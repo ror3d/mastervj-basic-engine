@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Math\MathConstants.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\Example.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="XML\XMLTreeNode.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Named.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Math">
+      <UniqueIdentifier>{2dad57e6-bad5-4a57-bec4-bf0d614f1152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{a4a227e4-f3b7-4a8c-ad1a-1bbaa0fc88ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{97a00bd0-9bd7-43b3-a598-60f3691639d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Math\MathTypes.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathUtils.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix33.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix34.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix44.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="XML\XMLTreeNode.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Types.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Color.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\MapManager.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Named.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Math\MathUtils.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Math\Matrix33.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Math\Matrix34.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Math\Matrix44.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Math\Vector2.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Math\Vector3.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Math\Vector4.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Math\Color.inl">
+      <Filter>Math</Filter>
+    </None>
+  </ItemGroup>
+</Project>

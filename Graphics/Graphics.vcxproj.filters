@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{0903e2ed-a8b6-4135-99d6-b2aa11f3b675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Context">
+      <UniqueIdentifier>{49d6b94f-81d9-41e4-85c7-96abe5a80321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{1ec04672-4998-4809-8a1f-c8d8341f0bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Material">
+      <UniqueIdentifier>{9c07c196-760e-4978-9dd3-c2028f8fb07c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{2ac03736-0ea6-46bb-89bc-f3e56e37e452}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{a3baba43-9257-4cc2-9105-68c1d5b39c02}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\CameraController.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\FPSCameraController.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Frustum.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\SphericalCameraController.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Context\ContextManager.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\DebugRender.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Material\Material.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Material\MaterialManager.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\RenderableObject.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\RenderableVertexs.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\RenderManager.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\Texture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics.h" />
+    <ClInclude Include="VertexTypes.h" />
+    <ClInclude Include="Material\Effect.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Material\EffectManager.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Material\EffectTechnique.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera\CameraController.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\FPSCameraController.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Frustum.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\SphericalCameraController.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\ContextManager.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\DebugRender.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Material\MaterialManager.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\RenderableObject.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\RenderManager.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\Texture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="Material\EffectManager.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -194,3 +194,5 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+3rdParty/AntTweakBar/debug32/
+3rdParty/AntTweakBar/release32/
