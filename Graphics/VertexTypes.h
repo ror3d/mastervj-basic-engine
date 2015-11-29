@@ -1,10 +1,10 @@
 #pragma once
 
 #include <string>
-#include "Math\Vector2.h"
-#include "Math\Vector3.h"
-#include "Math\Vector4.h"
-#include "Math\Color.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
+#include "Math/Color.h"
 
 #include <d3d11.h>
 

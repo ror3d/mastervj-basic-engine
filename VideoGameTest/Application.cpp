@@ -1,7 +1,7 @@
 #include "Application.h"
 
-#include "Math\Matrix44.h"
-#include "Math\Vector4.h"
+#include "Math/Matrix44.h"
+#include "Math/Vector4.h"
 
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Debug/DebugRender.h>
@@ -79,7 +79,7 @@ void CApplication::SwitchCamera()
 }
 
 void CApplication::Update(float _ElapsedTime)
-{	
+{
 
 	switch (m_CurrentCamera)
 	{
@@ -150,7 +150,7 @@ void CApplication::Render()
 	world.SetFromPos(0, 0, -10);
 	m_ContextManager->SetWorldMatrix(world);
 	m_ContextManager->Draw(m_DebugRender->GetPremultBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_PREMULT);
-	
+
 
 	CDebugHelper::GetDebugHelper()->Render();
 

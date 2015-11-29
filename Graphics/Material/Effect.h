@@ -3,9 +3,9 @@
 #include <d3d11.h>
 
 #include "Utils/Utils.h"
-#include "Math\Matrix44.h"
-#include "Math\Vector4.h"
-#include "Math\Color.h"
+#include "Math/Matrix44.h"
+#include "Math/Vector4.h"
+#include "Math/Color.h"
 
 class CEffect
 {

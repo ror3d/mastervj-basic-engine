@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <unordered_map>
 
-#include "Math\Vector2.h"
+#include "Math/Vector2.h"
 
 class CInputManager
 {

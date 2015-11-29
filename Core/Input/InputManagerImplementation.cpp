@@ -3,7 +3,7 @@
 
 #include "InputManagerImplementation.h"
 
-#include "XML\XMLTreeNode.h"
+#include "XML/XMLTreeNode.h"
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dinput8.lib")
@@ -250,21 +250,21 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 						//   podeis tener más de una a la vez usando "XINPUT_GAMEPAD_A | XINPUT_GAMEPAD_B", por ejemplo.
 						//   pero para que eso funcione bién con ON_PRESS tendréis que mejorar la lógica de esta clase o ser frame perfect pulsando botones
 
-						//  XINPUT_GAMEPAD_DPAD_UP       
-						//  XINPUT_GAMEPAD_DPAD_DOWN     
-						//  XINPUT_GAMEPAD_DPAD_LEFT     
-						//  XINPUT_GAMEPAD_DPAD_RIGHT    
-						//  XINPUT_GAMEPAD_START         
-						//  XINPUT_GAMEPAD_BACK          
-						//  XINPUT_GAMEPAD_LEFT_THUMB    
-						//  XINPUT_GAMEPAD_RIGHT_THUMB   
-						//  XINPUT_GAMEPAD_LEFT_SHOULDER 
+						//  XINPUT_GAMEPAD_DPAD_UP
+						//  XINPUT_GAMEPAD_DPAD_DOWN
+						//  XINPUT_GAMEPAD_DPAD_LEFT
+						//  XINPUT_GAMEPAD_DPAD_RIGHT
+						//  XINPUT_GAMEPAD_START
+						//  XINPUT_GAMEPAD_BACK
+						//  XINPUT_GAMEPAD_LEFT_THUMB
+						//  XINPUT_GAMEPAD_RIGHT_THUMB
+						//  XINPUT_GAMEPAD_LEFT_SHOULDER
 						//  XINPUT_GAMEPAD_RIGHT_SHOULDER
-						//  XINPUT_GAMEPAD_A             
-						//  XINPUT_GAMEPAD_B             
-						//  XINPUT_GAMEPAD_X             
-						//  XINPUT_GAMEPAD_Y             
-						// 
+						//  XINPUT_GAMEPAD_A
+						//  XINPUT_GAMEPAD_B
+						//  XINPUT_GAMEPAD_X
+						//  XINPUT_GAMEPAD_Y
+						//
 					}
 
 					m_Actions.push_back(action);

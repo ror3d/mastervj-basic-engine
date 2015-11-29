@@ -1,6 +1,6 @@
 #include "MaterialManager.h"
 
-#include "XML\XMLTreeNode.h"
+#include "XML/XMLTreeNode.h"
 
 
 static CContextManager::ERasterizerState ParseRasterizerState(const std::string& str)
