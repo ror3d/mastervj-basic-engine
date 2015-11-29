@@ -2,7 +2,9 @@
 
 ## How to Git
 
-We will be using the github workflow: https://guides.github.com/introduction/flow/
+Everyone will have a personal branch at the upstream repo. Their local repo's master
+branch will point to that personal branch, and when changes have to be made, they will
+be pull-requested from that branch to the development branch.
 
 Git Cheat Sheet: https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf
 
