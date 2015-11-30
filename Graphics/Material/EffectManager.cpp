@@ -19,7 +19,7 @@ void CEffectManager::Reload()
 }
 
 
-void CEffectManager::Load(const std::string &Filename)
+void CEffectManager::load(const std::string &Filename)
 {
 	CXMLTreeNode effects;
 	effects.LoadFile(Filename.c_str());

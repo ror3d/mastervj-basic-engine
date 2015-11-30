@@ -107,5 +107,8 @@
     <ClCompile Include="Material\EffectManager.cpp">
       <Filter>Material</Filter>
     </ClCompile>
+    <ClCompile Include="Material\Material.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

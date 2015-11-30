@@ -1,25 +1,17 @@
 #pragma once
 
-#include <unordered_map>
+#include <Utils/MapManager.h>
 
-#include "Material.h"
+class CMaterial;
 
-class CMaterialManager
+class CMaterialManager : public TemplatedMapManager<CMaterial>
 {
 public:
-	~CMaterialManager();
+	CMaterialManager();
+	virtual ~CMaterialManager();
+	void load(const std::string &Filename);
+	void Reload();
 
-	void AddMaterials(const std::string& path);
-
-	const CMaterial* GetMaterial(const std::string& name) const
-	{
-		std::unordered_map<std::string, CMaterial*>::const_iterator it = m_Materials.find(name);
-		return (it == m_Materials.end()) ? nullptr : it->second;
-	};
-
-private:
-
-	std::unordered_map<std::string, CMaterial*> m_Materials;
 
 };
 

@@ -39,6 +39,7 @@
     <ClCompile Include="Debug\DebugRender.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="Material\EffectManager.cpp" />
+    <ClCompile Include="Material\Material.cpp" />
     <ClCompile Include="Material\MaterialManager.cpp" />
     <ClCompile Include="Renderer\RenderableObject.cpp" />
     <ClCompile Include="Renderer\RenderManager.cpp" />

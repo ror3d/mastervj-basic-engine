@@ -110,7 +110,7 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 #else
 	int flags = 0;
 #endif
-	
+
 	if (FAILED(D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, flags, featureLevels, numFeatureLevels,
 		D3D11_SDK_VERSION, &sd, &m_SwapChain, &m_D3DDevice, NULL, &m_DeviceContext)))
 	{
@@ -190,7 +190,7 @@ HRESULT CContextManager::CreateBackBuffer(HWND hWnd, int Width, int Height)
 class CDebugCEffect : public CEffect
 {
 public:
-	bool Load(ID3D11Device *Device)
+	bool load(ID3D11Device *Device)
 	{
 		const char vs[] = {
 			0x44, 0x58, 0x42, 0x43, 0x34, 0x4f, 0xb6, 0xe4, 0xbc, 0xb2, 0xdf, 0x47, 0x4e, 0x87, 0x8b, 0x7d, 0x80, 0xfc, 0x58, 0x1d, 0x01, 0x00, 0x00, 0x00, 0x60, 0x05, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x34
@@ -293,7 +293,7 @@ CEffect *s_DebugEffect;
 void CContextManager::InitStates()
 {
 	CDebugCEffect *l_DebugEffect = new CDebugCEffect();
-	l_DebugEffect->Load(m_D3DDevice);
+	l_DebugEffect->load(m_D3DDevice);
 	s_DebugEffect = l_DebugEffect;
 
 	InitRasterizerStates();

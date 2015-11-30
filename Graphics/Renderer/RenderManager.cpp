@@ -68,7 +68,7 @@ void CRenderManager::Render(CContextManager* _Context, CMaterialManager* _Materi
 		for (int j = 0; j < l_RenderableObject->GetNumSubmeshes(); ++j)
 		{
 			const CRenderableObject::SSubmesh& l_Submesh = l_RenderableObject->GetSubmesh(j);
-			const CMaterial* l_Material = _MaterialManager->GetMaterial(l_Submesh.material);
+			const CMaterial* l_Material = _MaterialManager->get(l_Submesh.material);
 			// TODO no pintar el objeto, sino añadirlo a la lista l_SubmeshesWithBlend si tiene blend
 			// l_Material->HasBlending();
 

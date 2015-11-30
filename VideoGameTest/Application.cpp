@@ -64,7 +64,7 @@ CApplication::~CApplication()
 
 void CApplication::Init()
 {
-	m_MaterialManager.AddMaterials("Data\\materials.xml");
+	m_MaterialManager.load("Data\\materials.xml");
 
 	m_Cube.AddSubmesh(m_DebugRender->GetSimpleCube(), "solid material", m_DebugRender->GetSimpleCubeBSRadi(), m_DebugRender->GetSimpleCubeBBMin(), m_DebugRender->GetSimpleCubeBBMax());
 }

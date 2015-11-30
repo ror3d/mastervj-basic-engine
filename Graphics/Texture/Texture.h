@@ -16,7 +16,7 @@ private:
 public:
 	CTexture();
 	virtual ~CTexture();
-	bool Load(const std::string &Filename);
+	bool load(const std::string &Filename);
 	void Activate(unsigned int StageId);
 	bool Reload();
 };

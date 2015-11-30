@@ -17,7 +17,7 @@ public:
 	CEnemyManager();
 	virtual ~CEnemyManager();
 
-	void Load(const std::string &Filename);
+	void load(const std::string &Filename);
 	void Update(float ElapsedTime);
 	void Render();
 	void AddEnemy(CXMLTreeNode &XMLTreeNode);

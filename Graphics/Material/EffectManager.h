@@ -35,7 +35,7 @@ public:
 	CEffectManager();
 	virtual ~CEffectManager();
 	void Reload();
-	void Load( const std::string &Filename);
+	void load( const std::string &Filename);
 	CEffectVertexShader * GetVertexShader( const std::string &VertexShader);
 	CEffectPixelShader * GetPixelShader( const std::string &PixelShader);
 };

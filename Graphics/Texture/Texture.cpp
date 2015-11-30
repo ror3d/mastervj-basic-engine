@@ -38,7 +38,7 @@ void CTexture::Unload()
 {
 }
 
-bool CTexture::Load(const std::string &Filename)
+bool CTexture::load(const std::string &Filename)
 {
 	return false;
 }

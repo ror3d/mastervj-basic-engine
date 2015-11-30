@@ -73,7 +73,7 @@ void CEnemyManager::AddEnemy(CXMLTreeNode &XMLTreeNode)
 		m_Enemies.push_back(l_Enemy);
 }
 
-void CEnemyManager::Load(const std::string &Filename)
+void CEnemyManager::load(const std::string &Filename)
 {
 	CXMLTreeNode l_File;
 	if(l_File.LoadFile(Filename.c_str()))
