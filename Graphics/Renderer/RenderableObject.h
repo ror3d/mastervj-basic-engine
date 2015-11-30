@@ -21,6 +21,7 @@ public:
 	};
 
 	CRenderableObject() : CNamed("") {}
+	CRenderableObject(const std::string& name) : CNamed(name) {}
 
 	void AddSubmesh(const CRenderableVertexs* _Vertices, const std::string& _Material, float _BoundingRadius, const Vect3f& _BoundingBoxMin, const Vect3f& _BoundingBoxMax);
 

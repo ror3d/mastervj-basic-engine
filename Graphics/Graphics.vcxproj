@@ -25,9 +25,12 @@
     <ClInclude Include="Material\Material.h" />
     <ClInclude Include="Material\MaterialManager.h" />
     <ClInclude Include="Renderer\3DElement.h" />
+    <ClInclude Include="Renderer\MeshInstance.h" />
     <ClInclude Include="Renderer\RenderableObject.h" />
+    <ClInclude Include="Renderer\RenderableObjectsManager.h" />
     <ClInclude Include="Renderer\RenderableVertexs.h" />
     <ClInclude Include="Renderer\RenderManager.h" />
+    <ClInclude Include="Renderer\StaticMesh.h" />
     <ClInclude Include="Texture\Texture.h" />
     <ClInclude Include="VertexTypes.h" />
   </ItemGroup>
@@ -43,8 +46,11 @@
     <ClCompile Include="Material\Material.cpp" />
     <ClCompile Include="Material\MaterialManager.cpp" />
     <ClCompile Include="Renderer\3DElement.cpp" />
+    <ClCompile Include="Renderer\MeshInstance.cpp" />
     <ClCompile Include="Renderer\RenderableObject.cpp" />
+    <ClCompile Include="Renderer\RenderableObjectsManager.cpp" />
     <ClCompile Include="Renderer\RenderManager.cpp" />
+    <ClCompile Include="Renderer\StaticMesh.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
