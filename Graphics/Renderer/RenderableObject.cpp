@@ -1,5 +1,7 @@
 #include "RenderableObject.h"
 
+#include "RenderableVertexs.h"
+
 
 void CRenderableObject::AddSubmesh(const CRenderableVertexs* _Vertices, const std::string& _Material, float _BoundingRadius, const Vect3f& _BoundingBoxMin, const Vect3f& _BoundingBoxMax)
 {

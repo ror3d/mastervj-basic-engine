@@ -4,11 +4,13 @@
 
 #include "HelperTypes.h"
 
-#include "RenderableVertexs.h"
+#include "3DElement.h"
 #include "Material/Material.h"
 
+class CRenderManager;
+class CRenderableVertexs;
 
-class CRenderableObject
+class CRenderableObject : public CNamed, public C3DElement
 {
 public:
 
@@ -17,6 +19,8 @@ public:
 		const CRenderableVertexs* vertices;
 		std::string material;
 	};
+
+	CRenderableObject() : CNamed("") {}
 
 	void AddSubmesh(const CRenderableVertexs* _Vertices, const std::string& _Material, float _BoundingRadius, const Vect3f& _BoundingBoxMin, const Vect3f& _BoundingBoxMax);
 
@@ -34,6 +38,9 @@ public:
 	float GetBoundingRadius() const { return m_BoundingRadius; }
 	Vect3f GetBoundingMin() const { return m_BoundingBoxMin; }
 	Vect3f GetBoundingMax() const { return m_BoundingBoxMax; }
+
+	virtual void Update(float ElapsedTime) {}
+	virtual void Render(CRenderManager *rm) {}
 
 private:
 

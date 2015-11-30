@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Math\Color.h"
-#include "Math\Vector3.h"
+#include "Math/Color.h"
+#include "Math/Vector3.h"
 
 struct SPositionOrientation
 {

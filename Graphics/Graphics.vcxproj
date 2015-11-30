@@ -24,6 +24,7 @@
     <ClInclude Include="Material\EffectTechnique.h" />
     <ClInclude Include="Material\Material.h" />
     <ClInclude Include="Material\MaterialManager.h" />
+    <ClInclude Include="Renderer\3DElement.h" />
     <ClInclude Include="Renderer\RenderableObject.h" />
     <ClInclude Include="Renderer\RenderableVertexs.h" />
     <ClInclude Include="Renderer\RenderManager.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="Material\EffectManager.cpp" />
     <ClCompile Include="Material\Material.cpp" />
     <ClCompile Include="Material\MaterialManager.cpp" />
+    <ClCompile Include="Renderer\3DElement.cpp" />
     <ClCompile Include="Renderer\RenderableObject.cpp" />
     <ClCompile Include="Renderer\RenderManager.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />
@@ -97,7 +99,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Base;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Base;$(SolutionDir);.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
