@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+#include "Context/ContextManager.h"
+
 
 CEngine::CEngine()
 	: effectsManager(nullptr)
@@ -29,4 +31,5 @@ void CEngine::Init(){
 	renderableObjectManager = new CRenderableObjectsManager();
 	staticMeshManager = new CStaticMeshManager();
 	renderManager = new CRenderManager();
+	contextManager = new CContextManager();
 }

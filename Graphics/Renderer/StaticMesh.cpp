@@ -5,6 +5,10 @@
 #include "Material/Material.h"
 #include "Renderer/RenderableVertexs.h"
 
+#include "Engine/Engine.h"
+
+#include "VertexTypes.h"
+
 
 CStaticMesh::CStaticMesh()
 	: CNamed("")
@@ -18,82 +22,128 @@ CStaticMesh::~CStaticMesh()
 {
 	Destroy();
 }
+
 //Codigo basado en https://code.google.com/p/uab-engine/source/browse/trunk/+uab-engine/?r=3
 bool CStaticMesh::Load(const std::string &FileName)
 {
+    m_fileName=FileName;
+    FILE *l_meshFile = NULL;
+    fopen_s(&l_meshFile, FileName.c_str(), "rb");
 
-	/*
-        m_fileName=FileName;
-        FILE *l_meshFile = NULL;
-        fopen_s(&l_meshFile, FileName.c_str(), "rb");
+	if (l_meshFile == NULL)
+	{
+		return false;
+	}
+	else
+	{
+		//Header---------------------
+        unsigned short l_header, l_VertexType, l_numMaterials,l_NumBytes;
+        fread(&l_header, sizeof(unsigned short), 1, l_meshFile);   //lectura del header
+        if(l_header!=0xFE55){
+			return false;
+        }
 
-        if(l_meshFile==NULL){
+		//Materials---------------------	
+                
+        fread(&l_numMaterials, sizeof(unsigned short), 1, l_meshFile); //lectura del numero de materiales
+        if(l_numMaterials==0){
                 return false;
         }
-        else{
-                unsigned short l_header, l_numMaterials;
-                fread(&l_header, sizeof(unsigned short), 1, l_meshFile);   //lectura del header
-                if(l_header!=0x55FF){
-					return false;
-                }
-                
-                fread(&l_numMaterials, sizeof(unsigned short), 1, l_meshFile); //lectura del numero de materiales
-                if(l_numMaterials==0){
-                        return false;
-                }
-                m_materials.resize(l_numMaterials);
+        m_materials.resize(l_numMaterials);
 
-                for(int i=0; i<l_numMaterials;++i){  //lectura de los materiales
-                        unsigned short l_materialType;
-                        unsigned short l_NumChars;
+        for(int i=0; i<l_numMaterials;++i)
+		{  //lectura de los materiales
+            unsigned short l_NumChars;
+			fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
+			
+			char *l_MaterialName = new char[l_NumChars+1];
+            fread(&l_MaterialName[0], sizeof(char), l_NumChars+1, l_meshFile);
 
-						fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
-						char *l_FileName = new char[l_NumChars+1];
-						fread(&l_FileName[0], sizeof(char), l_NumChars+1, l_meshFile);
-						CTexture *l_Texture=CEngine::GetSingletonPtr()->GetTextureManager()->LoadFile(l_FileName);
-						m_Materials[i]->m_Textures[j].push_back(l_Texture);
-						CHECKED_DELETE(l_FileName);
-				
+			m_materials[i]=CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
 
-                } //lectura de los materiales
-                
-                for(int i=0; i<l_numMaterials;++i){  //lectura de los vertices  
-                        unsigned short l_NumVertexs;
-                        unsigned short l_NumIndexs;
-
-                        unsigned short l_VertexSize=0;	
-						l_VertexSize = sizeof(MV_VERTEX_TYPE_TEXTURE1);
-                        void * l_Vtxs=NULL;
-                        void * l_Idxs=NULL;
-                        CRenderableVertexs *l_RV = NULL;
-
-                        fread(&l_NumVertexs, sizeof(unsigned short), 1, l_meshFile);
-                                                
-                        l_Vtxs = malloc(l_VertexSize*l_NumVertexs);
-                        fread(l_Vtxs, l_VertexSize, l_NumVertexs, l_meshFile);
-
-                        fread(&l_NumIndexs, sizeof(unsigned short), 1, l_meshFile);
-                        
-                        l_Idxs = malloc(sizeof(unsigned short)*l_NumIndexs);
-                        fread(l_Idxs, sizeof(unsigned short), l_NumIndexs, l_meshFile);
-						//TODO VertexType
-						//De momento siempre llega el tipo 19
-                
-						//TODO no entiendo, imagino que se debe utilizar alguna de las clases de TemplatedRenderableVertexs que extienden RenderableVertex
-						l_RV =  new CRenderableVertexs<TNORMALTEXTURE1_VERTEX>(CEngine::GetSingletonPtr()->GetRenderManager(), l_Vtxs,l_Idxs,l_NumVertexs, l_NumIndexs);
-                        m_RVs.push_back(l_RV);
-                        free(l_Vtxs);
-                        free(l_Idxs);
-                        
-                } //lectura de los vertices
-
-                unsigned short l_footer;
-                fread(&l_footer, sizeof(unsigned short), 1, l_meshFile);   //lectura del footer
-                if(l_footer!=0xFF55){                     
-                        return false;
-                }
+			delete[] l_MaterialName;
+                    
+			//Texturas¿¿¿¿¿se cargan¿?¿
         }
-		*/
+
+		//Vertex & Index---------------------
+
+		//TODO: en fichero max, leer solo UVMap de x e y
+		for(int i=0; i<l_numMaterials;++i){
+			//Vertices---------------------
+			unsigned short l_VertexType;
+			fread(&l_VertexType, sizeof(unsigned short), 1, l_meshFile);
+
+			unsigned short l_NumVertexs;
+			fread(&l_NumVertexs, sizeof(unsigned short), 1, l_meshFile);
+
+			unsigned short l_NumBytes;
+			if(l_VertexType==MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType())
+				l_NumBytes=sizeof(MV_POSITION_NORMAL_TEXTURE_VERTEX)*l_NumVertexs;
+			else if(l_VertexType==MV_POSITION_COLOR_VERTEX::GetVertexType())
+				l_NumBytes=sizeof(MV_POSITION_COLOR_VERTEX)*l_NumVertexs;
+			else if(l_VertexType==MV_POSITION_TEXTURE_VERTEX::GetVertexType())
+				l_NumBytes=sizeof(MV_POSITION_TEXTURE_VERTEX)*l_NumVertexs;
+			else if(l_VertexType==MV_POSITION_COLOR_TEXTURE_VERTEX::GetVertexType())
+				l_NumBytes=sizeof(MV_POSITION_COLOR_TEXTURE_VERTEX)*l_NumVertexs;
+			else
+			{
+				throw std::runtime_error("unrecognized vertex type");
+			}
+
+			void *l_VtxsData=new char[l_NumBytes];
+			fread(l_VtxsData, 1, l_NumBytes, l_meshFile);
+
+			//Indices---------------------
+			unsigned short l_IndexType;
+			fread(&l_IndexType, sizeof(unsigned short), 1, l_meshFile);
+				
+			unsigned short l_NumIndexsFile;
+			unsigned int l_numVertexs;
+				
+			if(l_IndexType==16)	{					
+				fread(&l_NumIndexsFile, sizeof(unsigned short), 1, l_meshFile);
+				l_NumBytes=sizeof(unsigned short)*l_NumIndexsFile;
+				l_numVertexs=(unsigned int)l_NumIndexsFile;//Antes m_NumIndexs
+			}else if(l_IndexType==32) {					
+				fread(&l_NumIndexsFile, sizeof(unsigned int), 1, l_meshFile);
+				l_NumBytes=sizeof(unsigned int)*l_NumIndexsFile;
+				l_numVertexs=l_NumIndexsFile;
+			} else{
+				assert(!"Num Index Error");
+			}
+
+			void *l_IdxData=new char[l_NumBytes];
+			fread(l_IdxData, 1, l_NumBytes, l_meshFile);
+
+			CRenderableVertexs *l_RV=NULL;
+	
+			if(l_VertexType==MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType()){
+				if(l_IndexType==16)
+					l_RV=new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
+				else
+					l_RV=new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
+			} else if(l_VertexType==MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType()) {
+				if(l_IndexType==16)
+					l_RV=new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
+				else
+					l_RV=new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
+			}
+	
+			m_renderableVertexs.push_back(l_RV);	
+	
+			delete[] l_VtxsData;
+			delete[] l_IdxData;
+		}
+
+		//Footer---------------------
+        unsigned short l_footer;
+        fread(&l_footer, sizeof(unsigned short), 1, l_meshFile);   
+        if(l_footer!=0x55FE){                     
+                return false;
+        }
+	}
+
 	return true;
 }
 

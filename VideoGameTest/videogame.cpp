@@ -28,8 +28,7 @@
 
 #define APPLICATION_NAME	"VIDEOGAME"
 
-CContextManager s_Context;
-
+/*
 void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 {
 	// This follows Raymond Chen's prescription
@@ -61,12 +60,14 @@ void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 	}
 }
 
+*/
 //-----------------------------------------------------------------------------
 // Name: MsgProc()
 // Desc: The window's message handler
 //-----------------------------------------------------------------------------
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	/*
 	switch (msg)
 	{
 	case WM_SIZE:
@@ -87,7 +88,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	}//end switch( msg )
-
+	*/
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
@@ -96,7 +97,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //-----------------------------------------------------------------------
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
-	/*/
+	//*/
 	// Register the window class
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, APPLICATION_NAME, NULL };
 
@@ -114,7 +115,16 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	// Añadir aquí el Init de la applicacioón
 
+	new CEngine();
+	CEngine::GetSingleton().Init();
+
+	CContextManager& s_Context = *(CEngine::GetSingleton().getContextManager());
 	s_Context.CreateContext(hWnd, 800, 600);
+
+	CEngine::GetSingleton().getEffectsManager()->load("Data\\effects.xml");
+	CEngine::GetSingleton().getMaterialManager()->load("Data\\materials.xml");
+	CEngine::GetSingleton().getStaticMeshManager()->Load("Data\\static_meshes.xml");
+	CEngine::GetSingleton().getRenderableObjectManager()->Load("Data\\renderable_objects.xml");
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
@@ -183,7 +193,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 										WINDOWPLACEMENT windowPosition = { sizeof(WINDOWPLACEMENT) };
 										GetWindowPlacement(msg.hwnd, &windowPosition);
 
-										ToggleFullscreen(msg.hwnd, windowPosition);
+										//ToggleFullscreen(msg.hwnd, windowPosition);
 										consumed = true;
 									}
 									break;
@@ -255,12 +265,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	return 0;
 	//*/
 
-	new CEngine();
-	CEngine::GetSingleton().Init();
-	CEngine::GetSingleton().getEffectsManager()->load("Data\\effects.xml");
-	CEngine::GetSingleton().getMaterialManager()->load("Data\\materials.xml");
-	CEngine::GetSingleton().getStaticMeshManager()->Load("Data\\static_meshes.xml");
-	CEngine::GetSingleton().getRenderableObjectManager()->Load("Data\\renderable_objects.xml");
 	return 0;
 }
 

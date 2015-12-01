@@ -27,7 +27,7 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 		for (int i = 0; i < l_StaticMesh.GetNumChildren(); ++i){
 			CXMLTreeNode l_Mesh = l_StaticMesh(i);
 
-			if (l_Mesh.GetName() == "static_mesh")
+			if (l_Mesh.GetName() == std::string("static_mesh"))
 			{
 
 				std::string m_Name = l_Mesh.GetPszProperty("name");

@@ -39,6 +39,11 @@ public:
 		Device->PSSetShader(m_PixelShader, NULL, 0);
 	}
 
+	ID3D11VertexShader *getVertexShader() const { return m_VertexShader; }
+	ID3D11PixelShader *getPixelShader() const { return m_PixelShader; }
+	ID3D11InputLayout * getVertexLayout() const { return m_VertexLayout; }
+	ID3D11Buffer *getConstantBuffer() const { return m_ConstantBuffer; }
+
 protected:
 	ID3D11VertexShader * m_VertexShader;
 	ID3D11PixelShader * m_PixelShader;
