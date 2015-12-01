@@ -3,6 +3,7 @@
 
 CNamed::CNamed(const CXMLTreeNode &node)
 {
+	m_name = node.GetPszProperty("name");
 }
 
 CNamed::CNamed(const std::string &name)

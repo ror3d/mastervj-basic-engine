@@ -18,6 +18,11 @@
     <ClInclude Include="Camera\SphericalCameraController.h" />
     <ClInclude Include="Context\ContextManager.h" />
     <ClInclude Include="Debug\DebugRender.h" />
+    <ClInclude Include="Effect\EffectParameters.h" />
+    <ClInclude Include="Effect\EffectPixelShader.h" />
+    <ClInclude Include="Effect\EffectShader.h" />
+    <ClInclude Include="Effect\EffectTechnique.h" />
+    <ClInclude Include="Effect\EffectVertexShader.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="Material\Effect.h" />
     <ClInclude Include="Material\EffectManager.h" />
@@ -31,7 +36,9 @@
     <ClInclude Include="Renderer\RenderableVertexs.h" />
     <ClInclude Include="Renderer\RenderManager.h" />
     <ClInclude Include="Renderer\StaticMesh.h" />
+    <ClInclude Include="Renderer\StaticMeshManager.h" />
     <ClInclude Include="Texture\Texture.h" />
+    <ClInclude Include="Texture\TextureManager.h" />
     <ClInclude Include="VertexTypes.h" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +48,10 @@
     <ClCompile Include="Camera\SphericalCameraController.cpp" />
     <ClCompile Include="Context\ContextManager.cpp" />
     <ClCompile Include="Debug\DebugRender.cpp" />
+    <ClCompile Include="Effect\EffectPixelShader.cpp" />
+    <ClCompile Include="Effect\EffectShader.cpp" />
+    <ClCompile Include="Effect\EffectTechnique.cpp" />
+    <ClCompile Include="Effect\EffectVertexShader.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="Material\EffectManager.cpp" />
     <ClCompile Include="Material\Material.cpp" />
@@ -51,7 +62,9 @@
     <ClCompile Include="Renderer\RenderableObjectsManager.cpp" />
     <ClCompile Include="Renderer\RenderManager.cpp" />
     <ClCompile Include="Renderer\StaticMesh.cpp" />
+    <ClCompile Include="Renderer\StaticMeshManager.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />
+    <ClCompile Include="Texture\TextureManager.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{020A4F02-58DA-466E-85EA-6377045C2B72}</ProjectGuid>
@@ -96,6 +109,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(SolutionDir)\bin\Intermediate\$(ProjectName)$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -105,7 +120,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Base;$(SolutionDir);.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Core;$(SolutionDir)/Base;$(SolutionDir);.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

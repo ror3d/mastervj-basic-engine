@@ -48,6 +48,7 @@ protected:
 
 
 
+/*
 class CEffectParameters
 {
 public:
@@ -61,3 +62,4 @@ public:
 
 	uint8_t				offset[9];
 };
+*/

@@ -1,14 +1,14 @@
-#pragma once
-
-#include <vector>
+#ifndef MATERIAL_H
+#define MATERIAL_H
 
 #include <Utils/Named.h>
 #include <Utils/Utils.h>
-
+#include <vector>
+#include "Texture/Texture.h"
+#include "Effect/EffectTechnique.h"
 #include "Context/ContextManager.h"
 
-class CEffectTechnique;
-class CTexture;
+class CXMLTreeNode;
 
 class CMaterial : public CNamed
 {
@@ -22,22 +22,22 @@ private:
 
 	float m_debugSize;
 	CColor m_baseColor;
-
 public:
-	CMaterial( const std::string &Filename );
+	CMaterial(const std::string &Filename);
 	CMaterial(CContextManager::ERasterizerState _RasterizerState, CContextManager::EDepthStencilState _DepthStencilState, CContextManager::EBlendState _BlendState)
 		: m_rasterizerState(_RasterizerState)
 		, m_depthStencilState(_DepthStencilState)
 		, m_blendState(_BlendState)
 		, m_debugSize(1)
-		, m_baseColor(1,1,1,1)
+		, m_baseColor(1, 1, 1, 1)
 	{}
-
+	CMaterial(CXMLTreeNode &TreeNode);
 	virtual ~CMaterial();
+
 	void destroy();
 	virtual void apply();
 
-	UAB_GET_PROPERTY( CEffectTechnique*, effectTechnique );
+	CEffectTechnique* getEffectTechnique() const;
 
 	void SetDebugSize(float _DebugSize) { m_debugSize = _DebugSize; }
 	void SetBaseColor(const CColor& _BaseColor) { m_baseColor = _BaseColor; }
@@ -60,7 +60,7 @@ public:
 			return true;
 		}
 		// TODO: Copiar el siguiente comentario dentro de CContextManager::EBlendState
-		// NOTA: Si se añaden más estados aquí, modificar CMaterial::HasBlending
+		// NOTA: Si se añaden más estados aqui, modificar CMaterial::HasBlending
 	}
 
 	CContextManager::ERasterizerState GetRasterizerState() const { return m_rasterizerState; }
@@ -68,3 +68,5 @@ public:
 	CContextManager::EBlendState GetBlendState() const { return m_blendState; }
 
 };
+
+#endif

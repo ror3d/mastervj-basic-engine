@@ -25,6 +25,9 @@
     <ClCompile Include="Debug\DebugHelperImplementation.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Engine.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemies">
@@ -35,6 +38,9 @@
     </Filter>
     <Filter Include="Debug">
       <UniqueIdentifier>{7f1fd47f-6a96-489e-b403-28f0da294660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{55c8f47a-5678-4955-a640-097052f5e424}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="Debug\DebugHelperImplementation.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Engine.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

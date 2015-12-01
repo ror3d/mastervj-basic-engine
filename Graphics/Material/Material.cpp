@@ -1,57 +1,52 @@
 #include "Material.h"
-#include "EffectTechnique.h"
-#include "Texture/Texture.h"
-#include "Context/ContextManager.h"
+#include "Effect/EffectTechnique.h"
+#include "Engine/Engine.h"
 
-void CMaterial::destroy()
+CMaterial::CMaterial(CXMLTreeNode &TreeNode)
+	: CNamed(TreeNode)
 {
-	for ( auto it = m_textures.begin(); it != m_textures.end(); ++it )
-	{
-		delete *it;
-	}
-	delete m_effectTechnique;
-}
+	std::string l_EffectTechnique = TreeNode.GetPszProperty("effect_technique");
+	m_effectTechnique = CEngine::GetSingletonPtr()->getEffectsManager()->get(l_EffectTechnique);
 
-CMaterial::CMaterial( const std::string &Filename )
-	: CNamed( "" )
-{
-	CXMLTreeNode TreeNode;
-	TreeNode.LoadFile( Filename.c_str() );
-
-	CXMLTreeNode l_materials = TreeNode["materials"];
-	if ( l_materials.Exists() )
+	if (l_EffectTechnique == "diffuse_technique")
 	{
-		for ( int i = 0; i < l_materials.GetNumChildren(); ++i )
+		for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 		{
-			CXMLTreeNode l_material = l_materials( i );
-
-			if ( l_material.GetName() == "material" )
-			{
-				setName(l_material.GetPszProperty( "name" ));
-				m_effectTechnique->setName( l_material.GetPszProperty( "effect_technique" ) );
-
-				if ( l_material( 0 ).GetName() == "texture" )
-				{
-					CXMLTreeNode l_text = l_material( 0 );
-					CTexture* text = new CTexture();
-
-					text->load( l_text.GetPszProperty( "filename" ) );
-
-					m_textures.push_back( text );
-				}
-			}
+			CXMLTreeNode l_Texture = TreeNode(i);
+			CTexture * Texture = new CTexture();
+			Texture->load(l_Texture.GetPszProperty("filename"));
+			m_textures.push_back(Texture);
 		}
 	}
 }
+
 
 CMaterial::~CMaterial()
 {
 	destroy();
 }
 
+
 void CMaterial::apply()
 {
-	// TODO
+	for (int i = 0; i < m_textures.size(); ++i)
+	{
+		m_textures[i]->Activate(1);
+	}
 }
 
 
+CEffectTechnique * CMaterial::getEffectTechnique() const
+{
+	return m_effectTechnique;
+}
+
+void CMaterial::destroy()
+{
+	for (int i = 0; i < m_textures.size(); ++i)
+	{
+		delete m_textures[i];
+	}
+
+	m_textures.clear();
+}

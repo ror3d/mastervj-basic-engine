@@ -19,7 +19,9 @@ CStaticMesh::~CStaticMesh()
 	Destroy();
 }
 //Codigo basado en https://code.google.com/p/uab-engine/source/browse/trunk/+uab-engine/?r=3
-bool CStaticMesh::Load(const std::string &FileName){
+bool CStaticMesh::Load(const std::string &FileName)
+{
+
 	/*
         m_fileName=FileName;
         FILE *l_meshFile = NULL;
@@ -92,7 +94,7 @@ bool CStaticMesh::Load(const std::string &FileName){
                 }
         }
 		*/
-        return true;
+	return true;
 }
 
 void CStaticMesh::Render(CRenderManager *RM) const{
@@ -105,11 +107,11 @@ void CStaticMesh::Render(CRenderManager *RM) const{
 
 
 bool CStaticMesh::Reload(){
-        Destroy();
-        if(Load(m_fileName))
-                return true;
-        else
-                return false;
+	Destroy();
+	if(Load(m_fileName))
+		return true;
+	else
+		return false;
 };
 
 void CStaticMesh::Destroy(){

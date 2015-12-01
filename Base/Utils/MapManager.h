@@ -31,7 +31,7 @@ T* TemplatedMapManager<T>::get( const std::string& name ) const
 template<class T>
 void TemplatedMapManager<T>::add( const std::string& name, T* instance )
 {
-	assert( m_resources.find( name ) != m_resources.end() );
+	assert( m_resources.find( name ) == m_resources.end() );
 	m_resources[name] = instance;
 }
 

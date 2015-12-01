@@ -17,6 +17,7 @@
     <ClCompile Include="Enemies\EnemyManager.cpp" />
     <ClCompile Include="Enemies\FixedEnemy.cpp" />
     <ClCompile Include="Enemies\PatrolEnemy.cpp" />
+    <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\InputManagerImplementation.cpp" />
   </ItemGroup>
@@ -28,6 +29,7 @@
     <ClInclude Include="Enemies\EnemyManager.h" />
     <ClInclude Include="Enemies\FixedEnemy.h" />
     <ClInclude Include="Enemies\PatrolEnemy.h" />
+    <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputManagerImplementation.h" />
   </ItemGroup>
@@ -78,7 +80,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/Base/;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/Base/;.;$(SolutionDir)/Graphics/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>

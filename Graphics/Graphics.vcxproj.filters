@@ -19,6 +19,9 @@
     <Filter Include="Texture">
       <UniqueIdentifier>{a3baba43-9257-4cc2-9105-68c1d5b39c02}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{a4233511-279a-4505-b32e-967b53dd1cc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
@@ -83,6 +86,25 @@
     <ClInclude Include="Renderer\MeshInstance.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\StaticMeshManager.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\TextureManager.h" />
+    <ClInclude Include="Effect\EffectParameters.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\EffectPixelShader.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\EffectShader.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\EffectTechnique.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\EffectVertexShader.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -133,6 +155,22 @@
     </ClCompile>
     <ClCompile Include="Renderer\MeshInstance.cpp">
       <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\StaticMeshManager.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\TextureManager.cpp" />
+    <ClCompile Include="Effect\EffectPixelShader.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\EffectShader.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\EffectTechnique.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\EffectVertexShader.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

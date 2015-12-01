@@ -16,6 +16,7 @@
 #include "Input/InputManagerImplementation.h"
 #include "Debug/DebugHelperImplementation.h"
 
+#include <Engine/Engine.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Material/Effect.h>
@@ -95,6 +96,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //-----------------------------------------------------------------------
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
+	/*/
 	// Register the window class
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, APPLICATION_NAME, NULL };
 
@@ -250,6 +252,15 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	// Añadir una llamada a la alicación para finalizar/liberar memoria de todos sus datos
 	s_Context.Dispose();
 
+	return 0;
+	//*/
+
+	new CEngine();
+	CEngine::GetSingleton().Init();
+	CEngine::GetSingleton().getEffectsManager()->load("Data\\effects.xml");
+	CEngine::GetSingleton().getMaterialManager()->load("Data\\materials.xml");
+	CEngine::GetSingleton().getStaticMeshManager()->Load("Data\\static_meshes.xml");
+	CEngine::GetSingleton().getRenderableObjectManager()->Load("Data\\renderable_objects.xml");
 	return 0;
 }
 

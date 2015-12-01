@@ -68,6 +68,9 @@
     <ClInclude Include="Utils\Named.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\SingletonPattern.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Math\MathUtils.inl">
