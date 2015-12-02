@@ -30,15 +30,29 @@ void CRenderableObjectsManager::Render(CRenderManager *RM)
 }
 
 
-//No se si també s'hauria de llegir Yaw, Pitch, Roll y Visible, però com al constructor de moment no especifica no ho poso.
 CRenderableObject * CRenderableObjectsManager::AddMeshInstance(CXMLTreeNode &TreeNode)
 {
-	std::string CoreName = TreeNode.GetPszProperty("core_name");
 	std::string InstanceName = TreeNode.GetPszProperty("name");
-	Vect3f Default(0.0f, 0.0f, 0.0f);
-	Vect3f Position = TreeNode.GetVect3fProperty("pos", Default, false);
+	auto it = m_resources.find(InstanceName);
 
-	return AddMeshInstance(CoreName, InstanceName, Position);
+	if (it != m_resources.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		std::string CoreName = TreeNode.GetPszProperty("core_name");
+		Vect3f Default(0.0f, 0.0f, 0.0f);
+
+		CMeshInstance * Object = new CMeshInstance(InstanceName, CoreName);
+		Object->SetPosition(TreeNode.GetVect3fProperty("pos", Default, false));
+		Object->SetYaw(TreeNode.GetFloatProperty("yaw"));
+		Object->SetPitch(TreeNode.GetFloatProperty("pitch"));
+		Object->SetRoll(TreeNode.GetFloatProperty("roll"));
+
+		add(InstanceName, Object);
+		return Object;
+	}
 }
 
 
@@ -60,7 +74,6 @@ CRenderableObject * CRenderableObjectsManager::AddMeshInstance(const std::string
 }
 
 
-// TODO: Crec que va dir que aquests dos de moment no els fessim
 CRenderableObject * CRenderableObjectsManager::AddAnimatedInstanceModel(CXMLTreeNode &TreeNode)
 {
 	return NULL;
@@ -73,7 +86,6 @@ CRenderableObject * CRenderableObjectsManager::AddAnimatedInstanceModel(const st
 }
 
 
-// TODO: No se si el path del fitxer s'ha de construir o el trobarà bé.
 void CRenderableObjectsManager::Load(const std::string &FileName)
 {
 	CXMLTreeNode l_XML;

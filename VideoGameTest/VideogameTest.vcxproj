@@ -46,6 +46,7 @@
     <TargetName>$(ProjectName)_d</TargetName>
     <IntDir>$(SolutionDir)\bin\Intermediate\$(ProjectName)$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)\bin\$(ProjectName)\</OutDir>
+    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

@@ -2,7 +2,7 @@
 #include <Renderer/StaticMeshManager.h>
 #include <Renderer/RenderableObjectsManager.h>
 #include <Material/MaterialManager.h>
-#include <Material/EffectManager.h>
+#include <Effect/EffectManager.h>
 #include <Texture/TextureManager.h>
 #include <Renderer/RenderManager.h>
 

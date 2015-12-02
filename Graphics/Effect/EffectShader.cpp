@@ -4,6 +4,11 @@
 #include <D3DX11.h>
 #include <D3Dcompiler.h>
 
+#ifdef _DEBUG
+#pragma comment(lib, "d3dx11d.lib")
+#else
+#pragma comment(lib, "d3d11.lib")
+#endif
 
 CEffectShader::CEffectShader(const CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
@@ -27,7 +32,6 @@ bool CEffectShader::LoadShader(const std::string &Filename, const std::string &E
 		dwShaderFlags |= D3DCOMPILE_DEBUG;
 	#endif
 	ID3DBlob* pErrorBlob;
-	/* TODO
 	hr = D3DX11CompileFromFile(Filename.c_str(), NULL, NULL, EntryPoint.c_str(), ShaderModel.c_str(), dwShaderFlags, 0, NULL, BlobOut, &pErrorBlob, NULL);
 	if (FAILED(hr))
 	{
@@ -39,15 +43,13 @@ bool CEffectShader::LoadShader(const std::string &Filename, const std::string &E
 	}
 	if (pErrorBlob)
 		pErrorBlob->Release();
-		*/
 	return true;
 }
 
 
 bool CEffectShader::CreateConstantBuffer()
 {
-	/* TODO
-	ID3D11Device *l_Device = CEngine::GetSingleton().getRenderManager()->GetDevice();
+	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	D3D11_BUFFER_DESC l_BufferDescription;
 	ZeroMemory(&l_BufferDescription, sizeof(l_BufferDescription));
 	l_BufferDescription.Usage = D3D11_USAGE_DEFAULT;
@@ -56,7 +58,6 @@ bool CEffectShader::CreateConstantBuffer()
 	l_BufferDescription.CPUAccessFlags = 0;
 	if (FAILED(l_Device->CreateBuffer(&l_BufferDescription, NULL, &m_ConstantBuffer)))
 		return false;
-		*/
 	return true;
 }
 

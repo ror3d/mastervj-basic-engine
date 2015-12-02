@@ -65,15 +65,6 @@
     </ClInclude>
     <ClInclude Include="graphics.h" />
     <ClInclude Include="VertexTypes.h" />
-    <ClInclude Include="Material\Effect.h">
-      <Filter>Material</Filter>
-    </ClInclude>
-    <ClInclude Include="Material\EffectManager.h">
-      <Filter>Material</Filter>
-    </ClInclude>
-    <ClInclude Include="Material\EffectTechnique.h">
-      <Filter>Material</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\3DElement.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -103,6 +94,12 @@
       <Filter>Effect</Filter>
     </ClInclude>
     <ClInclude Include="Effect\EffectVertexShader.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\Effect.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\EffectManager.h">
       <Filter>Effect</Filter>
     </ClInclude>
   </ItemGroup>
@@ -138,9 +135,6 @@
       <Filter>Texture</Filter>
     </ClCompile>
     <ClCompile Include="graphics.cpp" />
-    <ClCompile Include="Material\EffectManager.cpp">
-      <Filter>Material</Filter>
-    </ClCompile>
     <ClCompile Include="Material\Material.cpp">
       <Filter>Material</Filter>
     </ClCompile>
@@ -170,6 +164,9 @@
       <Filter>Effect</Filter>
     </ClCompile>
     <ClCompile Include="Effect\EffectVertexShader.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\EffectManager.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
   </ItemGroup>

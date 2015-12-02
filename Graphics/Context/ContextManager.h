@@ -2,8 +2,8 @@
 
 #include <d3d11.h>
 
-#include "Material/Effect.h"
-#include "Material/EffectManager.h"
+#include "Effect/Effect.h"
+#include "Effect/EffectManager.h"
 #include "Camera/Camera.h"
 
 class CRenderableVertexs;

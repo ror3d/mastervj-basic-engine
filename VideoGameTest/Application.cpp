@@ -130,7 +130,7 @@ void CApplication::Render()
 	m_ContextManager->BeginRender(m_BackgroundColor);
 
 	// añadir todos los objetos que se quiere pintar
-	m_RenderManager.AddRenderableObjectToRenderList(&m_Cube);
+	//m_RenderManager.AddRenderableObjectToRenderList(&m_Cube);
 
 	m_RenderManager.Render(m_ContextManager, &m_MaterialManager);
 

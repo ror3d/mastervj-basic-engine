@@ -19,13 +19,10 @@ bool CEffectPixelShader::Load()
 	bool l_Loaded = LoadShader(m_Filename.c_str(), m_EntryPoint.c_str(), m_ShaderModel.c_str(), &l_PSBlob);
 	if (!l_Loaded)
 		return false;
-/*  TODO
-	ID3D11Device *l_Device = CEngine::GetSingleton().getRenderManager()->GetDevice();
+	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	HRESULT l_HR = l_Device->CreatePixelShader(l_PSBlob->GetBufferPointer(), l_PSBlob->GetBufferSize(), NULL, &m_PixelShader);
 	l_PSBlob->Release();
 	return CreateConstantBuffer();
-*/
-	return false;
 }
 
 

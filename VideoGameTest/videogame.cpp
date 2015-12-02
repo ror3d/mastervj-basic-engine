@@ -19,7 +19,7 @@
 #include <Engine/Engine.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Debug/DebugRender.h>
-#include <Graphics/Material/Effect.h>
+#include <Graphics/Effect/Effect.h>
 #include <Graphics/Camera/Camera.h>
 
 #include <AntTweakBar.h>
@@ -67,10 +67,10 @@ void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 //-----------------------------------------------------------------------------
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	/*
 	switch (msg)
 	{
 	case WM_SIZE:
+	/*
 		if (wParam != SIZE_MINIMIZED)
 		{
 			// TODO: Resetear el AntTeakBar
@@ -81,6 +81,8 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			TwWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 		}
 		return 0;
+	*/
+		break;
 	case WM_DESTROY:
 	{
 		PostQuitMessage(0);
@@ -88,7 +90,6 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	}//end switch( msg )
-	*/
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
