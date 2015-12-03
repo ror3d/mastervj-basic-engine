@@ -1,9 +1,10 @@
-#pragma once
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
 #include <Utils/Named.h>
 
-class ID3D11ShaderResourceView;
-class ID3D11SamplerState;
+struct ID3D11ShaderResourceView;
+struct ID3D11SamplerState;
 
 class CTexture : CNamed
 {
@@ -21,3 +22,4 @@ public:
 	bool Reload();
 };
 
+#endif

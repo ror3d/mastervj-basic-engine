@@ -37,7 +37,7 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 
 				if(l_static_mesh->Load(l_Path))
 				{
-						add(m_Name, l_static_mesh);
+					add(m_Name, l_static_mesh);
 				}
 				
 			}

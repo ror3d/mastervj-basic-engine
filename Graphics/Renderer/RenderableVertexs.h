@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RENDERABLE_VERTEXS_H
+#define RENDERABLE_VERTEXS_H
 
 #include <D3D11.h>
 
@@ -6,7 +7,7 @@
 
 #include <Utils/Utils.h>
 
-#include <d3d11.h>
+#include <D3D11.h>
 #include "Context/ContextManager.h"
 
 class CContextManager;
@@ -15,12 +16,12 @@ class CEffect;
 class CRenderableVertexs
 {
 public:
-	virtual bool Render(CContextManager *ContextManager, CEffect *Effect, void *Parameters)
+	virtual bool Render(CContextManager *ContextManager, CEffect *Effect, CEffectParameters *Parameters)
 	{
 		assert(!"This method mustn't be called");
 		return false;
 	}
-	virtual bool RenderIndexed(CContextManager *ContextManager, CEffect *Effect, void *Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	virtual bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *EffectManager, CEffectParameters Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
 		assert(!"This method mustn't be called");
 		return false;
@@ -50,7 +51,7 @@ public:
 		D3D11_SUBRESOURCE_DATA InitData;
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = Vtxs;
-		ID3D11Device *l_Device = UABEngine.GetRenderManager().GetDevice();
+		ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 		HRESULT l_HR = l_Device->CreateBuffer(&l_BufferDescription, &InitData, &m_VertexBuffer);
 		if (FAILED(l_HR))
 			return;
@@ -59,11 +60,11 @@ public:
 	{
 		CHECKED_RELEASE(m_VertexBuffer);
 	}
-	bool Render(CContextManager *ContextManager, CEffect *Effect, void *Parameters)
+	bool Render(CContextManager *ContextManager, CEffect *Effect, CEffectParameters *Parameters)
 	{
 		if (Effect->getPixelShader() == NULL || Effect->getVertexShader() == NULL)
 			return false;
-		ID3D11DeviceContext *l_DeviceContext = RenderManager->GetDeviceContext();
+		ID3D11DeviceContext *l_DeviceContext = ContextManager->GetDeviceContext();
 		UINT stride = sizeof(T);
 		UINT offset = 0;
 		l_DeviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
@@ -102,7 +103,7 @@ CRENDERABLE_VERTEX_CLASS_TYPE_CREATOR(CLinesStripRenderableVertexs, D3D11_PRIMIT
 template<class T>
 class CTemplatedRenderableIndexedVertexs : public CRenderableVertexs
 {
-private:
+protected:
 	ID3D11Buffer *m_VertexBuffer;
 	ID3D11Buffer *m_IndexBuffer;
 	D3D11_PRIMITIVE_TOPOLOGY m_PrimitiveTopology;
@@ -149,9 +150,9 @@ public:
 		CHECKED_RELEASE(m_IndexBuffer);
 	}
 
-	bool RenderIndexed(CContextManager *ContextManager, CEffect *Effect, void *Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *Effect, CEffectParameters Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
-		if (Effect->getPixelShader() == NULL || Effect->getVertexShader() == NULL)
+		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
 			return false;
 		ID3D11DeviceContext *l_DeviceContext = ContextManager->GetDeviceContext();
 		UINT stride = sizeof(T);
@@ -159,12 +160,12 @@ public:
 		l_DeviceContext->IASetIndexBuffer(m_IndexBuffer, m_IndexType, 0);
 		l_DeviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
 		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
-		l_DeviceContext->IASetInputLayout(Effect->getVertexLayout());
-		l_DeviceContext->VSSetShader(Effect->getVertexShader(), NULL, 0);
-		l_DeviceContext->UpdateSubresource(Effect->getConstantBuffer(), 0, NULL, Parameters, 0, 0);
-		ID3D11Buffer *l_ConstantBuffer = Effect->getConstantBuffer();
+		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
+		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
+		l_DeviceContext->UpdateSubresource(Effect->GetVertexShader()->GetConstantBuffer(), 0, NULL, &Parameters, 0, 0);
+		ID3D11Buffer *l_ConstantBuffer = Effect->GetVertexShader()->GetConstantBuffer();
 		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
-		l_DeviceContext->PSSetShader(Effect->getPixelShader(), NULL, 0);
+		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
 		l_DeviceContext->PSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->DrawIndexed(IndexCount == -1 ? m_IndexsCount : IndexCount, StartIndexLocation, BaseVertexLocation);
 		return true;
@@ -186,3 +187,37 @@ CRENDERABLE_INDEXED_VERTEX_CLASS_TYPE_CREATOR(CKGTriangleListRenderableIndexed16
 CRENDERABLE_INDEXED_VERTEX_CLASS_TYPE_CREATOR(CKGTriangleListRenderableIndexed32Vertexs, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, DXGI_FORMAT_R32_UINT);
 CRENDERABLE_INDEXED_VERTEX_CLASS_TYPE_CREATOR(CKGTriangleStripRenderableIndexed16Vertexs, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, DXGI_FORMAT_R16_UINT);
 CRENDERABLE_INDEXED_VERTEX_CLASS_TYPE_CREATOR(CKGTriangleStripRenderableIndexed32Vertexs, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, DXGI_FORMAT_R32_UINT);
+
+/*
+template<class T>
+class CKGTriangleListRenderableIndexed16Vertexs : public CTemplatedRenderableIndexedVertexs<T>
+{
+public:
+	CKGTriangleListRenderableIndexed16Vertexs(void *Vtxs, unsigned int VtxsCount, void *Indices, unsigned int IndexsCount)
+		: CTemplatedRenderableIndexedVertexs(Vtxs, VtxsCount, Indices, IndexsCount, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, DXGI_FORMAT_R16_UINT)
+	{
+	}
+
+	bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *Effect, CEffectParameters Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	{
+		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
+			return false;
+		ID3D11DeviceContext *l_DeviceContext = ContextManager->GetDeviceContext();
+		UINT stride = sizeof(T);
+		UINT offset = 0;
+		l_DeviceContext->IASetIndexBuffer(m_IndexBuffer, m_IndexType, 0);
+		l_DeviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
+		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
+		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
+		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
+		l_DeviceContext->UpdateSubresource(Effect->GetVertexShader()->GetConstantBuffer(), 0, NULL, &Parameters, 0, 0);
+		ID3D11Buffer *l_ConstantBuffer = Effect->GetVertexShader()->GetConstantBuffer();
+		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
+		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
+		l_DeviceContext->PSSetConstantBuffers(0, 1, &l_ConstantBuffer);
+		l_DeviceContext->DrawIndexed(IndexCount == -1 ? m_IndexsCount : IndexCount, StartIndexLocation, BaseVertexLocation);
+		return true;
+	}
+};
+*/
+#endif

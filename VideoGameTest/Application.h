@@ -33,7 +33,6 @@ private:
 	CContextManager *m_ContextManager;
 
 	CColor m_BackgroundColor;
-	CRenderableObject m_Cube;
 
 	CRenderManager m_RenderManager;
 	CMaterialManager m_MaterialManager;

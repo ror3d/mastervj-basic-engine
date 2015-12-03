@@ -23,7 +23,7 @@ CApplication::CApplication(CDebugRender *_DebugRender, CContextManager *_Context
 
 	CDebugHelper::SDebugBar bar;
 	bar.name = "CApplication";
-
+	/*
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "background";
@@ -53,7 +53,7 @@ CApplication::CApplication(CDebugRender *_DebugRender, CContextManager *_Context
 	}
 
 	CDebugHelper::GetDebugHelper()->RegisterBar(bar);
-
+	*/
 }
 
 
@@ -64,9 +64,9 @@ CApplication::~CApplication()
 
 void CApplication::Init()
 {
-	m_MaterialManager.load("Data\\materials.xml");
+	//m_MaterialManager.load("Data\\materials.xml");
 
-	m_Cube.AddSubmesh(m_DebugRender->GetSimpleCube(), "solid material", m_DebugRender->GetSimpleCubeBSRadi(), m_DebugRender->GetSimpleCubeBBMin(), m_DebugRender->GetSimpleCubeBBMax());
+	//m_Cube.AddSubmesh(m_DebugRender->GetSimpleCube(), "solid material", m_DebugRender->GetSimpleCubeBSRadi(), m_DebugRender->GetSimpleCubeBBMin(), m_DebugRender->GetSimpleCubeBBMax());
 }
 
 void CApplication::SwitchCamera()
@@ -138,18 +138,18 @@ void CApplication::Render()
 	Mat44f world;
 
 	world.SetIdentity();
-	m_ContextManager->SetWorldMatrix(world);
+	//m_ContextManager->SetWorldMatrix(world);
 	m_ContextManager->Draw(m_DebugRender->GetAxis());
 
 	world.SetIdentity();
 	world.SetFromPos(10, 0, 0);
-	m_ContextManager->SetWorldMatrix(world);
-	m_ContextManager->Draw(m_DebugRender->GetClassicBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_CLASSIC);
+	//m_ContextManager->SetWorldMatrix(world);
+	//m_ContextManager->Draw(m_DebugRender->GetClassicBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_CLASSIC);
 
 	world.SetIdentity();
 	world.SetFromPos(0, 0, -10);
-	m_ContextManager->SetWorldMatrix(world);
-	m_ContextManager->Draw(m_DebugRender->GetPremultBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_PREMULT);
+	//m_ContextManager->SetWorldMatrix(world);
+	//m_ContextManager->Draw(m_DebugRender->GetPremultBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_PREMULT);
 
 
 	CDebugHelper::GetDebugHelper()->Render();

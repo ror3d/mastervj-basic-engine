@@ -1,9 +1,10 @@
-#pragma once
+#ifndef MESH_INSTANCE_H
+#define MESH_INSTANCE_H
+
 #include "RenderableObject.h"
-#include "StaticMesh.h"
-#include "RenderManager.h"
-//#include "Core/Engine.h>
-#include <Utils/Named.h>
+
+class CStaticMesh;
+class CRenderManager;
 
 class CMeshInstance : public CRenderableObject
 {
@@ -14,3 +15,5 @@ public:
 	~CMeshInstance();
 	void Render(CRenderManager *RM);
 };
+
+#endif

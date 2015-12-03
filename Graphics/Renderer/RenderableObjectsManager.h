@@ -1,3 +1,6 @@
+#ifndef RENDERABLE_OBJECTS_MANAGER_H
+#define RENDERABLE_OBJECTS_MANAGER_H
+
 #include "Utils/MapManager.h"
 #include "RenderableObject.h"
 
@@ -15,3 +18,5 @@ public:
 	CRenderableObject * AddAnimatedInstanceModel(const std::string &CoreModelName, const std::string &InstanceModelName, const Vect3f &Position);
 	void Load(const std::string &FileName);
 };
+
+#endif

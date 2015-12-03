@@ -15,9 +15,9 @@ public:
 	CEffectVertexShader(const CXMLTreeNode &TreeNode);
 	virtual ~CEffectVertexShader();
 	bool Load();
-	ID3D11VertexShader * GetVertexShader();
-	ID3D11InputLayout * GetVertexLayout();
-	ID3D11Buffer * GetConstantBuffer();
+	ID3D11VertexShader * GetVertexShader() { return m_VertexShader; }
+	ID3D11InputLayout * GetVertexLayout() { return m_VertexLayout;  }
+	ID3D11Buffer * GetConstantBuffer() { return m_ConstantBuffer;  }
 };
 
 #endif

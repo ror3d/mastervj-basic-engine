@@ -1,3 +1,6 @@
+#ifndef STATIC_MESH_MANAGER_H
+#define STATIC_MESH_MANAGER_H
+
 #include <Utils/MapManager.h>
 #include "StaticMesh.h"
 #include <XML/XMLTreeNode.h>
@@ -12,3 +15,5 @@ public:
 	bool Load(const std::string &FileName);
 	bool Reload();
 };
+
+#endif

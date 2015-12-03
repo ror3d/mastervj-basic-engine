@@ -147,7 +147,15 @@ bool CStaticMesh::Load(const std::string &FileName)
 	return true;
 }
 
-void CStaticMesh::Render(CRenderManager *RM) const{
+void CStaticMesh::Render(CRenderManager *RM) const
+{
+	for (size_t i = 0; i < m_materials.size(); ++i)
+	{
+		m_materials[i]->apply();
+		m_renderableVertexs[i]->RenderIndexed(CEngine::GetSingleton().getContextManager(),
+			m_materials[i]->getEffectTechnique(),
+			CEngine::GetSingleton().getEffectsManager()->m_Parameters);
+	}
 //        for(size_t i=0; i<m_renderableVertexs.size(); ++i){
 //               for(size_t j=0; j<m_materials[i]->size(); ++j)
 //					m_materials[i]->m_Textures[j]->Activate(j);

@@ -421,7 +421,7 @@ void CContextManager::Draw(const CRenderableVertexs* _VerticesToRender, ERasteri
 	Vect4f v(1, 1, 1, 1);
 	m_DeviceContext->OMSetBlendState(m_BlendStates[_BS], &v.x, 0xffffffff);
 
-	s_DebugEffect->UpdateParameters(m_DeviceContext, &m_Parameters);
+	//s_DebugEffect->UpdateParameters(m_DeviceContext, &m_Parameters);
 	s_DebugEffect->SetActive(m_DeviceContext);
 
 	// TODO

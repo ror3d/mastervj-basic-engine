@@ -31,7 +31,7 @@ void CMaterial::apply()
 {
 	for (int i = 0; i < m_textures.size(); ++i)
 	{
-		m_textures[i]->Activate(1);
+		m_textures[i]->Activate(i);
 	}
 }
 

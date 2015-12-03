@@ -1,22 +1,23 @@
 #include "Texture.h"
 
 #include "Context/ContextManager.h"
-#include <d3d11.h>
+#include <Engine/Engine.h>
+#include <D3DX11.h>
 
-CTexture::CTexture()
+CTexture::CTexture() : CNamed("")
 {
 }
 
 
 CTexture::~CTexture()
 {
+	Unload();
 }
 
 
 bool CTexture::LoadFile()
 {
-	/* TODO
-	ID3D11Device *l_Device = UABEngine.GetRenderManager().GetDevice();
+	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	HRESULT l_HR = D3DX11CreateShaderResourceViewFromFile(l_Device,
 		getName().c_str(), NULL, NULL, &m_Texture, NULL);
 	D3D11_SAMPLER_DESC l_SampDesc;
@@ -30,31 +31,29 @@ bool CTexture::LoadFile()
 	l_SampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 	l_HR = l_Device->CreateSamplerState(&l_SampDesc, &m_SamplerState);
 	return SUCCEEDED(l_HR);
-	//*/
-	return false;
 }
 
 void CTexture::Unload()
 {
+	// TODO
 }
 
 bool CTexture::load(const std::string &Filename)
 {
-	return false;
+	setName(Filename);
+	return LoadFile();
 }
 
 void CTexture::Activate(unsigned int StageId)
 {
-	/* TODO
-	ID3D11DeviceContext
-		*l_DeviceContext = UABEngine.GetInstance().GetRenderManager().GetDeviceContext();
+	ID3D11DeviceContext *l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
 	l_DeviceContext->PSSetSamplers(StageId, 1, &m_SamplerState);
 	l_DeviceContext->PSSetShaderResources(StageId, 1, &m_Texture);
-	//*/
 }
 
 bool CTexture::Reload()
 {
-	return false;
+	Unload();
+	return load(getName());
 }
 

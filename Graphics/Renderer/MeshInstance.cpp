@@ -1,19 +1,19 @@
 #include "MeshInstance.h"
+#include <Engine/Engine.h>
 
 CMeshInstance::CMeshInstance(const std::string &Name, const std::string &CoreName)
-	: CRenderableObject(Name)
 {
-    //m_StaticMesh = CEngine::GetSingletonPtr()->getStaticMeshManager()->GetResource(CoreName);
-
+	setName(Name);
+    m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(CoreName);
 }
 
 CMeshInstance::~CMeshInstance()
 {
-	m_StaticMesh = NULL;
+	m_StaticMesh = nullptr;
 }
 
 void CMeshInstance::Render(CRenderManager *RM)
 {
-    //CEngine::GetSingletonPtr()->getEffectsManager()->SetWorldMatrix(GetTransform());
+	CEngine::GetSingleton().getEffectsManager()->m_Parameters.m_World.SetFromPosAndAnglesYXZ(m_Position, m_Yaw, m_Pitch, m_Roll);;
 	m_StaticMesh->Render(RM);
 }

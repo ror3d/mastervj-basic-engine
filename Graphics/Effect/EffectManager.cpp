@@ -5,6 +5,7 @@
 
 #include <XML/XMLTreeNode.h>
 
+CEffectParameters CEffectManager::m_Parameters;
 
 CEffectManager::CEffectManager()
 {
@@ -56,11 +57,11 @@ void CEffectManager::load(const std::string &Filename)
 
 CEffectVertexShader * CEffectManager::GetVertexShader(const std::string &VertexShader)
 {
-	return nullptr;
+	return m_VertexShaders.get(VertexShader);
 }
 
 
 CEffectPixelShader * CEffectManager::GetPixelShader(const std::string &PixelShader)
 {
-	return nullptr;
+	return m_PixelShaders.get(PixelShader);
 }

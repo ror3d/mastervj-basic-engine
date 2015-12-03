@@ -46,3 +46,5 @@ void CEffectVertexShader::Destroy()
 {
 	int i = 0;
 }
+
+

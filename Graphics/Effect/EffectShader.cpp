@@ -1,8 +1,8 @@
 #include "EffectShader.h"
-#include "Effect/EffectParameters.h"
 #include "Engine/Engine.h"
 #include <D3DX11.h>
 #include <D3Dcompiler.h>
+#include "EffectParameters.h"
 
 #ifdef _DEBUG
 #pragma comment(lib, "d3dx11d.lib")

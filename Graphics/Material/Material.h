@@ -44,8 +44,8 @@ public:
 
 	virtual void SetShaderParameters(CContextManager* _Context) const
 	{
-		_Context->SetDebugSize(m_debugSize);
-		_Context->SetBaseColor(m_baseColor);
+		//_Context->SetDebugSize(m_debugSize);
+		//_Context->SetBaseColor(m_baseColor);
 	}
 
 	bool HasBlending() const
