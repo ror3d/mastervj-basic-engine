@@ -3,6 +3,8 @@
 #include <Math/Matrix44.h>
 #include <Utils/MapManager.h>
 
+#define MAXBONES 29
+
 class CEffectParameters
 {
 public:
@@ -10,7 +12,7 @@ public:
 	Mat44f    m_View;
 	Mat44f    m_Projection;
 	Vect4f    m_BaseColor;
-	//Mat44f    m_Bones[MAXBONES];
+	Mat44f    m_Bones[MAXBONES];
 	Vect4f    m_CameraRightVector;
 	Vect4f    m_CameraUpVector;
 	Vect4f    m_BillboardPosition;

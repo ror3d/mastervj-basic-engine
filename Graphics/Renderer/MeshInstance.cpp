@@ -14,6 +14,7 @@ CMeshInstance::~CMeshInstance()
 
 void CMeshInstance::Render(CRenderManager *RM)
 {
-	CEngine::GetSingleton().getEffectsManager()->m_Parameters.m_World.SetFromPosAndAnglesYXZ(m_Position, m_Yaw, m_Pitch, m_Roll);;
+	CEffectManager::m_Parameters.m_World=GetTransform();
+	//CEngine::GetSingleton().getEffectsManager()->m_Parameters.m_World.SetFromPosAndAnglesYXZ(m_Position, m_Yaw, m_Pitch, m_Roll);;
 	m_StaticMesh->Render(RM);
 }

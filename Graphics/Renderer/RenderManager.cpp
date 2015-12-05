@@ -23,14 +23,20 @@ void CRenderManager::SetCurrentCamera(const CCamera& _CurrentCamera)
 
 void CRenderManager::Render(CContextManager* _Context, CMaterialManager* _MaterialManager)
 {
-	if (m_UseDebugCamera)
+
+	CCamera &l_Camera = (m_UseDebugCamera ? m_DebugCamera : m_CurrentCamera);
+	/*if (m_UseDebugCamera)
 	{
-		//_Context->SetCamera(m_DebugCamera);
+		m_DebugCamera.GetView()
+
+		_Context->SetCamera(m_DebugCamera);
 	}
 	else
 	{
-		//_Context->SetCamera(m_CurrentCamera);
-	}
+		_Context->SetCamera(m_CurrentCamera);
+	}*/
+	CEffectManager::m_Parameters.m_View=l_Camera.GetView();
+	CEffectManager::m_Parameters.m_Projection= l_Camera.GetProjection();
 	/*
 	static float r = 0;
 	r += 0.01;
