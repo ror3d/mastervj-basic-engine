@@ -2,8 +2,8 @@
 #define STATIC_MESH_MANAGER_H
 
 #include <Utils/MapManager.h>
-#include "StaticMesh.h"
-#include <XML/XMLTreeNode.h>
+
+class CStaticMesh;
 
 class CStaticMeshManager : public TemplatedMapManager<CStaticMesh>
 {

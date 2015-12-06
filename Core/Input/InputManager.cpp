@@ -1,6 +1,6 @@
 #include "InputManager.h"
 
-static CInputManager* s_CurrentInputManager;
+static CInputManager* s_CurrentInputManager = nullptr;
 
 class CDummyInputManager : public CInputManager
 {

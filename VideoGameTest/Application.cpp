@@ -8,22 +8,23 @@
 #include "Input/InputManager.h"
 #include "Debug/DebugHelper.h"
 
+
 static void __stdcall SwitchCameraCallback(void* _app)
 {
 	((CApplication*)_app)->SwitchCamera();
 }
 
-CApplication::CApplication(CDebugRender *_DebugRender, CContextManager *_ContextManager)
-	: m_DebugRender(_DebugRender)
+CApplication::CApplication(CDebugRender *_debugRender, CContextManager *_ContextManager)
+	: m_DebugRender(_debugRender)
 	, m_ContextManager(_ContextManager)
 	, m_BackgroundColor(.2f, .1f, .4f)
 	, m_CurrentCamera(0)
 {
 	CDebugHelper::GetDebugHelper()->Log("CApplication::CApplication");
 
+	/*
 	CDebugHelper::SDebugBar bar;
 	bar.name = "CApplication";
-	/*
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "background";
@@ -64,9 +65,6 @@ CApplication::~CApplication()
 
 void CApplication::Init()
 {
-	//m_MaterialManager.load("Data\\materials.xml");
-
-	//m_Cube.AddSubmesh(m_DebugRender->GetSimpleCube(), "solid material", m_DebugRender->GetSimpleCubeBSRadi(), m_DebugRender->GetSimpleCubeBBMin(), m_DebugRender->GetSimpleCubeBBMax());
 }
 
 void CApplication::SwitchCamera()
@@ -139,7 +137,7 @@ void CApplication::Render()
 
 	world.SetIdentity();
 	//m_ContextManager->SetWorldMatrix(world);
-	m_ContextManager->Draw(m_DebugRender->GetAxis());
+	//m_ContextManager->Draw(m_DebugRender->GetAxis());
 
 	world.SetIdentity();
 	world.SetFromPos(10, 0, 0);
@@ -152,7 +150,7 @@ void CApplication::Render()
 	//m_ContextManager->Draw(m_DebugRender->GetPremultBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_PREMULT);
 
 
-	CDebugHelper::GetDebugHelper()->Render();
+	//CDebugHelper::GetDebugHelper()->Render();
 
 	m_ContextManager->EndRender();
 }

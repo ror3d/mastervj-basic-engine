@@ -78,7 +78,6 @@ void CContextManager::Dispose()
 }
 
 
-
 HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 {
 

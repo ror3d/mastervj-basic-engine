@@ -1,5 +1,6 @@
 #include "MeshInstance.h"
 #include <Engine/Engine.h>
+#include "StaticMesh.h"
 
 CMeshInstance::CMeshInstance(const std::string &Name, const std::string &CoreName)
 {

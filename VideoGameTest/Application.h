@@ -1,4 +1,5 @@
-#pragma once
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
 #include <Camera/SphericalCameraController.h>
 #include <Camera/FPSCameraController.h>
@@ -12,7 +13,7 @@ class CContextManager;
 class CApplication
 {
 public:
-	CApplication(CDebugRender *_DebugRender, CContextManager *_ContextManager);
+	CApplication(CDebugRender *_debugRender, CContextManager *_ContextManager);
 	~CApplication();
 
 	void Init();
@@ -22,6 +23,7 @@ public:
 	void Update(float _ElapsedTime);
 	void Render();
 
+	void Destroy() {/* TODO */}
 private:
 
 	CSphericalCameraController m_SphericalCamera;
@@ -36,5 +38,7 @@ private:
 
 	CRenderManager m_RenderManager;
 	CMaterialManager m_MaterialManager;
+
 };
 
+#endif

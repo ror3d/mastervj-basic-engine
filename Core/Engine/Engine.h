@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Utils/SingletonPattern.h>
 #include <Renderer/StaticMeshManager.h>
 #include <Renderer/RenderableObjectsManager.h>

@@ -23,7 +23,6 @@ CStaticMesh::~CStaticMesh()
 	Destroy();
 }
 
-//Codigo basado en https://code.google.com/p/uab-engine/source/browse/trunk/+uab-engine/?r=3
 bool CStaticMesh::Load(const std::string &FileName)
 {
     m_fileName=FileName;

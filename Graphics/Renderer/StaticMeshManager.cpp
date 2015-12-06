@@ -1,4 +1,8 @@
 #include "StaticMeshManager.h"
+#include "StaticMesh.h"
+#include <XML/XMLTreeNode.h>
+
+#include <Core/Engine/Engine.h>
 
 
 CStaticMeshManager::CStaticMeshManager()

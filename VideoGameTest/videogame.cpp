@@ -28,7 +28,6 @@
 
 #define APPLICATION_NAME	"VIDEOGAME"
 
-/*
 void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 {
 	// This follows Raymond Chen's prescription
@@ -44,10 +43,10 @@ void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 		{
 			SetWindowLongW(Window, GWL_STYLE, Style & ~WS_OVERLAPPEDWINDOW);
 			SetWindowPos(Window, HWND_TOP,
-				MonitorInfo.rcMonitor.left, MonitorInfo.rcMonitor.top,
-				MonitorInfo.rcMonitor.right - MonitorInfo.rcMonitor.left,
-				MonitorInfo.rcMonitor.bottom - MonitorInfo.rcMonitor.top,
-				SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+						 MonitorInfo.rcMonitor.left, MonitorInfo.rcMonitor.top,
+						 MonitorInfo.rcMonitor.right - MonitorInfo.rcMonitor.left,
+						 MonitorInfo.rcMonitor.bottom - MonitorInfo.rcMonitor.top,
+						 SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 		}
 	}
 	else
@@ -55,49 +54,122 @@ void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 		SetWindowLongW(Window, GWL_STYLE, Style | WS_OVERLAPPEDWINDOW);
 		SetWindowPlacement(Window, &WindowPosition);
 		SetWindowPos(Window, 0, 0, 0, 0, 0,
-			SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
-			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+					 SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
+					 SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 	}
 }
 
-*/
 //-----------------------------------------------------------------------------
 // Name: MsgProc()
 // Desc: The window's message handler
 //-----------------------------------------------------------------------------
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	CContextManager& s_Context = *(CEngine::GetSingleton().getContextManager());
+	CInputManagerImplementation *inputManager = dynamic_cast<CInputManagerImplementation*>(CInputManager::GetInputManager());
+
+	bool WasDown = false, IsDown = false, Alt = false;
+
 	switch (msg)
 	{
-	case WM_SIZE:
-	/*
-		if (wParam != SIZE_MINIMIZED)
-		{
-			// TODO: Resetear el AntTeakBar
-			TwWindowSize(0, 0);
+		case WM_SETFOCUS:
+			if (inputManager) {
+				inputManager->SetFocus(true);
+			}
+			return 0;
+		case  WM_KILLFOCUS:
+			if (inputManager) {
+				inputManager->SetFocus(false);
+			}
+			return 0;
+		case WM_SYSKEYDOWN:
+		case WM_SYSKEYUP:
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+			WasDown = ((lParam & (1 << 30)) != 0);
+			IsDown = ((lParam & (1 << 31)) == 0);
+			Alt = ((lParam & (1 << 29)) != 0);
 
-			s_Context.Resize(hWnd, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
-			// TODO: Resetear el AntTeakBar
-			TwWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+			if (IsDown && !WasDown)
+			{
+				bool consumed = false;
+				switch (wParam)
+				{
+					case VK_RETURN:
+						if (Alt)
+						{
+							WINDOWPLACEMENT windowPosition = { sizeof(WINDOWPLACEMENT) };
+							GetWindowPlacement(hWnd, &windowPosition);
+
+							ToggleFullscreen(hWnd, windowPosition);
+							consumed = true;
+						}
+						break;
+					case VK_ESCAPE:
+						PostQuitMessage(0);
+						consumed = true;
+						break;
+					case VK_F4:
+						if (Alt)
+						{
+							PostQuitMessage(0);
+							consumed = true;
+						}
+						break;
+				}
+				if (consumed)
+				{
+					return 0;
+				}
+			}
+			if (inputManager && inputManager->HasFocus())
+			{
+				if (inputManager->KeyEventReceived(wParam, lParam))
+				{
+					return 0;
+				}
+			}
+			break;
+		case WM_MOUSEMOVE:
+			if (inputManager && inputManager->HasFocus())
+			{
+				int xPosAbsolute = GET_X_LPARAM(lParam);
+				int yPosAbsolute = GET_Y_LPARAM(lParam);
+
+				inputManager->UpdateCursor(xPosAbsolute, yPosAbsolute);
+
+				return 0;
+			}
+			break;
+		case WM_SIZE:
+			if (wParam != SIZE_MINIMIZED)
+			{
+				// TODO: Resetear el AntTeakBar
+				TwWindowSize(0, 0);
+
+				s_Context.Resize(hWnd, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+				// TODO: Resetear el AntTeakBar
+				TwWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+			}
+			return 0;
+		case WM_DESTROY:
+		{
+			PostQuitMessage(0);
+			return 0;
 		}
-		return 0;
-	*/
 		break;
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		return 0;
-	}
-	break;
 	}//end switch( msg )
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+
 
 //-----------------------------------------------------------------------
 // WinMain
 //-----------------------------------------------------------------------
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
+	new CEngine();
+	CEngine& engine = CEngine::GetSingleton();
 	//*/
 	// Register the window class
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, MsgProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, APPLICATION_NAME, NULL };
@@ -116,16 +188,15 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	// Añadir aquí el Init de la applicacioón
 
-	new CEngine();
-	CEngine::GetSingleton().Init();
+	engine.Init();
 
 	CContextManager& s_Context = *(CEngine::GetSingleton().getContextManager());
 	s_Context.CreateContext(hWnd, 800, 600);
 
-	CEngine::GetSingleton().getEffectsManager()->load("Data\\effects.xml");
-	CEngine::GetSingleton().getMaterialManager()->load("Data\\materials.xml");
-	CEngine::GetSingleton().getStaticMeshManager()->Load("Data\\static_meshes.xml");
-	CEngine::GetSingleton().getRenderableObjectManager()->Load("Data\\renderable_objects.xml");
+	engine.getEffectsManager()->load("Data\\effects.xml");
+	engine.getMaterialManager()->load("Data\\materials.xml");
+	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
+	engine.getRenderableObjectManager()->Load("Data\\renderable_objects.xml");
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
@@ -161,85 +232,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 			{
 				if (!debugHelper.Update(msg.hwnd, msg.message, msg.wParam, msg.lParam))
 				{
-					bool WasDown = false, IsDown = false, Alt = false;
-
-					switch (msg.message)
-					{
-					case WM_SETFOCUS:
-						hasFocus = true;
-						inputManager.SetFocus(true);
-						break;
-					case  WM_KILLFOCUS:
-						hasFocus = false;
-						inputManager.SetFocus(false);
-						break;
-					case WM_SYSKEYDOWN:
-					case WM_SYSKEYUP:
-					case WM_KEYDOWN:
-					case WM_KEYUP:
-						WasDown = ((msg.lParam & (1 << 30)) != 0);
-						IsDown = ((msg.lParam & (1 << 31)) == 0);
-						Alt = ((msg.lParam & (1 << 29)) != 0);
-
-						if (WasDown != IsDown)
-						{
-							if (IsDown)
-							{
-								bool consumed = false;
-								switch (msg.wParam)
-								{
-								case VK_RETURN:
-									if (Alt)
-									{
-										WINDOWPLACEMENT windowPosition = { sizeof(WINDOWPLACEMENT) };
-										GetWindowPlacement(msg.hwnd, &windowPosition);
-
-										//ToggleFullscreen(msg.hwnd, windowPosition);
-										consumed = true;
-									}
-									break;
-								case VK_ESCAPE:
-									PostQuitMessage(0);
-									consumed = true;
-									break;
-								case VK_F4:
-									if (Alt)
-									{
-										PostQuitMessage(0);
-										consumed = true;
-									}
-									break;
-								}
-								if (consumed)
-								{
-									break;
-								}
-							}
-						}
-						if (!hasFocus || !inputManager.KeyEventReceived(msg.wParam, msg.lParam))
-						{
-							TranslateMessage(&msg);
-							DispatchMessage(&msg);
-						}
-						break;
-					case WM_MOUSEMOVE:
-						if (hasFocus)
-						{
-							int xPosAbsolute = GET_X_LPARAM(msg.lParam);
-							int yPosAbsolute = GET_Y_LPARAM(msg.lParam);
-
-							inputManager.UpdateCursor(xPosAbsolute, yPosAbsolute);
-						}
-						else
-						{
-							TranslateMessage(&msg);
-							DispatchMessage(&msg);
-						}
-						break;
-					default:
-						TranslateMessage(&msg);
-						DispatchMessage(&msg);
-					}
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
 				}
 			}
 			else
@@ -247,23 +241,25 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 				inputManager.BeginFrame();
 
 				DWORD l_CurrentTime = timeGetTime();
-				float m_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
+				float l_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
 				m_PreviousTime = l_CurrentTime;
 
 
-				application.Update(m_ElapsedTime);
+				application.Update(l_ElapsedTime);
 				application.Render();
 
 
 				inputManager.EndFrame();
 			}
 		}
-		UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	}
-	// Añadir una llamada a la alicación para finalizar/liberar memoria de todos sus datos
+
+	UnregisterClass(APPLICATION_NAME, wc.hInstance);
+
+	// TODO: Dispose of CApplication resources
+
 	s_Context.Dispose();
 
-	return 0;
 	//*/
 
 	return 0;
