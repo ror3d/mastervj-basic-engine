@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Math/Matrix44.h>
-#include <Utils/MapManager.h>
+#include <Utils/TMapManager.h>
 
 #define MAXBONES 29
 
@@ -25,11 +25,11 @@ class CEffectTechnique;
 class CEffectVertexShader;
 class CEffectPixelShader;
 
-class CEffectManager : public TemplatedMapManager<CEffectTechnique>
+class CEffectManager : public TMapManager<CEffectTechnique>
 {
 private:
-	TemplatedMapManager<CEffectVertexShader> m_VertexShaders;
-	TemplatedMapManager<CEffectPixelShader> m_PixelShaders;
+	TMapManager<CEffectVertexShader> m_VertexShaders;
+	TMapManager<CEffectPixelShader> m_PixelShaders;
 
 public:
 	static CEffectParameters m_Parameters;
@@ -40,4 +40,6 @@ public:
 	void load( const std::string &Filename);
 	CEffectVertexShader * GetVertexShader( const std::string &VertexShader);
 	CEffectPixelShader * GetPixelShader( const std::string &PixelShader);
+
+	void destroy();
 };

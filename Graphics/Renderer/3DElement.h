@@ -1,9 +1,8 @@
 #ifndef C3D_ELEMENT_H
 #define C3D_ELEMENT_H
 
-#include "Math\Vector3.h"
-#include "Math\Matrix44.h"
-#include "XML\XMLTreeNode.h"
+#include <Base/Math/Math.h>
+#include <Base/XML/XMLTreeNode.h>
 
 class CRenderManager;
 

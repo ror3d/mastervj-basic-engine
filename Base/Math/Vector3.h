@@ -16,14 +16,14 @@
 // @Note1 \verbatim
 // El espacio 3D en el que se definen estos vectores, que también incluyen la funcionalidad de punto,
 // es un espacio que sigue un criterio de sistema de referencia de "mano derecha".
-// 
+//
 //                     z |
 //                       |
 //                       |  / y
 //                       | /
 //                       |/
 //                        --------  x
-// 
+//
 // Este criterio es utilizado y respetado en todas las operaciones entre objetos de la librería
 // matematica.
 // \endverbatim
@@ -36,20 +36,20 @@ public:
   // DATOS PUBLICOS
   //-----------------
   T x, y, z;
-      
-public: 
+
+public:
   //-------------------
   // METODOS PUBLICOS
   //-------------------
 
-  // Construcción   
+  // Construcción
   inline Vector3 ();
   inline Vector3 (const Vector3<T>& otro);
   inline Vector3 (const T tx, const T ty, const T tz);
   inline Vector3 (const T escalar);
-  
-  
-  // Operadores aritméticos   
+
+
+  // Operadores aritméticos
   inline        Vector3<T>  operator + (const Vector3<T>& otro) const;
   inline        Vector3<T>  operator - (const Vector3<T>& otro) const;
   inline        Vector3<T>  operator * (const T escalar) const;
@@ -60,8 +60,8 @@ public:
   inline        Vector3<T>& operator + ();
   inline const  Vector3<T>& operator + () const;
 
-      
-  // Operadores aritméticos de actualización   
+
+  // Operadores aritméticos de actualización
   inline Vector3<T>& operator += (const Vector3<T>& otro);
   inline Vector3<T>& operator -= (const Vector3<T>& otro);
   inline Vector3<T>& operator *= (const T escalar);
@@ -102,7 +102,7 @@ public:
   inline const Vector3<T>& SetIfMinComponents (const Vector3<T>& otro);
   inline const Vector3<T>& SetIfMaxComponents (const Vector3<T>& otro);
 
-  
+
   // Operador de acceso []
   inline T  operator [] (int i) const;
   inline T& operator [] (int i);
@@ -114,7 +114,7 @@ public:
   inline Vector2<T> GetProjZX () const;
 
 
-  // Funciones de la longitud 
+  // Funciones de la longitud
   inline Vector3<T>& Normalize     (const T tk = One<T>());
   inline Vector3<T>  GetNormalized (const T tk = One<T>()) const;
   inline T           Length        () const;
@@ -133,7 +133,7 @@ public:
   inline T           GetAngleY   () const;
   inline T           GetAngleZ   () const;
   inline void        GetAngles   (T& angX, T& angY, T& angZ) const;
-         
+
 
   // Interpolación lineal
   inline Vector3<T>& Lerp    (const Vector3<T>& otro, const T t);

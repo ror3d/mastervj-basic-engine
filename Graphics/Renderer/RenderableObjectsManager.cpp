@@ -1,4 +1,5 @@
 #include "RenderableObjectsManager.h"
+#include "RenderableObject.h"
 #include "MeshInstance.h"
 
 CRenderableObjectsManager::CRenderableObjectsManager()
@@ -21,11 +22,11 @@ void CRenderableObjectsManager::Update(float ElapsedTime)
 }
 
 
-void CRenderableObjectsManager::Render(CRenderManager *RM)
+void CRenderableObjectsManager::Render(CContextManager *_context)
 {
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{
-		it->second->Render(RM);
+		it->second->Render(_context);
 	}
 }
 

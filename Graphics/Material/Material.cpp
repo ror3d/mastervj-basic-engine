@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "Effect/EffectTechnique.h"
 #include "Engine/Engine.h"
+#include "Texture/Texture.h"
 
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)

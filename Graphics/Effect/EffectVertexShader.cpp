@@ -29,12 +29,18 @@ bool CEffectVertexShader::Load()
 		l_VSBlob->Release();
 		return false;
 	}
-	if (m_VertexType == "MV_POSITION_NORMAL_TEXTURE_VERTEX")
-		l_Loaded = MV_POSITION_NORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
-	else if (m_VertexType == "MV_POSITION_COLOR_VERTEX")
-		l_Loaded = MV_POSITION_COLOR_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	if ( m_VertexType == "MV_POSITION_NORMAL_TEXTURE_VERTEX" )
+	{
+		l_Loaded = MV_POSITION_NORMAL_TEXTURE_VERTEX::CreateInputLayout( l_Device, l_VSBlob, &m_VertexLayout );
+	}
+	else if ( m_VertexType == "MV_POSITION_COLOR_VERTEX" )
+	{
+		l_Loaded = MV_POSITION_COLOR_VERTEX::CreateInputLayout( l_Device, l_VSBlob, &m_VertexLayout );
+	}
 	else
+	{
 		//Info("Vertex type '%s' not recognized on CEffectVertexShader::Load", m_VertexType.c_str());
+	}
 	l_VSBlob->Release();
 	if (!l_Loaded)
 		return false;
@@ -45,6 +51,7 @@ bool CEffectVertexShader::Load()
 void CEffectVertexShader::Destroy()
 {
 	int i = 0;
+	// TODO: release shaders and buffers!!
 }
 
 

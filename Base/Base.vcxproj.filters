@@ -62,14 +62,17 @@
     <ClInclude Include="Utils\Utils.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\MapManager.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Named.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\SingletonPattern.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\TMapManager.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Math.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

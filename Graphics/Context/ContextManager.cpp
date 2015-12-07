@@ -6,7 +6,9 @@
 
 #include <Math/Matrix44.h>
 
-#include "Debug/DebugRender.h"
+//#include "Debug/DebugRender.h"
+#include <Base/Math/Color.h>
+
 
 #pragma comment(lib,"d3d11.lib")
 
@@ -413,24 +415,12 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 	}
 }
 
-void CContextManager::Draw(const CRenderableVertexs* _VerticesToRender, ERasterizerState _RS, EDepthStencilState _DSS, EBlendState _BS)
+void CContextManager::BeginRender()
 {
-	m_DeviceContext->RSSetState(m_RasterizerSates[_RS]);
-	m_DeviceContext->OMSetDepthStencilState(m_DepthStencilStates[_DSS], 0);
-	Vect4f v(1, 1, 1, 1);
-	m_DeviceContext->OMSetBlendState(m_BlendStates[_BS], &v.x, 0xffffffff);
-
-	//s_DebugEffect->UpdateParameters(m_DeviceContext, &m_Parameters);
-	s_DebugEffect->SetActive(m_DeviceContext);
-
-	// TODO
-
-	//_VerticesToRender->SetBuffers(m_DeviceContext);
-
-	//_VerticesToRender->Draw(m_DeviceContext);
+	BeginRender(CColor(.2f, .1f, .4f));
 }
 
-void CContextManager::BeginRender(CColor backgroundColor)
+void CContextManager::BeginRender(const CColor &backgroundColor)
 {
 	D3D11_VIEWPORT vp;
 	vp.Width = (FLOAT)m_Width;

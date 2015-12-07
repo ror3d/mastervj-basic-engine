@@ -3,7 +3,7 @@
 #include <d3d11.h>
 
 #include "Renderer/RenderableVertexs.h"
-#include "Math/Vector3.h"
+#include <Base/Math/Math.h>
 
 class CEffect;
 

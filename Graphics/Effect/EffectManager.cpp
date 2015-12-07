@@ -21,6 +21,12 @@ void CEffectManager::Reload()
 {
 }
 
+void CEffectManager::destroy()
+{
+	TMapManager::destroy();
+	m_VertexShaders.destroy();
+	m_PixelShaders.destroy();
+}
 
 void CEffectManager::load(const std::string &Filename)
 {

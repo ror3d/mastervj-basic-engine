@@ -25,26 +25,10 @@ void CRenderManager::Render(CContextManager* _Context, CMaterialManager* _Materi
 {
 
 	CCamera &l_Camera = (m_UseDebugCamera ? m_DebugCamera : m_CurrentCamera);
-	/*if (m_UseDebugCamera)
-	{
-		m_DebugCamera.GetView()
-
-		_Context->SetCamera(m_DebugCamera);
-	}
-	else
-	{
-		_Context->SetCamera(m_CurrentCamera);
-	}*/
 	CEffectManager::m_Parameters.m_View=l_Camera.GetView();
 	CEffectManager::m_Parameters.m_Projection= l_Camera.GetProjection();
-	/*
-	static float r = 0;
-	r += 0.01;
-	m_CurrentCamera.SetLookAt(Vect3f(sinf(r), 0, cosf(r)));
-	CEngine::GetSingleton().getEffectsManager()->m_Parameters.m_View = m_CurrentCamera.GetView();
-	*/
 
-	m_RenderableObjects->Render(this);
+	m_RenderableObjects->Render(_Context);
 
 
 

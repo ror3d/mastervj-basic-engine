@@ -28,7 +28,7 @@ public:
 	// DATOS PUBLICOS
 	//------------------
 
-	// Construcción   
+	// Construcción
 	inline Vector4();
 	inline Vector4(const Vector4<T>& otro);
 	inline Vector4(const Vector3<T>& otro);
@@ -37,7 +37,7 @@ public:
 	inline Vector4(const T escalar);
 
 
-	// Operadores aritméticos   
+	// Operadores aritméticos
 	inline        Vector4<T>  operator + (const Vector4<T>& otro) const;
 	inline        Vector4<T>  operator - (const Vector4<T>& otro) const;
 	inline        Vector4<T>  operator * (const T escalar) const;
@@ -49,7 +49,7 @@ public:
 	inline const  Vector4<T>& operator + () const;
 
 
-	// Operadores aritméticos de actualización   
+	// Operadores aritméticos de actualización
 	inline Vector4<T>& operator += (const Vector4<T>& otro);
 	inline Vector4<T>& operator -= (const Vector4<T>& otro);
 	inline Vector4<T>& operator *= (const T escalar);
@@ -92,7 +92,7 @@ public:
 	inline T& operator [] (int i);
 
 
-	// Funciones de la longitud 
+	// Funciones de la longitud
 	inline Vector4<T>& Normalize(const T tk = One<T>());
 	inline Vector4<T>  GetNormalized() const;
 	inline T           Length() const;

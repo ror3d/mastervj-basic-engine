@@ -8,7 +8,7 @@
 //#include "Utils/CompileTools.h"
 
 #include <math.h>
-#include <Math/MathTypes.h>
+#include "MathTypes.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// namespace mathUtils
@@ -105,7 +105,7 @@ inline bool IsPowerOf2(uint32 n)
 /// Devuelve: 1 --> A es mayor, 0 --> son iguales,  -1 --> A es menor
 template<typename TA, typename TB> inline int  Compare      (const TA& a, const TB& b, const TA epsilon = Epsilon<TA>());
 
-/// true si las magnitudes son iguales con un epsilon de margen de error 
+/// true si las magnitudes son iguales con un epsilon de margen de error
 template<typename T>               inline bool EqualEpsilon (const T a, const T b, const T epsilon = Epsilon<T>());
 
 /// true si la magnitud es cero con un epsilon de margen de tolerancia
@@ -141,4 +141,4 @@ inline void CanonizeAngle (float& fAngle);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 } //namespace mathUtils
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif 
+#endif

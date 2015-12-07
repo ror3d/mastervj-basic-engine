@@ -2,10 +2,12 @@
 #include <vector>
 #include <string>
 
-#include "Utils/Named.h"
+#include <Base/Utils/Named.h>
+#include <Base/Math/MathTypes.h>
 #include "VertexTypes.h"
 
 class CRenderManager;
+class CContextManager;
 class CRenderableVertexs;
 class CMaterial;
 
@@ -24,6 +26,6 @@ public:
 
 	bool Load (const std::string &FileName);
 	bool Reload ();
-	void Render (CRenderManager *RM) const;
+	void Render (CContextManager *_context) const;
 	void Destroy();
-};     
+};

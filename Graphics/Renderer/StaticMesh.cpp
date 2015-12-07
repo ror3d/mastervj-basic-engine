@@ -42,8 +42,8 @@ bool CStaticMesh::Load(const std::string &FileName)
 			return false;
         }
 
-		//Materials---------------------	
-                
+		//Materials---------------------
+
         fread(&l_numMaterials, sizeof(unsigned short), 1, l_meshFile); //lectura del numero de materiales
         if(l_numMaterials==0){
                 return false;
@@ -54,14 +54,14 @@ bool CStaticMesh::Load(const std::string &FileName)
 		{  //lectura de los materiales
             unsigned short l_NumChars;
 			fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
-			
+
 			char *l_MaterialName = new char[l_NumChars+1];
             fread(&l_MaterialName[0], sizeof(char), l_NumChars+1, l_meshFile);
 
 			m_materials[i]=CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
 
 			delete[] l_MaterialName;
-                    
+
 			//Texturas¿¿¿¿¿se cargan¿?¿
         }
 
@@ -96,15 +96,15 @@ bool CStaticMesh::Load(const std::string &FileName)
 			//Indices---------------------
 			unsigned short l_IndexType;
 			fread(&l_IndexType, sizeof(unsigned short), 1, l_meshFile);
-				
+
 			unsigned short l_NumIndexsFile;
 			unsigned int l_numVertexs;
-				
-			if(l_IndexType==16)	{					
+
+			if(l_IndexType==16)	{
 				fread(&l_NumIndexsFile, sizeof(unsigned short), 1, l_meshFile);
 				l_NumBytes=sizeof(unsigned short)*l_NumIndexsFile;
 				l_numVertexs=(unsigned int)l_NumIndexsFile;//Antes m_NumIndexs
-			}else if(l_IndexType==32) {					
+			}else if(l_IndexType==32) {
 				fread(&l_NumIndexsFile, sizeof(unsigned int), 1, l_meshFile);
 				l_NumBytes=sizeof(unsigned int)*l_NumIndexsFile;
 				l_numVertexs=l_NumIndexsFile;
@@ -116,7 +116,7 @@ bool CStaticMesh::Load(const std::string &FileName)
 			fread(l_IdxData, 1, l_NumBytes, l_meshFile);
 
 			CRenderableVertexs *l_RV=NULL;
-	
+
 			if(l_VertexType==MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType()){
 				if(l_IndexType==16)
 					l_RV=new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
@@ -128,17 +128,17 @@ bool CStaticMesh::Load(const std::string &FileName)
 				else
 					l_RV=new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
 			}
-	
-			m_renderableVertexs.push_back(l_RV);	
-	
+
+			m_renderableVertexs.push_back(l_RV);
+
 			delete[] l_VtxsData;
 			delete[] l_IdxData;
 		}
 
 		//Footer---------------------
         unsigned short l_footer;
-        fread(&l_footer, sizeof(unsigned short), 1, l_meshFile);   
-        if(l_footer!=0x55FE){                     
+        fread(&l_footer, sizeof(unsigned short), 1, l_meshFile);
+        if(l_footer!=0x55FE){
                 return false;
         }
 	}
@@ -146,20 +146,15 @@ bool CStaticMesh::Load(const std::string &FileName)
 	return true;
 }
 
-void CStaticMesh::Render(CRenderManager *RM) const
+void CStaticMesh::Render(CContextManager *_context) const
 {
 	for (size_t i = 0; i < m_materials.size(); ++i)
 	{
 		m_materials[i]->apply();
-		m_renderableVertexs[i]->RenderIndexed(CEngine::GetSingleton().getContextManager(),
+		m_renderableVertexs[i]->RenderIndexed(_context,
 			m_materials[i]->getEffectTechnique(),
-			CEngine::GetSingleton().getEffectsManager()->m_Parameters);
+			CEffectManager::m_Parameters);
 	}
-//        for(size_t i=0; i<m_renderableVertexs.size(); ++i){
-//               for(size_t j=0; j<m_materials[i]->size(); ++j)
-//					m_materials[i]->m_Textures[j]->Activate(j);
-//				m_renderableVertexs[i]->Render(RM, NULL,NULL);
-//        }
 }
 
 

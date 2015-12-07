@@ -3,11 +3,8 @@
 
 #include <d3d11.h>
 
-#include "Effect/Effect.h"
-#include "Effect/EffectManager.h"
-#include "Camera/Camera.h"
-
 class CRenderableVertexs;
+class CColor;
 
 class CContextManager
 {
@@ -36,7 +33,7 @@ public:
 		BLEND_SOLID,
 		BLEND_CLASSIC,
 		BLEND_PREMULT,
-		
+
 		BLEND_COUNT
 	};
 
@@ -54,9 +51,12 @@ public:
 
 	float GetAspectRatio() const { return (float)m_Width / (float)m_Height; }
 
-	void BeginRender(CColor backgroundColor = CColor(.2f, .1f, .4f));
+	float GetWidth() const { return m_Width; }
+	float GetHeight() const { return m_Height; }
+
+	void BeginRender();
+	void BeginRender(const CColor &backgroundColor);
 	void EndRender();
-	void Draw(const CRenderableVertexs* _VerticesToRender, ERasterizerState _RS = RS_SOLID, EDepthStencilState _DSS = DSS_DEPTH_ON, EBlendState _BS = BLEND_SOLID);
 
 	ID3D11Device* GetDevice() const { return m_D3DDevice; }
 	ID3D11DeviceContext* GetDeviceContext() const { return m_DeviceContext; }

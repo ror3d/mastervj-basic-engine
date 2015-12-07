@@ -1,17 +1,22 @@
 #ifndef RENDERABLE_OBJECTS_MANAGER_H
 #define RENDERABLE_OBJECTS_MANAGER_H
 
-#include "Utils/MapManager.h"
-#include "RenderableObject.h"
+#include <string>
+#include <Base/Utils/TMapManager.h>
+#include <Base/Math/Math.h>
 
-class CRenderableObjectsManager : public TemplatedMapManager<CRenderableObject>
+class CContextManager;
+class CRenderableObject;
+class CXMLTreeNode;
+
+class CRenderableObjectsManager : public TMapManager<CRenderableObject>
 {
 private:
 public:
 	CRenderableObjectsManager();
 	~CRenderableObjectsManager();
 	void Update(float ElapsedTime);
-	void Render(CRenderManager *RM);
+	void Render(CContextManager *_context);
 	CRenderableObject * AddMeshInstance(CXMLTreeNode &TreeNode);
 	CRenderableObject * AddMeshInstance(const std::string &CoreMeshName, const std::string &InstanceName, const Vect3f &Position);
 	CRenderableObject * AddAnimatedInstanceModel(CXMLTreeNode &TreeNode);

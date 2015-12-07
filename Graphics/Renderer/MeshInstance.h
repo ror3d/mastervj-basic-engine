@@ -4,7 +4,7 @@
 #include "RenderableObject.h"
 
 class CStaticMesh;
-class CRenderManager;
+class CContextManager;
 
 class CMeshInstance : public CRenderableObject
 {
@@ -13,7 +13,7 @@ private:
 public:
 	CMeshInstance(const std::string &Name, const std::string &CoreName);
 	~CMeshInstance();
-	void Render(CRenderManager *RM);
+	void Render(CContextManager *_context);
 };
 
 #endif

@@ -12,7 +12,6 @@ class CRenderManager
 {
 public:
 	CRenderManager();
-		
 
 	void SetCurrentCamera(const CCamera& _CurrentCamera);
 	void SetDebugCamera(const CCamera& _DebugCamera) { m_DebugCamera = _DebugCamera; }
@@ -28,7 +27,6 @@ private:
 	bool m_UseDebugCamera;
 
 	CRenderableObjectsManager * m_RenderableObjects;
-
 };
 
 #endif

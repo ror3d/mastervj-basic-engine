@@ -2,13 +2,13 @@
 #define MATERIAL_H
 
 #include <Utils/Named.h>
-#include <Utils/Utils.h>
+#include <Base/Math/Color.h>
 #include <vector>
-#include "Texture/Texture.h"
-#include "Effect/EffectTechnique.h"
 #include "Context/ContextManager.h"
 
 class CXMLTreeNode;
+class CEffectTechnique;
+class CTexture;
 
 class CMaterial : public CNamed
 {
@@ -23,7 +23,6 @@ private:
 	float m_debugSize;
 	CColor m_baseColor;
 public:
-	CMaterial(const std::string &Filename);
 	CMaterial(CContextManager::ERasterizerState _RasterizerState, CContextManager::EDepthStencilState _DepthStencilState, CContextManager::EBlendState _BlendState)
 		: m_rasterizerState(_RasterizerState)
 		, m_depthStencilState(_DepthStencilState)

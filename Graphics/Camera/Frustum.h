@@ -4,8 +4,7 @@
 #define INC_FRUSTUM_H_
 
 
-#include "Math/Matrix44.h"
-#include "Math/Vector3.h"
+#include <Base/Math/Math.h>
 
 class CFrustum
 {

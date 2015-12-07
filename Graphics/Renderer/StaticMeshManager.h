@@ -1,11 +1,11 @@
 #ifndef STATIC_MESH_MANAGER_H
 #define STATIC_MESH_MANAGER_H
 
-#include <Utils/MapManager.h>
+#include <Utils/TMapManager.h>
 
 class CStaticMesh;
 
-class CStaticMeshManager : public TemplatedMapManager<CStaticMesh>
+class CStaticMeshManager : public TMapManager<CStaticMesh>
 {
 protected:
 	std::string m_FileName;

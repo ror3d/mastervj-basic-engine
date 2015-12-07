@@ -1,8 +1,7 @@
 #ifndef INC_CAMERA_H_
 #define INC_CAMERA_H_
 
-#include "Math/Matrix44.h"
-#include "Math/Vector3.h"
+#include <Base/Math/Math.h>
 
 class CCamera
 {

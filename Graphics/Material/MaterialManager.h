@@ -2,9 +2,9 @@
 #define MATERIAL_MANAGER_H
 
 #include "Material.h"
-#include <Utils/MapManager.h>
+#include <Utils/TMapManager.h>
 
-class CMaterialManager : public TemplatedMapManager<CMaterial>
+class CMaterialManager : public TMapManager<CMaterial>
 {
 private:
 	std::string m_Filename;

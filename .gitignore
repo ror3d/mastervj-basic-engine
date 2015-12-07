@@ -194,3 +194,4 @@ FakesAssemblies/
 *.opt
 3rdParty/AntTweakBar/debug32/
 3rdParty/AntTweakBar/release32/
+*.opendb
