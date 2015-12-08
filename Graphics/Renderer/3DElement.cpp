@@ -50,7 +50,7 @@ C3DElement::C3DElement(float Yaw, float Pitch, float Roll)
 
 C3DElement::C3DElement(const CXMLTreeNode &XMLTreeNode)
 {
-	
+
 }
 
 
@@ -125,12 +125,6 @@ void C3DElement::SetScale(const Vect3f &Scale)
 inline const Vect3f & C3DElement::GetScale() const
 {
 	return m_Scale;
-}
-
-
-void C3DElement::Render(CRenderManager *RenderManager)
-{
-	RenderManager->Render(CEngine::GetSingleton().getContextManager(), CEngine::GetSingleton().getMaterialManager());
 }
 
 

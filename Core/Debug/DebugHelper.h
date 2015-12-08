@@ -68,7 +68,7 @@ public:
 
 public:
 
-	virtual void Render() {};
+	virtual void Render() = 0;
 
 	virtual void Log(const std::string& text) const {};
 
@@ -77,9 +77,6 @@ public:
 
 	static CDebugHelper* GetDebugHelper();
 	static void SetCurrentDebugHelper(CDebugHelper* _DebugHelper);
-
-protected:
-	CDebugHelper() {};
 };
 
 

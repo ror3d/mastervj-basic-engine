@@ -21,7 +21,7 @@ void CRenderManager::SetCurrentCamera(const CCamera& _CurrentCamera)
 }
 
 
-void CRenderManager::Render(CContextManager* _Context, CMaterialManager* _MaterialManager)
+void CRenderManager::Render(CContextManager* _Context)
 {
 
 	CCamera &l_Camera = (m_UseDebugCamera ? m_DebugCamera : m_CurrentCamera);

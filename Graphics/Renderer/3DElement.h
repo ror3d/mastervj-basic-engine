@@ -4,7 +4,7 @@
 #include <Base/Math/Math.h>
 #include <Base/XML/XMLTreeNode.h>
 
-class CRenderManager;
+class CContextManager;
 
 class C3DElement
 {
@@ -34,10 +34,10 @@ public:
 	virtual void SetYawPitchRoll(float Yaw, float Pitch, float Roll);
 	virtual void SetScale(const Vect3f &Scale);
 	inline const Vect3f & GetScale() const;
-	virtual void Render(CRenderManager *RenderManager);
 	const Mat44f & GetTransform();
 	bool GetVisible();
 	virtual void SetVisible(bool Visible);
+	virtual void Render(CContextManager *_context) = 0;
 };
 
 #endif

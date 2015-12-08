@@ -17,7 +17,7 @@ public:
 	void SetDebugCamera(const CCamera& _DebugCamera) { m_DebugCamera = _DebugCamera; }
 	void SetUseDebugCamera(bool _use) { m_UseDebugCamera = _use; }
 
-	void Render(CContextManager* _Context, CMaterialManager* _MaterialManager);
+	void Render(CContextManager* _Context);
 
 private:
 

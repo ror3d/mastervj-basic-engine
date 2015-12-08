@@ -9,6 +9,8 @@ public:
 	{
 		s_CurrentDebugHelper = this;
 	}
+
+	void Render() {};
 };
 
 static CDummyDebugHelper s_DummyDebugHelper;

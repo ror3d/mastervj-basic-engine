@@ -5,7 +5,7 @@
 CMeshInstance::CMeshInstance(const std::string &Name, const std::string &CoreName)
 {
 	setName(Name);
-    m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(CoreName);
+	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(CoreName);
 }
 
 CMeshInstance::~CMeshInstance()

@@ -1,26 +1,28 @@
 #include "Application.h"
 
-#include "Math/Matrix44.h"
-#include "Math/Vector4.h"
+#include <Base/Math/Math.h>
 
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Debug/DebugRender.h>
-#include "Input/InputManager.h"
-#include "Debug/DebugHelper.h"
+#include <Graphics/Renderer/RenderManager.h>
+
+#include <Core/Input/InputManager.h>
+#include <Core/Debug/DebugHelper.h>
 
 
-static void __stdcall SwitchCameraCallback(void* _app)
+static void __stdcall SwitchCameraCallback( void* _app )
 {
-	((CApplication*)_app)->SwitchCamera();
+	( (CApplication*)_app )->SwitchCamera();
 }
 
-CApplication::CApplication(CDebugRender *_debugRender, CContextManager *_ContextManager)
-	: m_DebugRender(_debugRender)
-	, m_ContextManager(_ContextManager)
-	, m_BackgroundColor(.2f, .1f, .4f)
-	, m_CurrentCamera(0)
+CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
+	: m_DebugRender( new CDebugRender( _ContextManager->GetDevice() ) )
+	, m_RenderManager( _renderManager )
+	, m_ContextManager( _ContextManager )
+	, m_BackgroundColor( .2f, .1f, .4f )
+	, m_CurrentCamera( 0 )
 {
-	CDebugHelper::GetDebugHelper()->Log("CApplication::CApplication");
+	CDebugHelper::GetDebugHelper()->Log( "CApplication::CApplication" );
 
 	/*
 	CDebugHelper::SDebugBar bar;
@@ -60,7 +62,7 @@ CApplication::CApplication(CDebugRender *_debugRender, CContextManager *_Context
 
 CApplication::~CApplication()
 {
-	CDebugHelper::GetDebugHelper()->Log("CApplication::~CApplication");
+	CDebugHelper::GetDebugHelper()->Log( "CApplication::~CApplication" );
 }
 
 void CApplication::Init()
@@ -70,82 +72,83 @@ void CApplication::Init()
 void CApplication::SwitchCamera()
 {
 	++m_CurrentCamera;
-	if (m_CurrentCamera > 1)
+	if ( m_CurrentCamera > 1 )
 	{
 		m_CurrentCamera = 0;
 	}
 }
 
-void CApplication::Update(float _ElapsedTime)
+void CApplication::Update( float _ElapsedTime )
 {
 
-	switch (m_CurrentCamera)
+	switch ( m_CurrentCamera )
 	{
-	case 0:
-		if (CInputManager::GetInputManager()->IsActionActive("MOVE_CAMERA"))
+		case 0:
+			if ( CInputManager::GetInputManager()->IsActionActive( "MOVE_CAMERA" ) )
+			{
+				Vect3f cameraMovement( 0, 0, 0 );
+
+				cameraMovement.x += CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * _ElapsedTime * 0.5f;
+				cameraMovement.y += CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * _ElapsedTime * 0.5f;
+
+				m_SphericalCamera.Update( cameraMovement );
+			}
+			break;
+		case 1:
 		{
-			Vect3f cameraMovement(0, 0, 0);
+			m_FPSCamera.AddYaw( -CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * _ElapsedTime * 0.05f );
+			m_FPSCamera.AddPitch( CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * _ElapsedTime * -0.05f );
 
-			cameraMovement.x += CInputManager::GetInputManager()->GetAxis("X_AXIS") * _ElapsedTime * 0.5f;
-			cameraMovement.y += CInputManager::GetInputManager()->GetAxis("Y_AXIS") * _ElapsedTime * 0.5f;
-
-			m_SphericalCamera.Update(cameraMovement);
+			m_FPSCamera.Move( CInputManager::GetInputManager()->GetAxis( "STRAFE" ), CInputManager::GetInputManager()->GetAxis( "MOVE_FWD" ), false, _ElapsedTime );
 		}
 		break;
-	case 1:
-	{
-		m_FPSCamera.AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * _ElapsedTime * 0.05f);
-		m_FPSCamera.AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * _ElapsedTime * -0.05f);
-
-		m_FPSCamera.Move(CInputManager::GetInputManager()->GetAxis("STRAFE"), CInputManager::GetInputManager()->GetAxis("MOVE_FWD"), false, _ElapsedTime);
-	}
-		break;
-	}
-	{
-		CCamera camera;
-		m_FPSCamera.SetCamera(&camera);
-		camera.SetFOV(1.047f);
-		camera.SetAspectRatio(m_ContextManager->GetAspectRatio());
-		camera.SetZNear(0.1f);
-		camera.SetZFar(100.f);
-		camera.SetMatrixs();
-		m_RenderManager.SetCurrentCamera(camera);
-
-		m_SphericalCamera.SetCamera(&camera);
-		camera.SetFOV(1.047f);
-		camera.SetAspectRatio(m_ContextManager->GetAspectRatio());
-		camera.SetZNear(0.1f);
-		camera.SetZFar(100.f);
-		camera.SetMatrixs();
-		m_RenderManager.SetDebugCamera(camera);
-
-		m_RenderManager.SetUseDebugCamera(m_CurrentCamera == 0);
 	}
 }
 
 void CApplication::Render()
 {
-	m_ContextManager->BeginRender(m_BackgroundColor);
+	{
+		CCamera camera;
+		m_FPSCamera.SetCamera( &camera );
+		camera.SetFOV( 1.047f );
+		camera.SetAspectRatio( m_ContextManager->GetAspectRatio() );
+		camera.SetZNear( 0.1f );
+		camera.SetZFar( 100.f );
+		camera.SetMatrixs();
+		m_RenderManager->SetCurrentCamera( camera );
+
+		m_SphericalCamera.SetCamera( &camera );
+		camera.SetFOV( 1.047f );
+		camera.SetAspectRatio( m_ContextManager->GetAspectRatio() );
+		camera.SetZNear( 0.1f );
+		camera.SetZFar( 100.f );
+		camera.SetMatrixs();
+		m_RenderManager->SetDebugCamera( camera );
+
+		m_RenderManager->SetUseDebugCamera( m_CurrentCamera == 0 );
+	}
+
+	m_ContextManager->BeginRender( m_BackgroundColor );
 
 	// añadir todos los objetos que se quiere pintar
 	//m_RenderManager.AddRenderableObjectToRenderList(&m_Cube);
 
-	m_RenderManager.Render(m_ContextManager, &m_MaterialManager);
+	m_RenderManager->Render( m_ContextManager );
 
 
-	Mat44f world;
+	//Mat44f world;
 
-	world.SetIdentity();
+	//world.SetIdentity();
 	//m_ContextManager->SetWorldMatrix(world);
 	//m_ContextManager->Draw(m_DebugRender->GetAxis());
 
-	world.SetIdentity();
-	world.SetFromPos(10, 0, 0);
+	//world.SetIdentity();
+	//world.SetFromPos(10, 0, 0);
 	//m_ContextManager->SetWorldMatrix(world);
 	//m_ContextManager->Draw(m_DebugRender->GetClassicBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_CLASSIC);
 
-	world.SetIdentity();
-	world.SetFromPos(0, 0, -10);
+	//world.SetIdentity();
+	//world.SetFromPos(0, 0, -10);
 	//m_ContextManager->SetWorldMatrix(world);
 	//m_ContextManager->Draw(m_DebugRender->GetPremultBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_PREMULT);
 

@@ -28,11 +28,11 @@ public:
 	void Init();
 
 	//GETS
-	CStaticMeshManager * getStaticMeshManager(){ return staticMeshManager;}
-	CRenderableObjectsManager * getRenderableObjectManager(){ return renderableObjectManager;}
-	CMaterialManager * getMaterialManager(){ return materialManager;}
-	CEffectManager * getEffectsManager(){ return effectsManager;}
-	CTextureManager * getTextureManager(){ return textureManager;}	
-	CRenderManager * getRenderManager(){ return renderManager;}	
-	CContextManager * getContextManager(){ return contextManager;}	
+	inline CStaticMeshManager * getStaticMeshManager() const { return staticMeshManager; }
+	inline CRenderableObjectsManager * getRenderableObjectManager() const { return renderableObjectManager; }
+	inline CMaterialManager * getMaterialManager() const { return materialManager; }
+	inline CEffectManager * getEffectsManager() const { return effectsManager; }
+	inline CTextureManager * getTextureManager() const { return textureManager; }
+	inline CRenderManager * getRenderManager() const { return renderManager; }
+	inline CContextManager * getContextManager() const { return contextManager; }
 };
