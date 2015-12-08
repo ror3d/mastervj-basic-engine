@@ -22,6 +22,9 @@
     <Filter Include="Effect">
       <UniqueIdentifier>{a4233511-279a-4505-b32e-967b53dd1cc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Light">
+      <UniqueIdentifier>{cbf936dc-86ac-4d24-8b3d-df5ea0aaaa29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
@@ -64,7 +67,6 @@
       <Filter>Texture</Filter>
     </ClInclude>
     <ClInclude Include="graphics.h" />
-    <ClInclude Include="VertexTypes.h" />
     <ClInclude Include="Renderer\3DElement.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -80,7 +82,6 @@
     <ClInclude Include="Renderer\StaticMeshManager.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Texture\TextureManager.h" />
     <ClInclude Include="Effect\EffectParameters.h">
       <Filter>Effect</Filter>
     </ClInclude>
@@ -101,6 +102,16 @@
     </ClInclude>
     <ClInclude Include="Effect\EffectManager.h">
       <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexTypes.h" />
+    <ClInclude Include="Texture\TextureManager.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Light\Light.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Light\LightManager.h">
+      <Filter>Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +164,6 @@
     <ClCompile Include="Renderer\StaticMeshManager.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Texture\TextureManager.cpp" />
     <ClCompile Include="Effect\EffectPixelShader.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
@@ -168,6 +178,15 @@
     </ClCompile>
     <ClCompile Include="Effect\EffectManager.cpp">
       <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\TextureManager.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Light\Light.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Light\LightManager.cpp">
+      <Filter>Light</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

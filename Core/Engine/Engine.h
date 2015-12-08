@@ -7,6 +7,7 @@
 #include <Effect/EffectManager.h>
 #include <Texture/TextureManager.h>
 #include <Renderer/RenderManager.h>
+#include <Light/LightManager.h>
 
 class CContextManager;
 
@@ -20,6 +21,7 @@ private:
 	CTextureManager * textureManager;
 	CRenderManager * renderManager;
 	CContextManager * contextManager;
+	CLightManager * lightManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -35,4 +37,5 @@ public:
 	inline CTextureManager * getTextureManager() const { return textureManager; }
 	inline CRenderManager * getRenderManager() const { return renderManager; }
 	inline CContextManager * getContextManager() const { return contextManager; }
+	inline CLightManager * getLightManager() const { return lightManager; }
 };

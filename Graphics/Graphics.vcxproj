@@ -26,6 +26,8 @@
     <ClInclude Include="Effect\EffectTechnique.h" />
     <ClInclude Include="Effect\EffectVertexShader.h" />
     <ClInclude Include="graphics.h" />
+    <ClInclude Include="Light\Light.h" />
+    <ClInclude Include="Light\LightManager.h" />
     <ClInclude Include="Material\Material.h" />
     <ClInclude Include="Material\MaterialManager.h" />
     <ClInclude Include="Renderer\3DElement.h" />
@@ -53,6 +55,8 @@
     <ClCompile Include="Effect\EffectTechnique.cpp" />
     <ClCompile Include="Effect\EffectVertexShader.cpp" />
     <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="Light\Light.cpp" />
+    <ClCompile Include="Light\LightManager.cpp" />
     <ClCompile Include="Material\Material.cpp" />
     <ClCompile Include="Material\MaterialManager.cpp" />
     <ClCompile Include="Renderer\3DElement.cpp" />
