@@ -9,6 +9,7 @@ CEngine::CEngine()
 	, renderableObjectManager(nullptr)
 	, staticMeshManager(nullptr)
 	, textureManager(nullptr)
+	, lightManager(nullptr)
 {
 } 
 CEngine::~CEngine(){
@@ -17,11 +18,13 @@ CEngine::~CEngine(){
 	delete renderableObjectManager;
 	delete staticMeshManager;
 	delete textureManager;
+	delete lightManager;
 	effectsManager = NULL;
 	materialManager = NULL;
 	renderableObjectManager = NULL;
 	staticMeshManager = NULL,
 	textureManager = NULL;
+	lightManager = NULL;
 } //Destruimos vars
 
 void CEngine::Init(){
@@ -32,4 +35,5 @@ void CEngine::Init(){
 	staticMeshManager = new CStaticMeshManager();
 	renderManager = new CRenderManager();
 	contextManager = new CContextManager();
+	lightManager = new CLightManager();
 }
