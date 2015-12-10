@@ -74,6 +74,13 @@ utility UABUtility "UAB Utility" width:162 height:360
 		
 	)
 	
+	on LightsButton pressed do
+	(
+		createLights()
+		messageBox "Fichero Lights.xml creado correctamente" title:"Creación correcta"
+		
+	)
+	
 	on SceneButton pressed do
 	(
 		createStaticMeshes()

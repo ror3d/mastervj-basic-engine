@@ -12,6 +12,22 @@ fn GetCores = (
 fn GetInstances = (
 	return $*
 )
+fn GetLights = (
+	--light_obj = 
+	light_obj = #()
+	for i =1 to $*.count do
+	(	
+		--format "\t<sc =\"%\"/>" SuperclassOf $*[i]
+		if SuperclassOf $*[i] == light then
+		(
+			 append light_obj $*[i]
+			format "\t<light =\"%\"/>" $*[i]
+			
+		)
+	)
+	format "<light_obj =\"%\"/>" light_obj
+	return light_obj --Mirar el classof
+)
 
 fn createStaticMeshes = (
 	local file=createfile (GetLevelName()+"static_meshes.xml" )
@@ -19,7 +35,11 @@ fn createStaticMeshes = (
 	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
 	format "<static_meshes>\n" to:file
 	for i=1 to cores.count do(
-		format "\t<static_mesh name=\"%\" filename=\"%.mesh\">\n" cores[i].name (GetLevelName()+cores[i].name) to:file
+		Pos = TranslationToRH(instances[i].transform.translation)
+		Yaw = GetYaw (instances[i].transform)
+		Pitch = GetPitch (instances[i].transform)
+		Roll = GetRoll (instances[i].transform)
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n" instances[i].name instances[i].name Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
 		)
 	
 	format "</static_meshes>\n" to:file 
@@ -33,7 +53,7 @@ fn createRenderableObjects = (
 	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
 	format "<renderable_objects>\n" to:file
 	for i=1 to instances.count do(
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"%\" yaw=\"%\" pitch=\"0.0\" roll=\"0.0\" visible=\"%\">\n" instances[i].name instances[i].name TranslationToRH(instances[i].transform.translation) GetYaw(instances[i].transform) instances[i].visible to:file
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"%\" yaw=\"%\" pitch=\"0.0\" roll=\"0.0\" visible=\"%\"/>\n" instances[i].name instances[i].name TranslationToRH(instances[i].transform.translation) GetYaw(instances[i].transform) instances[i].visible to:file
 		)
 
 	format "</renderable_objects>\n" to:file 
@@ -41,27 +61,37 @@ fn createRenderableObjects = (
 	close file
 )	
 
-fn createMaterials = (
-	local file=createfile (GetLevelName()+"materials.xml" )
-	local cores = GetCores()
+fn createLights = (
+	local file=createfile (GetLevelName()+"lights.xml" )
+	local all_lights = GetLights()
 	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
-	format "<materials>\n" to:file
-	for i=1 to cores.count do(
-		if classoff cores[i].material == Standardmaterial then (	
-			format "\t<material name=\"%\" filename=\"%\ diffuseMap=\"%\">\n" cores[i].material.name cores[i].material.name cores[i].material.diffuseMap.filename to:file		
-		) else (
-			for j = 1 to cores[i].material.numsubs do (
-				format "\t<material name=\"%\" filename=\"%\ diffuseMap=\"%\">\n" cores[i].material[j].name cores[i].material[j].namecores[i].material[j].diffuseMap.filename to:file		
-			)
+	format "<lights>\n" to:file
+	for i=1 to all_lights.count do(
+		if  classof all_lights[i] == Omnilight then
+		(
+			-- Omni (omni)
+			format "\t<light name=\"%\" type=\"%\" pos=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" all_lights[i].name all_lights[i].type all_lights[i].pos all_lights[i].rgb all_lights[i].farAttenStart all_lights[i].farAttenEnd all_lights[i].multiplier to:file
+		
+			) else if classof all_lights[i] == TargetDirectionallight then
+		(
+			-- Direcional (targetDirect)
+			local dir=($.target.pos-$.pos)
+			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" all_lights[i].name all_lights[i].type all_lights[i].pos dir all_lights[i].rgb all_lights[i].farAttenStart all_lights[i].farAttenEnd all_lights[i].multiplier to:file
+		
+		) else if classof all_lights[i] == targetSpot then
+		(
+		--Spot  (targetSpot)
+			local dir=($.target.pos-$.pos)
+			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" all_lights[i].name all_lights[i].type all_lights[i].pos dir all_lights[i].rgb all_lights[i].farAttenStart all_lights[i].farAttenEnd all_lights[i].multiplier to:file
 		)
-	)
-	
-	format "</materials>\n" to:file 
-	format "____CreatedMaterials____\n"
+
+	format "</lights>\n" to:file 
+	format "____CreatedRenderableObjects____\n"
 	close file
+	)	
 )
 
-fn createMaterials = (
+fn createMaterials ExportTexture = (
 	local file=createfile (GetLevelName()+"materials.xml" )
 	
 	local cores = GetCores()
@@ -71,9 +101,15 @@ fn createMaterials = (
 		if classof cores[i].material == Standardmaterial then (				
 			format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" cores[i].material.name (GetLevelName()+cores[i].material.name) to:file		
 			if cores[i].material.diffuseMap != undefined and cores[i].material.diffuseMap.bitmap != undefined then ( --TODO: comprobar difuso no bitmap??
-				format "\t\t <texture filename=\"%\"/>\n" cores[i].material.diffuseMap.filename to:file
+				if not doesFileExist (GetLevelName() + "Textures") then
+				(
+					makeDir (GetLevelName() + "Textures") all:true
+				)
+				textureName = filenameFromPath cores[i].material.diffuseMap.filename
+				format "\t\t <texture filename=\"%\"/>\n" ("Textures\\" + textureName) to:file
+				copyFile cores[i].material.diffuseMap.filename (GetLevelName() + "Textures\\" + textureName)
 			)else(
-				messageBox ("¡¡¡El material "+cores[i].material.name+" de la malla "+cores[i].name+" tiene las texturas mal!!!") title:"MENSAJE PARA ARTISTAS" 
+				messageBox ("Â¡Â¡Â¡El material "+cores[i].material.name+" de la malla "+cores[i].name+" tiene las texturas mal!!!") title:"MENSAJE PARA ARTISTAS" 
 			)
 			format "\t</material>\n" to:file 
 		) else (
@@ -81,9 +117,15 @@ fn createMaterials = (
 				--Si ya existe no exportamos
 				format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" cores[i].material[j].name (GetLevelName()+cores[i].material[j].name) to:file	
 				if cores[i].material[j].diffuseMap != undefined and cores[i].material[j].diffuseMap.bitmap != undefined then ( --TODO: comprobar difuso no bitmap??
-					format "\t\t <texture filename=\"%\"/>\n" cores[i].material[j].diffuseMap.filename to:file
+					if not doesFileExist (GetLevelName() + "Textures") then
+					(
+						makeDir (GetLevelName() + "Textures") all:true
+					)
+					textureName = filenameFromPath cores[i].material[j].diffuseMap.filename
+					format "\t\t <texture filename=\"%\"/>\n" ("Textures\\" + textureName) to:file
+					copyFile cores[i].material[j].diffuseMap.filename (GetLevelName() + "Textures\\" + textureName)
 				)else(
-					messageBox ("¡¡¡El material "+cores[i].material.name+" de la malla "+cores[i].name+" tiene las texturas mal!!!") title:"MENSAJE PARA ARTISTAS" 
+					messageBox ("Â¡Â¡Â¡El material "+cores[i].material.name+" de la malla "+cores[i].name+" tiene las texturas mal!!!") title:"MENSAJE PARA ARTISTAS" 
 				)
 				format "\t</material>\n" to:file 
 			)
@@ -125,18 +167,18 @@ function DotNetAddVertex VtxArray VtxMap Vtx =
 
 fn createVertexesForFace obj IdFace = (
 	local IdxsFace=getFace obj IdFace
-	-- Para coger los vértices de la primera cara
+	-- Para coger los vÃ©rtices de la primera cara
 	local Vtx1=getVert obj IdxsFace[1]
 	local Vtx2=getVert obj IdxsFace[2]
 	local Vtx3=getVert obj IdxsFace[3]
-	-- Para coger las normales de los vértices de la primera cara
+	-- Para coger las normales de los vÃ©rtices de la primera cara
 	local Normal1=getNormal obj IdxsFace[1]
 	local Normal2=getNormal obj IdxsFace[2]
 	local Normal3=getNormal obj IdxsFace[3]
-	-- Para coger los índices de las coordenadas de textura de la primera cara, el 1 señala al primer
+	-- Para coger los Ã­ndices de las coordenadas de textura de la primera cara, el 1 seÃ±ala al primer
 	--   conjunto de coordenadas aplicadas sobre la cara
 	local IdxsMap=meshop.getMapFace obj 1 IdFace
-	-- Para coger las coordenadas de los vértices de la primera cara
+	-- Para coger las coordenadas de los vÃ©rtices de la primera cara
 	local TUVMap1= meshop.getMapVert obj 1 IdxsMap[1]
 	local TUVMap2= meshop.getMapVert obj 1 IdxsMap[2]
 	local TUVMap3= meshop.getMapVert obj 1 IdxsMap[3]
@@ -259,5 +301,5 @@ fn TranslationToRH translation =
 --createStaticMeshes()
 --createRenderableObjects()
 --createMaterials()
-createMeshes()
+--createMeshes()
 
