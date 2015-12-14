@@ -236,14 +236,17 @@ fn createMesh obj= (
 		
 		for idVtx = 1 to vtxs.count do (
 			local vtx = vtxs[idVtx]
+			-- Vertex
 			writefloat file vtx[1].x
-			writefloat file vtx[1].y
 			writefloat file vtx[1].z
+			writefloat file vtx[1].y
 			
+			-- Normal
 			writefloat file vtx[2].x
-			writefloat file vtx[2].y
 			writefloat file vtx[2].z
+			writefloat file vtx[2].y
 			
+			-- UV
 			writefloat file vtx[3].x
 			writefloat file vtx[3].y
 		)

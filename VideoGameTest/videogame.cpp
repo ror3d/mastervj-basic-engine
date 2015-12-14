@@ -202,7 +202,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
 	s_Context.CreateBackBuffer(hWnd, 800, 600);
-	s_Context.InitStates();
 	{
 		//CDebugRender debugRender(s_Context.GetDevice());
 
