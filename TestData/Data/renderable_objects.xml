@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<renderable_objects>
+	<mesh_instance name="Box001" core_name="Box001" pos="-3.54839 0.0 3.19807" yaw="0.0" pitch="0.0" roll="0.0" visible="true"/>
+</renderable_objects>
