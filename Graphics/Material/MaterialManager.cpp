@@ -8,7 +8,6 @@ CMaterialManager::CMaterialManager()
 
 CMaterialManager::~CMaterialManager()
 {
-	destroy();
 }
 
 

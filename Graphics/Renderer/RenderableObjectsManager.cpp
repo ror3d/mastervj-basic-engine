@@ -9,7 +9,6 @@ CRenderableObjectsManager::CRenderableObjectsManager()
 
 CRenderableObjectsManager::~CRenderableObjectsManager()
 {
-	destroy();
 }
 
 

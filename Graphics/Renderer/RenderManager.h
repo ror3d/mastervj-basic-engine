@@ -19,6 +19,8 @@ public:
 
 	void Render(CContextManager* _Context);
 
+	void destroy() {}
+
 private:
 
 	CCamera m_CurrentCamera;

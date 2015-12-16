@@ -28,10 +28,9 @@ CContextManager::CContextManager()
 
 CContextManager::~CContextManager()
 {
-	Dispose();
 }
 
-void CContextManager::Dispose()
+void CContextManager::destroy()
 {
 	CHECKED_RELEASE(m_RenderTargetView);
 	CHECKED_RELEASE(m_DepthStencil);

@@ -12,7 +12,7 @@ public:
 	CContextManager();
 	~CContextManager();
 
-	void Dispose();
+	void destroy();
 
 	void Resize(HWND hWnd, unsigned int Width, unsigned int Height);
 

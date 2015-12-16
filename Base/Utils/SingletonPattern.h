@@ -60,6 +60,12 @@ public:
 		{
 				return ms_Singleton;
 		}
+
+		inline static void ReleaseSingleton()
+		{
+			delete ms_Singleton;
+			ms_Singleton = nullptr;
+		}
 };
 
 template<typename T> T* CSingleton<T>::ms_Singleton = 0;

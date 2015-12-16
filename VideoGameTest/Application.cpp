@@ -16,15 +16,13 @@ static void __stdcall SwitchCameraCallback( void* _app )
 }
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
-	: m_DebugRender( new CDebugRender( _ContextManager->GetDevice() ) )
-	, m_RenderManager( _renderManager )
+	: m_RenderManager( _renderManager )
 	, m_ContextManager( _ContextManager )
 	, m_BackgroundColor( .2f, .1f, .4f )
 	, m_CurrentCamera( 0 )
 {
 	CDebugHelper::GetDebugHelper()->Log( "CApplication::CApplication" );
 
-	/*
 	CDebugHelper::SDebugBar bar;
 	bar.name = "CApplication";
 	{
@@ -36,6 +34,7 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 
 		bar.variables.push_back(var);
 	}
+	/*
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "cube";
@@ -45,6 +44,7 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 
 		bar.variables.push_back(var);
 	}
+	*/
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "switch camera";
@@ -56,7 +56,6 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 	}
 
 	CDebugHelper::GetDebugHelper()->RegisterBar(bar);
-	*/
 }
 
 
@@ -153,7 +152,7 @@ void CApplication::Render()
 	//m_ContextManager->Draw(m_DebugRender->GetPremultBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_PREMULT);
 
 
-	//CDebugHelper::GetDebugHelper()->Render();
+	CDebugHelper::GetDebugHelper()->Render();
 
 	m_ContextManager->EndRender();
 }

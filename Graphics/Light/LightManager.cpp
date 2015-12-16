@@ -8,7 +8,6 @@ CLightManager::CLightManager()
 
 CLightManager::~CLightManager()
 {
-	destroy();
 }
 
 

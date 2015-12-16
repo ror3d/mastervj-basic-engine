@@ -6,7 +6,6 @@
 #include "HelperTypes.h"
 #include <Material/MaterialManager.h>
 
-class CDebugRender;
 class CContextManager;
 class CRenderManager;
 
@@ -31,7 +30,6 @@ private:
 
 	int m_CurrentCamera;
 
-	CDebugRender *m_DebugRender;
 	CContextManager *m_ContextManager;
 	CRenderManager *m_RenderManager;
 

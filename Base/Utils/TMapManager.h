@@ -49,4 +49,5 @@ void TMapManager<T>::destroy()
 	{
 		delete it->second;
 	}
+	m_resources.clear();
 }

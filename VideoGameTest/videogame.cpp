@@ -65,7 +65,7 @@ void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 //-----------------------------------------------------------------------------
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	CContextManager& s_Context = *(CEngine::GetSingleton().getContextManager());
+	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
 	CInputManagerImplementation *inputManager = dynamic_cast<CInputManagerImplementation*>(CInputManager::GetInputManager());
 
 	bool WasDown = false, IsDown = false, Alt = false;
@@ -147,7 +147,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				// TODO: Resetear el AntTeakBar
 				TwWindowSize(0, 0);
 
-				s_Context.Resize(hWnd, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+				context.Resize(hWnd, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 				// TODO: Resetear el AntTeakBar
 				TwWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 			}
@@ -168,6 +168,10 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //-----------------------------------------------------------------------
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
+
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(175);
+
 	new CEngine();
 	CEngine& engine = CEngine::GetSingleton();
 	//*/
@@ -190,8 +194,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	engine.Init();
 
-	CContextManager& s_Context = *(CEngine::GetSingleton().getContextManager());
-	s_Context.CreateContext(hWnd, 800, 600);
+	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
+	context.CreateContext(hWnd, 800, 600);
 
 	engine.getEffectsManager()->load("Data\\effects.xml");
 	engine.getMaterialManager()->load("Data\\materials.xml");
@@ -201,7 +205,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
-	s_Context.CreateBackBuffer(hWnd, 800, 600);
+	context.CreateBackBuffer(hWnd, 800, 600);
 	{
 		//CDebugRender debugRender(s_Context.GetDevice());
 
@@ -210,11 +214,11 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
-		CDebugHelperImplementation debugHelper(s_Context.GetDevice());
+		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
 		//CApplication application(&debugRender, &s_Context);
-		CApplication application(&s_Context, CEngine::GetSingleton().getRenderManager());
+		CApplication application(&context, CEngine::GetSingleton().getRenderManager());
 
 		application.Init();
 
@@ -259,8 +263,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	// TODO: Dispose of CApplication resources
 
-	s_Context.Dispose();
-
+	CEngine::ReleaseSingleton();
 	//*/
 
 	return 0;

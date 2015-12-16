@@ -12,22 +12,37 @@ CEngine::CEngine()
 	, lightManager(nullptr)
 {
 } 
-CEngine::~CEngine(){
+CEngine::~CEngine()
+{
+	effectsManager->destroy();
+	textureManager->destroy();
+	materialManager->destroy();
+	renderableObjectManager->destroy();
+	staticMeshManager->destroy();
+	renderManager->destroy();
+	contextManager->destroy();
+	lightManager->destroy();
+
 	delete effectsManager;
+	delete textureManager;
 	delete materialManager;
 	delete renderableObjectManager;
 	delete staticMeshManager;
-	delete textureManager;
+	delete renderManager;
+	delete contextManager;
 	delete lightManager;
-	effectsManager = NULL;
-	materialManager = NULL;
-	renderableObjectManager = NULL;
-	staticMeshManager = NULL,
-	textureManager = NULL;
-	lightManager = NULL;
+	effectsManager = nullptr;
+	textureManager = nullptr;
+	materialManager = nullptr;
+	renderableObjectManager = nullptr;
+	staticMeshManager = nullptr,
+	renderManager = nullptr;
+	contextManager = nullptr;
+	lightManager = nullptr;
 } //Destruimos vars
 
-void CEngine::Init(){
+void CEngine::Init()
+{
 	effectsManager = new CEffectManager();
 	textureManager = new CTextureManager();
 	materialManager = new CMaterialManager();
