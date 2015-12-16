@@ -1,6 +1,6 @@
 #include "RenderableObjectsManager.h"
 #include "RenderableObject.h"
-#include "MeshInstance.h"
+#include "Mesh/MeshInstance.h"
 
 CRenderableObjectsManager::CRenderableObjectsManager()
 {

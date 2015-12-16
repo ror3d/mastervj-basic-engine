@@ -1,7 +1,7 @@
 #ifndef MESH_INSTANCE_H
 #define MESH_INSTANCE_H
 
-#include "RenderableObject.h"
+#include "Renderable/RenderableObject.h"
 
 class CStaticMesh;
 class CContextManager;

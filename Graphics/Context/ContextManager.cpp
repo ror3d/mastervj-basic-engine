@@ -1,7 +1,7 @@
 #include "ContextManager.h"
 
 #include "VertexTypes.h"
-#include "Renderer/RenderableVertexs.h"
+#include "Renderable/RenderableVertexs.h"
 #include "Effect/Effect.h"
 
 #include <Math/Matrix44.h>

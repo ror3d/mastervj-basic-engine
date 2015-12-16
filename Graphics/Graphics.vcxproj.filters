@@ -25,6 +25,15 @@
     <Filter Include="Light">
       <UniqueIdentifier>{cbf936dc-86ac-4d24-8b3d-df5ea0aaaa29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{04abb94a-7fad-4083-a7b7-f4edae1ab932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderable">
+      <UniqueIdentifier>{392e1a9e-1a9d-4b79-aa9d-425a7fb1d20d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{2ed9f5ff-a653-44ab-b55b-ca92fc656898}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
@@ -54,12 +63,6 @@
     <ClInclude Include="Material\MaterialManager.h">
       <Filter>Material</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\RenderableObject.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\RenderableVertexs.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\RenderManager.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -67,21 +70,6 @@
       <Filter>Texture</Filter>
     </ClInclude>
     <ClInclude Include="graphics.h" />
-    <ClInclude Include="Renderer\3DElement.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\RenderableObjectsManager.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\StaticMesh.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\MeshInstance.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\StaticMeshManager.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Effect\EffectParameters.h">
       <Filter>Effect</Filter>
     </ClInclude>
@@ -113,6 +101,36 @@
     <ClInclude Include="Light\LightManager.h">
       <Filter>Light</Filter>
     </ClInclude>
+    <ClInclude Include="Animation\AnimatedCoreModel.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimatedModelManager.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable\AnimatedInstanceModel.h">
+      <Filter>Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable\RenderableObject.h">
+      <Filter>Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable\RenderableObjectsManager.h">
+      <Filter>Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable\RenderableVertexs.h">
+      <Filter>Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\3DElement.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\MeshInstance.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\StaticMesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\StaticMeshManager.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -136,9 +154,6 @@
     <ClCompile Include="Material\MaterialManager.cpp">
       <Filter>Material</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\RenderableObject.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\RenderManager.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -148,21 +163,6 @@
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="Material\Material.cpp">
       <Filter>Material</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\3DElement.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\RenderableObjectsManager.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\StaticMesh.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\MeshInstance.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\StaticMeshManager.cpp">
-      <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Effect\EffectPixelShader.cpp">
       <Filter>Effect</Filter>
@@ -187,6 +187,24 @@
     </ClCompile>
     <ClCompile Include="Light\LightManager.cpp">
       <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderable\RenderableObject.cpp">
+      <Filter>Renderable</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderable\RenderableObjectsManager.cpp">
+      <Filter>Renderable</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\3DElement.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\MeshInstance.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\StaticMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\StaticMeshManager.cpp">
+      <Filter>Mesh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

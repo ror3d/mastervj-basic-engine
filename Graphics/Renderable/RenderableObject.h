@@ -1,7 +1,7 @@
 #ifndef RENDERABLE_OBJECT_H
 #define RENDERABLE_OBJECT_H
 
-#include "3DElement.h"
+#include "Renderer/3DElement.h"
 #include <Base/Utils/Named.h>
 
 class CContextManager;

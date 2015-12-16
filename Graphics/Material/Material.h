@@ -1,7 +1,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include <Utils/Named.h>
+#include <Base/Utils/Named.h>
 #include <Base/Math/Color.h>
 #include <vector>
 #include "Context/ContextManager.h"

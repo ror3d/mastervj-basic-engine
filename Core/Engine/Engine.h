@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Utils/SingletonPattern.h>
-#include <Renderer/StaticMeshManager.h>
-#include <Renderer/RenderableObjectsManager.h>
-#include <Material/MaterialManager.h>
-#include <Effect/EffectManager.h>
-#include <Texture/TextureManager.h>
-#include <Renderer/RenderManager.h>
-#include <Light/LightManager.h>
+#include <Base/Utils/SingletonPattern.h>
+#include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics/Renderable/RenderableObjectsManager.h>
+#include <Graphics/Material/MaterialManager.h>
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Texture/TextureManager.h>
+#include <Graphics/Renderer/RenderManager.h>
+#include <Graphics/Light/LightManager.h>
 
 class CContextManager;
 
