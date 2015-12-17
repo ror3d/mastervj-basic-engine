@@ -22,6 +22,7 @@ CEngine::~CEngine()
 	renderManager->destroy();
 	contextManager->destroy();
 	lightManager->destroy();
+	animatedModelManager->destroy();
 
 	delete effectsManager;
 	delete textureManager;
@@ -31,6 +32,8 @@ CEngine::~CEngine()
 	delete renderManager;
 	delete contextManager;
 	delete lightManager;
+	delete animatedModelManager;
+
 	effectsManager = nullptr;
 	textureManager = nullptr;
 	materialManager = nullptr;
@@ -39,6 +42,8 @@ CEngine::~CEngine()
 	renderManager = nullptr;
 	contextManager = nullptr;
 	lightManager = nullptr;
+	animatedModelManager = nullptr;
+
 } //Destruimos vars
 
 void CEngine::Init()
@@ -51,4 +56,5 @@ void CEngine::Init()
 	renderManager = new CRenderManager();
 	contextManager = new CContextManager();
 	lightManager = new CLightManager();
+	animatedModelManager = new CAnimatedModelManager();
 }

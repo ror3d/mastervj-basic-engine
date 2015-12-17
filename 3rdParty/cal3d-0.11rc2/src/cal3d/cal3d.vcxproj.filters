@@ -9,10 +9,6 @@
       <UniqueIdentifier>{7e8ec0b4-f2cf-42d9-9dc8-a3e1f0e8eafd}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
-    <Filter Include="Ressourcendateien">
-      <UniqueIdentifier>{4da1f7fc-17b2-42c8-8808-cda6cb9a079b}</UniqueIdentifier>
-      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp">
@@ -268,13 +264,5 @@
     <ClInclude Include="vector.h">
       <Filter>Header-Dateien</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\AUTHORS" />
-    <CustomBuild Include="..\..\ChangeLog" />
-    <CustomBuild Include="..\..\COPYING" />
-    <CustomBuild Include="..\..\INSTALL" />
-    <CustomBuild Include="..\..\README" />
-    <CustomBuild Include="..\..\TODO" />
   </ItemGroup>
 </Project>

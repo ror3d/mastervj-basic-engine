@@ -17,7 +17,8 @@ public:
 	bool Load();
 	ID3D11VertexShader * GetVertexShader() { return m_VertexShader; }
 	ID3D11InputLayout * GetVertexLayout() { return m_VertexLayout;  }
-	ID3D11Buffer * GetConstantBuffer() { return m_ConstantBuffer;  }
+
+	void SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer);
 };
 
 #endif

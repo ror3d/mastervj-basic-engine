@@ -395,17 +395,16 @@ inline Matrix33<T>& Matrix33<T>::SetFromLookAt (const Vector3<T>& vPos, const Ve
 {
   // [TODO: implementar]
 }*/
-/*
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Establece los datos de la matriz a partir de un cuaternión
 /// (Ver comentarios en la clase 'Quatn' del cuaternión)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
-inline Matrix33<T>& Matrix33<T>::SetFromQuat (const Quatn<T>& quat)
+inline Matrix33<T>& Matrix33<T>::SetFromQuat (const Quaternion<T>& quat)
 {
   quat.GetMatrix33(*this);
   return (*this);
-}*/
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Igual que 'SetFromAngleX' pero solo modifica la rotación
@@ -664,18 +663,16 @@ inline Matrix33<T>& Matrix33<T>::SetRotByAnglesYXZ (const T angleY, const T angl
 
   return (*this);
 }
-/*
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Establece la rotación de la matriz a partir de un cuaternión dejando el escalado invariable
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
-inline Matrix34<T>& Matrix33<T>::SetRotByQuat(const Quatn<T>& quat)
+inline Matrix34<T>& Matrix33<T>::SetRotByQuat(const Quaternion<T>& quat)
 {
   Vector3<T> vSaveScale = GetScale();
   SetFromQuat(quat);
   Scale(vSaveScale);
 }
-*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Establece el escalado de la matriz considerada como una transformación.
 /// La parte de rotación permenece invariable.

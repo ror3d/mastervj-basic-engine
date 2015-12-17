@@ -92,7 +92,7 @@ public:
   inline Matrix33<T>& SetFromScale     (const T escala_x, const T escala_y, const T escala_z);
   inline Matrix33<T>& SetFromLookAt    (const Vector3<T>& vPos, const Vector3<T>& vTarget);
   inline Matrix33<T>& SetFromLookAt    (const Vector3<T>& vPos, const Vector3<T>& vTarget, const Vector3<T>& vUp);
-//  inline Matrix33<T>& SetFromQuat      (const Quatn<T>& quat);
+  inline Matrix33<T>& SetFromQuat      (const Quaternion<T>& quat);
 
 
   // Modificación de una de las partes de la matriz (rotación/escalado) dejando invariable las otras
@@ -101,7 +101,7 @@ public:
   inline Matrix33<T>& SetRotByAngleZ    (const T angleZ);
   inline Matrix33<T>& SetRotByAnglesXZ  (const T angleX, const T angleZ);
   inline Matrix33<T>& SetRotByAnglesYXZ (const T angleY, const T angleX, const T angleZ);
-//  inline Matrix34<T>& SetRotByQuat      (const Quatn<T>& quat);
+  inline Matrix34<T>& SetRotByQuat      (const Quaternion<T>& quat);
 
   inline Matrix33<T>& SetScale          (const Matrix33<T>& mat_escala);
   inline Matrix33<T>& SetScale          (const Vector3<T>& vect_escala);

@@ -18,6 +18,8 @@ public:
 	virtual ~CEffectTechnique();
 	CEffectVertexShader * GetVertexShader();
 	CEffectPixelShader * GetPixelShader();
+	void SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer);
+
 	void Refresh();
 };
 

@@ -47,8 +47,8 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\</OutDir>
-    <IntDir>$(SolutionDir)bin\Debug\</IntDir>
+    <OutDir>$(SolutionDir)bin\lib\</OutDir>
+    <IntDir>$(SolutionDir)\bin\Intermediate\$(ProjectName)$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
@@ -133,6 +133,9 @@
       <ImportLibrary>.\..\..\bin\Debug\cal3d_d.lib</ImportLibrary>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>if exist $(SolutionDir)bin\lib\Cal3D_d.dll  xcopy /y /f $(SolutionDir)bin\lib\Cal3D_d.dll $(LocalDebuggerWorkingDirectory).</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
@@ -222,14 +225,6 @@
     <ClInclude Include="submesh.h" />
     <ClInclude Include="tinyxml.h" />
     <ClInclude Include="vector.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\AUTHORS" />
-    <CustomBuild Include="..\..\ChangeLog" />
-    <CustomBuild Include="..\..\COPYING" />
-    <CustomBuild Include="..\..\INSTALL" />
-    <CustomBuild Include="..\..\README" />
-    <CustomBuild Include="..\..\TODO" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

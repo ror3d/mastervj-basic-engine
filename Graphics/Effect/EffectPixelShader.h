@@ -13,7 +13,8 @@ public:
 	virtual ~CEffectPixelShader();
 	bool Load();
 	ID3D11PixelShader * GetPixelShader() { return m_PixelShader; }
-	ID3D11Buffer * GetConstantBuffer() { return m_ConstantBuffer; }
+
+	void SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer);
 };
 
 #endif

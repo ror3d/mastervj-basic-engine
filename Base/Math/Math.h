@@ -8,5 +8,6 @@
 #include "Matrix33.h"
 #include "Matrix34.h"
 #include "Matrix44.h"
+#include "Quaternion.h"
 
 #endif

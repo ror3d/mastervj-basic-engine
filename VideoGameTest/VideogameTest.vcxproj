@@ -104,6 +104,9 @@ if exist $(SolutionDir)3rdParty\iconv-1.9.2.win32\iconv.dll  xcopy /y /f $(Solut
     <ProjectReference Include="..\3rdParty\AntTweakBar\AntTweakBar.vcxproj">
       <Project>{b99e1fa1-c30a-45f2-9d57-9e9c21b2df42}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\3rdParty\cal3d-0.11rc2\src\cal3d\cal3d.vcxproj">
+      <Project>{92b63265-5d15-49c8-b5aa-1b16378be875}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Base\Base.vcxproj">
       <Project>{13cd2fd7-8e02-4165-9128-d754579f003f}</Project>
     </ProjectReference>

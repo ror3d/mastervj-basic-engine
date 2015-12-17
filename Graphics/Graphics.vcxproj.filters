@@ -206,5 +206,14 @@
     <ClCompile Include="Mesh\StaticMeshManager.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="Animation\AnimatedCoreModel.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimatedModelManager.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderable\AnimatedInstanceModel.cpp">
+      <Filter>Renderable</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

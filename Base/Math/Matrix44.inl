@@ -705,12 +705,11 @@ inline Matrix44<T>& Matrix44<T>::SetFromPerspective(float fovy, float aspect, fl
 }
 
 
-/*
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Establece la matriz a partir de un cuaternión para la parte de rotación y un vector para la parte de posición
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
-inline Matrix44<T>& Matrix44<T>::SetFromQuatPos (const Quatn<T>& quat, const Vector3<T>& vPos)
+inline Matrix44<T>& Matrix44<T>::SetFromQuatPos (const Quaternion<T>& quat, const Vector3<T>& vPos)
 {
 T x = quat.x;
 T y = quat.y;
@@ -737,7 +736,6 @@ m30 = Zero<T>();               m31 = Zero<T>();               m32 = Zero<T>();  
 
 return (*this);
 }
-*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Igual que 'SetFromAngleX' pero solo modifica la submatriz 3x3 para cambiar la rotación
 /// dejando la traslación y el escalado invariables
@@ -995,12 +993,11 @@ inline Matrix44<T>& Matrix44<T>::SetRotByAnglesYXZ(const T angleY, const T angle
 
 	return (*this);
 }
-/*
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Establece la rotación de la matriz a partir de un cuaternión dejando la posición y el escalado invariables
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
-inline Matrix44<T>& Matrix44<T>::SetRotByQuat (const Quatn<T>& quat)
+inline Matrix44<T>& Matrix44<T>::SetRotByQuat (const Quaternion<T>& quat)
 {
 Vector3<T> vSavePos   = GetPos();
 Vector3<T> vSaveScale = GetScale();
@@ -1010,7 +1007,6 @@ SetScale(vSaveScale);
 
 return (*this);
 }
-*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Establece la parte de la cuarta columna que representa la traslación,
 /// considerando a la matriz como una transformación afín
