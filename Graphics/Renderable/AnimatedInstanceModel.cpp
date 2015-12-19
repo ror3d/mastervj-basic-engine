@@ -25,6 +25,7 @@ void CAnimatedInstanceModel::Initialize(CAnimatedCoreModel *AnimatedCoreModel)
 	m_CalModel = new CalModel(m_AnimatedCoreModel->GetCoreModel());
 	m_CalHardwareModel = new CalHardwareModel(m_AnimatedCoreModel->GetCoreModel());
 	m_Materials = m_AnimatedCoreModel->GetMaterials();
+	LoadVertexBuffer();
 }
 
 void CAnimatedInstanceModel::Render(CContextManager *context)
@@ -66,6 +67,7 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 
 void CAnimatedInstanceModel::Update(float ElapsedTime)
 {
+	m_CalModel->update(ElapsedTime);
 }
 
 void CAnimatedInstanceModel::Destroy()

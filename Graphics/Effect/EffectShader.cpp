@@ -139,9 +139,11 @@ bool CEffectShader::CreateConstantBuffer(int IdBuffer, unsigned int BufferSize)
 bool CEffectShader::CreateConstantBuffer()
 {
 	return
+	(
 		CreateConstantBuffer(0, sizeof(CSceneEffectParameters))
-		|| CreateConstantBuffer(1, sizeof(CLightEffectParameters))
-		|| CreateConstantBuffer(2, sizeof(CAnimatedModelEffectParameters));
+		&& CreateConstantBuffer(1, sizeof(CLightEffectParameters))
+		&& CreateConstantBuffer(2, sizeof(CAnimatedModelEffectParameters))
+	);
 }
 
 
