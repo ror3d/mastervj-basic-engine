@@ -9,7 +9,7 @@ CAnimatedCoreModel::CAnimatedCoreModel(CXMLTreeNode& node)
 	: CNamed(node)
 	, m_CalCoreModel(nullptr)
 {
-	m_Path = node.GetPszISOProperty("path");
+	m_Path = node.GetPszProperty("path");
 	m_CalCoreModel = new CalCoreModel(getName());
 	Load();
 }

@@ -6,6 +6,7 @@
 #include <XML/XMLTreeNode.h>
 
 CEffectParameters CEffectManager::m_Parameters;
+CAnimatedModelEffectParameters CEffectManager::m_AnimatedModelEffectParameters;
 
 CEffectManager::CEffectManager()
 {

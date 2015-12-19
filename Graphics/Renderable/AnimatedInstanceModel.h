@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANIMATED_INSTANCE_MODEL_H
+#define ANIMATED_INSTANCE_MODEL_H
 
 #include "RenderableObject.h"
 #include "RenderableVertexs.h"
@@ -40,3 +41,5 @@ public:
 	bool IsCycleAnimationActive(int Id) const;
 	bool IsActionAnimationActive(int Id) const;
 };
+
+#endif

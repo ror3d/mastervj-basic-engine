@@ -12,6 +12,7 @@
 CAnimatedInstanceModel::CAnimatedInstanceModel(CXMLTreeNode& TreeNode)
 	: CRenderableObject(TreeNode)
 {
+	Initialize(CEngine::GetSingleton().getAnimatedModelManager()->get(getName()));
 }
 
 CAnimatedInstanceModel::~CAnimatedInstanceModel()

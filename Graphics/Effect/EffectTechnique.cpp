@@ -31,3 +31,10 @@ CEffectPixelShader * CEffectTechnique::GetPixelShader()
 void CEffectTechnique::Refresh()
 {
 }
+
+
+void CEffectTechnique::SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer)
+{
+	m_VertexShader->SetConstantBuffer(IdBuffer, ConstantBuffer);
+	m_PixelShader->SetConstantBuffer(IdBuffer, ConstantBuffer);
+}
