@@ -72,28 +72,32 @@ void CAnimatedInstanceModel::Update(float ElapsedTime)
 
 void CAnimatedInstanceModel::Destroy()
 {
+	// TODO: Deletes
 }
 
 void CAnimatedInstanceModel::ExecuteAction(int Id, float DelayIn, float DelayOut, float WeightTarget, bool AutoLock)
 {
+	m_CalModel->getMixer()->executeAction(Id, DelayIn, DelayOut, WeightTarget, AutoLock);
 }
 
 void CAnimatedInstanceModel::BlendCycle(int Id, float Weight, float DelayIn)
 {
+	m_CalModel->getMixer()->blendCycle(Id, Weight, DelayIn);
 }
 
 void CAnimatedInstanceModel::ClearCycle(int Id, float DelayOut)
 {
+	m_CalModel->getMixer()->clearCycle(Id, DelayOut);
 }
 
 bool CAnimatedInstanceModel::IsCycleAnimationActive(int Id) const
 {
-	return false;
+	return m_CalModel->getMixer()->getAnimationCycle().size() > 0;
 }
 
 bool CAnimatedInstanceModel::IsActionAnimationActive(int Id) const
 {
-	return false;
+	return m_CalModel->getMixer()->getAnimationActionList().size() > 0;
 }
 
 void CAnimatedInstanceModel::LoadMaterials()

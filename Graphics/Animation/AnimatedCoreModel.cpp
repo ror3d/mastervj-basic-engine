@@ -29,7 +29,7 @@ CAnimatedCoreModel::~CAnimatedCoreModel()
 bool CAnimatedCoreModel::LoadMesh(CXMLTreeNode& treeNode)
 {
 	std::string fname = m_Path + treeNode.GetPszProperty("filename");
-	if (m_CalCoreModel->loadCoreMesh(fname) < 0)
+	if (m_CalCoreModel->loadCoreMesh(fname))
 	{
 		return false;
 	}
@@ -39,7 +39,7 @@ bool CAnimatedCoreModel::LoadMesh(CXMLTreeNode& treeNode)
 bool CAnimatedCoreModel::LoadSkeleton(CXMLTreeNode& treeNode)
 {
 	std::string fname = m_Path + treeNode.GetPszProperty("filename");
-	if (m_CalCoreModel->loadCoreSkeleton(fname) < 0)
+	if (m_CalCoreModel->loadCoreSkeleton(fname))
 	{
 		return false;
 	}
@@ -48,7 +48,7 @@ bool CAnimatedCoreModel::LoadSkeleton(CXMLTreeNode& treeNode)
 bool CAnimatedCoreModel::LoadAnimation(CXMLTreeNode& treeNode)
 {
 	std::string fname = m_Path + treeNode.GetPszProperty("filename");
-	if (m_CalCoreModel->loadCoreAnimation(fname) < 0)
+	if (m_CalCoreModel->loadCoreAnimation(fname))
 	{
 		return false;
 	}
