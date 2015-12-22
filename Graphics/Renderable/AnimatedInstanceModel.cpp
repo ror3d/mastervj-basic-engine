@@ -12,7 +12,8 @@
 CAnimatedInstanceModel::CAnimatedInstanceModel(CXMLTreeNode& TreeNode)
 	: CRenderableObject(TreeNode)
 {
-	Initialize(CEngine::GetSingleton().getAnimatedModelManager()->get(getName()));
+	Initialize(CEngine::GetSingleton().getAnimatedModelManager()->get(TreeNode.GetPszProperty("core_name")));
+	BlendCycle(1, 1.0f, 0.0f);
 }
 
 CAnimatedInstanceModel::~CAnimatedInstanceModel()
@@ -25,6 +26,7 @@ void CAnimatedInstanceModel::Initialize(CAnimatedCoreModel *AnimatedCoreModel)
 	m_CalModel = new CalModel(m_AnimatedCoreModel->GetCoreModel());
 	m_CalHardwareModel = new CalHardwareModel(m_AnimatedCoreModel->GetCoreModel());
 	m_Materials = m_AnimatedCoreModel->GetMaterials();
+
 	LoadVertexBuffer();
 }
 
@@ -49,7 +51,7 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 			l_Transformations[l_BoneId].SetIdentity();
 			l_Transformations[l_BoneId].SetRotByQuat(l_Quaternion);
 			CalVector translationBoneSpace = m_CalHardwareModel->getTranslationBoneSpace(l_BoneId, m_CalModel->getSkeleton());
-			l_Transformations[l_BoneId].SetPos((const Vect3f&)(translationBoneSpace.x));
+			l_Transformations[l_BoneId].SetPos(Vect3f(translationBoneSpace.x, translationBoneSpace.y, translationBoneSpace.z));
 		}
 		memcpy(&CEffectManager::m_AnimatedModelEffectParameters.m_Bones,
 			   l_Transformations,
@@ -92,17 +94,19 @@ void CAnimatedInstanceModel::ClearCycle(int Id, float DelayOut)
 
 bool CAnimatedInstanceModel::IsCycleAnimationActive(int Id) const
 {
-	return m_CalModel->getMixer()->getAnimationCycle().size() > 0;
+	// TODO
+	return false;
 }
 
 bool CAnimatedInstanceModel::IsActionAnimationActive(int Id) const
 {
-	return m_CalModel->getMixer()->getAnimationActionList().size() > 0;
+	// TODO
+	return false;
 }
 
 void CAnimatedInstanceModel::LoadMaterials()
 {
-	// Probably nothing
+	m_CalModel->setMaterialSet(0);
 }
 
 bool CAnimatedInstanceModel::LoadVertexBuffer()
