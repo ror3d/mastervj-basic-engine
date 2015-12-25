@@ -18,6 +18,7 @@ CEffectShader::CEffectShader(const CXMLTreeNode &TreeNode)
 	m_Filename = TreeNode.GetPszProperty("file");
 	m_ShaderModel = TreeNode.GetPszProperty("shader_model");
 	m_EntryPoint = TreeNode.GetPszProperty("entry_point");
+	m_Preprocessor = TreeNode.GetPszProperty("preprocessor");
 }
 
 
@@ -34,12 +35,17 @@ void SplitString(const std::string& str, char split, std::vector<std::string>& o
 		if (c == split)
 		{
 			out.push_back(ss.str());
-			ss.clear();
+			ss.str(std::string());
 		}
 		else
 		{
 			ss << c;
 		}
+	}
+
+	if (ss.str().length() > 0)
+	{
+		out.push_back(ss.str());
 	}
 }
 
@@ -94,6 +100,9 @@ bool CEffectShader::LoadShader(const std::string &Filename, const std::string
 #if defined( DEBUG ) || defined( _DEBUG )
 	dwShaderFlags |= D3DCOMPILE_DEBUG;
 #endif
+
+	CreateShaderMacro();
+
 	ID3DBlob* pErrorBlob;
 	hr = D3DX11CompileFromFile(Filename.c_str(), m_ShaderMacros, NULL,
 							   EntryPoint.c_str(), ShaderModel.c_str(), dwShaderFlags, 0, NULL, BlobOut,
