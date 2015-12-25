@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<renderable_objects>
+	<!--<mesh_instance name="Teapot001" core_name="Teapot001" pos="0.0 0.0 0.0" yaw="0.0" pitch="0.0" roll="0.0" visible="true"/>-->
+	<animated_instance name="bot" core_name="bot" pos="0.0 0.0 0.0" yaw="0.0" pitch="0.0" roll="0.0" visible="true"/>
+</renderable_objects>
