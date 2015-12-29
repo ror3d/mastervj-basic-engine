@@ -19,3 +19,8 @@ In `Tools > Options...`
 to True
 
 - Set `Environment > Documents > Save documents as Unicode when data cannot be saved in codepage`
+
+
+## Debugging
+
+Set Working Directory to `$(SolutionDir)` for the exe to take the correct Data directory.

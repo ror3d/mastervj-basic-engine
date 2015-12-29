@@ -7,7 +7,7 @@ CEffectVertexShader::CEffectVertexShader(const CXMLTreeNode &TreeNode)
 	: CEffectShader(TreeNode)
 {
 	m_VertexType = TreeNode.GetPszProperty("vertex_type");
-	Load();
+	assert(Load());
 }
 
 

@@ -58,6 +58,7 @@ dlldata.c
 *.vssscc
 .builds
 *.pidb
+*.idb
 *.svclog
 *.scc
 
@@ -195,3 +196,7 @@ FakesAssemblies/
 3rdParty/AntTweakBar/debug32/
 3rdParty/AntTweakBar/release32/
 *.opendb
+
+
+# To avoid adding files unintentionally
+[Dd]ata/
