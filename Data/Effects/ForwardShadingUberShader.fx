@@ -1,7 +1,9 @@
 //ForwardShadingUberShader.fx
 #include "globals.fxh"
 Texture2D DiffuseTexture : register( t0 );
+Texture2D LightmapTexture : register( t1 );
 SamplerState LinearSampler : register( s0 );
+SamplerState LightmapSampler : register( s1 );
 //----------------------------------------------------------------------
 
 struct VS_INPUT
@@ -20,6 +22,10 @@ struct VS_INPUT
 #ifdef HAS_UV
 	float2 UV		: TEXCOORD0;
 #endif // HAS_UV
+
+#ifdef HAS_UV2
+	float2 UV2		: TEXCOORD1;
+#endif // HAS_UV2
 };
 
 struct PS_INPUT
@@ -33,6 +39,10 @@ struct PS_INPUT
 #ifdef HAS_UV
 	float2 UV : TEXCOORD0;
 #endif // HAS_UV
+
+#ifdef HAS_UV2
+	float2 UV2 : TEXCOORD1;
+#endif // HAS_UV2
 };
 
 //----------------------------------------------------------------------
@@ -80,12 +90,6 @@ PS_INPUT VS( VS_INPUT IN )
 	#endif
 	
 #endif // !HAS_WEIGHT_INDICES
-	
-#ifdef HAS_UV
-	l_Output.UV = IN.UV;
-#endif // HAS_UV
-
-
 
 	l_Output.Pos = mul(float4(l_Position.xyz, 1.0), m_World);
 	l_Output.Pos = mul(l_Output.Pos, m_View);
@@ -97,6 +101,10 @@ PS_INPUT VS( VS_INPUT IN )
 
 #ifdef HAS_UV
 	l_Output.UV = IN.UV;
+#endif // HAS_UV
+
+#ifdef HAS_UV2
+	l_Output.UV2 = IN.UV2;
 #endif // HAS_UV
 	
 	return l_Output;
@@ -113,6 +121,10 @@ float4 PS( PS_INPUT IN) : SV_Target
 	
 #ifdef HAS_UV
 	l_Albedo = DiffuseTexture.Sample(LinearSampler, IN.UV);
+#endif
+
+#ifdef HAS_UV2
+	l_Albedo = l_Albedo * LightmapTexture.Sample(LightmapSampler, IN.UV2);
 #endif
 
 	l_Return = l_Albedo;

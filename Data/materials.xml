@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <materials>
-	<material name="01 - Default" effect_technique="diffuse_technique" >
-		 <texture filename="Data/Textures/BARK5.jpg"/>
+	<material name="Standard_7" effect_technique="lightmap_technique" >
+		 <texture filename="Data/Textures/text_2.dds"/>
+		 <lightmap filename="Data/Textures/lightMap.dds"/>
 	</material>
 </materials>

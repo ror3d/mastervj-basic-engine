@@ -2,9 +2,9 @@ fn Init = (
 	format "____Init____\n"
 )
 
-global dataPath = "Data\\"
-global meshPath = dataPath + "Meshes\\"
-global texturePath = dataPath + "Textures\\"
+global dataPath = "Data/"
+global meshPath = dataPath + "Meshes/"
+global texturePath = dataPath + "Textures/"
 
 fn getAbsolutePath = (
 	return (maxFilePath + dataPath)
@@ -15,13 +15,13 @@ fn createDirs = (
 	(
 		makeDir (getAbsolutePath()) all:true
 	)
-	if not doesFileExist (getAbsolutePath() + "\\Textures") then
+	if not doesFileExist (getAbsolutePath() + "/Textures") then
 	(
-		makeDir (getAbsolutePath() + "\\Textures")
+		makeDir (getAbsolutePath() + "/Textures")
 	)
-	if not doesFileExist (getAbsolutePath() + "\\Meshes") then
+	if not doesFileExist (getAbsolutePath() + "/Meshes") then
 	(
-		makeDir (getAbsolutePath() + "\\Meshes")
+		makeDir (getAbsolutePath() + "/Meshes")
 	)
 )
 
@@ -131,12 +131,12 @@ fn createMaterials ExportTexture = (
 	(
 		if classof cores[i].material == Standardmaterial then
 		(
-			format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" cores[i].material.name to:file
+			format "\t<material name=\"%\" effect_technique=\"lightmap_technique\" >\n" cores[i].material.name to:file
 			if cores[i].material.diffuseMap != undefined and cores[i].material.diffuseMap.bitmap != undefined then --TODO: comprobar difuso no bitmap??
 			(
 				textureName = filenameFromPath cores[i].material.diffuseMap.filename
 				format "\t\t <texture filename=\"%\"/>\n" (texturePath + textureName) to:file
-				copyFile cores[i].material.diffuseMap.filename (getAbsolutePath() + "Textures\\" + textureName)
+				copyFile cores[i].material.diffuseMap.filename (getAbsolutePath() + "Textures/" + textureName)
 			)
 			else
 			(
@@ -147,7 +147,7 @@ fn createMaterials ExportTexture = (
 			(
 				lightMapName = fileNameFromPath cores[i].material.selfIllumMap.filename
 				format "\t\t <lightmap filename=\"%\"/>\n" (texturePath + lightMapName) to:file
-				copyFile cores[i].material.selfIllumMap.filename (getAbsolutePath() + "Textures\\" + lightMapName)
+				copyFile cores[i].material.selfIllumMap.filename (getAbsolutePath() + "Textures/" + lightMapName)
 			)
 			
 			format "\t</material>\n" to:file 
@@ -162,7 +162,7 @@ fn createMaterials ExportTexture = (
 				(
 					textureName = filenameFromPath cores[i].material[j].diffuseMap.filename
 					format "\t\t <texture filename=\"%\"/>\n" (texturePath + textureName) to:file
-					copyFile cores[i].material[j].diffuseMap.filename (getAbsolutePath() + "Textures\\" + textureName)
+					copyFile cores[i].material[j].diffuseMap.filename (getAbsolutePath() + "Textures/" + textureName)
 				)
 				else
 				(
@@ -236,7 +236,7 @@ fn createVertexesForFace obj IdFace = (
 fn createMesh obj = (
 	format "____Creating Mesh %____\n" obj.name
 	
-	file = fopen (getAbsolutePath() + "Meshes\\" + obj.name + ".mesh") "wb"
+	file = fopen (getAbsolutePath() + "Meshes/" + obj.name + ".mesh") "wb"
 	
 	--Header
 	writeshort file 0xFE55
