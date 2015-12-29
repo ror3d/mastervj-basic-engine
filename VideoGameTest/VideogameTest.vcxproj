@@ -73,6 +73,7 @@
 if exist $(SolutionDir)3rdParty\libxml2-2.7.2.win32\libxml2.dll  xcopy /y /f $(SolutionDir)3rdParty\libxml2-2.7.2.win32\libxml2.dll $(LocalDebuggerWorkingDirectory).
 if exist $(SolutionDir)3rdParty\libxml2-2.7.2.win32\zlib1.dll  xcopy /y /f $(SolutionDir)3rdParty\libxml2-2.7.2.win32\zlib1.dll $(LocalDebuggerWorkingDirectory).
 if exist $(SolutionDir)3rdParty\iconv-1.9.2.win32\iconv.dll  xcopy /y /f $(SolutionDir)3rdParty\iconv-1.9.2.win32\iconv.dll $(LocalDebuggerWorkingDirectory).
+if exist $(SolutionDir)bin\lib\Cal3D_d.dll  xcopy /y /f $(SolutionDir)bin\lib\Cal3D_d.dll $(LocalDebuggerWorkingDirectory).
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

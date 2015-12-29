@@ -18,6 +18,9 @@ CAnimatedInstanceModel::CAnimatedInstanceModel(CXMLTreeNode& TreeNode)
 
 CAnimatedInstanceModel::~CAnimatedInstanceModel()
 {
+	delete m_CalModel;
+	delete m_CalHardwareModel;
+	delete m_RenderableVertexs;
 }
 
 void CAnimatedInstanceModel::Initialize(CAnimatedCoreModel *AnimatedCoreModel)
@@ -70,11 +73,6 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 void CAnimatedInstanceModel::Update(float ElapsedTime)
 {
 	m_CalModel->update(ElapsedTime);
-}
-
-void CAnimatedInstanceModel::Destroy()
-{
-	// TODO: Deletes
 }
 
 void CAnimatedInstanceModel::ExecuteAction(int Id, float DelayIn, float DelayOut, float WeightTarget, bool AutoLock)

@@ -33,7 +33,6 @@ public:
 	void Initialize(CAnimatedCoreModel *AnimatedCoreModel);
 	void Render(CContextManager *context);
 	void Update(float ElapsedTime);
-	void Destroy();
 	void ExecuteAction(int Id, float DelayIn, float DelayOut, float
 					   WeightTarget = 1.0f, bool AutoLock = true);
 	void BlendCycle(int Id, float Weight, float DelayIn);

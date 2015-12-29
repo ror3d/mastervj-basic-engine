@@ -58,6 +58,7 @@ dlldata.c
 *.vssscc
 .builds
 *.pidb
+*.idb
 *.svclog
 *.scc
 
