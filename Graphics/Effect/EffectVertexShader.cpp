@@ -46,6 +46,10 @@ bool CEffectVertexShader::Load()
 	{
 		l_Loaded = MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
+	else if (m_VertexType == "MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX")
+	{
+		l_Loaded = MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
 	else
 	{
 		assert(!"Vertex type '%s' not recognized on CEffectVertexShader::Load");

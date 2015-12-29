@@ -6,8 +6,7 @@
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
 {
-	std::string l_EffectTechnique = TreeNode.GetPszProperty("effect_technique");
-	m_effectTechnique = CEngine::GetSingletonPtr()->getEffectsManager()->get(l_EffectTechnique);
+	m_effectTechnique = CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique"));
 
 	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 	{

@@ -1,28 +1,46 @@
-fn Init =  (
+fn Init = (
 	format "____Init____\n"
-)		
+)
 
-fn GetLevelName = (
-	return maxFilePath + "Data\\Level\\"
+global dataPath = "Data\\"
+global meshPath = dataPath + "Meshes\\"
+global texturePath = dataPath + "Textures\\"
+
+fn getAbsolutePath = (
+	return (maxFilePath + dataPath)
+)
+
+fn createDirs = (
+	if not doesFileExist (getAbsolutePath()) then
+	(
+		makeDir (getAbsolutePath()) all:true
+	)
+	if not doesFileExist (getAbsolutePath() + "\\Textures") then
+	(
+		makeDir (getAbsolutePath() + "\\Textures")
+	)
+	if not doesFileExist (getAbsolutePath() + "\\Meshes") then
+	(
+		makeDir (getAbsolutePath() + "\\Meshes")
+	)
 )
 
 fn GetCores = (
 	return $*
-	)
+)
+
 fn GetInstances = (
 	return $*
 )
+
 fn GetLights = (
-	--light_obj = 
 	light_obj = #()
 	for i =1 to $*.count do
-	(	
-		--format "\t<sc =\"%\"/>" SuperclassOf $*[i]
+	(
 		if SuperclassOf $*[i] == light then
 		(
-			 append light_obj $*[i]
+			append light_obj $*[i]
 			format "\t<light =\"%\"/>" $*[i]
-			
 		)
 	)
 	format "<light_obj =\"%\"/>" light_obj
@@ -30,31 +48,37 @@ fn GetLights = (
 )
 
 fn createStaticMeshes = (
-	local file=createfile (GetLevelName()+"static_meshes.xml" )
+	local file = createfile (getAbsolutePath() + "static_meshes.xml")
 	local cores = GetCores()
+	
 	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
 	format "<static_meshes>\n" to:file
-	for i=1 to cores.count do(
-		Pos = TranslationToRH(instances[i].transform.translation)
-		Yaw = GetYaw (instances[i].transform)
-		Pitch = GetPitch (instances[i].transform)
-		Roll = GetRoll (instances[i].transform)
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n" instances[i].name instances[i].name Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
-		)
+	
+	for i=1 to cores.count do
+	(
+		format "\t<static_mesh name=\"%\" filename=\"%.mesh\"/>\n" cores[i].name (meshPath + cores[i].name) to:file
+	)
 	
 	format "</static_meshes>\n" to:file 
 	format "____CreatedStatic____\n"
 	close file
-	)
+)
 	
 fn createRenderableObjects = (
-	local file=createfile (GetLevelName()+"renderable_objects.xml" )
+	local file = createfile (getAbsolutePath() + "renderable_objects.xml" )
 	local instances = GetInstances()
+	
 	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
 	format "<renderable_objects>\n" to:file
-	for i=1 to instances.count do(
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"%\" yaw=\"%\" pitch=\"0.0\" roll=\"0.0\" visible=\"%\"/>\n" instances[i].name instances[i].name TranslationToRH(instances[i].transform.translation) GetYaw(instances[i].transform) instances[i].visible to:file
-		)
+	
+	for i = 1 to instances.count do
+	(
+		Pos = TranslationToRH (instances[i].transform.translation)
+		Yaw = GetYaw (instances[i].transform)
+		Pitch = GetPitch (instances[i].transform)
+		Roll = GetRoll (instances[i].transform)
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n" instances[i].name instances[i].name Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
+	)
 
 	format "</renderable_objects>\n" to:file 
 	format "____CreatedRenderableObjects____\n"
@@ -62,70 +86,87 @@ fn createRenderableObjects = (
 )	
 
 fn createLights = (
-	local file=createfile (GetLevelName()+"lights.xml" )
+	local file = createfile (getAbsolutePath() + "lights.xml")
 	local all_lights = GetLights()
+	
 	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
 	format "<lights>\n" to:file
-	for i=1 to all_lights.count do(
+	
+	for i=1 to all_lights.count do
+	(
 		if  classof all_lights[i] == Omnilight then
 		(
 			-- Omni (omni)
 			format "\t<light name=\"%\" type=\"%\" pos=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" all_lights[i].name all_lights[i].type all_lights[i].pos all_lights[i].rgb all_lights[i].farAttenStart all_lights[i].farAttenEnd all_lights[i].multiplier to:file
 		
-			) else if classof all_lights[i] == TargetDirectionallight then
+		)
+		else if classof all_lights[i] == TargetDirectionallight then
 		(
 			-- Direcional (targetDirect)
 			local dir=($.target.pos-$.pos)
 			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" all_lights[i].name all_lights[i].type all_lights[i].pos dir all_lights[i].rgb all_lights[i].farAttenStart all_lights[i].farAttenEnd all_lights[i].multiplier to:file
 		
-		) else if classof all_lights[i] == targetSpot then
+		)
+		else if classof all_lights[i] == targetSpot then
 		(
-		--Spot  (targetSpot)
+			--Spot  (targetSpot)
 			local dir=($.target.pos-$.pos)
 			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" all_lights[i].name all_lights[i].type all_lights[i].pos dir all_lights[i].rgb all_lights[i].farAttenStart all_lights[i].farAttenEnd all_lights[i].multiplier to:file
 		)
 
-	format "</lights>\n" to:file 
+	format "</lights>\n" to:file
 	format "____CreatedRenderableObjects____\n"
 	close file
 	)	
 )
 
 fn createMaterials ExportTexture = (
-	local file=createfile (GetLevelName()+"materials.xml" )
-	
+	local file = createfile (getAbsolutePath() + "materials.xml" )
 	local cores = GetCores()
+	
 	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
 	format "<materials>\n" to:file
-	for i=1 to cores.count do( --undefined
-		if classof cores[i].material == Standardmaterial then (				
-			format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" cores[i].material.name (GetLevelName()+cores[i].material.name) to:file		
-			if cores[i].material.diffuseMap != undefined and cores[i].material.diffuseMap.bitmap != undefined then ( --TODO: comprobar difuso no bitmap??
-				if not doesFileExist (GetLevelName() + "Textures") then
-				(
-					makeDir (GetLevelName() + "Textures") all:true
-				)
+	
+	for i=1 to cores.count do
+	(
+		if classof cores[i].material == Standardmaterial then
+		(
+			format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" cores[i].material.name to:file
+			if cores[i].material.diffuseMap != undefined and cores[i].material.diffuseMap.bitmap != undefined then --TODO: comprobar difuso no bitmap??
+			(
 				textureName = filenameFromPath cores[i].material.diffuseMap.filename
-				format "\t\t <texture filename=\"%\"/>\n" ("Textures\\" + textureName) to:file
-				copyFile cores[i].material.diffuseMap.filename (GetLevelName() + "Textures\\" + textureName)
-			)else(
-				messageBox ("¡¡¡El material "+cores[i].material.name+" de la malla "+cores[i].name+" tiene las texturas mal!!!") title:"MENSAJE PARA ARTISTAS" 
+				format "\t\t <texture filename=\"%\"/>\n" (texturePath + textureName) to:file
+				copyFile cores[i].material.diffuseMap.filename (getAbsolutePath() + "Textures\\" + textureName)
 			)
+			else
+			(
+				messageBox ("¡¡¡El material " + cores[i].material.name + " de la malla " + cores[i].name + " tiene las texturas mal!!!") title:"MENSAJE PARA ARTISTAS" 
+			)
+			
+			if cores[i].material.selfIllumMap != undefined and cores[i].material.selfIllumMap.bitmap != undefined then
+			(
+				lightMapName = fileNameFromPath cores[i].material.selfIllumMap.filename
+				format "\t\t <lightmap filename=\"%\"/>\n" (texturePath + lightMapName) to:file
+				copyFile cores[i].material.selfIllumMap.filename (getAbsolutePath() + "Textures\\" + lightMapName)
+			)
+			
 			format "\t</material>\n" to:file 
-		) else (
-			for j = 1 to cores[i].material.numsubs do (
+		)
+		else
+		(
+			for j = 1 to cores[i].material.numsubs do
+			(
 				--Si ya existe no exportamos
-				format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" cores[i].material[j].name (GetLevelName()+cores[i].material[j].name) to:file	
-				if cores[i].material[j].diffuseMap != undefined and cores[i].material[j].diffuseMap.bitmap != undefined then ( --TODO: comprobar difuso no bitmap??
-					if not doesFileExist (GetLevelName() + "Textures") then
-					(
-						makeDir (GetLevelName() + "Textures") all:true
-					)
+				format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" cores[i].material[j].name to:file	
+				if cores[i].material[j].diffuseMap != undefined and cores[i].material[j].diffuseMap.bitmap != undefined then --TODO: comprobar difuso no bitmap??
+				(
 					textureName = filenameFromPath cores[i].material[j].diffuseMap.filename
-					format "\t\t <texture filename=\"%\"/>\n" ("Textures\\" + textureName) to:file
-					copyFile cores[i].material[j].diffuseMap.filename (GetLevelName() + "Textures\\" + textureName)
-				)else(
-					messageBox ("¡¡¡El material "+cores[i].material.name+" de la malla "+cores[i].name+" tiene las texturas mal!!!") title:"MENSAJE PARA ARTISTAS" 
+					format "\t\t <texture filename=\"%\"/>\n" (texturePath + textureName) to:file
+					copyFile cores[i].material[j].diffuseMap.filename (getAbsolutePath() + "Textures\\" + textureName)
+				)
+				else
+				(
+					messageBox ("¡¡¡El material " + cores[i].material.name + " de la malla " + cores[i].name + " tiene las texturas mal!!!") title:"MENSAJE PARA ARTISTAS" 
 				)
 				format "\t</material>\n" to:file 
 			)
@@ -183,29 +224,38 @@ fn createVertexesForFace obj IdFace = (
 	local TUVMap2= meshop.getMapVert obj 1 IdxsMap[2]
 	local TUVMap3= meshop.getMapVert obj 1 IdxsMap[3]
 	
-	return #(#(Vtx1,Normal1,TUVMap1), #(Vtx2,Normal2,TUVMap2), #(Vtx3,Normal3,TUVMap3))
+	-- Coordenades de lightmap
+	local LUVMap1= meshop.getMapVert obj 2 IdxsMap[1]
+	local LUVMap2= meshop.getMapVert obj 2 IdxsMap[2]
+	local LUVMap3= meshop.getMapVert obj 2 IdxsMap[3]
+	
+	return #(#(Vtx1,Normal1,TUVMap1,LUVMap1), #(Vtx2,Normal2,TUVMap2,LUVMap2), #(Vtx3,Normal3,TUVMap3,LUVMap3))
 
 )
 
-fn createMesh obj= (
+fn createMesh obj = (
 	format "____Creating Mesh %____\n" obj.name
 	
-	file = fopen (GetLevelName()+obj.name+".mesh" ) "wb"
+	file = fopen (getAbsolutePath() + "Meshes\\" + obj.name + ".mesh") "wb"
 	
 	--Header
 	writeshort file 0xFE55
 	local numMats
 	
 	--Materials
-	if (classOf obj.material) == Standardmaterial then (
+	if (classOf obj.material) == Standardmaterial then
+	(
 		numMats=1
 		writeshort file numMats
 		writeshort file obj.material.name.count
 		writestring file obj.material.name
-	) else (
+	)
+	else
+	(
 		numMats = obj.material.numsubs
 		writeshort file numMats
-		for mats=1 to numMats do (			
+		for mats=1 to numMats do
+		(	
 			writeshort file obj.material[mats].name.count
 			writestring file obj.material[mats].name
 		)
@@ -215,26 +265,30 @@ fn createMesh obj= (
 
 	
 	--TODO: Evitar duplicados
-	for i=1 to numMats do (
+	for i=1 to numMats do
+	(
 		local l_VtxsMap = dotnetobject "System.Collections.Generic.Dictionary`2[System.String,System.Int16]"
 		local idxs = #()
 		local vtxs = #()
 		
-		writeshort file 37 --vertexType
+		--writeshort file 37 --vertexType
+		writeshort file 101
 		--writeshort file (getNumVerts obj) --TODO: coger vertices afectados por ese mat...
-		for idFace = 1 to (getNumFaces obj) do (
+		for idFace = 1 to (getNumFaces obj) do
+		(
 			local faceVtxs = createVertexesForFace obj idFace
-			for numVtx = 1 to 3 do (
+			for numVtx = 1 to 3 do
+			(
 				local idx = DotNetAddVertex vtxs l_VtxsMap faceVtxs[numVtx]
 				append idxs idx
 			)
-
 		)
 		
 		
 		writeshort file vtxs.count
 		
-		for idVtx = 1 to vtxs.count do (
+		for idVtx = 1 to vtxs.count do
+		(
 			local vtx = vtxs[idVtx]
 			-- Vertex
 			writefloat file vtx[1].x
@@ -249,6 +303,10 @@ fn createMesh obj= (
 			-- UV
 			writefloat file vtx[3].x
 			writefloat file vtx[3].y
+			
+			--UV Lightmap
+			writefloat file vtx[4].x
+			writefloat file vtx[4].y
 		)
 		
 		-- Write the index byte width
@@ -256,7 +314,8 @@ fn createMesh obj= (
 		
 		writeshort file idxs.count
 		
-		for idx = 1 to idxs.count do (
+		for idx = 1 to idxs.count do
+		(
 			writeshort file idxs[idx]
 		)
 	)
@@ -273,10 +332,10 @@ fn createMesh obj= (
 
 fn createMeshes = (
 	local cores = GetCores()
-	for i=1 to cores.count do(
-			createMesh (convertToMesh cores[i])
+	for i=1 to cores.count do
+	(
+		createMesh (convertToMesh cores[i])
 	)
-
 )
 
 
@@ -284,10 +343,12 @@ fn GetYaw transform =
 (
 	return -(transform as eulerangles).z
 )
+
 fn GetPitch transform =
 (
 	return -(transform as eulerangles).y
 )
+
 fn GetRoll transform =
 (
 	return (transform as eulerangles).x
@@ -298,11 +359,10 @@ fn TranslationToRH translation =
 (
 	return point3 -translation.x translation.z translation.y
 ) 
-	
-	
---Init()
---createStaticMeshes()
---createRenderableObjects()
---createMaterials()
---createMeshes()
+
+createDirs()
+createStaticMeshes()
+createRenderableObjects()
+createMaterials true
+createMeshes()
 
