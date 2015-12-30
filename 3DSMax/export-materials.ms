@@ -12,7 +12,7 @@ fn exportSingleTexture mat meshName = (
 	)
 	else if mat.diffuseMap != undefined then
 	(
-		err = "¡¡¡El material " + mat.name + " de la malla " + meshName + " no hay textura difusa o no es un bitmap!!!"
+		err = "En el material " + mat.name + " de la malla " + meshName + " no hay textura difusa o no es un bitmap!!!"
 		messageBox err title:"MENSAJE PARA ARTISTAS" 
 		format ("\n$$$$ Alerta: " + err + "\n\n")
 	)
@@ -35,7 +35,7 @@ fn createMaterials ExportTexture = (
 			
 			exportSingleTexture cores[i].material cores[i].name
 			
-			if HasLightmap cores[i].material then
+			if HasLightmap cores[i].material alertOnMissing:true then
 			(
 				lightMapName = fileNameFromPath cores[i].material.selfIllumMap.filename
 				format "\t\t <lightmap filename=\"%\"/>\n" (getTexturePath lightMapName) to:file

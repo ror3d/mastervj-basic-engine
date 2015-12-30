@@ -17,8 +17,14 @@ fn HasWeights mat = (
 	return false -- TODO: change when we have skeletal animations
 )
 
-fn HasLightmap mat = (
-	return mat.selfIllumMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
+fn HasLightmap mat alertOnMissing:false = (
+	local ret = mat.selfIllumMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
+	if alertOnMissing and not ret and mat.selfIllumMap != undefined then
+	(
+		-- TODO: show message box?
+		format "\n$$$$ Alerta: El material % parece tener Lightmap pero no tiene una textura asociada válida!!!\n\n" mat.name
+	)
+	return ret
 )
 
 fn GetVertexTypeFromMaterial mat = (
