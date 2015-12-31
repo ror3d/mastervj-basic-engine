@@ -2,7 +2,7 @@ fileIn "file-utils.ms"
 fileIn "vertex-types.ms"
 fileIn "export-scene-utils.ms"
 
-fn createStaticMeshes = (
+fn createStaticMeshesFile = (
 	MyCreateFile "static_meshes.xml"
 	
 	local cores = GetCores()
@@ -21,7 +21,7 @@ fn createStaticMeshes = (
 	MyCloseFile()
 )
 	
-fn createRenderableObjects = (
+fn createRenderableObjectsFile = (
 	MyCreateFile "renderable_objects.xml"
 	
 	local instances = GetInstances()
@@ -49,10 +49,6 @@ function ConvertVtx Vtx =
 (
 	local l_Text = stringstream ""
 	format "%" Vtx to:l_Text
-	/*for i=1 to Vtx.count do
-	(
-		format "%," Vtx[i] to:l_Text
-	)*/
 	return (l_Text as string)
 )
 
@@ -77,6 +73,9 @@ fn createVertexesForFace obj IdFace = (
 	local Vtx1=getVert obj IdxsFace[1]
 	local Vtx2=getVert obj IdxsFace[2]
 	local Vtx3=getVert obj IdxsFace[3]
+	
+	-- TODO: Obtener normales correctas
+	
 	-- Para coger las normales de los vértices de la primera cara
 	local Normal1=getNormal obj IdxsFace[1]
 	local Normal2=getNormal obj IdxsFace[2]
@@ -153,8 +152,8 @@ fn createMesh obj = (
 	
 	--Vertex
 
+	-- TODO: Centrar al origen?
 	
-	--TODO: Evitar duplicados
 	for i=1 to numMats do
 	(
 		local l_VtxsMap = dotnetobject "System.Collections.Generic.Dictionary`2[System.String,System.Int16]"
@@ -175,7 +174,7 @@ fn createMesh obj = (
 		
 		writeshort file (GetVertexTypeFromMaterial mat)
 		
-		--TODO: coger vertices afectados por ese mat...
+		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
 		(
 			local faceVtxs = createVertexesForFace obj idFace
@@ -231,6 +230,7 @@ fn createMesh obj = (
 		)
 	)
 
+	-- TODO: Export bounding box/sphere?
 	
 	--Footer
 	writeshort file 0x55FE
@@ -244,6 +244,14 @@ fn createMeshes = (
 	local cores = GetCores()
 	for i=1 to cores.count do
 	(
-		createMesh (convertToMesh cores[i])
+		-- TODO: Clone mesh and use the clone
+		local clone = #()
+		maxOps.cloneNodes cores[i] newNodes:&clone
+		local n = cores[i].name
+		cores[i].name = "_" + n
+		clone[1].name = n
+		createMesh (convertToMesh clone[1])
+		delete clone
+		cores[i].name = n
 	)
 )

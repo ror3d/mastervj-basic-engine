@@ -5,8 +5,18 @@
 ----------------------------------------------------------------------------
 struct vertex (pos, normal, uv, uv2)
 
-fn HasTexture mat = (
-	return mat.diffuseMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.diffuseMap.bitmap != undefined
+fn DisplayMaterialError errorString = (
+	messageBox errorString title:"MENSAJE PARA ARTISTAS"
+	format ("\n$$$$ Alerta: " + errorString + "\n\n")
+)
+
+fn HasTexture mat alertOnMissing:false = (
+	local ret = mat.diffuseMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.diffuseMap.bitmap != undefined
+	if alertOnMissing and not ret then
+	(
+		DisplayMaterialError ("En el material " + mat.name + " no hay textura difusa o no es un bitmap!!!")
+	)
+	return ret
 )
 
 fn HasNormal mat = (
@@ -21,8 +31,7 @@ fn HasLightmap mat alertOnMissing:false = (
 	local ret = mat.selfIllumMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
 	if alertOnMissing and not ret and mat.selfIllumMap != undefined then
 	(
-		-- TODO: show message box?
-		format "\n$$$$ Alerta: El material % parece tener Lightmap pero no tiene una textura asociada válida!!!\n\n" mat.name
+		DisplayMaterialError ("El material " + mat.name + " parece tener Lightmap pero no tiene una textura asociada válida!!!")
 	)
 	return ret
 )

@@ -66,8 +66,8 @@ fn createDirs = (
 -- File functions
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
-global file = undefined
-global fileFromFOpen = undefined
+file = undefined
+fileFromFOpen = undefined
 
 fn MyCloseFile = (
 	if file != undefined then
@@ -87,12 +87,14 @@ fn MyCloseFile = (
 
 fn MyCreateFile path = (
 	MyCloseFile()
+	createDirs()
 	file = createfile (getAbsoluteDataPath(path))
 	fileFromFOpen = false
 )
 
 fn MyFOpen path mode = (
 	MyCloseFile()
+	createDirs()
 	file = fopen (getAbsoluteDataPath(path)) mode
 	fileFromFOpen = true
 )
