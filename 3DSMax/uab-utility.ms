@@ -113,7 +113,7 @@ utility UABUtility "UAB Utility" width:160 height:527
 	)
 	on exportObjAnimBtn pressed do
 	(
-		-- TODO
+		ExportAllObjectCinematics()
 	)
 )
 openUtility UABUtility

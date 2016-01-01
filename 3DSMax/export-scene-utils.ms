@@ -13,6 +13,11 @@ fn GetInstances = (
 	return $*
 )
 
+fn GetAnimatedInstances = (
+	-- TODO
+	return $*
+)
+
 fn GetLights = (
 	light_obj = #()
 	for i =1 to $*.count do
