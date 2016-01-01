@@ -9,7 +9,7 @@ fn createLights = (
 	
 	local all_lights = GetLights()
 	
-	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
+	WriteXMLPrologToFile()
 	format "<lights>\n" to:file
 	
 	for i=1 to all_lights.count do

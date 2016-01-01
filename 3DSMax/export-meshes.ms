@@ -7,7 +7,7 @@ fn createStaticMeshesFile = (
 	
 	local cores = GetCores()
 	
-	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
+	WriteXMLPrologToFile()
 	format "<static_meshes>\n" to:file
 	
 	for i=1 to cores.count do
@@ -26,7 +26,7 @@ fn createRenderableObjectsFile = (
 	
 	local instances = GetInstances()
 	
-	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
+	WriteXMLPrologToFile()
 	format "<renderable_objects>\n" to:file
 	
 	for i = 1 to instances.count do
@@ -231,7 +231,7 @@ fn createMesh obj = (
 		)
 	)
 
-	-- TODO: Export bounding box/sphere?
+	-- TODO: Export bounding box/sphere? look into NodeGetBoundingBox
 	
 	--Footer
 	writeshort file 0x55FE

@@ -58,7 +58,7 @@ fn createMaterials copyTextures = (
 	
 	local cores = GetCores()
 	
-	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
+	WriteXMLPrologToFile()
 	format "<materials>\n" to:file
 	
 	local l_MatsMap = dotnetobject "System.Collections.Generic.Dictionary`2[System.String,System.Int16]"

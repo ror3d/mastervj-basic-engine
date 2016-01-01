@@ -7,6 +7,7 @@ global absPath = maxFilePath
 global DataPath = "Data\\"
 global MeshSubPath = "Meshes\\"
 global TextureSubPath = "Textures\\"
+global AnimationSubPath = "Animations\\"
 
 fn getDataPath p = (
 	return DataPath + p
@@ -18,6 +19,10 @@ fn getMeshPath p = (
 
 fn getTexturePath p = (
 	return getDataPath (TextureSubPath + p)
+)
+
+fn getAnimationPath p = (
+	return getDataPath (AnimationSubPath + p)
 )
 
 fn setAbsolutePath p = (
@@ -45,6 +50,10 @@ fn getAbsMeshPath p = (
 )
 
 
+fn getAbsAnimationPath p = (
+	return absPath + (getAnimationPath p)
+)
+
 fn createDirs = (
 	if not doesFileExist (getAbsoluteDataPath("")) then
 	(
@@ -58,6 +67,10 @@ fn createDirs = (
 	(
 		makeDir (getAbsMeshPath(""))
 	)
+	if not doesFileExist (getAbsAnimationPath("")) then
+	(
+		makeDir (getAbsAnimationPath(""))
+	)
 )
 
 
@@ -66,8 +79,8 @@ fn createDirs = (
 -- File functions
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
-file = undefined
-fileFromFOpen = undefined
+global file = undefined
+global fileFromFOpen = undefined
 
 fn MyCloseFile = (
 	if file != undefined then
@@ -97,4 +110,8 @@ fn MyFOpen path mode = (
 	createDirs()
 	file = fopen (getAbsoluteDataPath(path)) mode
 	fileFromFOpen = true
+)
+
+fn WriteXMLPrologToFile = (
+	format "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" to:file
 )
