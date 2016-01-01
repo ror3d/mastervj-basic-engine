@@ -1,27 +1,33 @@
 global UABPropertyManager
-rollout UABPropertyManager "UABPropertyManager" width:264 height:577
+rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 (
 	checkbox cbExportRender "Export" pos:[14,52] width:61 height:19
 	checkbox cbVisibleRender "Visible" pos:[14,78] width:68 height:19
 	checkbox cbLayerRender "Layer" pos:[14,109] width:54 height:19
 	dropdownList ddlExportRender "" pos:[81,49] width:158 height:21
-	dropdownList ddlLayerRender "" pos:[81,112] width:158 height:21
-	edittext txtAnimModel "Anim. Mode   " pos:[13,168] width:226 height:23
-	checkbox cbGeneratePhysics "Generate" pos:[14,225] width:66 height:19
-	checkbox cbLayerPhysics "Layer" pos:[14,259] width:48 height:19
-	checkbox cbGenerateLogic "Generate" pos:[14,328] width:65 height:19
-	checkbox cbExportLight "Export" pos:[14,396] width:92 height:19
-	dropdownList ddlGeneratePhysics "" pos:[81,225] width:158 height:21
-	dropdownList ddlLayerPhysics "" pos:[81,260] width:158 height:21
-	dropdownList ddlGenerateLogic "" pos:[81,327] width:158 height:21
-	GroupBox grpRender "Physics" pos:[8,208] width:248 height:88
-	GroupBox grpPhysics "Logic" pos:[8,308] width:248 height:58
-	GroupBox grpLogic "Render" pos:[8,30] width:248 height:174
+	dropdownList ddlLayerRender "" pos:[81,111] width:158 height:21
+	edittext txtAnimModel "Anim. Model " pos:[14,168] width:226 height:23
+	checkbox cbGeneratePhysics "Generate" pos:[14,220] width:66 height:19
+	checkbox cbLayerPhysics "Layer" pos:[14,254] width:48 height:19
+	checkbox cbGenerateLogic "Generate" pos:[14,311] width:65 height:19
+	checkbox cbExportLight "Export Light" pos:[14,371] width:92 height:19
+	dropdownList ddlGeneratePhysics "" pos:[81,220] width:158 height:21
+	dropdownList ddlLayerPhysics "" pos:[81,255] width:158 height:21
+	dropdownList ddlGenerateLogic "" pos:[81,310] width:158 height:21
+	GroupBox grpRender "Physics" pos:[8,203] width:248 height:88
+	GroupBox grpPhysics "Logic" pos:[8,291] width:248 height:58
+	GroupBox grpLogic "Render" pos:[8,29] width:532 height:174
 	button btnGet "Get" pos:[25,456] width:85 height:30
 	button btnSet "Set" pos:[129,456] width:85 height:30
 	checkbox autoloadCkbx "Auto load on selection change" pos:[25,500] width:187 height:19
 	
 	label lblObjectName "ObjectName" pos:[15,10] width:250 height:22
+	
+	
+	GroupBox grp10 "Lights" pos:[8,349] width:248 height:58
+	GroupBox grp15 "Cinematics" pos:[261,212] width:279 height:61
+	checkbox cbExportCinematics "Export" pos:[268,230] width:56 height:17
+	radiobuttons rbCinematicsLoopType "" pos:[290,250] width:219 height:16 enabled:false labels:#("Cycle", "Reverse", "One-Shot") columns:3
 	
 
 	local m_ObjSelected = undefined
@@ -41,6 +47,8 @@ rollout UABPropertyManager "UABPropertyManager" width:264 height:577
 		txtAnimModel.enabled = enabled
 		txtAnimModel.enabled = enabled
 		cbExportLight.enabled = enabled
+		cbExportCinematics.enabled = enabled
+		rbCinematicsLoopType.enabled = enabled
 	)
 	
 	----------------------------------------------------
@@ -57,6 +65,11 @@ rollout UABPropertyManager "UABPropertyManager" width:264 height:577
 		txtAnimModel.text = ""
 		txtAnimModel.enabled= false
 		cbExportLight.checked = false
+		
+		cbExportCinematics.checked = false
+		rbCinematicsLoopType.enabled = false
+		rbCinematicsLoopType.state = 1
+		
 		
 		lblObjectName.caption = ""
 		
@@ -263,7 +276,6 @@ rollout UABPropertyManager "UABPropertyManager" width:264 height:577
 	
 
 	
-	
 	on UABPropertyManager open do
 	(
 		ddlExportRender.items =#("Static Mesh","Animated Models")-- l_ExportRender
@@ -356,6 +368,10 @@ rollout UABPropertyManager "UABPropertyManager" width:264 height:577
 		(
 			selectedObjectChanged()
 		)
+	)
+	on cbExportCinematics changed state do
+	(
+		rbCinematicsLoopType.enabled = state
 	)
 )
 

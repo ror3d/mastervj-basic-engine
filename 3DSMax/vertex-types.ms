@@ -36,7 +36,7 @@ fn HasLightmap mat alertOnMissing:false = (
 	return ret
 )
 
-fn GetVertexTypeFromMaterial mat = (
+fn GetVertexTypeFromObjectMaterial obj mat = (
 	local MV_VERTEX_TYPE_POSITION		=	0x01
 	local MV_VERTEX_TYPE_COLOR			=	0x02
 	local MV_VERTEX_TYPE_NORMAL			=	0x04
@@ -50,17 +50,25 @@ fn GetVertexTypeFromMaterial mat = (
 	
 	ret = bit.or ret MV_VERTEX_TYPE_POSITION
 	if HasTexture mat then
+	(
 		ret = bit.or ret MV_VERTEX_TYPE_TEXTURE1
+	)
 	
 	if HasNormal mat then
+	(
 		ret = bit.or ret MV_VERTEX_TYPE_NORMAL
+	)
 	
 	if HasWeights mat then
+	(
 		ret = bit.or ret MV_VERTEX_TYPE_BLEND_INDICES
 		ret = bit.or ret MV_VERTEX_TYPE_BLEND_WEIGHT
+	)
 	
 	if HasLightmap mat then
+	(
 		ret = bit.or ret MV_VERTEX_TYPE_TEXTURE2
+	)
 	
 	-- TODO do the rest
 	

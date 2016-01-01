@@ -5,8 +5,8 @@ utility UABUtility "UAB Utility" width:160 height:527
 (
 	button SetPathButton "Set Export Path" pos:[10,41] width:138 height:25
 	label PathLabel "Label" pos:[8,68] width:140 height:19
-	checkbox ExportMeshCheck "Also export all .mesh" pos:[11,142] width:138 height:17 enabled:false checked:true
-	checkbox CopyTexturesCheck "Copy texture files" pos:[11,250] width:138 height:17 enabled:false checked:true
+	checkbox ExportMeshCheck "Also export all .mesh" pos:[11,142] width:138 height:17 checked:true
+	checkbox CopyTexturesCheck "Copy texture files" pos:[11,250] width:138 height:17 checked:true
 	GroupBox grp1 "Export Mesh Objects" pos:[5,93] width:150 height:135
 	button ExportRenderableObjectsBtn "Renderable Objects File" pos:[11,195] width:138 height:25
 	button LightsButton "Lights" pos:[11,323] width:138 height:25

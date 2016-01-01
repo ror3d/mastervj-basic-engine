@@ -127,6 +127,11 @@ fn createMesh obj = (
 	
 	MyFOpen (MeshSubPath + obj.name + ".mesh") "wb"
 	
+	-- Centrar al origen
+	obj.position = [0, 0, 0]
+	obj.rotation = quat 0 0 0 1
+	obj.scale = [1, 1, 1]
+	
 	--Header
 	writeshort file 0xFE55
 	local numMats
@@ -151,8 +156,6 @@ fn createMesh obj = (
 	)
 	
 	--Vertex
-
-	-- TODO: Centrar al origen?
 	
 	for i=1 to numMats do
 	(
@@ -160,8 +163,6 @@ fn createMesh obj = (
 		local idxs = #()
 		local vtxs = #()
 		
-		--writeshort file 37 --vertexType
-		--writeshort file 101
 		local mat;
 		if (classOf obj.material) == Standardmaterial then
 		(
@@ -172,7 +173,7 @@ fn createMesh obj = (
 			mat = obj.material[i]
 		)
 		
-		writeshort file (GetVertexTypeFromMaterial mat)
+		writeshort file (GetVertexTypeFromObjectMaterial obj mat)
 		
 		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
@@ -244,7 +245,7 @@ fn createMeshes = (
 	local cores = GetCores()
 	for i=1 to cores.count do
 	(
-		-- TODO: Clone mesh and use the clone
+		-- Clone mesh and use the clone
 		local clone = #()
 		maxOps.cloneNodes cores[i] newNodes:&clone
 		local n = cores[i].name
