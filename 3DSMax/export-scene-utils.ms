@@ -14,8 +14,16 @@ fn GetInstances = (
 )
 
 fn GetAnimatedInstances = (
-	-- TODO
-	return $*
+	local ret = #()
+	for i = 1 to $*.count do
+	(
+		local l_ExportCinematics = getUserProp $*[i] "cinematics_export"
+		if l_ExportCinematics != undefined and l_ExportCinematics then
+		(
+			append ret $*[i]
+		)
+	)
+	return ret
 )
 
 fn GetLights = (

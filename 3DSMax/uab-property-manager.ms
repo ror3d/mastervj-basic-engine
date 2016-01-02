@@ -27,7 +27,9 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	GroupBox grp10 "Lights" pos:[8,349] width:248 height:58
 	GroupBox grp15 "Cinematics" pos:[261,212] width:279 height:61
 	checkbox cbExportCinematics "Export" pos:[268,230] width:56 height:17
-	radiobuttons rbCinematicsLoopType "" pos:[290,250] width:219 height:16 enabled:false labels:#("Cycle", "Reverse", "One-Shot") columns:3
+	
+	local CinematicsLoopTypes = #("Cycle", "Reverse", "One-Shot")
+	radiobuttons rbCinematicsLoopType "" pos:[290,250] width:219 height:16 enabled:false labels:CinematicsLoopTypes columns:3
 	
 
 	local m_ObjSelected = undefined
@@ -100,6 +102,8 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		local l_LayerPhysics = getUserProp m_ObjSelected "physics_layer"
 		local l_GenerateLogic = getUserProp m_ObjSelected "logic_generate"
 		local l_ExportLight = getUserProp m_ObjSelected "light_export"
+		local l_ExportCinematics = getUserProp m_ObjSelected "cinematics_export"
+		local l_CinemLoopType = getUserProp m_ObjSelected "cinematics_loop"
 		
 		--Export Render
 		if l_ExportRender != undefined then
@@ -184,6 +188,23 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 			cbVisibleRender.enabled=check
 		)
 		
+		if l_ExportCinematics != undefined then
+		(
+			cbExportCinematics.checked = l_ExportCinematics
+			rbCinematicsLoopType.enabled = l_ExportCinematics
+		)
+		if l_CinemLoopType != undefined then
+		(
+			for i = 1 to CinematicsLoopTypes.count do
+			(
+				if CinematicsLoopTypes[i] == l_CinemLoopType then
+				(
+					rbCinematicsLoopType.state = i
+					exit
+				)
+			)
+		)
+		
 		return true
 	)
 	
@@ -247,7 +268,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		(
 			setUserProp Obj "logic_generate" "undefined"
 		)
-		--todo light
+		-- Export light
 		if cbExportLight.checked and  SuperclassOf Obj == light  then
 		(
 			setUserProp Obj "light_export" cbExportLight.checked
@@ -255,6 +276,17 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		else
 		(
 			setUserProp Obj "light_export" "undefined"
+		)
+		
+		if cbExportCinematics.checked then
+		(
+			setUserProp Obj "cinematics_export" true
+			setUserProp Obj "cinematics_loop" CinematicsLoopTypes[rbCinematicsLoopType.state]
+		)
+		else
+		(
+			setUserProp Obj "cinematics_export" false
+			setUserProp Obj "cinematics_loop" ""
 		)
 	)
 	
