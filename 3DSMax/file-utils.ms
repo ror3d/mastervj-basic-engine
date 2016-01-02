@@ -79,6 +79,18 @@ fn createDirs = (
 -- File functions
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
+if file != undefined then
+(
+	if fileFromFOpen then
+	(
+		fflush file
+		fclose file
+	)
+	else
+	(
+		close file
+	)
+)
 global file = undefined
 global fileFromFOpen = undefined
 
