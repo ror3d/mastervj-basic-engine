@@ -1,18 +1,43 @@
 fileIn "file-utils.ms"
 fileIn "export-scene-utils.ms"
 
+fn getControllers obj ctrls:#() =
+(
+    for item in refs.dependsOn obj do   
+    (
+        if isController item AND item.keyable do
+            append ctrls item
+
+        getControllers item ctrls:ctrls
+    )
+    ctrls
+)
+
 fn getAllKeys controllers =
 (
-	local keys = #()
+	local realControllers = #()
+	
 	for i = 1 to controllers.count do
 	(
-		for j = 1 to numkeys controllers[i] do
+		local ctrls = #()
+		getControllers controllers[i] ctrls:ctrls
+		if (isController controllers[i]) and controllers[i].keyable then
 		(
-			append keys (getkeytime controllers[i] j)
+			append ctrls controllers[i]
+		)
+		realControllers = realControllers + ctrls
+	)
+	
+	local keys = #()
+	for i = 1 to realControllers.count do
+	(
+		for j = 1 to numkeys realControllers[i] do
+		(
+			append keys (getkeytime realControllers[i] j)
 		)
 	)
-	sort keys
 	return makeUniqueArray keys
+	sort keys
 )
 
 fn ExportCameraAnimation cam =
@@ -24,18 +49,19 @@ fn ExportCameraAnimation cam =
 	
 	format "<camera_key_controller name=\"%\">\n" cam.name to:file
 	
-	local first_kf = animationrange.start
-	-- Get First keyframe
-	if ( at time 1 trackbar.getPreviousKeyTime() ) > 0 then
+	local keys = getAllKeys #(cam)
+		
+	if keys.count == 0 then
 	(
-		first_kf = at time 0 trackbar.getNextKeyTime()
+		keys = #(0f)
 	)
 	
 	local fps = 1s
 	fps = fps.frame
 	
-	local current_kf = first_kf
-	do (
+	for i = 1 to keys.count do
+	(
+		local current_kf = keys[i]
 		local transf = at time current_kf cam.transform
 		local pos = transf.pos
 		local eye = [0, 0, -1] * (transf.rotation as matrix3)
@@ -49,8 +75,7 @@ fn ExportCameraAnimation cam =
 		format "\t<key time=\"%\" pos=\"% % %\" look_at=\"% % %\" up_vector=\"% % %\" fov=\"%\" near_plane=\"%\" far_plane=\"%\"/>\n"\
 			c_time pos[1] pos[2] pos[3] eye[1] eye[2] eye[3] up[1] up[2] up[3] fov near far to: file
 		
-		current_kf = at time current_kf trackbar.getNextKeyTime()
-	) while current_kf != first_kf
+	)
 	
 	format "</camera_key_controller>\n" to: file
 	MyCloseFile()
