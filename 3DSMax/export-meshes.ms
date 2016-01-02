@@ -85,10 +85,29 @@ fn createVertexesForFace obj IdFace = (
 	local v2 = vertex pos: Vtx2 normal: Normal2
 	local v3 = vertex pos: Vtx3 normal: Normal3
 	
+	local faceMat
+	local nmats = 1
+	if (classOf obj.material) == Standardmaterial then
+	(
+		faceMat = obj.material
+	)
+	else
+	(
+		faceMat = obj.material[getFaceMatID obj IdFace]
+		nmats = obj.material.count
+	)
 	
-	local numMaps = meshop.getNumMaps obj
+	if faceMat == undefined then
+	(
+		format "$$$$ Alerta! El objeto % tiene caras con material incorrecto!!!\n" obj.name
+		setFaceMatID obj IdFace 1
+		if (classOf obj.material) == Standardmaterial then
+			faceMat = obj.material
+		else
+			faceMat = obj.material[1]
+	)
 	
-	if numMaps > 1 then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
+	if HasTexture faceMat then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
 	(
 		-- Para coger los índices de las coordenadas de textura de la primera cara, el 1 señala al primer
 		--   conjunto de coordenadas aplicadas sobre la cara
@@ -103,19 +122,20 @@ fn createVertexesForFace obj IdFace = (
 		v2.uv = TUVMap2
 		v3.uv = TUVMap3
 		
-		if numMaps > 2 then
-		(
-			local IdxsMap2=meshop.getMapFace obj 2 IdFace
-			
-			-- Coordenades de lightmap
-			local LUVMap1= meshop.getMapVert obj 2 IdxsMap2[1]
-			local LUVMap2= meshop.getMapVert obj 2 IdxsMap2[2]
-			local LUVMap3= meshop.getMapVert obj 2 IdxsMap2[3]
-			
-			v1.uv2 = LUVMap1
-			v2.uv2 = LUVMap2
-			v3.uv2 = LUVMap3
-		)
+	)
+	
+	if HasLightmap faceMat then
+	(
+		local IdxsMap2=meshop.getMapFace obj 2 IdFace
+		
+		-- Coordenades de lightmap
+		local LUVMap1= meshop.getMapVert obj 2 IdxsMap2[1]
+		local LUVMap2= meshop.getMapVert obj 2 IdxsMap2[2]
+		local LUVMap3= meshop.getMapVert obj 2 IdxsMap2[3]
+		
+		v1.uv2 = LUVMap1
+		v2.uv2 = LUVMap2
+		v3.uv2 = LUVMap3
 	)
 	
 	return #(v1, v2, v3)
@@ -134,7 +154,15 @@ fn createMesh obj = (
 	
 	--Header
 	writeshort file 0xFE55
-	local numMats
+	local numMats = 1
+	
+	if obj.material == undefined then
+	(
+		format "\n$$$$ Object % doesn't have a material!\n\n" obj.name
+		messageBox ("Object "+obj.name+" doesn't have a material!") title: "Error!"
+		MyCloseFile()
+		return OK
+	)
 	
 	--Materials
 	if (classOf obj.material) == Standardmaterial then
@@ -246,12 +274,25 @@ fn createMeshes = (
 	for i=1 to cores.count do
 	(
 		-- Clone mesh and use the clone
+		if superclassof cores[i] != GeometryClass then
+		(
+			format "$$$$ % no es una malla!\n" cores[i].name
+			continue
+		)
 		local clone = #()
 		maxOps.cloneNodes cores[i] newNodes:&clone
+		if clone.count > 1 then
+		(
+			delete clone
+			format "$$$$ % no es un objeto adecuado!\n" cores[i]
+			continue
+		)
 		local n = cores[i].name
 		cores[i].name = "_" + n
 		clone[1].name = n
+		
 		createMesh (convertToMesh clone[1])
+		
 		delete clone
 		cores[i].name = n
 	)
