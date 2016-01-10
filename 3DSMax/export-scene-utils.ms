@@ -5,8 +5,16 @@
 ----------------------------------------------------------------------------
 
 fn GetCores = (
-	-- TODO
-	return $*
+	-- TODO use only the selected ones
+	local ret = #()
+	for i = 1 to $*.count do
+	(
+		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
+		(
+			append ret $*[i]
+		)
+	)
+	return ret
 )
 
 fn GetInstances = (
@@ -39,4 +47,30 @@ fn GetLights = (
 	)
 	-- format "<light_obj =\"%\"/>" light_obj
 	return light_obj
+)
+
+
+fn GetYaw transform =
+(
+	return -(transform as eulerangles).z
+)
+
+fn GetPitch transform =
+(
+	return -(transform as eulerangles).y
+)
+
+fn GetRoll transform =
+(
+	return (transform as eulerangles).x
+) 
+
+fn ChangeCoordsBase coords =
+(
+	return point3 -coords.x coords.z coords.y
+)
+
+fn TranslationToRH translation =
+(
+	return ChangeCoordsBase
 )

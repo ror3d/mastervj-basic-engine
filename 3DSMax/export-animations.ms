@@ -63,9 +63,9 @@ fn ExportCameraAnimation cam =
 	(
 		local current_kf = keys[i]
 		local transf = at time current_kf cam.transform
-		local pos = transf.pos
-		local eye = [0, 0, -1] * (transf.rotation as matrix3)
-		local up = [0, 1, 0] * (transf.rotation as matrix3)
+		local pos = ChangeCoordsBase transf.pos
+		local eye = ChangeCoordsBase ([0, 0, -1] * (transf.rotation as matrix3))
+		local up = ChangeCoordsBase ([0, 1, 0] * (transf.rotation as matrix3))
 		local fov = at time current_kf cam.fov
 		local near = at time current_kf cam.nearrange
 		local far = at time current_kf cam.farrange
@@ -120,8 +120,8 @@ fn ExportAllObjectCinematics =
 		(
 			local t = keys[i].frame / fps
 			local transf = at time keys[i] obj.transform
-			local pos = transf.position
-			local rot = transf.rotation as eulerAngles
+			local pos = ChangeCoordsBase transf.position
+			local rot = ChangeCoordsBase(transf.rotation as eulerAngles)
 			local sca = transf.scale
 			format "\t\t<cinematic_object_key_frame time=\"%\" position=\"% % %\" rotation=\"% % %\" scale=\"% % %\">\n"\
 					t pos[1] pos[2] pos[3] rot.x rot.y rot.z sca[1] sca[2] sca[3] to: file

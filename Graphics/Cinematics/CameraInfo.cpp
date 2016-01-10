@@ -2,6 +2,8 @@
 
 #include "XML/XMLTreeNode.h"
 
+#include <Math/Math.h>
+
 #include <sstream>
 
 CCameraInfo::CCameraInfo()
@@ -32,14 +34,21 @@ CCameraInfo::CCameraInfo( CXMLTreeNode &node )
 	std::stringstream ss;
 	ss.str( node.GetPszProperty( "pos", "0 0 0") );
 	ss >> m_Eye;
+	ss.clear();
 	ss.str( node.GetPszProperty( "look_at", "0 0 1") );
 	ss >> m_LookAt;
+	ss.clear();
 	ss.str( node.GetPszProperty( "up_vector", "0 1 0") );
 	ss >> m_Up;
+	ss.clear();
 	ss.str( node.GetPszProperty( "fov", "90") );
 	ss >> m_FOV;
+	m_FOV = mathUtils::Deg2Rad( m_FOV );
+	ss.clear();
 	ss.str( node.GetPszProperty( "near_plane", "0") );
 	ss >> m_NearPlane;
+	ss.clear();
 	ss.str( node.GetPszProperty( "far_plane", "1000") );
 	ss >> m_FarPlane;
+	ss.clear();
 }

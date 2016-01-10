@@ -81,7 +81,7 @@ void CCameraKeyController::AnimateCamera(CCamera* cam) const
 	int nextKey = m_CurrentKey + 1;
 
 
-	if ( m_CurrentKey == m_Keys.size() )
+	if ( nextKey == m_Keys.size() )
 	{
 		nextKey = m_CurrentKey;
 	}
@@ -89,21 +89,26 @@ void CCameraKeyController::AnimateCamera(CCamera* cam) const
 	auto& curInf = m_Keys[m_CurrentKey]->m_CameraInfo;
 	auto& nextInf = m_Keys[nextKey]->m_CameraInfo;
 
-	float t = ( m_CurrentTime - m_Keys[m_CurrentKey]->m_Time );
+	float t = 1;
+	if ( nextKey != m_CurrentKey )
+	{
+		t = ( m_CurrentTime - m_Keys[m_CurrentKey]->m_Time ) / ( m_Keys[nextKey]->m_Time - m_Keys[m_CurrentKey]->m_Time );
+	}
 
 	Vect3f pos = lerp(curInf.m_Eye, nextInf.m_Eye, t);
 	Vect3f up = lerp(curInf.m_Up, nextInf.m_Up, t);
 	Vect3f lookat = lerp(curInf.m_LookAt, nextInf.m_LookAt, t);
-	float near = lerp(curInf.m_NearPlane, nextInf.m_NearPlane, t);
+	float near = mathUtils::Max(0.0001f, lerp(curInf.m_NearPlane, nextInf.m_NearPlane, t));
 	float far = lerp(curInf.m_FarPlane, nextInf.m_FarPlane, t);
 	float fov = lerp(curInf.m_FOV, nextInf.m_FOV, t);
 
 	cam->SetPosition( pos );
-	cam->SetLookAt( lookat );
+	cam->SetLookAt( lookat + pos );
 	cam->SetUp( up );
 	cam->SetZNear( near );
 	cam->SetZFar( far );
 	cam->SetFOV( fov );
+	cam->SetMatrixs();
 }
 
 
@@ -117,6 +122,7 @@ void CCameraKeyController::Update( float ElapsedTime )
 void CCameraKeyController::SetCurrentTime( float CurrentTime )
 {
 	m_CurrentTime = CurrentTime;
+	m_CurrentKey = 0;
 	GetCurrentKey();
 }
 
