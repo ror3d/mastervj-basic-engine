@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T>::Vector3 ()
+	: x(0), y(0), z(0)
 {
 }
 
@@ -854,3 +855,16 @@ inline Vector3<T> VectorMaxComponents (const Vector3<T>& uno, const Vector3<T>& 
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include <istream>
+
+template<typename T>
+std::istream& operator>> ( std::istream& is, Vector3<T> &v )
+{
+	T x, y, z;
+	is >> x >> y >> z;
+	v.x = x;
+	v.y = y;
+	v.z = z;
+	return is;
+}

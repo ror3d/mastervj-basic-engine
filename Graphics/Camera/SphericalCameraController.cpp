@@ -11,21 +11,23 @@ CSphericalCameraController::CSphericalCameraController()
 }
 
 CSphericalCameraController::~CSphericalCameraController()
-{	
+{
 }
 
 Vect3f CSphericalCameraController::GetDirection() const
 {
-	return Vect3f(m_Zoom*cos(m_Yaw)*cos(m_Pitch), m_Zoom*sin(m_Pitch), m_Zoom*sin(m_Yaw)*cos(m_Pitch));
+	return Vect3f(m_Zoom*cos(m_Yaw)*cos(m_Pitch),
+		m_Zoom*sin( m_Pitch ),
+		m_Zoom*sin( m_Yaw )*cos( m_Pitch ) );
 }
 
 void CSphericalCameraController::SetCamera(CCamera *Camera) const
 {
 	Vect3f l_Direction = GetDirection();
 
-	Camera->SetLookAt(m_Position);
-
 	Camera->SetPosition(m_Position-l_Direction);
+
+	Camera->SetLookAt(m_Position);
 
 	Camera->SetUp(GetUp());
 	Camera->SetMatrixs();

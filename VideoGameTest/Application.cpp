@@ -7,6 +7,7 @@
 #include <Graphics/Renderer/RenderManager.h>
 
 #include <Core/Input/InputManager.h>
+#include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
 
 
@@ -14,6 +15,8 @@ static void __stdcall SwitchCameraCallback( void* _app )
 {
 	( (CApplication*)_app )->SwitchCamera();
 }
+
+static float s_mouseSpeed = 1;
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
 	: m_RenderManager( _renderManager )
@@ -54,6 +57,16 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 
 		bar.variables.push_back(var);
 	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "mouse speed";
+		var.type = CDebugHelper::FLOAT;
+		var.mode = CDebugHelper::READ_WRITE;
+		var.pFloat = &s_mouseSpeed;
+		var.params = " min=0.1 max=10 step=0.1 precision=1 ";
+
+		bar.variables.push_back(var);
+	}
 
 	CDebugHelper::GetDebugHelper()->RegisterBar(bar);
 }
@@ -81,6 +94,8 @@ void CApplication::Update( float _ElapsedTime )
 {
 	CEngine::GetSingleton().getRenderableObjectManager()->Update(_ElapsedTime);
 
+	( (CInputManagerImplementation*)CInputManager::GetInputManager() )->SetMouseSpeed( s_mouseSpeed );
+
 	switch ( m_CurrentCamera )
 	{
 		case 0:
@@ -88,16 +103,16 @@ void CApplication::Update( float _ElapsedTime )
 			{
 				Vect3f cameraMovement( 0, 0, 0 );
 
-				cameraMovement.x += CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * _ElapsedTime * 0.5f;
-				cameraMovement.y += CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * _ElapsedTime * 0.5f;
+				cameraMovement.x = CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * 0.0005f;
+				cameraMovement.y = CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f;
 
 				m_SphericalCamera.Update( cameraMovement );
 			}
 			break;
 		case 1:
 		{
-			m_FPSCamera.AddYaw( -CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * _ElapsedTime * 0.05f );
-			m_FPSCamera.AddPitch( CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * _ElapsedTime * -0.05f );
+			m_FPSCamera.AddYaw( -CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * 0.0005f );
+			m_FPSCamera.AddPitch( CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f );
 
 			m_FPSCamera.Move( CInputManager::GetInputManager()->GetAxis( "STRAFE" ), CInputManager::GetInputManager()->GetAxis( "MOVE_FWD" ), false, _ElapsedTime );
 		}
@@ -117,6 +132,7 @@ void CApplication::Render()
 		camera.SetMatrixs();
 		m_RenderManager->SetCurrentCamera( camera );
 
+		m_SphericalCamera.SetZoom( 5 );
 		m_SphericalCamera.SetCamera( &camera );
 		camera.SetFOV( 1.047f );
 		camera.SetAspectRatio( m_ContextManager->GetAspectRatio() );

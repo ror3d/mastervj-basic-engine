@@ -25,10 +25,8 @@ void CRenderManager::Render(CContextManager* _Context)
 {
 
 	CCamera &l_Camera = (m_UseDebugCamera ? m_DebugCamera : m_CurrentCamera);
-	l_Camera.SetPosition(Vect3f(6, 0, 0));
-	l_Camera.SetMatrixs();
-	CEffectManager::m_Parameters.m_View=l_Camera.GetView();
-	CEffectManager::m_Parameters.m_Projection= l_Camera.GetProjection();
+	CEffectManager::m_Parameters.m_View = l_Camera.GetView();
+	CEffectManager::m_Parameters.m_Projection = l_Camera.GetProjection();
 
 	m_RenderableObjects->Render(_Context);
 

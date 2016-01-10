@@ -9,7 +9,10 @@
 /// Construcción sin inicialización de parámetros  
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
-inline Matrix33<T>::Matrix33()
+inline Matrix33<T>::Matrix33() :
+  m00(0), m10(0), m20(0),
+  m01(0), m11(0), m21(0),
+  m02(0), m12(0), m22(0)
 {
 }
 

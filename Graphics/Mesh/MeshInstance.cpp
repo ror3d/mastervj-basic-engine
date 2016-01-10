@@ -2,6 +2,13 @@
 #include <Engine/Engine.h>
 #include "StaticMesh.h"
 
+CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
+	: CRenderableObject(treeNode)
+{
+	std::string CoreName = treeNode.GetPszProperty("core_name");
+	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(CoreName);
+}
+
 CMeshInstance::CMeshInstance(const std::string &Name, const std::string &CoreName)
 {
 	setName(Name);
@@ -15,7 +22,9 @@ CMeshInstance::~CMeshInstance()
 
 void CMeshInstance::Render(CContextManager *_context)
 {
-	CEffectManager::m_Parameters.m_World=GetTransform();
-	//CEngine::GetSingleton().getEffectsManager()->m_Parameters.m_World.SetFromPosAndAnglesYXZ(m_Position, m_Yaw, m_Pitch, m_Roll);;
-	m_StaticMesh->Render(_context);
+	if ( m_Visible )
+	{
+		CEffectManager::m_Parameters.m_World = GetTransform();
+		m_StaticMesh->Render( _context );
+	}
 }
