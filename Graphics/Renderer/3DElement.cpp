@@ -72,9 +72,19 @@ C3DElement::C3DElement(const CXMLTreeNode &treeNode)
 {
 	m_Position = treeNode.GetVect3fProperty( "pos" , Vect3f(0, 0, 0), false);
 	m_Scale = treeNode.GetVect3fProperty( "scale" , Vect3f(1, 1, 1), false);
-	m_Yaw = treeNode.GetFloatProperty( "yaw" );
-	m_Pitch = treeNode.GetFloatProperty( "pitch" );
-	m_Roll = treeNode.GetFloatProperty( "roll" );
+	if ( treeNode.ExistsKey( "rotation" ) )
+	{
+		Vect3f rot = treeNode.GetVect3fProperty( "rotation", Vect3f( 0, 0, 0 ), false );
+		m_Yaw = rot.x;
+		m_Pitch = rot.y;
+		m_Roll = rot.z;
+	}
+	else
+	{
+		m_Yaw = treeNode.GetFloatProperty( "yaw" );
+		m_Pitch = treeNode.GetFloatProperty( "pitch" );
+		m_Roll = treeNode.GetFloatProperty( "roll" );
+	}
 	m_Visible = treeNode.GetBoolProperty( "visible", true, false );
 }
 

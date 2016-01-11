@@ -74,8 +74,6 @@ void CCameraKeyController::GetCurrentKey()
 	}
 }
 
-#define lerp(a, b, d) (a + (b-a)*d)
-
 void CCameraKeyController::AnimateCamera(CCamera* cam) const
 {
 	int nextKey = m_CurrentKey + 1;
@@ -95,12 +93,12 @@ void CCameraKeyController::AnimateCamera(CCamera* cam) const
 		t = ( m_CurrentTime - m_Keys[m_CurrentKey]->m_Time ) / ( m_Keys[nextKey]->m_Time - m_Keys[m_CurrentKey]->m_Time );
 	}
 
-	Vect3f pos = lerp(curInf.m_Eye, nextInf.m_Eye, t);
-	Vect3f up = lerp(curInf.m_Up, nextInf.m_Up, t);
-	Vect3f lookat = lerp(curInf.m_LookAt, nextInf.m_LookAt, t);
-	float near = mathUtils::Max(0.0001f, lerp(curInf.m_NearPlane, nextInf.m_NearPlane, t));
-	float far = lerp(curInf.m_FarPlane, nextInf.m_FarPlane, t);
-	float fov = lerp(curInf.m_FOV, nextInf.m_FOV, t);
+	Vect3f pos = mathUtils::Lerp(curInf.m_Eye, nextInf.m_Eye, t);
+	Vect3f up = mathUtils::Lerp(curInf.m_Up, nextInf.m_Up, t);
+	Vect3f lookat = mathUtils::Lerp(curInf.m_LookAt, nextInf.m_LookAt, t);
+	float near = mathUtils::Max(0.0001f, mathUtils::Lerp(curInf.m_NearPlane, nextInf.m_NearPlane, t));
+	float far = mathUtils::Lerp(curInf.m_FarPlane, nextInf.m_FarPlane, t);
+	float fov = mathUtils::Lerp(curInf.m_FOV, nextInf.m_FOV, t);
 
 	cam->SetPosition( pos );
 	cam->SetLookAt( lookat + pos );

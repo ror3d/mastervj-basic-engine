@@ -13,4 +13,6 @@ public:
 
 	inline float getKeyFrameTime() const { return m_KeyFrameTime; }
 	inline void setKeyFrameTime( float kft ) { m_KeyFrameTime = kft; }
+
+	inline virtual void Render( CContextManager *_context ) {}
 };

@@ -72,5 +72,5 @@ fn ChangeCoordsBase coords =
 
 fn TranslationToRH translation =
 (
-	return ChangeCoordsBase
+	return ChangeCoordsBase translation
 )

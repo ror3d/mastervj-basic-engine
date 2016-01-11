@@ -33,8 +33,8 @@ public:
   // -----------------------
   bool								LoadFile           	(const char* _pszFileName);
 
-  bool								Exists             	() { return m_pNode != NULL; }
-  bool								ExistsKey          	(const char* _pszKey);
+  bool								Exists             	() const { return m_pNode != NULL; }
+  bool								ExistsKey          	(const char* _pszKey) const;
   const char*					GetName            	();
 
   // To get properties from xml file
@@ -71,7 +71,7 @@ public:
   bool								WriteComment       	(const char* _pszComment);
   bool								StartElement       	(const char* _pszKey);
   bool								EndElement         	();
-  
+
   // To write keywords to xml file
   bool								WritePszKeyword    	(const char* _pszKey, const char* _pszValue);
   bool								WriteIntKeyword    	(const char* _pszKey, int _iValue);
@@ -94,7 +94,7 @@ private:
   void        				Release   					();
   CXMLTreeNode				GetSubTree					(const char* _pszKey) const;
   bool								_FindSubTree				(xmlNodePtr _pNode, const char* _pszKey, CXMLTreeNode& _TreeFound) const;
-  
+
   xmlChar*						GetProperty 				(const char* _pszKey) const;
   xmlChar*						GetKeyword  				(const char* _pszKey) const;
 

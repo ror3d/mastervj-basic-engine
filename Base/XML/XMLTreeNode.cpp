@@ -571,7 +571,7 @@ const char* CXMLTreeNode::GetPszKeyword (const char* _pszKey, const char* _pszDe
 //----------------------------------------------------------------------------
 // Checks if a key is on the tree
 //----------------------------------------------------------------------------
-bool CXMLTreeNode::ExistsKey (const char* _pszKey)
+bool CXMLTreeNode::ExistsKey (const char* _pszKey) const
 {
   assert(_pszKey);
 
