@@ -24,6 +24,24 @@
 		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="vs_4_0"		entry_point="VS"		vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX"		preprocessor="HAS_NORMAL;HAS_UV"/>
 	<pixel_shader		name="diffuse_ps"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="ps_4_0"		entry_point="PS"		preprocessor="HAS_NORMAL;HAS_UV"/>
 	<effect_technique		name="diffuse_technique"		vertex_shader="diffuse_vs"		pixel_shader="diffuse_ps"/>
+		
+	<vertex_shader
+		name="omnilight_vs"
+		file="./Data/Effects/OmniLight.fx"
+		shader_model="vs_3_0"
+		entry_point="VS"
+		vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX"
+		preprocessor=""/>
+	<pixel_shader
+		name="omnilight_ps"
+		file="./Data/Effects/OmniLight.fx"
+		shader_model="ps_3_0"
+		entry_point="PS"
+		preprocessor=""/>
+	<effect_technique
+		name="omnilight_technique"
+		vertex_shader="omnilight_vs"
+		pixel_shader="omnilight_ps"/>
 	
 	
 	<!--vertex_shader		name="debug_render_vs"		file="./Data/Effects/DebugRender.fx"		shader_model="vs_4_0"		entry_point="VS"		vertex_type="MV_POSITION_COLOR_VERTEX"		preprocessor=""/>
