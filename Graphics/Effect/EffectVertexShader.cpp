@@ -46,10 +46,6 @@ bool CEffectVertexShader::Load()
 	{
 		l_Loaded = MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
-	else if (m_VertexType == "MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX")
-	{
-		l_Loaded = MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
-	}
 	else
 	{
 		assert(!"Vertex type '%s' not recognized on CEffectVertexShader::Load");
@@ -77,8 +73,17 @@ void CEffectVertexShader::SetConstantBuffer(unsigned int IdBuffer, void
 
 void CEffectVertexShader::Destroy()
 {
-	int i = 0;
-	// TODO: release shaders and buffers!!
+	if (m_VertexLayout)
+	{
+		m_VertexLayout->Release();
+		m_VertexLayout = 0;
+	}
+
+	if (m_VertexShader)
+	{
+		m_VertexShader->Release();
+		m_VertexShader = 0;
+	}
 }
 
 

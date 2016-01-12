@@ -3,6 +3,7 @@
 
 #include "Utils/Named.h"
 #include "Math/Color.h"
+#include "Renderer/RenderManager.h"
 
 class CRenderManager;
 
@@ -28,6 +29,7 @@ public:
 	virtual ~CLight();
 	Vect3f getPosition() { return m_Position; } const
 	CColor getColor() { return m_Color; } const
+	float getIntensity() { return m_Intensity; } const
 	float getStartRangeAttenuation() { return m_StartRangeAttenuation; } const
 	float getEndRangeAttenuation() { return m_EndRangeAttenuation; } const
 	TLightType getType() { return m_Type; } const

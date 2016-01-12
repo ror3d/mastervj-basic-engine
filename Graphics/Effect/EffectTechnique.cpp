@@ -30,6 +30,8 @@ CEffectPixelShader * CEffectTechnique::GetPixelShader()
 
 void CEffectTechnique::Refresh()
 {
+	m_VertexShader = CEngine::GetSingleton().getEffectsManager()->GetVertexShader(m_VertexShaderName);
+	m_PixelShader = CEngine::GetSingleton().getEffectsManager()->GetPixelShader(m_PixelShaderName);
 }
 
 

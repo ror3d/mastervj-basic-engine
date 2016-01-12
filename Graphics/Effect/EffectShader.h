@@ -15,7 +15,7 @@ protected:
 
 	std::vector<ID3D11Buffer *> m_ConstantBuffers;
 	std::vector<std::string> m_PreprocessorMacros;
-	std::vector<D3D10_SHADER_MACRO> m_ShaderMacros;
+	D3D10_SHADER_MACRO *m_ShaderMacros;
 
 	virtual void Destroy() = 0;
 	bool LoadShader(const std::string &Filename, const std::string &EntryPoint, const std::string &ShaderModel, ID3DBlob **BlobOut);
@@ -26,7 +26,7 @@ protected:
 public:
 	CEffectShader(const CXMLTreeNode &TreeNode);
 	virtual ~CEffectShader();
-
+	
 	virtual bool Load() = 0;
 
 	virtual void SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer) = 0;

@@ -53,3 +53,19 @@ void CLightManager::Render(CRenderManager *RenderManager)
 		it.second->Render(RenderManager);
 	}
 }
+
+CLight CLightManager::iterate(size_t id)
+{
+	int i = 0;
+	CLight *l_Light;
+	for (auto it : m_resources)
+	{
+		if (i == id)
+		{
+			l_Light = it.second;
+		}
+		i++;
+	}
+
+	return *l_Light;
+}

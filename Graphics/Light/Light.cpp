@@ -47,7 +47,24 @@ CLight::~CLight()
 
 void CLight::Render(CRenderManager *RenderManager)
 {
+	/*Mat44f translate;
+	translate.SetIdentity();
+	translate.Translate(m_Position);
+	//RenderManager->//SetTransform(translate); no va, usar const buffer?*/
+	
 
+	/*	
+	void CLight::Render(CRenderManager *RM)
+	{
+	  Mat44f t;
+	  t.SetIdentity();
+	  t.Translate(m_Position);
+
+	  RM->SetTransform(t);
+	  RM->DrawSphere(0.1f, colYELLOW, 10);
+	  RM->DrawLine(v3fZERO, GetDirection()*10.0f);
+
+	}*/
 }
 
 

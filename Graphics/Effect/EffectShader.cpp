@@ -19,8 +19,6 @@ CEffectShader::CEffectShader(const CXMLTreeNode &TreeNode)
 	m_ShaderModel = TreeNode.GetPszProperty("shader_model");
 	m_EntryPoint = TreeNode.GetPszProperty("entry_point");
 	m_Preprocessor = TreeNode.GetPszProperty("preprocessor");
-
-	CreateShaderMacro();
 }
 
 
@@ -51,20 +49,19 @@ void SplitString(const std::string& str, char split, std::vector<std::string>& o
 	}
 }
 
+#define CHECKED_DELETE_ARRAY() assert(!"IMPLEMENT CHECKED_DELETE_ARRAY!")
 
 void CEffectShader::CreateShaderMacro()
 {
 	m_PreprocessorMacros.clear();
-	m_ShaderMacros.clear();
 	if (m_Preprocessor.empty())
 	{
+		m_ShaderMacros = NULL;
 		return;
 	}
 	std::vector<std::string> l_PreprocessorItems;
 	SplitString(m_Preprocessor, ';', l_PreprocessorItems);
-
-	m_ShaderMacros.resize(l_PreprocessorItems.size() + 1);
-
+	m_ShaderMacros = new D3D10_SHADER_MACRO[l_PreprocessorItems.size() + 1];
 	for (size_t i = 0; i<l_PreprocessorItems.size(); ++i)
 	{
 		std::vector<std::string> l_PreprocessorItem;
@@ -82,6 +79,7 @@ void CEffectShader::CreateShaderMacro()
 		else
 		{
 			assert(!"Error creating shader macro '%s', with wrong size on parameters");
+			CHECKED_DELETE_ARRAY(m_ShaderMacros);
 			return;
 		}
 	}
@@ -103,11 +101,12 @@ bool CEffectShader::LoadShader(const std::string &Filename, const std::string
 	dwShaderFlags |= D3DCOMPILE_DEBUG;
 #endif
 
+	CreateShaderMacro();
+
 	ID3DBlob* pErrorBlob;
-	hr = D3DX11CompileFromFile(Filename.c_str(), m_ShaderMacros.data(), NULL,
+	hr = D3DX11CompileFromFile(Filename.c_str(), m_ShaderMacros, NULL,
 							   EntryPoint.c_str(), ShaderModel.c_str(), dwShaderFlags, 0, NULL, BlobOut,
 							   &pErrorBlob, NULL);
-
 	if (FAILED(hr))
 	{
 		if (pErrorBlob != NULL)
