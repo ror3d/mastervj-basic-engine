@@ -30,6 +30,7 @@ void CRenderManager::Render(CContextManager* _Context)
 	CEffectManager::m_Parameters.m_View=l_Camera.GetView();
 	CEffectManager::m_Parameters.m_Projection= l_Camera.GetProjection();
 
+	CEngine::GetSingleton().getLightManager()->Render(this);
 	m_RenderableObjects->Render(_Context);
 
 }

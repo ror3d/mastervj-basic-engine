@@ -1,4 +1,5 @@
 #include "LightManager.h"
+#include <Engine/Engine.h>
 
 
 CLightManager::CLightManager()
@@ -43,6 +44,7 @@ void CLightManager::Load(const std::string &FileName)
 			}
 		}
 	}
+
 }
 
 
@@ -68,4 +70,16 @@ CLight CLightManager::iterate(size_t id)
 	}
 
 	return *l_Light;
+}
+
+size_t CLightManager::count()
+{
+	size_t i = 0;
+
+	for (auto it : m_resources)
+	{
+		i++;
+	}
+
+	return i;
 }
