@@ -55,6 +55,13 @@ void CCinematicObject::AddCinematicObjectKeyFrame( CCinematicObjectKeyFrame *Cin
 void CCinematicObject::Update( float ElapsedTime )
 {
 	CCinematicPlayer::Update( ElapsedTime );
+	
+	m_CurrentKeyFrame = 0;
+	while (m_CurrentKeyFrame < m_CinematicObjectKeyFrames.size() - 2
+		   && m_CinematicObjectKeyFrames[m_CurrentKeyFrame+1]->getKeyFrameTime() < m_CurrentTime)
+	{
+		m_CurrentKeyFrame++;
+	}
 
 	int nextKF = mathUtils::Min( m_CurrentKeyFrame + 1, m_CinematicObjectKeyFrames.size()-1);
 
@@ -73,6 +80,7 @@ void CCinematicObject::Update( float ElapsedTime )
 		mathUtils::Lerp( current->GetPitch(), next->GetPitch(), t ),
 		mathUtils::Lerp( current->GetRoll(), next->GetRoll(), t ) );
 	m_RenderableObject->SetScale( mathUtils::Lerp( current->GetScale(), next->GetScale(), t ) );
+	m_RenderableObject->Update(0);
 }
 
 

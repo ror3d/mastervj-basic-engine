@@ -72,7 +72,7 @@ C3DElement::C3DElement(const CXMLTreeNode &treeNode)
 {
 	m_Position = treeNode.GetVect3fProperty( "pos" , Vect3f(0, 0, 0), false);
 	m_Scale = treeNode.GetVect3fProperty( "scale" , Vect3f(1, 1, 1), false);
-	if ( treeNode.ExistsKey( "rotation" ) )
+	if ( treeNode.GetPszProperty( "rotation", nullptr, false ) != nullptr )
 	{
 		Vect3f rot = treeNode.GetVect3fProperty( "rotation", Vect3f( 0, 0, 0 ), false );
 		m_Yaw = rot.x;
@@ -101,13 +101,13 @@ void C3DElement::SetPosition(const Vect3f &Position)
 }
 
 
-inline const Vect3f & C3DElement::GetPosition() const
+const Vect3f & C3DElement::GetPosition() const
 {
 	return m_Position;
 }
 
 
-inline const Vect3f & C3DElement::GetPrevPosition() const
+const Vect3f & C3DElement::GetPrevPosition() const
 {
 	return m_Position;
 }
@@ -168,7 +168,7 @@ void C3DElement::SetScale(const Vect3f &Scale)
 }
 
 
-inline const Vect3f & C3DElement::GetScale() const
+const Vect3f & C3DElement::GetScale() const
 {
 	return m_Scale;
 }

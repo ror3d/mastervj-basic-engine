@@ -22,6 +22,14 @@ void CCinematicPlayer::Init( float Duration )
 	m_CurrentTime = 0;
 }
 
+void CCinematicPlayer::SetAnimTime(float Time)
+{
+	m_CurrentTime = Time;
+	bool l_playingTmp = m_Playing;
+	m_Playing = true;
+	Update(0);
+	m_Playing = l_playingTmp;
+}
 
 void CCinematicPlayer::Update( float ElapsedTime )
 {
@@ -53,6 +61,7 @@ void CCinematicPlayer::Stop()
 
 void CCinematicPlayer::Play( bool Cycle )
 {
+	m_Cycle = Cycle;
 	m_Playing = true;
 }
 

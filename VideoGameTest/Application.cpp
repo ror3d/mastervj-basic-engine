@@ -10,6 +10,18 @@
 #include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
 
+#include <XML/XMLTreeNode.h>
+#include <Graphics/Cinematics/Cinematic.h>
+
+
+static CCinematic* s_cinem;
+
+static float s_animTime = 0;
+
+static void __stdcall PlayAnimationCallback( void* _app )
+{
+	s_cinem->Play(false);
+}
 
 static void __stdcall SwitchCameraCallback( void* _app )
 {
@@ -67,6 +79,25 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 
 		bar.variables.push_back(var);
 	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "play animation";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = PlayAnimationCallback;
+		var.data = this;
+
+		bar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "animation time";
+		var.type = CDebugHelper::FLOAT;
+		var.mode = CDebugHelper::READ_WRITE;
+		var.pFloat = &s_animTime;
+		var.params = " min=0 max=10 step=0.001 precision=3 ";
+
+		bar.variables.push_back(var);
+	}
 
 	CDebugHelper::GetDebugHelper()->RegisterBar(bar);
 }
@@ -75,10 +106,15 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 CApplication::~CApplication()
 {
 	CDebugHelper::GetDebugHelper()->Log( "CApplication::~CApplication" );
+	delete s_cinem;
 }
 
 void CApplication::Init()
 {
+	CXMLTreeNode node;
+	node.LoadFile("Data\\Animations\\DestroyWallv1.xml");
+	s_cinem = new CCinematic(node);
+	node.Done();
 }
 
 void CApplication::SwitchCamera()
@@ -93,6 +129,9 @@ void CApplication::SwitchCamera()
 void CApplication::Update( float _ElapsedTime )
 {
 	CEngine::GetSingleton().getRenderableObjectManager()->Update(_ElapsedTime);
+
+	//s_cinem->Update(_ElapsedTime);
+	s_cinem->SetAnimTime(s_animTime);
 
 	( (CInputManagerImplementation*)CInputManager::GetInputManager() )->SetMouseSpeed( s_mouseSpeed );
 

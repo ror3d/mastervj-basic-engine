@@ -5,6 +5,8 @@
 #include <D3DX11.h>
 
 CTexture::CTexture() : CNamed("")
+, m_Texture(NULL)
+, m_SamplerState(NULL)
 {
 }
 
@@ -46,6 +48,8 @@ bool CTexture::load(const std::string &Filename)
 
 void CTexture::Activate(unsigned int StageId)
 {
+	if (m_Texture == NULL || m_SamplerState == NULL)
+		return;
 	ID3D11DeviceContext *l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
 	l_DeviceContext->PSSetSamplers(StageId, 1, &m_SamplerState);
 	l_DeviceContext->PSSetShaderResources(StageId, 1, &m_Texture);

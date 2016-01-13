@@ -9,7 +9,7 @@ fn GetCores = (
 	local ret = #()
 	for i = 1 to $*.count do
 	(
-		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
+		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject and not $*[i].isHidden then
 		(
 			append ret $*[i]
 		)
@@ -18,7 +18,8 @@ fn GetCores = (
 )
 
 fn GetInstances = (
-	return $*
+	-- TODO use the real instances!
+	return GetCores()
 )
 
 fn GetAnimatedInstances = (
@@ -49,6 +50,10 @@ fn GetLights = (
 	return light_obj
 )
 
+fn Deg2Rad a =
+(
+	return a * PI / 180
+)
 
 fn GetYaw transform =
 (
@@ -67,7 +72,11 @@ fn GetRoll transform =
 
 fn ChangeCoordsBase coords =
 (
-	return point3 -coords.x coords.z coords.y
+	if classof coords == EulerAngles then
+	(
+		return eulerAngles  (Deg2Rad -coords.z) (Deg2Rad -coords.y) (Deg2Rad coords.x)
+	)
+	return point3 -coords[1] coords[3] coords[2]
 )
 
 fn TranslationToRH translation =

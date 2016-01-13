@@ -7,6 +7,11 @@ CCinematic::CCinematic( CXMLTreeNode &treeNode )
 	: CRenderableObject(treeNode)
 {
 	m_Duration = treeNode.GetFloatProperty( "duration" );
+	for (int i = 0; i < treeNode.GetNumChildren(); ++i)
+	{
+		auto co = new CCinematicObject(treeNode(i));
+		m_CinematicObjects.push_back(co);
+	}
 }
 
 
@@ -21,19 +26,28 @@ CCinematic::~CCinematic()
 
 void CCinematic::Stop()
 {
-	// TODO
+	for (auto it = m_CinematicObjects.begin(); it != m_CinematicObjects.end(); ++it)
+	{
+		(*it)->Stop();
+	}
 }
 
 
 void CCinematic::Play( bool Cycle )
 {
-	// TODO
+	for (auto it = m_CinematicObjects.begin(); it != m_CinematicObjects.end(); ++it)
+	{
+		(*it)->Play(Cycle);
+	}
 }
 
 
 void CCinematic::Pause()
 {
-	// TODO
+	for (auto it = m_CinematicObjects.begin(); it != m_CinematicObjects.end(); ++it)
+	{
+		(*it)->Pause();
+	}
 }
 
 
@@ -42,6 +56,14 @@ void CCinematic::AddCinematicObject( CCinematicObject *CinematicObject )
 	m_CinematicObjects.push_back( CinematicObject );
 }
 
+
+void CCinematic::SetAnimTime( float Time )
+{
+	for ( auto it = m_CinematicObjects.begin(); it != m_CinematicObjects.end(); ++it )
+	{
+		( *it )->SetAnimTime( Time );
+	}
+}
 
 void CCinematic::Update( float ElapsedTime )
 {
@@ -52,8 +74,8 @@ void CCinematic::Update( float ElapsedTime )
 }
 
 
-void CCinematic::Render( CRenderManager &RenderManager )
+void CCinematic::Render(CContextManager *_context)
 {
+	// Does nothing
 }
-
 

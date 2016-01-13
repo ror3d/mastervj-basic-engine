@@ -42,7 +42,7 @@ template  <typename T>          inline  T     Exp     (T _val)                  
 template  <typename T>          inline  void  Swap    (T& _a, T& _b)            { T t=_a;_a=_b;_b=t; }
 
 template  <typename T,
-	typename F>                 inline  T     Lerp( const T& _a, const T& _b, const F& _lambda ) { return _a*( (T)1 - _lambda ) + _b*_lambda; }
+	typename F>                 inline  T     Lerp( const T& _a, const T& _b, const F& _lambda ) { return _a*( (F)1 - _lambda ) + _b*_lambda; }
 
 // Copiadas de cmath.h
 template <class T>              inline bool InRangeNonSorted_Open (T const& val, T const& ref0, T const& ref1)

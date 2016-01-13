@@ -18,6 +18,7 @@ public:
 	virtual void Play( bool Cycle );
 	virtual void Pause();
 	void AddCinematicObject( CCinematicObject *CinematicObject );
-	void Update( float ElapsedTime );
-	virtual void Render( CRenderManager &RenderManager );
+	virtual void Update( float ElapsedTime );
+	void SetAnimTime(float Time);
+	virtual void Render(CContextManager *_context);
 };
