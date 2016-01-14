@@ -200,3 +200,4 @@ FakesAssemblies/
 
 # To avoid adding files unintentionally
 [Dd]ata/
+*.exp
