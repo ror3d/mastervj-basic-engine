@@ -23,4 +23,4 @@ to True
 
 ## Debugging
 
-Set Working Directory to `$(SolutionDir)` for the exe to take the correct Data directory.
+Set Working Directory to `$(SolutionDir)Data\` for the exe to take the correct Data directory.
