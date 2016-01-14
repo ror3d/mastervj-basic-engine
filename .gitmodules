@@ -1,4 +1,4 @@
 [submodule "Run/Data"]
 	path = Run/Data
-	url = C:\\Users\\Roc\\Documents\\mastervj-basic-engine\\Run\\Data
+	url = https://github.com/rcrmn/master-vj-data-test
 	branch = destroy-wall-v1-anim
