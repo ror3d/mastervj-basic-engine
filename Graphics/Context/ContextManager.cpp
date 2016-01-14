@@ -179,7 +179,7 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 
 void CContextManager::BeginRender()
 {
-	BeginRender(CColor(.2f, .1f, .4f));
+	BeginRender(CColor(0, 0, 0));
 }
 
 void CContextManager::BeginRender(const CColor &backgroundColor)

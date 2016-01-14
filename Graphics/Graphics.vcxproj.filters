@@ -34,6 +34,9 @@
     <Filter Include="Mesh">
       <UniqueIdentifier>{2ed9f5ff-a653-44ab-b55b-ca92fc656898}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cinematic">
+      <UniqueIdentifier>{9f36ac37-457a-4873-a2ff-0885a2e0097f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
@@ -131,6 +134,27 @@
     <ClInclude Include="Mesh\StaticMeshManager.h">
       <Filter>Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="Cinematics\CameraInfo.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="Cinematics\CameraKey.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="Cinematics\CameraKeyController.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="Cinematics\CinematicPlayer.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="Cinematics\Cinematic.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="Cinematics\CinematicObject.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
+    <ClInclude Include="Cinematics\CinematicObjectKeyframe.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -214,6 +238,27 @@
     </ClCompile>
     <ClCompile Include="Renderable\AnimatedInstanceModel.cpp">
       <Filter>Renderable</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematics\CameraInfo.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematics\CameraKey.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematics\CameraKeyController.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematics\CinematicPlayer.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematics\Cinematic.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematics\CinematicObject.cpp">
+      <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematics\CinematicObjectKeyframe.cpp">
+      <Filter>Cinematic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

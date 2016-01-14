@@ -18,24 +18,28 @@ fn createLights = (
 		if  classof l == Omnilight then
 		(
 			-- Omni (omni)
+			local type = "omni"
 			format "\t<light name=\"%\" type=\"%\" pos=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" \
-					l.name l.type l.pos l.rgb l.farAttenStart l.farAttenEnd l.multiplier to:file
+					l.name type l.pos l.rgb l.farAttenStart l.farAttenEnd l.multiplier to:file
 		
 		)
 		else if classof l == TargetDirectionallight then
 		(
 			-- Direcional (targetDirect)
-			local dir=($.target.pos-$.pos)
+			local dir=(l.target.pos-l.pos)
+			local type = "directional"
 			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" \
-					l.name l.type l.pos dir l.rgb l.farAttenStart l.farAttenEnd l.multiplier to:file
+					l.name type l.pos dir l.rgb l.farAttenStart l.farAttenEnd l.multiplier to:file
 		
 		)
 		else if classof l == targetSpot then
 		(
+			--rmat $.pos
 			--Spot  (targetSpot)
-			local dir=($.target.pos-$.pos)
+			local dir=(l.target.pos-l.pos)
+			local type = "spot"
 			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" att_start_range=\"0.0\" att_end_range=\"0.0\" intensity=\"%\"/>\n" \
-					l.name l.type l.pos dir l.rgb l.farAttenStart l.farAttenEnd l.multiplier to:file
+					l.name type l.pos dir l.rgb l.farAttenStart l.farAttenEnd l.multiplier to:file
 		)
 	)
 	

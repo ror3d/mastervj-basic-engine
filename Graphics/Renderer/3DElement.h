@@ -23,8 +23,8 @@ public:
 	C3DElement(float Yaw, float Pitch, float Roll);
 	C3DElement(const CXMLTreeNode &XMLTreeNode);
 	virtual void SetPosition(const Vect3f &Position);
-	inline const Vect3f & GetPosition() const;
-	inline const Vect3f & GetPrevPosition() const;
+	const Vect3f & GetPosition() const;
+	const Vect3f & GetPrevPosition() const;
 	float GetYaw() const;
 	float GetPitch() const;
 	float GetRoll() const;
@@ -33,7 +33,7 @@ public:
 	virtual void SetRoll(float Roll);
 	virtual void SetYawPitchRoll(float Yaw, float Pitch, float Roll);
 	virtual void SetScale(const Vect3f &Scale);
-	inline const Vect3f & GetScale() const;
+	const Vect3f & GetScale() const;
 	const Mat44f & GetTransform();
 	bool GetVisible();
 	virtual void SetVisible(bool Visible);

@@ -80,19 +80,15 @@ CEffectPixelShader * CEffectManager::GetPixelShader(const std::string &PixelShad
 }
 
 
-void CEffectManager::SetSceneConstants()
-{
-
-}
-
 void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
 	m_LightParameters.m_LightEnabled[IdLight] = true;
-	m_LightParameters.m_LightAmbient = (1.0f, 1.0f, 1.0f, 1.0f);
+	m_LightParameters.m_LightAmbient = (0.0f, 0.0f, 0.0f, 0.0f);
 	m_LightParameters.m_LightAttenuationEndRange[IdLight] = Light->getEndRangeAttenuation();
 	m_LightParameters.m_LightAttenuationEndRange[IdLight] = Light->getStartRangeAttenuation();
 	m_LightParameters.m_LightColor[IdLight] = Light->getColor();
 	m_LightParameters.m_LightIntensity[IdLight] = Light->getIntensity();
+	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
 
 	if (Light->getType() == CLight::DIRECTIONAL)
 	{
@@ -116,12 +112,16 @@ void CEffectManager::SetLightsConstants()
 	{
 		CLight l_Light = l_LightManager->iterate(i);
 		SetLightConstants(i, &l_Light);
+
+		m_SceneParameters.m_World.SetPos(l_Light.getPosition());
 	}
 
 	std::map<std::string, CEffectTechnique*>::iterator itMap;
 	for (itMap = m_resources.begin(); itMap != m_resources.end(); ++itMap)
 	{
-		itMap->second->GetPixelShader()->SetConstantBuffer(1, &m_LightParameters);
+		itMap->second->GetVertexShader()->SetConstantBuffer(0, &m_SceneParameters);
+		itMap->second->GetPixelShader()->SetConstantBuffer(0, &m_SceneParameters);
 		itMap->second->GetVertexShader()->SetConstantBuffer(1, &m_LightParameters);
+		itMap->second->GetPixelShader()->SetConstantBuffer(1, &m_LightParameters);
 	}
 }

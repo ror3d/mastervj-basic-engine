@@ -30,7 +30,7 @@ void CXMLTreeNode::Release ()
   }
 
   m_pNode = NULL;
-  
+
   if (m_pWriter)
   {
     xmlFreeTextWriter(m_pWriter);
@@ -52,11 +52,11 @@ bool CXMLTreeNode::LoadFile (const char* _pszFileName)
   if (_pszFileName)
   {
     m_pDoc = xmlParseFile(_pszFileName);
-    
+
     if (m_pDoc)
     {
       m_pNode = xmlDocGetRootElement(m_pDoc);
-      
+
       if (m_pNode)
       {
         m_bIsOk = true;
@@ -180,7 +180,7 @@ CXMLTreeNode CXMLTreeNode::operator() (int _iIndex) const
 //----------------------------------------------------------------------------
 // Returns the number of children a tree has
 //----------------------------------------------------------------------------
-int CXMLTreeNode::GetNumChildren ()  
+int CXMLTreeNode::GetNumChildren ()
 {
   assert(m_pNode);
 
@@ -321,7 +321,7 @@ const char* CXMLTreeNode::GetPszProperty (const char* _pszKey, const char* _pszD
 std::string CXMLTreeNode::GetPszISOProperty (const char* _pszKey, const char* _pszDefault, bool warningDefault) const
 {
   std::string szRet = (char*)_pszDefault;
-  
+
   xmlChar* value = GetProperty(_pszKey);
 
   if (value)
@@ -348,12 +348,12 @@ std::string CXMLTreeNode::GetPszISOProperty (const char* _pszKey, const char* _p
 Vect2f CXMLTreeNode::GetVect2fProperty  (const char* _pszKey, const Vect2f& _Default, bool warningDefault) const
 {
   xmlChar* value = GetProperty(_pszKey);
-  Vect2f l_V2f(0.0f, 0.0f);
+  Vect2f l_V2f(_Default);
 
   if (value)
   {
     const char* pszValue = (const char*)value;
-    sscanf_s(pszValue,"%f %f",&l_V2f.x, &l_V2f.y);    
+    sscanf_s(pszValue,"%f %f",&l_V2f.x, &l_V2f.y);
   }
 	else if(warningDefault)
 	{
@@ -370,12 +370,12 @@ Vect2f CXMLTreeNode::GetVect2fProperty  (const char* _pszKey, const Vect2f& _Def
 Vect3f CXMLTreeNode::GetVect3fProperty  (const char* _pszKey, const Vect3f& _Default, bool warningDefault) const
 {
   xmlChar* value = GetProperty(_pszKey);
-  Vect3f l_V3f(0.0f, 0.0f, 0.0f);
+  Vect3f l_V3f(_Default);
 
   if (value)
   {
     const char* pszValue = (const char*)value;
-    sscanf_s(pszValue,"%f %f %f",&l_V3f.x, &l_V3f.y, &l_V3f.z);    
+    sscanf_s(pszValue,"%f %f %f",&l_V3f.x, &l_V3f.y, &l_V3f.z);
   }
 	else if(warningDefault)
 	{
@@ -392,12 +392,12 @@ Vect3f CXMLTreeNode::GetVect3fProperty  (const char* _pszKey, const Vect3f& _Def
 Vect4f CXMLTreeNode::GetVect4fProperty  (const char* _pszKey, const Vect4f& _Default, bool warningDefault) const
 {
   xmlChar* value = GetProperty(_pszKey);
-  Vect4f l_V4f(0.0f, 0.0f, 0.0f, 0.0f);
+  Vect4f l_V4f(_Default);
 
   if (value)
   {
     const char* pszValue = (const char*)value;
-    sscanf_s(pszValue,"%f %f %f %f", &l_V4f.x, &l_V4f.y, &l_V4f.z, &l_V4f.w);    
+    sscanf_s(pszValue,"%f %f %f %f", &l_V4f.x, &l_V4f.y, &l_V4f.z, &l_V4f.w);
   }
 	else if(warningDefault)
 	{
@@ -414,12 +414,12 @@ Vect4f CXMLTreeNode::GetVect4fProperty  (const char* _pszKey, const Vect4f& _Def
 Vect2i CXMLTreeNode::GetVect2iProperty  (const char* _pszKey, const Vect2i& _Default, bool warningDefault) const
 {
   xmlChar* value = GetProperty(_pszKey);
-  Vect2i l_V2i(0, 0);
+  Vect2i l_V2i(_Default);
 
   if (value)
   {
     const char* pszValue = (const char*)value;
-    sscanf_s(pszValue,"%d %d",&l_V2i.x, &l_V2i.y);    
+    sscanf_s(pszValue,"%d %d",&l_V2i.x, &l_V2i.y);
   }
 	else if(warningDefault)
 	{
@@ -436,12 +436,12 @@ Vect2i CXMLTreeNode::GetVect2iProperty  (const char* _pszKey, const Vect2i& _Def
 Vect3i CXMLTreeNode::GetVect3iProperty  (const char* _pszKey, const Vect3i& _Default, bool warningDefault) const
 {
   xmlChar* value = GetProperty(_pszKey);
-  Vect3i l_V3i(0, 0, 0);
+  Vect3i l_V3i(_Default);
 
   if (value)
   {
     const char* pszValue = (const char*)value;
-    sscanf_s(pszValue,"%d %d %d",&l_V3i.x, &l_V3i.y, &l_V3i.z);    
+    sscanf_s(pszValue,"%d %d %d",&l_V3i.x, &l_V3i.y, &l_V3i.z);
   }
 	else if(warningDefault)
 	{
@@ -458,12 +458,12 @@ Vect3i CXMLTreeNode::GetVect3iProperty  (const char* _pszKey, const Vect3i& _Def
 Vect4i CXMLTreeNode::GetVect4iProperty  (const char* _pszKey, const Vect4i& _Default, bool warningDefault) const
 {
   xmlChar* value = GetProperty(_pszKey);
-  Vect4i l_V4i(0, 0, 0, 0);
+  Vect4i l_V4i(_Default);
 
   if (value)
   {
     const char* pszValue = (const char*)value;
-    sscanf_s(pszValue,"%d %d %d %d",&l_V4i.x, &l_V4i.y, &l_V4i.z, &l_V4i.w);    
+    sscanf_s(pszValue,"%d %d %d %d",&l_V4i.x, &l_V4i.y, &l_V4i.z, &l_V4i.w);
   }
 	else if(warningDefault)
 	{
@@ -571,7 +571,7 @@ const char* CXMLTreeNode::GetPszKeyword (const char* _pszKey, const char* _pszDe
 //----------------------------------------------------------------------------
 // Checks if a key is on the tree
 //----------------------------------------------------------------------------
-bool CXMLTreeNode::ExistsKey (const char* _pszKey)
+bool CXMLTreeNode::ExistsKey (const char* _pszKey) const
 {
   assert(_pszKey);
 
@@ -585,9 +585,9 @@ bool CXMLTreeNode::ExistsKey (const char* _pszKey)
 bool CXMLTreeNode::StartNewFile(const char* _pszFileName)
 {
   assert(_pszFileName);
-  
+
   m_bIsOk = false;
-  
+
   if (_pszFileName)
   {
     m_pszFileName = _pszFileName;
@@ -601,7 +601,7 @@ bool CXMLTreeNode::StartNewFile(const char* _pszFileName)
       // Start the document with the xml default for the version, encoding ISO 8858-1 and the default for the standalone declaration.
       int rc = xmlTextWriterStartDocument(m_pWriter, NULL, MY_ENCODING, NULL);
       assert(rc >= 0);
-      if (rc >= 0) 
+      if (rc >= 0)
       {
         m_bIsOk = true;
         return true;

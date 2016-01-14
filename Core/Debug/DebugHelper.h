@@ -58,6 +58,7 @@ public:
 
 			void* ptr;
 		};
+		std::string params;
 	};
 
 	struct SDebugBar

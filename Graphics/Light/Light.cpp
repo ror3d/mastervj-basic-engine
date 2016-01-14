@@ -48,7 +48,9 @@ CLight::~CLight()
 
 void CLight::Render(CRenderManager *RenderManager)
 {
-	CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
+	CEffectManager l_effectManager = *(CEngine::GetSingleton().getEffectsManager());
+
+	l_effectManager.SetLightsConstants();
 }
 
 

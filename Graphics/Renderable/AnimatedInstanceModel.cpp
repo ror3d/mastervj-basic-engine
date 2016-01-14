@@ -35,6 +35,11 @@ void CAnimatedInstanceModel::Initialize(CAnimatedCoreModel *AnimatedCoreModel)
 
 void CAnimatedInstanceModel::Render(CContextManager *context)
 {
+	if ( !m_Visible )
+	{
+		return;
+	}
+
 	Mat44f l_Transform = GetTransform();
 	CEffectManager::m_Parameters.m_World = GetTransform();
 

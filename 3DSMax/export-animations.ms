@@ -36,8 +36,8 @@ fn getAllKeys controllers =
 			append keys (getkeytime realControllers[i] j)
 		)
 	)
-	return makeUniqueArray keys
-	sort keys
+	makeUniqueArray keys
+	return sort keys
 )
 
 fn ExportCameraAnimation cam =
@@ -63,9 +63,9 @@ fn ExportCameraAnimation cam =
 	(
 		local current_kf = keys[i]
 		local transf = at time current_kf cam.transform
-		local pos = transf.pos
-		local eye = [0, 0, -1] * (transf.rotation as matrix3)
-		local up = [0, 1, 0] * (transf.rotation as matrix3)
+		local pos = ChangeCoordsBase transf.pos
+		local eye = ChangeCoordsBase ([0, 0, -1] * (transf.rotation as matrix3))
+		local up = ChangeCoordsBase ([0, 1, 0] * (transf.rotation as matrix3))
 		local fov = at time current_kf cam.fov
 		local near = at time current_kf cam.nearrange
 		local far = at time current_kf cam.farrange
@@ -88,6 +88,8 @@ fn ExportAllObjectCinematics =
 	format "____Exporting animation tracks file %.xml____\n" fname
 	MyCreateFile ( AnimationSubPath + fname + ".xml" )
 	
+	WriteXMLPrologToFile()
+	
 	local objs = GetAnimatedInstances()
 	
 	local fps = 1s
@@ -101,7 +103,9 @@ fn ExportAllObjectCinematics =
 	for i = 1 to objs.count do
 	(
 		local obj = objs[i]
-	
+		
+		format "\t____Exporting animation tracks for object %____\n" obj.name
+		
 		if (superclassof obj) != GeometryClass then
 		(
 			format "\n$$$$ Alert: % should not be included in the track animation export list!\n\n" obj.name
@@ -115,15 +119,18 @@ fn ExportAllObjectCinematics =
 		(
 			keys = #(0f)
 		)
+		append keys (endTime as Time)
+		keys = makeUniqueArray keys
 		
 		for i = 1 to keys.count do
 		(
 			local t = keys[i].frame / fps
 			local transf = at time keys[i] obj.transform
-			local pos = transf.position
-			local rot = transf.rotation as eulerAngles
+			local pos = ChangeCoordsBase transf.position
+			local rot = ChangeCoordsBase(transf as eulerAngles)
+			-- TODO: should change coordinates?
 			local sca = transf.scale
-			format "\t\t<cinematic_object_key_frame time=\"%\" position=\"% % %\" rotation=\"% % %\" scale=\"% % %\">\n"\
+			format "\t\t<cinematic_object_key_frame time=\"%\" pos=\"% % %\" rotation=\"% % %\" scale=\"% % %\" />\n"\
 					t pos[1] pos[2] pos[3] rot.x rot.y rot.z sca[1] sca[2] sca[3] to: file
 		)
 		format "\t</cinematic_object>\n" to: file

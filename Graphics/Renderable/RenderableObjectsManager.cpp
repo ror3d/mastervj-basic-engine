@@ -42,14 +42,7 @@ CRenderableObject * CRenderableObjectsManager::AddMeshInstance(CXMLTreeNode &Tre
 	}
 	else
 	{
-		std::string CoreName = TreeNode.GetPszProperty("core_name");
-		Vect3f Default(0.0f, 0.0f, 0.0f);
-
-		CMeshInstance * Object = new CMeshInstance(InstanceName, CoreName);
-		Object->SetPosition(TreeNode.GetVect3fProperty("pos", Default, false));
-		Object->SetYaw(TreeNode.GetFloatProperty("yaw"));
-		Object->SetPitch(TreeNode.GetFloatProperty("pitch"));
-		Object->SetRoll(TreeNode.GetFloatProperty("roll"));
+		CMeshInstance * Object = new CMeshInstance(TreeNode);
 
 		add(InstanceName, Object);
 		return Object;
@@ -86,14 +79,7 @@ CRenderableObject * CRenderableObjectsManager::AddAnimatedInstanceModel(CXMLTree
 	}
 	else
 	{
-		std::string CoreName = TreeNode.GetPszProperty("core_name");
-		Vect3f Default(0.0f, 0.0f, 0.0f);
-
 		CAnimatedInstanceModel * Object = new CAnimatedInstanceModel(TreeNode);
-		Object->SetPosition(TreeNode.GetVect3fProperty("pos", Default, false));
-		Object->SetYaw(TreeNode.GetFloatProperty("yaw"));
-		Object->SetPitch(TreeNode.GetFloatProperty("pitch"));
-		Object->SetRoll(TreeNode.GetFloatProperty("roll"));
 
 		add(InstanceName, Object);
 		return Object;

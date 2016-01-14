@@ -10,6 +10,7 @@ CCameraController::CCameraController()
 , m_Position(0,0,0)
 {
 }
+
 CCameraController::~CCameraController()
 {
 }
@@ -36,7 +37,7 @@ void CCameraController::AddYaw(float Radians)
 void CCameraController::AddPitch(float Radians)
 {
 	if(((m_Pitch-Radians)<(DEG2RAD(180.0f)*0.5) && (m_Pitch-Radians)>-(DEG2RAD(180.0f)*0.5)))
-	{	
+	{
 		m_Pitch-=Radians;
 	}
 }

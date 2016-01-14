@@ -44,6 +44,80 @@ fn createRenderableObjectsFile = (
 	MyCloseFile()
 )
 
+---------------------------------------------------------------------
+-- NORMALS
+---------------------------------------------------------------------
+global UABVtxsNormals=#()
+function UABClearNormalsArray =
+(
+	while UABVtxsNormals.count>0 do
+	(
+		deleteItem UABVtxsNormals 1
+	)
+)
+
+function IsSmoothingGroupEnabled IdGroup Value =
+(
+	local ValueMask=2^(IdGroup-1)
+	return (bit.and Value ValueMask)==ValueMask
+)
+function UABGetVertexNormal obj IdVertex SmoothValue FaceNormal =
+(
+	local HasNormal=false
+	local Normal=point3 0 0 0
+	for b=1 to 32 do
+	(
+		if((IsSmoothingGroupEnabled b SmoothValue)==true) then
+		(
+			Normal=Normal+UABVtxsNormals[IdVertex][b]
+			HasNormal=true
+		)
+	)
+	if HasNormal==false then
+	(
+		Normal=FaceNormal
+	)
+	return Normal
+)
+function UABCalcVertexsNormals obj =
+(
+	UABClearNormalsArray()
+	local NumVtxs=getNumVerts obj
+	for b=1 to NumVtxs do
+	(
+		UABVtxsNormals[b]=#()
+		for t=1 to 32 do
+		(
+			UABVtxsNormals[b][t]=point3 0 0 0
+		)
+	)
+	local NumFaces=getNumFaces obj
+	local InvTransform=inverse obj.transform
+	for IdFace=1 to NumFaces do
+	(
+		local IdxsFace=getFace obj IdFace
+		local Vtx1=(getVert obj IdxsFace.x)*InvTransform
+		local Vtx2=(getVert obj IdxsFace.y)*InvTransform
+		local Vtx3=(getVert obj IdxsFace.z)*InvTransform
+		local FaceNormal=getFaceNormal obj IdFace
+		local SmoothValue=getFaceSmoothGroup obj IdFace
+		for b=1 to 32 do
+		(
+			if((IsSmoothingGroupEnabled b SmoothValue)==true) then
+			(
+				UABVtxsNormals[IdxsFace.x][b]=UABVtxsNormals[IdxsFace.x][b] + FaceNormal
+				UABVtxsNormals[IdxsFace.y][b]=UABVtxsNormals[IdxsFace.y][b] + FaceNormal
+				UABVtxsNormals[IdxsFace.z][b]=UABVtxsNormals[IdxsFace.z][b] + FaceNormal
+			)
+		)
+	)
+)
+
+---------------------------------------------------------------------
+-- /NORMALS
+---------------------------------------------------------------------
+
+
 
 function ConvertVtx Vtx =
 (
@@ -67,6 +141,8 @@ function DotNetAddVertex VtxArray VtxMap Vtx =
 	return l_Idx
 )
 
+global CurrentObjInvMat = matrix3 1
+
 fn createVertexesForFace obj IdFace = (
 	local IdxsFace=getFace obj IdFace
 	-- Para coger los vértices de la primera cara
@@ -77,13 +153,20 @@ fn createVertexesForFace obj IdFace = (
 	-- TODO: Obtener normales correctas
 	
 	-- Para coger las normales de los vértices de la primera cara
-	local Normal1=getNormal obj IdxsFace[1]
-	local Normal2=getNormal obj IdxsFace[2]
-	local Normal3=getNormal obj IdxsFace[3]
+	local FaceNormal = getFaceNormal obj IdFace -- El índice de la cara
+	local SmoothValue = getFaceSmoothGroup obj IdFace -- El índice de la cara
+
+	--local Normal1=getNormal obj IdxsFace[1]
+	--local Normal2=getNormal obj IdxsFace[2]
+	--local Normal3=getNormal obj IdxsFace[3]
+	local Normal1=normalize (UABGetVertexNormal obj IdxsFace[1] SmoothValue FaceNormal)
+	local Normal2=normalize (UABGetVertexNormal obj IdxsFace[2] SmoothValue FaceNormal)
+	local Normal3=normalize (UABGetVertexNormal obj IdxsFace[3] SmoothValue FaceNormal)
 	
-	local v1 = vertex pos: Vtx1 normal: Normal1
-	local v2 = vertex pos: Vtx2 normal: Normal2
-	local v3 = vertex pos: Vtx3 normal: Normal3
+	
+	local v1 = vertex pos: (ChangeCoordsBase (Vtx1*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal1)
+	local v2 = vertex pos: (ChangeCoordsBase (Vtx2*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal2)
+	local v3 = vertex pos: (ChangeCoordsBase (Vtx3*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal3)
 	
 	local faceMat
 	local nmats = 1
@@ -93,8 +176,14 @@ fn createVertexesForFace obj IdFace = (
 	)
 	else
 	(
-		faceMat = obj.material[getFaceMatID obj IdFace]
 		nmats = obj.material.count
+		local faceMatId = getFaceMatID obj IdFace
+		faceMatId = int(mod (faceMatId-1) obj.material.count)+1
+		faceMat = obj.material[faceMatId]
+		if faceMatId != getFaceMatID obj IdFace then
+		(
+			setFaceMatID obj IdFace faceMatId
+		)
 	)
 	
 	if faceMat == undefined then
@@ -138,7 +227,7 @@ fn createVertexesForFace obj IdFace = (
 		v3.uv2 = LUVMap3
 	)
 	
-	return #(v1, v2, v3)
+	return #(v3, v2, v1)
 
 )
 
@@ -148,9 +237,13 @@ fn createMesh obj = (
 	MyFOpen (MeshSubPath + obj.name + ".mesh") "wb"
 	
 	-- Centrar al origen
-	obj.position = [0, 0, 0]
-	obj.rotation = quat 0 0 0 1
-	obj.scale = [1, 1, 1]
+	--obj.position = [0, 0, 0]
+	--obj.rotation = quat 0 0 0 1
+	--obj.scale = [1, 1, 1]
+	
+	CurrentObjInvMat = inverse obj.transform
+	
+	UABCalcVertexsNormals obj
 	
 	--Header
 	writeshort file 0xFE55
@@ -222,15 +315,15 @@ fn createMesh obj = (
 			local vtx = vtxs[idVtx]
 			-- Vertex
 			writefloat file vtx.pos.x
-			writefloat file vtx.pos.z
 			writefloat file vtx.pos.y
+			writefloat file vtx.pos.z
 			
 			if HasNormal mat then
 			(
 				-- Normal
 				writefloat file vtx.normal.x
-				writefloat file vtx.normal.z
 				writefloat file vtx.normal.y
+				writefloat file vtx.normal.z
 			)
 			
 			if HasTexture mat then
