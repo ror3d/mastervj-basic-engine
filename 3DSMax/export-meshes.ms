@@ -35,7 +35,9 @@ fn createRenderableObjectsFile = (
 		Yaw = GetYaw (instances[i].transform)
 		Pitch = GetPitch (instances[i].transform)
 		Roll = GetRoll (instances[i].transform)
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n" instances[i].name instances[i].name Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
+		local core = getUserProp $*[i] "render_export_rend_obj"
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n"\
+					instances[i].name core Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
 	)
 
 	format "</renderable_objects>\n" to:file 
