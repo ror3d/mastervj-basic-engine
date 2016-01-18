@@ -26,6 +26,7 @@
     <ClInclude Include="DrawQuadSceneRendererCommand.h" />
     <ClInclude Include="DynamicTexture.h" />
     <ClInclude Include="EnableAlphaBlendSceneRendererCommand.h" />
+    <ClInclude Include="Layer\LayerManager.h" />
     <ClInclude Include="MaterialParameter.h" />
     <ClInclude Include="RenderableObjectTechnique.h" />
     <ClInclude Include="Debug\DebugRender.h" />
@@ -37,7 +38,6 @@
     <ClInclude Include="Effect\EffectTechnique.h" />
     <ClInclude Include="Effect\EffectVertexShader.h" />
     <ClInclude Include="graphics.h" />
-    <ClInclude Include="LayerManager.h" />
     <ClInclude Include="Light\Light.h" />
     <ClInclude Include="Light\LightManager.h" />
     <ClInclude Include="Material\Material.h" />
@@ -104,6 +104,7 @@
     <ClCompile Include="Renderable\RenderableObjectsManager.cpp" />
     <ClCompile Include="Renderer\3DElement.cpp" />
     <ClCompile Include="Renderer\RenderManager.cpp" />
+    <ClCompile Include="SetDepthStencilStateSceneRendererCommand.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />
     <ClCompile Include="Texture\TextureManager.cpp" />
   </ItemGroup>

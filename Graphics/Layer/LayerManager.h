@@ -21,8 +21,8 @@ public:
 	void Load(const std::string &Filename);
 	void Reload();
 	void Update(float ElapsedTime);
-	void Render(CContextManager &RenderManager);
-	void Render(CContextManager &RenderManager, const std::string &LayerName);
+	void Render(CContextManager &_context);
+	void Render(CContextManager &_context, const std::string &LayerName);
 };
 
 #endif

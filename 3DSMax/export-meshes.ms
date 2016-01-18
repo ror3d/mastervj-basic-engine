@@ -254,12 +254,14 @@ fn createMesh obj = (
 			writefloat file vtx.pos.z
 			writefloat file vtx.pos.y
 			
+			-- Normal
+			writefloat file vtx.normal.x
+			writefloat file vtx.normal.z
+			writefloat file vtx.normal.y
+			
 			if HasNormal mat then
 			(
-				-- Normal
-				writefloat file vtx.normal.x
-				writefloat file vtx.normal.z
-				writefloat file vtx.normal.y
+				
 				-- Binormal
 				writefloat file vtx.binormal.x
 				writefloat file vtx.binormal.z

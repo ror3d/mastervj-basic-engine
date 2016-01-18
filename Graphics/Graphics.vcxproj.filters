@@ -137,9 +137,6 @@
     <ClInclude Include="Mesh\StaticMeshManager.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="LayerManager.h">
-      <Filter>Layer</Filter>
-    </ClInclude>
     <ClInclude Include="RenderableObjectTechnique.h">
       <Filter>Renderable</Filter>
     </ClInclude>
@@ -226,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="DisableAlphaBlendSceneRendererCommand.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer\LayerManager.h">
+      <Filter>Layer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +316,9 @@
     </ClCompile>
     <ClCompile Include="CaptureFrameBufferTexture.cpp">
       <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SetDepthStencilStateSceneRendererCommand.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
