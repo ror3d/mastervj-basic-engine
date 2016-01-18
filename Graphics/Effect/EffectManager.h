@@ -16,7 +16,6 @@ private:
 	TMapManager<CEffectPixelShader> m_PixelShaders;
 
 public:
-	static CEffectParameters m_Parameters;
 	static CSceneEffectParameters m_SceneParameters;
 	static CAnimatedModelEffectParameters m_AnimatedModelEffectParameters;
 	static CLightEffectParameters m_LightParameters;
@@ -29,6 +28,7 @@ public:
 	CEffectVertexShader * GetVertexShader( const std::string &VertexShader);
 	CEffectPixelShader * GetPixelShader( const std::string &PixelShader);
 
+	void SetSceneConstants();
 	void SetLightConstants(unsigned int IdLight, CLight *Light);
 	void SetLightsConstants();
 

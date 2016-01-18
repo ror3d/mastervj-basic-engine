@@ -9,7 +9,6 @@
 
 #include <XML/XMLTreeNode.h>
 
-CEffectParameters CEffectManager::m_Parameters;
 CSceneEffectParameters CEffectManager::m_SceneParameters;
 CAnimatedModelEffectParameters CEffectManager::m_AnimatedModelEffectParameters;
 CLightEffectParameters CEffectManager::m_LightParameters;
@@ -79,13 +78,20 @@ CEffectPixelShader * CEffectManager::GetPixelShader(const std::string &PixelShad
 	return m_PixelShaders.get(PixelShader);
 }
 
+void CEffectManager::SetSceneConstants()
+{
+	for (auto it : m_resources)
+	{
+		it.second->SetConstantBuffer(0, &m_SceneParameters);
+	}
+}
 
 void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
 	m_LightParameters.m_LightEnabled[IdLight] = true;
-	m_LightParameters.m_LightAmbient = (0.0f, 0.0f, 0.0f, 0.0f);
+	m_LightParameters.m_LightAmbient = (0.1f, 0.1f, 0.1f, 0.0f);
+	m_LightParameters.m_LightAttenuationStartRange[IdLight] = Light->getStartRangeAttenuation();
 	m_LightParameters.m_LightAttenuationEndRange[IdLight] = Light->getEndRangeAttenuation();
-	m_LightParameters.m_LightAttenuationEndRange[IdLight] = Light->getStartRangeAttenuation();
 	m_LightParameters.m_LightColor[IdLight] = Light->getColor();
 	m_LightParameters.m_LightIntensity[IdLight] = Light->getIntensity();
 	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
@@ -112,16 +118,10 @@ void CEffectManager::SetLightsConstants()
 	{
 		CLight l_Light = l_LightManager->iterate(i);
 		SetLightConstants(i, &l_Light);
-
-		m_SceneParameters.m_World.SetPos(l_Light.getPosition());
 	}
 
-	std::map<std::string, CEffectTechnique*>::iterator itMap;
-	for (itMap = m_resources.begin(); itMap != m_resources.end(); ++itMap)
+	for (auto it : m_resources)
 	{
-		itMap->second->GetVertexShader()->SetConstantBuffer(0, &m_SceneParameters);
-		itMap->second->GetPixelShader()->SetConstantBuffer(0, &m_SceneParameters);
-		itMap->second->GetVertexShader()->SetConstantBuffer(1, &m_LightParameters);
-		itMap->second->GetPixelShader()->SetConstantBuffer(1, &m_LightParameters);
+		it.second->SetConstantBuffer(1, &m_LightParameters);
 	}
 }

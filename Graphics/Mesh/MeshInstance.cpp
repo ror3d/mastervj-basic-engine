@@ -22,9 +22,8 @@ CMeshInstance::~CMeshInstance()
 
 void CMeshInstance::Render(CContextManager *_context)
 {
-	if ( m_Visible )
+	if (m_Visible)
 	{
-		CEffectManager::m_Parameters.m_World = GetTransform();
-		m_StaticMesh->Render( _context );
+		m_StaticMesh->Render(_context);
 	}
 }

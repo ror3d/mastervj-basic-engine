@@ -168,8 +168,7 @@ void CStaticMesh::Render(CContextManager *_context) const
 	{
 		m_materials[i]->apply();
 		m_renderableVertexs[i]->RenderIndexed(_context,
-			m_materials[i]->getEffectTechnique(),
-			&CEffectManager::m_Parameters);
+			m_materials[i]->getEffectTechnique());
 	}
 }
 

@@ -13,7 +13,7 @@ CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
 	Vect3f pos(0.0f, 0.0f, 0.0f);
 	m_Position = TreeNode.GetVect3fProperty("pos", pos);
 	Vect4f color(0.0f, 0.0f, 0.0f, 0.0f);
-	m_Color = *(new CColor(TreeNode.GetVect4fProperty("color", color)));
+	m_Color = CColor(TreeNode.GetVect4fProperty("color", color));
 	m_StartRangeAttenuation = TreeNode.GetFloatProperty("att_start_range");
 	m_EndRangeAttenuation = TreeNode.GetFloatProperty("att_end_range");
 	m_Intensity = TreeNode.GetFloatProperty("intensity");

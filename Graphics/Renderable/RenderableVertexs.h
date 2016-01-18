@@ -19,12 +19,12 @@ class CEffect;
 class CRenderableVertexs
 {
 public:
-	virtual bool Render(CContextManager *ContextManager, CEffect *Effect, CEffectParameters *Parameters)
+	virtual bool Render(CContextManager *ContextManager, CEffect *Effect)
 	{
 		assert(!"This method mustn't be called");
 		return false;
 	}
-	virtual bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *EffectManager, CEffectParameters *Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	virtual bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *EffectManager, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
 		assert(!"This method mustn't be called");
 		return false;
@@ -63,7 +63,7 @@ public:
 	{
 		CHECKED_RELEASE(m_VertexBuffer);
 	}
-	bool Render(CContextManager *ContextManager, CEffect *Effect, CEffectParameters *Parameters)
+	bool Render(CContextManager *ContextManager, CEffect *Effect)
 	{
 		if (Effect->getPixelShader() == NULL || Effect->getVertexShader() == NULL)
 			return false;
@@ -74,7 +74,6 @@ public:
 		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
 		l_DeviceContext->IASetInputLayout(Effect->getVertexLayout());
 		l_DeviceContext->VSSetShader(Effect->getVertexShader(), NULL, 0);
-		l_DeviceContext->UpdateSubresource(Effect->getConstantBuffer(), 0, NULL, Parameters, 0, 0);
 		ID3D11Buffer *l_ConstantBuffer = Effect->getConstantBuffer();
 		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->PSSetShader(Effect->getPixelShader(), NULL, 0);
@@ -136,7 +135,7 @@ public:
 		CHECKED_RELEASE(m_IndexBuffer);
 	}
 
-	bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *Effect, CEffectParameters *Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *Effect, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
 		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
 			return false;
@@ -148,7 +147,6 @@ public:
 		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
 		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
 		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
-		l_DeviceContext->UpdateSubresource(Effect->GetVertexShader()->GetConstantBuffer(0), 0, NULL, Parameters, 0, 0);
 		ID3D11Buffer *l_ConstantBuffer = Effect->GetVertexShader()->GetConstantBuffer(0);
 		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
