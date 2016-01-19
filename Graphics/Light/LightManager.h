@@ -12,7 +12,7 @@ public:
 	virtual ~CLightManager();
 	void Load(const std::string &FileName);
 	void Render(CRenderManager *RenderManager);
-	CLight CLightManager::iterate(size_t id);
+	CLight& CLightManager::iterate(size_t id);
 	size_t CLightManager::count();
 };
 

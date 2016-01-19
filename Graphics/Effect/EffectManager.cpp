@@ -88,24 +88,27 @@ void CEffectManager::SetSceneConstants()
 
 void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
-	m_LightParameters.m_LightEnabled[IdLight] = true;
 	m_LightParameters.m_LightAmbient = (0.1f, 0.1f, 0.1f, 0.0f);
+	m_LightParameters.m_LightEnabled[IdLight] = true;
+	m_LightParameters.m_LightType[IdLight] = static_cast<float>(Light->getType());
+	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
 	m_LightParameters.m_LightAttenuationStartRange[IdLight] = Light->getStartRangeAttenuation();
 	m_LightParameters.m_LightAttenuationEndRange[IdLight] = Light->getEndRangeAttenuation();
-	m_LightParameters.m_LightColor[IdLight] = Light->getColor();
 	m_LightParameters.m_LightIntensity[IdLight] = Light->getIntensity();
-	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
+	m_LightParameters.m_LightColor[IdLight] = Light->getColor();
 
-	if (Light->getType() == CLight::DIRECTIONAL)
+	if (Light->getType() == CLight::TLightType::DIRECTIONAL)
 	{
 		m_LightParameters.m_LightDirection[IdLight] = ((CDirectionalLight*)Light)->getDirection();
 	}
-	else if (Light->getType() == CLight::SPOT)
+	else if (Light->getType() == CLight::TLightType::SPOT)
 	{
-		m_LightParameters.m_LightDirection[IdLight] = ((CSpotLight*)Light)->getDirection();
-		m_LightParameters.m_LightAngle[IdLight] = ((CSpotLight*)Light)->getAngle();
-		m_LightParameters.m_LightFallOffAngle[IdLight] = ((CSpotLight*)Light)->getFallOff();
+		CSpotLight* l_light = dynamic_cast<CSpotLight*>(Light);
+		m_LightParameters.m_LightDirection[IdLight] = l_light->getDirection();
+		m_LightParameters.m_LightAngle[IdLight] = l_light->getAngle();
+		m_LightParameters.m_LightFallOffAngle[IdLight] = l_light->getFallOff();
 	}
+
 }
 
 void CEffectManager::SetLightsConstants()
@@ -116,7 +119,7 @@ void CEffectManager::SetLightsConstants()
 	
 	for (size_t i = 0; i < l_LightManager->count(); ++i)
 	{
-		CLight l_Light = l_LightManager->iterate(i);
+		CLight& l_Light = l_LightManager->iterate(i);
 		SetLightConstants(i, &l_Light);
 	}
 

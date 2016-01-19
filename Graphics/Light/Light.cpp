@@ -9,7 +9,6 @@ CLight::CLight() : CNamed("")
 
 CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
 {
-	m_Type = getLightTypeByName(TreeNode.GetPszProperty("type"));
 	Vect3f pos(0.0f, 0.0f, 0.0f);
 	m_Position = TreeNode.GetVect3fProperty("pos", pos);
 	Vect4f color(0.0f, 0.0f, 0.0f, 0.0f);

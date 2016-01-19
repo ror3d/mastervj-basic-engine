@@ -56,7 +56,7 @@ void CLightManager::Render(CRenderManager *RenderManager)
 	}
 }
 
-CLight CLightManager::iterate(size_t id)
+CLight& CLightManager::iterate(size_t id)
 {
 	int i = 0;
 	CLight *l_Light;

@@ -10,7 +10,7 @@ class CRenderManager;
 class CLight : public CNamed
 {
 public:
-	enum TLightType
+	enum class TLightType
 	{
 		OMNI = 0,
 		DIRECTIONAL,
@@ -19,7 +19,6 @@ public:
 protected:
 	Vect3f m_Position;
 	CColor m_Color;
-	TLightType m_Type;
 	float m_Intensity;
 	float m_StartRangeAttenuation;
 	float m_EndRangeAttenuation;
@@ -32,12 +31,11 @@ public:
 	float getIntensity() { return m_Intensity; } const
 	float getStartRangeAttenuation() { return m_StartRangeAttenuation; } const
 	float getEndRangeAttenuation() { return m_EndRangeAttenuation; } const
-	TLightType getType() { return m_Type; } const
+	virtual const TLightType getType() const = 0;
 	void setPosition(const Vect3f position) { m_Position = position; }
 	void setColor(const CColor color) { m_Color = color; }
 	void setStartRangeAttenuation(const float startRangeAttenuation) { m_StartRangeAttenuation = startRangeAttenuation; }
 	void setEndTangeAttenuation(const float endRangeAttenuation) { m_EndRangeAttenuation = endRangeAttenuation; }
-	void setType(const TLightType type) { m_Type = type; }
 	virtual void Render(CRenderManager *RenderManager);
 	static TLightType getLightTypeByName(const std::string &type);
 };
@@ -48,6 +46,7 @@ class COmniLight : public CLight
 public:
 	COmniLight();
 	COmniLight(const CXMLTreeNode &TreeNode);
+	virtual const TLightType getType() const { return TLightType::OMNI; }
 };
 
 
@@ -61,6 +60,7 @@ public:
 	Vect3f getDirection() { return m_Direction; } const
 	void setDiretion(const Vect3f direction) { m_Direction = direction; }
 	virtual void Render(CRenderManager *RenderManager);
+	virtual const TLightType getType() const { return TLightType::DIRECTIONAL; }
 };
 
 
@@ -76,6 +76,7 @@ public:
 	float getFallOff() { return m_FallOff; } const
 	void setAngle(const float angle) { m_Angle = angle; }
 	void setFallOff(const float fallOff) { m_FallOff = fallOff; }
+	virtual const TLightType getType() const { return TLightType::SPOT; }
 };
 
 #endif
