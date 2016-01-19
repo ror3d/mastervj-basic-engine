@@ -1,5 +1,13 @@
 #pragma once
 
+#include <map>
+#include <string>
+#include <vector>
+
+#include <Base/Math/Math.h>
+
+#define PHYSX_UPDATE_STEP (1/60.f)
+
 namespace physx
 {
 	class PxFoundation;
@@ -28,8 +36,35 @@ class CPhysXManager
 protected:
 	CPhysXManager();
 public:
+	enum class ActorType {
+		Static,
+		Dynamic
+	};
+	struct ShapeDesc {
+		enum class Shape {
+			Box,
+			Sphere,
+			Capsule,
+			Mesh
+		} shape;
+
+		Vect3f size;
+		Vect3f position;
+		Quatf orientation;
+		std::string material;
+		float density;
+	};
+
 	static CPhysXManager* CreatePhysXManager();
 	virtual ~CPhysXManager();
+
+	void registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution);
+
+	void createActor(const std::string& name, ActorType type, const ShapeDesc& desc);
+
+	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
+
+	void update(float dt);
 
 protected:
 
@@ -42,6 +77,19 @@ protected:
 
 	physx::PxDefaultCpuDispatcher		*m_Dispatcher;
 	physx::PxScene						*m_Scene;
-	physx::PxCooking					*m_Cooking;
+	physx::PxCooking					*m_Cooking; // OPTIMIZE OUT
 	physx::PxControllerManager			*m_ControllerManager;
+
+private:
+	float m_elapsedTime;
+
+	std::map<std::string, physx::PxMaterial*> m_materials;
+
+	struct {
+		std::map<std::string, size_t> index;
+		std::vector<std::string> name;
+		std::vector<Vect3f> position;
+		std::vector<Quatf> rotation;
+		std::vector<physx::PxActor*> actor;
+	} m_actors;
 };

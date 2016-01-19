@@ -67,6 +67,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty/PhysX/Lib/vc$(PlatformToolsetVersion)$(Platform)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>if exist $(SolutionDir)bin\lib\AntTweakBarDebug.dll  xcopy /y /f $(SolutionDir)bin\lib\AntTweakBarDebug.dll $(LocalDebuggerWorkingDirectory).
@@ -125,6 +126,11 @@ if exist $(SolutionDir)bin\lib\Cal3D_d.dll  xcopy /y /f $(SolutionDir)bin\lib\Ca
     </ProjectReference>
     <ProjectReference Include="..\PhysX\PhysX.vcxproj">
       <Project>{d1e294ce-b49d-4c9e-b2be-e11236d76704}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\Sound\Sound.vcxproj">
       <Project>{2779982b-c2dc-4cb2-b39f-a966b91c9b70}</Project>

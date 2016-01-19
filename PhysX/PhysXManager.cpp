@@ -41,16 +41,16 @@
 #endif
 #define CHECKED_RELEASE(x) if(x!=nullptr) { x->release(); x=nullptr; }
 
-inline const physx::PxVec3& v(const Vect3f& v)
+inline physx::PxVec3 v(const Vect3f& v)
 { return physx::PxVec3(v.x, v.y, v.z); }
-inline const Vect3f& v(const physx::PxVec3& v)
+inline Vect3f v(const physx::PxVec3& v)
 { return Vect3f(v.x, v.y, v.z); }
-inline const Vect3f& v(const physx::PxExtendedVec3& v)
+inline Vect3f v(const physx::PxExtendedVec3& v)
 { return Vect3f((float)v.x, (float)v.y, (float)v.z); }
 
-inline const Quatf& q(const physx::PxQuat& q)
+inline Quatf q(const physx::PxQuat& q)
 { return Quatf(q.x, q.y, q.z, q.w); }
-inline const physx::PxQuat& q(const Quatf& q)
+inline physx::PxQuat q(const Quatf& q)
 { return physx::PxQuat(q.x, q.y, q.z, q.w); }
 
 
@@ -77,7 +77,7 @@ public:
 
 };
 
-static CPhysXManager* CreatePhysXManager()
+CPhysXManager* CPhysXManager::CreatePhysXManager()
 {
 	return new CPhysXManagerImplementation();
 }
@@ -107,7 +107,8 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 		m_PhysX->getVisualDebugger()->setVisualizeConstraints(true);
 		m_PhysX->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_CONTACTS, true);
 		m_PhysX->getVisualDebugger()->setVisualDebuggerFlag(physx::PxVisualDebuggerFlag::eTRANSMIT_SCENEQUERIES, true);
-		m_DebugConnection = physx::PxVisualDebuggerExt::createConnection(m_PhysX->getPvdConnectionManager(), PVD_HOST, 5425, 10);
+		m_DebugConnection = physx::PxVisualDebuggerExt::createConnection(m_PhysX->getPvdConnectionManager(), PVD_HOST, 5425, 100);
+		assert(m_DebugConnection);
 	}
 	else
 	{
@@ -199,5 +200,149 @@ void CPhysXManagerImplementation::onControllerHit(const physx::PxControllersHit 
 
 void CPhysXManagerImplementation::onObstacleHit(const physx::PxControllerObstacleHit &hit)
 {
+}
+
+CPhysXManager::CPhysXManager()
+	: m_elapsedTime(0)
+	, m_Foundation(nullptr)
+	, m_PhysX(nullptr)
+
+#if USE_PHYSX_DEBUG
+	, m_DebugConnection(nullptr)
+#endif
+	, m_Dispatcher(nullptr)
+	, m_Scene(nullptr)
+	, m_Cooking(nullptr)
+	, m_ControllerManager(nullptr)
+{
+}
+
+CPhysXManager::~CPhysXManager()
+{
+	for (auto pair : m_materials)
+	{
+		CHECKED_RELEASE(pair.second);
+	}
+	m_materials.clear();
+}
+
+void CPhysXManager::registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution)
+{
+	auto it = m_materials.find(name);
+	if (it != m_materials.end())
+	{
+		it->second->release();
+	}
+	m_materials[name] = m_PhysX->createMaterial(staticFriction, dynamicFriction, restitution);
+}
+
+void CPhysXManager::createPlane(const std::string& name, const std::string& material, Vect4f planeDesc)
+{
+	auto idx = m_actors.actor.size();
+
+	auto matIt = m_materials.find(material);
+	assert(matIt != m_materials.end());
+
+	physx::PxMaterial* mat = matIt->second;
+
+	auto groundPlane = physx::PxCreatePlane(*m_PhysX, physx::PxPlane(planeDesc.x, planeDesc.y, planeDesc.z, planeDesc.w), *mat);
+
+	physx::PxShape* shape;
+
+	size_t nShapes = groundPlane->getShapes(&shape, 1);
+	assert(nShapes == 1);
+
+	groundPlane->userData = reinterpret_cast<void*>(idx);
+
+	m_Scene->addActor(*groundPlane);
+
+	assert(m_actors.actor.size() == m_actors.index.size());
+	assert(m_actors.actor.size() == m_actors.name.size());
+	assert(m_actors.actor.size() == m_actors.position.size());
+	assert(m_actors.actor.size() == m_actors.rotation.size());
+
+	m_actors.index[name] = idx;
+	m_actors.name.push_back(name);
+	Vect3f normal = Vect3f(planeDesc.x, planeDesc.y, planeDesc.z);
+	m_actors.position.push_back(normal*planeDesc.w);
+	m_actors.rotation.push_back(Quatf::ShortestArc(Vect3f(0, 1, 0), normal));
+	m_actors.actor.push_back(groundPlane);
+}
+
+void CPhysXManager::createActor(const std::string& name, ActorType actorType, const ShapeDesc& desc)
+{
+	auto idx = m_actors.actor.size();
+
+	auto matIt = m_materials.find(desc.material);
+	assert(matIt != m_materials.end());
+
+	physx::PxMaterial* mat = matIt->second;
+
+	physx::PxGeometry* geom;
+	switch (desc.shape)
+	{
+		case ShapeDesc::Shape::Box:
+			geom = new physx::PxBoxGeometry(desc.size.x, desc.size.y, desc.size.z);
+			break;
+
+		default:
+			throw std::logic_error("Not yet implemented");
+			break;
+	}
+
+	physx::PxRigidActor* body;
+	switch (actorType)
+	{
+		case CPhysXManager::ActorType::Static:
+			body = m_PhysX->createRigidStatic(physx::PxTransform(v(desc.position), q(desc.orientation)));
+			break;
+		case CPhysXManager::ActorType::Dynamic:
+			body = m_PhysX->createRigidDynamic(physx::PxTransform(v(desc.position), q(desc.orientation)));
+			break;
+	}
+
+	physx::PxShape* shape = body->createShape(*geom, *mat);
+	delete geom;
+	
+	//body->attachShape(*shape);
+	body->userData = reinterpret_cast<void*>(idx);
+	if (actorType == ActorType::Dynamic)
+	{
+		physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidBody*>(body), desc.density);
+	}
+
+	m_Scene->addActor(*body);
+
+	assert(m_actors.actor.size() == m_actors.index.size());
+	assert(m_actors.actor.size() == m_actors.name.size());
+	assert(m_actors.actor.size() == m_actors.position.size());
+	assert(m_actors.actor.size() == m_actors.rotation.size());
+
+	m_actors.index[name] = idx;
+	m_actors.name.push_back(name);
+	m_actors.position.push_back(desc.position);
+	m_actors.rotation.push_back(desc.orientation);
+	m_actors.actor.push_back(body);
+}
+
+void CPhysXManager::update(float dt)
+{
+	m_elapsedTime += dt;
+	if (m_elapsedTime >= PHYSX_UPDATE_STEP)
+	{
+		m_Scene->simulate(PHYSX_UPDATE_STEP);
+		m_Scene->fetchResults(true);
+		m_elapsedTime = fmod(m_elapsedTime, PHYSX_UPDATE_STEP);
+
+		// Update actor positions
+		physx::PxU32 nActiveTransf;
+		auto activeTransf = m_Scene->getActiveTransforms(nActiveTransf);
+		for (physx::PxU32 i = 0; i < nActiveTransf; ++i)
+		{
+			size_t idx = reinterpret_cast<size_t>(activeTransf[i].userData);
+			m_actors.position[idx] = v(activeTransf[i].actor2World.p);
+			m_actors.rotation[idx] = q(activeTransf[i].actor2World.q);
+		}
+	}
 }
 

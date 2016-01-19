@@ -13,13 +13,33 @@
 #include <XML/XMLTreeNode.h>
 #include <Graphics/Cinematics/Cinematic.h>
 
+#include <PhysX/PhysXManager.h>
+
+
+static float s_mouseSpeed = 1;
+
+static CPhysXManager* phMgr = nullptr;
+
 
 static void __stdcall SwitchCameraCallback( void* _app )
 {
 	( (CApplication*)_app )->SwitchCamera();
 }
 
-static float s_mouseSpeed = 1;
+static void __stdcall CreateScene( void* a )
+{
+	CPhysXManager::ShapeDesc desc;
+	desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
+	desc.density = 1;
+	desc.material = "box";
+	desc.size = Vect3f(1, 1, 1);
+	desc.position = Vect3f(0, 5, 0);
+	phMgr->createActor("b1", CPhysXManager::ActorType::Dynamic, desc);
+	desc.position = Vect3f(0, 8, 0);
+	phMgr->createActor("b2", CPhysXManager::ActorType::Dynamic, desc);
+	desc.position = Vect3f(0, 16, 0);
+	phMgr->createActor("b3", CPhysXManager::ActorType::Dynamic, desc);
+}
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
 	: m_RenderManager( _renderManager )
@@ -70,6 +90,15 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 
 		bar.variables.push_back(var);
 	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "create scene";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = CreateScene;
+		var.data = this;
+
+		bar.variables.push_back(var);
+	}
 
 	CDebugHelper::GetDebugHelper()->RegisterBar(bar);
 }
@@ -82,6 +111,11 @@ CApplication::~CApplication()
 
 void CApplication::Init()
 {
+	phMgr = CPhysXManager::CreatePhysXManager();
+	phMgr->registerMaterial("ground", 1, 0.9, 0.1);
+	phMgr->registerMaterial("box", 1, 0.9, 0.8);
+	phMgr->createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
+
 }
 
 void CApplication::SwitchCamera()
@@ -95,6 +129,8 @@ void CApplication::SwitchCamera()
 
 void CApplication::Update( float _ElapsedTime )
 {
+	phMgr->update(_ElapsedTime);
+
 	CEngine::GetSingleton().getRenderableObjectManager()->Update(_ElapsedTime);
 
 	( (CInputManagerImplementation*)CInputManager::GetInputManager() )->SetMouseSpeed( s_mouseSpeed );
