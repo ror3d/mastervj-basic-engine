@@ -11,6 +11,8 @@ protected:
 	void Init(const std::string &Name, unsigned int Width, unsigned int Height);
 	void Unload();
 	bool CreateSamplerState();
+	UINT m_Width;
+	UINT m_Height;
 public:
 	bool Reload();
 	CCaptureFrameBufferTexture(const CXMLTreeNode &TreeNode);

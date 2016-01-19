@@ -2,6 +2,7 @@
 
 #include <Base/Utils/SingletonPattern.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics\Layer\LayerManager.h>
 #include <Graphics/Renderable/RenderableObjectsManager.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Effect/EffectManager.h>
@@ -16,7 +17,7 @@ class CEngine : public CSingleton<CEngine>
 {
 private:
 	CStaticMeshManager * staticMeshManager;
-	CRenderableObjectsManager * renderableObjectManager;
+	CLayerManager * layerManager;
 	CMaterialManager * materialManager;
 	CEffectManager * effectsManager;
 	CTextureManager * textureManager;
@@ -33,7 +34,7 @@ public:
 
 	//GETS
 	inline CStaticMeshManager * getStaticMeshManager() const { return staticMeshManager; }
-	inline CRenderableObjectsManager * getRenderableObjectManager() const { return renderableObjectManager; }
+	inline CLayerManager * getLayerManager() const { return layerManager; }
 	inline CMaterialManager * getMaterialManager() const { return materialManager; }
 	inline CEffectManager * getEffectsManager() const { return effectsManager; }
 	inline CTextureManager * getTextureManager() const { return textureManager; }

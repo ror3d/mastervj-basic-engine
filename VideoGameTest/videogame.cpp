@@ -201,7 +201,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getMaterialManager()->load("Data\\materials.xml");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
-	engine.getRenderableObjectManager()->Load("Data\\renderable_objects.xml");
+	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);

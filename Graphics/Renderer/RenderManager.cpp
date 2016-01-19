@@ -9,7 +9,7 @@
 CRenderManager::CRenderManager()
 	: m_UseDebugCamera(false)
 {
-	m_RenderableObjects = CEngine::GetSingleton().getRenderableObjectManager();
+	m_RenderableObjects = CEngine::GetSingleton().getLayerManager();
 }
 
 
@@ -30,6 +30,6 @@ void CRenderManager::Render(CContextManager* _Context)
 	CEffectManager::m_Parameters.m_View=l_Camera.GetView();
 	CEffectManager::m_Parameters.m_Projection= l_Camera.GetProjection();
 
-	m_RenderableObjects->Render(_Context);
+	m_RenderableObjects->Render(*_Context);
 
 }

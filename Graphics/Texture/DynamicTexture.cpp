@@ -1,9 +1,10 @@
 #include "DynamicTexture.h"
 #include <assert.h>
+#include "Engine\Engine.h"
 
 void CDynamicTexture::Init()
 {
-	ID3D11Device *l_Device = UABEngine.GetRenderManager().GetDevice();
+	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	D3D11_TEXTURE2D_DESC l_TextureDescription;
 	ZeroMemory(&l_TextureDescription, sizeof(D3D11_TEXTURE2D_DESC));
 	l_TextureDescription.Width = m_Width;
@@ -31,7 +32,7 @@ void CDynamicTexture::Init()
 	l_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	l_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
 	l_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
-	l_HR = l_Device->CreateShaderResourceView(m_RenderTargetTexture, &l_ShaderResourceViewDescription, &m_Texture);
+	l_HR = l_Device->CreateShaderResourceView(m_RenderTargetTexture, &l_ShaderResourceViewDescription, GetShaderResourceView());
 	assert(!FAILED(l_HR));
 	if (m_CreateDepthStencilBuffer)
 	{
@@ -63,7 +64,7 @@ void CDynamicTexture::Init()
 
 bool CDynamicTexture::CreateSamplerState()
 {
-	ID3D11Device *l_Device = UABEngine.GetRenderManager().GetDevice();
+	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	D3D11_SAMPLER_DESC l_SampDesc;
 	ZeroMemory(&l_SampDesc, sizeof(l_SampDesc));
 	l_SampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -73,6 +74,6 @@ bool CDynamicTexture::CreateSamplerState()
 	l_SampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	l_SampDesc.MinLOD = 0;
 	l_SampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	HRESULT l_HR = l_Device->CreateSamplerState(&l_SampDesc, &m_SamplerState);
+	HRESULT l_HR = l_Device->CreateSamplerState(&l_SampDesc, GetSamplerState());
 	return !FAILED(l_HR);
 }

@@ -31,6 +31,8 @@ public:
 	ID3D11Device* GetDevice() const { return m_D3DDevice; }
 	ID3D11DeviceContext* GetDeviceContext() const { return m_DeviceContext; }
 
+	IDXGISwapChain* GetSwapChain() const { return m_SwapChain;  }
+
 private:
 
 	ID3D11Device*			m_D3DDevice;

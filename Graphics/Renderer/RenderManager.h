@@ -4,7 +4,7 @@
 #include "Camera/Camera.h"
 #include "Camera/Frustum.h"
 
-class CRenderableObjectsManager;
+class CLayerManager;
 class CContextManager;
 class CMaterialManager;
 
@@ -28,7 +28,7 @@ private:
 	CCamera m_DebugCamera;
 	bool m_UseDebugCamera;
 
-	CRenderableObjectsManager * m_RenderableObjects;
+	CLayerManager * m_RenderableObjects;
 };
 
 #endif

@@ -16,14 +16,16 @@ protected:
 	void Unload();
 	void Init();
 	virtual bool CreateSamplerState();
+	UINT m_Width;
+	UINT m_Height;
 public:
 	CDynamicTexture(const std::string &Name, int Width, int Height, bool
 		CreateDepthStencilBuffer);
 	CDynamicTexture(const CXMLTreeNode &TreeNode);
 	~CDynamicTexture();
 	bool Reload();
-	UAB_GET_PROPERTY_POINTER(ID3D11RenderTargetView, RenderTargetView);
-	UAB_GET_PROPERTY_POINTER(ID3D11DepthStencilView, DepthStencilView);
+	//UAB_GET_PROPERTY_POINTER(ID3D11RenderTargetView, m_RenderTargetView);
+	//UAB_GET_PROPERTY_POINTER(ID3D11DepthStencilView, m_DepthStencilView);
 };
 
 #endif

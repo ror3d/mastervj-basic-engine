@@ -106,28 +106,3 @@ CRenderableObject * CRenderableObjectsManager::AddAnimatedInstanceModel(const st
 	return NULL;
 }
 
-
-void CRenderableObjectsManager::Load(const std::string &FileName)
-{
-	CXMLTreeNode l_XML;
-	if (l_XML.LoadFile(FileName.c_str()))
-	{
-		CXMLTreeNode l_Meshes = l_XML["renderable_objects"];
-		if (l_Meshes.Exists())
-		{
-			for (int i = 0; i < l_Meshes.GetNumChildren(); ++i)
-			{
-				CXMLTreeNode l_Mesh = l_Meshes(i);
-
-				if (l_Mesh.GetName() == std::string("mesh_instance"))
-				{
-					AddMeshInstance(l_Mesh);
-				}
-				else if (l_Mesh.GetName() == std::string("animated_instance"))
-				{
-					AddAnimatedInstanceModel(l_Mesh);
-				}
-			}
-		}
-	}
-}

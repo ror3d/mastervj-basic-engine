@@ -79,7 +79,7 @@ void CApplication::SwitchCamera()
 
 void CApplication::Update( float _ElapsedTime )
 {
-	CEngine::GetSingleton().getRenderableObjectManager()->Update(_ElapsedTime);
+	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 
 	switch ( m_CurrentCamera )
 	{

@@ -1,17 +1,16 @@
 #include "CaptureFrameBufferTexture.h"
 #include "Context\ContextManager.h"
+#include "Engine\Engine.h"
 
 void CCaptureFrameBufferTexture::Init(const std::string &Name, unsigned int Width,
 	unsigned int Height)
 {
 	m_Width = Width;
 	m_Height = Height;
-	SetName(Name);
-	CContextManager &l_RenderManager = UABEngine.GetInstance().GetRenderManager();
-	ID3D11Device *l_Device = l_RenderManager.GetDevice();
+	setName(Name);
+	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	ID3D11Texture2D *l_Buffer = NULL;
-	l_RenderManager.GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D),
-		(LPVOID*)&l_Buffer);
+	CEngine::GetSingleton().getContextManager()->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&l_Buffer);
 	D3D11_TEXTURE2D_DESC l_Texture2DDescription;
 	l_Texture2DDescription.Width = Width;
 	l_Texture2DDescription.Height = Height;
@@ -35,7 +34,7 @@ void CCaptureFrameBufferTexture::Init(const std::string &Name, unsigned int Widt
 	DescRV.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	DescRV.Texture2D.MipLevels = l_Texture2DDescription.MipLevels;
 	DescRV.Texture2D.MostDetailedMip = 0;
-	l_HR = l_Device->CreateShaderResourceView(m_DataTexture, &DescRV, &m_Texture);
+	l_HR = l_Device->CreateShaderResourceView(m_DataTexture, &DescRV, GetShaderResourceView());
 	if (FAILED(l_HR))
 		return;
 	CreateSamplerState();
@@ -43,19 +42,19 @@ void CCaptureFrameBufferTexture::Init(const std::string &Name, unsigned int Widt
 
 bool CCaptureFrameBufferTexture::Capture(unsigned int StageId)
 {
-	CContextManager &_context = UABEngine.GetInstance().GetRenderManager();
+
 	ID3D11Texture2D *l_Surface = NULL;
-	HRESULT l_HR = _context.GetSwapChain()->GetBuffer(StageId, __uuidof(
+	HRESULT l_HR = CEngine::GetSingleton().getContextManager()->GetSwapChain()->GetBuffer(StageId, __uuidof(
 		ID3D11Texture2D), reinterpret_cast< void** >(&l_Surface));
 	if (FAILED(l_HR) || l_Surface == NULL || m_DataTexture == NULL)
 		return false;
-	_context.GetDeviceContext()->CopyResource(m_DataTexture, l_Surface);
+	CEngine::GetSingleton().getContextManager()->GetDeviceContext()->CopyResource(m_DataTexture, l_Surface);
 	return true;
 }
 
 bool CCaptureFrameBufferTexture::CreateSamplerState()
 {
-	ID3D11Device *l_Device = UABEngine.GetRenderManager().GetDevice();
+	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	D3D11_SAMPLER_DESC l_SampDesc;
 	ZeroMemory(&l_SampDesc, sizeof(l_SampDesc));
 	l_SampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -65,6 +64,6 @@ bool CCaptureFrameBufferTexture::CreateSamplerState()
 	l_SampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	l_SampDesc.MinLOD = 0;
 	l_SampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	HRESULT l_HR = l_Device->CreateSamplerState(&l_SampDesc, &m_SamplerState);
+	HRESULT l_HR = l_Device->CreateSamplerState(&l_SampDesc, GetSamplerState());
 	return !FAILED(l_HR);
 }
