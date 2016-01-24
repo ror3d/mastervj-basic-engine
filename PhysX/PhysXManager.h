@@ -70,11 +70,11 @@ public:
 
 	void update(float dt);
 
-	static bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData);
+	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData);
 
-	static bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
+	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 
-	static bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
+	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
 protected:
 
