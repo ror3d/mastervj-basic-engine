@@ -45,14 +45,18 @@ public:
 			Box,
 			Sphere,
 			Capsule,
-			Mesh
+			ConvexMesh,
+			TriangleMesh
 		} shape;
 
 		Vect3f size;
+		float radius;
+		float halfHeight;
 		Vect3f position;
 		Quatf orientation;
 		std::string material;
 		float density;
+		std::vector<uint8>* cookedMeshData;
 	};
 
 	static CPhysXManager* CreatePhysXManager();
@@ -65,6 +69,12 @@ public:
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 
 	void update(float dt);
+
+	static bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData);
+
+	static bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
+
+	static bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
 protected:
 

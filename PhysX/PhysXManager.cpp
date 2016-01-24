@@ -3,6 +3,10 @@
 #include <PxPhysicsAPI.h>
 #include <cassert>
 
+#include <fstream>
+#include <iterator>
+#include <algorithm>
+
 #if (defined(_MSC_VER) && _MSC_VER >= 1800) || __cplusplus <= 199711L
 #include <thread>
 #endif
@@ -236,6 +240,55 @@ void CPhysXManager::registerMaterial(const std::string& name, float staticFricti
 	m_materials[name] = m_PhysX->createMaterial(staticFriction, dynamicFriction, restitution);
 }
 
+bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData)
+{
+	physx::PxConvexMeshDesc meshDesc;
+
+	meshDesc.points.count = vec.size();
+	meshDesc.points.stride = sizeof(Vect3f);
+	meshDesc.points.data = vec.data();
+
+	meshDesc.flags = physx::PxConvexFlag::eCOMPUTE_CONVEX;
+
+	physx::PxDefaultMemoryOutputStream oBuf;
+	physx::PxConvexMeshCookingResult::Enum result;
+	bool success = m_Cooking->cookConvexMesh(meshDesc, oBuf, &result);
+	assert(success);
+
+	outCookedData.assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
+	return success;
+}
+
+
+bool CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData)
+{
+	std::ifstream f(fname, std::ios::in | std::ifstream::binary);
+
+	if (f)
+	{
+		std::istream_iterator<uint8> iter(f);
+		std::copy(iter, std::istream_iterator<uint8>(), std::back_inserter(outCookedData));
+		return true;
+	}
+
+	return false;
+}
+
+bool CPhysXManager::saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname)
+{
+	std::ofstream f(fname, std::ios::out | std::ifstream::binary);
+
+	if (f)
+	{
+		std::ostream_iterator<uint8> iter(f);
+		std::copy(inCookedData.begin(), inCookedData.end(), iter);
+		return true;
+	}
+
+	return false;
+}
+
+
 void CPhysXManager::createPlane(const std::string& name, const std::string& material, Vect4f planeDesc)
 {
 	auto idx = m_actors.actor.size();
@@ -284,6 +337,22 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 		case ShapeDesc::Shape::Box:
 			geom = new physx::PxBoxGeometry(desc.size.x, desc.size.y, desc.size.z);
 			break;
+
+		case ShapeDesc::Shape::Sphere:
+			geom = new physx::PxSphereGeometry(desc.radius);
+			break;
+
+		case ShapeDesc::Shape::Capsule:
+			geom = new physx::PxCapsuleGeometry(desc.radius, desc.halfHeight);
+			break;
+
+		case ShapeDesc::Shape::ConvexMesh:
+		{
+			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
+			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
+			geom = new physx::PxConvexMeshGeometry(mesh);
+			break;
+		}
 
 		default:
 			throw std::logic_error("Not yet implemented");
