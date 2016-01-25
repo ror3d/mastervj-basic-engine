@@ -6,6 +6,8 @@
 
 #include <Base/Math/Math.h>
 
+#define USE_PHYSX_DEBUG 1
+
 #define PHYSX_UPDATE_STEP (1/60.f)
 
 namespace physx
