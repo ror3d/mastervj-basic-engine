@@ -71,7 +71,6 @@ bool CStaticMesh::Load(const std::string &FileName)
 
 		//Vertex & Index---------------------
 
-		//TODO: en fichero max, leer solo UVMap de x e y
 		for (int i = 0; i < l_numMaterials; ++i)
 		{
 			//Vertices---------------------

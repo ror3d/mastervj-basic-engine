@@ -10,7 +10,7 @@ class CXMLTreeNode;
 class CEffectTechnique;
 class CTexture;
 
-class CMaterial : public CNamed
+class CMaterial :public CNamed
 {
 private:
 	std::vector<CTexture *> m_textures;
