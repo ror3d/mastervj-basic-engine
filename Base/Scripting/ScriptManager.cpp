@@ -76,4 +76,10 @@ void CScriptManager::RegisterLUAFunctions()
 {
 	LuaErrorCapturedStdout errorCapture;
 	// TODO
+
+	(*m_state)["ScriptManager"]
+		.SetObj(*this,
+				"RunCode", &CScriptManager::RunCode,
+				"RunFile", &CScriptManager::RunFile,
+				"Load", &CScriptManager::Load);
 }
