@@ -22,27 +22,27 @@ namespace detail {
 
 template <typename T>
 struct is_primitive {
-    static constexpr bool value = false;
+    static const bool value = false;
 };
 template <>
 struct is_primitive<int> {
-    static constexpr bool value = true;
+    static const bool value = true;
 };
 template <>
 struct is_primitive<unsigned int> {
-    static constexpr bool value = true;
+    static const bool value = true;
 };
 template <>
 struct is_primitive<bool> {
-    static constexpr bool value = true;
+    static const bool value = true;
 };
 template <>
 struct is_primitive<lua_Number> {
-    static constexpr bool value = true;
+    static const bool value = true;
 };
 template <>
 struct is_primitive<std::string> {
-    static constexpr bool value = true;
+    static const bool value = true;
 };
 
 template<typename T>
@@ -372,7 +372,7 @@ inline void _push(lua_State *, std::tuple<>) {}
 
 template <typename... T>
 inline void _push(lua_State *l, const std::tuple<T...> &values) {
-    constexpr int num_values = sizeof...(T);
+    const int num_values = sizeof...(T);
     _push_dispatcher(l, values,
                      typename _indices_builder<num_values>::type());
 }

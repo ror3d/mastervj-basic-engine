@@ -36,7 +36,7 @@ public:
 
     template <typename Ret, typename... Args>
     void Register(std::function<Ret(Args...)> fun) {
-        constexpr int arity = detail::_arity<Ret>::value;
+        const int arity = detail::_arity<Ret>::value;
         _funs.emplace_back(
             sel::make_unique<Fun<arity, Ret, Args...>>(
                 _state, fun));
@@ -44,7 +44,7 @@ public:
 
     template <typename Ret, typename... Args>
     void Register(Ret (*fun)(Args...)) {
-        constexpr int arity = detail::_arity<Ret>::value;
+        const int arity = detail::_arity<Ret>::value;
         _funs.emplace_back(
             sel::make_unique<Fun<arity, Ret, Args...>>(
                 _state, fun));

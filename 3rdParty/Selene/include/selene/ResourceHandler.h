@@ -12,12 +12,12 @@ public:
 
     MovingFlag & operator=(MovingFlag const &) = default;
 
-    MovingFlag(MovingFlag && that) noexcept
+    MovingFlag(MovingFlag && that)
         : flag(that.flag) {
         that = false;
     }
 
-    MovingFlag & operator=(MovingFlag && that) noexcept {
+    MovingFlag & operator=(MovingFlag && that) {
         this->flag = that.flag;
         that = false;
         return *this;

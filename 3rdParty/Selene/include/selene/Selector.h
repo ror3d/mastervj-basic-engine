@@ -155,12 +155,8 @@ private:
     }
 public:
 
-    Selector(const Selector &) = default;
-    Selector(Selector &&) = default;
-    Selector & operator=(const Selector &) = default;
-    Selector & operator=(Selector &&) = default;
 
-    ~Selector() noexcept(false) {
+    ~Selector() {
         // If there is a functor is not empty, execute it and collect no args
         if (_functor_active) {
             ResetStackOnScopeExit save(_state);

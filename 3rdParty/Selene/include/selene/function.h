@@ -14,29 +14,29 @@ class Selector;
 
 namespace detail {
 struct function_base {
-    LuaRef _ref;
-    lua_State *_state;
-    ExceptionHandler *_exception_handler;
+	LuaRef _ref;
+	lua_State *_state;
+	ExceptionHandler *_exception_handler;
 
-    function_base(int ref, lua_State *state)
-        : _ref(state, ref), _state(state), _exception_handler(nullptr) {}
+	function_base(int ref, lua_State *state)
+		: _ref(state, ref), _state(state), _exception_handler(nullptr) {}
 
-    void _enable_exception_handler(ExceptionHandler *exception_handler) {
-        _exception_handler = exception_handler;
-    }
+	void _enable_exception_handler(ExceptionHandler *exception_handler) {
+		_exception_handler = exception_handler;
+	}
 
-    void protected_call(int const num_args, int const num_ret,
-                        int const handler_index) {
-        const auto status = lua_pcall(_state, num_args, num_ret, handler_index);
+	void protected_call(int const num_args, int const num_ret,
+						int const handler_index) {
+		const auto status = lua_pcall(_state, num_args, num_ret, handler_index);
 
-        if (status != LUA_OK && _exception_handler) {
-            _exception_handler->Handle_top_of_stack(status, _state);
-        }
-    }
+		if (status != LUA_OK && _exception_handler) {
+			_exception_handler->Handle_top_of_stack(status, _state);
+		}
+	}
 
-    void Push(lua_State *state) const {
-        _ref.Push(state);
-    }
+	void Push(lua_State *state) const {
+		_ref.Push(state);
+	}
 };
 }
 
@@ -47,95 +47,107 @@ template <class>
 class function {};
 
 template <typename R, typename... Args>
-class function<R(Args...)> : detail::function_base {
-    friend class Selector;
+class function<R(Args...)> : public detail::function_base {
+	friend class Selector;
 public:
-    using function_base::function_base;
+	using function_base::function_base;
 
-    R operator()(Args... args) {
-        ResetStackOnScopeExit save(_state);
+	function<R(Args...)>(int ref, lua_State *state)
+		: function_base(ref, state)
+	{}
 
-        int handler_index = SetErrorHandler(_state);
-        _ref.Push(_state);
-        detail::_push_n(_state, std::forward<Args>(args)...);
-        constexpr int num_args = sizeof...(Args);
+	R operator()(Args... args) {
+		ResetStackOnScopeExit save(_state);
 
-        protected_call(num_args, 1, handler_index);
+		int handler_index = SetErrorHandler(_state);
+		_ref.Push(_state);
+		detail::_push_n(_state, std::forward<Args>(args)...);
+		const int num_args = sizeof...(Args);
 
-        return detail::_get(detail::_id<R>{}, _state, -1);
-    }
+		protected_call(num_args, 1, handler_index);
 
-    using function_base::Push;
+		return detail::_get(detail::_id<R>{}, _state, -1);
+	}
+
+	using function_base::Push;
 };
 
 template <typename... Args>
-class function<void(Args...)> : detail::function_base{
-    friend class Selector;
+class function<void(Args...)> : public detail::function_base{
+	friend class Selector;
 public:
-    using function_base::function_base;
+	using function_base::function_base;
 
-    void operator()(Args... args) {
-        ResetStackOnScopeExit save(_state);
+	function<void(Args...)>(int ref, lua_State *state)
+		: function_base(ref, state)
+	{}
 
-        int handler_index = SetErrorHandler(_state);
-        _ref.Push(_state);
-        detail::_push_n(_state, std::forward<Args>(args)...);
-        constexpr int num_args = sizeof...(Args);
+	void operator()(Args... args) {
+		ResetStackOnScopeExit save(_state);
 
-        protected_call(num_args, 1, handler_index);
-    }
+		int handler_index = SetErrorHandler(_state);
+		_ref.Push(_state);
+		detail::_push_n(_state, std::forward<Args>(args)...);
+		const int num_args = sizeof...(Args);
 
-    using function_base::Push;
+		protected_call(num_args, 1, handler_index);
+	}
+
+	using function_base::Push;
 };
 
 // Specialization for multireturn types
 template <typename... R, typename... Args>
-class function<std::tuple<R...>(Args...)> : detail::function_base{
-    friend class Selector;
+class function<std::tuple<R...>(Args...)> : public detail::function_base{
+	friend class Selector;
 public:
-    using function_base::function_base;
+	using function_base::function_base;
 
-    std::tuple<R...> operator()(Args... args) {
-        ResetStackOnScopeExit save(_state);
+	function<std::tuple<R...>(Args...)>(int ref, lua_State *state)
+		: function_base(ref, state)
+	{}
 
-        int handler_index = SetErrorHandler(_state);
-        _ref.Push(_state);
-        detail::_push_n(_state, std::forward<Args>(args)...);
-        constexpr int num_args = sizeof...(Args);
-        constexpr int num_ret = sizeof...(R);
+	std::tuple<R...> operator()(Args... args) {
+		ResetStackOnScopeExit save(_state);
 
-        protected_call(num_args, num_ret, handler_index);
+		int handler_index = SetErrorHandler(_state);
+		_ref.Push(_state);
+		detail::_push_n(_state, std::forward<Args>(args)...);
+		const int num_args = sizeof...(Args);
+		const int num_ret = sizeof...(R);
 
-        lua_remove(_state, handler_index);
-        return detail::_get_n<R...>(_state);
-    }
+		protected_call(num_args, num_ret, handler_index);
 
-    using function_base::Push;
+		lua_remove(_state, handler_index);
+		return detail::_get_n<R...>(_state);
+	}
+
+	using function_base::Push;
 };
 
 namespace detail {
 
 template<typename T>
 struct is_primitive<sel::function<T>> {
-    static constexpr bool value = true;
+	static const bool value = true;
 };
 
 template <typename R, typename...Args>
 inline sel::function<R(Args...)> _check_get(_id<sel::function<R(Args...)>>,
-                                            lua_State *l, const int index) {
-    lua_pushvalue(l, index);
-    return sel::function<R(Args...)>{luaL_ref(l, LUA_REGISTRYINDEX), l};
+											lua_State *l, const int index) {
+	lua_pushvalue(l, index);
+	return sel::function<R(Args...)>(luaL_ref(l, LUA_REGISTRYINDEX), l);
 }
 
 template <typename R, typename... Args>
 inline sel::function<R(Args...)> _get(_id<sel::function<R(Args...)>> id,
-                                      lua_State *l, const int index) {
-    return _check_get(id, l, index);
+									  lua_State *l, const int index) {
+	return _check_get(id, l, index);
 }
 
 template <typename R, typename... Args>
 inline void _push(lua_State *l, sel::function<R(Args...)> fun) {
-    fun.Push(l);
+	fun.Push(l);
 }
 }
 }

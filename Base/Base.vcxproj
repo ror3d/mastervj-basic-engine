@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Math\MathConstants.cpp" />
+    <ClCompile Include="Scripting\ScriptManager.cpp" />
     <ClCompile Include="Utils\Named.cpp" />
     <ClCompile Include="XML\Example.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -31,6 +32,7 @@
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
+    <ClInclude Include="Scripting\ScriptManager.h" />
     <ClInclude Include="Utils\TMapManager.h" />
     <ClInclude Include="Utils\Named.h" />
     <ClInclude Include="Utils\SingletonPattern.h" />
@@ -86,7 +88,7 @@
     <IntDir>$(SolutionDir)\bin\Intermediate\$(ProjectName)$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)\bin\lib</OutDir>
+    <OutDir>$(SolutionDir)\bin\lib\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(SolutionDir)\bin\Intermediate\$(ProjectName)$(Configuration)\</IntDir>

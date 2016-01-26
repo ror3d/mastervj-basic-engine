@@ -95,7 +95,7 @@ namespace detail {
 
 template<typename T>
 struct is_primitive<sel::Reference<T>> {
-    static constexpr bool value = true;
+    static const bool value = true;
 };
 
 template <typename T>
@@ -124,7 +124,7 @@ inline void _push(lua_State *l, sel::Reference<T> const & ref) {
 
 template<typename T>
 struct is_primitive<sel::Pointer<T>> {
-    static constexpr bool value = true;
+    static const bool value = true;
 };
 
 template <typename T>

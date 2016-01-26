@@ -69,7 +69,7 @@ private:
         std::function<Ret(Args&&...)> lambda = [t, fun](Args&&... args) -> Ret {
             return (t->*fun)(std::forward<Args>(args)...);
         };
-        constexpr int arity = detail::_arity<Ret>::value;
+        const int arity = detail::_arity<Ret>::value;
         _funs.emplace_back(
             sel::make_unique<ObjFun<arity, Ret, Args...>>(
                 state, std::string(fun_name), lambda));
@@ -83,7 +83,7 @@ private:
         std::function<Ret(Args...)> lambda = [t, fun](Args... args) {
             return (t->*fun)(args...);
         };
-        constexpr int arity = detail::_arity<Ret>::value;
+        const int arity = detail::_arity<Ret>::value;
         _funs.emplace_back(
             sel::make_unique<ObjFun<arity, Ret, Args...>>(
                 state, std::string(fun_name), lambda));
