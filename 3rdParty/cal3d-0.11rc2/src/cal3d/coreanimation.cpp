@@ -22,6 +22,12 @@ CalCoreAnimation::CalCoreAnimation()
 
 CalCoreAnimation::~CalCoreAnimation()
 {
+	for (auto it = m_listCoreTrack.begin(); it != m_listCoreTrack.end(); ++it)
+	{
+		(*it)->destroy();
+		delete *it;
+	}
+	m_listCoreTrack.empty();
 }
 
 /*****************************************************************************/
