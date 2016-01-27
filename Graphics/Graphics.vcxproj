@@ -32,6 +32,7 @@
     <ClInclude Include="DrawQuadSceneRendererCommand.h" />
     <ClInclude Include="EnableAlphaBlendSceneRendererCommand.h" />
     <ClInclude Include="Layer\LayerManager.h" />
+    <ClInclude Include="Light\LightEffectParameters.h" />
     <ClInclude Include="MaterialParameter.h" />
     <ClInclude Include="Debug\DebugRender.h" />
     <ClInclude Include="Effect\Effect.h" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Renderer\3DElement.h" />
     <ClInclude Include="Renderer\RenderManager.h" />
     <ClInclude Include="Scene\ClearSceneRendererCommand.h" />
+    <ClInclude Include="Scene\GenerateShadowMapsSceneRendererCommand.h" />
     <ClInclude Include="Scene\PresentSceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderDebugLayerSceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderDebugLightsSceneRendererCommand.h" />
@@ -112,11 +114,11 @@
     <ClCompile Include="Mesh\MeshInstance.cpp" />
     <ClCompile Include="Mesh\StaticMesh.cpp" />
     <ClCompile Include="Mesh\StaticMeshManager.cpp" />
-    <ClCompile Include="PoolRenderableObjectTechnique.cpp" />
-    <ClCompile Include="RenderableObjectTechniqueManager.cpp" />
     <ClCompile Include="Renderable\AnimatedInstanceModel.cpp" />
+    <ClCompile Include="Renderable\PoolRenderableObjectTechnique.cpp" />
     <ClCompile Include="Renderable\RenderableObject.cpp" />
     <ClCompile Include="Renderable\RenderableObjectsManager.cpp" />
+    <ClCompile Include="Renderable\RenderableObjectTechniqueManager.cpp" />
     <ClCompile Include="Renderer\3DElement.cpp" />
     <ClCompile Include="Renderer\RenderManager.cpp" />
     <ClCompile Include="Scene\SetDepthStencilStateSceneRendererCommand.cpp" />

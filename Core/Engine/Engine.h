@@ -9,6 +9,7 @@
 #include <Graphics/Renderer/RenderManager.h>
 #include <Graphics/Light/LightManager.h>
 #include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Scene/SceneRendererCommandManager.h>
 
 class CContextManager;
 
@@ -24,6 +25,7 @@ private:
 	CContextManager * contextManager;
 	CLightManager * lightManager;
 	CAnimatedModelManager * animatedModelManager;
+	CSceneRendererCommandManager * sceneRendererCommandManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -41,4 +43,5 @@ public:
 	inline CContextManager * getContextManager() const { return contextManager; }
 	inline CLightManager * getLightManager() const { return lightManager; }
 	inline CAnimatedModelManager * getAnimatedModelManager() const { return animatedModelManager; }
+	inline CSceneRendererCommandManager * getSceneRendererCommandManager() const { return sceneRendererCommandManager; }
 };

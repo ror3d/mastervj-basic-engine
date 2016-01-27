@@ -251,6 +251,12 @@
     <ClInclude Include="Cinematics\CinematicObjectKeyframe.h">
       <Filter>Cinematic</Filter>
     </ClInclude>
+    <ClInclude Include="Light\LightEffectParameters.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GenerateShadowMapsSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -368,10 +374,10 @@
     <ClCompile Include="Scene\SetDepthStencilStateSceneRendererCommand.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="PoolRenderableObjectTechnique.cpp">
+    <ClCompile Include="Renderable\PoolRenderableObjectTechnique.cpp">
       <Filter>Renderable</Filter>
     </ClCompile>
-    <ClCompile Include="RenderableObjectTechniqueManager.cpp">
+    <ClCompile Include="Renderable\RenderableObjectTechniqueManager.cpp">
       <Filter>Renderable</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,8 +4,7 @@
 #include "Utils\TMapManager.h"
 #include "Scene\SceneRendererCommand.h"
 
-class CSceneRendererCommandManager : public
-	TMapManager<CSceneRendererCommand>
+class CSceneRendererCommandManager : public	TMapManager<CSceneRendererCommand>
 {
 private:
 	std::string m_Filename;

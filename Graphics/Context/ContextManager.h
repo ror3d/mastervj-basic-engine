@@ -27,6 +27,8 @@ public:
 	void BeginRender();
 	void BeginRender(const CColor &backgroundColor);
 	void EndRender();
+	void EnableAlphaBlendState();
+	void DisableAlphaBlendState();
 
 	ID3D11Device* GetDevice() const { return m_D3DDevice; }
 	ID3D11DeviceContext* GetDeviceContext() const { return m_DeviceContext; }
@@ -42,6 +44,7 @@ private:
 	ID3D11RenderTargetView*	m_RenderTargetView;
 	ID3D11Texture2D*		m_DepthStencil;
 	ID3D11DepthStencilView*	m_DepthStencilView;
+	ID3D11BlendState*		m_AlphaBlendState;
 
 	int m_Width, m_Height;
 };

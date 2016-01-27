@@ -5,6 +5,7 @@
 #include <Camera/FPSCameraController.h>
 #include "HelperTypes.h"
 #include <Material/MaterialManager.h>
+#include <Engine\Engine.h>
 
 class CContextManager;
 class CRenderManager;

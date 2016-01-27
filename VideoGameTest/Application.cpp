@@ -157,7 +157,9 @@ void CApplication::Render()
 	//m_RenderManager.AddRenderableObjectToRenderList(&m_Cube);
 
 	m_RenderManager->Render( m_ContextManager );
-
+	
+	//FOR SCENE RENDERE COMMANDS
+	//CEngine::GetSingleton().getSceneRendererCommandManager()->Execute(*m_ContextManager);
 
 	//Mat44f world;
 

@@ -5,7 +5,7 @@
 #include "Material\Material.h"
 #include "Context\ContextManager.h"
 
-class CSceneRendererCommand : public CActive, public CNamed
+class CSceneRendererCommand : /*public CActive, */public CNamed
 {
 protected:
 	CMaterial *m_Material;
