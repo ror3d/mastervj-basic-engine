@@ -51,13 +51,13 @@ void CScriptManager::Destroy()
 {
 }
 
-void CScriptManager::RunCode(const std::string &code) const
+void CScriptManager::RunCode(const std::string &code)
 {
 	LuaErrorCapturedStdout errorCapture;
 	(*m_state)(code.c_str());
 }
 
-void CScriptManager::RunFile(const std::string &fileName) const
+void CScriptManager::RunFile(const std::string &fileName)
 {
 	LuaErrorCapturedStdout errorCapture;
 	std::ifstream f(fileName);

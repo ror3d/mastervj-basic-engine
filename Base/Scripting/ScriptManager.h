@@ -16,8 +16,8 @@ public:
 	void Initialize();
 	void Destroy();
 
-	void RunCode(const std::string &Code) const;
-	void RunFile(const std::string &FileName) const;
+	void RunCode(const std::string &Code);
+	void RunFile(const std::string &FileName);
 	void Load(const std::string &XMLFile);
 
 	void RegisterLUAFunctions();
