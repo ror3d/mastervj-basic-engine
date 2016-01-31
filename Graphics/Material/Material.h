@@ -2,40 +2,35 @@
 #define MATERIAL_H
 
 #include <Base/Utils/Named.h>
+#include <Base\Utils\Utils.h>
 #include <Base/Math/Color.h>
 #include <vector>
 #include "Context/ContextManager.h"
+#include "MaterialParameter.h"
+#include "Graphics\Renderable\RenderableObjectTechnique.h"
+#include "Effect/EffectTechnique.h"
+#include "Engine/Engine.h"
+#include "Texture/Texture.h"
 
 class CXMLTreeNode;
 class CEffectTechnique;
 class CTexture;
 
-class CMaterial :public CNamed
+class CMaterial : public CNamed
 {
 private:
 	std::vector<CTexture *> m_textures;
-	CEffectTechnique *m_effectTechnique;
-
-	float m_debugSize;
-	CColor m_baseColor;
+	std::vector<CMaterialParameter *> m_Parameters;
+	CRenderableObjectTechnique *m_RenderableObjectTechnique;
+	unsigned int m_CurrentParameterData;
+	void destroy();
 public:
 	CMaterial(CXMLTreeNode &TreeNode);
 	virtual ~CMaterial();
-
-	void destroy();
-	virtual void apply();
-
-	CEffectTechnique* getEffectTechnique() const;
-
-	void SetDebugSize(float _DebugSize) { m_debugSize = _DebugSize; }
-	void SetBaseColor(const CColor& _BaseColor) { m_baseColor = _BaseColor; }
-
-	virtual void SetShaderParameters(CContextManager* _Context) const
-	{
-		//_Context->SetDebugSize(m_debugSize);
-		//_Context->SetBaseColor(m_baseColor);
-	}
-
+	virtual void apply(CRenderableObjectTechnique *RenderableObjectTechnique = NULL);
+	CRenderableObjectTechnique * getRenderableObjectTechique(){ return m_RenderableObjectTechnique; }
+	std::vector<CMaterialParameter *> getParameters(){ return m_Parameters;  }
+	void * GetNextParameterAddress(unsigned int NumBytes);
 };
 
 #endif

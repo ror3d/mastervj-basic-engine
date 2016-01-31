@@ -24,10 +24,11 @@ public:
 	CDynamicTexture(const CXMLTreeNode &TreeNode);
 	~CDynamicTexture();
 	bool Reload();
+
 	UINT GetWidth(){ return m_Width;  }
 	UINT GetHeight(){ return m_Height; }
-	//UAB_GET_PROPERTY_POINTER(ID3D11RenderTargetView, m_RenderTargetView);
-	//UAB_GET_PROPERTY_POINTER(ID3D11DepthStencilView, m_DepthStencilView);
+	ID3D11RenderTargetView * getRenderTargetView(){ return m_RenderTargetView; }
+	ID3D11DepthStencilView * getDepthStencilView(){ return m_DepthStencilView; }
 };
 
 #endif

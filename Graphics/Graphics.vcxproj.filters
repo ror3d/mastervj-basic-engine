@@ -140,9 +140,6 @@
     <ClInclude Include="Mesh\StaticMeshManager.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialParameter.h">
-      <Filter>Material</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\ClearSceneRendererCommand.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -256,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="Scene\GenerateShadowMapsSceneRendererCommand.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Material\MaterialParameter.h">
+      <Filter>Material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

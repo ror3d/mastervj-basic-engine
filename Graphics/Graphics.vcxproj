@@ -33,7 +33,6 @@
     <ClInclude Include="EnableAlphaBlendSceneRendererCommand.h" />
     <ClInclude Include="Layer\LayerManager.h" />
     <ClInclude Include="Light\LightEffectParameters.h" />
-    <ClInclude Include="MaterialParameter.h" />
     <ClInclude Include="Debug\DebugRender.h" />
     <ClInclude Include="Effect\Effect.h" />
     <ClInclude Include="Effect\EffectManager.h" />
@@ -47,6 +46,7 @@
     <ClInclude Include="Light\LightManager.h" />
     <ClInclude Include="Material\Material.h" />
     <ClInclude Include="Material\MaterialManager.h" />
+    <ClInclude Include="Material\MaterialParameter.h" />
     <ClInclude Include="Mesh\MeshInstance.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="Mesh\StaticMeshManager.h" />
@@ -170,8 +170,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(SolutionDir)\bin\Intermediate\$(ProjectName)$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
-    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib;$(DXSDK_DIR)\Lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

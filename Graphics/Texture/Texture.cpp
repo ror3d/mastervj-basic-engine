@@ -2,7 +2,10 @@
 
 #include "Context/ContextManager.h"
 #include <Engine/Engine.h>
-#include <D3DX11.h>
+#include <d3dx11.h>
+
+
+
 
 CTexture::CTexture() : CNamed("")
 , m_Texture(NULL)

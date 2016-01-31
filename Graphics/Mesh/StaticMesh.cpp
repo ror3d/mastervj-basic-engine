@@ -163,12 +163,16 @@ bool CStaticMesh::Load(const std::string &FileName)
 
 void CStaticMesh::Render(CContextManager *_context) const
 {
-	for (size_t i = 0; i < m_materials.size(); ++i)
+	for (size_t i = 0; i<m_renderableVertexs.size(); ++i)
 	{
-		m_materials[i]->apply();
-		m_renderableVertexs[i]->RenderIndexed(_context,
-			m_materials[i]->getEffectTechnique(),
-			&CEffectManager::m_Parameters);
+		CMaterial *l_Material = m_materials[i];
+		/*if (l_Material != NULL && l_Material->GetRenderableObjectTechnique() != NULL)
+		{
+			l_Material->Apply();
+			//TODO: UTILS
+			//m_renderableVertexs[i]->RenderIndexed(_context, l_Material->GetRenderableObjectTechnique()->GetEffectTechnique(), &CEffectManager::m_SceneParameters);
+		}
+		*/
 	}
 }
 
