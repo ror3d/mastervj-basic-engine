@@ -18,7 +18,8 @@ public:
 protected:
 	TMaterialType m_MaterialType;
 public:
-	CMaterialParameter(CMaterial *Material, CXMLTreeNode &TreeNode,
+	CMaterialParameter(CMaterial Material, 
+		CXMLTreeNode &TreeNode,
 		CMaterialParameter::TMaterialType MaterialType);
 	virtual ~CMaterialParameter();
 	virtual void Apply() = 0;

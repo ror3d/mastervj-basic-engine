@@ -21,11 +21,11 @@ private:
 	CMaterialManager * materialManager;
 	CEffectManager * effectsManager;
 	CTextureManager * textureManager;
-	CRenderManager * renderManager;
-	CContextManager * contextManager;
+	CRenderManager * renderManager;	
 	CLightManager * lightManager;
 	CAnimatedModelManager * animatedModelManager;
 	CSceneRendererCommandManager * sceneRendererCommandManager;
+	CContextManager * contextManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets

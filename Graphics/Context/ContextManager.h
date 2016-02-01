@@ -2,6 +2,8 @@
 #define CONTEXT_MANAGER_H
 
 #include <d3d11.h>
+#include "Graphics\Texture\Texture.h"
+#include "Graphics\Effect\EffectTechnique.h"
 
 class CRenderableVertexs;
 class CColor;
@@ -24,15 +26,22 @@ public:
 	float GetWidth() const { return m_Width; }
 	float GetHeight() const { return m_Height; }
 
+
 	void BeginRender();
 	void BeginRender(const CColor &backgroundColor);
 	void EndRender();
 	void EnableAlphaBlendState();
 	void DisableAlphaBlendState();
+	void Clear(bool clear_DepthStencil, bool clear_RenderTarget);
+	void Present();
+	void SetRenderTargets(int NumViews, ID3D11RenderTargetView *const
+		*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView);
+	void DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
+		*Texture, float x, float y, float Width, float Height, const CColor &Color);
 
 	ID3D11Device* GetDevice() const { return m_D3DDevice; }
 	ID3D11DeviceContext* GetDeviceContext() const { return m_DeviceContext; }
-
+	ID3D11DepthStencilView* GetDepthStencilView() const { return m_DepthStencilView; }
 	IDXGISwapChain* GetSwapChain() const { return m_SwapChain;  }
 
 private:
@@ -47,6 +56,7 @@ private:
 	ID3D11BlendState*		m_AlphaBlendState;
 
 	int m_Width, m_Height;
+	int m_NumViews;
 };
 
 #endif

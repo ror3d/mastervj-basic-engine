@@ -1,4 +1,6 @@
 #include "Material.h"
+#include "Engine\Engine.h"
+#include "Graphics\Renderable\RenderableObjectTechnique.h"
 
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
@@ -20,14 +22,14 @@ CMaterial::~CMaterial()
 	destroy();
 }
 
-/*
-void CMaterial::apply()
+
+void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 {
-	for (int i = 0; i < m_textures.size(); ++i)
+	/*for (int i = 0; i < m_textures.size(); ++i)
 	{
 		m_textures[i]->Activate(i);
-	}
-}*/
+	}*/
+}
 
 void CMaterial::destroy()
 {

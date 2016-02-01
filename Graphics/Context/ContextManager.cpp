@@ -229,3 +229,32 @@ void CContextManager::DisableAlphaBlendState()
 {
 	m_DeviceContext->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
+
+void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
+	//TODO;
+}
+
+void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView *const	*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){
+	m_NumViews = NumViews;
+	/*m_RenderTargetView = RenderTargetViews;
+	m_DepthStencilView = DepthStencilView;*/
+	m_DeviceContext->OMSetRenderTargets(m_NumViews, RenderTargetViews,	DepthStencilView);
+}
+
+void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
+	*Texture, float x, float y, float Width, float Height, const CColor &Color)
+{
+	//CEffectManager::m_SceneParameters.m_BaseColor = Color;
+	if (Texture != NULL)
+		Texture->Activate(0);
+	D3D11_VIEWPORT l_Viewport;
+	//l_Viewport.Width = Width*m_Viewport.Width;
+	//l_Viewport.Height = Height*m_Viewport.Height;
+	l_Viewport.MinDepth = 0.0f;
+	l_Viewport.MaxDepth = 1.0f;
+	//l_Viewport.TopLeftX = x*m_Viewport.Width;
+	//l_Viewport.TopLeftY = y*m_Viewport.Height;
+	//m_DeviceContext->RSSetViewports(1, &l_Viewport);
+	//m_DrawQuadRV->Render(this, EffectTechnique,	&CEffectManager::m_SceneParameters);
+	//m_DeviceContext->RSSetViewports(1, &m_Viewport);
+}

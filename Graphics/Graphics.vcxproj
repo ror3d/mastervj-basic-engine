@@ -18,7 +18,6 @@
     <ClInclude Include="Camera\FPSCameraController.h" />
     <ClInclude Include="Camera\Frustum.h" />
     <ClInclude Include="Camera\SphericalCameraController.h" />
-    <ClInclude Include="CaptureFrameBufferSceneRendererCommand.h" />
     <ClInclude Include="Cinematics\CameraInfo.h" />
     <ClInclude Include="Cinematics\CameraKey.h" />
     <ClInclude Include="Cinematics\CameraKeyController.h" />
@@ -27,10 +26,6 @@
     <ClInclude Include="Cinematics\CinematicObjectKeyframe.h" />
     <ClInclude Include="Cinematics\CinematicPlayer.h" />
     <ClInclude Include="Context\ContextManager.h" />
-    <ClInclude Include="DeferredShadingSceneRendererCommand.h" />
-    <ClInclude Include="DisableAlphaBlendSceneRendererCommand.h" />
-    <ClInclude Include="DrawQuadSceneRendererCommand.h" />
-    <ClInclude Include="EnableAlphaBlendSceneRendererCommand.h" />
     <ClInclude Include="Layer\LayerManager.h" />
     <ClInclude Include="Light\LightEffectParameters.h" />
     <ClInclude Include="Debug\DebugRender.h" />
@@ -45,8 +40,12 @@
     <ClInclude Include="Light\Light.h" />
     <ClInclude Include="Light\LightManager.h" />
     <ClInclude Include="Material\Material.h" />
-    <ClInclude Include="Material\MaterialManager.h" />
-    <ClInclude Include="Material\MaterialParameter.h" />
+    <ClInclude Include="Material\MaterialManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Material\MaterialParameter.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Mesh\MeshInstance.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="Mesh\StaticMeshManager.h" />
@@ -57,15 +56,20 @@
     <ClInclude Include="Renderable\RenderableObjectTechnique.h" />
     <ClInclude Include="Renderable\RenderableObjectTechniqueManager.h" />
     <ClInclude Include="Renderable\RenderableVertexs.h" />
-    <ClInclude Include="RenderDebugGridSceneRendererCommand.h" />
-    <ClInclude Include="RenderDebugShadowMapsSceneRendererCommand.h" />
     <ClInclude Include="Renderer\3DElement.h" />
     <ClInclude Include="Renderer\RenderManager.h" />
+    <ClInclude Include="Scene\CaptureFrameBufferSceneRendererCommand.h" />
     <ClInclude Include="Scene\ClearSceneRendererCommand.h" />
+    <ClInclude Include="Scene\DeferredShadingSceneRendererCommand.h" />
+    <ClInclude Include="Scene\DisableAlphaBlendSceneRendererCommand.h" />
+    <ClInclude Include="Scene\DrawQuadSceneRendererCommand.h" />
+    <ClInclude Include="Scene\EnableAlphaBlendSceneRendererCommand.h" />
     <ClInclude Include="Scene\GenerateShadowMapsSceneRendererCommand.h" />
     <ClInclude Include="Scene\PresentSceneRendererCommand.h" />
+    <ClInclude Include="Scene\RenderDebugGridSceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderDebugLayerSceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderDebugLightsSceneRendererCommand.h" />
+    <ClInclude Include="Scene\RenderDebugShadowMapsSceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderGUISceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderLayerSceneRendererCommand.h" />
     <ClInclude Include="Scene\SceneRendererCommand.h" />
@@ -73,15 +77,14 @@
     <ClInclude Include="Scene\SetDepthStencilStateSceneRendererCommand.h" />
     <ClInclude Include="Scene\SetMatricesSceneRendererCommand.h" />
     <ClInclude Include="Scene\SetPoolRenderableObjectsTechniqueSceneRendererCommand.h" />
+    <ClInclude Include="Scene\SetRenderTargetSceneRendererCommand.h" />
+    <ClInclude Include="Scene\ShadowMapsSceneRendererCommand.h" />
     <ClInclude Include="Scene\StagedTexturedSceneRendererCommand.h" />
-    <ClInclude Include="SetPoolRenderableObjectsTechniqueSceneRendererCommand.h" />
-    <ClInclude Include="SetRenderTargetSceneRendererCommand.h" />
-    <ClInclude Include="ShadowMapsSceneRendererCommand.h" />
+    <ClInclude Include="Scene\UnsetRenderTargetSceneRendererCommand.h" />
     <ClInclude Include="Texture\CaptureFrameBufferTexture.h" />
     <ClInclude Include="Texture\DynamicTexture.h" />
     <ClInclude Include="Texture\Texture.h" />
     <ClInclude Include="Texture\TextureManager.h" />
-    <ClInclude Include="UnsetRenderTargetSceneRendererCommand.h" />
     <ClInclude Include="VertexTypes.h" />
   </ItemGroup>
   <ItemGroup>
@@ -110,7 +113,9 @@
     <ClCompile Include="Light\Light.cpp" />
     <ClCompile Include="Light\LightManager.cpp" />
     <ClCompile Include="Material\Material.cpp" />
-    <ClCompile Include="Material\MaterialManager.cpp" />
+    <ClCompile Include="Material\MaterialManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Mesh\MeshInstance.cpp" />
     <ClCompile Include="Mesh\StaticMesh.cpp" />
     <ClCompile Include="Mesh\StaticMeshManager.cpp" />
@@ -118,10 +123,18 @@
     <ClCompile Include="Renderable\PoolRenderableObjectTechnique.cpp" />
     <ClCompile Include="Renderable\RenderableObject.cpp" />
     <ClCompile Include="Renderable\RenderableObjectsManager.cpp" />
+    <ClCompile Include="Renderable\RenderableObjectTechnique.cpp" />
     <ClCompile Include="Renderable\RenderableObjectTechniqueManager.cpp" />
     <ClCompile Include="Renderer\3DElement.cpp" />
     <ClCompile Include="Renderer\RenderManager.cpp" />
+    <ClCompile Include="Scene\ClearSceneRendererCommand.cpp" />
+    <ClCompile Include="Scene\DisableAlphaBlendSceneRendererCommand.cpp" />
+    <ClCompile Include="Scene\EnableAlphaBlendSceneRendererCommand.cpp" />
+    <ClCompile Include="Scene\PresentSceneRendererCommand.cpp" />
+    <ClCompile Include="Scene\SceneRendererCommandManager.cpp" />
     <ClCompile Include="Scene\SetDepthStencilStateSceneRendererCommand.cpp" />
+    <ClCompile Include="Scene\SetMatricesSceneRendererCommand.cpp" />
+    <ClCompile Include="Scene\SetRenderTargetSceneRendererCommand.cpp" />
     <ClCompile Include="Texture\CaptureFrameBufferTexture.cpp" />
     <ClCompile Include="Texture\DynamicTexture.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />

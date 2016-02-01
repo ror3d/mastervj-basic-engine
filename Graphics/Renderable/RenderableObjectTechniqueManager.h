@@ -4,6 +4,7 @@
 #include <Utils\TMapManager.h>
 #include "Renderable\RenderableObjectTechnique.h"
 #include "Renderable\PoolRenderableObjectTechnique.h"
+#include "Engine\Engine.h"
 
 class CRenderableObjectTechniqueManager : public
 	TMapManager<CRenderableObjectTechnique>
@@ -21,7 +22,7 @@ public:
 	void Destroy();
 	bool Load(const std::string &Filename);
 	bool Reload();
-	CPoolRenderableObjectTechnique * GetPoolRenderableObjectTechniques();
+	TMapManager<CPoolRenderableObjectTechnique*> & GetPoolRenderableObjectTechniques();
 };
 
 #endif

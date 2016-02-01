@@ -27,8 +27,8 @@ public:
 
 	UINT GetWidth(){ return m_Width;  }
 	UINT GetHeight(){ return m_Height; }
-	ID3D11RenderTargetView * getRenderTargetView(){ return m_RenderTargetView; }
-	ID3D11DepthStencilView * getDepthStencilView(){ return m_DepthStencilView; }
+	ID3D11RenderTargetView * GetRenderTargetView(){ return m_RenderTargetView; }
+	ID3D11DepthStencilView * GetDepthStencilView(){ return m_DepthStencilView; }
 };
 
 #endif

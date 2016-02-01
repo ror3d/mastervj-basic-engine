@@ -166,13 +166,13 @@ void CStaticMesh::Render(CContextManager *_context) const
 	for (size_t i = 0; i<m_renderableVertexs.size(); ++i)
 	{
 		CMaterial *l_Material = m_materials[i];
-		/*if (l_Material != NULL && l_Material->GetRenderableObjectTechnique() != NULL)
+		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
 		{
-			l_Material->Apply();
-			//TODO: UTILS
-			//m_renderableVertexs[i]->RenderIndexed(_context, l_Material->GetRenderableObjectTechnique()->GetEffectTechnique(), &CEffectManager::m_SceneParameters);
+			l_Material->apply();
+			//must return pointer: getRenderableObjectTechique()
+			//m_renderableVertexs[i]->RenderIndexed(_context, l_Material->getRenderableObjectTechique()->GetEffectTechnique(), &CEffectManager::m_SceneParameters);
 		}
-		*/
+		
 	}
 }
 

@@ -2,10 +2,10 @@
 #include "Engine\Engine.h"
 
 CPoolRenderableObjectTechnique::CPoolRenderableObjectTechnique(CXMLTreeNode &TreeNode){
-	//TODO:
+	setName(TreeNode.GetPszProperty("pool"));
 }
 CPoolRenderableObjectTechnique::~CPoolRenderableObjectTechnique(){
-	//TODO
+	
 }
 void CPoolRenderableObjectTechnique::Destroy(){
 	m_RenderableObjectTechniqueElements.clear();
@@ -24,4 +24,9 @@ void CPoolRenderableObjectTechnique::Apply(){
 	/*TODO: recorreremos el pool y estableceremos las CEffectTechnique de
 		m_RenderableObjectTechnique sobre el
 		m_OnRenderableObjectTechniqueManager de los elementos.*/
+	for (std::vector<CPoolRenderableObjectTechniqueElement * >::iterator it = m_RenderableObjectTechniqueElements.begin();
+		it != m_RenderableObjectTechniqueElements.end(); ++it)
+	{		
+		//it->second->m_OnRenderableObjectTechniqueManager.SetEffectTechnique(m_RenderableObjectTechnique.GetEffectTechnique() ));
+	}
 }

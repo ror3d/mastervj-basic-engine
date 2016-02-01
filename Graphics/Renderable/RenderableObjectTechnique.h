@@ -12,7 +12,7 @@ public:
 	CRenderableObjectTechnique(const std::string &Name, CEffectTechnique
 		*EffectTechnique);
 	void SetEffectTechnique(CEffectTechnique *EffectTechnique);
-	CEffectTechnique * GetEffectTechnique() const;
+	CEffectTechnique * GetEffectTechnique() const { return m_EffectTechnique; }
 };
 
 #endif

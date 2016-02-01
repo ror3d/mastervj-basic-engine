@@ -4,11 +4,13 @@
 #include "Utils/Named.h"
 #include "Utils\Utils.h"
 #include "Math/Color.h"
+
+/*
 #include "Graphics\Renderer\3DElement.h"
 #include "Graphics\Texture\DynamicTexture.h"
 #include <vector>
 #include "Graphics\Renderable\RenderableObjectsManager.h"
-#include "Engine\Engine.h"
+#include "Engine\Engine.h"*/
 
 class CRenderManager;
 
@@ -28,11 +30,11 @@ protected:
 	float m_Intensity;
 	float m_StartRangeAttenuation;
 	float m_EndRangeAttenuation;
-	bool m_GenerateShadowMap;
+	/*bool m_GenerateShadowMap;
 	CDynamicTexture *m_ShadowMap;
 	CTexture *m_ShadowMaskTexture;
 	std::vector<CRenderableObjectsManager *> m_Layers;
-	Mat44f m_ViewShadowMap, m_ProjectionShadowMap;
+	Mat44f m_ViewShadowMap, m_ProjectionShadowMap;*/
 public:
 	CLight(const CXMLTreeNode &TreeNode);
 	CLight();
@@ -56,7 +58,7 @@ public:
 	UAB_GET_PROPERTY_REFERENCE(Mat44f, ViewShadowMap);
 	UAB_GET_PROPERTY_REFERENCE(Mat44f, ProjectionShadowMap);
 	UAB_GET_PROPERTY_REFERENCE(std::vector<CRenderableObjectsManager *>, Layers);*/
-	virtual void SetShadowMap(CRenderManager &RenderManager);
+	//virtual void SetShadowMap(CRenderManager &RenderManager);
 };
 
 

@@ -9,9 +9,8 @@ CSetDepthStencilStateSceneRendererCommand::CSetDepthStencilStateSceneRendererCom
 	l_DepthStencilStateDescription.DepthWriteMask = TreeNode.GetBoolProperty("write_z_buffer", true) ? D3D11_DEPTH_WRITE_MASK_ALL :	D3D11_DEPTH_WRITE_MASK_ZERO;
 	l_DepthStencilStateDescription.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 	l_DepthStencilStateDescription.StencilEnable = TreeNode.GetBoolProperty("enable_stencil", true) ? TRUE : FALSE;
-	//TODO:
-	//if (FAILED(CEngine::GetSingleton().getContextManager().GetDevice()->CreateDepthStencilState(&l_DepthStencilStateDescription, &m_DepthStencilState)))
-		//Info("Error on creating CSetDepthStencilStateSceneRendererCommand");
+	HRESULT hr = CEngine::GetSingleton().getContextManager()->GetDevice()->CreateDepthStencilState(&l_DepthStencilStateDescription, &m_DepthStencilState);
+	assert(hr);
 }
 
 void CSetDepthStencilStateSceneRendererCommand::Execute(CContextManager	&_context)

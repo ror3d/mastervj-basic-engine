@@ -5,16 +5,14 @@
 #include <Base\Utils\Utils.h>
 #include <Base/Math/Color.h>
 #include <vector>
-#include "Context/ContextManager.h"
-#include "MaterialParameter.h"
-#include "Graphics\Renderable\RenderableObjectTechnique.h"
-#include "Effect/EffectTechnique.h"
-#include "Engine/Engine.h"
-#include "Texture/Texture.h"
+
 
 class CXMLTreeNode;
 class CEffectTechnique;
 class CTexture;
+class CMaterialParameter;
+class CRenderableObjectTechnique;
+class CMaterialParameter;
 
 class CMaterial : public CNamed
 {
