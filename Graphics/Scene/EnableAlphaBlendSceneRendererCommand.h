@@ -8,6 +8,6 @@ class CEnableAlphaBlendSceneRendererCommand : public CSceneRendererCommand
 public:
 	CEnableAlphaBlendSceneRendererCommand(CXMLTreeNode &TreeNode);
 	void Execute(CContextManager &_context);
-}
+};
 
 #endif
