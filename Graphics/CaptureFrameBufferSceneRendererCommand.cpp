@@ -4,3 +4,7 @@ CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand
 	:CStagedTexturedSceneRendererCommand(TreeNode){
 
 }
+
+void CCaptureFrameBufferSceneRendererCommand::Execute(CContextManager &_context){
+
+}

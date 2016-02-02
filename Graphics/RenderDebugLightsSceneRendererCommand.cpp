@@ -4,3 +4,7 @@ CRenderDebugLightsSceneRendererCommand::CRenderDebugLightsSceneRendererCommand(C
 	:CSceneRendererCommand(TreeNode){
 
 }
+
+void CRenderDebugLightsSceneRendererCommand::Execute(CContextManager &_context){
+
+}

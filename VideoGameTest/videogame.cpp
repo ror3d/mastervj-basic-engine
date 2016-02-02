@@ -203,6 +203,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
 	engine.getRenderableObjectManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
+	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 

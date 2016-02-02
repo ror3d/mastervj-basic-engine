@@ -3,6 +3,7 @@
 
 #include "Scene\SceneRendererCommand.h"
 #include "Renderable\RenderableObjectsManager.h"
+#include "Engine\Engine.h"
 
 class CRenderLayerSceneRendererCommand : public CSceneRendererCommand
 {

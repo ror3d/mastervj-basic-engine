@@ -4,3 +4,8 @@ CRenderDebugShadowMapsSceneRendererCommand::CRenderDebugShadowMapsSceneRendererC
 	:CSceneRendererCommand(TreeNode){
 
 }
+
+
+void CRenderDebugShadowMapsSceneRendererCommand::Execute(CContextManager &_context){
+
+}

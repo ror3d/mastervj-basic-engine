@@ -4,3 +4,10 @@ CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLT
 	: CStagedTexturedSceneRendererCommand(TreeNode){
 
 }
+
+CDeferredShadingSceneRendererCommand::~CDeferredShadingSceneRendererCommand(){
+}
+
+void CDeferredShadingSceneRendererCommand::Execute(CContextManager &_context){
+
+}

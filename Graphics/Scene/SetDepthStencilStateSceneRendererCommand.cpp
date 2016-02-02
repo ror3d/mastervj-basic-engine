@@ -13,6 +13,11 @@ CSetDepthStencilStateSceneRendererCommand::CSetDepthStencilStateSceneRendererCom
 	assert(hr);
 }
 
+CSetDepthStencilStateSceneRendererCommand::~CSetDepthStencilStateSceneRendererCommand(){
+
+}
+
+
 void CSetDepthStencilStateSceneRendererCommand::Execute(CContextManager	&_context)
 {
 	_context.GetDeviceContext()->OMSetDepthStencilState(m_DepthStencilState, 0);

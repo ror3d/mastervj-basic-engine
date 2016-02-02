@@ -4,3 +4,7 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 	: CStagedTexturedSceneRendererCommand(TreeNode){
 
 }
+
+void CDrawQuadSceneRendererCommand::Execute(CContextManager &_context){
+
+}

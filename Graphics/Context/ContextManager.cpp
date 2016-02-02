@@ -218,9 +218,9 @@ void CContextManager::EnableAlphaBlendState()
 	l_AlphablendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	l_AlphablendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 	
-	/*CreateBlendState not exist
-	if (FAILED(m_DeviceContext->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState)))
-		return false;*/
+	/*CreateBlendState not exist*/
+	//HRESULT hr = m_DeviceContext->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState);
+	//assert(hr);
 
 	m_DeviceContext->OMSetBlendState(m_AlphaBlendState, NULL, 0xffffffff);
 }
@@ -231,14 +231,25 @@ void CContextManager::DisableAlphaBlendState()
 }
 
 void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
-	//TODO;
+	
+	if (clear_DepthStencil){
+		CColor color = CColor(0, 0, 0);
+		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, &color.x);		
+	}
+
+	if (clear_RenderTarget)		
+		m_DeviceContext->ClearDepthStencilView(m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView *const	*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){
 	m_NumViews = NumViews;
-	/*m_RenderTargetView = RenderTargetViews;
-	m_DepthStencilView = DepthStencilView;*/
+	m_RenderTargetView = *RenderTargetViews;
+	m_DepthStencilView = DepthStencilView;
 	m_DeviceContext->OMSetRenderTargets(m_NumViews, RenderTargetViews,	DepthStencilView);
+}
+
+void CContextManager::UnsetRenderTargets(){
+	//TODO;
 }
 
 void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
@@ -257,4 +268,8 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 	//m_DeviceContext->RSSetViewports(1, &l_Viewport);
 	//m_DrawQuadRV->Render(this, EffectTechnique,	&CEffectManager::m_SceneParameters);
 	//m_DeviceContext->RSSetViewports(1, &m_Viewport);
+}
+
+void CContextManager::Present(){
+
 }

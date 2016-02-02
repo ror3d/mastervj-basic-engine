@@ -36,6 +36,7 @@ public:
 	void Present();
 	void SetRenderTargets(int NumViews, ID3D11RenderTargetView *const
 		*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView);
+	void UnsetRenderTargets();
 	void DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 		*Texture, float x, float y, float Width, float Height, const CColor &Color);
 

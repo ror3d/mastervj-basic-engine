@@ -4,3 +4,9 @@ CUnsetRenderTargetSceneRendererCommand::CUnsetRenderTargetSceneRendererCommand(C
 	:CSceneRendererCommand(TreeNode){
 
 }
+
+
+void CUnsetRenderTargetSceneRendererCommand::Execute(CContextManager &_context)
+{
+	_context.UnsetRenderTargets();
+}

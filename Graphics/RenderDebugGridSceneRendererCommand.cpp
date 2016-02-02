@@ -4,3 +4,7 @@ CRenderDebugGridSceneRendererCommand::CRenderDebugGridSceneRendererCommand(CXMLT
 	:CSceneRendererCommand(TreeNode){
 
 }
+
+void CRenderDebugGridSceneRendererCommand::Execute(CContextManager &_context){
+
+}

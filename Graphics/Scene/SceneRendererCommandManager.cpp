@@ -1,7 +1,7 @@
 #include "SceneRendererCommandManager.h"
 #include "SetDepthStencilStateSceneRendererCommand.h"
 #include "SetPoolRenderableObjectsTechniqueSceneRendererCommand.h"
-#include "ShadowMapsSceneRendererCommand.h"
+#include "GenerateShadowMapsSceneRendererCommand.h"
 #include "SetRenderTargetSceneRendererCommand.h"
 #include "SetMatricesSceneRendererCommand.h"
 #include "RenderDebugLayerSceneRendererCommand.h"

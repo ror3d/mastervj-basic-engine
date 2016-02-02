@@ -8,7 +8,7 @@ class CCaptureFrameBufferSceneRendererCommand : public
 {
 public:
 	CCaptureFrameBufferSceneRendererCommand(CXMLTreeNode &TreeNode);
-	virtual void Execute(CContextManager &_context);
+	void Execute(CContextManager &_context);
 };
 
 #endif

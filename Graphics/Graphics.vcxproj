@@ -78,7 +78,6 @@
     <ClInclude Include="Scene\SetMatricesSceneRendererCommand.h" />
     <ClInclude Include="Scene\SetPoolRenderableObjectsTechniqueSceneRendererCommand.h" />
     <ClInclude Include="Scene\SetRenderTargetSceneRendererCommand.h" />
-    <ClInclude Include="Scene\ShadowMapsSceneRendererCommand.h" />
     <ClInclude Include="Scene\StagedTexturedSceneRendererCommand.h" />
     <ClInclude Include="Scene\UnsetRenderTargetSceneRendererCommand.h" />
     <ClInclude Include="Texture\CaptureFrameBufferTexture.h" />
@@ -137,6 +136,7 @@
     <ClCompile Include="Renderer\RenderManager.cpp" />
     <ClCompile Include="RenderGUISceneRendererCommand.cpp" />
     <ClCompile Include="RenderLayerSceneRendererCommand.cpp" />
+    <ClCompile Include="SceneRendererCommand.cpp" />
     <ClCompile Include="Scene\ClearSceneRendererCommand.cpp" />
     <ClCompile Include="Scene\DisableAlphaBlendSceneRendererCommand.cpp" />
     <ClCompile Include="Scene\EnableAlphaBlendSceneRendererCommand.cpp" />
@@ -146,7 +146,7 @@
     <ClCompile Include="Scene\SetMatricesSceneRendererCommand.cpp" />
     <ClCompile Include="Scene\SetRenderTargetSceneRendererCommand.cpp" />
     <ClCompile Include="SetPoolRenderableObjectsTechniqueSceneRendererCommand.cpp" />
-    <ClCompile Include="ShadowMapsSceneRendererCommand.cpp" />
+    <ClCompile Include="StagedTexturedSceneRendererCommand.cpp" />
     <ClCompile Include="Texture\CaptureFrameBufferTexture.cpp" />
     <ClCompile Include="Texture\DynamicTexture.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />

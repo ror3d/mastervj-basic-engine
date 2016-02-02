@@ -245,9 +245,6 @@
     <ClInclude Include="Scene\SetRenderTargetSceneRendererCommand.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\ShadowMapsSceneRendererCommand.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\StagedTexturedSceneRendererCommand.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -431,13 +428,16 @@
     <ClCompile Include="RenderLayerSceneRendererCommand.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ShadowMapsSceneRendererCommand.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="UnsetRenderTargetSceneRendererCommand.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="CaptureFrameBufferSceneRendererCommand.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StagedTexturedSceneRendererCommand.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneRendererCommand.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,10 @@
 #include "Scene\SetMatricesSceneRendererCommand.h"
 
-void CSetMatricesSceneRendererCommand::Execute(CContextManager &_context){
+CSetMatricesSceneRendererCommand::CSetMatricesSceneRendererCommand(CXMLTreeNode &TreeNode) :CSceneRendererCommand(TreeNode){
 
-	//_context.GetCamera()->SetMatrixs();
+}
+void CSetMatricesSceneRendererCommand::Execute(CContextManager &_context){
+	//Llamar a CApplication::Render()?
+	//Mover camaras a RenderManager, para sacar de Application??
+	//_context.SetCamerasMatrix();
 }

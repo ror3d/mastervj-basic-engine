@@ -2,6 +2,16 @@
 #include <assert.h>
 #include "Engine\Engine.h"
 
+CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool
+	CreateDepthStencilBuffer){
+}
+CDynamicTexture::CDynamicTexture(const CXMLTreeNode &TreeNode){
+
+}
+CDynamicTexture::~CDynamicTexture(){
+
+}
+
 void CDynamicTexture::Init()
 {
 	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
