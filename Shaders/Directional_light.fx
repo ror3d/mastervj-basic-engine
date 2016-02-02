@@ -38,7 +38,7 @@ float4 PS(PS_INPUT IN) : SV_Target
 	//float3 L = m_LightPosition[0] - IN.WorldPos.xyz;
 	
 	//calculos difuso
-	 float l_DiffuseContrib = max(0, dot(Nn, -m_LightDirection[0]))*m_LightIntensity;
+	 float l_DiffuseContrib = max(0, dot(Nn, -m_LightDirection[0])) * m_LightIntensity;
 	float4 l_Albedo = DiffuseTexture.Sample(LinearSampler, IN.UV); // Textura
 	
 	//calculos Specular

@@ -29,11 +29,15 @@ cbuffer AnimatedModelConstantBuffer : register (b2)
 	float4x4 m_Bones[MAXBONES];
 }
 
-	static float SpecularExp = 80;
-	static float m_LightEnabledArray[4]=(float[4])m_LightEnabled;
-	static float m_LightTypeArray[4]=(float[4])m_LightType;
-	static float m_LightAngleArray[4]=(float[4])m_LightAngle;
-	static float m_LightFallOffAngleArray[4]=(float[4])m_LightFallOffAngle;
-	static float m_LightAttenuationStartRangeArray[4]=(float[4])m_LightAttenuationStartRange;
-	static float m_LightAttenuationEndRangeArray[4]=(float[4])m_LightAttenuationEndRange;
-	static float m_LightIntensityArray[4]=(float[4])m_LightIntensity;
+static uint OMNI = 0;
+static uint DIRECTIONAL = 1;
+static uint SPOT = 3;
+
+static float SpecularExp = 80;
+static float m_LightEnabledArray[4]=(float[4])m_LightEnabled;
+static float m_LightTypeArray[4]=(float[4])m_LightType;
+static float m_LightAngleArray[4]=(float[4])m_LightAngle;
+static float m_LightFallOffAngleArray[4]=(float[4])m_LightFallOffAngle;
+static float m_LightAttenuationStartRangeArray[4]=(float[4])m_LightAttenuationStartRange;
+static float m_LightAttenuationEndRangeArray[4]=(float[4])m_LightAttenuationEndRange;
+static float m_LightIntensityArray[4]=(float[4])m_LightIntensity;
