@@ -9,7 +9,7 @@
 CRenderManager::CRenderManager()
 	: m_UseDebugCamera(false)
 {
-	m_RenderableObjects = CEngine::GetSingleton().getRenderableObjectManager();
+	m_RenderableObjects = CEngine::GetSingleton().getLayerManager()->getDefaultLayer();
 }
 
 

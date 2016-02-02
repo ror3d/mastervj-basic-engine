@@ -5,7 +5,10 @@
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
 {
-	m_RenderableObjectTechnique->SetEffectTechnique(CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));
+	//m_effectTechnique = CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique"));
+	m_RenderableObjectTechnique = new CRenderableObjectTechnique(TreeNode.GetPszProperty("effect_technique"), 
+		CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));
+	//m_RenderableObjectTechnique->SetEffectTechnique(CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));
 
 	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 	{
