@@ -34,17 +34,17 @@ PS_INPUT VS(VS_INPUT IN)
 
 float4 PS(PS_INPUT IN) : SV_Target
 {
-	float3 Nn = normalize(IN.WorldNormal);
+	float3 Nn = normalize(IN.WorldNormal.xyz);
 	float3 Hn = 1;
 	float3 L = 0;
 	float dist = 0;
-	float l_DiffuseContrib = 0;
-	float l_SpecularContrib = 0;
+	float4 l_DiffuseContrib = 0;
+	float4 l_SpecularContrib = 0;
 	float linearAtten = 1;
 	float spotAtten = 1;
 	float atten = 1;
 	float cosAngle = 0;
-	float cosFallOff = 0;
+	float cosFallOff = 1;
 	float cosAngleLight = 0;
 	
 	for (uint i = 0; i < MAX_LIGHTS_BY_SHADER; i++)
@@ -54,7 +54,7 @@ float4 PS(PS_INPUT IN) : SV_Target
 		
 		if (m_LightEnabledArray[i])
 		{
-			if (!m_LightTypeArray[i] == DIRECTIONAL)
+			if (m_LightTypeArray[i] != DIRECTIONAL)
 			{
 				L = m_LightPosition[i] - IN.WorldPos.xyz;
 				
@@ -79,10 +79,10 @@ float4 PS(PS_INPUT IN) : SV_Target
 			
 			atten = linearAtten * spotAtten;
 			
-			l_DiffuseContrib += max(0, dot(Nn, L)) * m_LightIntensityArray[i] * m_LightColor[i] * atten;
+			l_DiffuseContrib += max(0, dot(Nn, L)) * m_LightIntensityArray[i] * atten * m_LightColor[i];
 			
 			Hn = normalize(normalize(m_CameraPosition - IN.WorldPos.xyz) + L);
-			l_SpecularContrib += pow(max(0, dot(Nn, Hn)), SpecularExp) * m_LightIntensityArray[i] * m_LightColor[i] * atten;
+			l_SpecularContrib += pow(max(0, dot(Nn, Hn)), SpecularExp) * m_LightIntensityArray[i] * atten * m_LightColor[i];
 		}
 	}
 	
