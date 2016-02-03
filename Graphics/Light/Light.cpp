@@ -75,5 +75,5 @@ void CDirectionalLight::Render(CRenderManager *RenderManager)
 CSpotLight::CSpotLight(const CXMLTreeNode &TreeNode) : CDirectionalLight(TreeNode)
 {
 	m_Angle = TreeNode.GetFloatProperty("angle");
-	m_FallOff = TreeNode.GetFloatProperty("fall_off");
+	m_FallOff = TreeNode.GetFloatProperty("falloff");
 }
