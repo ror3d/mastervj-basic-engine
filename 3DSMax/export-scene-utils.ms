@@ -5,21 +5,48 @@
 ----------------------------------------------------------------------------
 
 fn GetCores = (
-	-- TODO use only the selected ones
 	local ret = #()
 	for i = 1 to $*.count do
 	(
-		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject and not $*[i].isHidden then
+		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
 		(
-			append ret $*[i]
+			local core = getUserProp $*[i] "render_export_core"
+			if core != undefined then
+			(
+				append ret $*[i]
+			)
 		)
 	)
 	return ret
 )
 
 fn GetInstances = (
-	-- TODO use the real instances!
-	return GetCores()
+	local ret = #()
+	for i = 1 to $*.count do
+	(
+		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject and not $*[i].isHidden then
+		(
+			local core = getUserProp $*[i] "render_export_rend_obj"
+			if core != undefined then
+			(
+				append ret $*[i]
+			)
+		)
+	)
+	return ret
+)
+
+
+fn deleteUserProp node prop = if getUserProp node prop != undefined do
+(
+	buff = (getUserPropBuffer node) as stringStream 
+	newb = stringStream ""
+	while not eof buff do
+	(
+		str = readLine buff
+		if str != "" and not matchpattern str pattern:("*" + prop + "*=*") do format "%\n" str to:newb
+	)
+	setUserPropBuffer node (replace_LF_with_CRLF (newb as string))
 )
 
 fn GetAnimatedInstances = (

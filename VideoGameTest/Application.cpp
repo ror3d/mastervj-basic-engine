@@ -13,13 +13,16 @@
 #include <XML/XMLTreeNode.h>
 #include <Graphics/Cinematics/Cinematic.h>
 
+#include <PhysX/PhysXManager.h>
+
+
+static float s_mouseSpeed = 1;
+
 
 static void __stdcall SwitchCameraCallback( void* _app )
 {
 	( (CApplication*)_app )->SwitchCamera();
 }
-
-static float s_mouseSpeed = 1;
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
 	: m_RenderManager( _renderManager )
@@ -82,6 +85,7 @@ CApplication::~CApplication()
 
 void CApplication::Init()
 {
+
 }
 
 void CApplication::SwitchCamera()

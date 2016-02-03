@@ -34,6 +34,12 @@
     <Filter Include="Mesh">
       <UniqueIdentifier>{2ed9f5ff-a653-44ab-b55b-ca92fc656898}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Layer">
+      <UniqueIdentifier>{ad4c5457-233c-4415-95db-8df8e16e5f6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{e3e1ef91-2d26-4dd8-8610-9fc48e95c60c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Cinematic">
       <UniqueIdentifier>{9f36ac37-457a-4873-a2ff-0885a2e0097f}</UniqueIdentifier>
     </Filter>
@@ -133,6 +139,96 @@
     </ClInclude>
     <ClInclude Include="Mesh\StaticMeshManager.h">
       <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialParameter.h">
+      <Filter>Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\ClearSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\PresentSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\RenderDebugLayerSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\RenderDebugLightsSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\RenderGUISceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\RenderLayerSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneRendererCommandManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SetDepthStencilStateSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SetMatricesSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SetPoolRenderableObjectsTechniqueSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\StagedTexturedSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable\PoolRenderableObjectTechnique.h">
+      <Filter>Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawQuadSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SetPoolRenderableObjectsTechniqueSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SetRenderTargetSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UnsetRenderTargetSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredShadingSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureFrameBufferSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapsSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderDebugShadowMapsSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderDebugGridSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EnableAlphaBlendSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="DisableAlphaBlendSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer\LayerManager.h">
+      <Filter>Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\CaptureFrameBufferTexture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\DynamicTexture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable\RenderableObjectTechnique.h">
+      <Filter>Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable\RenderableObjectTechniqueManager.h">
+      <Filter>Renderable</Filter>
     </ClInclude>
     <ClInclude Include="Cinematics\CameraInfo.h">
       <Filter>Cinematic</Filter>
@@ -259,6 +355,24 @@
     </ClCompile>
     <ClCompile Include="Cinematics\CinematicObjectKeyframe.cpp">
       <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\CaptureFrameBufferTexture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer\LayerManager.cpp">
+      <Filter>Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture\DynamicTexture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SetDepthStencilStateSceneRendererCommand.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PoolRenderableObjectTechnique.cpp">
+      <Filter>Renderable</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableObjectTechniqueManager.cpp">
+      <Filter>Renderable</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

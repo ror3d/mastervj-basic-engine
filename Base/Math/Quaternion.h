@@ -70,7 +70,24 @@ public:
            }
          };
 	inline ~Quaternion() {};
-	
+
+	static inline Quaternion<T> ShortestArc( const Vector3<T>& from, const Vector3<T>& to )
+	{
+	  assert(abs(from.SquaredLength() - One<T>()) < Epsilon<T>() && abs(from.SquaredLength() - One<T>()) < Epsilon<T>() && "shortestArc from i to cal que siguin unitaris");
+	  
+
+		Vector3<T> cross = from ^ to; //Compute vector cross product
+		T dot = from * to ;      //Compute dot product
+		
+		dot = (T) sqrt( 2*(dot+1) ) ; //We will use this equation twice
+		
+		cross /= dot ; //Get the x, y, z components
+		
+		//Return with the w component (Note that w is inverted because of left-handed rotations )
+		return Quaternion<T>( cross[0], cross[1], cross[2], dot/2 ).GetNormalized() ; 
+		
+	}
+
 	// member functions	
 public:
 	inline T& operator[](unsigned int index)
@@ -317,24 +334,6 @@ template<typename T>
 static inline Quaternion<T> operator+(const Quaternion<T>& q, const Quaternion<T>& r)
 {
 	return Quaternion<T>(q.x + r.x, q.y + r.y, q.z + r.z, q.w + r.w);
-}
-
-template<typename T>
-static inline Quaternion<T> ShortestArc( const Vector3<T>& from, const Vector3<T>& to )
-{
-  assert(abs(from.SquaredLength() - One<T>()) < Epsilon<T>() && abs(from.SquaredLength() - One<T>()) < Epsilon<T>() && "shortestArc from i to cal que siguin unitaris");
-  
-
-	Vector3<T> cross = from ^ to; //Compute vector cross product
-	T dot = from * to ;      //Compute dot product
-	
-	dot = (T) sqrt( 2*(dot+1) ) ; //We will use this equation twice
-	
-	cross /= dot ; //Get the x, y, z components
-	
-	//Return with the w component (Note that w is inverted because of left-handed rotations )
-	return Quaternion<T>( cross[0], cross[1], cross[2], dot/2 ).GetNormalized() ; 
-	
 }
 
 

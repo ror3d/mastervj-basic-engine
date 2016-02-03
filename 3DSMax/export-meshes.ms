@@ -35,7 +35,9 @@ fn createRenderableObjectsFile = (
 		Yaw = GetYaw (instances[i].transform)
 		Pitch = GetPitch (instances[i].transform)
 		Roll = GetRoll (instances[i].transform)
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n" instances[i].name instances[i].name Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
+		local core = getUserProp $*[i] "render_export_rend_obj"
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n"\
+					instances[i].name core Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
 	)
 
 	format "</renderable_objects>\n" to:file 
@@ -227,6 +229,35 @@ fn createVertexesForFace obj IdFace = (
 		v3.uv2 = LUVMap3
 	)
 	
+	if HasNormal faceMat then
+	(		
+		--Binormal & Tang x Face
+		--Font: http://forums.cgsociety.org/archive/index.php?t-407814.html
+		local dV1 = Vtx1 - Vtx2
+		local dV2 = Vtx1 - Vtx3
+
+		local dUV1 = TUVMap1 - TUVMap2
+		local dUV2 = TUVMap1 - TUVMap3
+
+		local area = dUV1.x * dUV2.y - dUV1.y * dUV2.x
+		local sign = if area < 0 then -1 else 1
+
+		v1.tangent = [0,0,1]
+
+		v1.tangent.x = dV1.x * dUV2.y - dUV1.y * dV2.x
+		v1.tangent.y = dV1.y * dUV2.y - dUV1.y * dV2.y
+		v1.tangent.z = dV1.z * dUV2.y - dUV1.y * dV2.z
+
+		v1.tangent = (normalize v1.tangent) * sign
+
+		v1.binormal = (normalize (cross (normalize (getFaceNormal obj idFace)) v1.tangent)) * sign
+
+		v2.tangent = v1.tangent
+		v3.tangent = v1.tangent
+		v2.binormal = v1.binormal
+		v3.binormal = v1.binormal		
+	)
+	
 	return #(v3, v2, v1)
 
 )
@@ -318,12 +349,22 @@ fn createMesh obj = (
 			writefloat file vtx.pos.y
 			writefloat file vtx.pos.z
 			
+			-- Normal
+			writefloat file vtx.normal.x
+			writefloat file vtx.normal.y
+			writefloat file vtx.normal.z
+			
 			if HasNormal mat then
 			(
-				-- Normal
-				writefloat file vtx.normal.x
-				writefloat file vtx.normal.y
-				writefloat file vtx.normal.z
+				
+				-- Binormal
+				writefloat file vtx.binormal.x
+				writefloat file vtx.binormal.y
+				writefloat file vtx.binormal.z
+				-- Tangencial
+				writefloat file vtx.tangencial.x
+				writefloat file vtx.tangencial.y
+				writefloat file vtx.tangencial.z
 			)
 			
 			if HasTexture mat then
@@ -361,6 +402,8 @@ fn createMesh obj = (
 	
 	format "____Created Mesh %____\n" obj.name
 )
+
+
 
 fn createMeshes = (
 	local cores = GetCores()
