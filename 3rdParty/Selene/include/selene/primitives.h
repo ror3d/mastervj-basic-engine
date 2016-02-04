@@ -259,18 +259,6 @@ inline std::string _check_get(_id<std::string>, lua_State *l, const int index) {
 	return std::string{buff, size};
 }
 
-inline std::string _check_get(_id<const std::string&>, lua_State *l, const int index) {
-	size_t size = 0;
-	char const * buff = lua_tolstring(l, index, &size);
-	if(buff == nullptr) {
-		throw GetParameterFromLuaTypeError{
-			[](lua_State *l, int index){luaL_checkstring(l, index);},
-			index
-		};
-	}
-	return std::string{buff, size};
-}
-
 // Worker type-trait struct to _get_n
 // Getting multiple elements returns a tuple
 template <typename... Ts>
