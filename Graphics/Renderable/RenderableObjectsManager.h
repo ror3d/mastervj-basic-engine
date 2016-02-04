@@ -17,10 +17,10 @@ public:
 	~CRenderableObjectsManager();
 	void Update(float ElapsedTime);
 	void Render(CContextManager *_context);
-	CRenderableObject * AddMeshInstance(CXMLTreeNode &TreeNode);
-	CRenderableObject * AddMeshInstance(const std::string &CoreMeshName, const std::string &InstanceName, const Vect3f &Position);
-	CRenderableObject * AddAnimatedInstanceModel(CXMLTreeNode &TreeNode);
-	CRenderableObject * AddAnimatedInstanceModel(const std::string &CoreModelName, const std::string &InstanceModelName, const Vect3f &Position);
+	void AddMeshInstance(CXMLTreeNode &TreeNode);
+	void AddMeshInstance(const std::string &CoreMeshName, const std::string &InstanceName, const Vect3f &Position);
+	void AddAnimatedInstanceModel(CXMLTreeNode &TreeNode);
+	void AddAnimatedInstanceModel(const std::string &CoreModelName, const std::string &InstanceModelName, const Vect3f &Position);
 	void Load(const std::string &FileName);
 };
 

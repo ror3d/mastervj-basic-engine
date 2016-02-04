@@ -1,4 +1,5 @@
 #include "LightManager.h"
+#include "Light/Light.h"
 
 
 CLightManager::CLightManager()

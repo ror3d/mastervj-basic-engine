@@ -1,8 +1,8 @@
 #ifndef RENDER_MANAGER_H
 #define RENDER_MANAGER_H
 
-#include "Camera/Camera.h"
-#include "Camera/Frustum.h"
+#include "../Camera/Camera.h"
+#include "../Camera/Frustum.h"
 
 class CRenderableObjectsManager;
 class CContextManager;

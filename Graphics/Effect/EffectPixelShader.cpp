@@ -4,7 +4,7 @@
 
 CEffectPixelShader::CEffectPixelShader(const CXMLTreeNode &TreeNode) : CEffectShader(TreeNode)
 {
-	Load();
+	assert(Load());
 }
 
 

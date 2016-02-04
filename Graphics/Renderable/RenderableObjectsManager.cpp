@@ -31,65 +31,63 @@ void CRenderableObjectsManager::Render(CContextManager *_context)
 }
 
 
-CRenderableObject * CRenderableObjectsManager::AddMeshInstance(CXMLTreeNode &TreeNode)
+void CRenderableObjectsManager::AddMeshInstance(CXMLTreeNode &TreeNode)
 {
 	std::string InstanceName = TreeNode.GetPszProperty("name");
 	auto it = m_resources.find(InstanceName);
 
 	if (it != m_resources.end())
 	{
-		return it->second;
+		return;
 	}
 	else
 	{
 		CMeshInstance * Object = new CMeshInstance(TreeNode);
 
 		add(InstanceName, Object);
-		return Object;
+		return;
 	}
 }
 
 
-CRenderableObject * CRenderableObjectsManager::AddMeshInstance(const std::string &CoreMeshName, const std::string &InstanceName, const Vect3f &Position)
+void CRenderableObjectsManager::AddMeshInstance(const std::string &CoreMeshName, const std::string &InstanceName, const Vect3f &Position)
 {
 	auto it = m_resources.find(InstanceName);
 
 	if (it != m_resources.end())
 	{
-		return it->second;
+		return;
 	}
 	else
 	{
 		CMeshInstance * Object = new CMeshInstance(InstanceName, CoreMeshName);
 		Object->SetPosition(Position);
 		add(InstanceName, Object);
-		return Object;
 	}
 }
 
 
-CRenderableObject * CRenderableObjectsManager::AddAnimatedInstanceModel(CXMLTreeNode &TreeNode)
+void CRenderableObjectsManager::AddAnimatedInstanceModel(CXMLTreeNode &TreeNode)
 {
 	std::string InstanceName = TreeNode.GetPszProperty("name");
 	auto it = m_resources.find(InstanceName);
 
 	if (it != m_resources.end())
 	{
-		return it->second;
+		return;
 	}
 	else
 	{
 		CAnimatedInstanceModel * Object = new CAnimatedInstanceModel(TreeNode);
 
 		add(InstanceName, Object);
-		return Object;
 	}
 }
 
 
-CRenderableObject * CRenderableObjectsManager::AddAnimatedInstanceModel(const std::string &CoreModelName, const std::string &InstanceModelName, const Vect3f &Position)
+void CRenderableObjectsManager::AddAnimatedInstanceModel(const std::string &CoreModelName, const std::string &InstanceModelName, const Vect3f &Position)
 {
-	return NULL;
+	// TODO!
 }
 
 

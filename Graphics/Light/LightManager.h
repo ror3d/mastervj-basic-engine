@@ -2,8 +2,9 @@
 #define LIGHT_MANAGER_H
 
 #include <Utils/TMapManager.h>
-#include "Light/Light.h"
-#include "Renderer/RenderManager.h"
+
+class CRenderManager;
+class CLight;
 
 class CLightManager : public TMapManager<CLight>
 {

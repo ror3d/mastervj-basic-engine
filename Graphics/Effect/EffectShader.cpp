@@ -18,7 +18,7 @@ CEffectShader::CEffectShader(const CXMLTreeNode &TreeNode)
 	m_Filename = TreeNode.GetPszProperty("file");
 	m_ShaderModel = TreeNode.GetPszProperty("shader_model");
 	m_EntryPoint = TreeNode.GetPszProperty("entry_point");
-	m_Preprocessor = TreeNode.GetPszProperty("preprocessor");
+	m_Preprocessor = TreeNode.GetPszProperty("preprocessor", "", false);
 
 	CreateShaderMacro();
 }

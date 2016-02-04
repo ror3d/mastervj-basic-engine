@@ -4,11 +4,11 @@
 #include <Base/Utils/Named.h>
 #include <Base/Math/Color.h>
 #include <vector>
-#include "Context/ContextManager.h"
 
 class CXMLTreeNode;
 class CEffectTechnique;
 class CTexture;
+class CContextManager;
 
 class CMaterial :public CNamed
 {
