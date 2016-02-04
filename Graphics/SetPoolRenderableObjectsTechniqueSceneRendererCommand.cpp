@@ -3,7 +3,8 @@
 
 CSetPoolRenderableObjectsTechniqueSceneRendererCommand::CSetPoolRenderableObjectsTechniqueSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode){
-	m_Pool = * CEngine::GetSingleton().getRenderableObjectTechniqueManager()->GetPoolRenderableObjectTechniques().get(TreeNode.GetPszProperty("name"));
+	m_Pool = CEngine::GetSingleton().getRenderableObjectTechniqueManager()
+		->GetPoolRenderableObjectTechniques().get(TreeNode.GetPszProperty("pool"));
 }
 
 void CSetPoolRenderableObjectsTechniqueSceneRendererCommand::Execute(CContextManager &_context){

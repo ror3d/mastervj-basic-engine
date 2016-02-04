@@ -64,7 +64,7 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 						}
 						InsertRenderableObjectTechnique(l_PoolRenderableObjectTechnique, l_RenderableObjectTechniqueName, l_TechniqueName);
 					}
-					m_PoolRenderableObjectTechniques.add(l_PoolRenderableObjectTechnique->getName(), &l_PoolRenderableObjectTechnique);
+					m_PoolRenderableObjectTechniques.add(l_PoolRenderableObjectTechnique->getName(), l_PoolRenderableObjectTechnique);
 				}
 			}
 		}
@@ -78,7 +78,7 @@ bool CRenderableObjectTechniqueManager::Reload()
 	Destroy();
 	return Load(m_Filename);
 }
-TMapManager<CPoolRenderableObjectTechnique*> & CRenderableObjectTechniqueManager::GetPoolRenderableObjectTechniques()
+TMapManager<CPoolRenderableObjectTechnique> & CRenderableObjectTechniqueManager::GetPoolRenderableObjectTechniques()
 {
 	return m_PoolRenderableObjectTechniques;
 }

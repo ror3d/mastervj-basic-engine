@@ -9,7 +9,7 @@ class CPoolRenderableObjectTechnique;
 class CRenderableObjectTechniqueManager : public TMapManager<CRenderableObjectTechnique>
 {
 private:
-	TMapManager<CPoolRenderableObjectTechnique*>
+	TMapManager<CPoolRenderableObjectTechnique>
 		m_PoolRenderableObjectTechniques;
 	std::string m_Filename;
 public:
@@ -21,7 +21,7 @@ public:
 	void Destroy();
 	bool Load(const std::string &Filename);
 	bool Reload();
-	TMapManager<CPoolRenderableObjectTechnique*> & GetPoolRenderableObjectTechniques();
+	TMapManager<CPoolRenderableObjectTechnique> & GetPoolRenderableObjectTechniques();
 };
 
 #endif

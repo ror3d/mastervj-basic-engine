@@ -28,16 +28,15 @@ void CPoolRenderableObjectTechnique::AddElement(const std::string &Name, const s
 	
 	m_RenderableObjectTechniqueElements.push_back(
 		new CPoolRenderableObjectTechniqueElement(
-		Name,
-		CEngine::GetSingleton().getEffectsManager()->get(TechniqueName), 
-		ROTOnRenderableObjectTechniqueManager));
+			Name,
+			CEngine::GetSingleton().getEffectsManager()->get(TechniqueName), 
+			ROTOnRenderableObjectTechniqueManager));
 
 }
 void CPoolRenderableObjectTechnique::Apply(){
-	for (std::vector<CPoolRenderableObjectTechniqueElement * >::iterator it = m_RenderableObjectTechniqueElements.begin();
-		it != m_RenderableObjectTechniqueElements.end(); ++it)
+	for (auto elem : m_RenderableObjectTechniqueElements)
 	{
-		CPoolRenderableObjectTechniqueElement *l_PoolRenderableObjectTechniqueElement = (*it);
-		l_PoolRenderableObjectTechniqueElement->m_OnRenderableObjectTechniqueManager->SetEffectTechnique(l_PoolRenderableObjectTechniqueElement->m_RenderableObjectTechnique.GetEffectTechnique());
+		elem->m_OnRenderableObjectTechniqueManager
+			->SetEffectTechnique(elem->m_RenderableObjectTechnique.GetEffectTechnique());
 	}
 }
