@@ -9,8 +9,8 @@
 #include <Graphics/Renderer/RenderManager.h>
 #include <Graphics/Light/LightManager.h>
 #include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Context/ContextManager.h>
 
-class CContextManager;
 
 class CEngine : public CSingleton<CEngine>
 {

@@ -34,6 +34,14 @@ struct _indices_builder<0, Is...> {
     using type = _indices<Is...>;
 };
 
+template <std::size_t N, std::size_t... Is>
+struct _indices_rev_builder : _indices_rev_builder<N-1, Is..., N-1> {};
+
+template <std::size_t... Is>
+struct _indices_rev_builder<0, Is...> {
+    using type = _indices<Is...>;
+};
+
 template <typename T> struct _id {};
 }
 }

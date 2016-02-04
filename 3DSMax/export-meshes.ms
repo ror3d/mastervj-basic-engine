@@ -184,14 +184,14 @@ fn createVertexesForFace obj IdFace = (
 		faceMat = obj.material[faceMatId]
 		if faceMatId != getFaceMatID obj IdFace then
 		(
-			setFaceMatID obj IdFace faceMatId
+			--setFaceMatID obj IdFace faceMatId
 		)
 	)
 	
 	if faceMat == undefined then
 	(
 		format "$$$$ Alerta! El objeto % tiene caras con material incorrecto!!!\n" obj.name
-		setFaceMatID obj IdFace 1
+		--setFaceMatID obj IdFace 1
 		if (classOf obj.material) == Standardmaterial then
 			faceMat = obj.material
 		else
@@ -353,7 +353,7 @@ fn createMesh obj = (
 			writefloat file vtx.normal.x
 			writefloat file vtx.normal.y
 			writefloat file vtx.normal.z
-			
+			/*
 			if HasNormal mat then
 			(
 				
@@ -365,7 +365,7 @@ fn createMesh obj = (
 				writefloat file vtx.tangencial.x
 				writefloat file vtx.tangencial.y
 				writefloat file vtx.tangencial.z
-			)
+			)*/
 			
 			if HasTexture mat then
 			(

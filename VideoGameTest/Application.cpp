@@ -15,9 +15,12 @@
 
 #include <PhysX/PhysXManager.h>
 
+#include <Base/Scripting/ScriptManager.h>
+
 
 static float s_mouseSpeed = 1;
 
+CScriptManager *s_sm = nullptr;
 
 static void __stdcall SwitchCameraCallback( void* _app )
 {
@@ -85,7 +88,13 @@ CApplication::~CApplication()
 
 void CApplication::Init()
 {
-
+	/*
+	s_sm = new CScriptManager();
+	s_sm->Initialize();
+	s_sm->RegisterLUAFunctions();
+	//s_sm->RunCode("a = Vect3f.new(2, 2, 2)");
+	s_sm->RunCode("v = Vect3f.new(2, 2, 2); CRenderableObjectsManager:AddMeshInstance('Teapot', 'tp2', v);");
+	*/
 }
 
 void CApplication::SwitchCamera()
