@@ -11,10 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PhysXManager.cpp" />
+    <ClCompile Include="PhysXManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PhysXManager.h" />
+    <ClInclude Include="PhysXManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D1E294CE-B49D-4C9E-B2BE-E11236D76704}</ProjectGuid>

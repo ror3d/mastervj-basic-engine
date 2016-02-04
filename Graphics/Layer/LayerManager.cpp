@@ -32,7 +32,12 @@ void CLayerManager::Load(const std::string &FileName){
 					if (l_MeshInfo.GetBoolProperty("default", false))
 						m_DefaultLayer = renderObManager;
 				}
-				else if(l_MeshInfo.GetName() == std::string("mesh_instance"))
+				if (l_MeshInfo.GetName() != std::string("layer") && m_resources.size() == 0){
+					CRenderableObjectsManager * renderObManager = new CRenderableObjectsManager();
+					add("default", renderObManager);
+					m_DefaultLayer = renderObManager;
+				}
+			    if(l_MeshInfo.GetName() == std::string("mesh_instance"))
 				{
 					m_DefaultLayer->AddMeshInstance(l_MeshInfo);
 				}

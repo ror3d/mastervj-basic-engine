@@ -22,6 +22,7 @@ public:
 	void Update(float ElapsedTime);
 	void Render(CContextManager &_context);
 	void Render(CContextManager *_context, const std::string &LayerName);
+	CRenderableObjectsManager * getDefaultLayer(){ return m_DefaultLayer;  }
 };
 
 #endif

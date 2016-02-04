@@ -359,6 +359,30 @@ public:
 	inline T Determinant() const;
 	bool     IsOrthogonalEpsilon() const;
 	bool     IsOrthonormalEpsilon() const;
+	
+	/*inline Matrix44<T>& SetFromOrtho(float Width, float Height, float ZNear, float ZFar);
+
+	template<typename T>
+	inline Matrix44<T>& Matrix44<T>::SetFromOrtho(float Width, float Height, float ZNear, float ZFar)
+	{
+		m00 = 2.0f / Width;
+		m01 = 0.0f;
+		m02 = 0.0f;
+		m03 = 0.0f;
+		m10 = 0.0f;
+		m11 = 2.0f / Height;
+		m12 = 0.0f;
+		m13 = 0.0f;
+		m20 = 0.0f;
+		m21 = 0.0f;
+		m22 = 1.0f / (ZNear - ZFar);
+		m23 = 0.0f;
+		m30 = 0.0f;
+		m31 = 0.0f;
+		m32 = ZNear / (ZNear - ZFar);
+		m33 = 1.0f;
+		return (*this);
+	}*/
 
 
 private:
@@ -391,4 +415,6 @@ extern const Mat44d  m44dZERO;
 extern const Mat44d  m44dONES;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 #endif

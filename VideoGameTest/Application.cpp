@@ -17,6 +17,8 @@
 
 #include <Base/Scripting/ScriptManager.h>
 
+#include <Engine/Engine.h>
+
 
 static float s_mouseSpeed = 1;
 
@@ -108,7 +110,7 @@ void CApplication::SwitchCamera()
 
 void CApplication::Update( float _ElapsedTime )
 {
-	CEngine::GetSingleton().getRenderableObjectManager()->Update(_ElapsedTime);
+	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 
 	( (CInputManagerImplementation*)CInputManager::GetInputManager() )->SetMouseSpeed( s_mouseSpeed );
 
@@ -166,7 +168,9 @@ void CApplication::Render()
 	//m_RenderManager.AddRenderableObjectToRenderList(&m_Cube);
 
 	m_RenderManager->Render( m_ContextManager );
-
+	
+	//FOR SCENE RENDERE COMMANDS
+	//CEngine::GetSingleton().getSceneRendererCommandManager()->Execute(*m_ContextManager);
 
 	//Mat44f world;
 

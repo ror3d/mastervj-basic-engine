@@ -12,7 +12,7 @@ CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 	: m_CurrentKeyFrame(0)
 {
 	std::string rendObjName = treeNode.GetPszProperty( "resource" );
-	m_RenderableObject = CEngine::GetSingleton().getRenderableObjectManager()->get(rendObjName);
+	m_RenderableObject = CEngine::GetSingleton().getLayerManager()->getDefaultLayer()->get(rendObjName);
 
 
 	float duration = 0;

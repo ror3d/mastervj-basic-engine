@@ -5,6 +5,7 @@
 #include <Base/Math/MathUtils.h>
 #include "VertexTypes.h"
 #include "Renderable/RenderableVertexs.h"
+#include "RenderableObjectTechnique.h"
 
 #include <cal3d/cal3d.h>
 #include <XML/XMLTreeNode.h>
@@ -68,13 +69,13 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 		memcpy(&CEffectManager::m_AnimatedModelEffectParameters.m_Bones,
 			   l_Transformations,
 			   MAXBONES*sizeof(float) * 4 * 4);
-		m_Materials[l_HardwareMeshId]->getEffectTechnique()->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
+		m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique()->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
 		m_RenderableVertexs->RenderIndexed(context,
-										   m_Materials[l_HardwareMeshId]->getEffectTechnique(),
-										   &CEffectManager::m_Parameters,
-										   m_CalHardwareModel->getFaceCount() * 3,
-										   m_CalHardwareModel->getStartIndex(),
-										   m_CalHardwareModel->getBaseVertexIndex());
+				m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique(),
+				&CEffectManager::m_Parameters,
+				m_CalHardwareModel->getFaceCount() * 3,
+				m_CalHardwareModel->getStartIndex(),
+				m_CalHardwareModel->getBaseVertexIndex());
 	}
 }
 

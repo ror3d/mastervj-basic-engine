@@ -2,6 +2,7 @@
 #define STAGED_TEXTURED_SCENE_RENDERER_COMMAND_H
 
 #include "Scene\SceneRendererCommand.h"
+#include "Graphics\Texture\DynamicTexture.h"
 
 class CStagedTexturedSceneRendererCommand : public CSceneRendererCommand
 {
@@ -19,8 +20,7 @@ protected:
 		void Activate();
 	};
 	std::vector<CStageTexture> m_StageTextures;
-	//TODO:
-	//std::vector<CDynamicTexture *> m_DynamicTextures;
+	std::vector<CDynamicTexture *> m_DynamicTextures;
 	std::vector<ID3D11RenderTargetView *> m_RenderTargetViews;
 public:
 	CStagedTexturedSceneRendererCommand(CXMLTreeNode &TreeNode);

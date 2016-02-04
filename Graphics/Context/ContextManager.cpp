@@ -204,3 +204,72 @@ void CContextManager::EndRender()
 {
 	m_SwapChain->Present(0, 0);
 }
+
+void CContextManager::EnableAlphaBlendState()
+{
+	D3D11_BLEND_DESC l_AlphablendDesc;
+	ZeroMemory(&l_AlphablendDesc, sizeof(D3D11_BLEND_DESC));
+	l_AlphablendDesc.RenderTarget[0].BlendEnable = true;
+	l_AlphablendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	l_AlphablendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	l_AlphablendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	l_AlphablendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	l_AlphablendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	l_AlphablendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	l_AlphablendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	
+	/*CreateBlendState not exist*/
+	//HRESULT hr = m_DeviceContext->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState);
+	//assert(hr);
+
+	m_DeviceContext->OMSetBlendState(m_AlphaBlendState, NULL, 0xffffffff);
+}
+
+void CContextManager::DisableAlphaBlendState()
+{
+	m_DeviceContext->OMSetBlendState(NULL, NULL, 0xffffffff);
+}
+
+void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
+	
+	if (clear_DepthStencil){
+		CColor color = CColor(0, 0, 0);
+		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, &color.x);		
+	}
+
+	if (clear_RenderTarget)		
+		m_DeviceContext->ClearDepthStencilView(m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView *const	*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){
+	m_NumViews = NumViews;
+	m_RenderTargetView = *RenderTargetViews;
+	m_DepthStencilView = DepthStencilView;
+	m_DeviceContext->OMSetRenderTargets(m_NumViews, RenderTargetViews,	DepthStencilView);
+}
+
+void CContextManager::UnsetRenderTargets(){
+	//TODO;
+}
+
+void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
+	*Texture, float x, float y, float Width, float Height, const CColor &Color)
+{
+	//CEffectManager::m_SceneParameters.m_BaseColor = Color;
+	if (Texture != NULL)
+		Texture->Activate(0);
+	D3D11_VIEWPORT l_Viewport;
+	//l_Viewport.Width = Width*m_Viewport.Width;
+	//l_Viewport.Height = Height*m_Viewport.Height;
+	l_Viewport.MinDepth = 0.0f;
+	l_Viewport.MaxDepth = 1.0f;
+	//l_Viewport.TopLeftX = x*m_Viewport.Width;
+	//l_Viewport.TopLeftY = y*m_Viewport.Height;
+	//m_DeviceContext->RSSetViewports(1, &l_Viewport);
+	//m_DrawQuadRV->Render(this, EffectTechnique,	&CEffectManager::m_SceneParameters);
+	//m_DeviceContext->RSSetViewports(1, &m_Viewport);
+}
+
+void CContextManager::Present(){
+
+}

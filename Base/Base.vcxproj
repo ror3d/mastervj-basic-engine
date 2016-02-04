@@ -12,7 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Math\MathConstants.cpp" />
-    <ClCompile Include="Scripting\ScriptManager.cpp" />
+    <ClCompile Include="Scripting\ScriptManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Utils\Named.cpp" />
     <ClCompile Include="XML\Example.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -32,7 +34,9 @@
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
-    <ClInclude Include="Scripting\ScriptManager.h" />
+    <ClInclude Include="Scripting\ScriptManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Utils\TMapManager.h" />
     <ClInclude Include="Utils\Named.h" />
     <ClInclude Include="Utils\SingletonPattern.h" />

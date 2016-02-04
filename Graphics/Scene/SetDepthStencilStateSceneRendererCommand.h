@@ -2,6 +2,7 @@
 #define SET_DEPTH_STENCIL_STATE_SCENE_RENDERER_COMMAND_H
 
 #include "Scene\SceneRendererCommand.h"
+#include "Engine\Engine.h"
 
 class CSetDepthStencilStateSceneRendererCommand : public CSceneRendererCommand
 {
