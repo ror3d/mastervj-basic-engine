@@ -7,7 +7,7 @@ namespace sel {
 template <typename T, typename... Args>
 class Ctor : public BaseFun {
 private:
-    using _ctor_type = std::function<void(lua_State *, Args...)>;
+    using _ctor_type = std::function<void(lua_State *, detail::decay_primitive<Args>...)>;
     _ctor_type _ctor;
 
 public:
@@ -24,7 +24,7 @@ public:
     }
 
     int Apply(lua_State *l) {
-        std::tuple<Args...> args = detail::_get_args<Args...>(l);
+        std::tuple<detail::decay_primitive<Args>...> args = detail::_get_args<detail::decay_primitive<Args>...>(l);
         auto pack = std::tuple_cat(std::make_tuple(l), args);
         detail::_lift(_ctor, pack);
         // The constructor will leave a single userdata entry on the stack

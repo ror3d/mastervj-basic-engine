@@ -8,7 +8,7 @@ namespace sel {
 template <int N, typename T, typename Ret, typename... Args>
 class ClassFun : public BaseFun {
 private:
-    using _fun_type = std::function<Ret(T*, Args...)>;
+    using _fun_type = std::function<Ret(T*, detail::decay_primitive<Args>...)>;
     _fun_type _fun;
     std::string _name;
     std::string _metatable_name;
@@ -38,8 +38,8 @@ public:
 
     int Apply(lua_State *l) {
         std::tuple<T*> t = std::make_tuple(_get(l));
-        std::tuple<Args...> args = detail::_get_args<Args...>(l);
-        std::tuple<T*, Args...> pack = std::tuple_cat(t, args);
+        std::tuple<detail::decay_primitive<Args>...> args = detail::_get_args<detail::decay_primitive<Args>...>(l);
+        std::tuple<T*, detail::decay_primitive<Args>...> pack = std::tuple_cat(t, args);
         detail::_push(l, detail::_lift(_fun, pack));
         return N;
     }
@@ -48,7 +48,7 @@ public:
 template <typename T, typename... Args>
 class ClassFun<0, T, void, Args...> : public BaseFun {
 private:
-    using _fun_type = std::function<void(T*, Args...)>;
+    using _fun_type = std::function<void(T*, detail::decay_primitive<Args>...)>;
     _fun_type _fun;
     std::string _name;
     std::string _metatable_name;
@@ -78,8 +78,8 @@ public:
 
     int Apply(lua_State *l) {
         std::tuple<T*> t = std::make_tuple(_get(l));
-        std::tuple<Args...> args = detail::_get_args<Args...>(l);
-        std::tuple<T*, Args...> pack = std::tuple_cat(t, args);
+        std::tuple<detail::decay_primitive<Args>...> args = detail::_get_args<detail::decay_primitive<Args>...>(l);
+        std::tuple<T*, detail::decay_primitive<Args>...> pack = std::tuple_cat(t, args);
         detail::_lift(_fun, pack);
         return 0;
     }
