@@ -17,8 +17,6 @@ class CMaterial : public CNamed
 {
 private:
 	std::vector<CTexture *> m_textures;
-	CEffectTechnique *m_effectTechnique;
-
 	std::vector<CMaterialParameter *> m_Parameters;
 	CRenderableObjectTechnique *m_RenderableObjectTechnique;
 	unsigned int m_CurrentParameterData;
@@ -26,7 +24,6 @@ public:
 	CMaterial(CXMLTreeNode &TreeNode);
 	virtual ~CMaterial();
 	virtual void apply(CRenderableObjectTechnique *RenderableObjectTechnique = NULL);
-	CEffectTechnique* getEffectTechnique() const;
 	CRenderableObjectTechnique * getRenderableObjectTechique(){ return m_RenderableObjectTechnique; }
 	std::vector<CMaterialParameter *> getParameters(){ return m_Parameters;  }
 	void * GetNextParameterAddress(unsigned int NumBytes);

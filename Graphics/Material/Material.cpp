@@ -7,7 +7,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 {
 	m_RenderableObjectTechnique = new CRenderableObjectTechnique(TreeNode.GetPszProperty("effect_technique"), 
 		CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));
-		for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
+	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 	{
 		CXMLTreeNode l_Texture = TreeNode(i);
 		CTexture * Texture = new CTexture();
@@ -20,11 +20,6 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 CMaterial::~CMaterial()
 {
 	destroy();
-}
-
-CEffectTechnique * CMaterial::getEffectTechnique() const
-{
-	return m_effectTechnique;
 }
 
 void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)

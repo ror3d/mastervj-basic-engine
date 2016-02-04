@@ -108,6 +108,15 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 
 	dxgiFactory->Release();
 
+	D3D11_VIEWPORT vp;
+	vp.Width = (FLOAT)Width;
+	vp.Height = (FLOAT)Height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	m_DeviceContext->RSSetViewports(1, &vp);
+
 	return S_OK;
 }
 
@@ -155,6 +164,8 @@ HRESULT CContextManager::CreateBackBuffer(HWND hWnd, int Width, int Height)
 	hr = m_D3DDevice->CreateDepthStencilView(m_DepthStencil, &descDSV, &m_DepthStencilView);
 	if (FAILED(hr))
 		return hr;
+
+	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 
 	return S_OK;
 }
