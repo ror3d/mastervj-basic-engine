@@ -4,7 +4,10 @@ CStagedTexturedSceneRendererCommand::CStagedTexturedSceneRendererCommand(CXMLTre
 
 }
 CStagedTexturedSceneRendererCommand::~CStagedTexturedSceneRendererCommand(){}
+
 void CStagedTexturedSceneRendererCommand::CreateRenderTargetViewVector(){
+	/*El método CreateRenderTargetViewVector se llamará al terminar de leer el nodo
+y se rellenará con todos los RenderTargets de las texturas dinámicas.*/
 }
 void CStagedTexturedSceneRendererCommand::ActivateTextures(){
 }

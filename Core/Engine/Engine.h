@@ -10,6 +10,7 @@
 #include <Graphics/Light/LightManager.h>
 #include <Graphics/Animation/AnimatedModelManager.h>
 #include <Graphics/Context/ContextManager.h>
+#include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 
 
@@ -21,9 +22,10 @@ private:
 	CMaterialManager * materialManager;
 	CEffectManager * effectsManager;
 	CTextureManager * textureManager;
-	CRenderManager * renderManager;
+	CRenderManager * renderManager;	
 	CLightManager * lightManager;
 	CAnimatedModelManager * animatedModelManager;
+	CRenderableObjectTechniqueManager * renderableObjectTechniqueManager;
 	CSceneRendererCommandManager * sceneRendererCommandManager;
 	CContextManager * contextManager;
 
@@ -43,5 +45,6 @@ public:
 	inline CContextManager * getContextManager() const { return contextManager; }
 	inline CLightManager * getLightManager() const { return lightManager; }
 	inline CAnimatedModelManager * getAnimatedModelManager() const { return animatedModelManager; }
+	inline CRenderableObjectTechniqueManager * getRenderableObjectTechniqueManager() const { return renderableObjectTechniqueManager; }
 	inline CSceneRendererCommandManager * getSceneRendererCommandManager() const { return sceneRendererCommandManager; }
 };

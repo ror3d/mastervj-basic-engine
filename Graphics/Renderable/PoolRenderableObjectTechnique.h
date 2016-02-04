@@ -1,9 +1,9 @@
 #ifndef POOL_RENDERABLE_OBJECT_TECHNIQUE_H
 #define POOL_RENDERABLE_OBJECT_TECHNIQUE_H
 
-#include "Utils\Named.h"
-#include "Renderable\RenderableObjectTechnique.h"
-#include "XML\XMLTreeNode.h"
+#include "Utils/Named.h"
+#include "XML/XMLTreeNode.h"
+#include "Renderable/RenderableObjectTechnique.h"
 
 class CPoolRenderableObjectTechnique : public CNamed
 {

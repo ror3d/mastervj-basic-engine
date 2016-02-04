@@ -38,5 +38,6 @@ void CMaterialManager::load(const std::string &Filename)
 
 void CMaterialManager::reload()
 {
-	// TODO
+	destroy();
+	load(m_Filename);
 }

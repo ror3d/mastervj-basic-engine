@@ -1,13 +1,12 @@
-#ifndef RENDERABLE_OBJECT_TECHNIQUE_MANAGER
-#define RENDERABLE_OBJECT_TECHNIQUE_MANAGER
+#ifndef RENDERABLE_OBJECT_TECHNIQUE_MANAGER_H
+#define RENDERABLE_OBJECT_TECHNIQUE_MANAGER_H
 
 #include <Utils\TMapManager.h>
-#include "Renderable\RenderableObjectTechnique.h"
-#include "Renderable\PoolRenderableObjectTechnique.h"
-#include "Engine\Engine.h"
 
-class CRenderableObjectTechniqueManager : public
-	TMapManager<CRenderableObjectTechnique>
+class CRenderableObjectTechnique;
+class CPoolRenderableObjectTechnique;
+
+class CRenderableObjectTechniqueManager : public TMapManager<CRenderableObjectTechnique>
 {
 private:
 	TMapManager<CPoolRenderableObjectTechnique*>

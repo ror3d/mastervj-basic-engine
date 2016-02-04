@@ -243,13 +243,24 @@ void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
 
 void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView *const	*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){
 	m_NumViews = NumViews;
-	m_RenderTargetView = *RenderTargetViews;
-	m_DepthStencilView = DepthStencilView;
+	m_CurrentRenderTargetViews = *RenderTargetViews;
+	m_CurrentDepthStencilView = DepthStencilView;
 	m_DeviceContext->OMSetRenderTargets(m_NumViews, RenderTargetViews,	DepthStencilView);
 }
 
 void CContextManager::UnsetRenderTargets(){
-	//TODO;
+	m_NumViews = 1;
+	m_CurrentRenderTargetViews = m_RenderTargetView;
+	m_CurrentDepthStencilView = m_DepthStencilView;
+	m_DeviceContext->OMSetRenderTargets(m_NumViews, &m_RenderTargetView, m_DepthStencilView);
+	D3D11_VIEWPORT vp;
+	vp.Width = (FLOAT)m_Width;
+	vp.Height = (FLOAT)m_Height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	m_DeviceContext->RSSetViewports(1, &vp);
 }
 
 void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
@@ -271,5 +282,5 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 }
 
 void CContextManager::Present(){
-
+	m_SwapChain->Present(0, 0);
 }

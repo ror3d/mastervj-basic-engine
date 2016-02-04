@@ -97,13 +97,13 @@ CDebugRender::CDebugRender(ID3D11Device* _Device)
 		// Simple Grid
 		MV_POSITION_COLOR_VERTEX l_SimpleGridVtxs[] =
 		{
-			{ Vect3f(+1.0f, 0.0f, +1.0f), CColor(1.0f, 1.0f, 1.0f, 1.0f) },   // 0
+			{ Vect3f(+1.0f, 0.0f, +1.0f), CColor(1.0f, 1.0f, 1.0f, 1.0f) },  // 0
 			{ Vect3f(+1.0f, 0.0f, -1.0f), CColor(1.0f, 1.0f, 0.0f, 1.0f) },  // 1
-			{ Vect3f(-1.0f, 0.0f, -1.0f), CColor(1.0f, 0.0f, 0.0f, 1.0f) }, // 2
+			{ Vect3f(-1.0f, 0.0f, -1.0f), CColor(1.0f, 0.0f, 0.0f, 1.0f) },  // 2
 			{ Vect3f(-1.0f, 0.0f, +1.0f), CColor(1.0f, 0.0f, 1.0f, 1.0f) },  // 3
-			{ Vect3f(+1.0f, 0.0f, +0.0f), CColor(1.0f, 1.0f, 0.5f, 1.0f) },   // 4
+			{ Vect3f(+1.0f, 0.0f, +0.0f), CColor(1.0f, 1.0f, 0.5f, 1.0f) },  // 4
 			{ Vect3f(-1.0f, 0.0f, +0.0f), CColor(1.0f, 0.0f, 0.5f, 1.0f) },  // 5
-			{ Vect3f(+0.0f, 0.0f, +1.0f), CColor(1.0f, 0.5f, 1.0f, 1.0f) },   // 6
+			{ Vect3f(+0.0f, 0.0f, +1.0f), CColor(1.0f, 0.5f, 1.0f, 1.0f) },  // 6
 			{ Vect3f(+0.0f, 0.0f, -1.0f), CColor(1.0f, 0.5f, 0.0f, 1.0f) },  // 7
 		};
 
@@ -128,12 +128,12 @@ CDebugRender::CDebugRender(ID3D11Device* _Device)
 			{ Vect3f(-0.5f, 1.0f, +0.5f), CColor(1.0f, 0.0f, 1.0f, 1.0f) },  // 7
 		};
 
-		
+
 		//uint16_t l_SimpleCubeIdxs[] = {
 		//0, 1, 0, 3, 2, 1, 2, 3,
 		//4, 5, 4, 7, 6, 5, 6, 7,
 		//0, 4, 1, 5, 2, 6, 3, 7 };
-		
+
 		uint16_t l_SimpleCubeIdxs[] = {
 			0, 2, 1, 3, 2, 0, // bot
 			0, 4, 3, 3, 4, 7, // front
@@ -149,5 +149,16 @@ CDebugRender::CDebugRender(ID3D11Device* _Device)
 		m_SimpleCubeBSRadi = 1.224745f;
 		m_SimpleCubeBBMin = Vect3f(-.5f, 0.f, -.5f);
 		m_SimpleCubeBBMax = Vect3f(.5f, 1.f, .5f);
+	}
+	//QUAD
+	{		
+		MV_POSITION4_COLOR_TEXTURE_VERTEX l_ScreenVertexsQuad[4] =
+		{
+			{ Vect4f(-1.0f, 1.0f, 0.5f, 1.0f), CColor(1.0f, 1.0f, 1.0f, 1.0f), Vect2f(0.0f, 0.0f) },
+			{ Vect4f(-1.0f, -1.0f, 0.5f, 1.0f), CColor(1.0f, 1.0f, 1.0f, 1.0f), Vect2f(0.0f, 1.0f) },
+			{ Vect4f(1.0f, 1.0f, 0.5f, 1.0f), CColor(1.0f, 1.0f, 1.0f, 1.0f), Vect2f(1.0f, 0.0f) },
+			{ Vect4f(1.0f, -1.0f, 0.5f, 1.0f), CColor(1.0f, 1.0f, 1.0f, 1.0f), Vect2f(1.0f, 1.0f) }
+		};
+		m_DrawQuadRV = new CTrianglesStripRenderableVertexs<MV_POSITION4_COLOR_TEXTURE_VERTEX>(l_ScreenVertexsQuad, 4, 2);
 	}
 }

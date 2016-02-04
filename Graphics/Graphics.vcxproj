@@ -67,6 +67,7 @@
     <ClInclude Include="Scene\GenerateShadowMapsSceneRendererCommand.h" />
     <ClInclude Include="Scene\PresentSceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderDebugGridSceneRendererCommand.h" />
+    <ClInclude Include="Scene\RenderDebugGUISceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderDebugLayerSceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderDebugLightsSceneRendererCommand.h" />
     <ClInclude Include="Scene\RenderDebugShadowMapsSceneRendererCommand.h" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Scene\DisableAlphaBlendSceneRendererCommand.cpp" />
     <ClCompile Include="Scene\EnableAlphaBlendSceneRendererCommand.cpp" />
     <ClCompile Include="Scene\PresentSceneRendererCommand.cpp" />
+    <ClCompile Include="Scene\RenderDebugGUISceneRendererCommand.cpp" />
     <ClCompile Include="Scene\SceneRendererCommandManager.cpp" />
     <ClCompile Include="Scene\SetDepthStencilStateSceneRendererCommand.cpp" />
     <ClCompile Include="Scene\SetMatricesSceneRendererCommand.cpp" />

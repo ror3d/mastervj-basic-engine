@@ -1,5 +1,5 @@
 
-#include "Scene\SceneRendererCommand.h"
+#include "SceneRendererCommand.h"
 #include "SceneRendererCommandManager.h"
 #include "SetDepthStencilStateSceneRendererCommand.h"
 #include "SetPoolRenderableObjectsTechniqueSceneRendererCommand.h"
@@ -19,6 +19,7 @@
 #include "DisableAlphaBlendSceneRendererCommand.h"
 #include "RenderGUISceneRendererCommand.h"
 #include "PresentSceneRendererCommand.h"
+#include "RenderDebugGUISceneRendererCommand.h"
 
 CSceneRendererCommandManager::CSceneRendererCommandManager(){
 
@@ -106,6 +107,9 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 				}
 				else if (scene_command.GetName() == std::string("render_debug_gui")){
 					add(new CRenderGUISceneRendererCommand(scene_command));
+				}
+				else if (scene_command.GetName() == std::string("render_debug_antTweak")){
+					add(new CRenderDebugGUISceneRendererCommand(scene_command));
 				}
 				else if (scene_command.GetName() == std::string("present")){
 					add(new CPresentSceneRendererCommand(scene_command));
