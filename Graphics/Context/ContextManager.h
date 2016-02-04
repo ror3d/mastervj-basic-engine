@@ -52,8 +52,10 @@ private:
 	ID3D11Debug*			m_D3DDebug;
 	IDXGISwapChain*			m_SwapChain;
 	ID3D11RenderTargetView*	m_RenderTargetView;
+	ID3D11RenderTargetView* m_CurrentRenderTargetViews;
 	ID3D11Texture2D*		m_DepthStencil;
 	ID3D11DepthStencilView*	m_DepthStencilView;
+	ID3D11DepthStencilView* m_CurrentDepthStencilView;
 	ID3D11BlendState*		m_AlphaBlendState;
 
 	int m_Width, m_Height;

@@ -203,17 +203,15 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
-	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
+	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
+	engine.getSceneRendererCommandManager()->Load("Data\\basic_scene_renderer_commands.xml");
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
 	context.CreateBackBuffer(hWnd, 800, 600);
 	{
-		//CDebugRender debugRender(s_Context.GetDevice());
-
 		CInputManagerImplementation inputManager(hWnd);
 		CInputManager::SetCurrentInputManager(&inputManager);
-
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
 		CDebugHelperImplementation debugHelper(context.GetDevice());
@@ -253,8 +251,9 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 
 				application.Update(l_ElapsedTime);
-				application.Render();
+				//application.Render();
 
+				engine.getSceneRendererCommandManager()->Execute(context);
 
 				inputManager.EndFrame();
 			}
@@ -262,12 +261,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	}
 
 	UnregisterClass(APPLICATION_NAME, wc.hInstance);
-
-	// TODO: Dispose of CApplication resources
-
 	CEngine::ReleaseSingleton();
-	//*/
-
 	return 0;
 }
 

@@ -18,6 +18,7 @@ public:
 	CRenderableVertexs * GetPremultBlendTriangle() const { return m_PremultBlendTriangle; }
 	CRenderableVertexs * GetSimpleCube() const { return m_SimpleCube; }
 	CRenderableVertexs * GetAxis() const { return m_Axis; }
+	CRenderableVertexs * GetQuad() const { return m_DrawQuadRV; }
 
 	float GetSimpleTriangleBSRadi() const { return m_SimpleTriangleBSRadi; }
 	float GetClassicBlendTriangleBSRadi() const { return m_ClassicBlendTriangleBSRadi; }
@@ -46,6 +47,7 @@ private:
 	CRenderableVertexs				*m_SimpleCube;
 	CRenderableVertexs				*m_Axis;
 	CRenderableVertexs				*m_LongAxis;
+	CRenderableVertexs				*m_DrawQuadRV;
 
 	float m_SimpleTriangleBSRadi;
 	float m_ClassicBlendTriangleBSRadi;

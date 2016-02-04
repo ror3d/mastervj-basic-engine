@@ -9,6 +9,7 @@
 #include <Graphics/Renderer/RenderManager.h>
 #include <Graphics/Light/LightManager.h>
 #include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 
 class CContextManager;
@@ -23,7 +24,8 @@ private:
 	CTextureManager * textureManager;
 	CRenderManager * renderManager;	
 	CLightManager * lightManager;
-	CAnimatedModelManager * animatedModelManager;
+	CAnimatedModelManager * animatedModelManager;	
+	CRenderableObjectTechniqueManager * renderableObjectTechniqueManager;
 	CSceneRendererCommandManager * sceneRendererCommandManager;
 	CContextManager * contextManager;
 
@@ -43,5 +45,6 @@ public:
 	inline CContextManager * getContextManager() const { return contextManager; }
 	inline CLightManager * getLightManager() const { return lightManager; }
 	inline CAnimatedModelManager * getAnimatedModelManager() const { return animatedModelManager; }
+	inline CRenderableObjectTechniqueManager * getRenderableObjectTechniqueManager() const { return renderableObjectTechniqueManager; }
 	inline CSceneRendererCommandManager * getSceneRendererCommandManager() const { return sceneRendererCommandManager; }
 };

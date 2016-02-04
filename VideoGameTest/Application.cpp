@@ -21,14 +21,14 @@ static float s_mouseSpeed = 1;
 
 static void __stdcall SwitchCameraCallback( void* _app )
 {
-	( (CApplication*)_app )->SwitchCamera();
+	((CApplication*)_app)->m_RenderManager->SwitchCamera();
 }
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
 	: m_RenderManager( _renderManager )
 	, m_ContextManager( _ContextManager )
 	, m_BackgroundColor( .2f, .1f, .4f )
-	, m_CurrentCamera( 0 )
+	
 {
 	CDebugHelper::GetDebugHelper()->Log( "CApplication::CApplication" );
 
@@ -88,14 +88,7 @@ void CApplication::Init()
 
 }
 
-void CApplication::SwitchCamera()
-{
-	++m_CurrentCamera;
-	if ( m_CurrentCamera > 1 )
-	{
-		m_CurrentCamera = 0;
-	}
-}
+
 
 void CApplication::Update( float _ElapsedTime )
 {
@@ -103,7 +96,7 @@ void CApplication::Update( float _ElapsedTime )
 
 	( (CInputManagerImplementation*)CInputManager::GetInputManager() )->SetMouseSpeed( s_mouseSpeed );
 
-	switch ( m_CurrentCamera )
+	switch (m_RenderManager->getCurrentCameraNum())
 	{
 		case 0:
 			if ( CInputManager::GetInputManager()->IsActionActive( "MOVE_CAMERA" ) )
@@ -113,15 +106,15 @@ void CApplication::Update( float _ElapsedTime )
 				cameraMovement.x = CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * 0.0005f;
 				cameraMovement.y = CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f;
 
-				m_SphericalCamera.Update( cameraMovement );
+				m_RenderManager->getSphericalCamera().Update(cameraMovement);
 			}
 			break;
 		case 1:
 		{
-			m_FPSCamera.AddYaw( -CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * 0.0005f );
-			m_FPSCamera.AddPitch( CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f );
+			m_RenderManager->getFPSCamera().AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
+			m_RenderManager->getFPSCamera().AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
 
-			m_FPSCamera.Move( CInputManager::GetInputManager()->GetAxis( "STRAFE" ), CInputManager::GetInputManager()->GetAxis( "MOVE_FWD" ), false, _ElapsedTime );
+			m_RenderManager->getFPSCamera().Move(CInputManager::GetInputManager()->GetAxis("STRAFE"), CInputManager::GetInputManager()->GetAxis("MOVE_FWD"), false, _ElapsedTime);
 		}
 		break;
 	}
@@ -129,37 +122,13 @@ void CApplication::Update( float _ElapsedTime )
 
 void CApplication::Render()
 {
-	{
-		CCamera camera;
-		m_FPSCamera.SetCamera( &camera );
-		camera.SetFOV( 1.047f );
-		camera.SetAspectRatio( m_ContextManager->GetAspectRatio() );
-		camera.SetZNear( 0.1f );
-		camera.SetZFar( 100.f );
-		camera.SetMatrixs();
-		m_RenderManager->SetCurrentCamera( camera );
-
-		m_SphericalCamera.SetZoom( 5 );
-		m_SphericalCamera.SetCamera( &camera );
-		camera.SetFOV( 1.047f );
-		camera.SetAspectRatio( m_ContextManager->GetAspectRatio() );
-		camera.SetZNear( 0.1f );
-		camera.SetZFar( 100.f );
-		camera.SetMatrixs();
-		m_RenderManager->SetDebugCamera( camera );
-
-		m_RenderManager->SetUseDebugCamera( m_CurrentCamera == 0 );
-	}
-
+	m_RenderManager->SetCamerasMatrix(m_ContextManager);
 	m_ContextManager->BeginRender( m_BackgroundColor );
 
 	// añadir todos los objetos que se quiere pintar
 	//m_RenderManager.AddRenderableObjectToRenderList(&m_Cube);
 
 	m_RenderManager->Render( m_ContextManager );
-	
-	//FOR SCENE RENDERE COMMANDS
-	//CEngine::GetSingleton().getSceneRendererCommandManager()->Execute(*m_ContextManager);
 
 	//Mat44f world;
 
@@ -177,8 +146,8 @@ void CApplication::Render()
 	//m_ContextManager->SetWorldMatrix(world);
 	//m_ContextManager->Draw(m_DebugRender->GetPremultBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_PREMULT);
 
-
-	CDebugHelper::GetDebugHelper()->Render();
+	//ANTTWEAK
+	//CDebugHelper::GetDebugHelper()->Render();
 
 	m_ContextManager->EndRender();
 }

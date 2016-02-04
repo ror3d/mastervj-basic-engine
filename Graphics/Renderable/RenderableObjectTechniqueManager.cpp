@@ -1,6 +1,12 @@
 #include "Renderable\RenderableObjectTechniqueManager.h"
 
+#include "Renderable\RenderableObjectTechnique.h"
+#include "Renderable\PoolRenderableObjectTechnique.h"
+
+#include "Engine\Engine.h"
+
 CRenderableObjectTechniqueManager::CRenderableObjectTechniqueManager()
+	: m_Filename("")
 {
 
 }
@@ -11,17 +17,24 @@ CRenderableObjectTechniqueManager::~CRenderableObjectTechniqueManager()
 bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRenderableObjectTechnique	*PoolRenderableObjectTechniques,
 	const std::string &RenderableObjectTechniqueName,
 	const std::string &TechniqueName)
-{	
-	CRenderableObjectTechnique * tech = new CRenderableObjectTechnique(RenderableObjectTechniqueName, CEngine::GetSingleton().getEffectsManager()->get(TechniqueName));
-	add(RenderableObjectTechniqueName,tech);
+{
+	CRenderableObjectTechnique *l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = get(RenderableObjectTechniqueName);
+	
+	CEffectTechnique *l_EffectTechnique = CEngine::GetSingleton().getEffectsManager()->get(TechniqueName);
+	if (l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager == NULL)
+	{
+		l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = new CRenderableObjectTechnique(RenderableObjectTechniqueName, l_EffectTechnique);
+		add(l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager->getName(), l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager);
+	}
+	PoolRenderableObjectTechniques->AddElement(RenderableObjectTechniqueName, TechniqueName, l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager);
 	return true;
 }
 
 void CRenderableObjectTechniqueManager::Destroy()
 {
-	m_PoolRenderableObjectTechniques.destroy();
 	m_resources.clear();
 }
+
 bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 {
 	m_Filename = FileName;
@@ -33,33 +46,36 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 		{
 			for (int i = 0; i < l_renderable_ob_technqs.GetNumChildren(); ++i)
 			{
-				CXMLTreeNode l_pool = l_renderable_ob_technqs(i);
+				CXMLTreeNode l_Pool = l_renderable_ob_technqs(i);
 
-				if (l_pool.GetName() == std::string("pool_renderable_object_technique")){
-					CPoolRenderableObjectTechnique * pool;
-					pool->setName(l_pool.GetPszProperty("name"));
-					for (int j = 0; j < l_pool.GetNumChildren(); j++){
-						CXMLTreeNode l_technique = l_pool(i);
-						
-						if (l_technique.GetName() == std::string("default_technique")){
-							//TODO:
-							//l_technique.GetPszProperty("vertex_type");
-							//l_technique.GetPszProperty("technique")
+				if (l_Pool.GetName() == std::string("pool_renderable_object_technique")){
+					CPoolRenderableObjectTechnique * l_PoolRenderableObjectTechnique = new CPoolRenderableObjectTechnique(l_Pool);
+					for (int j = 0; j < l_Pool.GetNumChildren(); j++){
+						CXMLTreeNode l_Technique = l_Pool(i);
+						std::string l_RenderableObjectTechniqueName;
+						std::string l_TechniqueName;
+						if (l_Technique.GetName() == std::string("default_technique")){
+							l_RenderableObjectTechniqueName = l_Pool.GetPszProperty("vertex_type", "");
+							l_TechniqueName = l_Pool.GetPszProperty("technique", "");
 						}
-						else if (l_technique.GetName() == std::string("renderable_object_technique")){
-							InsertRenderableObjectTechnique(pool, l_technique.GetPszProperty("name"), l_technique.GetPszProperty("technique"));
-							pool->AddElement(pool->getName(), l_technique.GetPszProperty("technique"), get(l_technique.GetPszProperty("name")));
+						else if (l_Technique.GetName() == std::string("renderable_object_technique")){
+							l_RenderableObjectTechniqueName = l_Pool.GetPszProperty("name", "");
+							l_TechniqueName = l_Pool.GetPszProperty("technique", "");
 						}
+						InsertRenderableObjectTechnique(l_PoolRenderableObjectTechnique, l_RenderableObjectTechniqueName, l_TechniqueName);
 					}
-					m_PoolRenderableObjectTechniques.add(pool->getName(),&pool);
+					m_PoolRenderableObjectTechniques.add(l_PoolRenderableObjectTechnique->getName(), &l_PoolRenderableObjectTechnique);
 				}
 			}
 		}
+		return true;
 	}
-	return true;
+	return false;
+	
 }
 bool CRenderableObjectTechniqueManager::Reload()
 {
+	Destroy();
 	return Load(m_Filename);
 }
 TMapManager<CPoolRenderableObjectTechnique*> & CRenderableObjectTechniqueManager::GetPoolRenderableObjectTechniques()

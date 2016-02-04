@@ -169,8 +169,9 @@ void CStaticMesh::Render(CContextManager *_context) const
 		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
 		{
 			l_Material->apply();
-			//must return pointer: getRenderableObjectTechique()
-			//m_renderableVertexs[i]->RenderIndexed(_context, l_Material->getRenderableObjectTechique()->GetEffectTechnique(), &CEffectManager::m_SceneParameters);
+			m_renderableVertexs[i]->RenderIndexed(_context, 
+				l_Material->getRenderableObjectTechique()->GetEffectTechnique(), 
+				&CEffectManager::m_Parameters);
 		}
 		
 	}

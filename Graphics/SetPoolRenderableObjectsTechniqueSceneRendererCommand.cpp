@@ -1,11 +1,11 @@
 #include "Scene/SetPoolRenderableObjectsTechniqueSceneRendererCommand.h"
+#include "Engine/Engine.h"
 
 CSetPoolRenderableObjectsTechniqueSceneRendererCommand::CSetPoolRenderableObjectsTechniqueSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode){
-	//m_Pool->setName(TreeNode.GetPszProperty("name"));
-	m_Pool = nullptr;
+	m_Pool = * CEngine::GetSingleton().getRenderableObjectTechniqueManager()->GetPoolRenderableObjectTechniques().get(TreeNode.GetPszProperty("name"));
 }
 
 void CSetPoolRenderableObjectsTechniqueSceneRendererCommand::Execute(CContextManager &_context){
-	//Como añade un elemento a RenderableObjectsTEchManAGER->pOOLS??
+	m_Pool->Apply();
 }

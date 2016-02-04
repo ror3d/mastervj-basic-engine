@@ -2,13 +2,14 @@
 #include "Engine\Engine.h"
 
 CPoolRenderableObjectTechnique::CPoolRenderableObjectTechnique(CXMLTreeNode &TreeNode){
-	setName(TreeNode.GetPszProperty("pool"));
+	setName(TreeNode.GetPszProperty("name"));
 }
 CPoolRenderableObjectTechnique::~CPoolRenderableObjectTechnique(){
 	
 }
 void CPoolRenderableObjectTechnique::Destroy(){
 	m_RenderableObjectTechniqueElements.clear();
+	delete(&m_RenderableObjectTechniqueElements);
 }
 void CPoolRenderableObjectTechnique::AddElement(const std::string &Name, const std::string &TechniqueName,
 	CRenderableObjectTechnique *ROTOnRenderableObjectTechniqueManager){
@@ -21,12 +22,10 @@ void CPoolRenderableObjectTechnique::AddElement(const std::string &Name, const s
 
 }
 void CPoolRenderableObjectTechnique::Apply(){
-	/*TODO: recorreremos el pool y estableceremos las CEffectTechnique de
-		m_RenderableObjectTechnique sobre el
-		m_OnRenderableObjectTechniqueManager de los elementos.*/
 	for (std::vector<CPoolRenderableObjectTechniqueElement * >::iterator it = m_RenderableObjectTechniqueElements.begin();
 		it != m_RenderableObjectTechniqueElements.end(); ++it)
-	{		
-		//it->second->m_OnRenderableObjectTechniqueManager.SetEffectTechnique(m_RenderableObjectTechnique.GetEffectTechnique() ));
+	{
+		CPoolRenderableObjectTechniqueElement *l_PoolRenderableObjectTechniqueElement = (*it);
+		l_PoolRenderableObjectTechniqueElement->m_OnRenderableObjectTechniqueManager->SetEffectTechnique(l_PoolRenderableObjectTechniqueElement->m_RenderableObjectTechnique.GetEffectTechnique());
 	}
 }
