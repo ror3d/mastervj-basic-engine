@@ -31,7 +31,6 @@ static void __stdcall SwitchCameraCallback( void* _app )
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
 	: m_RenderManager( _renderManager )
 	, m_ContextManager( _ContextManager )
-	
 {
 	CDebugHelper::GetDebugHelper()->Log( "CApplication::CApplication" );
 
@@ -107,15 +106,15 @@ void CApplication::Update( float _ElapsedTime )
 				cameraMovement.x = CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * 0.0005f;
 				cameraMovement.y = CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f;
 
-				m_RenderManager->getSphericalCamera().Update(cameraMovement);
+				m_RenderManager->getSphericalCamera()->Update(cameraMovement);
 			}
 			break;
 		case 1:
 		{
-			m_RenderManager->getFPSCamera().AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
-			m_RenderManager->getFPSCamera().AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
+			m_RenderManager->getFPSCamera()->AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
+			m_RenderManager->getFPSCamera()->AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
 
-			m_RenderManager->getFPSCamera().Move(CInputManager::GetInputManager()->GetAxis("STRAFE"), CInputManager::GetInputManager()->GetAxis("MOVE_FWD"), false, _ElapsedTime);
+			m_RenderManager->getFPSCamera()->Move(CInputManager::GetInputManager()->GetAxis("STRAFE"), CInputManager::GetInputManager()->GetAxis("MOVE_FWD"), false, _ElapsedTime);
 		}
 		break;
 	}

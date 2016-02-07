@@ -19,8 +19,8 @@ public:
 	void SetDebugCamera(const CCamera& _DebugCamera) { m_DebugCamera = _DebugCamera; }
 	void SetUseDebugCamera(bool _use) { m_UseDebugCamera = _use; }
 	int getCurrentCameraNum(){ return m_CurrentCameraNum; }
-	CSphericalCameraController getSphericalCamera(){ return m_SphericalCamera; }
-	CFPSCameraController getFPSCamera(){ return m_FPSCamera; }
+	CSphericalCameraController* getSphericalCamera(){ return &m_SphericalCamera; }
+	CFPSCameraController* getFPSCamera(){ return &m_FPSCamera; }
 	CCamera getCurrentCamera(){ return m_CurrentCamera;  }
 
 	void SetCamerasMatrix(CContextManager *_context);
