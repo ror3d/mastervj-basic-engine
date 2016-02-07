@@ -37,11 +37,16 @@ void CRenderManager::SetCamerasMatrix(CContextManager *_context){
 	camera.SetMatrixs();
 	SetDebugCamera(camera);
 
-	SetUseDebugCamera(m_CurrentCameraNum == 0);
+	SetUseDebugCamera(m_CurrentCameraNum == 0);	
+}
 
+void CRenderManager::Render(){
 	CCamera &l_Camera = (m_UseDebugCamera ? m_DebugCamera : m_CurrentCamera);
-	CEffectManager::m_Parameters.m_View = l_Camera.GetView();
-	CEffectManager::m_Parameters.m_Projection = l_Camera.GetProjection();
+	CEffectManager::m_SceneParameters.m_CameraPosition = l_Camera.GetPosition();
+	CEffectManager::m_SceneParameters.m_CameraRightVector = l_Camera.GetLookAt();
+	CEffectManager::m_SceneParameters.m_CameraUpVector = l_Camera.GetUp();
+	CEffectManager::m_SceneParameters.m_View = l_Camera.GetView();
+	CEffectManager::m_SceneParameters.m_Projection = l_Camera.GetProjection();
 }
 
 void CRenderManager::SwitchCamera()
@@ -51,14 +56,4 @@ void CRenderManager::SwitchCamera()
 	{
 		m_CurrentCameraNum = 0;
 	}
-}
-
-
-void CRenderManager::Render(CContextManager* _Context)
-{
-
-	
-
-	CEngine::GetSingleton().getLayerManager()->Render(*_Context);
-
 }

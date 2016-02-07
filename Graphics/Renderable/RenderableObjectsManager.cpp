@@ -26,6 +26,11 @@ void CRenderableObjectsManager::Render(CContextManager *_context)
 {
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{
+		CEffectManager l_effectManager = *(CEngine::GetSingleton().getEffectsManager());
+
+		l_effectManager.m_SceneParameters.m_World = it->second->GetTransform();
+		l_effectManager.SetSceneConstants();
+
 		it->second->Render(_context);
 	}
 }

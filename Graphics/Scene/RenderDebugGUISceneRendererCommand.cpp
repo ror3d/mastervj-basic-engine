@@ -5,6 +5,5 @@ CRenderDebugGUISceneRendererCommand::CRenderDebugGUISceneRendererCommand(CXMLTre
 }
 
 void CRenderDebugGUISceneRendererCommand::Execute(CContextManager &_contex){
-	//Llamar anttweak RenderDebug
 	CDebugHelper::GetDebugHelper()->Render();
 }

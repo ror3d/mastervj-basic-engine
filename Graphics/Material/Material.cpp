@@ -28,7 +28,6 @@ void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 	{
 		m_textures[i]->Activate(i);
 	}
-	//RenderableObjectTechnique->GetEffectTechnique()->SetConstantBuffer(??)
 }
 
 void CMaterial::destroy()

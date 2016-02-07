@@ -4,13 +4,16 @@
 #include <d3d11.h>
 #include "Graphics\Texture\Texture.h"
 #include "Graphics\Effect\EffectTechnique.h"
+#include <Base/Math/Color.h>
 
 class CRenderableVertexs;
-class CColor;
 
 class CContextManager
 {
 public:
+
+	CColor m_BackgroundColor;
+
 	CContextManager();
 	~CContextManager();
 
@@ -22,14 +25,9 @@ public:
 	HRESULT CreateBackBuffer(HWND hWnd, int Width, int Height);
 
 	float GetAspectRatio() const { return (float)m_Width / (float)m_Height; }
-
 	float GetWidth() const { return m_Width; }
 	float GetHeight() const { return m_Height; }
 
-
-	void BeginRender();
-	void BeginRender(const CColor &backgroundColor);
-	void EndRender();
 	void EnableAlphaBlendState();
 	void DisableAlphaBlendState();
 	void Clear(bool clear_DepthStencil, bool clear_RenderTarget);
@@ -57,6 +55,9 @@ private:
 	ID3D11DepthStencilView*	m_DepthStencilView;
 	ID3D11DepthStencilView* m_CurrentDepthStencilView;
 	ID3D11BlendState*		m_AlphaBlendState;
+	D3D11_VIEWPORT			m_Viewport;
+	
+
 
 	int m_Width, m_Height;
 	int m_NumViews;

@@ -16,7 +16,6 @@ private:
 	TMapManager<CEffectPixelShader> m_PixelShaders;
 
 public:
-	static CEffectParameters m_Parameters;
 	static CSceneEffectParameters m_SceneParameters;
 	static CAnimatedModelEffectParameters m_AnimatedModelEffectParameters;
 	static CLightEffectParameters m_LightParameters;
@@ -31,7 +30,7 @@ public:
 
 	void SetSceneConstants();
 	void SetLightConstants(unsigned int IdLight, CLight *Light);
-	void SetLightsConstants(unsigned int MaxLights = MAX_LIGHTS_BY_SHADER);
+	void SetLightsConstants();
 
 	void destroy();
 };

@@ -29,9 +29,7 @@ CSetDepthStencilStateSceneRendererCommand::CSetDepthStencilStateSceneRendererCom
 }
 
 CSetDepthStencilStateSceneRendererCommand::~CSetDepthStencilStateSceneRendererCommand(){
-
 }
-
 
 void CSetDepthStencilStateSceneRendererCommand::Execute(CContextManager	&_context)
 {

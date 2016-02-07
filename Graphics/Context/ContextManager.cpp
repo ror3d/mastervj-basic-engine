@@ -3,11 +3,7 @@
 #include "VertexTypes.h"
 #include "Renderable/RenderableVertexs.h"
 #include "Effect/Effect.h"
-
 #include <Math/Matrix44.h>
-
-//#include "Debug/DebugRender.h"
-#include <Base/Math/Color.h>
 
 
 #pragma comment(lib,"d3d11.lib")
@@ -21,10 +17,9 @@ CContextManager::CContextManager()
 	, m_DepthStencil(nullptr)
 	, m_DepthStencilView(nullptr)
 	, m_D3DDebug(nullptr)
+	, m_BackgroundColor(.2f, .1f, .4f)
 {
-
 }
-
 
 CContextManager::~CContextManager()
 {
@@ -108,14 +103,13 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 
 	dxgiFactory->Release();
 
-	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)Width;
-	vp.Height = (FLOAT)Height;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	m_DeviceContext->RSSetViewports(1, &vp);
+	m_Viewport.Width = (FLOAT)Width;
+	m_Viewport.Height = (FLOAT)Height;
+	m_Viewport.MinDepth = 0.0f;
+	m_Viewport.MaxDepth = 1.0f;
+	m_Viewport.TopLeftX = 0;
+	m_Viewport.TopLeftY = 0;
+	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 
 	return S_OK;
 }
@@ -165,8 +159,8 @@ HRESULT CContextManager::CreateBackBuffer(HWND hWnd, int Width, int Height)
 	if (FAILED(hr))
 		return hr;
 
-	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
-
+	SetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	
 	return S_OK;
 }
 
@@ -186,34 +180,6 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 		HRESULT hr = CreateBackBuffer(hWnd, Width, Height);
 		assert(hr == S_OK);
 	}
-}
-
-void CContextManager::BeginRender()
-{
-	BeginRender(CColor(0, 0, 0));
-}
-
-void CContextManager::BeginRender(const CColor &backgroundColor)
-{
-	D3D11_VIEWPORT vp;
-	vp.Width = (FLOAT)m_Width;
-	vp.Height = (FLOAT)m_Height;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	m_DeviceContext->RSSetViewports(1, &vp);
-
-	m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, &backgroundColor.x);
-	m_DeviceContext->ClearDepthStencilView(m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-
-	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
-}
-
-void CContextManager::EndRender()
-{
-	m_SwapChain->Present(0, 0);
 }
 
 void CContextManager::EnableAlphaBlendState()
@@ -241,11 +207,9 @@ void CContextManager::DisableAlphaBlendState()
 	m_DeviceContext->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
 
-void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
-	
+void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){	
 	if (clear_DepthStencil){
-		CColor color = CColor(0, 0, 0);
-		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, &color.x);		
+		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, &m_BackgroundColor.x);
 	}
 
 	if (clear_RenderTarget)		
@@ -274,22 +238,22 @@ void CContextManager::UnsetRenderTargets(){
 	m_DeviceContext->RSSetViewports(1, &vp);
 }
 
-void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
-	*Texture, float x, float y, float Width, float Height, const CColor &Color)
+void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture, 
+	float x, float y, float Width, float Height, const CColor &Color)
 {
-	//CEffectManager::m_SceneParameters.m_BaseColor = Color;
+	CEffectManager::m_SceneParameters.m_BaseColor = Color;
 	if (Texture != NULL)
 		Texture->Activate(0);
 	D3D11_VIEWPORT l_Viewport;
-	//l_Viewport.Width = Width*m_Viewport.Width;
-	//l_Viewport.Height = Height*m_Viewport.Height;
+	l_Viewport.Width = Width* m_Viewport.Width;
+	l_Viewport.Height = Height*m_Viewport.Height;
 	l_Viewport.MinDepth = 0.0f;
 	l_Viewport.MaxDepth = 1.0f;
-	//l_Viewport.TopLeftX = x*m_Viewport.Width;
-	//l_Viewport.TopLeftY = y*m_Viewport.Height;
-	//m_DeviceContext->RSSetViewports(1, &l_Viewport);
-	//m_DrawQuadRV->Render(this, EffectTechnique,	&CEffectManager::m_SceneParameters);
-	//m_DeviceContext->RSSetViewports(1, &m_Viewport);
+	l_Viewport.TopLeftX = x*m_Viewport.Width;
+	l_Viewport.TopLeftY = y*m_Viewport.Height;
+	m_DeviceContext->RSSetViewports(1, &l_Viewport);
+	//CEngine::GetSingleton().getDebugRender()->GetQuad()->Render(this, EffectTechnique);
+	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 }
 
 void CContextManager::Present(){

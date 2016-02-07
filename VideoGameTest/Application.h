@@ -18,14 +18,10 @@ public:
 	void Init();
 	
 	void Update(float _ElapsedTime);
-	void Render();
 
 	void Destroy() {/* TODO */}
 private:
 	CContextManager *m_ContextManager;
-	
-
-	CColor m_BackgroundColor;
 };
 
 #endif
