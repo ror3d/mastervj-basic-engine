@@ -19,12 +19,12 @@ class CEffect;
 class CRenderableVertexs
 {
 public:
-	virtual bool Render(CContextManager *ContextManager, CEffect *Effect, CEffectParameters *Parameters)
+	virtual bool Render(CContextManager *ContextManager, CEffect *Effect)
 	{
 		assert(!"This method mustn't be called");
 		return false;
 	}
-	virtual bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *EffectManager, CEffectParameters *Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	virtual bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *EffectManager, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
 		assert(!"This method mustn't be called");
 		return false;
@@ -63,7 +63,7 @@ public:
 	{
 		CHECKED_RELEASE(m_VertexBuffer);
 	}
-	bool Render(CContextManager *ContextManager, CEffect *Effect, CEffectParameters *Parameters)
+	bool Render(CContextManager *ContextManager, CEffect *Effect)
 	{
 		if (Effect->getPixelShader() == NULL || Effect->getVertexShader() == NULL)
 			return false;
@@ -74,7 +74,6 @@ public:
 		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
 		l_DeviceContext->IASetInputLayout(Effect->getVertexLayout());
 		l_DeviceContext->VSSetShader(Effect->getVertexShader(), NULL, 0);
-		l_DeviceContext->UpdateSubresource(Effect->getConstantBuffer(), 0, NULL, Parameters, 0, 0);
 		ID3D11Buffer *l_ConstantBuffer = Effect->getConstantBuffer();
 		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->PSSetShader(Effect->getPixelShader(), NULL, 0);
@@ -136,7 +135,7 @@ public:
 		CHECKED_RELEASE(m_IndexBuffer);
 	}
 
-	bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *Effect, CEffectParameters *Parameters, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *Effect, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
 		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
 			return false;
@@ -148,7 +147,6 @@ public:
 		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
 		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
 		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
-		l_DeviceContext->UpdateSubresource(Effect->GetVertexShader()->GetConstantBuffer(0), 0, NULL, Parameters, 0, 0);
 		ID3D11Buffer *l_ConstantBuffer = Effect->GetVertexShader()->GetConstantBuffer(0);
 		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
@@ -163,28 +161,24 @@ public:
 /* TODO: Use when C++11 supported! (VS2013)
 template<class T>
 using CLinesListRenderableVertexs = CTemplatedRenderableVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_LINELIST>;
-
-
 template<class T>
 using CTrianglesListRenderableVertexs = CTemplatedRenderableVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST>;
-
 template<class T>
 using CTrianglesStripRenderableVertexs = CTemplatedRenderableVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP>;
-
 template<class T>
 using CLinesStripRenderableVertexs = CTemplatedRenderableVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP>;
 */
 
 // TODO: Delete when C++11 supported! (VS2013)
 #define CRENDERABLE_VERTEX_CLASS_TYPE_CREATOR(ClassName, TopologyType) \
-template<class T> \
+	template<class T> \
 class ClassName : public CTemplatedRenderableVertexs<T, TopologyType> \
 { \
 public: \
 	ClassName(void *Vtxs, unsigned int VtxsCount, unsigned int PrimitiveCount) \
 	: CTemplatedRenderableVertexs(Vtxs, VtxsCount, PrimitiveCount) \
-	{ \
-	} \
+{ \
+} \
 };
 
 CRENDERABLE_VERTEX_CLASS_TYPE_CREATOR(CLinesListRenderableVertexs, D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
@@ -197,19 +191,14 @@ CRENDERABLE_VERTEX_CLASS_TYPE_CREATOR(CLinesStripRenderableVertexs, D3D11_PRIMIT
 /* TODO: Use when C++11 supported! (VS2013)
 template<class T>
 using CKGTriangleListRenderableIndexed16Vertexs	= CTemplatdRenderableIndexedVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, DXGI_FORMAT_R16_UINT>;
-
 template<class T>
 using CKGTriangleListRenderableIndexed32Vertexs	= CTemplatdRenderableIndexedVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, DXGI_FORMAT_R32_UINT>;
-
 template<class T>
 using CKGTriangleStripRenderableIndexed16Vertexs= CTemplatdRenderableIndexedVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, DXGI_FORMAT_R16_UINT>;
-
 template<class T>
 using CKGTriangleStripRenderableIndexed32Vertexs= CTemplatdRenderableIndexedVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, DXGI_FORMAT_R32_UINT>;
-
 template<class T>
 using CLinesListRenderableIndexed16Vertexs		= CTemplatdRenderableIndexedVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_LINELIST, DXGI_FORMAT_R16_UINT>;
-
 template<class T>
 using CLinesListRenderableIndexed32Vertexs		= CTemplatdRenderableIndexedVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_LINELIST, DXGI_FORMAT_R32_UINT>;
 */
@@ -217,14 +206,14 @@ using CLinesListRenderableIndexed32Vertexs		= CTemplatdRenderableIndexedVertexs<
 
 // TODO: Delete when C++11 supported! (VS2013)
 #define CRENDERABLE_INDEXED_VERTEX_CLASS_TYPE_CREATOR(ClassName, TopologyType, IndexType) \
-template<class T> \
+	template<class T> \
 class ClassName : public CTemplatedRenderableIndexedVertexs<T, TopologyType, IndexType> \
 { \
 public: \
 	ClassName(void *Vtxs, unsigned int VtxsCount, void *Indices, unsigned int IndexsCount) \
 	: CTemplatedRenderableIndexedVertexs(Vtxs, VtxsCount, Indices, IndexsCount) \
-	{ \
-	} \
+{ \
+} \
 };
 
 CRENDERABLE_INDEXED_VERTEX_CLASS_TYPE_CREATOR(CKGTriangleListRenderableIndexed16Vertexs, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, DXGI_FORMAT_R16_UINT);

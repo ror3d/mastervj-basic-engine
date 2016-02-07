@@ -5,10 +5,10 @@ CRenderLayerSceneRendererCommand::CRenderLayerSceneRendererCommand(CXMLTreeNode 
 	//TODO: save active
 	//<render_layer layer="solid" active="true"/>
 	std::string layerNameToRender = TreeNode.GetPszProperty("layer");
-	m_Layer = CEngine::GetSingleton().getLayerManager()->get(layerNameToRender);
-	//assert(m_Layer!=nullptr);
+	m_Layer = CEngine::GetSingleton().getLayerManager()->get(layerNameToRender);	
 }
 
 void CRenderLayerSceneRendererCommand::Execute(CContextManager &_context){
+	CEngine::GetSingleton().getRenderManager()->Render();
 	m_Layer->Render(&_context);
 }

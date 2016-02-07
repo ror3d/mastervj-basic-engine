@@ -46,7 +46,6 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 	}
 
 	Mat44f l_Transform = GetTransform();
-	CEffectManager::m_Parameters.m_World = GetTransform();
 
 	for (int l_HardwareMeshId = 0;
 		 l_HardwareMeshId < m_CalHardwareModel->getHardwareMeshCount();
@@ -72,7 +71,6 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 		m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique()->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
 		m_RenderableVertexs->RenderIndexed(context,
 				m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique(),
-				&CEffectManager::m_Parameters,
 				m_CalHardwareModel->getFaceCount() * 3,
 				m_CalHardwareModel->getStartIndex(),
 				m_CalHardwareModel->getBaseVertexIndex());

@@ -3,7 +3,6 @@
 #include <Base/Math/Math.h>
 
 #include <Graphics/Context/ContextManager.h>
-#include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Renderer/RenderManager.h>
 
 #include <Core/Input/InputManager.h>
@@ -32,7 +31,6 @@ static void __stdcall SwitchCameraCallback( void* _app )
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
 	: m_RenderManager( _renderManager )
 	, m_ContextManager( _ContextManager )
-	, m_BackgroundColor( .2f, .1f, .4f )
 	
 {
 	CDebugHelper::GetDebugHelper()->Log( "CApplication::CApplication" );
@@ -44,7 +42,7 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 		var.name = "background";
 		var.type = CDebugHelper::COLOR;
 		var.mode = CDebugHelper::READ_WRITE;
-		var.pColor = &m_BackgroundColor;
+		var.pColor = &_ContextManager->m_BackgroundColor;
 
 		bar.variables.push_back(var);
 	}
@@ -93,7 +91,6 @@ void CApplication::Init()
 }
 
 
-
 void CApplication::Update( float _ElapsedTime )
 {
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
@@ -122,36 +119,4 @@ void CApplication::Update( float _ElapsedTime )
 		}
 		break;
 	}
-}
-
-void CApplication::Render()
-{
-	m_RenderManager->SetCamerasMatrix(m_ContextManager);
-	m_ContextManager->BeginRender( m_BackgroundColor );
-
-	// añadir todos los objetos que se quiere pintar
-	//m_RenderManager.AddRenderableObjectToRenderList(&m_Cube);
-
-	m_RenderManager->Render( m_ContextManager );
-
-	//Mat44f world;
-
-	//world.SetIdentity();
-	//m_ContextManager->SetWorldMatrix(world);
-	//m_ContextManager->Draw(m_DebugRender->GetAxis());
-
-	//world.SetIdentity();
-	//world.SetFromPos(10, 0, 0);
-	//m_ContextManager->SetWorldMatrix(world);
-	//m_ContextManager->Draw(m_DebugRender->GetClassicBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_CLASSIC);
-
-	//world.SetIdentity();
-	//world.SetFromPos(0, 0, -10);
-	//m_ContextManager->SetWorldMatrix(world);
-	//m_ContextManager->Draw(m_DebugRender->GetPremultBlendTriangle(), CContextManager::RS_SOLID, CContextManager::DSS_OFF, CContextManager::BLEND_PREMULT);
-
-	//ANTTWEAK
-	//CDebugHelper::GetDebugHelper()->Render();
-
-	m_ContextManager->EndRender();
 }

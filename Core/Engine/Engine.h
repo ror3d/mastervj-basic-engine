@@ -12,6 +12,7 @@
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
+#include <Graphics/Debug/DebugRender.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -28,6 +29,7 @@ private:
 	CRenderableObjectTechniqueManager * renderableObjectTechniqueManager;
 	CSceneRendererCommandManager * sceneRendererCommandManager;
 	CContextManager * contextManager;
+	CDebugRender * debugRender;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -47,4 +49,5 @@ public:
 	inline CAnimatedModelManager * getAnimatedModelManager() const { return animatedModelManager; }
 	inline CRenderableObjectTechniqueManager * getRenderableObjectTechniqueManager() const { return renderableObjectTechniqueManager; }
 	inline CSceneRendererCommandManager * getSceneRendererCommandManager() const { return sceneRendererCommandManager; }
+	inline CDebugRender * getDebugRender() const { return debugRender; }
 };

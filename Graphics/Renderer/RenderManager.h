@@ -23,9 +23,9 @@ public:
 	CFPSCameraController getFPSCamera(){ return m_FPSCamera; }
 	CCamera getCurrentCamera(){ return m_CurrentCamera;  }
 
-	void Render(CContextManager* _Context);
 	void SetCamerasMatrix(CContextManager *_context);
 	void SwitchCamera();
+	void Render();
 
 	void destroy() {}
 
@@ -38,8 +38,6 @@ private:
 	CFrustum m_CullFrustum;
 	
 	bool m_UseDebugCamera;
-
-	CRenderableObjectsManager * m_RenderableObjects;
 };
 
 #endif
