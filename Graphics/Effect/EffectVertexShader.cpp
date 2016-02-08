@@ -50,9 +50,9 @@ bool CEffectVertexShader::Load()
 	{
 		l_Loaded = MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
-	else if (m_VertexType == "MV_POSITION4_COLOR_TEXTURE_VERTEX")
+	else if (m_VertexType == "MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX")
 	{
-		l_Loaded = MV_POSITION4_COLOR_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+		l_Loaded = MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
 	else
 	{
@@ -81,8 +81,19 @@ void CEffectVertexShader::SetConstantBuffer(unsigned int IdBuffer, void
 
 void CEffectVertexShader::Destroy()
 {
-	int i = 0;
-	// TODO: release shaders and buffers!!
+	if (m_VertexLayout)
+	{
+		m_VertexLayout->Release();
+		m_VertexLayout = 0;
+	}
+
+	if (m_VertexShader)
+	{
+		m_VertexShader->Release();
+		m_VertexShader = 0;
+	}
+
+	delete m_ShaderMacros;
 }
 
 

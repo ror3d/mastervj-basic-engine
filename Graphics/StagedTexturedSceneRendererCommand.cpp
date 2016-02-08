@@ -7,13 +7,15 @@ CStagedTexturedSceneRendererCommand::CStagedTexturedSceneRendererCommand(CXMLTre
 CStagedTexturedSceneRendererCommand::~CStagedTexturedSceneRendererCommand(){
 }
 
-void CStagedTexturedSceneRendererCommand::CreateRenderTargetViewVector(){
+void CStagedTexturedSceneRendererCommand::CreateRenderTargetViewVector()
+{
 	/*El método CreateRenderTargetViewVector se llamará al terminar de leer el nodo
 y se rellenará con todos los RenderTargets de las texturas dinámicas.*/
 
 
 }
-void CStagedTexturedSceneRendererCommand::ActivateTextures(){
+void CStagedTexturedSceneRendererCommand::ActivateTextures()
+{
 	for (int i = 0; i < m_StageTextures.size(); i++){
 		m_StageTextures[i].Activate();
 	}
@@ -23,3 +25,9 @@ void CStagedTexturedSceneRendererCommand::AddStageTexture(int StageId, CTexture 
 		new CStageTexture(StageId, Texture);
 	m_StageTextures.push_back(*stagedText);
 }
+
+void CStagedTexturedSceneRendererCommand::CStageTexture::Activate()
+{
+	// TODO
+}
+

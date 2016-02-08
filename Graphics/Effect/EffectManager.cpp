@@ -86,7 +86,7 @@ void CEffectManager::SetSceneConstants()
 	}
 }
 
-/*void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
+void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
 	m_LightParameters.m_LightAmbient = (0.1f, 0.1f, 0.1f, 0.0f);
 	m_LightParameters.m_LightEnabled[IdLight] = true;
@@ -94,7 +94,7 @@ void CEffectManager::SetSceneConstants()
 	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
 	m_LightParameters.m_LightAttenuationStartRange[IdLight] = Light->getStartRangeAttenuation();
 	m_LightParameters.m_LightAttenuationEndRange[IdLight] = Light->getEndRangeAttenuation();
-	//m_LightParameters.m_LightIntensity[IdLight] = Light->getIntensity();
+	m_LightParameters.m_LightIntensity[IdLight] = Light->getIntensity();
 	m_LightParameters.m_LightColor[IdLight] = Light->getColor();
 
 	if (Light->getType() == CLight::TLightType::DIRECTIONAL)
@@ -109,14 +109,14 @@ void CEffectManager::SetSceneConstants()
 		m_LightParameters.m_LightFallOffAngle[IdLight] = l_light->getFallOff();
 	}
 
-}*/
+}
 
 void CEffectManager::SetLightsConstants()
 {
-	/*CLightManager *l_LightManager = CEngine::GetSingleton().getLightManager();
+	CLightManager *l_LightManager = CEngine::GetSingleton().getLightManager();
 
 	size_t i = 0;
-
+	
 	for (size_t i = 0; i < l_LightManager->count(); ++i)
 	{
 		CLight& l_Light = l_LightManager->iterate(i);
@@ -126,5 +126,5 @@ void CEffectManager::SetLightsConstants()
 	for (auto it : m_resources)
 	{
 		it.second->SetConstantBuffer(1, &m_LightParameters);
-	}*/
+	}
 }

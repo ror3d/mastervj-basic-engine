@@ -71,9 +71,9 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 		m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique()->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
 		m_RenderableVertexs->RenderIndexed(context,
 				m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique(),
-				m_CalHardwareModel->getFaceCount() * 3,
-				m_CalHardwareModel->getStartIndex(),
-				m_CalHardwareModel->getBaseVertexIndex());
+										   m_CalHardwareModel->getFaceCount() * 3,
+										   m_CalHardwareModel->getStartIndex(),
+										   m_CalHardwareModel->getBaseVertexIndex());
 	}
 }
 

@@ -8,7 +8,7 @@
 CRenderManager::CRenderManager()
 	: m_UseDebugCamera(false)
 	, m_CurrentCameraNum(0)
-{	
+{
 }
 
 void CRenderManager::SetCurrentCamera(const CCamera& _CurrentCamera)
@@ -47,6 +47,8 @@ void CRenderManager::Render(){
 	CEffectManager::m_SceneParameters.m_CameraUpVector = l_Camera.GetUp();
 	CEffectManager::m_SceneParameters.m_View = l_Camera.GetView();
 	CEffectManager::m_SceneParameters.m_Projection = l_Camera.GetProjection();
+
+	CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
 }
 
 void CRenderManager::SwitchCamera()

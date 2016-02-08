@@ -3,6 +3,8 @@
 #include "VertexTypes.h"
 #include "Effect/Effect.h"
 
+#include "Renderable/RenderableVertexs.h"
+
 CDebugRender::CDebugRender(ID3D11Device* _Device)
 {
 	{

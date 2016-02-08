@@ -119,3 +119,7 @@ void CApplication::Update( float _ElapsedTime )
 		break;
 	}
 }
+void CApplication::Render()
+{
+	CEngine::GetSingleton().getSceneRendererCommandManager()->Execute(*m_ContextManager);
+}

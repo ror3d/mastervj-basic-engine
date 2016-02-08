@@ -1,4 +1,5 @@
 #include "Light.h"
+#include <Engine/Engine.h>
 
 
 CLight::CLight() : CNamed("")
@@ -8,11 +9,10 @@ CLight::CLight() : CNamed("")
 
 CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
 {
-	m_Type = getLightTypeByName(TreeNode.GetPszProperty("type"));
 	Vect3f pos(0.0f, 0.0f, 0.0f);
 	m_Position = TreeNode.GetVect3fProperty("pos", pos);
 	Vect4f color(0.0f, 0.0f, 0.0f, 0.0f);
-	m_Color = *(new CColor(TreeNode.GetVect4fProperty("color", color)));
+	m_Color = CColor(TreeNode.GetVect4fProperty("color", color));
 	m_StartRangeAttenuation = TreeNode.GetFloatProperty("att_start_range");
 	m_EndRangeAttenuation = TreeNode.GetFloatProperty("att_end_range");
 	m_Intensity = TreeNode.GetFloatProperty("intensity");
@@ -47,12 +47,15 @@ CLight::~CLight()
 
 void CLight::Render(CRenderManager *RenderManager)
 {
+	CEffectManager l_effectManager = *(CEngine::GetSingleton().getEffectsManager());
 
+	l_effectManager.SetLightsConstants();
 }
 
 
 COmniLight::COmniLight(const CXMLTreeNode &TreeNode) : CLight(TreeNode)
 {
+
 }
 
 
@@ -65,14 +68,14 @@ CDirectionalLight::CDirectionalLight(const CXMLTreeNode &TreeNode) : CLight(Tree
 
 void CDirectionalLight::Render(CRenderManager *RenderManager)
 {
-
+	CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
 }
 
 
 CSpotLight::CSpotLight(const CXMLTreeNode &TreeNode) : CDirectionalLight(TreeNode)
 {
 	m_Angle = TreeNode.GetFloatProperty("angle");
-	m_FallOff = TreeNode.GetFloatProperty("fall_off");
+	m_FallOff = TreeNode.GetFloatProperty("falloff");
 }
 /*
 void CDirectionalLight::SetShadowMap(CRenderManager &RenderManager)

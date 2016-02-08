@@ -252,7 +252,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 				application.Update(l_ElapsedTime);
 
-				engine.getSceneRendererCommandManager()->Execute(context);
+				application.Render();
 
 				inputManager.EndFrame();
 			}

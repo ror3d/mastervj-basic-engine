@@ -1,5 +1,6 @@
 #include "LightManager.h"
 #include "Light/Light.h"
+#include <Engine/Engine.h>
 
 
 CLightManager::CLightManager()
@@ -44,6 +45,7 @@ void CLightManager::Load(const std::string &FileName)
 			}
 		}
 	}
+
 }
 
 
@@ -53,4 +55,32 @@ void CLightManager::Render(CRenderManager *RenderManager)
 	{
 		it.second->Render(RenderManager);
 	}
+}
+
+CLight& CLightManager::iterate(size_t id)
+{
+	int i = 0;
+	CLight *l_Light;
+	for (auto it : m_resources)
+	{
+		if (i == id)
+		{
+			l_Light = it.second;
+		}
+		i++;
+	}
+
+	return *l_Light;
+}
+
+size_t CLightManager::count()
+{
+	size_t i = 0;
+
+	for (auto it : m_resources)
+	{
+		i++;
+	}
+
+	return i;
 }

@@ -2,10 +2,10 @@
 
 #include <d3d11.h>
 
-#include "Renderable/RenderableVertexs.h"
 #include <Base/Math/Math.h>
 
 class CEffect;
+class CRenderableVertexs;
 
 class CDebugRender
 {
