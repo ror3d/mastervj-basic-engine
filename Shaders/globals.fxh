@@ -1,11 +1,12 @@
 //Globals.fxh
 #define MAXBONES 40
 #define MAX_LIGHTS_BY_SHADER 4
-cbuffer SceneConstantBuffer : register( b0 )
+cbuffer SceneConstantBuffer : register(b0)
 {
 	float4x4 m_World;
 	float4x4 m_View;
 	float4x4 m_Projection;
+	float4x4 m_ViewInverse;
 	float4 m_CameraPosition;
 	float4 m_CameraRightVector;
 	float4 m_CameraUpVector;
@@ -31,9 +32,11 @@ cbuffer AnimatedModelConstantBuffer : register (b2)
 
 static uint OMNI = 0;
 static uint DIRECTIONAL = 1;
-static uint SPOT = 3;
+static uint SPOT = 2;
 
-static float SpecularExp = 80;
+static float SpecularExp = 80.0f;
+static float m_Bump = 2.4f;
+static float g_EnvironmentFactor = 1;
 static float m_LightEnabledArray[4]=(float[4])m_LightEnabled;
 static float m_LightTypeArray[4]=(float[4])m_LightType;
 static float m_LightAngleArray[4]=(float[4])m_LightAngle;

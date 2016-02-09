@@ -24,14 +24,14 @@ fn exportSingleTexture mat meshName = (
 fn exportSingleLightmap mat meshName = (
 	if HasLightmap mat alertOnMissing:true then
 	(
-		exportTextureFile "lightmap" mat.selfIllumMap
+		exportTextureFile "texture" mat.selfIllumMap
 	)
 )
 
 fn exportSingleNormal mat meshName = (
 	if HasNormal mat alertOnMissing:true then
 	(
-		exportTextureFile "normal" mat.bumpMap.normal_map
+		exportTextureFile "texture" mat.bumpMap.normal_map
 	)
 )
 

@@ -371,14 +371,14 @@ fn createMesh obj = (
 			(
 				-- UV
 				writefloat file vtx.uv.x
-				writefloat file vtx.uv.y
+				writefloat file (1 - vtx.uv.y)
 			)
 			
 			if HasLightmap mat then
 			(
 				--UV Lightmap
 				writefloat file vtx.uv2.x
-				writefloat file vtx.uv2.y
+				writefloat file (1 - vtx.uv2.y)
 			)
 		)
 		

@@ -41,7 +41,7 @@ fn HasWeights mat = (
 )
 
 fn HasLightmap mat alertOnMissing:false = (
-	local ret = mat.selfIllumMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
+	local ret = mat.selfIllumMap != undefined and classof mat.selfIllumMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
 	if alertOnMissing and not ret and mat.selfIllumMap != undefined then
 	(
 		DisplayMaterialError ("El material " + mat.name + " parece tener Lightmap pero no tiene una textura asociada v�lida!!!")
