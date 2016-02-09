@@ -7,6 +7,7 @@ CEffectVertexShader::CEffectVertexShader(const CXMLTreeNode &TreeNode)
 	: CEffectShader(TreeNode)
 {
 	m_VertexType = TreeNode.GetPszProperty("vertex_type");
+
 	assert(Load());
 }
 
@@ -95,5 +96,3 @@ void CEffectVertexShader::Destroy()
 
 	delete m_ShaderMacros;
 }
-
-

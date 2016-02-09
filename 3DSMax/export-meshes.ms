@@ -315,7 +315,7 @@ fn createMesh obj = (
 		local idxs = #()
 		local vtxs = #()
 		
-		local mat;
+		local mat
 		if (classOf obj.material) == Standardmaterial then
 		(
 			mat = obj.material
@@ -338,7 +338,6 @@ fn createMesh obj = (
 			)
 		)
 		
-		
 		writeshort file vtxs.count
 		
 		for idVtx = 1 to vtxs.count do
@@ -353,19 +352,20 @@ fn createMesh obj = (
 			writefloat file vtx.normal.x
 			writefloat file vtx.normal.y
 			writefloat file vtx.normal.z
-			/*
+			
 			if HasNormal mat then
 			(
-				
 				-- Binormal
-				writefloat file vtx.binormal.x
-				writefloat file vtx.binormal.y
-				writefloat file vtx.binormal.z
+				writefloat file 0
+				writefloat file 0
+				writefloat file 0
+				writefloat file 0
 				-- Tangencial
-				writefloat file vtx.tangencial.x
-				writefloat file vtx.tangencial.y
-				writefloat file vtx.tangencial.z
-			)*/
+				writefloat file 0
+				writefloat file 0
+				writefloat file 0
+				writefloat file 0
+			)
 			
 			if HasTexture mat then
 			(
@@ -392,7 +392,7 @@ fn createMesh obj = (
 			writeshort file idxs[idx]
 		)
 	)
-
+	
 	-- TODO: Export bounding box/sphere? look into NodeGetBoundingBox
 	
 	--Footer
