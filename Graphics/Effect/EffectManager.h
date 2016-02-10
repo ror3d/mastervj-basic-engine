@@ -14,6 +14,7 @@ class CEffectManager : public TMapManager<CEffectTechnique>
 private:
 	TMapManager<CEffectVertexShader> m_VertexShaders;
 	TMapManager<CEffectPixelShader> m_PixelShaders;
+	std::string m_FileName;
 
 public:
 	static CSceneEffectParameters m_SceneParameters;

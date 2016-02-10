@@ -28,8 +28,8 @@ void CRenderManager::Render(CContextManager* _Context)
 	CEffectManager::m_SceneParameters.m_CameraPosition = l_Camera.GetPosition();
 	CEffectManager::m_SceneParameters.m_CameraRightVector = l_Camera.GetLookAt();
 	CEffectManager::m_SceneParameters.m_CameraUpVector = l_Camera.GetUp();
-	CEffectManager::m_SceneParameters.m_View = l_Camera.GetView();
 	auto view = l_Camera.GetView();
+	CEffectManager::m_SceneParameters.m_View = view;
 	view.Invert();
 	CEffectManager::m_SceneParameters.m_ViewInverse = view;
 	CEffectManager::m_SceneParameters.m_Projection = l_Camera.GetProjection();

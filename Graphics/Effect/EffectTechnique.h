@@ -19,7 +19,7 @@ public:
 	CEffectVertexShader * GetVertexShader();
 	CEffectPixelShader * GetPixelShader();
 	void SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer);
-
+	void destroy();
 	void Refresh();
 };
 

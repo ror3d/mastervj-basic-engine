@@ -25,13 +25,21 @@ CEffectManager::~CEffectManager()
 
 void CEffectManager::Reload()
 {
+	destroy();
+	load(m_FileName);
 }
 
 void CEffectManager::destroy()
 {
-	TMapManager::destroy();
+	for (auto it : m_resources)
+	{
+		it.second->destroy();
+	}
+
 	m_VertexShaders.destroy();
 	m_PixelShaders.destroy();
+
+	TMapManager::destroy();
 }
 
 void CEffectManager::load(const std::string &Filename)
@@ -39,6 +47,8 @@ void CEffectManager::load(const std::string &Filename)
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(Filename.c_str()))
 	{
+		m_FileName = Filename;
+
 		CXMLTreeNode l_Effects = l_XML["effects"];
 		if (l_Effects.Exists())
 		{

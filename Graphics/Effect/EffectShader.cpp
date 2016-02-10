@@ -92,6 +92,8 @@ void CEffectShader::CreateShaderMacro()
 
 	m_ShaderMacros[l_PreprocessorItems.size()].Name = NULL;
 	m_ShaderMacros[l_PreprocessorItems.size()].Definition = NULL;
+
+	l_PreprocessorItems.clear();
 }
 
 bool CEffectShader::LoadShader(const std::string &Filename, const std::string
