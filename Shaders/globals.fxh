@@ -36,7 +36,7 @@ static uint SPOT = 2;
 
 static float SpecularExp = 80.0f;
 static float m_Bump = 2.4f;
-static float g_EnvironmentFactor = 1;
+static float g_EnvironmentFactor = 0.2f;
 static float m_LightEnabledArray[4]=(float[4])m_LightEnabled;
 static float m_LightTypeArray[4]=(float[4])m_LightType;
 static float m_LightAngleArray[4]=(float[4])m_LightAngle;
