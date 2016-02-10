@@ -16,6 +16,7 @@ private:
 	void Unload();
 public:
 	CTexture();
+	CTexture(const std::string& name);
 	virtual ~CTexture();
 	bool load(const std::string &Filename);
 	void Activate(unsigned int StageId);

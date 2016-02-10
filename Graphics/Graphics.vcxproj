@@ -29,7 +29,6 @@
     <ClInclude Include="Layer\LayerManager.h" />
     <ClInclude Include="Light\LightEffectParameters.h" />
     <ClInclude Include="Debug\DebugRender.h" />
-    <ClInclude Include="Effect\Effect.h" />
     <ClInclude Include="Effect\EffectManager.h" />
     <ClInclude Include="Effect\EffectParameters.h" />
     <ClInclude Include="Effect\EffectPixelShader.h" />

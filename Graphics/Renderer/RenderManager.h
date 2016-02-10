@@ -25,7 +25,7 @@ public:
 
 	void SetCamerasMatrix(CContextManager *_context);
 	void SwitchCamera();
-	void Render();
+	void SetMatrixes();
 
 	void destroy() {}
 

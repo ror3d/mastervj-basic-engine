@@ -1,15 +1,63 @@
 #include "DynamicTexture.h"
 #include <assert.h>
-#include "Engine\Engine.h"
+#include "Engine/Engine.h"
 
 CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool
-	CreateDepthStencilBuffer){
+	CreateDepthStencilBuffer)
+	: CTexture(Name)
+	, m_Width(Width)
+	, m_Height(Height)
+	, m_CreateDepthStencilBuffer(CreateDepthStencilBuffer)
+{
+	Init();
 }
-CDynamicTexture::CDynamicTexture(const CXMLTreeNode &TreeNode){
 
+CDynamicTexture::CDynamicTexture(const CXMLTreeNode &node)
+	: CTexture(node.GetPszProperty("name"))
+	, m_DepthStencilBuffer(nullptr)
+	, m_DepthStencilView(nullptr)
+	, m_RenderTargetView(nullptr)
+	, m_RenderTargetTexture(nullptr)
+{
+	int width = 64;
+	int height = 64;
+	if (node.GetBoolProperty("texture_width_as_frame_buffer", false, false))
+	{
+		width = CEngine::GetSingleton().getContextManager()->GetWidth();
+		height = CEngine::GetSingleton().getContextManager()->GetHeight();
+	}
+	else
+	{
+		width = node.GetIntProperty("width", 64);
+		height = node.GetIntProperty("height", 64);
+	}
+	m_Width = width;
+	m_Height = height;
+
+	m_CreateDepthStencilBuffer = node.GetBoolProperty("create_depth_stencil_buffer", false, false);
+
+	/*static std::map<std::string, DXGI_FORMAT> formats = {
+		{ "A8R8G8B8", DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM },
+		{ "R32F", DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT }
+	};
+
+	std::string fmt = node.GetPszProperty("format_type", "", false);
+
+	auto it = formats.find(fmt);
+	if (it != formats.end())
+	{
+		m_format = it->second;
+	}
+	else
+	{*/
+		m_format = DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT;
+	//}
+
+	Init();
 }
-CDynamicTexture::~CDynamicTexture(){
 
+CDynamicTexture::~CDynamicTexture()
+{
 }
 
 void CDynamicTexture::Init()
@@ -21,7 +69,7 @@ void CDynamicTexture::Init()
 	l_TextureDescription.Height = m_Height;
 	l_TextureDescription.MipLevels = 1; 
 	l_TextureDescription.ArraySize = 1;
-	l_TextureDescription.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	l_TextureDescription.Format = m_format;//DXGI_FORMAT_R32G32B32A32_FLOAT;
 	l_TextureDescription.SampleDesc.Count = 1;
 	l_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
 	l_TextureDescription.BindFlags = D3D11_BIND_RENDER_TARGET |

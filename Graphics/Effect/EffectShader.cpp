@@ -134,7 +134,9 @@ bool CEffectShader::CreateConstantBuffer(int IdBuffer, unsigned int BufferSize)
 	l_BufferDescription.Usage = D3D11_USAGE_DEFAULT;
 	l_BufferDescription.ByteWidth = BufferSize;
 	if ((BufferSize % 16) != 0)
+	{
 		assert(!"Constant Buffer '%d' with wrong size '%d' on shader '%s'.");
+	}
 	l_BufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	l_BufferDescription.CPUAccessFlags = 0;
 	if (FAILED(l_Device->CreateBuffer(&l_BufferDescription, NULL,

@@ -19,7 +19,6 @@
 #include <Engine/Engine.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Debug/DebugRender.h>
-#include <Graphics/Effect/Effect.h>
 #include <Graphics/Camera/Camera.h>
 
 #include <AntTweakBar.h>
@@ -198,13 +197,13 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	context.CreateContext(hWnd, 800, 600);
 
 	engine.getEffectsManager()->load("Data\\effects.xml");
+	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
 	engine.getMaterialManager()->load("Data\\materials.xml");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
-	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
-	engine.getSceneRendererCommandManager()->Load("Data\\basic_scene_renderer_commands.xml");
+	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 

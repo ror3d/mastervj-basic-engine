@@ -15,6 +15,7 @@ public:
 	virtual ~TMapManager();
 	virtual T* get(const std::string& name) const;
 	virtual void add(const std::string& name, T* instance);
+	virtual void remove(const std::string& name);
 	virtual void destroy();
 };
 
@@ -34,6 +35,13 @@ void TMapManager<T>::add( const std::string& name, T* instance )
 {
 	assert( m_resources.find( name ) == m_resources.end() );
 	m_resources[name] = instance;
+}
+
+template<class T>
+void TMapManager<T>::remove( const std::string& name )
+{
+	assert( m_resources.find( name ) != m_resources.end() );
+	m_resources.erase(name);
 }
 
 template<class T>

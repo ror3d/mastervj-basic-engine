@@ -13,6 +13,12 @@ CTexture::CTexture() : CNamed("")
 {
 }
 
+CTexture::CTexture(const std::string& name) : CNamed(name)
+, m_Texture(NULL)
+, m_SamplerState(NULL)
+{
+}
+
 
 CTexture::~CTexture()
 {

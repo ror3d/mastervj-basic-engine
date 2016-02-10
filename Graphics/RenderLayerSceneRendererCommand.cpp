@@ -8,7 +8,7 @@ CRenderLayerSceneRendererCommand::CRenderLayerSceneRendererCommand(CXMLTreeNode 
 	m_Layer = CEngine::GetSingleton().getLayerManager()->get(layerNameToRender);	
 }
 
-void CRenderLayerSceneRendererCommand::Execute(CContextManager &_context){
-	CEngine::GetSingleton().getRenderManager()->Render();
+void CRenderLayerSceneRendererCommand::Execute(CContextManager &_context)
+{
 	m_Layer->Render(&_context);
 }

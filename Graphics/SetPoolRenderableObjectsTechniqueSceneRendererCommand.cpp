@@ -2,11 +2,15 @@
 #include "Engine/Engine.h"
 
 CSetPoolRenderableObjectsTechniqueSceneRendererCommand::CSetPoolRenderableObjectsTechniqueSceneRendererCommand(CXMLTreeNode &TreeNode)
-	: CSceneRendererCommand(TreeNode){
-	m_Pool = CEngine::GetSingleton().getRenderableObjectTechniqueManager()
-		->GetPoolRenderableObjectTechniques().get(TreeNode.GetPszProperty("pool"));
+	: CSceneRendererCommand(TreeNode)
+{
+	m_Pool = CEngine::GetSingleton()
+				.getRenderableObjectTechniqueManager()
+					->GetPoolRenderableObjectTechniques()
+						.get(TreeNode.GetPszProperty("pool"));
 }
 
-void CSetPoolRenderableObjectsTechniqueSceneRendererCommand::Execute(CContextManager &_context){
+void CSetPoolRenderableObjectsTechniqueSceneRendererCommand::Execute(CContextManager &_context)
+{
 	m_Pool->Apply();
 }

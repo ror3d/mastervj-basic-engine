@@ -118,6 +118,9 @@ void CApplication::Update( float _ElapsedTime )
 		}
 		break;
 	}
+
+
+	CEngine::GetSingleton().getRenderManager()->SetCamerasMatrix(m_ContextManager);
 }
 void CApplication::Render()
 {
