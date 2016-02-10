@@ -39,5 +39,5 @@ void CEffectPixelShader::SetConstantBuffer(unsigned int IdBuffer, void
 
 void CEffectPixelShader::destroy()
 {
-	delete m_ShaderMacros;
+
 }

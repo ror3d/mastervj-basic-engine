@@ -93,9 +93,4 @@ void CEffectVertexShader::destroy()
 		m_VertexShader->Release();
 		m_VertexShader = 0;
 	}
-
-	m_ShaderMacros->Definition = NULL;
-	m_ShaderMacros->Name = NULL;
-
-	delete m_ShaderMacros;
 }
