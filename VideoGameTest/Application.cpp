@@ -11,6 +11,7 @@
 #include <Core/Debug/DebugHelper.h>
 
 #include <XML/XMLTreeNode.h>
+#include <Core/Engine/Engine.h>
 #include <Graphics/Cinematics/Cinematic.h>
 
 #include <PhysX/PhysXManager.h>
@@ -22,6 +23,11 @@ static float s_mouseSpeed = 1;
 static void __stdcall SwitchCameraCallback( void* _app )
 {
 	( (CApplication*)_app )->SwitchCamera();
+}
+
+static void __stdcall ReloadMaterials(void* _app)
+{
+	CEngine::GetSingleton().getMaterialManager()->reload();
 }
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
@@ -59,6 +65,15 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 		var.name = "switch camera";
 		var.type = CDebugHelper::BUTTON;
 		var.callback = SwitchCameraCallback;
+		var.data = this;
+
+		bar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "reload materials";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = ReloadMaterials;
 		var.data = this;
 
 		bar.variables.push_back(var);

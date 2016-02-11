@@ -163,5 +163,6 @@ bool CEffectShader::CreateConstantBuffer()
 
 bool CEffectShader::Reload()
 {
+	// TODO: Reload shaders
 	return true;
 }

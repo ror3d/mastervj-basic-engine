@@ -1,4 +1,5 @@
 #include "MaterialManager.h"
+#include <Core/Engine/Engine.h>
 
 CMaterialManager::CMaterialManager()
 	: m_Filename("")
@@ -38,5 +39,14 @@ void CMaterialManager::load(const std::string &Filename)
 
 void CMaterialManager::reload()
 {
-	// TODO
+	//CEngine::GetSingleton().getTextureManager()->destroy();
+
+	for (auto it : m_resources)
+	{
+		it.second->destroy();
+	}
+
+	destroy();
+
+	load(m_Filename);
 }

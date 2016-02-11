@@ -13,7 +13,15 @@ CTextureManager::~CTextureManager()
 
 CTexture * CTextureManager::GetTexture(const std::string &Filename)
 {
-	return get(Filename);
+	CTexture *texture = get(Filename);
+
+	if (texture == nullptr)
+	{
+		texture = new CTexture();
+		texture->load(Filename);
+	}
+
+	return texture;
 }
 
 
