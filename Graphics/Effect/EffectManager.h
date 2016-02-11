@@ -34,11 +34,3 @@ public:
 
 	void destroy();
 };
-
-/*
-class CMaterialEffectParameters
-{
-public:
-	Vect4f m_RawData[MAX_OBJECT_RAW_PARAMETER];
-};
-*/

@@ -208,12 +208,11 @@ void CContextManager::DisableAlphaBlendState()
 }
 
 void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){	
-	if (clear_DepthStencil){
-		m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, &m_BackgroundColor.x);
-	}
+	if (clear_RenderTarget)
+		m_DeviceContext->ClearRenderTargetView(m_CurrentRenderTargetViews, &m_BackgroundColor.x);	
 
-	if (clear_RenderTarget)		
-		m_DeviceContext->ClearDepthStencilView(m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	if (clear_DepthStencil)
+		m_DeviceContext->ClearDepthStencilView(m_CurrentDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView *const	*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){

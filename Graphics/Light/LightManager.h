@@ -5,6 +5,7 @@
 
 class CRenderManager;
 class CLight;
+class CContextManager;
 
 class CLightManager : public TMapManager<CLight>
 {
@@ -15,6 +16,7 @@ public:
 	void Render(CRenderManager *RenderManager);
 	CLight& CLightManager::iterate(size_t id);
 	size_t CLightManager::count();
+	void ExecuteShadowCreation(CContextManager &_context);
 };
 
 #endif

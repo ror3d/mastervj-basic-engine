@@ -51,7 +51,7 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 				if (l_Pool.GetName() == std::string("pool_renderable_object_technique")){
 					CPoolRenderableObjectTechnique * l_PoolRenderableObjectTechnique = new CPoolRenderableObjectTechnique(l_Pool);
 					for (int j = 0; j < l_Pool.GetNumChildren(); j++){
-						CXMLTreeNode l_Technique = l_Pool(i);
+						CXMLTreeNode l_Technique = l_Pool(j);
 						std::string l_RenderableObjectTechniqueName;
 						std::string l_TechniqueName;
 						if (l_Technique.GetName() == std::string("default_technique")){

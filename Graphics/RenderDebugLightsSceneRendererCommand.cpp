@@ -7,5 +7,5 @@ CRenderDebugLightsSceneRendererCommand::CRenderDebugLightsSceneRendererCommand(C
 }
 
 void CRenderDebugLightsSceneRendererCommand::Execute(CContextManager &_context){
-	//CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
+	CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
 }

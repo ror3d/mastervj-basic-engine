@@ -7,11 +7,9 @@ CLightManager::CLightManager()
 {
 }
 
-
 CLightManager::~CLightManager()
 {
 }
-
 
 void CLightManager::Load(const std::string &FileName)
 {
@@ -69,18 +67,29 @@ CLight& CLightManager::iterate(size_t id)
 		}
 		i++;
 	}
-
 	return *l_Light;
 }
 
 size_t CLightManager::count()
 {
 	size_t i = 0;
-
 	for (auto it : m_resources)
 	{
 		i++;
 	}
-
 	return i;
+}
+
+void CLightManager::ExecuteShadowCreation(CContextManager &_context){
+	for (auto light : m_resources){
+		if (light.second->getGenerateShadowMap() && light.second->getIsActive()){
+			light.second->SetShadowMap(_context); //Set matrices y renderTarget
+			_context.Clear(true, false);//Clear Depth
+			for (auto child = light.second->getLayers().begin(); child < light.second->getLayers().end(); child++){
+				(*child)->Render(&_context);//Render de layers afectadas por la luz
+			}
+			//DUDA::::::DONDE SE USA m_ShadowMaskTexture???
+		}			
+	}
+	_context.UnsetRenderTargets();//Una vez pintadas las sombras, quitamos target para render normal
 }

@@ -3,11 +3,29 @@
 #include "Engine\Engine.h"
 
 CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool
-	CreateDepthStencilBuffer){
+	CreateDepthStencilBuffer) : CTexture()
+	, m_RenderTargetTexture(nullptr)
+	, m_RenderTargetView(nullptr)
+	, m_DepthStencilBuffer(nullptr)
+	, m_DepthStencilView(nullptr)
+	, m_CreateDepthStencilBuffer(CreateDepthStencilBuffer)
+	, m_Width(Width)
+	, m_Height(Height)
+{
+	Init();
 }
-CDynamicTexture::CDynamicTexture(const CXMLTreeNode &TreeNode){
 
+CDynamicTexture::CDynamicTexture(const CXMLTreeNode &TreeNode) : CTexture()
+, m_RenderTargetTexture(nullptr)
+, m_RenderTargetView(nullptr)
+, m_DepthStencilBuffer(nullptr)
+, m_DepthStencilView(nullptr)
+, m_CreateDepthStencilBuffer(false)
+, m_Width(0)
+, m_Height(0)
+{
 }
+
 CDynamicTexture::~CDynamicTexture(){
 
 }
