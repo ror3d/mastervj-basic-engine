@@ -129,6 +129,24 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 	m_Width = Width;
 	m_Height = Height;
 
+
+	D3D11_BLEND_DESC l_AlphablendDesc;
+	ZeroMemory(&l_AlphablendDesc, sizeof(D3D11_BLEND_DESC));
+	l_AlphablendDesc.RenderTarget[0].BlendEnable = true;
+	l_AlphablendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	l_AlphablendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	l_AlphablendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	l_AlphablendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	l_AlphablendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	l_AlphablendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	l_AlphablendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	
+	/*CreateBlendState not exist*/
+	hr = m_D3DDevice->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState);
+	assert(!FAILED(hr));
+
+
 	return S_OK;
 }
 
@@ -206,21 +224,6 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 
 void CContextManager::EnableAlphaBlendState()
 {
-	D3D11_BLEND_DESC l_AlphablendDesc;
-	ZeroMemory(&l_AlphablendDesc, sizeof(D3D11_BLEND_DESC));
-	l_AlphablendDesc.RenderTarget[0].BlendEnable = true;
-	l_AlphablendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	l_AlphablendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	l_AlphablendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	l_AlphablendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	l_AlphablendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
-	l_AlphablendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	l_AlphablendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	
-	/*CreateBlendState not exist*/
-	//HRESULT hr = m_DeviceContext->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState);
-	//assert(hr);
-
 	m_DeviceContext->OMSetBlendState(m_AlphaBlendState, NULL, 0xffffffff);
 }
 

@@ -48,7 +48,13 @@ void CRenderManager::SetMatrixes()
 	CEffectManager::m_SceneParameters.m_CameraRightVector = l_Camera.GetLookAt();
 	CEffectManager::m_SceneParameters.m_CameraUpVector = l_Camera.GetUp();
 	CEffectManager::m_SceneParameters.m_View = l_Camera.GetView();
+
+	CEffectManager::m_SceneParameters.m_ViewInverse = l_Camera.GetView();
+	CEffectManager::m_SceneParameters.m_ViewInverse.Invert();
+
 	CEffectManager::m_SceneParameters.m_Projection = l_Camera.GetProjection();
+	CEffectManager::m_SceneParameters.m_ProjectionInverse = l_Camera.GetProjection();
+	CEffectManager::m_SceneParameters.m_ProjectionInverse.Invert();
 }
 
 void CRenderManager::SwitchCamera()

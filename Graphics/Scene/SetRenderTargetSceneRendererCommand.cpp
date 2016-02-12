@@ -21,11 +21,6 @@ CSetRenderTargetSceneRendererCommand::CSetRenderTargetSceneRendererCommand(CXMLT
 
 CSetRenderTargetSceneRendererCommand::~CSetRenderTargetSceneRendererCommand()
 {
-	for (auto t : m_DynamicTextures)
-	{
-		CEngine::GetSingleton().getTextureManager()->remove(t->getName());
-		delete t;
-	}
 }
 
 
