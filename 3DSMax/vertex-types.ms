@@ -79,6 +79,12 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 	)
 	
 	
+	if HasReflection mat then
+	(
+		ret = bit.or ret MV_VERTEX_TYPE_TEXTURE1
+	)
+	
+	
 	if HasNormal mat then
 	(
 		ret = bit.or ret MV_VERTEX_TYPE_BINORMAL_TANG

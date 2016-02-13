@@ -39,6 +39,10 @@ bool CEffectVertexShader::Load()
 	{
 		l_Loaded = MV_POSITION_NORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
+	if (m_VertexType == "MV_POSITION_TEXTURE_VERTEX")
+	{
+		l_Loaded = MV_POSITION_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
 	else if (m_VertexType == "MV_POSITION_COLOR_VERTEX")
 	{
 		l_Loaded = MV_POSITION_COLOR_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);

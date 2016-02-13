@@ -34,6 +34,11 @@ void CRenderManager::Render(CContextManager* _Context)
 	CEffectManager::m_SceneParameters.m_ViewInverse = view;
 	CEffectManager::m_SceneParameters.m_Projection = l_Camera.GetProjection();
 
+	CEffectManager::m_SceneParameters.m_CameraProjectionInfo[0] = l_Camera.GetZNear();
+	CEffectManager::m_SceneParameters.m_CameraProjectionInfo[1] = l_Camera.GetZFar();
+	CEffectManager::m_SceneParameters.m_CameraProjectionInfo[2] = l_Camera.GetFOV();
+	CEffectManager::m_SceneParameters.m_CameraProjectionInfo[3] = l_Camera.GetAspectRatio();
+
 	CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
 
 	m_RenderableObjects->Render(_Context);
