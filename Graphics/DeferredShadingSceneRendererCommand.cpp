@@ -2,7 +2,7 @@
 #include <Core/Engine/Engine.h>
 #include "Light/Light.h"
 
-CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLTreeNode &TreeNode) 
+CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CStagedTexturedSceneRendererCommand(TreeNode)
 {
 	auto mm = CEngine::GetSingleton().getMaterialManager();
@@ -12,6 +12,10 @@ CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLT
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++)
 	{
 		CXMLTreeNode texChild = TreeNode(i);
+		if ( texChild.GetName() != std::string( "texture" ) )
+		{
+			continue;
+		}
 		CTexture *tex = nullptr;
 		tex = CEngine::GetSingleton().getTextureManager()->GetTexture(texChild.GetPszProperty("file"));
 		AddStageTexture(texChild.GetIntProperty("stage_id"), tex);

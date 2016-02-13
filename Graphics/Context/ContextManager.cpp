@@ -141,7 +141,7 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 	l_AlphablendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	l_AlphablendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	
+
 	/*CreateBlendState not exist*/
 	hr = m_D3DDevice->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState);
 	assert(!FAILED(hr));
@@ -198,7 +198,7 @@ HRESULT CContextManager::CreateBackBuffer(HWND hWnd, int Width, int Height)
 	SetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 
 	//m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
-	
+
 	return S_OK;
 }
 
@@ -232,7 +232,7 @@ void CContextManager::DisableAlphaBlendState()
 	m_DeviceContext->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
 
-void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){	
+void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
 	if (clear_DepthStencil)
 	{
 		m_DeviceContext->ClearDepthStencilView(m_CurrentDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -243,12 +243,11 @@ void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
 		for (int i = 0; i < m_NumViews; ++i)
 		{
 			m_DeviceContext->ClearRenderTargetView(m_CurrentRenderTargetViews[i], &m_BackgroundColor.x);
-			
 		}
 	}
 }
 
-void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView 
+void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView
 *const*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){
 	m_NumViews = NumViews;
 	assert(m_NumViews <= MAX_RENDER_TARGET_VIEW);
@@ -274,7 +273,7 @@ void CContextManager::UnsetRenderTargets(){
 	m_DeviceContext->RSSetViewports(1, &vp);
 }
 
-void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture, 
+void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture,
 	float x, float y, float Width, float Height, const CColor &Color)
 {
 	CEffectManager::m_SceneParameters.m_BaseColor = Color;

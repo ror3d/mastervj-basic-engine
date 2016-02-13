@@ -90,7 +90,7 @@ void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
 	m_LightParameters.m_LightAmbient = (0.1f, 0.1f, 0.1f, 0.0f);
 	m_LightParameters.m_LightEnabled[IdLight] = 1.0f;
-	m_LightParameters.m_LightType[IdLight] = 1;//static_cast<float>(Light->getType());
+	m_LightParameters.m_LightType[IdLight] = static_cast<float>(Light->getType());
 	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
 	m_LightParameters.m_LightAttenuationStartRange[IdLight] = Light->getStartRangeAttenuation();
 	m_LightParameters.m_LightAttenuationEndRange[IdLight] = Light->getEndRangeAttenuation();
@@ -116,7 +116,7 @@ void CEffectManager::SetLightsConstants()
 	CLightManager *l_LightManager = CEngine::GetSingleton().getLightManager();
 
 	size_t i = 0;
-	
+
 	for (size_t i = 0; i < l_LightManager->count(); ++i)
 	{
 		CLight& l_Light = l_LightManager->iterate(i);

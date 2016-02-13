@@ -24,6 +24,10 @@ void CLightManager::Load(const std::string &FileName)
 			for (int i = 0; i < l_Lights.GetNumChildren(); ++i)
 			{
 				CXMLTreeNode l_Light = l_Lights(i);
+				if ( l_Light.GetName() != std::string("light") )
+				{
+					continue;
+				}
 
 				CLight::TLightType type = CLight::getLightTypeByName(l_Light.GetPszProperty("type"));
 
@@ -41,7 +45,7 @@ void CLightManager::Load(const std::string &FileName)
 				{
 					CSpotLight * light = new CSpotLight(l_Light);
 					add(light->getName(), light);
-				}				
+				}
 			}
 		}
 	}

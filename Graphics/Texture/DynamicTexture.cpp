@@ -67,7 +67,7 @@ void CDynamicTexture::Init()
 	ZeroMemory(&l_TextureDescription, sizeof(D3D11_TEXTURE2D_DESC));
 	l_TextureDescription.Width = m_Width;
 	l_TextureDescription.Height = m_Height;
-	l_TextureDescription.MipLevels = 1; 
+	l_TextureDescription.MipLevels = 1;
 	l_TextureDescription.ArraySize = 1;
 	l_TextureDescription.Format = m_format;//DXGI_FORMAT_R32G32B32A32_FLOAT;
 	l_TextureDescription.SampleDesc.Count = 1;
