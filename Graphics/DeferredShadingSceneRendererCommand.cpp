@@ -46,6 +46,8 @@ void CDeferredShadingSceneRendererCommand::Execute(CContextManager &_context)
 
 	auto lm = CEngine::GetSingleton().getLightManager();
 	auto em = CEngine::GetSingleton().getEffectsManager();
+
+	ActivateTextures();
 	for (int i = 0; i < lm->count(); i++)
 	{
 		CLight& light = lm->iterate(i);
@@ -53,12 +55,12 @@ void CDeferredShadingSceneRendererCommand::Execute(CContextManager &_context)
 		em->SetLightConstants(0, &light);
 		m_RenderableObjectTechnique->GetEffectTechnique()->SetConstantBuffer(1, &CEffectManager::m_LightParameters);
 		// Render scene with that light
-		ActivateTextures();
 
-		// TODO: Paint only enabled
+		// TODO: Paint only enabled lights
 		_context.DrawScreenQuad(m_RenderableObjectTechnique->GetEffectTechnique(),
 								nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
 	}
+	DeactivateTextures();
 
 	CEngine::GetSingleton().getContextManager()->GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 }

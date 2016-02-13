@@ -18,20 +18,25 @@ y se rellenará con todos los RenderTargets de las texturas dinámicas.*/
 		m_RenderTargetViews.push_back(t->GetRenderTargetView());
 	}
 }
+
 void CStagedTexturedSceneRendererCommand::ActivateTextures()
 {
 	for (int i = 0; i < m_StageTextures.size(); i++)
 	{
-		m_StageTextures[i].Activate();
+		m_StageTextures[i].m_Texture->Activate(m_StageTextures[i].m_StageId);
 	}
 }
+
+void CStagedTexturedSceneRendererCommand::DeactivateTextures()
+{
+	for (int i = 0; i < m_StageTextures.size(); i++)
+	{
+		m_StageTextures[i].m_Texture->Deactivate();
+	}
+}
+
 void CStagedTexturedSceneRendererCommand::AddStageTexture(int StageId, CTexture *Texture)
 {
 	m_StageTextures.push_back(CStageTexture(StageId, Texture));
-}
-
-void CStagedTexturedSceneRendererCommand::CStageTexture::Activate()
-{
-	m_Texture->Activate(m_StageId);
 }
 

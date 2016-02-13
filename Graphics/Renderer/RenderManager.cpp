@@ -57,6 +57,9 @@ void CRenderManager::SetMatrixes()
 
 	CEffectManager::m_SceneParameters.m_ProjectionInverse = l_Camera.GetProjection();
 	CEffectManager::m_SceneParameters.m_ProjectionInverse.Invert();
+
+	// TODO: Move somewhere else!
+	CEffectManager::m_SceneParameters.m_LightAmbient = Vect4f(0.1f, 0.1f, 0.1f, 1.0f);
 }
 
 void CRenderManager::SwitchCamera()

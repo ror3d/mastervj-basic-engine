@@ -2,7 +2,7 @@
 #include "Engine/Engine.h"
 #include "VertexTypes.h"
 
-CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeNode) 
+CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CStagedTexturedSceneRendererCommand(TreeNode)
 {
 	/*<render_draw_quad material="DeferredFogMaterial">
@@ -16,18 +16,21 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++)
 	{
 		CXMLTreeNode texChild = TreeNode(i);
-		CTexture *tex = nullptr;
-		if (texChild.GetBoolProperty("load_file", false))
+		if ( texChild.GetName() == std::string( "texture" ) )
 		{
-			tex = new CTexture();
-			tex->load(texChild.GetPszProperty("file"));
-			CEngine::GetSingleton().getTextureManager()->add(tex->getName(), tex);
+			CTexture *tex = nullptr;
+			if ( texChild.GetBoolProperty( "load_file", false ) )
+			{
+				tex = new CTexture();
+				tex->load( texChild.GetPszProperty( "file" ) );
+				CEngine::GetSingleton().getTextureManager()->add( tex->getName(), tex );
+			}
+			else
+			{
+				tex = CEngine::GetSingleton().getTextureManager()->GetTexture( texChild.GetPszProperty( "file" ) );
+			}
+			AddStageTexture( texChild.GetIntProperty( "stage_id" ), tex );
 		}
-		else
-		{
-			tex = CEngine::GetSingleton().getTextureManager()->GetTexture(texChild.GetPszProperty("file"));
-		}
-		AddStageTexture(texChild.GetIntProperty("stage_id"), tex);
 	}
 }
 
@@ -36,4 +39,5 @@ void CDrawQuadSceneRendererCommand::Execute(CContextManager &_context)
 	ActivateTextures();
 	_context.DrawScreenQuad(m_RenderableObjectTechnique->GetEffectTechnique(),
 							nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
+	DeactivateTextures();
 }

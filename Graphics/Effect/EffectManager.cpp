@@ -88,7 +88,6 @@ void CEffectManager::SetSceneConstants()
 
 void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
-	m_LightParameters.m_LightAmbient = (0.1f, 0.1f, 0.1f, 0.0f);
 	m_LightParameters.m_LightEnabled[IdLight] = 1.0f;
 	m_LightParameters.m_LightType[IdLight] = static_cast<float>(Light->getType());
 	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
