@@ -70,6 +70,8 @@ public:
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 
+	void createController(float height, float radius, float density, Vect3f pos, std::string name);
+
 	void update(float dt);
 
 	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData);
@@ -77,6 +79,12 @@ public:
 	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
+
+	Vect3f moveCharacterController(Vect3f movement, float _ElapsedTime);
+
+	void releaseCharacterControllers();
+
+	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
 protected:
 
@@ -96,6 +104,7 @@ private:
 	float m_elapsedTime;
 
 	std::map<std::string, physx::PxMaterial*> m_materials;
+	std::map<std::string, physx::PxController*> m_CharacterControllers;
 
 	struct {
 		std::map<std::string, size_t> index;
