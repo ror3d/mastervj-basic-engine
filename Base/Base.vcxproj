@@ -37,6 +37,7 @@
     <ClInclude Include="Scripting\ScriptManager.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Utils\Active.h" />
     <ClInclude Include="Utils\TMapManager.h" />
     <ClInclude Include="Utils\Named.h" />
     <ClInclude Include="Utils\SingletonPattern.h" />

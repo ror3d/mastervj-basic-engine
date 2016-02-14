@@ -1,11 +1,12 @@
 #ifndef SCENE_RENDERER_COMMAND_H
 #define SCENE_RENDERER_COMMAND_H
 
-#include "Utils\Named.h"
-#include "Material\Material.h"
-#include "Context\ContextManager.h"
+#include "Utils/Named.h"
+#include "Utils/Active.h"
+#include "Material/Material.h"
+#include "Context/ContextManager.h"
 
-class CSceneRendererCommand : /*public CActive, */public CNamed
+class CSceneRendererCommand : public CActive, public CNamed
 {
 protected:
 	CMaterial *m_Material;

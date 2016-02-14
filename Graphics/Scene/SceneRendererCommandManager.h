@@ -18,6 +18,7 @@ public:
 	bool Reload();
 	void Execute(CContextManager &_context);
 	void add(CSceneRendererCommand * command);
+	CSceneRendererCommand * getLast();
 	void destroy();
 };
 

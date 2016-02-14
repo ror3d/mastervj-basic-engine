@@ -2,6 +2,7 @@
 #define LIGHT_H
 
 #include "Utils/Named.h"
+#include "Utils/Active.h"
 #include "Utils/Utils.h"
 #include "Math/Color.h"
 #include "Math/Matrix44.h"
@@ -13,7 +14,7 @@ class CTexture;
 class CRenderableObjectsManager;
 class CContextManager;
 
-class CLight : public CNamed
+class CLight : public CNamed, public CActive
 {
 public:
 	enum class TLightType

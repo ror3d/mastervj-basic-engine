@@ -1,4 +1,3 @@
-
 #include "SceneRendererCommand.h"
 #include "SceneRendererCommandManager.h"
 #include "SetDepthStencilStateSceneRendererCommand.h"
@@ -36,6 +35,10 @@ std::string CSceneRendererCommandManager::GetNextName(){
 
 void CSceneRendererCommandManager::add(CSceneRendererCommand * command){
 	m_resources.push_back(command);
+}
+
+CSceneRendererCommand * CSceneRendererCommandManager::getLast(){
+	return m_resources.back();
 }
 
 void CSceneRendererCommandManager::destroy(){
@@ -114,6 +117,8 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 				else if (scene_command.GetName() == std::string("present")){
 					add(new CPresentSceneRendererCommand(scene_command));
 				}
+
+				getLast()->setActive(true); //By default all commands enabled				
 			}
 			return true;
 		}		
@@ -122,6 +127,7 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 }
 
 bool CSceneRendererCommandManager::Reload(){
+	destroy();
 	return Load(m_Filename);
 }
 

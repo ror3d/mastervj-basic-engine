@@ -18,9 +18,8 @@ CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
 	m_StartRangeAttenuation = TreeNode.GetFloatProperty("att_start_range");
 	m_EndRangeAttenuation = TreeNode.GetFloatProperty("att_end_range");
 	m_Intensity = TreeNode.GetFloatProperty("intensity");
-	m_isActive = true;
-	//m_GenerateShadowMap = TreeNode.GetBoolProperty("generate_shadow_map",false);
-	m_GenerateShadowMap = false;
+	m_active = true;
+	m_GenerateShadowMap = TreeNode.GetBoolProperty("generate_shadow_map",false);
 
 	if (m_GenerateShadowMap){
 		m_ShadowMap = new CDynamicTexture(TreeNode.GetPszProperty("shadow_texture_mask"), TreeNode.GetIntProperty("shadow_map_width"), TreeNode.GetIntProperty("shadow_map_height"), true);
@@ -65,9 +64,9 @@ CLight::~CLight()
 
 void CLight::Render(CRenderManager *RenderManager)
 {
-	CEffectManager l_effectManager = *(CEngine::GetSingleton().getEffectsManager());
-
-	l_effectManager.SetLightsConstants();
+	if (m_active){
+		CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
+	}	
 }
 
 
@@ -90,7 +89,9 @@ CDirectionalLight::CDirectionalLight(const CXMLTreeNode &TreeNode) : CLight(Tree
 
 void CDirectionalLight::Render(CRenderManager *RenderManager)
 {
-	CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
+	if (m_active){
+		CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
+	}
 }
 
 void CDirectionalLight::SetShadowMap(CContextManager &_context)

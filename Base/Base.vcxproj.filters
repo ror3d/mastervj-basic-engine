@@ -86,6 +86,9 @@
     <ClInclude Include="Scripting\ScriptManager.h">
       <Filter>Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Active.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Math\MathUtils.inl">
