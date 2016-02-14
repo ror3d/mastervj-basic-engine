@@ -20,7 +20,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 
 CMaterial::~CMaterial()
 {
-	destroy();
+
 }
 
 

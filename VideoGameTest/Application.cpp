@@ -25,9 +25,11 @@ static void __stdcall SwitchCameraCallback( void* _app )
 	( (CApplication*)_app )->SwitchCamera();
 }
 
-static void __stdcall ReloadMaterials(void* _app)
+static void __stdcall ReloadScene(void* _app)
 {
 	CEngine::GetSingleton().getMaterialManager()->reload();
+	CEngine::GetSingleton().getStaticMeshManager()->Reload();
+	CEngine::GetSingleton().getRenderableObjectManager()->reload();
 }
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
@@ -71,9 +73,9 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 	}
 	{
 		CDebugHelper::SDebugVariable var = {};
-		var.name = "reload materials";
+		var.name = "reload scene";
 		var.type = CDebugHelper::BUTTON;
-		var.callback = ReloadMaterials;
+		var.callback = ReloadScene;
 		var.data = this;
 
 		bar.variables.push_back(var);

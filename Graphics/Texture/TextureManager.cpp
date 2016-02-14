@@ -19,6 +19,7 @@ CTexture * CTextureManager::GetTexture(const std::string &Filename)
 	{
 		texture = new CTexture();
 		texture->load(Filename);
+		add(texture->getName(), texture);
 	}
 
 	return texture;

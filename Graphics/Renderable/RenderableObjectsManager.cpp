@@ -103,6 +103,8 @@ void CRenderableObjectsManager::Load(const std::string &FileName)
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(FileName.c_str()))
 	{
+		m_FileName = FileName;
+
 		CXMLTreeNode l_Meshes = l_XML["renderable_objects"];
 		if (l_Meshes.Exists())
 		{
@@ -121,4 +123,10 @@ void CRenderableObjectsManager::Load(const std::string &FileName)
 			}
 		}
 	}
+}
+
+void CRenderableObjectsManager::reload()
+{
+	destroy();
+	Load(m_FileName);
 }
