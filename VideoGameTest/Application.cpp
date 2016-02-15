@@ -27,9 +27,12 @@ static void __stdcall SwitchCameraCallback( void* _app )
 
 static void __stdcall ReloadScene(void* _app)
 {
+	CEngine::GetSingleton().getEffectsManager()->Reload();
 	CEngine::GetSingleton().getMaterialManager()->reload();
 	CEngine::GetSingleton().getStaticMeshManager()->Reload();
+	CEngine::GetSingleton().getAnimatedModelManager()->Reload();
 	CEngine::GetSingleton().getRenderableObjectManager()->reload();
+	CEngine::GetSingleton().getLightManager()->reload();
 }
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )

@@ -17,6 +17,8 @@ void CLightManager::Load(const std::string &FileName)
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(FileName.c_str()))
 	{
+		m_FileName = FileName;
+
 		CXMLTreeNode l_Lights = l_XML["lights"];
 		if (l_Lights.Exists())
 		{
@@ -82,4 +84,10 @@ size_t CLightManager::count()
 	}
 
 	return i;
+}
+
+void CLightManager::reload()
+{
+	destroy();
+	Load(m_FileName);
 }
