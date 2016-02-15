@@ -125,7 +125,10 @@ void CEffectManager::SetLightsConstants()
 {
 	CLightManager *l_LightManager = CEngine::GetSingleton().getLightManager();
 
-	size_t i = 0;
+	for (size_t i = 0; i < MAX_LIGHTS_BY_SHADER; ++i)
+	{
+		m_LightParameters.m_LightEnabled[i] = false;
+	}
 	
 	for (size_t i = 0; i < l_LightManager->count(); ++i)
 	{
