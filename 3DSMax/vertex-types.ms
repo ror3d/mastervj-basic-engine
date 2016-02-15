@@ -26,7 +26,7 @@ fn HasTexture mat alertOnMissing:false = (
 )
 
 fn HasNormal mat alertOnMissing:false = (
-	local ret = mat.bumpMap != undefined and classof mat.bumpMap == Bitmaptexture and mat.bumpMap.bitmap != undefined
+	local ret = mat.bumpMap != undefined and classof mat.bumpMap.normal_map == Bitmaptexture and mat.bumpMap.normal_map.bitmap != undefined
 	if alertOnMissing and not ret then
 	(
 		DisplayMaterialError ("En el material " + mat.name + " no hay textura normal o no es un bitmap!!!")
@@ -35,14 +35,16 @@ fn HasNormal mat alertOnMissing:false = (
 )
 
 fn HasWeights mat = (
-	return false -- TODO: change when we have skeletal animations
+	local ret = false
+	
+	return ret
 )
 
 fn HasLightmap mat alertOnMissing:false = (
-	local ret = mat.selfIllumMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
+	local ret = mat.selfIllumMap != undefined and classof mat.selfIllumMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
 	if alertOnMissing and not ret and mat.selfIllumMap != undefined then
 	(
-		DisplayMaterialError ("El material " + mat.name + " parece tener Lightmap pero no tiene una textura asociada válida!!!")
+		DisplayMaterialError ("El material " + mat.name + " parece tener Lightmap pero no tiene una textura asociada vï¿½lida!!!")
 	)
 	return ret
 )
@@ -56,8 +58,9 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 	local MV_VERTEX_TYPE_TEXTURE1		=	0x20
 	local MV_VERTEX_TYPE_TEXTURE2		=	0x40
 	local MV_VERTEX_TYPE_POSITION4		=	0x80
-	local MV_VERTEX_TYPE_NORMAL4		=  0x100
-	local MV_VERTEX_TYPE_BINORMAL_TANG		=	0x200
+	local MV_VERTEX_TYPE_NORMAL4		=   0x100
+	local MV_VERTEX_TYPE_BINORMAL		=	0x200
+	local MV_VERTEX_TYPE_TANGENT		=	0x400
 	
 	local ret = 0;
 	
@@ -71,7 +74,8 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 	
 	if HasNormal mat then
 	(
-		ret = bit.or ret MV_VERTEX_TYPE_BINORMAL_TANG
+		ret = bit.or ret MV_VERTEX_TYPE_BINORMAL
+		ret = bit.or ret MV_VERTEX_TYPE_TANGENT
 	)
 	
 	/*if HasWeights mat then

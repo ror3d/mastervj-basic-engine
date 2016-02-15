@@ -46,7 +46,16 @@ bool CTexture::LoadFile()
 
 void CTexture::Unload()
 {
-	// TODO
+	if (m_Texture != NULL)
+	{
+		m_Texture->Release();
+		m_Texture = NULL;
+	}
+	if (m_SamplerState != NULL)
+	{
+		m_SamplerState->Release();
+		m_SamplerState = NULL;
+	}
 }
 
 bool CTexture::load(const std::string &Filename)

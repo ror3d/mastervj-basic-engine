@@ -10,6 +10,7 @@
 #include <Core/Debug/DebugHelper.h>
 
 #include <XML/XMLTreeNode.h>
+#include <Core/Engine/Engine.h>
 #include <Graphics/Cinematics/Cinematic.h>
 
 #include <PhysX/PhysXManager.h>
@@ -26,6 +27,16 @@ CScriptManager *s_sm = nullptr;
 static void __stdcall SwitchCameraCallback( void* _app )
 {
 	((CApplication*)_app)->m_RenderManager->SwitchCamera();
+}
+
+static void __stdcall ReloadScene(void* _app)
+{
+	CEngine::GetSingleton().getEffectsManager()->Reload();
+	CEngine::GetSingleton().getMaterialManager()->reload();
+	CEngine::GetSingleton().getStaticMeshManager()->Reload();
+	CEngine::GetSingleton().getAnimatedModelManager()->Reload();
+	CEngine::GetSingleton().getLayerManager()->Reload();
+	CEngine::GetSingleton().getLightManager()->reload();
 }
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
@@ -61,6 +72,15 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 		var.name = "switch camera";
 		var.type = CDebugHelper::BUTTON;
 		var.callback = SwitchCameraCallback;
+		var.data = this;
+
+		bar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "reload scene";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = ReloadScene;
 		var.data = this;
 
 		bar.variables.push_back(var);

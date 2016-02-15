@@ -147,16 +147,16 @@ global CurrentObjInvMat = matrix3 1
 
 fn createVertexesForFace obj IdFace = (
 	local IdxsFace=getFace obj IdFace
-	-- Para coger los vértices de la primera cara
+	-- Para coger los v?rtices de la primera cara
 	local Vtx1=getVert obj IdxsFace[1]
 	local Vtx2=getVert obj IdxsFace[2]
 	local Vtx3=getVert obj IdxsFace[3]
 	
 	-- TODO: Obtener normales correctas
 	
-	-- Para coger las normales de los vértices de la primera cara
-	local FaceNormal = getFaceNormal obj IdFace -- El índice de la cara
-	local SmoothValue = getFaceSmoothGroup obj IdFace -- El índice de la cara
+	-- Para coger las normales de los v?rtices de la primera cara
+	local FaceNormal = getFaceNormal obj IdFace -- El ?ndice de la cara
+	local SmoothValue = getFaceSmoothGroup obj IdFace -- El ?ndice de la cara
 
 	--local Normal1=getNormal obj IdxsFace[1]
 	--local Normal2=getNormal obj IdxsFace[2]
@@ -200,11 +200,11 @@ fn createVertexesForFace obj IdFace = (
 	
 	if HasTexture faceMat then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
 	(
-		-- Para coger los índices de las coordenadas de textura de la primera cara, el 1 señala al primer
+		-- Para coger los ?ndices de las coordenadas de textura de la primera cara, el 1 se?ala al primer
 		--   conjunto de coordenadas aplicadas sobre la cara
 		local IdxsMap=meshop.getMapFace obj 1 IdFace
 		
-		-- Para coger las coordenadas de los vértices de la primera cara
+		-- Para coger las coordenadas de los v?rtices de la primera cara
 		local TUVMap1= meshop.getMapVert obj 1 IdxsMap[1]
 		local TUVMap2= meshop.getMapVert obj 1 IdxsMap[2]
 		local TUVMap3= meshop.getMapVert obj 1 IdxsMap[3]
@@ -242,18 +242,18 @@ fn createVertexesForFace obj IdFace = (
 		local area = dUV1.x * dUV2.y - dUV1.y * dUV2.x
 		local sign = if area < 0 then -1 else 1
 
-		v1.tangent = [0,0,1]
+		v1.tangencial = [0,0,1]
 
-		v1.tangent.x = dV1.x * dUV2.y - dUV1.y * dV2.x
-		v1.tangent.y = dV1.y * dUV2.y - dUV1.y * dV2.y
-		v1.tangent.z = dV1.z * dUV2.y - dUV1.y * dV2.z
+		v1.tangencial.x = dV1.x * dUV2.y - dUV1.y * dV2.x
+		v1.tangencial.y = dV1.y * dUV2.y - dUV1.y * dV2.y
+		v1.tangencial.z = dV1.z * dUV2.y - dUV1.y * dV2.z
 
-		v1.tangent = (normalize v1.tangent) * sign
+		v1.tangencial = (normalize v1.tangencial) * sign
 
-		v1.binormal = (normalize (cross (normalize (getFaceNormal obj idFace)) v1.tangent)) * sign
+		v1.binormal = (normalize (cross (normalize (getFaceNormal obj idFace)) v1.tangencial)) * sign
 
-		v2.tangent = v1.tangent
-		v3.tangent = v1.tangent
+		v2.tangencial = v1.tangencial
+		v3.tangencial = v1.tangencial
 		v2.binormal = v1.binormal
 		v3.binormal = v1.binormal		
 	)
@@ -315,7 +315,7 @@ fn createMesh obj = (
 		local idxs = #()
 		local vtxs = #()
 		
-		local mat;
+		local mat
 		if (classOf obj.material) == Standardmaterial then
 		(
 			mat = obj.material
@@ -338,7 +338,6 @@ fn createMesh obj = (
 			)
 		)
 		
-		
 		writeshort file vtxs.count
 		
 		for idVtx = 1 to vtxs.count do
@@ -353,19 +352,20 @@ fn createMesh obj = (
 			writefloat file vtx.normal.x
 			writefloat file vtx.normal.y
 			writefloat file vtx.normal.z
-			/*
+
 			if HasNormal mat then
 			(
-				
 				-- Binormal
 				writefloat file vtx.binormal.x
 				writefloat file vtx.binormal.y
 				writefloat file vtx.binormal.z
+				writefloat file 0
 				-- Tangencial
 				writefloat file vtx.tangencial.x
 				writefloat file vtx.tangencial.y
 				writefloat file vtx.tangencial.z
-			)*/
+				writefloat file 0
+			)
 			
 			if HasTexture mat then
 			(
@@ -392,7 +392,7 @@ fn createMesh obj = (
 			writeshort file idxs[idx]
 		)
 	)
-
+	
 	-- TODO: Export bounding box/sphere? look into NodeGetBoundingBox
 	
 	--Footer

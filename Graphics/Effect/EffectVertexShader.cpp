@@ -84,7 +84,7 @@ void CEffectVertexShader::SetConstantBuffer(unsigned int IdBuffer, void
 }
 
 
-void CEffectVertexShader::Destroy()
+void CEffectVertexShader::destroy()
 {
 	if (m_VertexLayout)
 	{
@@ -97,8 +97,4 @@ void CEffectVertexShader::Destroy()
 		m_VertexShader->Release();
 		m_VertexShader = 0;
 	}
-
-	delete m_ShaderMacros;
 }
-
-

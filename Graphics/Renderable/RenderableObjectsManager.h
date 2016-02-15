@@ -12,6 +12,7 @@ class CXMLTreeNode;
 class CRenderableObjectsManager : public TMapManager<CRenderableObject>
 {
 private:
+	std::string m_FileName;
 public:
 	CRenderableObjectsManager();
 	~CRenderableObjectsManager();
@@ -22,6 +23,7 @@ public:
 	void AddAnimatedInstanceModel(CXMLTreeNode &TreeNode);
 	void AddAnimatedInstanceModel(const std::string &CoreModelName, const std::string &InstanceModelName, const Vect3f &Position);
 	void Load(const std::string &FileName);
+	void reload();
 };
 
 #endif
