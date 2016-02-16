@@ -10,10 +10,12 @@ CRenderableObjectTechniqueManager::CRenderableObjectTechniqueManager()
 {
 
 }
+
 CRenderableObjectTechniqueManager::~CRenderableObjectTechniqueManager()
 {
-	Destroy();
+	destroy();
 }
+
 bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRenderableObjectTechnique	*PoolRenderableObjectTechniques,
 																		const std::string &RenderableObjectTechniqueName,
 																		const std::string &TechniqueName)
@@ -30,9 +32,10 @@ bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRen
 	return true;
 }
 
-void CRenderableObjectTechniqueManager::Destroy()
+void CRenderableObjectTechniqueManager::destroy()
 {
-	m_resources.clear();
+	m_PoolRenderableObjectTechniques.destroy();
+	TMapManager<CRenderableObjectTechnique>::destroy();
 }
 
 bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
@@ -77,11 +80,13 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 	return false;
 
 }
+
 bool CRenderableObjectTechniqueManager::Reload()
 {
-	Destroy();
+	destroy();
 	return Load(m_Filename);
 }
+
 TMapManager<CPoolRenderableObjectTechnique> & CRenderableObjectTechniqueManager::GetPoolRenderableObjectTechniques()
 {
 	return m_PoolRenderableObjectTechniques;
