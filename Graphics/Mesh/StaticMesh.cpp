@@ -82,7 +82,7 @@ bool CStaticMesh::Load(const std::string &FileName)
 			unsigned short l_NumVertexs;
 			fread(&l_NumVertexs, sizeof(unsigned short), 1, l_meshFile);
 
-			unsigned long l_NumBytes;
+			unsigned long l_NumBytes = 0;
 			if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType())
 				l_NumBytes = sizeof(MV_POSITION_NORMAL_TEXTURE_VERTEX)*l_NumVertexs;
 			else if (l_VertexType == MV_POSITION_COLOR_VERTEX::GetVertexType())
