@@ -120,6 +120,29 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 
 		m_Actions.push_back(action);
 	}
+
+	{
+		Action action = { "JUMP", KEYBOARD, Action::WHILE_PRESSED };
+		action.keyboard.key = 'C';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		action.triggersAxis = true;
+		action.axisName = "JUMPAxis";
+		action.axisValue = 1;
+		m_Actions.push_back(action);
+	}
+
+	{
+		Action action = { "COACH", KEYBOARD, Action::WHILE_PRESSED };
+		action.keyboard.key = 'X';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		action.triggersAxis = true;
+		action.axisName = "JUMPAxis";
+		action.axisValue = -1;
+		m_Actions.push_back(action);
+	}
+
 	{
 		Action action = { "MOVE_FWD", KEYBOARD, Action::WHILE_PRESSED };
 		action.keyboard.key = 'W';

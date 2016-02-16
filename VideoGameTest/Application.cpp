@@ -41,12 +41,8 @@ static void __stdcall CreateScene(void* a)
 	desc.density = 1;
 	desc.material = "box";
 	desc.size = Vect3f(1, 1, 1);
-	desc.position = Vect3f(0, 5, 0);
-	phMgr->createActor("b1", CPhysXManager::ActorType::Dynamic, desc);
-	desc.position = Vect3f(0, 8, 0);
-	phMgr->createActor("b2", CPhysXManager::ActorType::Dynamic, desc);
-	desc.position = Vect3f(0, 16, 0);
-	phMgr->createActor("b3", CPhysXManager::ActorType::Dynamic, desc);
+	desc.position = Vect3f(0, 0.5f, 0);
+	phMgr->createActor("boxCol", CPhysXManager::ActorType::Static, desc);
 }
 
 static void __stdcall CreateChar(void* a)
@@ -153,7 +149,7 @@ void CApplication::Init()
 	phMgr->registerMaterial("box", 1, 0.9, 0.8);
 	phMgr->registerMaterial("controller_material", 10, 2, 0.5);
 	phMgr->createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
-	phMgr->createController(2, 0.5f, 10, Vect3f(0, 4, 0), "main");
+	phMgr->createController(2, 0.5f, 10, Vect3f(0, 3, 0), "main");
 }
 
 
@@ -172,25 +168,26 @@ void CApplication::Update( float _ElapsedTime )
 				Vect3f cameraMovement( 0, 0, 0 );
 
 				cameraMovement.x = CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * 0.0005f;
-				cameraMovement.y = CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f;
-
-				
-				
+				cameraMovement.y = CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f;				
 				m_RenderManager->getSphericalCamera()->Update(cameraMovement);
 			}
 			break;
 		case 1:
 		{
-
 			m_RenderManager->getFPSCamera()->AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
 			m_RenderManager->getFPSCamera()->AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
-			Vect3f cameraMovement(0, -9.8f, 0);
-			cameraMovement.z = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
-			cameraMovement.x = CInputManager::GetInputManager()->GetAxis("STRAFE");
+			
+			Vect3f cameraMovement(0, 0, 0);						
+			float Strafe = CInputManager::GetInputManager()->GetAxis("STRAFE");
+			float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
+			float m_Yaw = m_RenderManager->getFPSCamera()->GetYaw();
+			
+			cameraMovement.y = CInputManager::GetInputManager()->GetAxis("JUMPAxis");
+			cameraMovement.x = Forward*(cos(m_Yaw)) + Strafe*(cos(m_Yaw + 3.14159f*0.5f));
+			cameraMovement.z = Forward*(sin(m_Yaw)) + Strafe*(sin(m_Yaw + 3.14159f*0.5f));
 
-			cameraMovement = phMgr->moveCharacterController(cameraMovement, _ElapsedTime);
-			//m_RenderManager->getFPSCamera()->Move(CInputManager::GetInputManager()->GetAxis("STRAFE"), CInputManager::GetInputManager()->GetAxis("MOVE_FWD"), false, _ElapsedTime);
-			m_RenderManager->getFPSCamera()->Move(cameraMovement.x, cameraMovement.z, false, _ElapsedTime);
+			cameraMovement = phMgr->moveCharacterController(cameraMovement, m_RenderManager->getFPSCamera()->GetUp(), _ElapsedTime);
+			m_RenderManager->getFPSCamera()->SetPosition(cameraMovement);
 		}
 		break;
 	}

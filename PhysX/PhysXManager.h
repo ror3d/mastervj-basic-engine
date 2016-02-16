@@ -80,7 +80,9 @@ public:
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
-	Vect3f moveCharacterController(Vect3f movement, float _ElapsedTime);
+	Vect3f moveCharacterController(Vect3f movement, Vect3f direction, float _ElapsedTime);
+
+	void createScene();
 
 	void releaseCharacterControllers();
 

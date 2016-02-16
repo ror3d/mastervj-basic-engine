@@ -403,8 +403,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.slopeLimit = cosf(3.1415f / 6); //30º
 	desc.stepOffset = 0.5f;
 	desc.density = density;
-	//TODO
-	//desc.reportCallback = this;
+	desc.reportCallback = NULL;//TODO
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + radius + height * 0.5f, pos.z);
 	desc.material = l_material;
 	int index = m_CharacterControllers.size();
@@ -413,11 +412,12 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	m_CharacterControllers[name] = cct;
 }
 
-Vect3f CPhysXManager::moveCharacterController(Vect3f movement, float elapsedTime){
+Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime){
 	physx::PxController* cct = getCharControllers()["main"];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
 	cct->move(v(movement), movement.Length() * 0.01f, elapsedTime, filters);
+	cct->setUpDirection(v(direction));
 	physx::PxRigidDynamic* actor = cct->getActor();
 	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
 	physx::PxVec3 vel = actor->getLinearVelocity();

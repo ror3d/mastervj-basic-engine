@@ -7,7 +7,7 @@
 
 CRenderManager::CRenderManager()
 	: m_UseDebugCamera(false)
-	, m_CurrentCameraNum(0)
+	, m_CurrentCameraNum(1)
 {
 }
 
