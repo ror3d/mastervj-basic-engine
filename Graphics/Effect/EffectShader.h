@@ -15,7 +15,7 @@ protected:
 
 	std::vector<ID3D11Buffer *> m_ConstantBuffers;
 	std::vector<std::string> m_PreprocessorMacros;
-	D3D10_SHADER_MACRO *m_ShaderMacros;
+	std::vector<D3D10_SHADER_MACRO> m_ShaderMacros;
 
 	bool LoadShader(const std::string &Filename, const std::string &EntryPoint, const std::string &ShaderModel, ID3DBlob **BlobOut);
 

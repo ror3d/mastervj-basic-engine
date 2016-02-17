@@ -65,21 +65,16 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 	local MV_VERTEX_TYPE_TEXTURE1		=	0x20
 	local MV_VERTEX_TYPE_TEXTURE2		=	0x40
 	local MV_VERTEX_TYPE_POSITION4		=	0x80
-	local MV_VERTEX_TYPE_NORMAL4		=  0x100
-	local MV_VERTEX_TYPE_BINORMAL_TANG		=	0x200
+	local MV_VERTEX_TYPE_NORMAL4		=   0x100
+	local MV_VERTEX_TYPE_BINORMAL		=	0x200
+	local MV_VERTEX_TYPE_TANGENT		=	0x400
 	
 	local ret = 0;
 	
 	ret = bit.or ret MV_VERTEX_TYPE_POSITION
 	ret = bit.or ret MV_VERTEX_TYPE_NORMAL
 	
-	if HasTexture mat then
-	(
-		ret = bit.or ret MV_VERTEX_TYPE_TEXTURE1
-	)
-	
-	
-	if HasReflection mat then
+	if HasTexture or HasReflection mat then
 	(
 		ret = bit.or ret MV_VERTEX_TYPE_TEXTURE1
 	)
@@ -87,7 +82,8 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 	
 	if HasNormal mat then
 	(
-		ret = bit.or ret MV_VERTEX_TYPE_BINORMAL_TANG
+		ret = bit.or ret MV_VERTEX_TYPE_BINORMAL
+		ret = bit.or ret MV_VERTEX_TYPE_TANGENT
 	)
 	
 	/*if HasWeights mat then

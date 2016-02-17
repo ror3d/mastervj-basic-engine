@@ -28,9 +28,12 @@ public:
 	Mat44f m_View;
 	Mat44f m_Projection;
 	Mat44f m_ViewInverse;
+	Mat44f m_ProjectionInverse;
 	Vect4f m_CameraPosition;
 	Vect4f m_CameraRightVector;
 	Vect4f m_CameraUpVector;
+	Vect4f m_BaseColor;
+	Vect4f m_LightAmbient;
 	Vect4f m_CameraProjectionInfo;
 };
 
@@ -43,7 +46,6 @@ public:
 class CLightEffectParameters
 {
 public:
-	Vect4f m_LightAmbient;
 	float m_LightEnabled[MAX_LIGHTS_BY_SHADER];
 	float m_LightType[MAX_LIGHTS_BY_SHADER];
 	Vect4f m_LightPosition[MAX_LIGHTS_BY_SHADER];

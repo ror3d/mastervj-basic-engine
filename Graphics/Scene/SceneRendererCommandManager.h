@@ -1,14 +1,15 @@
 #ifndef SCENE_RENDERER_COMMAND_MANAGER_H
 #define SCENE_RENDERER_COMMAND_MANAGER_H
 
-#include "Utils\TMapManager.h"
-#include "Scene\SceneRendererCommand.h"
-
-class CSceneRendererCommandManager : public
-	TMapManager<CSceneRendererCommand>
+#include <vector>
+#include <assert.h>
+class CSceneRendererCommand;
+class CSceneRendererCommandManager
 {
 private:
 	std::string m_Filename;
+	std::vector<CSceneRendererCommand *> m_resources;
+	
 public:
 	CSceneRendererCommandManager();
 	virtual ~CSceneRendererCommandManager();
@@ -16,6 +17,8 @@ public:
 	bool Load(const std::string &Filename);
 	bool Reload();
 	void Execute(CContextManager &_context);
+	void add(CSceneRendererCommand * command);
+	void destroy();
 };
 
 #endif

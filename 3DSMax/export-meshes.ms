@@ -332,7 +332,7 @@ fn createMesh obj = (
 		local idxs = #()
 		local vtxs = #()
 		
-		local mat;
+		local mat
 		if (classOf obj.material) == Standardmaterial then
 		(
 			mat = obj.material
@@ -378,24 +378,26 @@ fn createMesh obj = (
 				writefloat file vtx.binormal.x
 				writefloat file vtx.binormal.y
 				writefloat file vtx.binormal.z
+				writefloat file 0
 				-- Tangencial
 				writefloat file vtx.tangencial.x
 				writefloat file vtx.tangencial.y
 				writefloat file vtx.tangencial.z
-			)*/
+				writefloat file 0
+			)
 			
 			if HasTexture mat or HasReflection mat then
 			(
 				-- UV
 				writefloat file vtx.uv.x
-				writefloat file (1-vtx.uv.y)
+				writefloat file (1 - vtx.uv.y)
 			)
 			
 			if HasLightmap mat then
 			(
 				--UV Lightmap
 				writefloat file vtx.uv2.x
-				writefloat file vtx.uv2.y
+				writefloat file (1 - vtx.uv2.y)
 			)
 		)
 		
@@ -409,7 +411,7 @@ fn createMesh obj = (
 			writeshort file idxs[idx]
 		)
 	)
-
+	
 	-- TODO: Export bounding box/sphere? look into NodeGetBoundingBox
 	
 	--Footer

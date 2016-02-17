@@ -1,4 +1,5 @@
 #include "LightManager.h"
+#include "Light/Light.h"
 #include <Engine/Engine.h>
 
 
@@ -17,12 +18,18 @@ void CLightManager::Load(const std::string &FileName)
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(FileName.c_str()))
 	{
+		m_FileName = FileName;
+
 		CXMLTreeNode l_Lights = l_XML["lights"];
 		if (l_Lights.Exists())
 		{
 			for (int i = 0; i < l_Lights.GetNumChildren(); ++i)
 			{
 				CXMLTreeNode l_Light = l_Lights(i);
+				if ( l_Light.GetName() != std::string("light") )
+				{
+					continue;
+				}
 
 				CLight::TLightType type = CLight::getLightTypeByName(l_Light.GetPszProperty("type"));
 
@@ -40,7 +47,7 @@ void CLightManager::Load(const std::string &FileName)
 				{
 					CSpotLight * light = new CSpotLight(l_Light);
 					add(light->getName(), light);
-				}				
+				}
 			}
 		}
 	}
@@ -82,4 +89,10 @@ size_t CLightManager::count()
 	}
 
 	return i;
+}
+
+void CLightManager::reload()
+{
+	destroy();
+	Load(m_FileName);
 }

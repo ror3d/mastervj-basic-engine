@@ -19,7 +19,6 @@
 #include <Engine/Engine.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Debug/DebugRender.h>
-#include <Graphics/Effect/Effect.h>
 #include <Graphics/Camera/Camera.h>
 
 #include <AntTweakBar.h>
@@ -168,9 +167,8 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //-----------------------------------------------------------------------
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
-
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(433);
+	//_CrtSetBreakAlloc(2102);
 
 	new CEngine();
 	CEngine& engine = CEngine::GetSingleton();
@@ -198,21 +196,20 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	context.CreateContext(hWnd, 800, 600);
 
 	engine.getEffectsManager()->load("Data\\effects.xml");
+	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
 	engine.getMaterialManager()->load("Data\\materials.xml");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
-	engine.getRenderableObjectManager()->Load("Data\\renderable_objects.xml");
+	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
+	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
 	context.CreateBackBuffer(hWnd, 800, 600);
 	{
-		//CDebugRender debugRender(s_Context.GetDevice());
-
 		CInputManagerImplementation inputManager(hWnd);
 		CInputManager::SetCurrentInputManager(&inputManager);
-
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
 		CDebugHelperImplementation debugHelper(context.GetDevice());
@@ -252,8 +249,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 
 				application.Update(l_ElapsedTime);
-				application.Render();
 
+				application.Render();
 
 				inputManager.EndFrame();
 			}
@@ -261,12 +258,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	}
 
 	UnregisterClass(APPLICATION_NAME, wc.hInstance);
-
-	// TODO: Dispose of CApplication resources
-
 	CEngine::ReleaseSingleton();
-	//*/
-
 	return 0;
 }
 

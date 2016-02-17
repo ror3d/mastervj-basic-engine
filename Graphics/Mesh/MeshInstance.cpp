@@ -22,8 +22,8 @@ CMeshInstance::~CMeshInstance()
 
 void CMeshInstance::Render(CContextManager *_context)
 {
-	if (m_Visible)
+	if ( m_Visible )
 	{
-		m_StaticMesh->Render(_context);
+		m_StaticMesh->Render( _context );
 	}
 }

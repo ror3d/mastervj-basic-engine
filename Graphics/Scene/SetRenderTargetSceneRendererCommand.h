@@ -8,6 +8,7 @@ class CSetRenderTargetSceneRendererCommand : public
 {
 public:
 	CSetRenderTargetSceneRendererCommand(CXMLTreeNode &TreeNode);
+	~CSetRenderTargetSceneRendererCommand();
 	void Execute(CContextManager &_context);
 };
 

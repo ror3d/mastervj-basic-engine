@@ -75,6 +75,7 @@ if exist $(SolutionDir)3rdParty\libxml2-2.7.2.win32\libxml2.dll  xcopy /y /f $(S
 if exist $(SolutionDir)3rdParty\libxml2-2.7.2.win32\zlib1.dll  xcopy /y /f $(SolutionDir)3rdParty\libxml2-2.7.2.win32\zlib1.dll $(LocalDebuggerWorkingDirectory).
 if exist $(SolutionDir)3rdParty\iconv-1.9.2.win32\iconv.dll  xcopy /y /f $(SolutionDir)3rdParty\iconv-1.9.2.win32\iconv.dll $(LocalDebuggerWorkingDirectory).
 if exist $(SolutionDir)bin\lib\Cal3D_d.dll  xcopy /y /f $(SolutionDir)bin\lib\Cal3D_d.dll $(LocalDebuggerWorkingDirectory).
+if exist $(SolutionDir)bin\lib\lua_d.dll  xcopy /y /f $(SolutionDir)bin\lib\lua_d.dll $(LocalDebuggerWorkingDirectory).
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -108,6 +109,9 @@ if exist $(SolutionDir)bin\lib\Cal3D_d.dll  xcopy /y /f $(SolutionDir)bin\lib\Ca
     </ProjectReference>
     <ProjectReference Include="..\3rdParty\cal3d-0.11rc2\src\cal3d\cal3d.vcxproj">
       <Project>{92b63265-5d15-49c8-b5aa-1b16378be875}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rdParty\lua-5.3.2\lua.vcxproj">
+      <Project>{81f73e5a-b785-4f4e-8af5-d1ae902edeed}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Base\Base.vcxproj">
       <Project>{13cd2fd7-8e02-4165-9128-d754579f003f}</Project>

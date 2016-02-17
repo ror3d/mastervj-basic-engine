@@ -1,22 +1,7 @@
 //ForwardShadingUberShader.fx
 #include "globals.fxh"
-Texture2D DiffuseTexture : register( t0 );
-SamplerState LinearSampler : register( s0 );
+#include "samplers.fxh"
 
-#ifdef HAS_UV2
-Texture2D LightMapTexture : register( t1 );
-SamplerState LightMapSampler : register( s1 );
-#endif // HAS_UV2
-
-#ifdef HAS_NORMAL_MAP
-Texture2D NormalMapTexture : register( t1 );
-SamplerState NormalMapSampler : register( s1 );
-#endif // HAS_NORMAL_MAP
-
-#ifdef HAS_ENVIRONMENT_MAP
-Texture2D EnvironmentMapTexture : register( t1 );
-SamplerState EnvironmentMapSampler : register( s1 );
-#endif // HAS_ENVIRONMENT_MAP
 //----------------------------------------------------------------------
 
 struct VS_INPUT
@@ -49,7 +34,7 @@ struct VS_INPUT
 struct PS_INPUT
 {
 	float4 Pos : SV_POSITION;
-	float4 WorldPos : POSITION1;
+	float4 WorldPos : TEXCOORD2;
 
 #ifdef HAS_NORMAL
 	float3 Normal: NORMAL;
@@ -134,6 +119,11 @@ PS_INPUT VS( VS_INPUT IN )
 #ifdef HAS_UV2
 	l_Output.UV2 = IN.UV2;
 #endif // HAS_UV
+
+#ifdef HAS_ENVIRONMENT_MAP
+	float3 l_EyeToWorldPosition=normalize(IN.Pos - m_ViewInverse[3].xyz);
+	float3 l_ReflectVector=normalize(reflect(l_EyeToWorldPosition, l_Output.Normal));
+#endif
 	
 	l_Output.WorldPos = mul(float4(IN.Pos.xyz, 1.0), m_World);
 	
@@ -171,15 +161,15 @@ float4 PS( PS_INPUT IN) : SV_Target
 	float cosAngleLight = 0;
 	
 #ifdef HAS_UV
-	l_Albedo = DiffuseTexture.Sample(LinearSampler, IN.UV);
+	l_Albedo = T0Texture.Sample(S0Sampler, IN.UV);
 #endif // HAS_UV
 
 #ifdef HAS_UV2
-	l_Albedo = l_Albedo * LightMapTexture.Sample(LightMapSampler, IN.UV2);
+	l_Albedo = l_Albedo * T1Texture.Sample(S1Sampler, IN.UV2);
 #endif // HAS_UV2
 
 #ifdef HAS_NORMAL_MAP
-	float3 bump = m_Bump * (NormalMapTexture.Sample(NormalMapSampler, IN.UV).rgb - float3(0.5,0.5,0.5));
+	float3 bump = m_Bump * (T1Texture.Sample(S1Sampler, IN.UV).rgb - float3(0.5,0.5,0.5));
 	Nn = Nn + bump.x * Tn + bump.y * Bn;
 	Nn = normalize(Nn);
 #endif // HAS_NORMAL_MAP
@@ -230,7 +220,7 @@ float4 PS( PS_INPUT IN) : SV_Target
 #ifdef HAS_ENVIRONMENT_MAP
 	float3 l_EyeToWorldPosition = normalize(IN.WorldPos - m_ViewInverse[3].xyz);
 	float3 l_ReflectVector = normalize(reflect(l_EyeToWorldPosition, Nn));
-	float3 l_ReflectColor = EnvironmentMapTexture.Sample(EnvironmentMapSampler, l_ReflectVector).xyz * g_EnvironmentFactor;
+	float3 l_ReflectColor = T1Cube.Sample(S1Sampler, l_ReflectVector).xyz * g_EnvironmentFactor;
 	
 	l_Albedo = float4(l_Albedo.xyz + l_ReflectColor, l_Albedo.a);
 #endif //HAS_ENVIRONMENT_MAP

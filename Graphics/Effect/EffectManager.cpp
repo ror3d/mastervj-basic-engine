@@ -98,8 +98,7 @@ void CEffectManager::SetSceneConstants()
 
 void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
-	m_LightParameters.m_LightAmbient = (0.1f, 0.1f, 0.1f, 0.0f);
-	m_LightParameters.m_LightEnabled[IdLight] = true;
+	m_LightParameters.m_LightEnabled[IdLight] = 1.0f;
 	m_LightParameters.m_LightType[IdLight] = static_cast<float>(Light->getType());
 	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
 	m_LightParameters.m_LightAttenuationStartRange[IdLight] = Light->getStartRangeAttenuation();
@@ -125,7 +124,10 @@ void CEffectManager::SetLightsConstants()
 {
 	CLightManager *l_LightManager = CEngine::GetSingleton().getLightManager();
 
-	size_t i = 0;
+	for (size_t i = 0; i < MAX_LIGHTS_BY_SHADER; ++i)
+	{
+		m_LightParameters.m_LightEnabled[i] = false;
+	}
 	
 	for (size_t i = 0; i < l_LightManager->count(); ++i)
 	{

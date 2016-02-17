@@ -5,6 +5,7 @@
 #include <Base/Math/MathUtils.h>
 #include "VertexTypes.h"
 #include "Renderable/RenderableVertexs.h"
+#include "RenderableObjectTechnique.h"
 
 #include <cal3d/cal3d.h>
 #include <XML/XMLTreeNode.h>
@@ -12,7 +13,11 @@
 CAnimatedInstanceModel::CAnimatedInstanceModel(CXMLTreeNode& TreeNode)
 	: CRenderableObject(TreeNode)
 {
-	Initialize(CEngine::GetSingleton().getAnimatedModelManager()->get(TreeNode.GetPszProperty("core_name")));
+	const char* coreName = TreeNode.GetPszProperty("core_name");
+	assert(coreName);
+	auto core = CEngine::GetSingleton().getAnimatedModelManager()->get(coreName);
+	assert(core);
+	Initialize(core);
 	BlendCycle(1, 1.0f, 0.0f);
 }
 
@@ -63,9 +68,9 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 		memcpy(&CEffectManager::m_AnimatedModelEffectParameters.m_Bones,
 			   l_Transformations,
 			   MAXBONES*sizeof(float) * 4 * 4);
-		m_Materials[l_HardwareMeshId]->getEffectTechnique()->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
+		m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique()->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
 		m_RenderableVertexs->RenderIndexed(context,
-										   m_Materials[l_HardwareMeshId]->getEffectTechnique(),
+				m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique(),
 										   m_CalHardwareModel->getFaceCount() * 3,
 										   m_CalHardwareModel->getStartIndex(),
 										   m_CalHardwareModel->getBaseVertexIndex());

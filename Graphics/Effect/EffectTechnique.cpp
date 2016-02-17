@@ -45,4 +45,7 @@ void CEffectTechnique::destroy()
 {
 	m_VertexShader->destroy();
 	m_PixelShader->destroy();
+
+	m_VertexShader = NULL;
+	m_PixelShader = NULL;
 }

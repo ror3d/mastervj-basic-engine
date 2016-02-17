@@ -9,10 +9,11 @@ class CRenderableObjectTechnique : public CNamed
 private:
 	CEffectTechnique *m_EffectTechnique;
 public:
-	CRenderableObjectTechnique(const std::string &Name, CEffectTechnique
-		*EffectTechnique);
+	CRenderableObjectTechnique(const std::string &Name, CEffectTechnique *EffectTechnique);
+	virtual ~CRenderableObjectTechnique() {}
+
 	void SetEffectTechnique(CEffectTechnique *EffectTechnique);
-	CEffectTechnique * GetEffectTechnique() const;
+	CEffectTechnique * GetEffectTechnique() const { return m_EffectTechnique; }
 };
 
 #endif

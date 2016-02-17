@@ -1,16 +1,15 @@
-#ifndef RENDERABLE_OBJECT_TECHNIQUE_MANAGER
-#define RENDERABLE_OBJECT_TECHNIQUE_MANAGER
+#ifndef RENDERABLE_OBJECT_TECHNIQUE_MANAGER_H
+#define RENDERABLE_OBJECT_TECHNIQUE_MANAGER_H
 
 #include <Utils\TMapManager.h>
-#include "Renderable\RenderableObjectTechnique.h"
-#include "Renderable\PoolRenderableObjectTechnique.h"
 
-class CRenderableObjectTechniqueManager : public
-	TMapManager<CRenderableObjectTechnique>
+class CRenderableObjectTechnique;
+class CPoolRenderableObjectTechnique;
+
+class CRenderableObjectTechniqueManager : public TMapManager<CRenderableObjectTechnique>
 {
 private:
-	TMapManager<CPoolRenderableObjectTechnique*>
-		m_PoolRenderableObjectTechniques;
+	TMapManager<CPoolRenderableObjectTechnique> m_PoolRenderableObjectTechniques;
 	std::string m_Filename;
 public:
 	CRenderableObjectTechniqueManager();
@@ -18,10 +17,10 @@ public:
 	bool InsertRenderableObjectTechnique(CPoolRenderableObjectTechnique	*PoolRenderableObjectTechniques, 
 		const std::string &RenderableObjectTechniqueName,
 		const std::string &TechniqueName);
-	void Destroy();
+	void destroy();
 	bool Load(const std::string &Filename);
 	bool Reload();
-	CPoolRenderableObjectTechnique * GetPoolRenderableObjectTechniques();
+	TMapManager<CPoolRenderableObjectTechnique> & GetPoolRenderableObjectTechniques();
 };
 
 #endif

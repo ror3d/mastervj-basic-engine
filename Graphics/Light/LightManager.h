@@ -2,11 +2,14 @@
 #define LIGHT_MANAGER_H
 
 #include <Utils/TMapManager.h>
-#include "Light/Light.h"
-#include "Renderer/RenderManager.h"
+
+class CRenderManager;
+class CLight;
 
 class CLightManager : public TMapManager<CLight>
 {
+private:
+	std::string m_FileName;
 public:
 	CLightManager();
 	virtual ~CLightManager();
@@ -14,6 +17,7 @@ public:
 	void Render(CRenderManager *RenderManager);
 	CLight& CLightManager::iterate(size_t id);
 	size_t CLightManager::count();
+	void reload();
 };
 
 #endif

@@ -2,8 +2,8 @@
 #define LIGHT_H
 
 #include "Utils/Named.h"
+#include "Utils/Utils.h"
 #include "Math/Color.h"
-#include "Renderer/RenderManager.h"
 
 class CRenderManager;
 
@@ -22,6 +22,11 @@ protected:
 	float m_Intensity;
 	float m_StartRangeAttenuation;
 	float m_EndRangeAttenuation;
+	/*bool m_GenerateShadowMap;
+	CDynamicTexture *m_ShadowMap;
+	CTexture *m_ShadowMaskTexture;
+	std::vector<CRenderableObjectsManager *> m_Layers;
+	Mat44f m_ViewShadowMap, m_ProjectionShadowMap;*/
 public:
 	CLight(const CXMLTreeNode &TreeNode);
 	CLight();
@@ -38,6 +43,14 @@ public:
 	void setEndTangeAttenuation(const float endRangeAttenuation) { m_EndRangeAttenuation = endRangeAttenuation; }
 	virtual void Render(CRenderManager *RenderManager);
 	static TLightType getLightTypeByName(const std::string &type);
+	/*TODO:
+	UAB_GET_SET_GET_ADRESS_STANDARD_PROPERTY(bool, GenerateShadowMap);
+	UAB_GET_PROPERTY_POINTER(CDynamicTexture, ShadowMap);
+	UAB_GET_PROPERTY_POINTER(CTexture, ShadowMaskTexture);
+	UAB_GET_PROPERTY_REFERENCE(Mat44f, ViewShadowMap);
+	UAB_GET_PROPERTY_REFERENCE(Mat44f, ProjectionShadowMap);
+	UAB_GET_PROPERTY_REFERENCE(std::vector<CRenderableObjectsManager *>, Layers);*/
+	//virtual void SetShadowMap(CRenderManager &RenderManager);
 };
 
 
@@ -54,6 +67,7 @@ class CDirectionalLight : public CLight
 {
 protected:
 	Vect3f m_Direction;
+	Vect2f m_OrthoShadowMapSize;
 public:
 	CDirectionalLight();
 	CDirectionalLight(const CXMLTreeNode &TreeNode);
@@ -61,6 +75,7 @@ public:
 	void setDiretion(const Vect3f direction) { m_Direction = direction; }
 	virtual void Render(CRenderManager *RenderManager);
 	virtual const TLightType getType() const { return TLightType::DIRECTIONAL; }
+	//void SetShadowMap(CRenderManager &RenderManager);
 };
 
 

@@ -1,19 +1,32 @@
 #include "Material.h"
-#include "Effect/EffectTechnique.h"
 #include "Engine/Engine.h"
+#include "Graphics/Renderable/RenderableObjectTechnique.h"
 #include "Texture/Texture.h"
+#include "Texture/TextureManager.h"
 
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
 {
-	m_effectTechnique = CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique"));
+	/*m_RenderableObjectTechnique = new CRenderableObjectTechnique(TreeNode.GetPszProperty("effect_technique"), 
+		CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));*/
 
+	std::string name;
+	const char * rot = TreeNode.GetPszProperty("renderable_object_technique", 0, false);
+	if (rot)
+	{
+		name = rot;
+	}
+	else
+	{
+		name = TreeNode.GetPszProperty("vertex_type", "", true);
+	}
+
+	m_RenderableObjectTechnique = CEngine::GetSingleton().getRenderableObjectTechniqueManager()->get(name);
 	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 	{
 		CXMLTreeNode l_Texture = TreeNode(i);
-		CTexture * Texture = new CTexture();
-		Texture->load(l_Texture.GetPszProperty("filename"));
-		m_textures.push_back(Texture);
+		CTexture *texture = CEngine::GetSingleton().getTextureManager()->GetTexture(l_Texture.GetPszProperty("filename"));
+		m_textures.push_back(texture);
 	}
 }
 
@@ -23,8 +36,7 @@ CMaterial::~CMaterial()
 	destroy();
 }
 
-
-void CMaterial::apply()
+void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 {
 	for (int i = 0; i < m_textures.size(); ++i)
 	{
@@ -32,18 +44,7 @@ void CMaterial::apply()
 	}
 }
 
-
-CEffectTechnique * CMaterial::getEffectTechnique() const
-{
-	return m_effectTechnique;
-}
-
 void CMaterial::destroy()
 {
-	for (int i = 0; i < m_textures.size(); ++i)
-	{
-		delete m_textures[i];
-	}
-
 	m_textures.clear();
 }
