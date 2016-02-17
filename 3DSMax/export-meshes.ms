@@ -384,18 +384,11 @@ fn createMesh obj = (
 				writefloat file vtx.tangencial.z
 			)*/
 			
-			if HasTexture mat then
+			if HasTexture mat or HasReflection mat then
 			(
 				-- UV
 				writefloat file vtx.uv.x
-				writefloat file vtx.uv.y
-			)
-			
-			if HasReflection mat then
-			(
-				-- UV
-				writefloat file vtx.uv.x
-				writefloat file vtx.uv.y
+				writefloat file (1-vtx.uv.y)
 			)
 			
 			if HasLightmap mat then
