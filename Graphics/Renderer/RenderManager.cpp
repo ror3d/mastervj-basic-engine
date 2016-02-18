@@ -37,7 +37,7 @@ void CRenderManager::SetCamerasMatrix(CContextManager *_context){
 	camera.SetMatrixs();
 	SetDebugCamera(camera);
 
-	SetUseDebugCamera(m_CurrentCameraNum == 0);
+	SetUseDebugCamera(m_CurrentCameraNum == 0);	
 }
 
 void CRenderManager::SetMatrixes()

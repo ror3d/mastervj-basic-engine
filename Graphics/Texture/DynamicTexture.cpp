@@ -2,13 +2,17 @@
 #include <assert.h>
 #include "Engine/Engine.h"
 
-CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool
-	CreateDepthStencilBuffer)
+CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool CreateDepthStencilBuffer)
 	: CTexture(Name)
 	, m_Width(Width)
 	, m_Height(Height)
 	, m_CreateDepthStencilBuffer(CreateDepthStencilBuffer)
+	, m_DepthStencilBuffer(nullptr)
+	, m_DepthStencilView(nullptr)
+	, m_RenderTargetView(nullptr)
+	, m_RenderTargetTexture(nullptr)
 {
+	m_format = DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT;
 	Init();
 }
 
@@ -47,7 +51,7 @@ CDynamicTexture::CDynamicTexture(const CXMLTreeNode &node)
 	if (it != formats.end())
 	{
 		m_format = it->second;
-	}
+}
 	else
 	{*/
 		m_format = DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -67,7 +71,7 @@ void CDynamicTexture::Init()
 	ZeroMemory(&l_TextureDescription, sizeof(D3D11_TEXTURE2D_DESC));
 	l_TextureDescription.Width = m_Width;
 	l_TextureDescription.Height = m_Height;
-	l_TextureDescription.MipLevels = 1;
+	l_TextureDescription.MipLevels = 1; 
 	l_TextureDescription.ArraySize = 1;
 	l_TextureDescription.Format = m_format;//DXGI_FORMAT_R32G32B32A32_FLOAT;
 	l_TextureDescription.SampleDesc.Count = 1;

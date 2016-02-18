@@ -251,6 +251,9 @@
     <ClInclude Include="Scene\RenderDebugGUISceneRendererCommand.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="ApplyFiltersSceneRendererCommand.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -441,6 +444,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\RenderDebugGUISceneRendererCommand.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplyFiltersSceneRendererCommand.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>

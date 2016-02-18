@@ -156,6 +156,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 
 CPhysXManagerImplementation::~CPhysXManagerImplementation()
 {
+	releaseCharacterControllers();
 	CHECKED_RELEASE(m_ControllerManager);
 	CHECKED_RELEASE(m_Scene);
 	CHECKED_RELEASE(m_Dispatcher);
@@ -391,6 +392,44 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	m_actors.position.push_back(desc.position);
 	m_actors.rotation.push_back(desc.orientation);
 	m_actors.actor.push_back(body);
+}
+
+void CPhysXManager::createController(float height, float radius, float density, Vect3f pos, std::string name){
+	physx::PxMaterial* l_material = m_materials["controller_material"];
+	physx::PxCapsuleControllerDesc desc;
+	desc.height = height;
+	desc.radius = radius;
+	desc.climbingMode = physx::PxCapsuleClimbingMode::eEASY;
+	desc.slopeLimit = cosf(3.1415f / 6); //30º
+	desc.stepOffset = 0.5f;
+	desc.density = density;
+	desc.reportCallback = NULL;//TODO
+	desc.position = physx::PxExtendedVec3(pos.x, pos.y + radius + height * 0.5f, pos.z);
+	desc.material = l_material;
+	int index = m_CharacterControllers.size();
+	desc.userData = (void*) index;
+	physx::PxController* cct = m_ControllerManager->createController(desc);
+	m_CharacterControllers[name] = cct;
+}
+
+Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime){
+	physx::PxController* cct = getCharControllers()["main"];
+	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
+	size_t index = (size_t)cct->getUserData();
+	cct->move(v(movement), movement.Length() * 0.01f, elapsedTime, filters);
+	cct->setUpDirection(v(direction));
+	physx::PxRigidDynamic* actor = cct->getActor();
+	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
+	physx::PxVec3 vel = actor->getLinearVelocity();
+	return v(cct->getPosition());
+}
+
+void CPhysXManager::releaseCharacterControllers(){
+	for (auto it = m_CharacterControllers.begin(); it != m_CharacterControllers.end(); it++){
+		physx::PxController *cct = it->second;
+		cct->release();
+	}
+	m_CharacterControllers.clear();
 }
 
 void CPhysXManager::update(float dt)

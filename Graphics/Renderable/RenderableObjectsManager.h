@@ -2,14 +2,15 @@
 #define RENDERABLE_OBJECTS_MANAGER_H
 
 #include <string>
-#include <Base/Utils/TMapManager.h>
-#include <Base/Math/Math.h>
+#include "Utils/Active.h"
+#include "Utils/TMapManager.h"
+#include "Math/Math.h"
 
 class CContextManager;
 class CRenderableObject;
 class CXMLTreeNode;
 
-class CRenderableObjectsManager : public TMapManager<CRenderableObject>
+class CRenderableObjectsManager : public TMapManager<CRenderableObject>, public CActive
 {
 private:
 	std::string m_FileName;

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Animation\AnimatedCoreModel.h" />
     <ClInclude Include="Animation\AnimatedModelManager.h" />
+    <ClInclude Include="ApplyFiltersSceneRendererCommand.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraController.h" />
     <ClInclude Include="Camera\FPSCameraController.h" />
@@ -89,6 +90,7 @@
   <ItemGroup>
     <ClCompile Include="Animation\AnimatedCoreModel.cpp" />
     <ClCompile Include="Animation\AnimatedModelManager.cpp" />
+    <ClCompile Include="ApplyFiltersSceneRendererCommand.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
     <ClCompile Include="Camera\FPSCameraController.cpp" />
     <ClCompile Include="Camera\Frustum.cpp" />

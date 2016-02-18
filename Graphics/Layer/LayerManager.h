@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Utils\TMapManager.h"
+#include "Utils/Active.h"
 #include "Renderable\RenderableObjectsManager.h"
 #include "Context\ContextManager.h"
 

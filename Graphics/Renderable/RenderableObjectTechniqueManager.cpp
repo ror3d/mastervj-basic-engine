@@ -17,11 +17,11 @@ CRenderableObjectTechniqueManager::~CRenderableObjectTechniqueManager()
 }
 
 bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRenderableObjectTechnique	*PoolRenderableObjectTechniques,
-																		const std::string &RenderableObjectTechniqueName,
-																		const std::string &TechniqueName)
+	const std::string &RenderableObjectTechniqueName,
+	const std::string &TechniqueName)
 {
 	CRenderableObjectTechnique *l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = get(RenderableObjectTechniqueName);
-
+	
 	if (l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager == NULL)
 	{
 		CEffectTechnique *l_EffectTechnique = CEngine::GetSingleton().getEffectsManager()->get(TechniqueName);
@@ -78,7 +78,7 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 		return true;
 	}
 	return false;
-
+	
 }
 
 bool CRenderableObjectTechniqueManager::Reload()
