@@ -1,7 +1,6 @@
 //ForwardShadingUberShader.fx
 #include "globals.fxh"
 #include "samplers.fxh"
-
 //----------------------------------------------------------------------
 
 struct VS_INPUT
@@ -34,10 +33,14 @@ struct VS_INPUT
 struct PS_INPUT
 {
 	float4 Pos : SV_POSITION;
-	float4 WorldPos : TEXCOORD2;
-
+	
+	float4 HPos : TEXCOORD3;
+	
+	float4 ViewPos : POSITION1;
+	
 #ifdef HAS_NORMAL
-	float3 Normal: NORMAL;
+	float3 Normal: NORMAL0;
+	float3 ViewNormal: NORMAL1;
 #endif // HAS_NORMAL
 
 #ifdef HAS_TANGENT_BINORMAL
@@ -54,12 +57,21 @@ struct PS_INPUT
 #endif // HAS_UV2
 };
 
+struct PS_OUTPUT
+{
+	float4 Albedo;
+	float4 LightMap;
+	float4 ViewNormal;
+	float4 ViewPosAndDepth;
+};
+
 //----------------------------------------------------------------------
 // Vertex Shader
 //----------------------------------------------------------------------
 PS_INPUT VS( VS_INPUT IN )
 {
 	PS_INPUT l_Output = (PS_INPUT)0;
+	
 	
 #ifndef HAS_WEIGHT_INDICES
 	
@@ -98,15 +110,7 @@ PS_INPUT VS( VS_INPUT IN )
 	#endif
 	
 #endif // !HAS_WEIGHT_INDICES
-
-	l_Output.Pos = mul(float4(l_Position.xyz, 1.0), m_World);
-	l_Output.Pos = mul(l_Output.Pos, m_View);
-	l_Output.Pos = mul(l_Output.Pos, m_Projection);
-
-#ifdef HAS_NORMAL
-	l_Output.Normal = normalize(mul(l_Normal, (float3x3)m_World));
-#endif // HAS_NORMAL
-
+	
 #ifdef HAS_TANGENT_BINORMAL
 	l_Output.Tangent = mul(IN.Tangent.xyz,(float3x3) m_World);
 	l_Output.Binormal = mul(cross(IN.Tangent.xyz,IN.Normal),(float3x3)m_World);
@@ -118,14 +122,26 @@ PS_INPUT VS( VS_INPUT IN )
 
 #ifdef HAS_UV2
 	l_Output.UV2 = IN.UV2;
-#endif // HAS_UV
+#endif // HAS_UV2
 
-#ifdef HAS_ENVIRONMENT_MAP
-	float3 l_EyeToWorldPosition=normalize(IN.Pos - m_ViewInverse[3].xyz);
-	float3 l_ReflectVector=normalize(reflect(l_EyeToWorldPosition, l_Output.Normal));
-#endif
+
+
+	l_Output.Pos = mul(float4(l_Position.xyz, 1.0), m_World);
+	l_Output.Pos = mul(l_Output.Pos, m_View);
 	
-	l_Output.WorldPos = mul(float4(IN.Pos.xyz, 1.0), m_World);
+	l_Output.ViewPos = l_Output.Pos;
+	
+	l_Output.Pos = mul(l_Output.Pos, m_Projection);
+	l_Output.HPos = l_Output.Pos;
+	
+#ifdef HAS_NORMAL
+	l_Output.Normal = normalize(mul(l_Normal, (float3x3)m_World));
+	l_Output.ViewNormal = normalize(mul(l_Output.Normal, (float3x3)m_View));
+#endif // HAS_NORMAL
+
+#ifdef HAS_UV
+	l_Output.UV = IN.UV;
+#endif // HAS_UV
 	
 	return l_Output;
 }
@@ -134,98 +150,52 @@ PS_INPUT VS( VS_INPUT IN )
 //----------------------------------------------------------------------
 // Pixel Shader
 //----------------------------------------------------------------------
-float4 PS( PS_INPUT IN) : SV_Target
+PS_OUTPUT PS( PS_INPUT IN) : SV_Target
 {
-	float4 l_Return = 0;
-	float4 l_Albedo = 0;
+	PS_OUTPUT l_Return = (PS_OUTPUT)0;
+	float4 l_Albedo = float4(1, 1, 1, 1);
+	
+	float4 l_ViewNormal = float4(0.5f, 0.5f, 1.0f, 1.0f);
+	
+	float3 l_LightMapColor = m_LightAmbient.xyz;
 	
 #ifdef HAS_NORMAL
 	float3 Nn = normalize(IN.Normal.xyz);
-#endif
+#endif // HAS_NORMAL
 
 #ifdef HAS_TANGENT_BINORMAL
 	float3 Tn = normalize(IN.Tangent);
 	float3 Bn = normalize(IN.Binormal);
 #endif // HAS_TANGENT_BINORMAL
 
-	float3 Hn = 0;
-	float3 L = 0;
-	float dist = 0;
-	float4 l_DiffuseContrib = 0;
-	float4 l_SpecularContrib = 0;
-	float linearAtten = 1;
-	float spotAtten = 1;
-	float atten = 1;
-	float cosAngle = 0;
-	float cosFallOff = 1;
-	float cosAngleLight = 0;
-	
 #ifdef HAS_UV
 	l_Albedo = T0Texture.Sample(S0Sampler, IN.UV);
-#endif // HAS_UV
+#endif
 
 #ifdef HAS_UV2
-	l_Albedo = l_Albedo * T1Texture.Sample(S1Sampler, IN.UV2);
+	l_LightMapColor = l_LightMapColor + T1Texture.Sample(S1Sampler, IN.UV2).xyz; // Maybe should be * instead of +?
 #endif // HAS_UV2
 
-#ifdef HAS_NORMAL_MAP
+#if defined(HAS_TANGENT_BINORMAL) && defined(HAS_NORMAL)
 	float3 bump = m_Bump * (T1Texture.Sample(S1Sampler, IN.UV).rgb - float3(0.5,0.5,0.5));
-	Nn = Nn + bump.x * Tn + bump.y * Bn;
-	Nn = normalize(Nn);
+	Nn = Nn + bump.x * Tn - bump.y * Bn;
+	Nn = mul(Nn, (float3x3)m_View);
+#elif defined(HAS_NORMAL)
+	Nn = IN.ViewNormal.xyz;
 #endif // HAS_NORMAL_MAP
 
-#ifdef HAS_LIGHTS
-	for (uint i = 0; i < MAX_LIGHTS_BY_SHADER; i++)
-	{
-		linearAtten = 1;
-		spotAtten = 1;
-		
-		if (m_LightEnabledArray[i])
-		{
-			if (m_LightTypeArray[i] != DIRECTIONAL)
-			{
-				L = m_LightPosition[i] - IN.WorldPos.xyz;
-				
-				dist = length(L);
-				L /= dist;
-				
-				linearAtten = clamp((m_LightAttenuationEndRangeArray[i] - dist) * (1/(m_LightAttenuationEndRangeArray[i] - m_LightAttenuationStartRange[i])), 0, 1);
-			}
-			else
-			{
-				L = -m_LightDirection[i];
-			}
-			
-			if (m_LightTypeArray[i] == SPOT)
-			{
-				cosAngle = cos(m_LightAngleArray[i]);
-				cosFallOff = cos(m_LightFallOffAngleArray[i]);
-				cosAngleLight = max(0, dot(-L, m_LightDirection[i]));
-				
-				spotAtten = saturate((cosAngleLight - cosFallOff) / (cosAngle - cosFallOff));
-			}
-			
-			atten = linearAtten * spotAtten;
-			
-			l_DiffuseContrib += max(0, dot(Nn, L)) * m_LightIntensityArray[i] * atten * m_LightColor[i];
-			
-			Hn = normalize(normalize(m_CameraPosition - IN.WorldPos.xyz) + L);
-			l_SpecularContrib += pow(max(0, dot(Nn, Hn)), SpecularExp) * m_LightIntensityArray[i] * atten * m_LightColor[i];
-		}
-	}
-	
-	l_Albedo = float4((m_LightAmbient.xyz * l_Albedo.xyz + l_DiffuseContrib * l_Albedo.xyz + l_SpecularContrib), l_Albedo.a);
-#endif // HAS_LIGHTS
+#if defined(HAS_NORMAL)
+	l_ViewNormal = float4(normalize(Nn.xyz).xyz, 1.0f);
+	l_ViewNormal.xy = (l_ViewNormal.xy/2.0f)+float2(0.5f, 0.5f);
+#endif
 
-#ifdef HAS_ENVIRONMENT_MAP
-	float3 l_EyeToWorldPosition = normalize(IN.WorldPos - m_ViewInverse[3].xyz);
-	float3 l_ReflectVector = normalize(reflect(l_EyeToWorldPosition, Nn));
-	float3 l_ReflectColor = T1Cube.Sample(S1Sampler, l_ReflectVector).xyz * g_EnvironmentFactor;
+	l_Return.Albedo = float4(l_Albedo.xyz, 1.0f);
 	
-	l_Albedo = float4(l_Albedo.xyz + l_ReflectColor, l_Albedo.a);
-#endif //HAS_ENVIRONMENT_MAP
-
-	l_Return = l_Albedo;
+	l_Return.LightMap = float4(l_LightMapColor, 1.0f/80.f); // Lightmap + Specular Exponent
+	l_Return.ViewNormal = l_ViewNormal;
+	
+	float l_Depth=IN.HPos.z/IN.HPos.w;
+	l_Return.ViewPosAndDepth = float4(IN.ViewPos.xyz, l_Depth);
 	
 	return l_Return;
 }

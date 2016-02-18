@@ -13,6 +13,7 @@
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 #include <Graphics/Debug/DebugRender.h>
+#include <PhysX/PhysXManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -30,6 +31,7 @@ private:
 	CSceneRendererCommandManager * sceneRendererCommandManager;
 	CContextManager * contextManager;
 	CDebugRender * debugRender;
+	CPhysXManager * physXManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -50,4 +52,5 @@ public:
 	inline CRenderableObjectTechniqueManager * getRenderableObjectTechniqueManager() const { return renderableObjectTechniqueManager; }
 	inline CSceneRendererCommandManager * getSceneRendererCommandManager() const { return sceneRendererCommandManager; }
 	inline CDebugRender * getDebugRender() const { return debugRender; }
+	inline CPhysXManager * getPhysXManager() const { return physXManager; }
 };
