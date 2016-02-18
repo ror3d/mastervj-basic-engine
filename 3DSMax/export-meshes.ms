@@ -215,6 +215,23 @@ fn createVertexesForFace obj IdFace = (
 		
 	)
 	
+	if HasReflection faceMat then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
+	(
+		-- Para coger los ?ndices de las coordenadas de textura de la primera cara, el 1 se?ala al primer
+		--   conjunto de coordenadas aplicadas sobre la cara
+		local IdxsMap=meshop.getMapFace obj 1 IdFace
+		
+		-- Para coger las coordenadas de los v?rtices de la primera cara
+		local TUVMap1= meshop.getMapVert obj 1 IdxsMap[1]
+		local TUVMap2= meshop.getMapVert obj 1 IdxsMap[2]
+		local TUVMap3= meshop.getMapVert obj 1 IdxsMap[3]
+		
+		v1.uv = TUVMap1
+		v2.uv = TUVMap2
+		v3.uv = TUVMap3
+		
+	)
+	
 	if HasLightmap faceMat then
 	(
 		local IdxsMap2=meshop.getMapFace obj 2 IdFace
@@ -338,6 +355,7 @@ fn createMesh obj = (
 			)
 		)
 		
+		
 		writeshort file vtxs.count
 		
 		for idVtx = 1 to vtxs.count do
@@ -352,9 +370,10 @@ fn createMesh obj = (
 			writefloat file vtx.normal.x
 			writefloat file vtx.normal.y
 			writefloat file vtx.normal.z
-
+			/*
 			if HasNormal mat then
 			(
+				
 				-- Binormal
 				writefloat file vtx.binormal.x
 				writefloat file vtx.binormal.y
@@ -367,7 +386,7 @@ fn createMesh obj = (
 				writefloat file 0
 			)
 			
-			if HasTexture mat then
+			if HasTexture mat or HasReflection mat then
 			(
 				-- UV
 				writefloat file vtx.uv.x
