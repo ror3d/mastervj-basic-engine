@@ -9,7 +9,10 @@ CLight::CLight() : CNamed("")
 }
 
 
-CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
+CLight::CLight(const CXMLTreeNode &TreeNode)
+	: CNamed(TreeNode)
+	, CActive(true)
+	, m_GenerateShadowMap(false)
 {
 	Vect3f pos(0.0f, 0.0f, 0.0f);
 	m_Position = TreeNode.GetVect3fProperty("pos", pos);
@@ -18,13 +21,12 @@ CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
 	m_StartRangeAttenuation = TreeNode.GetFloatProperty("att_start_range");
 	m_EndRangeAttenuation = TreeNode.GetFloatProperty("att_end_range");
 	m_Intensity = TreeNode.GetFloatProperty("intensity");
-	m_active = true;
-	m_GenerateShadowMap = TreeNode.GetBoolProperty("generate_shadow_map",false);
 
-	if (m_GenerateShadowMap){
-		m_ShadowMap = new CDynamicTexture(TreeNode.GetPszProperty("shadow_texture_mask"), TreeNode.GetIntProperty("shadow_map_width"), TreeNode.GetIntProperty("shadow_map_height"), true);
-		m_ShadowMaskTexture = new CTexture();		
-	}
+	// Shadowmap
+	m_ShadowMaskFileName = TreeNode.GetPszProperty("shadow_texture_mask", "", false);
+
+	m_ShadowMapSize = Vect2f( TreeNode.GetIntProperty("shadow_map_width", 1, false), TreeNode.GetIntProperty("shadow_map_height", 1, false));
+	setGenerateShadowMap(TreeNode.GetBoolProperty("generate_shadow_map", false));
 
 	CXMLTreeNode light = TreeNode;
 	for (int i = 0; i< light.GetNumChildren(); i++){
@@ -33,6 +35,30 @@ CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
 			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(light(i).GetPszProperty("layer")));
 		}			
 	}	
+}
+
+void CLight::setGenerateShadowMap(bool generate)
+{
+	if (m_GenerateShadowMap != generate)
+	{
+		if (generate)
+		{
+			m_ShadowMap = new CDynamicTexture(getName()+"_shadowmap", m_ShadowMapSize.x, m_ShadowMapSize.y, true);
+			CEngine::GetSingleton().getTextureManager()->add(m_ShadowMap->getName(), m_ShadowMap);
+			// TODO
+			//m_ShadowMaskTexture = ...
+		}
+		else
+		{
+			if (m_ShadowMap)
+			{
+				CEngine::GetSingleton().getTextureManager()->remove(m_ShadowMap->getName());
+				m_ShadowMap = nullptr;
+			}
+		}
+
+		m_GenerateShadowMap = generate;
+	}
 }
 
 
@@ -59,14 +85,12 @@ CLight::TLightType CLight::getLightTypeByName(const std::string &type)
 
 CLight::~CLight()
 {
+	setGenerateShadowMap(false);
 }
 
 
 void CLight::Render(CRenderManager *RenderManager)
 {
-	if (m_active){
-		CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
-	}	
 }
 
 
@@ -75,8 +99,10 @@ void CLight::Render(CRenderManager *RenderManager)
 COmniLight::COmniLight(const CXMLTreeNode &TreeNode) : CLight(TreeNode)
 {
 }
-void COmniLight::SetShadowMap(CContextManager &_context){
-	
+
+void COmniLight::SetShadowMap(CContextManager &_context)
+{
+	DEBUG_ASSERT(false);
 }
 
 //-----------DIRECTIONAL

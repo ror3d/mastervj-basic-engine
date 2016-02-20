@@ -87,6 +87,11 @@ bool CRenderableObjectTechniqueManager::Reload()
 	return Load(m_Filename);
 }
 
+CPoolRenderableObjectTechnique * CRenderableObjectTechniqueManager::getPool(const std::string& pool)
+{
+	return m_PoolRenderableObjectTechniques.get(pool);
+}
+
 TMapManager<CPoolRenderableObjectTechnique> & CRenderableObjectTechniqueManager::GetPoolRenderableObjectTechniques()
 {
 	return m_PoolRenderableObjectTechniques;

@@ -24,7 +24,6 @@ public:
 		SPOT
 	};
 protected:
-	bool m_isActive;
 	Vect3f m_Position;
 	CColor m_Color;
 	float m_Intensity;
@@ -39,11 +38,13 @@ protected:
 	Mat44f m_ViewShadowMap;
 	Mat44f m_ProjectionShadowMap;
 
+	Vect2f m_ShadowMapSize;
+	std::string m_ShadowMaskFileName;
+
 public:
 	CLight(const CXMLTreeNode &TreeNode);
 	CLight();
 	virtual ~CLight();
-	bool getIsActive(){ return m_isActive; }
 	Vect3f getPosition() { return m_Position; } const
 	CColor getColor() { return m_Color; } const
 	float getIntensity() { return m_Intensity; } const
@@ -59,7 +60,7 @@ public:
 
 	//ShadowMap
 	bool getGenerateShadowMap(){ return m_GenerateShadowMap;  }
-	void setGenerateShadowMap(bool generate){ m_GenerateShadowMap = generate;  }
+	void setGenerateShadowMap(bool generate);
 	CDynamicTexture * getShadowMap(){ return m_ShadowMap;  }
 	CTexture * getShadowMaskTexture(){ return m_ShadowMaskTexture;  }
 	Mat44f getViewShadowMap(){ return m_ViewShadowMap; }

@@ -43,18 +43,6 @@ bool CEffectVertexShader::Load()
 	{
 		l_Loaded = MV_POSITION_NORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
-	else if(m_VertexType == "MV_POSITION_TEXTURE_VERTEX")
-	{
-		l_Loaded = MV_POSITION_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
-	}
-	else if (m_VertexType == "MV_POSITION_COLOR_VERTEX")
-	{
-		l_Loaded = MV_POSITION_COLOR_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
-	}
-	else if (m_VertexType == "MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX")
-	{
-		l_Loaded = MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
-	}
 	else if (m_VertexType == "MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX")
 	{
 		l_Loaded = MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
@@ -62,6 +50,27 @@ bool CEffectVertexShader::Load()
 	else if (m_VertexType == "MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX")
 	{
 		l_Loaded = MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	else if (m_VertexType == "MV_POSITION_NORMAL_TEXTURE_TEXTURE2_TANGENT_BINORMAL_VERTEX")
+	{
+		l_Loaded = MV_POSITION_NORMAL_TEXTURE_TEXTURE2_TANGENT_BINORMAL_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	else if (m_VertexType == "MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX")
+	{
+		l_Loaded = MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	else if (m_VertexType == "MV_POSITION_WEIGHT_INDICES_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX")
+	{
+		l_Loaded = MV_POSITION_WEIGHT_INDICES_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	else if (m_VertexType == "MV_POSITION_WEIGHT_INDICES_NORMAL_TANGENT_BINORMAL_TEXTURE_TEXTURE2_VERTEX")
+	{
+		l_Loaded = MV_POSITION_WEIGHT_INDICES_NORMAL_TANGENT_BINORMAL_TEXTURE_TEXTURE2_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	
+	else if (m_VertexType == "MV_POSITION_COLOR_VERTEX")
+	{
+		l_Loaded = MV_POSITION_COLOR_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
 	else
 	{

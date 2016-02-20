@@ -86,13 +86,17 @@ size_t CLightManager::count()
 	return i;
 }
 
-void CLightManager::ExecuteShadowCreation(CContextManager &_context){
-	for (auto light : m_resources){
-		if (light.second->getGenerateShadowMap() && light.second->getIsActive()){
+void CLightManager::ExecuteShadowCreation(CContextManager &_context)
+{
+	for (auto light : m_resources)
+	{
+		if (light.second->getGenerateShadowMap() && light.second->isActive())
+		{
 			light.second->SetShadowMap(_context); //Set matrices y renderTarget
 			_context.Clear(true, false);//Clear Depth
 			std::vector<CRenderableObjectsManager *> layers = light.second->getLayers();
-			for (auto child = layers.begin(); child < layers.end(); child++){
+			for (auto child = layers.begin(); child < layers.end(); child++)
+			{
 				(*child)->Render(&_context);//Render de layers afectadas por la luz
 			}
 			//DUDA::::::DONDE SE USA m_ShadowMaskTexture???

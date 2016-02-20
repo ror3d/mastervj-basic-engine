@@ -21,6 +21,7 @@ public:
 	bool Load(const std::string &Filename);
 	bool Reload();
 	TMapManager<CPoolRenderableObjectTechnique> & GetPoolRenderableObjectTechniques();
+	CPoolRenderableObjectTechnique* getPool(const std::string& pool);
 };
 
 #endif
