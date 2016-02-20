@@ -373,7 +373,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	physx::PxShape* shape = body->createShape(*geom, *mat);
 	delete geom;
 	
-	//body->attachShape(*shape);
+	body->attachShape(*shape);
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)
 	{

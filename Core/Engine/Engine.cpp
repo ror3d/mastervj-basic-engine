@@ -13,6 +13,7 @@ CEngine::CEngine()
 	, animatedModelManager(nullptr)
 	, renderableObjectTechniqueManager(nullptr)
 	, sceneRendererCommandManager(nullptr)
+	, physicsManager(nullptr)
 {
 } 
 CEngine::~CEngine()
@@ -28,6 +29,7 @@ CEngine::~CEngine()
 	animatedModelManager->destroy();
 	renderableObjectTechniqueManager->Destroy();
 	sceneRendererCommandManager->destroy();
+	//TODO: physicsManager->destroy();
 
 	delete effectsManager;
 	delete textureManager;
@@ -40,6 +42,7 @@ CEngine::~CEngine()
 	delete animatedModelManager;
 	delete renderableObjectTechniqueManager;
 	delete sceneRendererCommandManager;
+	delete physicsManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -52,6 +55,7 @@ CEngine::~CEngine()
 	animatedModelManager = nullptr;
 	renderableObjectTechniqueManager = nullptr;
 	sceneRendererCommandManager = nullptr;
+	physicsManager = nullptr;
 
 } //Destruimos vars
 
@@ -68,4 +72,5 @@ void CEngine::Init()
 	animatedModelManager = new CAnimatedModelManager();
 	renderableObjectTechniqueManager = new CRenderableObjectTechniqueManager();
 	sceneRendererCommandManager = new CSceneRendererCommandManager();
+	physicsManager = CPhysXManager::CreatePhysXManager();
 }

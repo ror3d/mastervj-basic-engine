@@ -1,6 +1,7 @@
 #include "Material.h"
 #include "Engine\Engine.h"
 #include "Graphics\Renderable\RenderableObjectTechnique.h"
+#include "Graphics/Material/MaterialParameter.h"
 
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
@@ -9,10 +10,12 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 		CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));
 	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 	{
-		CXMLTreeNode l_Texture = TreeNode(i);
-		CTexture * Texture = new CTexture();
-		Texture->load(l_Texture.GetPszProperty("filename"));
-		m_textures.push_back(Texture);
+		if (TreeNode(i).GetName() == std::string("texture")){
+			CXMLTreeNode l_Texture = TreeNode(i);
+			CTexture * Texture = new CTexture();
+			Texture->load(l_Texture.GetPszProperty("filename"));
+			m_textures.push_back(Texture);
+		}		
 	}
 }
 
@@ -24,10 +27,18 @@ CMaterial::~CMaterial()
 
 void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 {
+	for (int i = 0; i < m_Parameters.size(); i++)
+	{		
+		m_Parameters[i]->Apply();
+	}
+
+	CEngine::GetSingleton().getEffectsManager()->SetMaterialsConstants();
+
 	for (int i = 0; i < m_textures.size(); ++i)
 	{
 		m_textures[i]->Activate(i);
 	}
+
 }
 
 void CMaterial::destroy()

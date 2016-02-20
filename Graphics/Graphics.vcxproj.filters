@@ -452,5 +452,8 @@
     <ClCompile Include="ApplyFiltersSceneRendererCommand.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="MaterialParameter.cpp">
+      <Filter>Material</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

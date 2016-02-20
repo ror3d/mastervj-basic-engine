@@ -220,7 +220,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		//CApplication application(&debugRender, &s_Context);
 		CApplication application(&context, CEngine::GetSingleton().getRenderManager());
 
-		application.Init();
+		application.CreateCharController();
 
 		UpdateWindow(hWnd);
 		MSG msg;

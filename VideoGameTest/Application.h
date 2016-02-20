@@ -15,7 +15,7 @@ public:
 
 	CRenderManager *m_RenderManager;
 
-	void Init();
+	void CreateCharController();
 	
 	void Update(float _ElapsedTime);
 	void Render();

@@ -19,7 +19,7 @@ public:
 	static CSceneEffectParameters m_SceneParameters;
 	static CAnimatedModelEffectParameters m_AnimatedModelEffectParameters;
 	static CLightEffectParameters m_LightParameters;
-
+	static CMaterialEffectParameters m_MaterialEffectParameters;
 
 	CEffectManager();
 	virtual ~CEffectManager();
@@ -31,6 +31,7 @@ public:
 	void SetSceneConstants();
 	void SetLightConstants(unsigned int IdLight, CLight *Light);
 	void SetLightsConstants();
+	void SetMaterialsConstants();
 
 	void destroy();
 };

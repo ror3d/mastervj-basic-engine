@@ -1,4 +1,8 @@
 #include "DebugHelperImplementation.h"
+#include "Core\Engine\Engine.h"
+#include <Core/Input/InputManagerImplementation.h>
+#include "Material\MaterialParameter.h"
+#include <PhysX/PhysXManager.h>
 
 #include <cassert>
 
@@ -50,6 +54,7 @@ void CDebugHelperImplementation::Render()
 
 bool CDebugHelperImplementation::Update(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	m_posRot->Position = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetPosition();
 	// TODO: mandarle eventos al AntTweakBar
 	return TwEventWin(hWnd, msg, wParam, lParam);
 }
@@ -104,6 +109,13 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 				type = m_PosRotType;
 				break;
 
+			case NONE:
+				type = TW_TYPE_UNDEF;
+				break;
+			case LABEL:
+				type = TW_TYPE_CSSTRING(1);
+				break;
+
 			default:
 				break;
 			}
@@ -119,6 +131,15 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 				status = TwAddVarRW(twBar, bar.variables[i].name.c_str(), type, bar.variables[i].ptr, params.c_str());
 				assert(status);
 				break;
+			case SEPARATOR:
+				if (bar.variables[i].type == NONE)
+					status = TwAddSeparator(twBar, NULL, NULL);
+				else if (bar.variables[i].type == LABEL){
+					status = TwAddButton(twBar, "labelName", NULL, NULL, params.c_str());
+				}
+					
+				assert(status);
+				break;
 
 			default:
 				break;
@@ -129,7 +150,196 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 	m_Bars[bar.name] = twBar;
 }
 
-void CDebugHelperImplementation::RemoveBar(const std::string& bar)
+void CDebugHelperImplementation::RemoveBar(std::string bar){
+	std::unordered_map<std::string, TwBar*>::iterator it = m_Bars.find(bar);
+	int status = 0;
+	if (it != m_Bars.end())
+	{
+		status = TwDeleteBar(it->second);
+		assert(status);
+	}
+}
+
+void TW_CALL RemoveBar(void* ba)
 {
-	// TODO: eliminar una ventana de debug
+	//TODO receive string correctly
+	//probar a pasar vector con string en [0]
+	std::vector<std::string> * barnames = (std::vector<std::string> *) ba;
+	std::string nameToRemove = barnames->at(0);
+	CDebugHelper::GetDebugHelper()->RemoveBar(nameToRemove);
+}
+
+void TW_CALL SwitchCameraCallback(void* _app)
+{
+	CEngine::GetSingleton().getRenderManager()->SwitchCamera();
+}
+
+void TW_CALL ReloadSceneCommands(void* _app)
+{
+	CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
+}
+void TW_CALL CreateScene(void* a)
+{
+	//PxRigidDynamic* aSphereActor = thePhysics->createRigidDynamic(PxTransform(position));
+	//PxShape* aSphereShape = aSphereActor->createShape(PxSphereGeometry(radius), aMaterial);
+
+	CPhysXManager::ShapeDesc desc;
+	desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
+	desc.density = 1;
+	desc.material = "box";
+	desc.size = Vect3f(1, 1, 1);
+	desc.position = Vect3f(0, 0.5f, 0);
+	CEngine::GetSingleton().getPhysicsManager()->createActor("boxCol", CPhysXManager::ActorType::Static, desc);
+}
+
+void TW_CALL OpenMaterialParams(void *material)
+{
+	CMaterial * mat = (CMaterial *) material;
+	std::vector<CMaterialParameter *> * paramsMaterial = mat->getParameters();
+	
+	CDebugHelper::SDebugBar barMaterialParams;
+	barMaterialParams.name = mat->getName()+ " Parameters";
+	for (auto it = paramsMaterial->begin(); it != paramsMaterial->end(); ++it)
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = (*it)->getName();
+		if ((*it)->getMaterialType() == CMaterialParameter::TMaterialType::FLOAT){
+			var.type = CDebugHelper::FLOAT;
+			var.mode = CDebugHelper::READ_WRITE;
+			var.pFloat = ((CTemplatedMaterialParameter<float>*)(*it))->getValue();
+			var.params = (*it)->getParamValues();
+		}		
+
+		barMaterialParams.variables.push_back(var);
+	}
+	CDebugHelper::GetDebugHelper()->RegisterBar(barMaterialParams);
+}
+
+void TW_CALL OpenMaterialsBar(void *materialsMap)
+{
+	std::map<std::string, CMaterial*> * mapMaterials = (std::map<std::string, CMaterial*>*) materialsMap;
+	CDebugHelper::SDebugBar barMaterials;
+	barMaterials.name = "Materials List Raw Data";
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "...";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = RemoveBar;
+		std::vector<std::string> * name = new std::vector<std::string>();
+		name->push_back(barMaterials.name);
+		var.ptr = name;
+
+		barMaterials.variables.push_back(var);
+	}
+	for (auto it = mapMaterials->begin(); it != mapMaterials->end(); ++it)
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = it->second->getName();
+		var.type = CDebugHelper::BUTTON;
+		var.callback = OpenMaterialParams;
+		var.ptr = it->second;
+
+		barMaterials.variables.push_back(var);
+	}
+	CDebugHelper::GetDebugHelper()->RegisterBar(barMaterials);
+}
+
+void CDebugHelperImplementation::CreateMainBar(){
+	//----------------------MAIN BAR------------------------
+	CDebugHelper::SDebugBar mainBar;
+	mainBar.name = "CApplication";
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "background";
+		var.type = CDebugHelper::COLOR;
+		var.mode = CDebugHelper::READ_WRITE;
+		var.pColor = &CEngine::GetSingleton().getContextManager()->m_BackgroundColor;
+
+		mainBar.variables.push_back(var);
+	}
+	//m_RenderManager->getFPSCamera()->
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "Pos";
+		var.type = CDebugHelper::POSITION_ORIENTATION;
+		var.mode = CDebugHelper::READ_WRITE;
+		m_posRot = new SPositionOrientation();
+		m_posRot->Position = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetPosition();
+		var.pPositionOrientation = m_posRot;
+		var.ptr = m_posRot;
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "switch camera";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = SwitchCameraCallback;
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "mouse speed";
+		var.type = CDebugHelper::FLOAT;
+		var.mode = CDebugHelper::READ_WRITE;
+		var.pFloat = ((CInputManagerImplementation*)CInputManager::GetInputManager())->GetMouseSpeed();
+		var.params = " min=0.1 max=10 step=0.1 precision=1 ";
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "PhysX: Create Box";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = CreateScene;
+		var.data = this;
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "Separator";
+		var.mode = CDebugHelper::SEPARATOR;
+		var.type = CDebugHelper::NONE;
+		mainBar.variables.push_back(var);
+	}
+
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "Reload Options";
+		var.mode = CDebugHelper::SEPARATOR;
+		var.type = CDebugHelper::LABEL;
+		var.params = "label='Reload Options'";
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "  - Commands";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = ReloadSceneCommands;
+		var.data = this;
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "Separator";
+		var.mode = CDebugHelper::SEPARATOR;
+		var.type = CDebugHelper::NONE;
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "Open Materials RawD";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = OpenMaterialsBar;
+		var.data = this;
+		var.ptr = CEngine::GetSingleton().getMaterialManager()->getMaterialsMap();
+
+		mainBar.variables.push_back(var);
+	}
+
+	CDebugHelper::GetDebugHelper()->RegisterBar(mainBar);
 }

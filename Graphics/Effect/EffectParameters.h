@@ -5,6 +5,7 @@
 
 #define MAXBONES 40
 #define MAX_LIGHTS_BY_SHADER 4
+#define MAX_OBJECT_RAW_PARAMETER 16
 
 class CEffectParameters
 {
@@ -60,4 +61,11 @@ public:
 	Mat44f m_LightProjection[MAX_LIGHTS_BY_SHADER];
 };
 
+class CMaterialEffectParameters
+{
+public:
+	Vect4f m_RawData[MAX_OBJECT_RAW_PARAMETER];
+	/*static float m_TextureSize=m_RawDataValues[0];
+	static float m_BlurScale=m_RawDataValues[1];*/
+};
 #endif
