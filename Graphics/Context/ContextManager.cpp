@@ -100,10 +100,10 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 	// treure el ALT+INTRO automàtic
 	IDXGIFactory* dxgiFactory;
 	hr = m_SwapChain->GetParent(__uuidof(IDXGIFactory), (void **)&dxgiFactory);
-	assert(hr == S_OK);
+	DEBUG_ASSERT(hr == S_OK);
 
 	hr = dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_ALT_ENTER);
-	assert(hr == S_OK);
+	DEBUG_ASSERT(hr == S_OK);
 
 	dxgiFactory->Release();
 
@@ -144,7 +144,7 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 
 	/*CreateBlendState not exist*/
 	hr = m_D3DDevice->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState);
-	assert(!FAILED(hr));
+	DEBUG_ASSERT(!FAILED(hr));
 
 
 	return S_OK;
@@ -216,7 +216,7 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 
 		m_SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
 		HRESULT hr = CreateBackBuffer(hWnd, Width, Height);
-		assert(hr == S_OK);
+		DEBUG_ASSERT(hr == S_OK);
 		m_Width = Width;
 		m_Height = Height;
 	}
@@ -250,7 +250,7 @@ void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
 void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView
 *const*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){
 	m_NumViews = NumViews;
-	assert(m_NumViews <= MAX_RENDER_TARGET_VIEW);
+	DEBUG_ASSERT(m_NumViews <= MAX_RENDER_TARGET_VIEW);
 	for (int i = 0;i<m_NumViews;++i)
 		m_CurrentRenderTargetViews[i] = RenderTargetViews[i];
 	m_CurrentDepthStencilView = DepthStencilView;

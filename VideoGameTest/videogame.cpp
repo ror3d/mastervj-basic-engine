@@ -3,8 +3,6 @@
 
 #include <d3d11.h>
 
-#include <cassert>
-
 // TODO: Activar AntTeakBar
 //#include <AntTweakBar.h>
 

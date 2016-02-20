@@ -97,7 +97,7 @@ void CDirectionalLight::Render(CRenderManager *RenderManager)
 void CDirectionalLight::SetShadowMap(CContextManager &_context)
 {
 	if (m_ShadowMap == NULL)
-		assert(false);
+		DEBUG_ASSERT(false);
 	m_ViewShadowMap.SetIdentity();
 	m_ViewShadowMap.SetFromLookAt(m_Position, m_Position + m_Direction, v3fY);
 	unsigned int l_ShadowMapWidth = m_ShadowMap->GetWidth();
@@ -130,7 +130,7 @@ CSpotLight::CSpotLight(const CXMLTreeNode &TreeNode) : CDirectionalLight(TreeNod
 void CSpotLight::SetShadowMap(CContextManager &_context)
 {
 	if (m_ShadowMap == NULL)
-		assert(false);
+		DEBUG_ASSERT(false);
 	m_ViewShadowMap.SetIdentity();
 	m_ViewShadowMap.SetFromLookAt(m_Position, m_Position + m_Direction, v3fY);
 	unsigned int l_ShadowMapWidth = m_ShadowMap->GetWidth();

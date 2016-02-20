@@ -9,7 +9,7 @@
 #ifndef INC_SINGLETON_H_
 #define INC_SINGLETON_H_
 
-#include <assert.h>
+#include "Utils.h"
 
 /** Template class for creating single-instance global classes.
 */
@@ -25,7 +25,7 @@ public:
 		*/
 		CSingleton( void )
 		{
-				assert( !ms_Singleton );
+				DEBUG_ASSERT( !ms_Singleton );
 				#if defined( _MSC_VER ) && _MSC_VER < 1200
 						int offset = (int)(T*)1 - (int)(CSingleton <T>*)(T*)1;
 						ms_Singleton = (T*)((int)this + offset);
@@ -39,7 +39,7 @@ public:
 		*/
 		virtual ~CSingleton( void )
 		{
-				assert( ms_Singleton );  ms_Singleton = 0;
+				DEBUG_ASSERT( ms_Singleton );  ms_Singleton = 0;
 		}
 
 		/**
@@ -48,7 +48,7 @@ public:
 		*/
 		inline static T& GetSingleton( void )
 		{
-				assert( ms_Singleton );
+				DEBUG_ASSERT( ms_Singleton );
 				return ( *ms_Singleton );
 		}
 

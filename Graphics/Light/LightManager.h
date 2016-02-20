@@ -7,6 +7,8 @@ class CRenderManager;
 class CLight;
 class CContextManager;
 
+class CTexture;
+
 class CLightManager : public TMapManager<CLight>
 {
 private:

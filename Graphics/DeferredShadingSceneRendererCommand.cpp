@@ -32,7 +32,7 @@ CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLT
 	l_AlphablendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	l_AlphablendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 	HRESULT hr = CEngine::GetSingleton().getContextManager()->GetDevice()->CreateBlendState(&l_AlphablendDesc, &m_EnabledAlphaBlendState);
-	assert(!FAILED(hr));
+	DEBUG_ASSERT(!FAILED(hr));
 }
 
 CDeferredShadingSceneRendererCommand::~CDeferredShadingSceneRendererCommand()

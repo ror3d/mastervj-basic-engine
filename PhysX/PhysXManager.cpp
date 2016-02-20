@@ -1,7 +1,7 @@
 #include "PhysXManager.h"
 #include <Base/Math/Math.h>
+#include <Base/Utils/Utils.h>
 #include <PxPhysicsAPI.h>
-#include <cassert>
 
 #include <fstream>
 #include <iterator>
@@ -93,17 +93,17 @@ static physx::PxDefaultAllocator gDefaultAllocatorCallback;
 CPhysXManagerImplementation::CPhysXManagerImplementation()
 {
 	m_Foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
-	assert(m_Foundation);
+	DEBUG_ASSERT(m_Foundation);
 
 	physx::PxProfileZoneManager* profileZoneManager = nullptr;
 #if USE_PHYSX_DEBUG
 	profileZoneManager = &physx::PxProfileZoneManager::createProfileZoneManager(m_Foundation);
 #endif
 	m_PhysX = PxCreatePhysics(PX_PHYSICS_VERSION, *m_Foundation, physx::PxTolerancesScale(), true, profileZoneManager);
-	assert(m_PhysX);
+	DEBUG_ASSERT(m_PhysX);
 
 	m_Cooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_Foundation, physx::PxCookingParams(physx::PxTolerancesScale()));
-	assert(m_Cooking);
+	DEBUG_ASSERT(m_Cooking);
 
 #if USE_PHYSX_DEBUG
 	if (m_PhysX->getPvdConnectionManager())
@@ -143,7 +143,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 	sceneDesc.flags = physx::PxSceneFlag::eENABLE_ACTIVETRANSFORMS;
 	m_Scene = m_PhysX->createScene(sceneDesc);
-	assert(m_Scene);
+	DEBUG_ASSERT(m_Scene);
 
 	m_Scene->setSimulationEventCallback(this);
 	
@@ -253,7 +253,7 @@ bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<u
 	physx::PxDefaultMemoryOutputStream oBuf;
 	physx::PxConvexMeshCookingResult::Enum result;
 	bool success = m_Cooking->cookConvexMesh(meshDesc, oBuf, &result);
-	assert(success);
+	DEBUG_ASSERT(success);
 
 	outCookedData.assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
 	return success;
@@ -294,7 +294,7 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 	auto idx = m_actors.actor.size();
 
 	auto matIt = m_materials.find(material);
-	assert(matIt != m_materials.end());
+	DEBUG_ASSERT(matIt != m_materials.end());
 
 	physx::PxMaterial* mat = matIt->second;
 
@@ -303,16 +303,16 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 	physx::PxShape* shape;
 
 	size_t nShapes = groundPlane->getShapes(&shape, 1);
-	assert(nShapes == 1);
+	DEBUG_ASSERT(nShapes == 1);
 
 	groundPlane->userData = reinterpret_cast<void*>(idx);
 
 	m_Scene->addActor(*groundPlane);
 
-	assert(m_actors.actor.size() == m_actors.index.size());
-	assert(m_actors.actor.size() == m_actors.name.size());
-	assert(m_actors.actor.size() == m_actors.position.size());
-	assert(m_actors.actor.size() == m_actors.rotation.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
 
 	m_actors.index[name] = idx;
 	m_actors.name.push_back(name);
@@ -327,7 +327,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	auto idx = m_actors.actor.size();
 
 	auto matIt = m_materials.find(desc.material);
-	assert(matIt != m_materials.end());
+	DEBUG_ASSERT(matIt != m_materials.end());
 
 	physx::PxMaterial* mat = matIt->second;
 
@@ -382,10 +382,10 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 	m_Scene->addActor(*body);
 
-	assert(m_actors.actor.size() == m_actors.index.size());
-	assert(m_actors.actor.size() == m_actors.name.size());
-	assert(m_actors.actor.size() == m_actors.position.size());
-	assert(m_actors.actor.size() == m_actors.rotation.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
 
 	m_actors.index[name] = idx;
 	m_actors.name.push_back(name);

@@ -1,5 +1,4 @@
 #include "DynamicTexture.h"
-#include <assert.h>
 #include "Engine/Engine.h"
 
 CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool CreateDepthStencilBuffer)
@@ -81,21 +80,21 @@ void CDynamicTexture::Init()
 	l_TextureDescription.CPUAccessFlags = 0;
 	l_TextureDescription.MiscFlags = 0;
 	HRESULT l_HR = l_Device->CreateTexture2D(&l_TextureDescription, NULL, &m_RenderTargetTexture);
-	assert(!FAILED(l_HR));
+	DEBUG_ASSERT(!FAILED(l_HR));
 	D3D11_RENDER_TARGET_VIEW_DESC l_RenderTargetViewDescription;
 	l_RenderTargetViewDescription.Format = l_TextureDescription.Format;
 	l_RenderTargetViewDescription.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	l_RenderTargetViewDescription.Texture2D.MipSlice = 0;
 	l_HR = l_Device->CreateRenderTargetView(m_RenderTargetTexture,
 		&l_RenderTargetViewDescription, &m_RenderTargetView);
-	assert(!FAILED(l_HR));
+	DEBUG_ASSERT(!FAILED(l_HR));
 	D3D11_SHADER_RESOURCE_VIEW_DESC l_ShaderResourceViewDescription;
 	l_ShaderResourceViewDescription.Format = l_TextureDescription.Format;
 	l_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	l_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
 	l_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
 	l_HR = l_Device->CreateShaderResourceView(m_RenderTargetTexture, &l_ShaderResourceViewDescription, GetShaderResourceView());
-	assert(!FAILED(l_HR));
+	DEBUG_ASSERT(!FAILED(l_HR));
 	if (m_CreateDepthStencilBuffer)
 	{
 		D3D11_TEXTURE2D_DESC l_DepthBufferDescription;
@@ -112,14 +111,14 @@ void CDynamicTexture::Init()
 		l_DepthBufferDescription.CPUAccessFlags = 0;
 		l_DepthBufferDescription.MiscFlags = 0;
 		l_HR = l_Device->CreateTexture2D(&l_DepthBufferDescription, NULL, &m_DepthStencilBuffer);
-		assert(!FAILED(l_HR));
+		DEBUG_ASSERT(!FAILED(l_HR));
 		D3D11_DEPTH_STENCIL_VIEW_DESC l_DepthStencilViewDescription;
 		ZeroMemory(&l_DepthStencilViewDescription, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
 		l_DepthStencilViewDescription.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		l_DepthStencilViewDescription.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		l_DepthStencilViewDescription.Texture2D.MipSlice = 0;
 		l_HR = l_Device->CreateDepthStencilView(m_DepthStencilBuffer, &l_DepthStencilViewDescription, &m_DepthStencilView);
-		assert(!FAILED(l_HR));
+		DEBUG_ASSERT(!FAILED(l_HR));
 	}
 	CreateSamplerState();
 }

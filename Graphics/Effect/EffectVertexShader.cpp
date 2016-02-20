@@ -8,7 +8,7 @@ CEffectVertexShader::CEffectVertexShader(const CXMLTreeNode &TreeNode)
 {
 	m_VertexType = TreeNode.GetPszProperty("vertex_type");
 	bool success = Load();
-	assert(success);
+	DEBUG_ASSERT(success);
 }
 
 
@@ -65,7 +65,7 @@ bool CEffectVertexShader::Load()
 	}
 	else
 	{
-		assert(!"Vertex type '%s' not recognized on CEffectVertexShader::Load");
+		DEBUG_ASSERT(!"Vertex type '%s' not recognized on CEffectVertexShader::Load");
 	}
 	l_VSBlob->Release();
 	if (!l_Loaded)

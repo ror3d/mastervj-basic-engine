@@ -14,9 +14,9 @@ CAnimatedInstanceModel::CAnimatedInstanceModel(CXMLTreeNode& TreeNode)
 	: CRenderableObject(TreeNode)
 {
 	const char* coreName = TreeNode.GetPszProperty("core_name");
-	assert(coreName);
+	DEBUG_ASSERT(coreName);
 	auto core = CEngine::GetSingleton().getAnimatedModelManager()->get(coreName);
-	assert(core);
+	DEBUG_ASSERT(core);
 	Initialize(core);
 	BlendCycle(1, 1.0f, 0.0f);
 }
