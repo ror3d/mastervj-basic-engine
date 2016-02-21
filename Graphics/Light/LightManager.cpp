@@ -16,12 +16,18 @@ void CLightManager::Load(const std::string &FileName)
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(FileName.c_str()))
 	{
+		m_FileName = FileName;
+
 		CXMLTreeNode l_Lights = l_XML["lights"];
 		if (l_Lights.Exists())
 		{
 			for (int i = 0; i < l_Lights.GetNumChildren(); ++i)
 			{
 				CXMLTreeNode l_Light = l_Lights(i);
+				if ( l_Light.GetName() != std::string("light") )
+				{
+					continue;
+				}
 
 				CLight::TLightType type = CLight::getLightTypeByName(l_Light.GetPszProperty("type"));
 
@@ -93,4 +99,10 @@ void CLightManager::ExecuteShadowCreation(CContextManager &_context){
 		}			
 	}
 	_context.UnsetRenderTargets();//Una vez pintadas las sombras, quitamos target para render normal
+}
+
+void CLightManager::reload()
+{
+	destroy();
+	Load(m_FileName);
 }

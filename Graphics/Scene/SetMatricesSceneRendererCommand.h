@@ -1,7 +1,7 @@
 #ifndef SET_MATERICES_SCENE_RENDERER_COMMAND_H
 #define SET_MATERICES_SCENE_RENDERER_COMMAND_H
 
-#include <Scene\SceneRendererCommand.h>
+#include <Scene/SceneRendererCommand.h>
 
 class CSetMatricesSceneRendererCommand : public CSceneRendererCommand
 {

@@ -16,6 +16,7 @@ private:
 		CPoolRenderableObjectTechniqueElement(const std::string &Name,
 			CEffectTechnique *EffectTechnique, CRenderableObjectTechnique
 			*OnRenderableObjectTechniqueManager);
+		~CPoolRenderableObjectTechniqueElement() { }
 	};
 	std::vector<CPoolRenderableObjectTechniqueElement *>
 		m_RenderableObjectTechniqueElements;

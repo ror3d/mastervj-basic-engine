@@ -6,14 +6,9 @@ CLayerManager::CLayerManager(){
 
 }
 
-CLayerManager::~CLayerManager(){
-	Destroy();
-}
-void CLayerManager::Destroy(){
-	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
-	{
-		it->second->destroy();
-	}
+CLayerManager::~CLayerManager()
+{
+	destroy();
 }
 void CLayerManager::Load(const std::string &FileName){
 	CXMLTreeNode l_XML;
@@ -50,7 +45,9 @@ void CLayerManager::Load(const std::string &FileName){
 	}
 }
 
-void CLayerManager::Reload(){
+void CLayerManager::Reload()
+{
+	destroy();
 	Load(m_Filename);
 }
 

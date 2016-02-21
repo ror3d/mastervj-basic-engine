@@ -82,7 +82,7 @@ bool CStaticMesh::Load(const std::string &FileName)
 			unsigned short l_NumVertexs;
 			fread(&l_NumVertexs, sizeof(unsigned short), 1, l_meshFile);
 
-			unsigned short l_NumBytes;
+			unsigned long l_NumBytes = 0;
 			if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType())
 				l_NumBytes = sizeof(MV_POSITION_NORMAL_TEXTURE_VERTEX)*l_NumVertexs;
 			else if (l_VertexType == MV_POSITION_COLOR_VERTEX::GetVertexType())
@@ -93,6 +93,8 @@ bool CStaticMesh::Load(const std::string &FileName)
 				l_NumBytes = sizeof(MV_POSITION_COLOR_TEXTURE_VERTEX)*l_NumVertexs;
 			else if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::GetVertexType())
 				l_NumBytes = sizeof(MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX)*l_NumVertexs;
+			else if (l_VertexType == MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::GetVertexType())
+				l_NumBytes = sizeof(MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX)*l_NumVertexs;
 			else
 			{
 				throw std::runtime_error("unrecognized vertex type");
@@ -144,6 +146,13 @@ bool CStaticMesh::Load(const std::string &FileName)
 				else
 					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
 			}
+			else if (l_VertexType == MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::GetVertexType())
+			{
+				if (l_IndexType == 16)
+					l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
+				else
+					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
+			}
 
 			m_renderableVertexs.push_back(l_RV);
 
@@ -160,6 +169,8 @@ bool CStaticMesh::Load(const std::string &FileName)
 		}
 	}
 
+	fclose(l_meshFile);
+
 	return true;
 }
 
@@ -169,7 +180,7 @@ void CStaticMesh::Render(CContextManager *_context) const
 	{
 		CMaterial *l_Material = m_materials[i];
 		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
-		{
+	{
 			l_Material->apply();
 		m_renderableVertexs[i]->RenderIndexed(_context,
 				l_Material->getRenderableObjectTechique()->GetEffectTechnique());

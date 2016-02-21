@@ -7,7 +7,8 @@ CEffectVertexShader::CEffectVertexShader(const CXMLTreeNode &TreeNode)
 	: CEffectShader(TreeNode)
 {
 	m_VertexType = TreeNode.GetPszProperty("vertex_type");
-	assert(Load());
+	bool success = Load();
+	assert(success);
 }
 
 
@@ -34,9 +35,17 @@ bool CEffectVertexShader::Load()
 		l_VSBlob->Release();
 		return false;
 	}
-	if (m_VertexType == "MV_POSITION_NORMAL_TEXTURE_VERTEX")
+	if (m_VertexType == "MV_POSITION_TEXTURE_VERTEX")
+	{
+		l_Loaded = MV_POSITION_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	else if (m_VertexType == "MV_POSITION_NORMAL_TEXTURE_VERTEX")
 	{
 		l_Loaded = MV_POSITION_NORMAL_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	else if(m_VertexType == "MV_POSITION_TEXTURE_VERTEX")
+	{
+		l_Loaded = MV_POSITION_TEXTURE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
 	else if (m_VertexType == "MV_POSITION_COLOR_VERTEX")
 	{
@@ -79,7 +88,7 @@ void CEffectVertexShader::SetConstantBuffer(unsigned int IdBuffer, void
 }
 
 
-void CEffectVertexShader::Destroy()
+void CEffectVertexShader::destroy()
 {
 	if (m_VertexLayout)
 	{
@@ -92,8 +101,4 @@ void CEffectVertexShader::Destroy()
 		m_VertexShader->Release();
 		m_VertexShader = 0;
 	}
-
-	delete m_ShaderMacros;
 }
-
-

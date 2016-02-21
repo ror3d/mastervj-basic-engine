@@ -10,13 +10,13 @@ protected:
 	ID3D11VertexShader *m_VertexShader;
 	ID3D11InputLayout *m_VertexLayout;
 	std::string m_VertexType;
-	void Destroy();
 public:
 	CEffectVertexShader(const CXMLTreeNode &TreeNode);
 	virtual ~CEffectVertexShader();
 	bool Load();
 	ID3D11VertexShader * GetVertexShader() { return m_VertexShader; }
-	ID3D11InputLayout * GetVertexLayout() { return m_VertexLayout;  }
+	ID3D11InputLayout * GetVertexLayout() { return m_VertexLayout; }
+	void destroy();
 
 	void SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer);
 };

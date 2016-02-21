@@ -27,7 +27,7 @@ CEngine::~CEngine()
 	contextManager->destroy();
 	lightManager->destroy();
 	animatedModelManager->destroy();
-	renderableObjectTechniqueManager->Destroy();
+	renderableObjectTechniqueManager->destroy();
 	sceneRendererCommandManager->destroy();
 	//TODO: physicsManager->destroy();
 

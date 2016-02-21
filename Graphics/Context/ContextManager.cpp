@@ -2,7 +2,6 @@
 
 #include "VertexTypes.h"
 #include "Renderable/RenderableVertexs.h"
-#include "Effect/Effect.h"
 #include <Math/Matrix44.h>
 
 
@@ -19,6 +18,8 @@ CContextManager::CContextManager()
 	, m_D3DDebug(nullptr)
 	, m_BackgroundColor(.2f, .1f, .4f)
 {
+	for (int i = 0; i<4; ++i)
+		m_CurrentRenderTargetViews[i] = nullptr;
 }
 
 CContextManager::~CContextManager()
@@ -39,6 +40,9 @@ void CContextManager::destroy()
 
 	if (m_D3DDebug)
 		m_D3DDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+
+	if (m_DrawQuadRV)
+		delete m_DrawQuadRV;
 
 	CHECKED_RELEASE(m_D3DDebug);
 
@@ -111,6 +115,38 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 	m_Viewport.TopLeftY = 0;
 	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 
+
+	MV_POSITION_TEXTURE_VERTEX l_ScreenVertexsQuad[4] =
+	{
+		{ Vect3f(-1.0f, 1.0f, 0.5f), Vect2f(0.0f, 0.0f) },
+		{ Vect3f(1.0f, 1.0f, 0.5f), Vect2f(1.0f, 0.0f) },
+		{ Vect3f(-1.0f, -1.0f, 0.5f), Vect2f(0.0f, 1.0f) },
+		{ Vect3f(1.0f, -1.0f, 0.5f), Vect2f(1.0f, 1.0f) }
+	};
+	m_DrawQuadRV = new CTrianglesStripRenderableVertexs
+		<MV_POSITION_TEXTURE_VERTEX>(l_ScreenVertexsQuad, 4, 2);
+
+	m_Width = Width;
+	m_Height = Height;
+
+
+	D3D11_BLEND_DESC l_AlphablendDesc;
+	ZeroMemory(&l_AlphablendDesc, sizeof(D3D11_BLEND_DESC));
+	l_AlphablendDesc.RenderTarget[0].BlendEnable = true;
+	l_AlphablendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	l_AlphablendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	l_AlphablendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	l_AlphablendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	l_AlphablendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	l_AlphablendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	l_AlphablendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+
+	/*CreateBlendState not exist*/
+	hr = m_D3DDevice->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState);
+	assert(!FAILED(hr));
+
+
 	return S_OK;
 }
 
@@ -161,6 +197,8 @@ HRESULT CContextManager::CreateBackBuffer(HWND hWnd, int Width, int Height)
 
 	SetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 	
+	//m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+
 	return S_OK;
 }
 
@@ -179,26 +217,13 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 		m_SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
 		HRESULT hr = CreateBackBuffer(hWnd, Width, Height);
 		assert(hr == S_OK);
+		m_Width = Width;
+		m_Height = Height;
 	}
 }
 
 void CContextManager::EnableAlphaBlendState()
 {
-	D3D11_BLEND_DESC l_AlphablendDesc;
-	ZeroMemory(&l_AlphablendDesc, sizeof(D3D11_BLEND_DESC));
-	l_AlphablendDesc.RenderTarget[0].BlendEnable = true;
-	l_AlphablendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	l_AlphablendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	l_AlphablendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	l_AlphablendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	l_AlphablendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
-	l_AlphablendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	l_AlphablendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	
-	/*CreateBlendState not exist*/
-	//HRESULT hr = m_DeviceContext->CreateBlendState(&l_AlphablendDesc, &m_AlphaBlendState);
-	//assert(hr);
-
 	m_DeviceContext->OMSetBlendState(m_AlphaBlendState, NULL, 0xffffffff);
 }
 
@@ -208,25 +233,36 @@ void CContextManager::DisableAlphaBlendState()
 }
 
 void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){	
-	if (clear_RenderTarget)
-		m_DeviceContext->ClearRenderTargetView(m_CurrentRenderTargetViews, &m_BackgroundColor.x);	
-
 	if (clear_DepthStencil)
+	{
 		m_DeviceContext->ClearDepthStencilView(m_CurrentDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	}
+
+	if (clear_RenderTarget)
+	{
+		for (int i = 0; i < m_NumViews; ++i)
+		{
+			m_DeviceContext->ClearRenderTargetView(m_CurrentRenderTargetViews[i], &m_BackgroundColor.x);
+		}
+	}
 }
 
-void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView *const	*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){
+void CContextManager::SetRenderTargets(int NumViews, ID3D11RenderTargetView
+*const*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView){
 	m_NumViews = NumViews;
-	m_CurrentRenderTargetViews = *RenderTargetViews;
+	assert(m_NumViews <= MAX_RENDER_TARGET_VIEW);
+	for (int i = 0;i<m_NumViews;++i)
+		m_CurrentRenderTargetViews[i] = RenderTargetViews[i];
 	m_CurrentDepthStencilView = DepthStencilView;
 	m_DeviceContext->OMSetRenderTargets(m_NumViews, RenderTargetViews,	DepthStencilView);
 }
 
 void CContextManager::UnsetRenderTargets(){
-	m_NumViews = 1;
-	m_CurrentRenderTargetViews = m_RenderTargetView;
+	//m_NumViews = 1;
+	SetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	/*m_CurrentRenderTargetViews[0  = m_RenderTargetView;
 	m_CurrentDepthStencilView = m_DepthStencilView;
-	m_DeviceContext->OMSetRenderTargets(m_NumViews, &m_RenderTargetView, m_DepthStencilView);
+	m_DeviceContext->OMSetRenderTargets(m_NumViews, &m_RenderTargetView, m_DepthStencilView);*/
 	D3D11_VIEWPORT vp;
 	vp.Width = (FLOAT)m_Width;
 	vp.Height = (FLOAT)m_Height;
@@ -251,7 +287,7 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 	l_Viewport.TopLeftX = x*m_Viewport.Width;
 	l_Viewport.TopLeftY = y*m_Viewport.Height;
 	m_DeviceContext->RSSetViewports(1, &l_Viewport);
-	//CEngine::GetSingleton().getDebugRender()->GetQuad()->Render(this, EffectTechnique);
+	m_DrawQuadRV->Render(this, EffectTechnique);
 	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 }
 

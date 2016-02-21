@@ -17,7 +17,6 @@ protected:
 			m_StageId = StageId;
 			m_Texture = Texture;
 		}
-		void Activate();
 	};
 	std::vector<CStageTexture> m_StageTextures;
 	std::vector<CDynamicTexture *> m_DynamicTextures;
@@ -27,6 +26,7 @@ public:
 	virtual ~CStagedTexturedSceneRendererCommand();
 	void CreateRenderTargetViewVector();
 	void ActivateTextures();
+	void DeactivateTextures();
 	void AddStageTexture(int StageId, CTexture *Texture);
 	virtual void Execute(CContextManager &context) = 0;
 };

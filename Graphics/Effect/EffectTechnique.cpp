@@ -40,3 +40,12 @@ void CEffectTechnique::SetConstantBuffer(unsigned int IdBuffer, void *ConstantBu
 	m_VertexShader->SetConstantBuffer(IdBuffer, ConstantBuffer);
 	m_PixelShader->SetConstantBuffer(IdBuffer, ConstantBuffer);
 }
+
+void CEffectTechnique::destroy()
+{
+	m_VertexShader->destroy();
+	m_PixelShader->destroy();
+
+	m_VertexShader = NULL;
+	m_PixelShader = NULL;
+}

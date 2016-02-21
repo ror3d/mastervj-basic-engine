@@ -9,6 +9,8 @@ class CContextManager;
 
 class CLightManager : public TMapManager<CLight>
 {
+private:
+	std::string m_FileName;
 public:
 	CLightManager();
 	virtual ~CLightManager();
@@ -17,6 +19,7 @@ public:
 	CLight& CLightManager::iterate(size_t id);
 	size_t CLightManager::count();
 	void ExecuteShadowCreation(CContextManager &_context);
+	void reload();
 };
 
 #endif

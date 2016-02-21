@@ -94,9 +94,6 @@
     <ClInclude Include="Effect\EffectVertexShader.h">
       <Filter>Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Effect\Effect.h">
-      <Filter>Effect</Filter>
-    </ClInclude>
     <ClInclude Include="Effect\EffectManager.h">
       <Filter>Effect</Filter>
     </ClInclude>

@@ -21,17 +21,24 @@ fn exportSingleTexture mat meshName = (
 	)
 )
 
+fn exportSingleReflection mat meshName = (
+	if HasReflection mat alertOnMissing:true then
+	(
+		exportTextureFile "texture" mat.reflectionMap
+	)
+)
+
 fn exportSingleLightmap mat meshName = (
 	if HasLightmap mat alertOnMissing:true then
 	(
-		exportTextureFile "texture" mat.selfIllumMap
+		exportTextureFile "lightmap" mat.selfIllumMap
 	)
 )
 
 fn exportSingleNormal mat meshName = (
 	if HasNormal mat alertOnMissing:true then
 	(
-		exportTextureFile "texture" mat.bumpMap.normal_map
+		exportTextureFile "normal" mat.bumpMap.normal_map
 	)
 )
 
@@ -42,6 +49,8 @@ fn createSingleMaterial obj mat = (
 	format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" mat.name to:file	
 
 	exportSingleTexture mat obj.name
+	
+	exportSingleReflection mat obj.name
 	
 	exportSingleLightmap mat obj.name
 	

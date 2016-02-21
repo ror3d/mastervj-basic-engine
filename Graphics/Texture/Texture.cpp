@@ -13,6 +13,12 @@ CTexture::CTexture() : CNamed("")
 {
 }
 
+CTexture::CTexture(const std::string& name) : CNamed(name)
+, m_Texture(NULL)
+, m_SamplerState(NULL)
+{
+}
+
 
 CTexture::~CTexture()
 {
@@ -40,7 +46,16 @@ bool CTexture::LoadFile()
 
 void CTexture::Unload()
 {
-	// TODO
+	if (m_Texture != NULL)
+	{
+		m_Texture->Release();
+		m_Texture = NULL;
+	}
+	if (m_SamplerState != NULL)
+	{
+		m_SamplerState->Release();
+		m_SamplerState = NULL;
+	}
 }
 
 bool CTexture::load(const std::string &Filename)
@@ -56,6 +71,25 @@ void CTexture::Activate(unsigned int StageId)
 	ID3D11DeviceContext *l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
 	l_DeviceContext->PSSetSamplers(StageId, 1, &m_SamplerState);
 	l_DeviceContext->PSSetShaderResources(StageId, 1, &m_Texture);
+	m_activeStages.insert( StageId );
+}
+
+void CTexture::Deactivate()
+{
+	if ( m_Texture == NULL || m_SamplerState == NULL )
+		return;
+	ID3D11DeviceContext *l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
+
+	ID3D11SamplerState *const tabs[1] = {NULL};
+	ID3D11ShaderResourceView *const tabr[1] = {NULL};
+
+
+	for ( auto StageId : m_activeStages )
+	{
+		l_DeviceContext->PSSetSamplers( StageId, 1, tabs );
+		l_DeviceContext->PSSetShaderResources( StageId, 1, tabr );
+	}
+	m_activeStages.clear();
 }
 
 bool CTexture::Reload()
