@@ -38,7 +38,7 @@ protected:
 	Mat44f m_ViewShadowMap;
 	Mat44f m_ProjectionShadowMap;
 
-	Vect2f m_ShadowMapSize;
+	Vect2i m_ShadowMapSize;
 	std::string m_ShadowMaskFileName;
 
 public:

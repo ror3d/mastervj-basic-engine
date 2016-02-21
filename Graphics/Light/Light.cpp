@@ -13,6 +13,8 @@ CLight::CLight(const CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
 	, CActive(true)
 	, m_GenerateShadowMap(false)
+	, m_ShadowMap(nullptr)
+	, m_ShadowMaskTexture(nullptr)
 {
 	Vect3f pos(0.0f, 0.0f, 0.0f);
 	m_Position = TreeNode.GetVect3fProperty("pos", pos);
@@ -25,15 +27,15 @@ CLight::CLight(const CXMLTreeNode &TreeNode)
 	// Shadowmap
 	m_ShadowMaskFileName = TreeNode.GetPszProperty("shadow_texture_mask", "", false);
 
-	m_ShadowMapSize = Vect2f( TreeNode.GetIntProperty("shadow_map_width", 1, false), TreeNode.GetIntProperty("shadow_map_height", 1, false));
+	m_ShadowMapSize = TreeNode.GetVect2iProperty("shadow_map_size", Vect2i(1, 1), false);
 	setGenerateShadowMap(TreeNode.GetBoolProperty("generate_shadow_map", false));
 
 	CXMLTreeNode light = TreeNode;
 	for (int i = 0; i< light.GetNumChildren(); i++){
 		CXMLTreeNode layer = light(i);
 		if (layer.GetName() == std::string("layer")){
-			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(light(i).GetPszProperty("layer")));
-		}			
+			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(layer.GetPszProperty("name")));
+		}
 	}	
 }
 
@@ -85,7 +87,7 @@ CLight::TLightType CLight::getLightTypeByName(const std::string &type)
 
 CLight::~CLight()
 {
-	setGenerateShadowMap(false);
+	//setGenerateShadowMap(false);
 }
 
 
@@ -110,6 +112,7 @@ CDirectionalLight::CDirectionalLight(const CXMLTreeNode &TreeNode) : CLight(Tree
 {
 	Vect3f dir(0.0f, 0.0f, 0.0f);
 	m_Direction = TreeNode.GetVect3fProperty("dir", dir);
+	m_OrthoShadowMapSize = TreeNode.GetVect2fProperty("ortho_shadow_map_size", Vect2f(1, 1));
 }
 
 
@@ -147,8 +150,6 @@ void CDirectionalLight::SetShadowMap(CContextManager &_context)
 //-----------SPOT
 CSpotLight::CSpotLight(const CXMLTreeNode &TreeNode) : CDirectionalLight(TreeNode)
 {
-	Vect2f orthoSize(0.0f, 0.0f);
-	m_OrthoShadowMapSize = TreeNode.GetVect2fProperty("ortho_shadow_map_size", orthoSize);
 	m_Angle = TreeNode.GetFloatProperty("angle");
 	m_FallOff = TreeNode.GetFloatProperty("falloff");
 }

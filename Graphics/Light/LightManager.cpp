@@ -93,7 +93,12 @@ void CLightManager::ExecuteShadowCreation(CContextManager &_context)
 		if (light.second->getGenerateShadowMap() && light.second->isActive())
 		{
 			light.second->SetShadowMap(_context); //Set matrices y renderTarget
-			_context.Clear(true, false);//Clear Depth
+
+			auto c = _context.m_BackgroundColor;
+			_context.m_BackgroundColor = CColor(0, 0, 0, 0);
+			_context.Clear(true, true);//Clear Depth
+			_context.m_BackgroundColor = c;
+
 			std::vector<CRenderableObjectsManager *> layers = light.second->getLayers();
 			for (auto child = layers.begin(); child < layers.end(); child++)
 			{
