@@ -125,6 +125,7 @@ void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 	{
 		CDynamicTexture *l_ShadowMap = Light->getShadowMap();
 		CTexture *l_ShadowMask = Light->getShadowMaskTexture();
+		m_LightParameters.m_UseShadowMap[IdLight] = 1;
 		m_LightParameters.m_UseShadowMask[IdLight] = l_ShadowMask != NULL ? 1.0f : 0.0f;
 		m_LightParameters.m_LightView[IdLight] = Light->getViewShadowMap();
 		m_LightParameters.m_LightProjection[IdLight] = Light->getProjectionShadowMap();
@@ -133,6 +134,11 @@ void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 		{
 			l_ShadowMask->Activate(UAB_ID_SHADOW_MAP + 1 + IdLight * 2);
 		}
+	}
+	else
+	{
+		m_LightParameters.m_UseShadowMap[IdLight] = 0;
+		m_LightParameters.m_UseShadowMask[IdLight] = 0;
 	}
 
 }
