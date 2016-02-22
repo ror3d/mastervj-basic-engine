@@ -54,7 +54,7 @@ static void __stdcall CreateScene(void* a)
 
 static void __stdcall CreateChar(void* a)
 {
-	
+
 }
 
 CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
@@ -110,7 +110,7 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 		var.type = CDebugHelper::BUTTON;
 		var.callback = CreateScene;
 		var.data = this;
-		
+
 		bar.variables.push_back(var);
 	}
 	{
@@ -184,16 +184,16 @@ void CApplication::Update( float _ElapsedTime )
 			m_RenderManager->getFPSCamera()->AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
 			m_RenderManager->getFPSCamera()->AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
 
-			Vect3f cameraMovement(0, 0, 0);						
+			Vect3f cameraMovement(0, 0, 0);
 			float Strafe = CInputManager::GetInputManager()->GetAxis("STRAFE");
 			float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
 			float m_Yaw = m_RenderManager->getFPSCamera()->GetYaw();
-			
+
 			cameraMovement.y = CInputManager::GetInputManager()->GetAxis("JUMPAxis");
 			cameraMovement.x = Forward*(cos(m_Yaw)) + Strafe*(cos(m_Yaw + 3.14159f*0.5f));
 			cameraMovement.z = Forward*(sin(m_Yaw)) + Strafe*(sin(m_Yaw + 3.14159f*0.5f));
 
-			cameraMovement = phMgr->moveCharacterController(cameraMovement, m_RenderManager->getFPSCamera()->GetUp(), _ElapsedTime);
+			cameraMovement = phMgr->moveCharacterController(cameraMovement*0.2, m_RenderManager->getFPSCamera()->GetUp(), _ElapsedTime);
 			m_RenderManager->getFPSCamera()->SetPosition(cameraMovement);
 		}
 		break;
