@@ -36,7 +36,7 @@ CLight::CLight(const CXMLTreeNode &TreeNode)
 		if (layer.GetName() == std::string("layer")){
 			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(layer.GetPszProperty("name")));
 		}
-	}	
+	}
 }
 
 void CLight::setGenerateShadowMap(bool generate)
@@ -135,6 +135,7 @@ void CDirectionalLight::SetShadowMap(CContextManager &_context)
 	CEffectManager::m_SceneParameters.m_View = m_ViewShadowMap;
 	CEffectManager::m_SceneParameters.m_Projection = m_ProjectionShadowMap;
 	ID3D11RenderTargetView *l_RenderTargetViews[1];
+	m_ShadowMap->Deactivate();
 	l_RenderTargetViews[0] = m_ShadowMap->GetRenderTargetView();
 	D3D11_VIEWPORT m_viewport;
 	m_viewport.Width = (float)l_ShadowMapWidth;

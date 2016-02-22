@@ -11,6 +11,7 @@ CEffectPixelShader::CEffectPixelShader(const CXMLTreeNode &TreeNode) : CEffectSh
 
 CEffectPixelShader::~CEffectPixelShader()
 {
+	CHECKED_RELEASE( m_PixelShader );
 }
 
 bool CEffectPixelShader::Load()

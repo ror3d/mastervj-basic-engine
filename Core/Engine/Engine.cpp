@@ -15,7 +15,7 @@ CEngine::CEngine()
 	, sceneRendererCommandManager(nullptr)
 	, physXManager(nullptr)
 {
-} 
+}
 CEngine::~CEngine()
 {
 	effectsManager->destroy();
@@ -24,11 +24,11 @@ CEngine::~CEngine()
 	layerManager->destroy();
 	staticMeshManager->destroy();
 	renderManager->destroy();
-	contextManager->destroy();
 	lightManager->destroy();
 	animatedModelManager->destroy();
 	renderableObjectTechniqueManager->destroy();
 	sceneRendererCommandManager->destroy();
+	contextManager->destroy();
 
 	delete effectsManager;
 	delete textureManager;
@@ -36,12 +36,12 @@ CEngine::~CEngine()
 	delete layerManager;
 	delete staticMeshManager;
 	delete renderManager;
-	delete contextManager;
 	delete lightManager;
 	delete animatedModelManager;
 	delete renderableObjectTechniqueManager;
 	delete sceneRendererCommandManager;
 	delete physXManager;
+	delete contextManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -49,12 +49,12 @@ CEngine::~CEngine()
 	layerManager = nullptr;
 	staticMeshManager = nullptr,
 	renderManager = nullptr;
-	contextManager = nullptr;
 	lightManager = nullptr;
 	animatedModelManager = nullptr;
 	renderableObjectTechniqueManager = nullptr;
 	sceneRendererCommandManager = nullptr;
 	physXManager = nullptr;
+	contextManager = nullptr;
 
 } //Destruimos vars
 

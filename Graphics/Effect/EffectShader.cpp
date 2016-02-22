@@ -26,6 +26,10 @@ CEffectShader::CEffectShader(const CXMLTreeNode &TreeNode)
 
 CEffectShader::~CEffectShader()
 {
+	for ( auto buf : m_ConstantBuffers )
+	{
+		buf->Release();
+	}
 }
 
 void SplitString(const std::string& str, char split, std::vector<std::string>& out)

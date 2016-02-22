@@ -255,8 +255,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		}
 	}
 
-	UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	CEngine::ReleaseSingleton();
+	UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	return 0;
 }
 
