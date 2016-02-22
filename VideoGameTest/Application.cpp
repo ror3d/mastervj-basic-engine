@@ -151,7 +151,7 @@ CApplication::~CApplication()
 
 void CApplication::Init()
 {
-	phMgr = CPhysXManager::CreatePhysXManager();
+	phMgr = CEngine::GetSingleton().getPhysXManager();
 	phMgr->registerMaterial("ground", 1, 0.9, 0.1);
 	phMgr->registerMaterial("box", 1, 0.9, 0.8);
 	phMgr->registerMaterial("controller_material", 10, 2, 0.5);

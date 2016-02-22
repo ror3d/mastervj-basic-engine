@@ -1,32 +1,36 @@
-<?xml version="1.0"		encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <effects>
-	<vertex_shader 
-		name="animated_model_render_vs"
-		file="./Data/Effects/ForwardShadingUberShader.fx"
-		shader_model="vs_4_0"
-		entry_point="VS"
-		vertex_type="MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX"
-		preprocessor="HAS_WEIGHT_INDICES;HAS_NORMAL;HAS_UV"/>
-	<pixel_shader
-		name="animated_model_render_ps"
-		file="./Data/Effects/ForwardShadingUberShader.fx"
-		shader_model="ps_4_0"
-		entry_point="PS"
-		preprocessor="HAS_WEIGHT_INDICES;HAS_NORMAL;HAS_UV"/>
-	<effect_technique
-		name="animated_diffuse_technique"
-		vertex_shader="animated_model_render_vs"
-		pixel_shader="animated_model_render_ps"/>
+
+<!-- Forward -->
+	<vertex_shader  name="animated_model_render_vs" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX" preprocessor="HAS_WEIGHT_INDICES;HAS_NORMAL;HAS_UV"/>
+	<pixel_shader name="animated_model_render_ps" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_WEIGHT_INDICES;HAS_NORMAL;HAS_UV"/>
+	<effect_technique name="animated_diffuse_technique" vertex_shader="animated_model_render_vs" pixel_shader="animated_model_render_ps"/>
 	
+	<vertex_shader name="diffuse_vs" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX" preprocessor="HAS_NORMAL;HAS_UV"/>
+	<pixel_shader name="diffuse_ps" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_NORMAL;HAS_UV"/>
+	<effect_technique name="diffuse_technique" vertex_shader="diffuse_vs" pixel_shader="diffuse_ps"/>
 	
-	<vertex_shader
-		name="diffuse_vs"
-		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="vs_4_0"		entry_point="VS"		vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX"		preprocessor="HAS_NORMAL;HAS_UV"/>
-	<pixel_shader		name="diffuse_ps"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="ps_4_0"		entry_point="PS"		preprocessor="HAS_NORMAL;HAS_UV"/>
-	<effect_technique		name="diffuse_technique"		vertex_shader="diffuse_vs"		pixel_shader="diffuse_ps"/>					<vertex_shader 		name="normal_vs"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="vs_4_0"		entry_point="VS"		vertex_type="MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX"		preprocessor="HAS_NORMAL;HAS_UV;HAS_TANGENT_BINORMAL;HAS_LIGHTS;HAS_NORMAL_MAP"/>	<pixel_shader		name="normal_ps"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="ps_4_0"		entry_point="PS"		preprocessor="HAS_NORMAL;HAS_UV;HAS_TANGENT_BINORMAL;HAS_LIGHTS;HAS_NORMAL_MAP"/>	<effect_technique		name="normal_technique"		vertex_shader="normal_vs"		pixel_shader="normal_ps"/>			<vertex_shader 		name="light_vs"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="vs_4_0"		entry_point="VS"		vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX"		preprocessor="HAS_NORMAL;HAS_UV;HAS_LIGHTS"/>	<pixel_shader		name="light_ps"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="ps_4_0"		entry_point="PS"		preprocessor="HAS_NORMAL;HAS_UV;HAS_LIGHTS"/>	<effect_technique		name="light_technique"		vertex_shader="light_vs"		pixel_shader="light_ps"/>
-		<vertex_shader 		name="environment_vs"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="vs_4_0"		entry_point="VS"		vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX"		preprocessor="HAS_NORMAL;HAS_UV;HAS_ENVIRONMENT_MAP"/>	<pixel_shader		name="environment_ps"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="ps_4_0"		entry_point="PS"		preprocessor="HAS_NORMAL;HAS_UV;HAS_ENVIRONMENT_MAP"/>	<effect_technique		name="environment_technique"		vertex_shader="environment_vs"		pixel_shader="environment_ps"/>			<vertex_shader 		name="lightmap_vs"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="vs_4_0"		entry_point="VS"		vertex_type="MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX"		preprocessor="HAS_NORMAL;HAS_UV;HAS_UV2"/>	<pixel_shader		name="lightmap_ps"		file="./Data/Effects/ForwardShadingUberShader.fx"		shader_model="ps_4_0"		entry_point="PS"		preprocessor="HAS_NORMAL;HAS_UV;HAS_UV2"/>	<effect_technique		name="lightmap_technique"		vertex_shader="lightmap_vs"		pixel_shader="lightmap_ps"/>
+	<vertex_shader name="normal_vs" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX" preprocessor="HAS_NORMAL;HAS_UV;HAS_TANGENT_BINORMAL;HAS_LIGHTS;HAS_NORMAL_MAP"/>
+	<pixel_shader name="normal_ps" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_NORMAL;HAS_UV;HAS_TANGENT_BINORMAL;HAS_LIGHTS;HAS_NORMAL_MAP"/>
+	<effect_technique name="normal_technique" vertex_shader="normal_vs" pixel_shader="normal_ps"/>
 	
-	<!--vertex_shader		name="debug_render_vs"		file="./Data/Effects/DebugRender.fx"		shader_model="vs_4_0"		entry_point="VS"		vertex_type="MV_POSITION_COLOR_VERTEX"		preprocessor=""/>
-	<pixel_shader		name="debug_render_ps"		file="./Data/Effects/DebugRender.fx"		shader_model="ps_4_0"		entry_point="PS"		preprocessor=""/>
-	<effect_technique		name="debug_render_technique"		vertex_shader="debug_render_vs"		pixel_shader="debug_render_ps"/-->
+	<vertex_shader name="light_vs" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX" preprocessor="HAS_NORMAL;HAS_UV;HAS_LIGHTS"/>
+	<pixel_shader name="light_ps" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_NORMAL;HAS_UV;HAS_LIGHTS"/>
+	<effect_technique name="light_technique" vertex_shader="light_vs" pixel_shader="light_ps"/>
+	
+	<vertex_shader name="environment_vs" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX" preprocessor="HAS_NORMAL;HAS_UV;HAS_ENVIRONMENT_MAP"/>
+	<pixel_shader name="environment_ps" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_NORMAL;HAS_UV;HAS_ENVIRONMENT_MAP;HAS_LIGHTS"/>
+	<effect_technique name="environment_technique" vertex_shader="environment_vs" pixel_shader="environment_ps"/>
+		
+	<vertex_shader name="lightmap_vs" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX" preprocessor="HAS_NORMAL;HAS_UV;HAS_UV2"/>
+	<pixel_shader name="lightmap_ps" file="./Data/Effects/ForwardShadingUberShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_NORMAL;HAS_UV;HAS_UV2"/>
+	<effect_technique name="lightmap_technique" vertex_shader="lightmap_vs" pixel_shader="lightmap_ps"/>
+	
+	<vertex_shader name="skybox_vs" file="./Data/Effects/Skybox.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX" preprocessor="HAS_NORMAL;HAS_UV"/>
+	<pixel_shader name="skybox_ps" file="./Data/Effects/Skybox.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_NORMAL;HAS_UV"/>
+	<effect_technique name="skybox_technique" vertex_shader="skybox_vs" pixel_shader="skybox_ps"/>
+	<!-- G-Buffer -->		<vertex_shader name="g_buffer_PosNorTex_vs" file="./Data/Effects/GBufferUberShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_NORMAL_TEXTURE_VERTEX" preprocessor="HAS_NORMAL;HAS_UV"/>	<pixel_shader name="g_buffer_PosNorTex_ps" file="./Data/Effects/GBufferUberShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_NORMAL;HAS_UV"/>	<effect_technique name="g_buffer_PosNorTex_technique" vertex_shader="g_buffer_PosNorTex_vs" pixel_shader="g_buffer_PosNorTex_ps"/>		<vertex_shader name="g_buffer_PosNorBiTanTex_vs" file="./Data/Effects/GBufferUberShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX" preprocessor="HAS_NORMAL;HAS_UV;HAS_TANGENT_BINORMAL;"/>	<pixel_shader name="g_buffer_PosNorBiTanTex_ps" file="./Data/Effects/GBufferUberShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_NORMAL;HAS_UV;HAS_TANGENT_BINORMAL;"/>	<effect_technique name="g_buffer_PosNorBiTanTex_technique" vertex_shader="g_buffer_PosNorBiTanTex_vs" pixel_shader="g_buffer_PosNorBiTanTex_ps"/>	
+<!-- Deferred -->
+	<vertex_shader name="screenquad_vs" file="./Data/Effects/ScreenQuadShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_TEXTURE_VERTEX" preprocessor=""/>
+	<pixel_shader name="screenquad_ps" file="./Data/Effects/ScreenQuadShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor=""/>	<effect_technique name="screenquad_technique" vertex_shader="screenquad_vs" pixel_shader="screenquad_ps"/>		<vertex_shader name="lightmap_screenquad_vs" file="./Data/Effects/ScreenQuadShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_TEXTURE_VERTEX" preprocessor=""/>	<pixel_shader name="lightmap_screenquad_ps" file="./Data/Effects/ScreenQuadShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor="HAS_LIGHTMAP"/>	<effect_technique name="lightmap_screenquad_technique" vertex_shader="lightmap_screenquad_vs" pixel_shader="lightmap_screenquad_ps"/>		<vertex_shader name="screenquad_deferred_lighting_vs" file="./Data/Effects/DeferredShader.fx" shader_model="vs_4_0" entry_point="VS" vertex_type="MV_POSITION_TEXTURE_VERTEX" preprocessor=""/>	<pixel_shader name="screenquad_deferred_lighting_ps" file="./Data/Effects/DeferredShader.fx" shader_model="ps_4_0" entry_point="PS" preprocessor=""/>	<effect_technique name="screenquad_deferred_lighting_technique" vertex_shader="screenquad_deferred_lighting_vs" pixel_shader="screenquad_deferred_lighting_ps"/>		
 </effects>
