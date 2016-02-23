@@ -58,7 +58,6 @@
     <ClInclude Include="Renderable\RenderableObjectTechniqueManager.h" />
     <ClInclude Include="Renderable\RenderableVertexs.h" />
     <ClInclude Include="Renderer\3DElement.h" />
-    <ClInclude Include="Renderer\RenderManager.h" />
     <ClInclude Include="Scene\CaptureFrameBufferSceneRendererCommand.h" />
     <ClInclude Include="Scene\ClearSceneRendererCommand.h" />
     <ClInclude Include="Scene\DeferredShadingSceneRendererCommand.h" />
@@ -137,7 +136,6 @@
     <ClCompile Include="RenderDebugLightsSceneRendererCommand.cpp" />
     <ClCompile Include="RenderDebugShadowMapsSceneRendererCommand.cpp" />
     <ClCompile Include="Renderer\3DElement.cpp" />
-    <ClCompile Include="Renderer\RenderManager.cpp" />
     <ClCompile Include="RenderGUISceneRendererCommand.cpp" />
     <ClCompile Include="RenderLayerSceneRendererCommand.cpp" />
     <ClCompile Include="SceneRendererCommand.cpp" />

@@ -3,7 +3,7 @@
 #include <Base/Math/Math.h>
 
 #include <Graphics/Context/ContextManager.h>
-#include <Graphics/Renderer/RenderManager.h>
+#include <Graphics/Camera/FPSCameraController.h>
 
 #include <Core/Input/InputManager.h>
 #include <Core/Input/InputManagerImplementation.h>

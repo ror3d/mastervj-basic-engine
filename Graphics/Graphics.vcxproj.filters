@@ -72,9 +72,6 @@
     <ClInclude Include="Material\MaterialManager.h">
       <Filter>Material</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\RenderManager.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Texture\Texture.h">
       <Filter>Texture</Filter>
     </ClInclude>
@@ -279,9 +276,6 @@
     </ClCompile>
     <ClCompile Include="Material\MaterialManager.cpp">
       <Filter>Material</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\RenderManager.cpp">
-      <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Texture\Texture.cpp">
       <Filter>Texture</Filter>
