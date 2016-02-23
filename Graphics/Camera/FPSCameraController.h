@@ -15,12 +15,14 @@ private:
 public:
 	CFPSCameraController();
 	virtual ~CFPSCameraController();
-	
+
 	void Move(float Strafe, float Forward, bool Speed, float ElapsedTime);
-	void SetCamera(CCamera *Camera) const;
+	void UpdateCameraValues(CCamera *Camera) const;
 	void AddYaw(float Radians);
 	void AddPitch(float Radians);
 	Vect3f GetDirection() const;
+
+	void Update( float ElapsedTime );
 
 };
 

@@ -20,7 +20,7 @@ void CRenderManager::SetCurrentCamera(const CCamera& _CurrentCamera)
 
 void CRenderManager::SetCamerasMatrix(CContextManager *_context){
 	CCamera camera;
-	m_FPSCamera.SetCamera(&camera);
+	m_FPSCamera.UpdateCameraValues(&camera);
 	camera.SetFOV(1.047f);
 	camera.SetAspectRatio(_context->GetAspectRatio());
 	camera.SetZNear(0.1f);
@@ -29,7 +29,7 @@ void CRenderManager::SetCamerasMatrix(CContextManager *_context){
 	SetCurrentCamera(camera);
 
 	m_SphericalCamera.SetZoom(5);
-	m_SphericalCamera.SetCamera(&camera);
+	m_SphericalCamera.UpdateCameraValues(&camera);
 	camera.SetFOV(1.047f);
 	camera.SetAspectRatio(_context->GetAspectRatio());
 	camera.SetZNear(0.1f);

@@ -27,7 +27,11 @@ static CPhysXManager* phMgr = nullptr;
 
 static void __stdcall SwitchCameraCallback( void* _app )
 {
-	((CApplication*)_app)->m_RenderManager->SwitchCamera();
+	std::string cam = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName();
+	if ( cam == "__debug" ) cam = "__fps";
+	else if ( cam == "__fps" ) cam = "__debug";
+
+	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController(cam);
 }
 
 static void __stdcall ReloadScene(void* _app)
@@ -57,9 +61,8 @@ static void __stdcall CreateChar(void* a)
 
 }
 
-CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
-	: m_RenderManager( _renderManager )
-	, m_ContextManager( _ContextManager )
+CApplication::CApplication( CContextManager *_ContextManager)
+	: m_ContextManager( _ContextManager )
 {
 	CDebugHelper::GetDebugHelper()->Log( "CApplication::CApplication" );
 
@@ -167,40 +170,26 @@ void CApplication::Update( float _ElapsedTime )
 
 	( (CInputManagerImplementation*)CInputManager::GetInputManager() )->SetMouseSpeed( s_mouseSpeed );
 
-	switch (m_RenderManager->getCurrentCameraNum())
+	// TODO: move this to somewhere else! (like inside the FPS cam controller)
+	CCameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>( cc );
+	if(ccfps != nullptr)
 	{
-		case 0:
-			if ( CInputManager::GetInputManager()->IsActionActive( "MOVE_CAMERA" ) )
-			{
-				Vect3f cameraMovement( 0, 0, 0 );
+		Vect3f cameraMovement(0, 0, 0);
+		float Strafe = CInputManager::GetInputManager()->GetAxis("STRAFE");
+		float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
+		float m_Yaw = ccfps->GetYaw();
 
-				cameraMovement.x = CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * 0.0005f;
-				cameraMovement.y = CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f;
-				m_RenderManager->getSphericalCamera()->Update(cameraMovement);
-			}
-			break;
-		case 1:
-		{
-			m_RenderManager->getFPSCamera()->AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
-			m_RenderManager->getFPSCamera()->AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
+		cameraMovement.y = CInputManager::GetInputManager()->GetAxis("JUMPAxis");
+		cameraMovement.x = Forward*(cos(m_Yaw)) + Strafe*(cos(m_Yaw + 3.14159f*0.5f));
+		cameraMovement.z = Forward*(sin(m_Yaw)) + Strafe*(sin(m_Yaw + 3.14159f*0.5f));
 
-			Vect3f cameraMovement(0, 0, 0);
-			float Strafe = CInputManager::GetInputManager()->GetAxis("STRAFE");
-			float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
-			float m_Yaw = m_RenderManager->getFPSCamera()->GetYaw();
-
-			cameraMovement.y = CInputManager::GetInputManager()->GetAxis("JUMPAxis");
-			cameraMovement.x = Forward*(cos(m_Yaw)) + Strafe*(cos(m_Yaw + 3.14159f*0.5f));
-			cameraMovement.z = Forward*(sin(m_Yaw)) + Strafe*(sin(m_Yaw + 3.14159f*0.5f));
-
-			cameraMovement = phMgr->moveCharacterController(cameraMovement*0.2, m_RenderManager->getFPSCamera()->GetUp(), _ElapsedTime);
-			m_RenderManager->getFPSCamera()->SetPosition(cameraMovement);
-		}
-		break;
+		cameraMovement = phMgr->moveCharacterController(cameraMovement*0.2, ccfps->GetUp(), _ElapsedTime);
+		ccfps->SetPosition(cameraMovement);
 	}
 
+	CEngine::GetSingleton().getCameraManager()->Update( _ElapsedTime );
 
-	CEngine::GetSingleton().getRenderManager()->SetCamerasMatrix(m_ContextManager);
 }
 
 

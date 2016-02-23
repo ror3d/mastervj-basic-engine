@@ -16,10 +16,11 @@
     <ClInclude Include="ApplyFiltersSceneRendererCommand.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraController.h" />
+    <ClInclude Include="Camera\CameraInfo.h" />
+    <ClInclude Include="Camera\CameraManager.h" />
     <ClInclude Include="Camera\FPSCameraController.h" />
     <ClInclude Include="Camera\Frustum.h" />
     <ClInclude Include="Camera\SphericalCameraController.h" />
-    <ClInclude Include="Cinematics\CameraInfo.h" />
     <ClInclude Include="Cinematics\CameraKey.h" />
     <ClInclude Include="Cinematics\CameraKeyController.h" />
     <ClInclude Include="Cinematics\Cinematic.h" />
@@ -92,11 +93,12 @@
     <ClCompile Include="Animation\AnimatedModelManager.cpp" />
     <ClCompile Include="ApplyFiltersSceneRendererCommand.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
+    <ClCompile Include="Camera\CameraInfo.cpp" />
+    <ClCompile Include="Camera\CameraManager.cpp" />
     <ClCompile Include="Camera\FPSCameraController.cpp" />
     <ClCompile Include="Camera\Frustum.cpp" />
     <ClCompile Include="Camera\SphericalCameraController.cpp" />
     <ClCompile Include="CaptureFrameBufferSceneRendererCommand.cpp" />
-    <ClCompile Include="Cinematics\CameraInfo.cpp" />
     <ClCompile Include="Cinematics\CameraKey.cpp" />
     <ClCompile Include="Cinematics\CameraKeyController.cpp" />
     <ClCompile Include="Cinematics\Cinematic.cpp" />

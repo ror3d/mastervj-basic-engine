@@ -214,7 +214,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
 		//CApplication application(&debugRender, &s_Context);
-		CApplication application(&context, CEngine::GetSingleton().getRenderManager());
+		CApplication application(&context);
 
 		application.Init();
 

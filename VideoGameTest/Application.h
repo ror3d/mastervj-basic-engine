@@ -10,10 +10,8 @@ class CRenderManager;
 class CApplication
 {
 public:
-	CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager );
+	CApplication( CContextManager *_ContextManager);
 	~CApplication();
-
-	CRenderManager *m_RenderManager;
 
 	void Init();
 	

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CameraInfo.h"
+#include "Camera/CameraInfo.h"
 
 class CXMLTreeNode;
 

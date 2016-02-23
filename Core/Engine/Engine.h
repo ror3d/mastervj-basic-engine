@@ -6,13 +6,13 @@
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Texture/TextureManager.h>
-#include <Graphics/Renderer/RenderManager.h>
 #include <Graphics/Light/LightManager.h>
 #include <Graphics/Animation/AnimatedModelManager.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 #include <Graphics/Debug/DebugRender.h>
+#include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
 
 
@@ -24,13 +24,13 @@ private:
 	CMaterialManager * materialManager;
 	CEffectManager * effectsManager;
 	CTextureManager * textureManager;
-	CRenderManager * renderManager;	
 	CLightManager * lightManager;
 	CAnimatedModelManager * animatedModelManager;
 	CRenderableObjectTechniqueManager * renderableObjectTechniqueManager;
 	CSceneRendererCommandManager * sceneRendererCommandManager;
 	CContextManager * contextManager;
 	CDebugRender * debugRender;
+	CCameraManager * cameraManager;
 	CPhysXManager * physXManager;
 
 public:
@@ -45,12 +45,12 @@ public:
 	inline CMaterialManager * getMaterialManager() const { return materialManager; }
 	inline CEffectManager * getEffectsManager() const { return effectsManager; }
 	inline CTextureManager * getTextureManager() const { return textureManager; }
-	inline CRenderManager * getRenderManager() const { return renderManager; }
 	inline CContextManager * getContextManager() const { return contextManager; }
 	inline CLightManager * getLightManager() const { return lightManager; }
 	inline CAnimatedModelManager * getAnimatedModelManager() const { return animatedModelManager; }
 	inline CRenderableObjectTechniqueManager * getRenderableObjectTechniqueManager() const { return renderableObjectTechniqueManager; }
 	inline CSceneRendererCommandManager * getSceneRendererCommandManager() const { return sceneRendererCommandManager; }
 	inline CDebugRender * getDebugRender() const { return debugRender; }
+	inline CCameraManager * getCameraManager() const { return cameraManager; }
 	inline CPhysXManager * getPhysXManager() const { return physXManager; }
 };
