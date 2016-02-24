@@ -1,11 +1,11 @@
 #ifndef INC_CAMERAFPSHOOTER_H_
 #define INC_CAMERAFPSHOOTER_H_
 
-#include "CameraController.h"
+#include "YawPitchCameraController.h"
 
 class CCamera;
 
-class CFPSCameraController : public CCameraController
+class CFPSCameraController : public IYawPitchCameraController
 {
 private:
 	float						m_YawSpeed;

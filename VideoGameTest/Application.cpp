@@ -171,7 +171,7 @@ void CApplication::Update( float _ElapsedTime )
 	( (CInputManagerImplementation*)CInputManager::GetInputManager() )->SetMouseSpeed( s_mouseSpeed );
 
 	// TODO: move this to somewhere else! (like inside the FPS cam controller)
-	CCameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+	ICameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>( cc );
 	if(ccfps != nullptr)
 	{
