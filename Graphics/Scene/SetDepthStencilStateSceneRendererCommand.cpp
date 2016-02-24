@@ -25,7 +25,7 @@ CSetDepthStencilStateSceneRendererCommand::
 	l_DepthStencilStateDescription.BackFace = od;
 
 	if (FAILED(CEngine::GetSingleton().getContextManager()->GetDevice()->CreateDepthStencilState(&l_DepthStencilStateDescription, &m_DepthStencilState))){
-		assert(false);
+		DEBUG_ASSERT(false);
 	}	
 }
 

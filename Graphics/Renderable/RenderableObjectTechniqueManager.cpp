@@ -10,16 +10,18 @@ CRenderableObjectTechniqueManager::CRenderableObjectTechniqueManager()
 {
 
 }
+
 CRenderableObjectTechniqueManager::~CRenderableObjectTechniqueManager()
 {
-	Destroy();
+	destroy();
 }
+
 bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRenderableObjectTechnique	*PoolRenderableObjectTechniques,
-																		const std::string &RenderableObjectTechniqueName,
-																		const std::string &TechniqueName)
+	const std::string &RenderableObjectTechniqueName,
+	const std::string &TechniqueName)
 {
 	CRenderableObjectTechnique *l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = get(RenderableObjectTechniqueName);
-
+	
 	if (l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager == NULL)
 	{
 		CEffectTechnique *l_EffectTechnique = CEngine::GetSingleton().getEffectsManager()->get(TechniqueName);
@@ -30,9 +32,10 @@ bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRen
 	return true;
 }
 
-void CRenderableObjectTechniqueManager::Destroy()
+void CRenderableObjectTechniqueManager::destroy()
 {
-	m_resources.clear();
+	m_PoolRenderableObjectTechniques.destroy();
+	TMapManager<CRenderableObjectTechnique>::destroy();
 }
 
 bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
@@ -75,13 +78,20 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 		return true;
 	}
 	return false;
-
+	
 }
+
 bool CRenderableObjectTechniqueManager::Reload()
 {
-	Destroy();
+	destroy();
 	return Load(m_Filename);
 }
+
+CPoolRenderableObjectTechnique * CRenderableObjectTechniqueManager::getPool(const std::string& pool)
+{
+	return m_PoolRenderableObjectTechniques.get(pool);
+}
+
 TMapManager<CPoolRenderableObjectTechnique> & CRenderableObjectTechniqueManager::GetPoolRenderableObjectTechniques()
 {
 	return m_PoolRenderableObjectTechniques;

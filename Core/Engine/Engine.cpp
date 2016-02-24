@@ -13,8 +13,10 @@ CEngine::CEngine()
 	, animatedModelManager(nullptr)
 	, renderableObjectTechniqueManager(nullptr)
 	, sceneRendererCommandManager(nullptr)
+	, cameraManager(nullptr)
+	, physXManager(nullptr)
 {
-} 
+}
 CEngine::~CEngine()
 {
 	effectsManager->destroy();
@@ -22,36 +24,38 @@ CEngine::~CEngine()
 	materialManager->destroy();
 	layerManager->destroy();
 	staticMeshManager->destroy();
-	renderManager->destroy();
-	contextManager->destroy();
 	lightManager->destroy();
 	animatedModelManager->destroy();
-	renderableObjectTechniqueManager->Destroy();
+	renderableObjectTechniqueManager->destroy();
 	sceneRendererCommandManager->destroy();
+	cameraManager->destroy();
+	contextManager->destroy();
 
 	delete effectsManager;
 	delete textureManager;
 	delete materialManager;
 	delete layerManager;
 	delete staticMeshManager;
-	delete renderManager;
-	delete contextManager;
 	delete lightManager;
 	delete animatedModelManager;
 	delete renderableObjectTechniqueManager;
 	delete sceneRendererCommandManager;
+	delete physXManager;
+	delete cameraManager;
+	delete contextManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
 	materialManager = nullptr;
 	layerManager = nullptr;
 	staticMeshManager = nullptr,
-	renderManager = nullptr;
-	contextManager = nullptr;
 	lightManager = nullptr;
 	animatedModelManager = nullptr;
 	renderableObjectTechniqueManager = nullptr;
 	sceneRendererCommandManager = nullptr;
+	physXManager = nullptr;
+	cameraManager = nullptr;
+	contextManager = nullptr;
 
 } //Destruimos vars
 
@@ -62,10 +66,11 @@ void CEngine::Init()
 	materialManager = new CMaterialManager();
 	layerManager = new CLayerManager();
 	staticMeshManager = new CStaticMeshManager();
-	renderManager = new CRenderManager();
 	contextManager = new CContextManager();
 	lightManager = new CLightManager();
 	animatedModelManager = new CAnimatedModelManager();
 	renderableObjectTechniqueManager = new CRenderableObjectTechniqueManager();
 	sceneRendererCommandManager = new CSceneRendererCommandManager();
+	cameraManager = new CCameraManager(contextManager);
+	physXManager = CPhysXManager::CreatePhysXManager();
 }

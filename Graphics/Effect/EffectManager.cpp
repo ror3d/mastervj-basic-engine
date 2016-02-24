@@ -6,6 +6,7 @@
 #include <Core/Engine/Engine.h>
 #include "Light/Light.h"
 #include "Light/LightManager.h"
+#include "Texture/DynamicTexture.h"
 
 #include <XML/XMLTreeNode.h>
 
@@ -96,6 +97,8 @@ void CEffectManager::SetSceneConstants()
 	}
 }
 
+#define UAB_ID_SHADOW_MAP 6
+
 void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
 	m_LightParameters.m_LightEnabled[IdLight] = 1.0f;
@@ -118,6 +121,28 @@ void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 		m_LightParameters.m_LightFallOffAngle[IdLight] = l_light->getFallOff();
 	}
 
+	if (Light->getGenerateShadowMap())
+	{
+		CDynamicTexture *l_ShadowMap = Light->getShadowMap();
+		CTexture *l_ShadowMask = Light->getShadowMaskTexture();
+		m_LightParameters.m_UseShadowMap[IdLight] = 1;
+		m_LightParameters.m_UseShadowMask[IdLight] = l_ShadowMask != NULL ? 1.0f : 0.0f;
+		m_LightParameters.m_LightView[IdLight] = Light->getViewShadowMap();
+		m_LightParameters.m_LightProjection[IdLight] = Light->getProjectionShadowMap();
+		l_ShadowMap->Activate(UAB_ID_SHADOW_MAP + IdLight * 2);
+		if (l_ShadowMask != NULL)
+		{
+			l_ShadowMask->Activate(UAB_ID_SHADOW_MAP + 1 + IdLight * 2);
+		}
+	}
+	else
+	{
+		m_LightParameters.m_UseShadowMap[IdLight] = 0;
+		m_LightParameters.m_UseShadowMask[IdLight] = 0;
+	}
+
+	// TODO: read from file!
+	m_SceneParameters.m_LightAmbient = Vect4f(0.1f, 0.1f, 0.1f, 1.0f);
 }
 
 void CEffectManager::SetLightsConstants()

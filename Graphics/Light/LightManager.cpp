@@ -7,11 +7,9 @@ CLightManager::CLightManager()
 {
 }
 
-
 CLightManager::~CLightManager()
 {
 }
-
 
 void CLightManager::Load(const std::string &FileName)
 {
@@ -47,7 +45,7 @@ void CLightManager::Load(const std::string &FileName)
 				{
 					CSpotLight * light = new CSpotLight(l_Light);
 					add(light->getName(), light);
-				}
+				}				
 			}
 		}
 	}
@@ -75,20 +73,41 @@ CLight& CLightManager::iterate(size_t id)
 		}
 		i++;
 	}
-
 	return *l_Light;
 }
 
 size_t CLightManager::count()
 {
 	size_t i = 0;
-
 	for (auto it : m_resources)
 	{
 		i++;
 	}
-
 	return i;
+}
+
+void CLightManager::ExecuteShadowCreation(CContextManager &_context)
+{
+	for (auto light : m_resources)
+	{
+		if (light.second->getGenerateShadowMap() && light.second->isActive())
+		{
+			light.second->SetShadowMap(_context); //Set matrices y renderTarget
+
+			auto c = _context.m_BackgroundColor;
+			_context.m_BackgroundColor = CColor(0, 0, 0, 0);
+			_context.Clear(true, true);//Clear Depth
+			_context.m_BackgroundColor = c;
+
+			std::vector<CRenderableObjectsManager *> layers = light.second->getLayers();
+			for (auto child = layers.begin(); child < layers.end(); child++)
+			{
+				(*child)->Render(&_context);//Render de layers afectadas por la luz
+			}
+			//DUDA::::::DONDE SE USA m_ShadowMaskTexture???
+		}			
+	}
+	_context.UnsetRenderTargets();//Una vez pintadas las sombras, quitamos target para render normal
 }
 
 void CLightManager::reload()

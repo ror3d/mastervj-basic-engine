@@ -3,7 +3,7 @@
 #include <Base/Math/Math.h>
 
 #include <Graphics/Context/ContextManager.h>
-#include <Graphics/Renderer/RenderManager.h>
+#include <Graphics/Camera/FPSCameraController.h>
 
 #include <Core/Input/InputManager.h>
 #include <Core/Input/InputManagerImplementation.h>
@@ -23,10 +23,15 @@
 static float s_mouseSpeed = 1;
 
 CScriptManager *s_sm = nullptr;
+static CPhysXManager* phMgr = nullptr;
 
 static void __stdcall SwitchCameraCallback( void* _app )
 {
-	((CApplication*)_app)->m_RenderManager->SwitchCamera();
+	std::string cam = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName();
+	if ( cam == "__debug" ) cam = "__fps";
+	else if ( cam == "__fps" ) cam = "__debug";
+
+	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController(cam);
 }
 
 static void __stdcall ReloadScene(void* _app)
@@ -37,11 +42,27 @@ static void __stdcall ReloadScene(void* _app)
 	CEngine::GetSingleton().getAnimatedModelManager()->Reload();
 	CEngine::GetSingleton().getLayerManager()->Reload();
 	CEngine::GetSingleton().getLightManager()->reload();
+	CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 }
 
-CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager )
-	: m_RenderManager( _renderManager )
-	, m_ContextManager( _ContextManager )
+static void __stdcall CreateScene(void* a)
+{
+	CPhysXManager::ShapeDesc desc;
+	desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
+	desc.density = 1;
+	desc.material = "box";
+	desc.size = Vect3f(1, 1, 1);
+	desc.position = Vect3f(0, 0.5f, 0);
+	phMgr->createActor("boxCol", CPhysXManager::ActorType::Static, desc);
+}
+
+static void __stdcall CreateChar(void* a)
+{
+
+}
+
+CApplication::CApplication( CContextManager *_ContextManager)
+	: m_ContextManager( _ContextManager )
 {
 	CDebugHelper::GetDebugHelper()->Log( "CApplication::CApplication" );
 
@@ -78,20 +99,46 @@ CApplication::CApplication( CContextManager *_ContextManager, CRenderManager *_r
 	}
 	{
 		CDebugHelper::SDebugVariable var = {};
-		var.name = "reload scene";
+		var.name = "mouse speed";
+		var.type = CDebugHelper::FLOAT;
+		var.mode = CDebugHelper::READ_WRITE;
+		var.pFloat = &s_mouseSpeed;
+		var.params = " min=0.1 max=10 step=0.1 precision=1 ";
+
+		bar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "PhysX: Create scene";
 		var.type = CDebugHelper::BUTTON;
-		var.callback = ReloadScene;
+		var.callback = CreateScene;
 		var.data = this;
 
 		bar.variables.push_back(var);
 	}
 	{
 		CDebugHelper::SDebugVariable var = {};
-		var.name = "mouse speed";
-		var.type = CDebugHelper::FLOAT;
-		var.mode = CDebugHelper::READ_WRITE;
-		var.pFloat = &s_mouseSpeed;
-		var.params = " min=0.1 max=10 step=0.1 precision=1 ";
+		var.name = "PhysX: Create char";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = CreateChar;
+		var.data = this;
+
+		bar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "Reload Options";
+		var.type = CDebugHelper::STRING;
+		var.pString = "";
+
+		bar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "reload scene";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = ReloadScene;
+		var.data = this;
 
 		bar.variables.push_back(var);
 	}
@@ -107,41 +154,45 @@ CApplication::~CApplication()
 
 void CApplication::Init()
 {
+	phMgr = CEngine::GetSingleton().getPhysXManager();
+	phMgr->registerMaterial("ground", 1, 0.9, 0.1);
+	phMgr->registerMaterial("box", 1, 0.9, 0.8);
+	phMgr->registerMaterial("controller_material", 10, 2, 0.5);
+	phMgr->createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
+	phMgr->createController(2, 0.5f, 10, Vect3f(0, 3, 0), "main");
 }
 
 
 void CApplication::Update( float _ElapsedTime )
 {
+	phMgr->update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 
 	( (CInputManagerImplementation*)CInputManager::GetInputManager() )->SetMouseSpeed( s_mouseSpeed );
 
-	switch (m_RenderManager->getCurrentCameraNum())
+	// TODO: move this to somewhere else! (like inside the FPS cam controller)
+	CCameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>( cc );
+	if(ccfps != nullptr)
 	{
-		case 0:
-			if ( CInputManager::GetInputManager()->IsActionActive( "MOVE_CAMERA" ) )
-			{
-				Vect3f cameraMovement( 0, 0, 0 );
+		Vect3f cameraMovement(0, 0, 0);
+		float Strafe = CInputManager::GetInputManager()->GetAxis("STRAFE");
+		float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
+		float m_Yaw = ccfps->GetYaw();
 
-				cameraMovement.x = CInputManager::GetInputManager()->GetAxis( "X_AXIS" ) * 0.0005f;
-				cameraMovement.y = CInputManager::GetInputManager()->GetAxis( "Y_AXIS" ) * 0.005f;
+		cameraMovement.y = CInputManager::GetInputManager()->GetAxis("JUMPAxis");
+		cameraMovement.x = Forward*(cos(m_Yaw)) + Strafe*(cos(m_Yaw + 3.14159f*0.5f));
+		cameraMovement.z = Forward*(sin(m_Yaw)) + Strafe*(sin(m_Yaw + 3.14159f*0.5f));
 
-				m_RenderManager->getSphericalCamera()->Update(cameraMovement);
-			}
-			break;
-		case 1:
-		{
-			m_RenderManager->getFPSCamera()->AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
-			m_RenderManager->getFPSCamera()->AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
-
-			m_RenderManager->getFPSCamera()->Move(CInputManager::GetInputManager()->GetAxis("STRAFE"), CInputManager::GetInputManager()->GetAxis("MOVE_FWD"), false, _ElapsedTime);
-		}
-		break;
+		cameraMovement = phMgr->moveCharacterController(cameraMovement*0.2, ccfps->GetUp(), _ElapsedTime);
+		ccfps->SetPosition(cameraMovement);
 	}
 
+	CEngine::GetSingleton().getCameraManager()->Update( _ElapsedTime );
 
-	CEngine::GetSingleton().getRenderManager()->SetCamerasMatrix(m_ContextManager);
 }
+
+
 void CApplication::Render()
 {
 	CEngine::GetSingleton().getSceneRendererCommandManager()->Execute(*m_ContextManager);

@@ -3,8 +3,6 @@
 
 #include <d3d11.h>
 
-#include <cassert>
-
 // TODO: Activar AntTeakBar
 //#include <AntTweakBar.h>
 
@@ -167,9 +165,8 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //-----------------------------------------------------------------------
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
-
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(433);
+	//_CrtSetBreakAlloc(2102);
 
 	new CEngine();
 	CEngine& engine = CEngine::GetSingleton();
@@ -217,7 +214,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
 		//CApplication application(&debugRender, &s_Context);
-		CApplication application(&context, CEngine::GetSingleton().getRenderManager());
+		CApplication application(&context);
 
 		application.Init();
 
@@ -258,8 +255,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		}
 	}
 
-	UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	CEngine::ReleaseSingleton();
+	UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	return 0;
 }
 

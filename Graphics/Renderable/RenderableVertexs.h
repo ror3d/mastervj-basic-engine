@@ -3,8 +3,6 @@
 
 #include <D3D11.h>
 
-#include <assert.h>
-
 #include <Utils/Utils.h>
 
 #include <D3D11.h>
@@ -21,12 +19,12 @@ class CRenderableVertexs
 public:
 	virtual bool Render(CContextManager *ContextManager, CEffectTechnique *Effect)
 	{
-		assert(!"This method mustn't be called");
+		DEBUG_ASSERT(!"This method mustn't be called");
 		return false;
 	}
 	virtual bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *EffectManager, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
-		assert(!"This method mustn't be called");
+		DEBUG_ASSERT(!"This method mustn't be called");
 		return false;
 	}
 };

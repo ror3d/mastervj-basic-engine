@@ -26,6 +26,10 @@ CEffectShader::CEffectShader(const CXMLTreeNode &TreeNode)
 
 CEffectShader::~CEffectShader()
 {
+	for ( auto buf : m_ConstantBuffers )
+	{
+		buf->Release();
+	}
 }
 
 void SplitString(const std::string& str, char split, std::vector<std::string>& out)
@@ -82,7 +86,7 @@ void CEffectShader::CreateShaderMacro()
 		}
 		else
 		{
-			assert(!"Error creating shader macro '%s', with wrong size on parameters");
+			DEBUG_ASSERT(!"Error creating shader macro '%s', with wrong size on parameters");
 			return;
 		}
 	}
@@ -136,14 +140,14 @@ bool CEffectShader::CreateConstantBuffer(int IdBuffer, unsigned int BufferSize)
 	l_BufferDescription.ByteWidth = BufferSize;
 	if ((BufferSize % 16) != 0)
 	{
-		assert(!"Constant Buffer '%d' with wrong size '%d' on shader '%s'.");
+		DEBUG_ASSERT(!"Constant Buffer '%d' with wrong size '%d' on shader '%s'.");
 	}
 	l_BufferDescription.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	l_BufferDescription.CPUAccessFlags = 0;
 	if (FAILED(l_Device->CreateBuffer(&l_BufferDescription, NULL,
 		&l_ConstantBuffer)))
 	{
-		assert(!"Constant buffer '%d' couldn't created on shader '%s'.");
+		DEBUG_ASSERT(!"Constant buffer '%d' couldn't created on shader '%s'.");
 		m_ConstantBuffers.push_back(NULL);
 		return false;
 	}

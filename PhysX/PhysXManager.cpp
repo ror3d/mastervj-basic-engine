@@ -1,7 +1,7 @@
 #include "PhysXManager.h"
 #include <Base/Math/Math.h>
+#include <Base/Utils/Utils.h>
 #include <PxPhysicsAPI.h>
-#include <cassert>
 
 #include <fstream>
 #include <iterator>
@@ -93,17 +93,17 @@ static physx::PxDefaultAllocator gDefaultAllocatorCallback;
 CPhysXManagerImplementation::CPhysXManagerImplementation()
 {
 	m_Foundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
-	assert(m_Foundation);
+	DEBUG_ASSERT(m_Foundation);
 
 	physx::PxProfileZoneManager* profileZoneManager = nullptr;
 #if USE_PHYSX_DEBUG
 	profileZoneManager = &physx::PxProfileZoneManager::createProfileZoneManager(m_Foundation);
 #endif
 	m_PhysX = PxCreatePhysics(PX_PHYSICS_VERSION, *m_Foundation, physx::PxTolerancesScale(), true, profileZoneManager);
-	assert(m_PhysX);
+	DEBUG_ASSERT(m_PhysX);
 
 	m_Cooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_Foundation, physx::PxCookingParams(physx::PxTolerancesScale()));
-	assert(m_Cooking);
+	DEBUG_ASSERT(m_Cooking);
 
 #if USE_PHYSX_DEBUG
 	if (m_PhysX->getPvdConnectionManager())
@@ -143,7 +143,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 	sceneDesc.flags = physx::PxSceneFlag::eENABLE_ACTIVETRANSFORMS;
 	m_Scene = m_PhysX->createScene(sceneDesc);
-	assert(m_Scene);
+	DEBUG_ASSERT(m_Scene);
 
 	m_Scene->setSimulationEventCallback(this);
 	
@@ -156,18 +156,6 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 
 CPhysXManagerImplementation::~CPhysXManagerImplementation()
 {
-	CHECKED_RELEASE(m_ControllerManager);
-	CHECKED_RELEASE(m_Scene);
-	CHECKED_RELEASE(m_Dispatcher);
-#if USE_PHYSX_DEBUG
-	CHECKED_RELEASE(m_DebugConnection);
-#endif
-	CHECKED_RELEASE(m_Cooking);
-	auto profileZoneManager = m_PhysX->getProfileZoneManager();
-	CHECKED_RELEASE(m_PhysX);
-	CHECKED_RELEASE(profileZoneManager);
-	CHECKED_RELEASE(m_Foundation);
-
 }
 
 // PxSimulationEventCallback
@@ -227,6 +215,18 @@ CPhysXManager::~CPhysXManager()
 		CHECKED_RELEASE(pair.second);
 	}
 	m_materials.clear();
+	releaseCharacterControllers();
+	CHECKED_RELEASE(m_ControllerManager);
+	CHECKED_RELEASE(m_Scene);
+	CHECKED_RELEASE(m_Dispatcher);
+#if USE_PHYSX_DEBUG
+	CHECKED_RELEASE(m_DebugConnection);
+#endif
+	CHECKED_RELEASE(m_Cooking);
+	auto profileZoneManager = m_PhysX->getProfileZoneManager();
+	CHECKED_RELEASE(m_PhysX);
+	CHECKED_RELEASE(profileZoneManager);
+	CHECKED_RELEASE(m_Foundation);
 }
 
 void CPhysXManager::registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution)
@@ -252,7 +252,7 @@ bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<u
 	physx::PxDefaultMemoryOutputStream oBuf;
 	physx::PxConvexMeshCookingResult::Enum result;
 	bool success = m_Cooking->cookConvexMesh(meshDesc, oBuf, &result);
-	assert(success);
+	DEBUG_ASSERT(success);
 
 	outCookedData.assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
 	return success;
@@ -293,7 +293,7 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 	auto idx = m_actors.actor.size();
 
 	auto matIt = m_materials.find(material);
-	assert(matIt != m_materials.end());
+	DEBUG_ASSERT(matIt != m_materials.end());
 
 	physx::PxMaterial* mat = matIt->second;
 
@@ -302,16 +302,16 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 	physx::PxShape* shape;
 
 	size_t nShapes = groundPlane->getShapes(&shape, 1);
-	assert(nShapes == 1);
+	DEBUG_ASSERT(nShapes == 1);
 
 	groundPlane->userData = reinterpret_cast<void*>(idx);
 
 	m_Scene->addActor(*groundPlane);
 
-	assert(m_actors.actor.size() == m_actors.index.size());
-	assert(m_actors.actor.size() == m_actors.name.size());
-	assert(m_actors.actor.size() == m_actors.position.size());
-	assert(m_actors.actor.size() == m_actors.rotation.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
 
 	m_actors.index[name] = idx;
 	m_actors.name.push_back(name);
@@ -326,7 +326,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	auto idx = m_actors.actor.size();
 
 	auto matIt = m_materials.find(desc.material);
-	assert(matIt != m_materials.end());
+	DEBUG_ASSERT(matIt != m_materials.end());
 
 	physx::PxMaterial* mat = matIt->second;
 
@@ -381,16 +381,54 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 	m_Scene->addActor(*body);
 
-	assert(m_actors.actor.size() == m_actors.index.size());
-	assert(m_actors.actor.size() == m_actors.name.size());
-	assert(m_actors.actor.size() == m_actors.position.size());
-	assert(m_actors.actor.size() == m_actors.rotation.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
 
 	m_actors.index[name] = idx;
 	m_actors.name.push_back(name);
 	m_actors.position.push_back(desc.position);
 	m_actors.rotation.push_back(desc.orientation);
 	m_actors.actor.push_back(body);
+}
+
+void CPhysXManager::createController(float height, float radius, float density, Vect3f pos, std::string name){
+	physx::PxMaterial* l_material = m_materials["controller_material"];
+	physx::PxCapsuleControllerDesc desc;
+	desc.height = height;
+	desc.radius = radius;
+	desc.climbingMode = physx::PxCapsuleClimbingMode::eEASY;
+	desc.slopeLimit = cosf(3.1415f / 6); //30º
+	desc.stepOffset = 0.5f;
+	desc.density = density;
+	desc.reportCallback = NULL;//TODO
+	desc.position = physx::PxExtendedVec3(pos.x, pos.y + radius + height * 0.5f, pos.z);
+	desc.material = l_material;
+	int index = m_CharacterControllers.size();
+	desc.userData = (void*) index;
+	physx::PxController* cct = m_ControllerManager->createController(desc);
+	m_CharacterControllers[name] = cct;
+}
+
+Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime){
+	physx::PxController* cct = getCharControllers()["main"];
+	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
+	size_t index = (size_t)cct->getUserData();
+	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
+	cct->setUpDirection(v(direction));
+	physx::PxRigidDynamic* actor = cct->getActor();
+	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
+	physx::PxVec3 vel = actor->getLinearVelocity();
+	return v(cct->getPosition());
+}
+
+void CPhysXManager::releaseCharacterControllers(){
+	for (auto it = m_CharacterControllers.begin(); it != m_CharacterControllers.end(); it++){
+		physx::PxController *cct = it->second;
+		cct->release();
+	}
+	m_CharacterControllers.clear();
 }
 
 void CPhysXManager::update(float dt)

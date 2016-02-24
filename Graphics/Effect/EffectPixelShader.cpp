@@ -4,12 +4,14 @@
 
 CEffectPixelShader::CEffectPixelShader(const CXMLTreeNode &TreeNode) : CEffectShader(TreeNode)
 {
-	assert(Load());
+	bool result = Load();
+	DEBUG_ASSERT(result);
 }
 
 
 CEffectPixelShader::~CEffectPixelShader()
 {
+	CHECKED_RELEASE( m_PixelShader );
 }
 
 bool CEffectPixelShader::Load()

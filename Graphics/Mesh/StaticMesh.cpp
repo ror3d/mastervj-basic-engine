@@ -124,7 +124,7 @@ bool CStaticMesh::Load(const std::string &FileName)
 			}
 			else
 			{
-				assert(!"Num Index Error");
+				DEBUG_ASSERT(!"Num Index Error");
 			}
 
 			void *l_IdxData = new char[l_NumBytes];

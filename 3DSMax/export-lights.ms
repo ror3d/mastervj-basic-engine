@@ -36,9 +36,14 @@ fn createLights = (
 			local concdir = dir[1] as string + " " + dir[2]as string + " " + dir[3] as string
 			local rgba = l.rgb/255
 			local concrgba = rgba.r as string + " " + rgba.g as string + " " + rgba.b as string + " " + rgba.a as string
+			local generateShadowMap = "true"
+			local shadowMapWidth = 1024
+			local shadowMapHeight = shadowMapWidth
+			local shadowTextureMask = "./data/textures/shadow_mask.tga"
+			local orthoShadowMapSize = "30.0 40.0"
 			
-			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" att_start_range=\"%\" att_end_range=\"%\" intensity=\"%\"/>\n" \
-					l.name type concpos concdir concrgba l.farAttenStart l.farAttenEnd l.multiplier to:file
+			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" att_start_range=\"%\" att_end_range=\"%\" intensity=\"%\" generate_shadow_map=\"%\" shadow_map_width=\"%\" shadow_map_height=\"%\" shadow_texture_mask=\"%\" ortho_shadow_map_size=\"%\" />\n" \
+					l.name type concpos concdir concrgba l.farAttenStart l.farAttenEnd l.multiplier generateShadowMap shadowMapWidth shadowMapHeight shadowTextureMask orthoShadowMapSize to:file
 		
 		)
 		else if classof l == targetSpot then
@@ -53,9 +58,13 @@ fn createLights = (
 			local concdir = dir[1] as string + " " + dir[2]as string + " " + dir[3] as string
 			local rgba = l.rgb/255
 			local concrgba = rgba.r as string + " " + rgba.g as string + " " + rgba.b as string + " " + rgba.a as string
+			local generateShadowMap = "true"
+			local shadowMapWidth = 1024
+			local shadowMapHeight = shadowMapWidth
+			local shadowTextureMask = "./data/textures/shadow_mask.tga"
 			
-			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" angle=\"%\" falloff=\"%\" att_start_range=\"%\" att_end_range=\"%\" intensity=\"%\"/>\n" \
-					l.name type concpos concdir concrgba lightangle lightfalloff l.farAttenStart l.farAttenEnd l.multiplier to:file
+			format "\t<light name=\"%\" type=\"%\" pos=\"%\" dir=\"%\" color=\"%\" angle=\"%\" falloff=\"%\" att_start_range=\"%\" att_end_range=\"%\" intensity=\"%\" generate_shadow_map=\"%\" shadow_map_width=\"%\" shadow_map_height=\"%\" shadow_texture_mask=\"%\" />\n" \
+					l.name type concpos concdir concrgba lightangle lightfalloff l.farAttenStart l.farAttenEnd l.multiplier generateShadowMap shadowMapWidth shadowMapHeight shadowTextureMask to:file
 		)
 	)
 	

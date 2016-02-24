@@ -1,5 +1,5 @@
 #include "XMLTreeNode.h"
-#include "Assert.h"
+#include "Utils/Utils.h"
 //#include "Logger/Logger.h"
 
 // Defines
@@ -47,7 +47,7 @@ bool CXMLTreeNode::LoadFile (const char* _pszFileName)
 {
   m_bIsOk = false;
 
-  assert(_pszFileName);
+  DEBUG_ASSERT(_pszFileName);
 
   if (_pszFileName)
   {
@@ -75,7 +75,7 @@ bool CXMLTreeNode::LoadFile (const char* _pszFileName)
 //----------------------------------------------------------------------------
 CXMLTreeNode CXMLTreeNode::GetSubTree (const char* _pszKey) const
 {
-  assert(m_pNode && _pszKey);
+  DEBUG_ASSERT(m_pNode && _pszKey);
   CXMLTreeNode NewTree;
 
   if (_pszKey && m_pNode)
@@ -131,7 +131,7 @@ const char* CXMLTreeNode::GetName ()
 //----------------------------------------------------------------------------
 CXMLTreeNode CXMLTreeNode::operator[] (const char* _pszKey) const
 {
-  assert(_pszKey && m_pNode);
+  DEBUG_ASSERT(_pszKey && m_pNode);
 
   CXMLTreeNode TreeFound;
 
@@ -148,7 +148,7 @@ CXMLTreeNode CXMLTreeNode::operator[] (const char* _pszKey) const
 //----------------------------------------------------------------------------
 CXMLTreeNode CXMLTreeNode::operator() (int _iIndex) const
 {
-  assert(_iIndex >= 0 && m_pNode);
+  DEBUG_ASSERT(_iIndex >= 0 && m_pNode);
 
   CXMLTreeNode TreeFound;
 
@@ -182,7 +182,7 @@ CXMLTreeNode CXMLTreeNode::operator() (int _iIndex) const
 //----------------------------------------------------------------------------
 int CXMLTreeNode::GetNumChildren ()
 {
-  assert(m_pNode);
+  DEBUG_ASSERT(m_pNode);
 
   int iCount = 0;
 
@@ -206,7 +206,7 @@ int CXMLTreeNode::GetNumChildren ()
 //----------------------------------------------------------------------------
 xmlChar* CXMLTreeNode::GetProperty (const char* _pszKey) const
 {
-  assert(_pszKey && m_pNode);
+  DEBUG_ASSERT(_pszKey && m_pNode);
 
   xmlChar* value = NULL;
 
@@ -480,7 +480,7 @@ Vect4i CXMLTreeNode::GetVect4iProperty  (const char* _pszKey, const Vect4i& _Def
 //----------------------------------------------------------------------------
 xmlChar* CXMLTreeNode::GetKeyword (const char* _pszKey) const
 {
-  assert(_pszKey && m_pNode && m_pDoc);
+  DEBUG_ASSERT(_pszKey && m_pNode && m_pDoc);
 
   xmlChar* value = NULL;
 
@@ -573,7 +573,7 @@ const char* CXMLTreeNode::GetPszKeyword (const char* _pszKey, const char* _pszDe
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::ExistsKey (const char* _pszKey) const
 {
-  assert(_pszKey);
+  DEBUG_ASSERT(_pszKey);
 
   CXMLTreeNode TreeFound = GetSubTree(_pszKey);
   return TreeFound.Exists();
@@ -584,7 +584,7 @@ bool CXMLTreeNode::ExistsKey (const char* _pszKey) const
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::StartNewFile(const char* _pszFileName)
 {
-  assert(_pszFileName);
+  DEBUG_ASSERT(_pszFileName);
 
   m_bIsOk = false;
 
@@ -594,13 +594,13 @@ bool CXMLTreeNode::StartNewFile(const char* _pszFileName)
 
     // Create a new XmlWriter for DOM, with no compression.
     m_pWriter = xmlNewTextWriterDoc(&m_pDoc, 0);
-    assert(m_pWriter);
+    DEBUG_ASSERT(m_pWriter);
 
     if (m_pWriter)
     {
       // Start the document with the xml default for the version, encoding ISO 8858-1 and the default for the standalone declaration.
       int rc = xmlTextWriterStartDocument(m_pWriter, NULL, MY_ENCODING, NULL);
-      assert(rc >= 0);
+      DEBUG_ASSERT(rc >= 0);
       if (rc >= 0)
       {
         m_bIsOk = true;
@@ -620,7 +620,7 @@ bool CXMLTreeNode::StartNewFile(const char* _pszFileName)
 //----------------------------------------------------------------------------
 void CXMLTreeNode::EndNewFile ()
 {
-  assert(m_pWriter && m_pDoc && m_pszFileName);
+  DEBUG_ASSERT(m_pWriter && m_pDoc && m_pszFileName);
 
   if (m_pWriter && m_pDoc && m_pszFileName)
   {
@@ -636,12 +636,12 @@ void CXMLTreeNode::EndNewFile ()
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteComment(const char* _pszComment)
 {
-  assert(_pszComment && m_pWriter);
+  DEBUG_ASSERT(_pszComment && m_pWriter);
 
   if (_pszComment && m_pWriter)
   {
     int rc = xmlTextWriterWriteComment(m_pWriter, BAD_CAST _pszComment);
-    assert(rc >= 0);
+    DEBUG_ASSERT(rc >= 0);
 
     if (rc < 0)
       return false;
@@ -657,13 +657,13 @@ bool CXMLTreeNode::WriteComment(const char* _pszComment)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::StartElement(const char* _pszKey)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
     // Start an element named "EXAMPLE". Since thist is the first element, this will be the root element of the document.
     int rc = xmlTextWriterStartElement(m_pWriter, BAD_CAST _pszKey);
-    assert(rc >= 0);
+    DEBUG_ASSERT(rc >= 0);
 
     if (rc < 0)
       return false;
@@ -679,13 +679,13 @@ bool CXMLTreeNode::StartElement(const char* _pszKey)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::EndElement()
 {
-  assert(m_pWriter);
+  DEBUG_ASSERT(m_pWriter);
 
   if (m_pWriter)
   {
     /* Close the element named HEADER. */
     int rc = xmlTextWriterEndElement(m_pWriter);
-    assert(rc >= 0);
+    DEBUG_ASSERT(rc >= 0);
 
     if (rc < 0)
       return false;
@@ -701,7 +701,7 @@ bool CXMLTreeNode::EndElement()
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WritePszKeyword(const char* _pszKey, const char* _pszValue)
 {
-  assert(_pszKey && _pszValue && m_pWriter);
+  DEBUG_ASSERT(_pszKey && _pszValue && m_pWriter);
 
   if (_pszKey && _pszValue && m_pWriter)
   {
@@ -719,7 +719,7 @@ bool CXMLTreeNode::WritePszKeyword(const char* _pszKey, const char* _pszValue)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteIntKeyword(const char* _pszKey, int _iValue)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -740,7 +740,7 @@ bool CXMLTreeNode::WriteIntKeyword(const char* _pszKey, int _iValue)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteFloatKeyword(const char* _pszKey, float _fValue)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -761,7 +761,7 @@ bool CXMLTreeNode::WriteFloatKeyword(const char* _pszKey, float _fValue)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteBoolKeyword(const char* _pszKey, bool _bValue)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -782,7 +782,7 @@ bool CXMLTreeNode::WriteBoolKeyword(const char* _pszKey, bool _bValue)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WritePszProperty(const char* _pszKey, const char* _pszValue)
 {
-  assert(_pszKey && _pszValue && m_pWriter);
+  DEBUG_ASSERT(_pszKey && _pszValue && m_pWriter);
 
   if (_pszKey && _pszValue && m_pWriter)
   {
@@ -799,7 +799,7 @@ bool CXMLTreeNode::WritePszProperty(const char* _pszKey, const char* _pszValue)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteIntProperty(const char* _pszKey, int _iValue)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -818,7 +818,7 @@ bool CXMLTreeNode::WriteIntProperty(const char* _pszKey, int _iValue)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteFloatProperty(const char* _pszKey, float _fValue)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -837,7 +837,7 @@ bool CXMLTreeNode::WriteFloatProperty(const char* _pszKey, float _fValue)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteBoolProperty(const char* _pszKey, bool _bValue)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -858,7 +858,7 @@ bool CXMLTreeNode::WriteBoolProperty(const char* _pszKey, bool _bValue)
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteVect2fProperty	(const char* _pszKey, const Vect2f& _value)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -877,7 +877,7 @@ bool CXMLTreeNode::WriteVect2fProperty	(const char* _pszKey, const Vect2f& _valu
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteVect3fProperty	(const char* _pszKey, const Vect3f& _value)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -896,7 +896,7 @@ bool CXMLTreeNode::WriteVect3fProperty	(const char* _pszKey, const Vect3f& _valu
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteVect4fProperty	(const char* _pszKey, const Vect4f& _value)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -915,7 +915,7 @@ bool CXMLTreeNode::WriteVect4fProperty	(const char* _pszKey, const Vect4f& _valu
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteVect2iProperty	(const char* _pszKey, const Vect2i& _value)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -934,7 +934,7 @@ bool CXMLTreeNode::WriteVect2iProperty	(const char* _pszKey, const Vect2i& _valu
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteVect3iProperty	(const char* _pszKey, const Vect3i& _value)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {
@@ -953,7 +953,7 @@ bool CXMLTreeNode::WriteVect3iProperty	(const char* _pszKey, const Vect3i& _valu
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteVect4iProperty	(const char* _pszKey, const Vect4i& _value)
 {
-  assert(_pszKey && m_pWriter);
+  DEBUG_ASSERT(_pszKey && m_pWriter);
 
   if (_pszKey && m_pWriter)
   {

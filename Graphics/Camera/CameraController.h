@@ -15,7 +15,8 @@ protected:
 public:
 	CCameraController();
 	virtual ~CCameraController();
-	virtual void SetCamera(CCamera *Camera) const = 0;
+	virtual void UpdateCameraValues(CCamera *Camera) const = 0;
+
 	virtual void AddYaw(float Radians);
 	virtual void AddPitch(float Radians);
 	void SetYaw(float Yaw) {m_Yaw=Yaw;}
@@ -27,9 +28,7 @@ public:
 	const Vect3f & GetPosition() const { return m_Position; }
 	void SetPosition(const Vect3f &Position) { m_Position = Position; }
 
-	virtual void Update(float ElapsedTime)
-	{
-	}
+	virtual void Update( float ElapsedTime ) = 0;
 };
 
 #endif

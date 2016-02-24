@@ -61,11 +61,12 @@ void CLayerManager::Render(CContextManager &_context){
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{
 		it->second->Render(&_context);
-	}
+	}	
 }
 
 void CLayerManager::Render(CContextManager *_context, const std::string &LayerName){
 	auto it = m_resources.find(LayerName);
+
 	if (it != m_resources.end())
 	{
 		it->second->Render(_context);

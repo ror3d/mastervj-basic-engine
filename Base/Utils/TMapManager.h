@@ -2,7 +2,7 @@
 
 #include <map>
 #include <string>
-#include <cassert>
+#include "Utils.h"
 
 template<class T>
 class TMapManager
@@ -33,21 +33,21 @@ T* TMapManager<T>::get( const std::string& name ) const
 template<class T>
 void TMapManager<T>::add( const std::string& name, T* instance )
 {
-	assert( m_resources.find( name ) == m_resources.end() );
+	DEBUG_ASSERT( m_resources.find( name ) == m_resources.end() );
 	m_resources[name] = instance;
 }
 
 template<class T>
 void TMapManager<T>::remove( const std::string& name )
 {
-	assert( m_resources.find( name ) != m_resources.end() );
+	DEBUG_ASSERT( m_resources.find( name ) != m_resources.end() );
 	m_resources.erase(name);
 }
 
 template<class T>
 TMapManager<T>::~TMapManager()
 {
-	assert( m_resources.size() == 0 || "Resources not destroyed!" );
+	DEBUG_ASSERT( m_resources.size() == 0 || "Resources not destroyed!" );
 }
 
 template<class T>

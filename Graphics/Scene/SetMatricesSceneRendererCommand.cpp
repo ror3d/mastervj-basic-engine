@@ -7,5 +7,5 @@ CSetMatricesSceneRendererCommand::CSetMatricesSceneRendererCommand(CXMLTreeNode 
 
 void CSetMatricesSceneRendererCommand::Execute(CContextManager &_context)
 {
-	CEngine::GetSingleton().getRenderManager()->SetMatrixes();
+	CEngine::GetSingleton().getCameraManager()->SetMatrixes();
 }

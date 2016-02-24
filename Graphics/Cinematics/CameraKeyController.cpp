@@ -1,6 +1,5 @@
 #include "CameraKeyController.h"
 
-#include "CameraInfo.h"
 #include "CameraKey.h"
 #include "Camera/Camera.h"
 
@@ -93,12 +92,12 @@ void CCameraKeyController::AnimateCamera(CCamera* cam) const
 		t = ( m_CurrentTime - m_Keys[m_CurrentKey]->m_Time ) / ( m_Keys[nextKey]->m_Time - m_Keys[m_CurrentKey]->m_Time );
 	}
 
-	Vect3f pos = mathUtils::Lerp(curInf.m_Eye, nextInf.m_Eye, t);
-	Vect3f up = mathUtils::Lerp(curInf.m_Up, nextInf.m_Up, t);
-	Vect3f lookat = mathUtils::Lerp(curInf.m_LookAt, nextInf.m_LookAt, t);
-	float near = mathUtils::Max(0.0001f, mathUtils::Lerp(curInf.m_NearPlane, nextInf.m_NearPlane, t));
-	float far = mathUtils::Lerp(curInf.m_FarPlane, nextInf.m_FarPlane, t);
-	float fov = mathUtils::Lerp(curInf.m_FOV, nextInf.m_FOV, t);
+	Vect3f pos = mathUtils::Lerp(curInf.GetPosition(), nextInf.GetPosition(), t);
+	Vect3f up = mathUtils::Lerp(curInf.GetUp(), nextInf.GetUp(), t);
+	Vect3f lookat = mathUtils::Lerp(curInf.GetLookAt(), nextInf.GetLookAt(), t);
+	float near = mathUtils::Max(0.0001f, mathUtils::Lerp(curInf.GetZNear(), nextInf.GetZNear(), t));
+	float far = mathUtils::Lerp(curInf.GetZFar(), nextInf.GetZFar(), t);
+	float fov = mathUtils::Lerp(curInf.GetFOV(), nextInf.GetFOV(), t);
 
 	cam->SetPosition( pos );
 	cam->SetLookAt( lookat + pos );

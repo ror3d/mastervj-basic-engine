@@ -2,12 +2,19 @@
 #define LIGHT_H
 
 #include "Utils/Named.h"
+#include "Utils/Active.h"
 #include "Utils/Utils.h"
 #include "Math/Color.h"
+#include "Math/Matrix44.h"
+#include <vector>
 
 class CRenderManager;
+class CDynamicTexture;
+class CTexture;
+class CRenderableObjectsManager;
+class CContextManager;
 
-class CLight : public CNamed
+class CLight : public CNamed, public CActive
 {
 public:
 	enum class TLightType
@@ -22,11 +29,18 @@ protected:
 	float m_Intensity;
 	float m_StartRangeAttenuation;
 	float m_EndRangeAttenuation;
-	/*bool m_GenerateShadowMap;
+
+	//ShadowMap
+	bool m_GenerateShadowMap;
 	CDynamicTexture *m_ShadowMap;
 	CTexture *m_ShadowMaskTexture;
 	std::vector<CRenderableObjectsManager *> m_Layers;
-	Mat44f m_ViewShadowMap, m_ProjectionShadowMap;*/
+	Mat44f m_ViewShadowMap;
+	Mat44f m_ProjectionShadowMap;
+
+	Vect2i m_ShadowMapSize;
+	std::string m_ShadowMaskFileName;
+
 public:
 	CLight(const CXMLTreeNode &TreeNode);
 	CLight();
@@ -43,26 +57,29 @@ public:
 	void setEndTangeAttenuation(const float endRangeAttenuation) { m_EndRangeAttenuation = endRangeAttenuation; }
 	virtual void Render(CRenderManager *RenderManager);
 	static TLightType getLightTypeByName(const std::string &type);
-	/*TODO:
-	UAB_GET_SET_GET_ADRESS_STANDARD_PROPERTY(bool, GenerateShadowMap);
-	UAB_GET_PROPERTY_POINTER(CDynamicTexture, ShadowMap);
-	UAB_GET_PROPERTY_POINTER(CTexture, ShadowMaskTexture);
-	UAB_GET_PROPERTY_REFERENCE(Mat44f, ViewShadowMap);
-	UAB_GET_PROPERTY_REFERENCE(Mat44f, ProjectionShadowMap);
-	UAB_GET_PROPERTY_REFERENCE(std::vector<CRenderableObjectsManager *>, Layers);*/
-	//virtual void SetShadowMap(CRenderManager &RenderManager);
+
+	//ShadowMap
+	bool getGenerateShadowMap(){ return m_GenerateShadowMap;  }
+	void setGenerateShadowMap(bool generate);
+	CDynamicTexture * getShadowMap(){ return m_ShadowMap;  }
+	CTexture * getShadowMaskTexture(){ return m_ShadowMaskTexture;  }
+	Mat44f getViewShadowMap(){ return m_ViewShadowMap; }
+	Mat44f getProjectionShadowMap(){ return m_ProjectionShadowMap; }
+	std::vector<CRenderableObjectsManager *> getLayers(){ return m_Layers;  }
+	virtual void SetShadowMap(CContextManager &_context) = 0;
 };
 
-
+//-----------OMNI
 class COmniLight : public CLight
 {
 public:
 	COmniLight();
 	COmniLight(const CXMLTreeNode &TreeNode);
 	virtual const TLightType getType() const { return TLightType::OMNI; }
+	void SetShadowMap(CContextManager &_context);
 };
 
-
+//-----------DIRECTIONAL
 class CDirectionalLight : public CLight
 {
 protected:
@@ -75,10 +92,10 @@ public:
 	void setDiretion(const Vect3f direction) { m_Direction = direction; }
 	virtual void Render(CRenderManager *RenderManager);
 	virtual const TLightType getType() const { return TLightType::DIRECTIONAL; }
-	//void SetShadowMap(CRenderManager &RenderManager);
+	void SetShadowMap(CContextManager &_context);
 };
 
-
+//-----------SPOT
 class CSpotLight : public CDirectionalLight
 {
 protected:
@@ -92,6 +109,7 @@ public:
 	void setAngle(const float angle) { m_Angle = angle; }
 	void setFallOff(const float fallOff) { m_FallOff = fallOff; }
 	virtual const TLightType getType() const { return TLightType::SPOT; }
+	void SetShadowMap(CContextManager &_context);
 };
 
 #endif

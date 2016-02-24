@@ -24,14 +24,14 @@ protected:
 	void Init();
 	virtual bool CreateSamplerState();
 
-	CDynamicTexture(const std::string &Name, int Width, int Height, bool
-		CreateDepthStencilBuffer);
 public:
 	CDynamicTexture(const CXMLTreeNode &TreeNode);
+	CDynamicTexture(const std::string &Name, int Width, int Height, bool
+		CreateDepthStencilBuffer);
 	~CDynamicTexture();
 	bool Reload();
 
-	UINT GetWidth(){ return m_Width;  }
+	UINT GetWidth(){ return m_Width; }
 	UINT GetHeight(){ return m_Height; }
 	ID3D11RenderTargetView * GetRenderTargetView(){ return m_RenderTargetView; }
 	ID3D11DepthStencilView * GetDepthStencilView(){ return m_DepthStencilView; }

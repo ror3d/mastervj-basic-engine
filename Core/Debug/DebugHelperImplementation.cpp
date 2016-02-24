@@ -1,12 +1,10 @@
 #include "DebugHelperImplementation.h"
 
-#include <cassert>
-
 CDebugHelperImplementation::CDebugHelperImplementation(void *device)
 {
 	// TODO: inicializar AntTweakBar
 	int status = TwInit(TW_DIRECT3D11, device);
-	assert(status);
+	DEBUG_ASSERT(status);
 
 	{
 		TwStructMember structMembers[] =
@@ -28,7 +26,7 @@ CDebugHelperImplementation::~CDebugHelperImplementation()
 {
 	// TODO: finalizar AntTweakBar
 	int status = TwTerminate();
-	assert(status);
+	DEBUG_ASSERT(status);
 }
 
 void CDebugHelperImplementation::Log(const std::string& text) const
@@ -62,7 +60,7 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 	if (it != m_Bars.end())
 	{
 		status = TwDeleteBar(it->second);
-		assert(status);
+		DEBUG_ASSERT(status);
 	}
 
 	TwBar* twBar = TwNewBar(bar.name.c_str());
@@ -72,7 +70,7 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 		if (bar.variables[i].type == BUTTON)
 		{
 			status = TwAddButton(twBar, bar.variables[i].name.c_str(), bar.variables[i].callback, bar.variables[i].data, "");
-			assert(status);
+			DEBUG_ASSERT(status);
 		}
 		else
 		{
@@ -112,12 +110,12 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 			{
 			case READ:
 				status = TwAddVarRO(twBar, bar.variables[i].name.c_str(), type, bar.variables[i].ptr, params.c_str());
-				assert(status);
+				DEBUG_ASSERT(status);
 				break;
 
 			case READ_WRITE:
 				status = TwAddVarRW(twBar, bar.variables[i].name.c_str(), type, bar.variables[i].ptr, params.c_str());
-				assert(status);
+				DEBUG_ASSERT(status);
 				break;
 
 			default:

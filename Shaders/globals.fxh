@@ -1,19 +1,25 @@
 //Globals.fxh
 #define MAXBONES 40
 #define MAX_LIGHTS_BY_SHADER 4
-cbuffer SceneConstantBuffer : register(b0)
+cbuffer SceneConstantBuffer : register( b0 )
 {
 	float4x4 m_World;
 	float4x4 m_View;
 	float4x4 m_Projection;
+	
 	float4x4 m_ViewInverse;
+	float4x4 m_ProjectionInverse;
+	
 	float4 m_CameraPosition;
 	float4 m_CameraRightVector;
 	float4 m_CameraUpVector;
+	
+	float4 m_BaseColor;
+	float4 m_LightAmbient;
+	float4 m_CameraProjectionInfo;
 }
 cbuffer LightsConstantBuffer : register (b1)
 {
-	float4 m_LightAmbient;
 	float4 m_LightEnabled;
 	float4 m_LightType; //0 : OMNI, 1 : DIRECTIONAL, 2 : SPOT
 	float4 m_LightPosition[MAX_LIGHTS_BY_SHADER];
