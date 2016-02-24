@@ -52,10 +52,7 @@ utility UABUtility "UAB Utility" width:160 height:527
 	(
 		if $ != undefined then
 		(
-			for i = 1 to $selection.count do
-			(
-				createMesh $selection[i]
-			)
+			createMeshes($selection)
 			messageBox "Fichero .mesh creado correctamente" title:"Exportación correcta"
 		)
 		else
@@ -99,10 +96,11 @@ utility UABUtility "UAB Utility" width:160 height:527
 	)
 	on SceneButton pressed do
 	(
-		createStaticMeshesFile()
+		local cores = GetCores()
+		createStaticMeshesFile(cores)
 		createRenderableObjectsFile()
 		createMaterials CopyTexturesCheck.checked
-		createMeshes()
+		createMeshes(cores)
 		
 		messageBox "Escena exportada correctamente" title:"Exportación correcta"
 	)

@@ -2,10 +2,10 @@ fileIn "file-utils.ms"
 fileIn "vertex-types.ms"
 fileIn "export-scene-utils.ms"
 
-fn createStaticMeshesFile = (
+fn createStaticMeshesFile meshesToExport = (
 	MyCreateFile "static_meshes.xml"
 	
-	local cores = GetCores()
+	local cores = meshesToExport
 	
 	WriteXMLPrologToFile()
 	format "<static_meshes>\n" to:file
@@ -280,6 +280,33 @@ fn createMesh obj = (
 	writeshort file 0xFE55
 	local numMats = 1
 	
+	--TODO Que materiales se utilizan?
+	local matsUsed = #()
+	local NumFaces=getNumFaces obj
+	local matsUsed = dotnetobject "System.Collections.Generic.Dictionary`2[System.String,System.Int16]"
+
+	for IdFace=1 to NumFaces do
+	(
+		local hasMaterial= false
+		local IdxsFace=getFace obj IdFace
+		faceMatId = int(mod (IdxsFace-1) obj.material.count)+1
+		faceMat = obj.material[faceMatId]
+		for Id=1 to matsUsed.count
+		(
+			if(matsUsed[Id] == faceMat)
+			(
+				hasMaterial=true
+			)
+		)
+		if(not hasMaterial) then 
+		(
+			append matsUsed faceMat
+		)
+		
+	)
+	--TODO Que materiales se utilizan?
+	
+	
 	if obj.material == undefined then
 	(
 		format "\n$$$$ Object % doesn't have a material!\n\n" obj.name
@@ -298,6 +325,7 @@ fn createMesh obj = (
 	)
 	else
 	(
+		-- TODO 
 		numMats = obj.material.numsubs
 		writeshort file numMats
 		for mats=1 to numMats do
@@ -405,8 +433,8 @@ fn createMesh obj = (
 
 
 
-fn createMeshes = (
-	local cores = GetCores()
+fn createMeshes meshesToExport = (
+	local cores = meshesToExport
 	for i=1 to cores.count do
 	(
 		-- Clone mesh and use the clone
