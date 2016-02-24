@@ -2,6 +2,63 @@ fileIn "file-utils.ms"
 fileIn "vertex-types.ms"
 fileIn "export-scene-utils.ms"
 
+fn getRealFaceMatID obj faceId = (
+	local numMats = 1
+	if (classOf obj.material) != Standardmaterial then
+	(
+		numMats = obj.material.numsubs
+	)
+	local faceMatId = getFaceMatID obj faceId
+	faceMatId = int(mod (faceMatId-1) numMats)+1
+	return faceMatId
+)
+
+fn getMaterial obj matId = (	
+	if (classOf obj.material) == Standardmaterial then
+	(
+		return obj.material
+	)
+	else
+	(
+		return obj.material[matId]
+	)
+)
+
+fn getUsedMaterials obj = (
+	
+	if (classOf obj.material) == Standardmaterial then
+	(
+		return #(1)
+	)
+	
+	local maxNumMats = obj.material.numsubs
+	local facesPerMat = #()
+	for i = 1 to maxNumMats do
+	(
+		append facesPerMat 0
+	)
+	
+	local NumFaces=getNumFaces obj
+
+	for IdFace=1 to NumFaces do
+	(
+		local faceMatId = getRealFaceMatID obj IdFace
+		facesPerMat[faceMatId] = facesPerMat[faceMatId]+1
+	)
+	local matsUsed = #()
+	
+	for i = 1 to maxNumMats do
+	(
+		if facesPerMat[i] > 0 then
+		(
+			append matsUsed i
+		)
+	)
+	
+	return matsUsed
+)
+
+
 fn createStaticMeshesFile meshesToExport = (
 	MyCreateFile "static_meshes.xml"
 	
@@ -12,7 +69,13 @@ fn createStaticMeshesFile meshesToExport = (
 	
 	for i=1 to cores.count do
 	(
-		format "\t<static_mesh name=\"%\" filename=\"%.mesh\"/>\n" cores[i].name (getMeshPath cores[i].name) to:file
+		format "\t<static_mesh name=\"%\" filename=\"%.mesh\">\n" cores[i].name (getMeshPath cores[i].name) to:file
+		local mats = getUsedMaterials cores[i]
+		for j = 1 to mats.count do
+		(
+			format "\t\t</material name=\"%\">\n" (getMaterial cores[i] mats[j]).name to:file
+		)
+		format "\t</static_mesh>\n\n" to:file
 	)
 	
 	format "</static_meshes>\n" to:file 
@@ -263,41 +326,6 @@ fn createVertexesForFace obj IdFace mat = (
 
 )
 
-fn getUsedMaterials obj = (
-	
-	if (classOf obj.material) == Standardmaterial then
-	(
-		return #(1)
-	)
-	
-	local maxNumMats = obj.material.numsubs
-	local facesPerMat = #()
-	for i = 1 to maxNumMats do
-	(
-		append facesPerMat 0
-	)
-	
-	local NumFaces=getNumFaces obj
-
-	for IdFace=1 to NumFaces do
-	(
-		local faceMatId = getFaceMatID obj IdFace
-		faceMatId = int(mod (faceMatId-1) maxNumMats)+1
-		facesPerMat[faceMatId] = facesPerMat[faceMatId]+1
-	)
-	local matsUsed = #()
-	
-	for i = 1 to maxNumMats do
-	(
-		if facesPerMat[i] > 0 then
-		(
-			append matsUsed i
-		)
-	)
-	
-	return matsUsed
-)
-
 fn createMesh obj = (
 	format "____Creating Mesh %____\n" obj.name
 	
@@ -313,7 +341,7 @@ fn createMesh obj = (
 	UABCalcVertexsNormals obj
 	
 	--Header
-	writeshort file 0xFE55
+	writeshort file 0xFE56
 	local numMats = 1
 	
 	if obj.material == undefined then
@@ -331,19 +359,21 @@ fn createMesh obj = (
 	(
 		numMats=1
 		writeshort file numMats
-		writeshort file obj.material.name.count
+/*		writeshort file obj.material.name.count
 		writestring file obj.material.name
+*/
 	)
 	else
 	(
 		-- TODO 
 		numMats = usedMaterials.count
 		writeshort file numMats
-		for mats=1 to numMats do
+/*		for mats=1 to numMats do
 		(
 			writeshort file obj.material[usedMaterials[mats]].name.count
 			writestring file obj.material[usedMaterials[mats]].name
 		)
+*/
 	)
 	
 	--Vertex
@@ -354,23 +384,14 @@ fn createMesh obj = (
 		local idxs = #()
 		local vtxs = #()
 		
-		local mat
-		if (classOf obj.material) == Standardmaterial then
-		(
-			mat = obj.material
-		)
-		else
-		(
-			mat = obj.material[usedMaterials[i]]
-		)
+		local mat = getMaterial obj usedMaterials[i]
 		
 		writeshort file (GetVertexTypeFromObjectMaterial obj mat)
 		
 		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
 		(
-			local faceMatId = getFaceMatID obj IdFace
-			faceMatId = int(mod (faceMatId-1) numMats)+1
+			local faceMatId = getRealFaceMatID obj IdFace
 			if faceMatId == usedMaterials[i] then
 			(
 				local faceVtxs = createVertexesForFace obj idFace mat

@@ -85,12 +85,12 @@ utility UABUtility "UAB Utility" width:160 height:527
 	)
 	on StaticMeshManagerButton pressed do
 	(
-		createStaticMeshesFile()
+		createStaticMeshesFile( GetCores() )
 		messageBox "Fichero static_meshes.xml creado correctamente" title:"Exportación correcta"
 		
 		if ExportMeshCheck.checked then
 		(
-			createMeshes()
+			createMeshes( GetCores() )
 			messageBox "Ficheros .mesh creados correctamente" title:"Exportación correcta"
 		)
 	)
