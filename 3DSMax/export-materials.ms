@@ -38,7 +38,7 @@ fn exportSingleLightmap mat meshName = (
 fn exportSingleNormal mat meshName = (
 	if HasNormal mat alertOnMissing:true then
 	(
-		exportTextureFile "normal" mat.bumpMap.normal_map
+		exportTextureFile "normal" mat.bumpMap
 	)
 )
 

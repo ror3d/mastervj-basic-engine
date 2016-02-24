@@ -2,17 +2,80 @@ fileIn "file-utils.ms"
 fileIn "vertex-types.ms"
 fileIn "export-scene-utils.ms"
 
-fn createStaticMeshesFile = (
+fn getRealFaceMatID obj faceId = (
+	local numMats = 1
+	if (classOf obj.material) != Standardmaterial then
+	(
+		numMats = obj.material.numsubs
+	)
+	local faceMatId = getFaceMatID obj faceId
+	faceMatId = int(mod (faceMatId-1) numMats)+1
+	return faceMatId
+)
+
+fn getMaterial obj matId = (	
+	if (classOf obj.material) == Standardmaterial then
+	(
+		return obj.material
+	)
+	else
+	(
+		return obj.material[matId]
+	)
+)
+
+fn getUsedMaterials obj = (
+	
+	if (classOf obj.material) == Standardmaterial then
+	(
+		return #(1)
+	)
+	
+	local maxNumMats = obj.material.numsubs
+	local facesPerMat = #()
+	for i = 1 to maxNumMats do
+	(
+		append facesPerMat 0
+	)
+	
+	local NumFaces=getNumFaces obj
+
+	for IdFace=1 to NumFaces do
+	(
+		local faceMatId = getRealFaceMatID obj IdFace
+		facesPerMat[faceMatId] = facesPerMat[faceMatId]+1
+	)
+	local matsUsed = #()
+	
+	for i = 1 to maxNumMats do
+	(
+		if facesPerMat[i] > 0 then
+		(
+			append matsUsed i
+		)
+	)
+	
+	return matsUsed
+)
+
+
+fn createStaticMeshesFile meshesToExport = (
 	MyCreateFile "static_meshes.xml"
 	
-	local cores = GetCores()
+	local cores = meshesToExport
 	
 	WriteXMLPrologToFile()
 	format "<static_meshes>\n" to:file
 	
 	for i=1 to cores.count do
 	(
-		format "\t<static_mesh name=\"%\" filename=\"%.mesh\"/>\n" cores[i].name (getMeshPath cores[i].name) to:file
+		format "\t<static_mesh name=\"%\" filename=\"%.mesh\">\n" cores[i].name (getMeshPath cores[i].name) to:file
+		local mats = getUsedMaterials cores[i]
+		for j = 1 to mats.count do
+		(
+			format "\t\t</material name=\"%\">\n" (getMaterial cores[i] mats[j]).name to:file
+		)
+		format "\t</static_mesh>\n\n" to:file
 	)
 	
 	format "</static_meshes>\n" to:file 
@@ -145,7 +208,7 @@ function DotNetAddVertex VtxArray VtxMap Vtx =
 
 global CurrentObjInvMat = matrix3 1
 
-fn createVertexesForFace obj IdFace = (
+fn createVertexesForFace obj IdFace mat = (
 	local IdxsFace=getFace obj IdFace
 	-- Para coger los v?rtices de la primera cara
 	local Vtx1=getVert obj IdxsFace[1]
@@ -170,23 +233,7 @@ fn createVertexesForFace obj IdFace = (
 	local v2 = vertex pos: (ChangeCoordsBase (Vtx2*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal2)
 	local v3 = vertex pos: (ChangeCoordsBase (Vtx3*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal3)
 	
-	local faceMat
-	local nmats = 1
-	if (classOf obj.material) == Standardmaterial then
-	(
-		faceMat = obj.material
-	)
-	else
-	(
-		nmats = obj.material.count
-		local faceMatId = getFaceMatID obj IdFace
-		faceMatId = int(mod (faceMatId-1) obj.material.count)+1
-		faceMat = obj.material[faceMatId]
-		if faceMatId != getFaceMatID obj IdFace then
-		(
-			--setFaceMatID obj IdFace faceMatId
-		)
-	)
+	local faceMat = mat
 	
 	if faceMat == undefined then
 	(
@@ -294,7 +341,7 @@ fn createMesh obj = (
 	UABCalcVertexsNormals obj
 	
 	--Header
-	writeshort file 0xFE55
+	writeshort file 0xFE56
 	local numMats = 1
 	
 	if obj.material == undefined then
@@ -306,52 +353,53 @@ fn createMesh obj = (
 	)
 	
 	--Materials
+	local usedMaterials = getUsedMaterials obj
+	
 	if (classOf obj.material) == Standardmaterial then
 	(
 		numMats=1
 		writeshort file numMats
-		writeshort file obj.material.name.count
+/*		writeshort file obj.material.name.count
 		writestring file obj.material.name
+*/
 	)
 	else
 	(
-		numMats = obj.material.numsubs
+		-- TODO 
+		numMats = usedMaterials.count
 		writeshort file numMats
-		for mats=1 to numMats do
-		(	
-			writeshort file obj.material[mats].name.count
-			writestring file obj.material[mats].name
+/*		for mats=1 to numMats do
+		(
+			writeshort file obj.material[usedMaterials[mats]].name.count
+			writestring file obj.material[usedMaterials[mats]].name
 		)
+*/
 	)
 	
 	--Vertex
 	
-	for i=1 to numMats do
+	for i=1 to usedMaterials.count do
 	(
 		local l_VtxsMap = dotnetobject "System.Collections.Generic.Dictionary`2[System.String,System.Int16]"
 		local idxs = #()
 		local vtxs = #()
 		
-		local mat
-		if (classOf obj.material) == Standardmaterial then
-		(
-			mat = obj.material
-		)
-		else
-		(
-			mat = obj.material[i]
-		)
+		local mat = getMaterial obj usedMaterials[i]
 		
 		writeshort file (GetVertexTypeFromObjectMaterial obj mat)
 		
 		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
 		(
-			local faceVtxs = createVertexesForFace obj idFace
-			for numVtx = 1 to 3 do
+			local faceMatId = getRealFaceMatID obj IdFace
+			if faceMatId == usedMaterials[i] then
 			(
-				local idx = DotNetAddVertex vtxs l_VtxsMap faceVtxs[numVtx]
-				append idxs idx
+				local faceVtxs = createVertexesForFace obj idFace mat
+				for numVtx = 1 to 3 do
+				(
+					local idx = DotNetAddVertex vtxs l_VtxsMap faceVtxs[numVtx]
+					append idxs idx
+				)
 			)
 		)
 		
@@ -370,7 +418,7 @@ fn createMesh obj = (
 			writefloat file vtx.normal.x
 			writefloat file vtx.normal.y
 			writefloat file vtx.normal.z
-			/*
+
 			if HasNormal mat then
 			(
 				
@@ -424,8 +472,8 @@ fn createMesh obj = (
 
 
 
-fn createMeshes = (
-	local cores = GetCores()
+fn createMeshes meshesToExport = (
+	local cores = meshesToExport
 	for i=1 to cores.count do
 	(
 		-- Clone mesh and use the clone
