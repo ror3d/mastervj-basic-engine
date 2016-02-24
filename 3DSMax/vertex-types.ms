@@ -35,7 +35,7 @@ fn HasReflection mat alertOnMissing:false = (
 )
 
 fn HasNormal mat alertOnMissing:false = (
-	local ret = mat.bumpMap != undefined and classof mat.bumpMap.normal_map == Bitmaptexture and mat.bumpMap.normal_map.bitmap != undefined
+	local ret = mat.bumpMap != undefined and classof mat.bumpMap == Bitmaptexture and mat.bumpMap.bitmap != undefined
 	if alertOnMissing and not ret then
 	(
 		DisplayMaterialError ("En el material " + mat.name + " no hay textura normal o no es un bitmap!!!")
@@ -74,7 +74,7 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 	ret = bit.or ret MV_VERTEX_TYPE_POSITION
 	ret = bit.or ret MV_VERTEX_TYPE_NORMAL
 	
-	if HasTexture or HasReflection mat then
+	if (HasTexture mat) or (HasReflection mat) then
 	(
 		ret = bit.or ret MV_VERTEX_TYPE_TEXTURE1
 	)
