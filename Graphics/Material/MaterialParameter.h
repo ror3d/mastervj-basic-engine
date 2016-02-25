@@ -2,8 +2,6 @@
 #define MATERIAL_PARAMETER_H
 
 #include "Utils\Named.h"
-#include "Material\Material.h"
-#include "Utils\Utils.h"
 
 class CMaterialParameter : public CNamed
 {

@@ -35,7 +35,7 @@
 */
 #else
 #endif
-
+//#define USE_PHYSX_DEBUG 1
 #if USE_PHYSX_DEBUG
 #define				PVD_HOST			"127.0.0.1"
 #endif
@@ -156,18 +156,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 
 CPhysXManagerImplementation::~CPhysXManagerImplementation()
 {
-	releaseCharacterControllers();
-	CHECKED_RELEASE(m_ControllerManager);
-	CHECKED_RELEASE(m_Scene);
-	CHECKED_RELEASE(m_Dispatcher);
-#if USE_PHYSX_DEBUG
-	CHECKED_RELEASE(m_DebugConnection);
-#endif
-	CHECKED_RELEASE(m_Cooking);
-	auto profileZoneManager = m_PhysX->getProfileZoneManager();
-	CHECKED_RELEASE(m_PhysX);
-	CHECKED_RELEASE(profileZoneManager);
-	CHECKED_RELEASE(m_Foundation);
+	
 
 }
 
@@ -228,6 +217,18 @@ CPhysXManager::~CPhysXManager()
 		CHECKED_RELEASE(pair.second);
 	}
 	m_materials.clear();
+	releaseCharacterControllers();
+	CHECKED_RELEASE(m_ControllerManager);
+	CHECKED_RELEASE(m_Scene);
+	CHECKED_RELEASE(m_Dispatcher);
+	#if USE_PHYSX_DEBUG
+		CHECKED_RELEASE(m_DebugConnection);
+	#endif
+		CHECKED_RELEASE(m_Cooking);
+	auto profileZoneManager = m_PhysX->getProfileZoneManager();
+	CHECKED_RELEASE(m_PhysX);
+	CHECKED_RELEASE(profileZoneManager);
+	CHECKED_RELEASE(m_Foundation);
 }
 
 void CPhysXManager::registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution)

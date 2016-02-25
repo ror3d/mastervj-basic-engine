@@ -55,12 +55,12 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 						std::string l_RenderableObjectTechniqueName;
 						std::string l_TechniqueName;
 						if (l_Technique.GetName() == std::string("default_technique")){
-							l_RenderableObjectTechniqueName = l_Pool.GetPszProperty("vertex_type", "");
-							l_TechniqueName = l_Pool.GetPszProperty("technique", "");
+							l_RenderableObjectTechniqueName = l_Technique.GetPszProperty("vertex_type", "");
+							l_TechniqueName = l_Technique.GetPszProperty("technique", "");
 						}
 						else if (l_Technique.GetName() == std::string("renderable_object_technique")){
-							l_RenderableObjectTechniqueName = l_Pool.GetPszProperty("name", "");
-							l_TechniqueName = l_Pool.GetPszProperty("technique", "");
+							l_RenderableObjectTechniqueName = l_Technique.GetPszProperty("name", "");
+							l_TechniqueName = l_Technique.GetPszProperty("technique", "");
 						}
 						InsertRenderableObjectTechnique(l_PoolRenderableObjectTechnique, l_RenderableObjectTechniqueName, l_TechniqueName);
 					}

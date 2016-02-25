@@ -187,8 +187,8 @@ void TW_CALL CreateScene(void* a)
 	desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
 	desc.density = 1;
 	desc.material = "box";
-	desc.size = Vect3f(1, 1, 1);
-	desc.position = Vect3f(0, 0.5f, 0);
+	desc.size = Vect3f(4, 4, 4);
+	desc.position = Vect3f(0, 2.0f, 0);
 	CEngine::GetSingleton().getPhysicsManager()->createActor("boxCol", CPhysXManager::ActorType::Static, desc);
 }
 

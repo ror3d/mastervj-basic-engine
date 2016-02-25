@@ -68,9 +68,12 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 		memcpy(&CEffectManager::m_AnimatedModelEffectParameters.m_Bones,
 			   l_Transformations,
 			   MAXBONES*sizeof(float) * 4 * 4);
-		m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique()->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
+
+		CEffectTechnique *l_EffectTechnique = m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique();
+
+		l_EffectTechnique->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
 		m_RenderableVertexs->RenderIndexed(context,
-				m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique(),
+			l_EffectTechnique,
 										   m_CalHardwareModel->getFaceCount() * 3,
 										   m_CalHardwareModel->getStartIndex(),
 										   m_CalHardwareModel->getBaseVertexIndex());
@@ -135,9 +138,10 @@ bool CAnimatedInstanceModel::LoadVertexBuffer()
 	CalIndex *l_Faces = (CalIndex *)malloc(m_NumFaces * 3 * sizeof(CalIndex));
 
 	m_CalHardwareModel->setVertexBuffer((char*)l_Vertexs, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
-	m_CalHardwareModel->setWeightBuffer(((char*)l_Vertexs) + 12, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
-	m_CalHardwareModel->setMatrixIndexBuffer(((char*)l_Vertexs) + 28, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
-	m_CalHardwareModel->setNormalBuffer(((char*)l_Vertexs) + 44, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
+	m_CalHardwareModel->setNormalBuffer(((char*)l_Vertexs) + 12, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
+	m_CalHardwareModel->setWeightBuffer(((char*)l_Vertexs) + 24, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
+	m_CalHardwareModel->setMatrixIndexBuffer(((char*)l_Vertexs) + 40, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
+	
 
 	m_CalHardwareModel->setTextureCoordNum(1);
 	m_CalHardwareModel->setTextureCoordBuffer(0, ((char*)l_Vertexs) + 56, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
