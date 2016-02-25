@@ -21,6 +21,7 @@ CSetRenderTargetSceneRendererCommand::CSetRenderTargetSceneRendererCommand(CXMLT
 
 CSetRenderTargetSceneRendererCommand::~CSetRenderTargetSceneRendererCommand()
 {
+	// TODO
 }
 
 

@@ -34,6 +34,7 @@ public:
 	Vect4f m_CameraUpVector;
 	Vect4f m_BaseColor;
 	Vect4f m_LightAmbient;
+	Vect4f m_Time;
 	Vect4f m_CameraProjectionInfo;
 };
 

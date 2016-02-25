@@ -8,7 +8,7 @@ class CCaptureFrameBufferTexture : public CTexture
 {
 protected:
 	ID3D11Texture2D *m_DataTexture;
-	void Init(const std::string &Name, unsigned int Width, unsigned int Height);
+	void Init(unsigned int Width, unsigned int Height);
 	void Unload();
 	bool CreateSamplerState();
 	UINT m_Width;
