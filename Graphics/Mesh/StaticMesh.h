@@ -29,4 +29,10 @@ public:
 	bool Reload ();
 	void Render (CContextManager *_context) const;
 	void Destroy();
+
+	inline void setMaterial(unsigned int idx, CMaterial* mat)
+	{
+		DEBUG_ASSERT(idx < m_materials.size());
+		m_materials[idx] = mat;
+	}
 };

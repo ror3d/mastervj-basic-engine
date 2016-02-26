@@ -40,12 +40,17 @@ bool CStaticMesh::Load(const std::string &FileName)
 	}
 	else
 	{
+		bool shouldReadMaterials = true;
 		//Header---------------------
 		unsigned short l_header, l_VertexType, l_numMaterials, l_NumBytes;
 		fread(&l_header, sizeof(unsigned short), 1, l_meshFile);   //lectura del header
-		if (l_header != 0xFE55)
+		if (l_header != 0xFE55 && l_header != 0xFE56)
 		{
 			return false;
+		}
+		if (l_header == 0xFE56)
+		{
+			shouldReadMaterials = false;
 		}
 
 		//Materials---------------------
@@ -58,17 +63,20 @@ bool CStaticMesh::Load(const std::string &FileName)
 		m_materials.resize(l_numMaterials);
 
 
-		for (int i = 0; i < l_numMaterials; ++i)
-		{  //lectura de los materiales
-			unsigned short l_NumChars;
-			fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
+		if (shouldReadMaterials)
+		{
+			for (int i = 0; i < l_numMaterials; ++i)
+			{  //lectura de los materiales
+				unsigned short l_NumChars;
+				fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
 
-			char *l_MaterialName = new char[l_NumChars + 1];
-			fread(&l_MaterialName[0], sizeof(char), l_NumChars + 1, l_meshFile);
+				char *l_MaterialName = new char[l_NumChars + 1];
+				fread(&l_MaterialName[0], sizeof(char), l_NumChars + 1, l_meshFile);
 
-			m_materials[i] = CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
+				m_materials[i] = CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
 
-			delete[] l_MaterialName;
+				delete[] l_MaterialName;
+			}
 		}
 
 		//Vertex & Index---------------------
