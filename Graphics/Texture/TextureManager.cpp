@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include <Core/Engine/Engine.h>
 
 
 CTextureManager::CTextureManager()
@@ -32,4 +33,21 @@ void CTextureManager::Reload()
 	{
 		it->second->Reload();
 	}
+}
+
+void CTextureManager::DeactivateTextures()
+{
+	ID3D11DeviceContext *l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
+
+	ID3D11SamplerState *const tabs[1] = {NULL};
+	ID3D11ShaderResourceView *const tabr[1] = {NULL};
+
+	for (auto tex : m_activeTextures)
+	{
+		if (tex.second == nullptr) continue;
+		l_DeviceContext->PSSetSamplers( tex.first, 1, tabs );
+		l_DeviceContext->PSSetShaderResources( tex.first, 1, tabr );
+	}
+
+	m_activeTextures.clear();
 }

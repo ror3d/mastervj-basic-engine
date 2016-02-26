@@ -62,7 +62,6 @@ void CDeferredShadingSceneRendererCommand::Execute(CContextManager &_context)
 		_context.DrawScreenQuad(m_Material->getRenderableObjectTechique()->GetEffectTechnique(),
 								nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
 	}
-	DeactivateTextures();
 
 	CEngine::GetSingleton().getContextManager()->GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 }

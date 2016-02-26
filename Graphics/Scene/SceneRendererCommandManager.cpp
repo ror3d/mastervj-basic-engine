@@ -126,13 +126,17 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 	return false;
 }
 
-bool CSceneRendererCommandManager::Reload(){
+bool CSceneRendererCommandManager::Reload()
+{
 	destroy();
 	return Load(m_Filename);
 }
 
-void CSceneRendererCommandManager::Execute(CContextManager &_context){
-	for (auto it = m_resources.begin(); it != m_resources.end(); it++){		
+void CSceneRendererCommandManager::Execute(CContextManager &_context)
+{
+	CEngine::GetSingleton().getTextureManager()->DeactivateTextures();
+	for (auto it = m_resources.begin(); it != m_resources.end(); it++)
+	{		
 		(*it)->Execute(_context);
 	}
 }
