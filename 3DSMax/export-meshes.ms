@@ -73,7 +73,7 @@ fn createStaticMeshesFile meshesToExport = (
 		local mats = getUsedMaterials cores[i]
 		for j = 1 to mats.count do
 		(
-			format "\t\t</material name=\"%\">\n" (getMaterial cores[i] mats[j]).name to:file
+			format "\t\t<material name=\"%\" />\n" (getMaterial cores[i] mats[j]).name to:file
 		)
 		format "\t</static_mesh>\n\n" to:file
 	)
