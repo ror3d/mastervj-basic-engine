@@ -63,6 +63,7 @@ static void __stdcall CreateChar(void* a)
 
 CApplication::CApplication( CContextManager *_ContextManager)
 	: m_ContextManager( _ContextManager )
+	, m_Timer(0)
 {
 	CDebugHelper::GetDebugHelper()->Log( "CApplication::CApplication" );
 
@@ -165,6 +166,8 @@ void CApplication::Init()
 
 void CApplication::Update( float _ElapsedTime )
 {
+	m_Timer += _ElapsedTime;
+	CEngine::GetSingleton().getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
 	phMgr->update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 

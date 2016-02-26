@@ -21,6 +21,7 @@ public:
 	void Destroy() {/* TODO */}
 private:
 	CContextManager *m_ContextManager;
+	float m_Timer;
 };
 
 #endif
