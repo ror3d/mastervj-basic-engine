@@ -1,8 +1,9 @@
 #ifndef STAGED_TEXTURED_SCENE_RENDERER_COMMAND_H
 #define STAGED_TEXTURED_SCENE_RENDERER_COMMAND_H
 
-#include "Scene\SceneRendererCommand.h"
-#include "Graphics\Texture\DynamicTexture.h"
+#include "Scene/SceneRendererCommand.h"
+#include "Graphics/Texture/DynamicTexture.h"
+#include <vector>
 
 class CStagedTexturedSceneRendererCommand : public CSceneRendererCommand
 {

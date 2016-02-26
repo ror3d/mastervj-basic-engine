@@ -1,4 +1,5 @@
 #include "Scene\EnableAlphaBlendSceneRendererCommand.h"
+#include "Context/ContextManager.h"
 
 CEnableAlphaBlendSceneRendererCommand::CEnableAlphaBlendSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode)

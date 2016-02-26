@@ -1,4 +1,6 @@
 #include "Scene/DrawQuadSceneRendererCommand.h"
+#include "Material/Material.h"
+#include "Renderable/RenderableObjectTechnique.h"
 #include "Engine/Engine.h"
 #include "VertexTypes.h"
 
@@ -10,8 +12,7 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 		<texture stage_id="1" file="DepthMapTexture"/>
 	</render_draw_quad>*/
 	auto mm = CEngine::GetSingleton().getMaterialManager();
-	auto mat = mm->get(TreeNode.GetPszProperty("material"));
-	m_RenderableObjectTechnique = mat->getRenderableObjectTechique();
+	m_Material = mm->get(TreeNode.GetPszProperty("material"));
 
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++)
 	{
@@ -37,7 +38,8 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 void CDrawQuadSceneRendererCommand::Execute(CContextManager &_context)
 {
 	ActivateTextures();
-	_context.DrawScreenQuad(m_RenderableObjectTechnique->GetEffectTechnique(),
+	m_Material->apply();
+	_context.DrawScreenQuad(m_Material->getRenderableObjectTechique()->GetEffectTechnique(),
 							nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
 	DeactivateTextures();
 }
