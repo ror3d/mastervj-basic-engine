@@ -27,7 +27,7 @@ protected:
 public:
 	CDynamicTexture(const CXMLTreeNode &TreeNode);
 	CDynamicTexture(const std::string &Name, int Width, int Height, bool
-		CreateDepthStencilBuffer);
+		CreateDepthStencilBuffer, DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM);
 	~CDynamicTexture();
 	bool Reload();
 

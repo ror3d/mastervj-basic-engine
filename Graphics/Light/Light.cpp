@@ -45,7 +45,7 @@ void CLight::setGenerateShadowMap(bool generate)
 	{
 		if (generate)
 		{
-			m_ShadowMap = new CDynamicTexture(getName()+"_shadowmap", m_ShadowMapSize.x, m_ShadowMapSize.y, true);
+			m_ShadowMap = new CDynamicTexture(getName()+"_shadowmap", m_ShadowMapSize.x, m_ShadowMapSize.y, true, DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT);
 			CEngine::GetSingleton().getTextureManager()->add(m_ShadowMap->getName(), m_ShadowMap);
 			// TODO
 			//m_ShadowMaskTexture = ...
