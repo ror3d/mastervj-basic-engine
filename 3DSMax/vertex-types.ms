@@ -106,3 +106,37 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 	
 	return ret
 )
+
+fn GetVertexTypeStringFromObjectMaterial mat = (
+	local ret = "MV_POSITION_NORMAL_";
+	
+	if HasNormal mat then
+	(
+		ret = ret + "TANGENT_BINORMAL_"
+	)
+	
+	if HasTexture mat or HasReflection mat then
+	(
+		ret = ret + "TEXTURE_"
+	)
+	
+	if HasLightmap mat then
+	(
+		ret = ret + "TEXTURE2_"
+	)
+	
+	if HasColor mat then
+	(
+		ret = ret + "COLOR_"
+	)
+	
+	/*if HasWeights mat then
+	(
+		ret = ret + "WEIGHT_INDICES_"
+	)*/
+	
+	-- TODO position4, HasWeights, and HasColor
+	
+	ret = ret + "VERTEX"
+	return ret
+)

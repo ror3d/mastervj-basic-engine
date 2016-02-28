@@ -40,7 +40,8 @@ utility UABUtility "UAB Utility" width:160 height:527
 	)
 	on ExportRenderableObjectsBtn pressed do
 	(
-		createRenderableObjectsFile()
+		CollectCoresAndInstances()
+		createRenderableObjectsFile(GetInstances())
 	)
 	on LightsButton pressed do
 	(
@@ -85,6 +86,7 @@ utility UABUtility "UAB Utility" width:160 height:527
 	)
 	on StaticMeshManagerButton pressed do
 	(
+		CollectCoresAndInstances()
 		createStaticMeshesFile( GetCores() )
 		messageBox "Fichero static_meshes.xml creado correctamente" title:"Exportación correcta"
 		
@@ -96,6 +98,7 @@ utility UABUtility "UAB Utility" width:160 height:527
 	)
 	on SceneButton pressed do
 	(
+		CollectCoresAndInstances()
 		local cores = GetCores()
 		createStaticMeshesFile(cores)
 		createRenderableObjectsFile()

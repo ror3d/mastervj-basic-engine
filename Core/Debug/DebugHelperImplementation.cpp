@@ -192,8 +192,8 @@ void TW_CALL ReloadSceneCommands(void* _app)
 }
 void TW_CALL CreateScene(void* a)
 {
-	CPhysXManager::ShapeDesc desc;
-	desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
+	CPhysxColliderShapeDesc desc;
+	desc.shape = CPhysxColliderShapeDesc::Shape::Box;
 	desc.density = 1;
 	desc.material = "box";
 	desc.size = Vect3f(4, 4, 4);

@@ -213,7 +213,7 @@ CPhysXManager::CPhysXManager()
 
 CPhysXManager::~CPhysXManager()
 {
-	for (auto pair : m_materials)
+	for (auto &pair : m_materials)
 	{
 		CHECKED_RELEASE(pair.second);
 	}
@@ -324,7 +324,7 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 	m_actors.actor.push_back(groundPlane);
 }
 
-void CPhysXManager::createActor(const std::string& name, ActorType actorType, const ShapeDesc& desc)
+void CPhysXManager::createActor(const std::string& name, ActorType actorType, const CPhysxColliderShapeDesc& desc)
 {
 	auto idx = m_actors.actor.size();
 
@@ -336,19 +336,19 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	physx::PxGeometry* geom;
 	switch (desc.shape)
 	{
-		case ShapeDesc::Shape::Box:
+		case CPhysxColliderShapeDesc::Shape::Box:
 			geom = new physx::PxBoxGeometry(desc.size.x, desc.size.y, desc.size.z);
 			break;
 
-		case ShapeDesc::Shape::Sphere:
+		case CPhysxColliderShapeDesc::Shape::Sphere:
 			geom = new physx::PxSphereGeometry(desc.radius);
 			break;
 
-		case ShapeDesc::Shape::Capsule:
+		case CPhysxColliderShapeDesc::Shape::Capsule:
 			geom = new physx::PxCapsuleGeometry(desc.radius, desc.halfHeight);
 			break;
 
-		case ShapeDesc::Shape::ConvexMesh:
+		case CPhysxColliderShapeDesc::Shape::ConvexMesh:
 		{
 			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
@@ -425,7 +425,7 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction,
 	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
-	cct->move(v(movement), movement.Length() * 0.1f, elapsedTime, filters);
+	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
 	cct->setUpDirection(v(direction));
 	physx::PxRigidDynamic* actor = cct->getActor();
 	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();

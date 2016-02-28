@@ -84,10 +84,8 @@ fn createStaticMeshesFile meshesToExport = (
 	MyCloseFile()
 )
 	
-fn createRenderableObjectsFile = (
+fn createRenderableObjectsFile instances = (
 	MyCreateFile "renderable_objects.xml"
-	
-	local instances = GetInstances()
 	
 	WriteXMLPrologToFile()
 	format "<renderable_objects>\n" to:file
@@ -98,7 +96,7 @@ fn createRenderableObjectsFile = (
 		Yaw = GetYaw (instances[i].transform)
 		Pitch = GetPitch (instances[i].transform)
 		Roll = GetRoll (instances[i].transform)
-		local core = getUserProp $*[i] "render_export_rend_obj"
+		local core = getUserProp $*[i] "export_core_name"
 		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n"\
 					instances[i].name core Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
 	)

@@ -34,6 +34,25 @@ namespace physx
 	typedef debugger::comm::PvdConnection PxVisualDebuggerConnection;
 }
 
+struct CPhysxColliderShapeDesc {
+	enum class Shape {
+		Box,
+		Sphere,
+		Capsule,
+		ConvexMesh,
+		TriangleMesh
+	} shape;
+
+	Vect3f size;
+	float radius;
+	float halfHeight;
+	Vect3f position;
+	Quatf orientation;
+	std::string material;
+	float density;
+	std::shared_ptr<std::vector<uint8>> cookedMeshData;
+};
+
 class CPhysXManager
 {
 protected:
@@ -43,31 +62,13 @@ public:
 		Static,
 		Dynamic
 	};
-	struct ShapeDesc {
-		enum class Shape {
-			Box,
-			Sphere,
-			Capsule,
-			ConvexMesh,
-			TriangleMesh
-		} shape;
-
-		Vect3f size;
-		float radius;
-		float halfHeight;
-		Vect3f position;
-		Quatf orientation;
-		std::string material;
-		float density;
-		std::vector<uint8>* cookedMeshData;
-	};
 
 	static CPhysXManager* CreatePhysXManager();
 	virtual ~CPhysXManager();
 
 	void registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution);
 
-	void createActor(const std::string& name, ActorType type, const ShapeDesc& desc);
+	void createActor(const std::string& name, ActorType type, const CPhysxColliderShapeDesc& desc);
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 
@@ -84,8 +85,6 @@ public:
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
 	Vect3f moveCharacterController(Vect3f movement, Vect3f direction, float _ElapsedTime, std::string name);
-
-	void createScene();
 
 	void releaseCharacterControllers();
 
