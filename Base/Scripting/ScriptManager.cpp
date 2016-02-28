@@ -91,8 +91,8 @@ void CScriptManager::RegisterLUAFunctions()
 		.SetClass<Vect3f, float, float, float>("x", &Vect3f::x,
 					"y", &Vect3f::y,
 					"z", &Vect3f::z);
-	(*m_state)["CRenderableObjectsManager"]
+	/*(*m_state)["CRenderableObjectsManager"]
 		.SetObj(*CEngine::GetSingleton().getRenderableObjectManager(),
 		"AddMeshInstance", static_cast<void(CRenderableObjectsManager::*)(const std::string&, const std::string&, const Vect3f &)>(&CRenderableObjectsManager::AddMeshInstance));
-
+		*/
 }

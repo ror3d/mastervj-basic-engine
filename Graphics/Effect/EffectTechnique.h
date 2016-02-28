@@ -2,9 +2,9 @@
 #define EFFECT_TECHNIQUE_H
 
 
-#include "Utils\Named.h"
-#include "EffectPixelShader.h"
-#include "EffectVertexShader.h"
+#include "Utils/Named.h"
+class CEffectVertexShader;
+class CEffectPixelShader;
 
 class CEffectTechnique : public CNamed
 {

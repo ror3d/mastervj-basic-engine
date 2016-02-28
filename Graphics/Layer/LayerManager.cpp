@@ -1,6 +1,8 @@
 #include "LayerManager.h"
 #include "Mesh/MeshInstance.h"
 #include "Renderable/AnimatedInstanceModel.h"
+#include "Renderable/RenderableObjectsManager.h"
+#include "Context/ContextManager.h"
 
 CLayerManager::CLayerManager(){
 
@@ -61,7 +63,7 @@ void CLayerManager::Render(CContextManager &_context){
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{
 		it->second->Render(&_context);
-	}	
+	}
 }
 
 void CLayerManager::Render(CContextManager *_context, const std::string &LayerName){

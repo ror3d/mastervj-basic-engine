@@ -19,6 +19,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	else
 	{
 		name = TreeNode.GetPszProperty("vertex_type", "", true);
+		DEBUG_ASSERT( name != std::string("") );
 	}
 
 	m_RenderableObjectTechnique = CEngine::GetSingleton().getRenderableObjectTechniqueManager()->get(name);

@@ -161,6 +161,10 @@ bool CStaticMesh::Load(const std::string &FileName)
 				else
 					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
 			}
+			else
+			{
+				DEBUG_ASSERT( !"Vertex layout not implemented!" );
+			}
 
 			m_renderableVertexs.push_back(l_RV);
 
@@ -193,7 +197,7 @@ void CStaticMesh::Render(CContextManager *_context) const
 		m_renderableVertexs[i]->RenderIndexed(_context,
 				l_Material->getRenderableObjectTechique()->GetEffectTechnique());
 		}
-		
+
 	}
 }
 

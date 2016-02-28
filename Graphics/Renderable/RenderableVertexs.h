@@ -1,15 +1,17 @@
 #ifndef RENDERABLE_VERTEXS_H
 #define RENDERABLE_VERTEXS_H
 
-#include <D3D11.h>
-
-#include <Utils/Utils.h>
-
-#include <D3D11.h>
 #include "Context/ContextManager.h"
 
 #include "Effect/EffectTechnique.h"
+#include "Effect/EffectVertexShader.h"
+#include "Effect/EffectPixelShader.h"
+
+#include <Utils/Utils.h>
+
 #include <Core/Engine/Engine.h>
+
+#include <D3D11.h>
 
 class CContextManager;
 class CEffect;
