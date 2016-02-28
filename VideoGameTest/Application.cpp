@@ -16,10 +16,11 @@
 #include <Graphics/Cinematics/Cinematic.h>
 
 #include <PhysX/PhysXManager.h>
+#include <Scripting/ScriptManager.h>
 
 #include <Engine/Engine.h>
 
-//CScriptManager *s_sm = nullptr;
+CScriptManager *s_sm = nullptr;
 
 CApplication::CApplication(CContextManager *_ContextManager)
 : m_ContextManager(_ContextManager)
@@ -57,7 +58,7 @@ void CApplication::Update( float _ElapsedTime )
 			ccfps->AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
 			ccfps->AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS")  * 0.005f);
 		}
-		CRenderableObject * character = CEngine::GetSingleton().getLayerManager()->getDefaultLayer()->get("main");
+		CRenderableObject * character = CEngine::GetSingleton().getLayerManager()->get("models")->get("main");
 		if (character != nullptr)
 		{
 			if (ccfps->GetPitch() > 0.8f)//No atraviesa suelo
