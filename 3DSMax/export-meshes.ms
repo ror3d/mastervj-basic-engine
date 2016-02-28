@@ -96,7 +96,7 @@ fn createRenderableObjectsFile instances = (
 		Yaw = GetYaw (instances[i].transform)
 		Pitch = GetPitch (instances[i].transform)
 		Roll = GetRoll (instances[i].transform)
-		local core = getUserProp $*[i] "export_core_name"
+		local core = getUserProp instances[i] "export_core_name"
 		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n"\
 					instances[i].name core Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
 	)
@@ -320,7 +320,7 @@ fn createVertexesForFace obj IdFace mat = (
 		v3.binormal = v1.binormal		
 	)
 	
-	return #(v3, v2, v1)
+	return #(v1, v2, v3)
 
 )
 
@@ -336,7 +336,9 @@ fn createMesh obj = (
 	
 	CurrentObjInvMat = inverse obj.transform
 	
+	tik()
 	UABCalcVertexsNormals obj
+	tok s:"Calc Vertex Normals"
 	
 	--Header
 	writeshort file 0xFE56
@@ -386,6 +388,7 @@ fn createMesh obj = (
 		
 		writeshort file (GetVertexTypeFromObjectMaterial obj mat)
 		
+		tik()
 		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
 		(
@@ -400,10 +403,11 @@ fn createMesh obj = (
 				)
 			)
 		)
-		
+		tok s:"gather all vertices for this material"
 		
 		writeshort file vtxs.count
 		
+		tik()
 		for idVtx = 1 to vtxs.count do
 		(
 			local vtx = vtxs[idVtx]
@@ -446,16 +450,19 @@ fn createMesh obj = (
 				writefloat file (1 - vtx.uv2.y)
 			)
 		)
+		tok s:"write all vertices for this material"
 		
 		-- Write the index byte width
 		writeshort file 16
 		
 		writeshort file idxs.count
 		
+		tik()
 		for idx = 1 to idxs.count do
 		(
 			writeshort file idxs[idx]
 		)
+		tok s:"write indices for this material's vertices"
 	)
 	
 	-- TODO: Export bounding box/sphere? look into NodeGetBoundingBox

@@ -184,7 +184,7 @@ void CApplication::Update( float _ElapsedTime )
 		cameraMovement.x = Forward*(cos(m_Yaw)) + Strafe*(cos(m_Yaw + 3.14159f*0.5f));
 		cameraMovement.z = Forward*(sin(m_Yaw)) + Strafe*(sin(m_Yaw + 3.14159f*0.5f));
 
-		cameraMovement = phMgr->moveCharacterController(cameraMovement*0.2, ccfps->GetUp(), _ElapsedTime);
+		cameraMovement = phMgr->moveCharacterController(cameraMovement*0.02, ccfps->GetUp(), _ElapsedTime);
 		ccfps->SetPosition(cameraMovement);
 	}
 
