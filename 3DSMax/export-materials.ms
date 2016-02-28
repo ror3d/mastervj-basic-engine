@@ -7,8 +7,15 @@ shouldCopyTextures = true
 fn exportTextureFile texTypeName texMap = (
 	local texturePath = (openBitMap texMap.bitmap.filename).filename
 	local textureName = filenameFromPath texMap.filename
-	format "\t\t <% filename=\"%\"/>\n" texTypeName (getTexturePath texturePath) to:file
-	if shouldCopyTextures then
+	
+	format "\t\t <% filename=\"%\"/>\n" texTypeName (getTexturePath textureName) to:file
+	
+	local ext = toLower (getFilenameType textureName)
+	if ext != ".dds" and ext != ".jpg" and ext != ".jpeg" and ext != ".png" then
+	(
+		messageBox ("La textura " + texturePath +" no tiene formato aceptable!") title:"MENSAJE PARA ARTISTAS"
+	)
+	else if shouldCopyTextures then
 	(
 		format "Copying % from % to output dir %\n" texTypeName texturePath (getAbsTexturePath textureName)
 		copyFile texturePath (getAbsTexturePath textureName)
@@ -47,7 +54,7 @@ fn createSingleMaterial obj mat = (
 	
 	-- TODO cambiar technique dependiendo del tipo de material
 	
-	format "\t<material name=\"%\" effect_technique=\"diffuse_technique\" >\n" mat.name to:file	
+	format "\t<material name=\"%\" vertex_type=\"%\" >\n" mat.name (GetVertexTypeStringFromObjectMaterial mat) to:file	
 
 	exportSingleTexture mat obj.name
 	

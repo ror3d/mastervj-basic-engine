@@ -1,13 +1,10 @@
 global UABPropertyManager
 rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 (
-	checkbox cbExportCore "Export As Core" pos:[16,48] width:91 height:19
-	dropdownList ddlExportCore "" pos:[112,48] width:158 height:21
-	checkbox cbExportRenderableObject "Export Renderable Object" pos:[14,80] width:154 height:19
-	dropdownList ddlParentCoreMesh "Parent Core Mesh" pos:[176,72] width:160 height:40
-	checkbox cbLayerRender "Layer" pos:[14,134] width:54 height:19
-	dropdownList ddlLayerRender "" pos:[81,136] width:158 height:21
-	edittext txtAnimModel "Anim. Model " pos:[14,168] width:226 height:23
+	checkbox cbExportRenderableObject "Export Renderable Object" pos:[14,52] width:154 height:19
+	checkbox cbLayerRender "Layer" pos:[14,106] width:54 height:19
+	dropdownList ddlLayerRender "" pos:[81,108] width:158 height:21
+	edittext txtAnimModel "Anim. Model " pos:[14,140] width:226 height:23
 	checkbox cbGeneratePhysics "Generate" pos:[14,220] width:66 height:19
 	checkbox cbLayerPhysics "Layer" pos:[14,254] width:48 height:19
 	checkbox cbGenerateLogic "Generate" pos:[14,311] width:65 height:19
@@ -41,10 +38,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	
 	fn ToggleInputElements enabled =
 	(
-		cbExportCore.enabled = enabled
-		ddlExportCore.enabled = cbExportCore.checked
 		cbExportRenderableObject.enabled = enabled
-		ddlParentCoreMesh.enabled = cbExportRenderableObject.checked
 		
 		cbLayerRender.enabled = false --enabled
 		cbGeneratePhysics.enabled = false --enabled
@@ -63,11 +57,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	----------------------------------------------------
 	function ResetProps =
 	(
-		cbExportCore.checked = false
-		ddlExportCore.enabled = cbExportCore.checked
-		
 		cbExportRenderableObject.checked = false
-		ddlParentCoreMesh.enabled = cbExportRenderableObject.checked
 		
 		cbLayerRender.checked = false
 		cbGeneratePhysics.checked = false
@@ -90,23 +80,6 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		)
 	)
 	
-	local g_loadedCores = #()
-	
-	fn LoadRenderableObjectParentCores =
-	(
-		local cores = GetCores()
-		g_loadedCores = #()
-		local itemNames = #()
-		
-		for i = 1 to cores.count do
-		(
-			append g_loadedCores cores[i]
-			append itemNames (cores[i].name)
-		)
-		
-		ddlParentCoreMesh.items = itemNames
-	)
-	
 	fn LoadObjectProps =
 	(
 		--Reset de cb y text
@@ -121,48 +94,11 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		UABPropertyManager.title = m_ObjSelected.name
 		lblObjectName.caption = m_ObjSelected.name
 		
-		
-		--Export As Core Mesh
-		local l_ExportCore = getUserProp m_ObjSelected "render_export_core"
-		local l_ExportRenderableObject = getUserProp m_ObjSelected "render_export_rend_obj"
-		
-		if l_ExportCore != undefined then
-		(
-			for i = 1 to ddlExportCore.items.count do
-			(
-				if ddlExportCore.items[i] == l_ExportCore then
-				(
-					ddlExportCore.selection = i
-					ddlExportCore.enabled = true
-					cbExportCore.checked = true
-				)
-			)
-		)
-		
-		LoadRenderableObjectParentCores()
-		
 		--Export Renderable Object
-		if l_ExportRenderableObject != undefined and ddlParentCoreMesh.items != undefined then
+		local l_ExportRenderableObject = getUserProp m_ObjSelected "render_export_rend_obj"
+		if l_ExportRenderableObject != undefined then
 		(
-			for i = 1 to ddlParentCoreMesh.items.count do
-			(
-				if ddlParentCoreMesh.items[i] == l_ExportRenderableObject then
-				(
-					ddlParentCoreMesh.selection = i
-					ddlParentCoreMesh.enabled = true
-					cbExportRenderableObject.checked = true
-				)
-			)
-		)
-		else if l_ExportCore != undefined then
-		(
-			for i = 1 to ddlParentCoreMesh.items.count do
-			(
-				if ddlParentCoreMesh.items[i] == m_ObjSelected.name then
-				(
-					ddlParentCoreMesh.selection = i
-				)
-			)
+			cbExportRenderableObject.checked = true
 		)
 		
 		/*
@@ -229,7 +165,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 			)
 		)*/
 		
-		--todo Export Light
+		-- Export Light
 		local l_ExportLight = getUserProp m_ObjSelected "light_export"
 		
 		if l_ExportLight != undefined  and SuperclassOf m_ObjSelected == light then
@@ -267,28 +203,10 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	----------------------------------------------------
 	function SaveObjectProps Obj =
 	(
-		--Set Export Render Prop to Object
-		if cbExportCore.checked then
-		(
-			if ddlExportCore.selected != undefined then
-			(
-				setUserProp Obj "render_export_core" ddlExportCore.selected
-			)
-			else
-			(
-				messageBox "Tienes que seleccionar una Core Mesh!"
-				return OK
-			)
-		)
-		else
-		(
-			deleteUserProp Obj "render_export_core"
-		)
-		
 		-- Renderable Object
 		if cbExportRenderableObject.checked then
 		(
-			setUserProp Obj "render_export_rend_obj" ddlParentCoreMesh.selected
+			setUserProp Obj "render_export_rend_obj" "true"
 		)
 		else
 		(
@@ -383,7 +301,6 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	
 	on UABPropertyManager open do
 	(
-		ddlExportCore.items =#("Static Mesh","Animated Models")
 		ddlLayerRender.items = #("solid", "alpha_objects","alpha_blend_objects", "particles")
 		ddlGeneratePhysics.items = #("Triangle Mesh", "Convex Shape", "Bounding Box", "Bounding Sphere", "Bounding Capsule", "Plane shape (?)")
 		ddlLayerPhysics.items=#("PhysicsLayer")
@@ -397,28 +314,6 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	on UABPropertyManager close do
 	(
 		callbacks.removeScripts #selectionSetChanged id:#UABProperties
-	)
-	on cbExportCore changed check do
-	(
-		ddlExportCore.enabled=check
-		-- cbLayerRender.enabled=check
-	)
-	on ddlExportCore selected i do
-	(
-		if i==2  then
-		(
-			txtAnimModel.enabled=true
-			
-		)
-		else
-		(
-			txtAnimModel.enabled=false
-			txtAnimModel.text=""
-		)
-	)
-	on cbExportRenderableObject changed state do
-	(
-		ddlParentCoreMesh.enabled = state
 	)
 	on btnGet pressed do
 	(
