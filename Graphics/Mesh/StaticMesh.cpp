@@ -40,12 +40,17 @@ bool CStaticMesh::Load(const std::string &FileName)
 	}
 	else
 	{
+		bool shouldReadMaterials = true;
 		//Header---------------------
 		unsigned short l_header, l_VertexType, l_numMaterials, l_NumBytes;
 		fread(&l_header, sizeof(unsigned short), 1, l_meshFile);   //lectura del header
-		if (l_header != 0xFE55)
+		if (l_header != 0xFE55 && l_header != 0xFE56)
 		{
 			return false;
+		}
+		if (l_header == 0xFE56)
+		{
+			shouldReadMaterials = false;
 		}
 
 		//Materials---------------------
@@ -58,17 +63,20 @@ bool CStaticMesh::Load(const std::string &FileName)
 		m_materials.resize(l_numMaterials);
 
 
-		for (int i = 0; i < l_numMaterials; ++i)
-		{  //lectura de los materiales
-			unsigned short l_NumChars;
-			fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
+		if (shouldReadMaterials)
+		{
+			for (int i = 0; i < l_numMaterials; ++i)
+			{  //lectura de los materiales
+				unsigned short l_NumChars;
+				fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
 
-			char *l_MaterialName = new char[l_NumChars + 1];
-			fread(&l_MaterialName[0], sizeof(char), l_NumChars + 1, l_meshFile);
+				char *l_MaterialName = new char[l_NumChars + 1];
+				fread(&l_MaterialName[0], sizeof(char), l_NumChars + 1, l_meshFile);
 
-			m_materials[i] = CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
+				m_materials[i] = CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
 
-			delete[] l_MaterialName;
+				delete[] l_MaterialName;
+			}
 		}
 
 		//Vertex & Index---------------------
@@ -82,7 +90,7 @@ bool CStaticMesh::Load(const std::string &FileName)
 			unsigned short l_NumVertexs;
 			fread(&l_NumVertexs, sizeof(unsigned short), 1, l_meshFile);
 
-			unsigned short l_NumBytes;
+			unsigned long l_NumBytes = 0;
 			if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType())
 				l_NumBytes = sizeof(MV_POSITION_NORMAL_TEXTURE_VERTEX)*l_NumVertexs;
 			else if (l_VertexType == MV_POSITION_COLOR_VERTEX::GetVertexType())
@@ -93,6 +101,8 @@ bool CStaticMesh::Load(const std::string &FileName)
 				l_NumBytes = sizeof(MV_POSITION_COLOR_TEXTURE_VERTEX)*l_NumVertexs;
 			else if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::GetVertexType())
 				l_NumBytes = sizeof(MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX)*l_NumVertexs;
+			else if (l_VertexType == MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::GetVertexType())
+				l_NumBytes = sizeof(MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX)*l_NumVertexs;
 			else
 			{
 				throw std::runtime_error("unrecognized vertex type");
@@ -122,7 +132,7 @@ bool CStaticMesh::Load(const std::string &FileName)
 			}
 			else
 			{
-				assert(!"Num Index Error");
+				DEBUG_ASSERT(!"Num Index Error");
 			}
 
 			void *l_IdxData = new char[l_NumBytes];
@@ -144,6 +154,17 @@ bool CStaticMesh::Load(const std::string &FileName)
 				else
 					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
 			}
+			else if (l_VertexType == MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::GetVertexType())
+			{
+				if (l_IndexType == 16)
+					l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
+				else
+					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
+			}
+			else
+			{
+				DEBUG_ASSERT( !"Vertex layout not implemented!" );
+			}
 
 			m_renderableVertexs.push_back(l_RV);
 
@@ -162,6 +183,8 @@ bool CStaticMesh::Load(const std::string &FileName)
 		
 	}
 
+	fclose(l_meshFile);
+
 	return true;
 }
 
@@ -171,12 +194,12 @@ void CStaticMesh::Render(CContextManager *_context) const
 	{
 		CMaterial *l_Material = m_materials[i];
 		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
-		{
+	{
 			l_Material->apply();
 			m_renderableVertexs[i]->RenderIndexed(_context,
 				l_Material->getRenderableObjectTechique()->GetEffectTechnique());
 		}
-		
+
 	}
 }
 

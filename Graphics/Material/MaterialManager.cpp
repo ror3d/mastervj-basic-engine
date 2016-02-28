@@ -1,4 +1,5 @@
 #include "MaterialManager.h"
+#include <Core/Engine/Engine.h>
 
 #include "Effect/EffectManager.h"
 

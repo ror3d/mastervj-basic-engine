@@ -7,24 +7,26 @@
 #include <sstream>
 
 CCameraInfo::CCameraInfo()
-	: m_Eye(0, 0, 0)
-	, m_LookAt(0, 0, 1)
-	, m_Up(0, 1, 0)
-	, m_FOV(90)
-	, m_NearPlane(0)
-	, m_FarPlane(1000)
+	: m_FOV(1.047198f) // 60deg
+	, m_AspectRatio(1.0f)
+	, m_ZNear(0.1f)
+	, m_ZFar(1000.0f)
+	, m_Position(0.0f, 0.0f, 0.0f)
+	, m_LookAt(0.0f, 0.0f, 1.0f)
+	, m_Up(0.0f, 1.0f, 0.0f)
 {
 }
 
 
 CCameraInfo::CCameraInfo( const Vect3f &Eye, const Vect3f &LookAt, const Vect3f &Up, float
-	NearPlane, float FarPlane, float FOV )
-	: m_Eye(Eye)
+	NearPlane, float FarPlane, float FOV, float AspectRatio )
+	: m_Position(Eye)
 	, m_LookAt(LookAt)
 	, m_Up(Up)
-	, m_NearPlane(NearPlane)
-	, m_FarPlane(FarPlane)
+	, m_ZNear(NearPlane)
+	, m_ZFar(FarPlane)
 	, m_FOV(FOV)
+	, m_AspectRatio(AspectRatio)
 {
 }
 
@@ -33,7 +35,7 @@ CCameraInfo::CCameraInfo( CXMLTreeNode &node )
 {
 	std::stringstream ss;
 	ss.str( node.GetPszProperty( "pos", "0 0 0") );
-	ss >> m_Eye;
+	ss >> m_Position;
 	ss.clear();
 	ss.str( node.GetPszProperty( "look_at", "0 0 1") );
 	ss >> m_LookAt;
@@ -46,9 +48,9 @@ CCameraInfo::CCameraInfo( CXMLTreeNode &node )
 	m_FOV = mathUtils::Deg2Rad( m_FOV );
 	ss.clear();
 	ss.str( node.GetPszProperty( "near_plane", "0") );
-	ss >> m_NearPlane;
+	ss >> m_ZNear;
 	ss.clear();
 	ss.str( node.GetPszProperty( "far_plane", "1000") );
-	ss >> m_FarPlane;
+	ss >> m_ZFar;
 	ss.clear();
 }

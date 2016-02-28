@@ -3,11 +3,13 @@
 #include <vector>
 #include <string>
 
+#include "Camera/CameraController.h"
+
 class CXMLTreeNode;
 class CCameraKey;
 class CCamera;
 
-class CCameraKeyController
+class CCameraKeyController : public ICameraController
 {
 private:
 	std::vector<CCameraKey *> m_Keys;
@@ -30,7 +32,7 @@ public:
 	void ResetTime();
 	float GetTotalTime();
 
-	void AnimateCamera( CCamera* cam ) const;
+	void UpdateCameraValues( CCamera* cam ) const;
 
 	bool IsCycle() const { return m_Cycle; }
 	void SetCycle( bool Cycle ) { m_Cycle = Cycle; }

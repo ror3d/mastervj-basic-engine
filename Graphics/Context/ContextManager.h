@@ -6,6 +6,8 @@
 #include "Graphics\Effect\EffectTechnique.h"
 #include <Base/Math/Color.h>
 
+#define MAX_RENDER_TARGET_VIEW 4
+
 class CRenderableVertexs;
 
 class CContextManager
@@ -32,8 +34,7 @@ public:
 	void DisableAlphaBlendState();
 	void Clear(bool clear_DepthStencil, bool clear_RenderTarget);
 	void Present();
-	void SetRenderTargets(int NumViews, ID3D11RenderTargetView *const
-		*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView);
+	void SetRenderTargets(int NumViews, ID3D11RenderTargetView *const*RenderTargetViews, ID3D11DepthStencilView *DepthStencilView);
 	void UnsetRenderTargets();
 	void DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 		*Texture, float x, float y, float Width, float Height, const CColor &Color);
@@ -50,13 +51,13 @@ private:
 	ID3D11Debug*			m_D3DDebug;
 	IDXGISwapChain*			m_SwapChain;
 	ID3D11RenderTargetView*	m_RenderTargetView;
-	ID3D11RenderTargetView* m_CurrentRenderTargetViews;
+	ID3D11RenderTargetView* m_CurrentRenderTargetViews[MAX_RENDER_TARGET_VIEW];
 	ID3D11Texture2D*		m_DepthStencil;
 	ID3D11DepthStencilView*	m_DepthStencilView;
 	ID3D11DepthStencilView* m_CurrentDepthStencilView;
 	ID3D11BlendState*		m_AlphaBlendState;
 	D3D11_VIEWPORT			m_Viewport;
-	
+	CRenderableVertexs*		m_DrawQuadRV;
 
 
 	int m_Width, m_Height;

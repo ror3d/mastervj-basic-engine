@@ -3,8 +3,6 @@
 
 #include <d3d11.h>
 
-#include <cassert>
-
 // TODO: Activar AntTeakBar
 //#include <AntTweakBar.h>
 
@@ -19,7 +17,6 @@
 #include <Engine/Engine.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Debug/DebugRender.h>
-#include <Graphics/Effect/Effect.h>
 #include <Graphics/Camera/Camera.h>
 
 #include <AntTweakBar.h>
@@ -168,9 +165,8 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 //-----------------------------------------------------------------------
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
-
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(175);
+	//_CrtSetBreakAlloc(2102);
 
 	new CEngine();
 	CEngine& engine = CEngine::GetSingleton();
@@ -193,19 +189,19 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	// Añadir aquí el Init de la applicacioón
 
 	engine.Init();
-	engine.getPhysicsManager()->InitPhysx();
+	engine.getPhysXManager()->InitPhysx();
 
 	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
 	context.CreateContext(hWnd, 800, 600);
 
 	engine.getEffectsManager()->load("Data\\effects.xml");
+	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
 	engine.getMaterialManager()->load("Data\\materials.xml");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
-	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
-	engine.getSceneRendererCommandManager()->Load("Data\\basic_scene_renderer_commands.xml");
+	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
@@ -218,7 +214,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
-		CApplication application(&context, CEngine::GetSingleton().getRenderManager());
+		//CApplication application(&debugRender, &s_Context);
+		CApplication application(&context);
 
 		application.CreateCharController();
 
@@ -259,8 +256,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		}
 	}
 
-	UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	CEngine::ReleaseSingleton();
+	UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	return 0;
 }
 

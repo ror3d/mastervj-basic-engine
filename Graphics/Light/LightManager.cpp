@@ -1,6 +1,7 @@
 #include "LightManager.h"
 #include "Light/Light.h"
 #include <Engine/Engine.h>
+#include "Renderable/RenderableObjectsManager.h"
 
 
 CLightManager::CLightManager()
@@ -16,12 +17,18 @@ void CLightManager::Load(const std::string &FileName)
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(FileName.c_str()))
 	{
+		m_FileName = FileName;
+
 		CXMLTreeNode l_Lights = l_XML["lights"];
 		if (l_Lights.Exists())
 		{
 			for (int i = 0; i < l_Lights.GetNumChildren(); ++i)
 			{
 				CXMLTreeNode l_Light = l_Lights(i);
+				if ( l_Light.GetName() != std::string("light") )
+				{
+					continue;
+				}
 
 				CLight::TLightType type = CLight::getLightTypeByName(l_Light.GetPszProperty("type"));
 
@@ -39,7 +46,7 @@ void CLightManager::Load(const std::string &FileName)
 				{
 					CSpotLight * light = new CSpotLight(l_Light);
 					add(light->getName(), light);
-				}				
+				}
 			}
 		}
 	}
@@ -49,7 +56,7 @@ void CLightManager::Load(const std::string &FileName)
 
 void CLightManager::Render(CRenderManager *RenderManager)
 {
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
 		it.second->Render(RenderManager);
 	}
@@ -59,7 +66,7 @@ CLight& CLightManager::iterate(size_t id)
 {
 	int i = 0;
 	CLight *l_Light;
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
 		if (i == id)
 		{
@@ -73,24 +80,39 @@ CLight& CLightManager::iterate(size_t id)
 size_t CLightManager::count()
 {
 	size_t i = 0;
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
 		i++;
 	}
 	return i;
 }
 
-void CLightManager::ExecuteShadowCreation(CContextManager &_context){
-	for (auto light : m_resources){
-		if (light.second->getGenerateShadowMap() && light.second->getIsActive()){
+void CLightManager::ExecuteShadowCreation(CContextManager &_context)
+{
+	for (auto const &light : m_resources)
+	{
+		if (light.second->getGenerateShadowMap() && light.second->isActive())
+		{
 			light.second->SetShadowMap(_context); //Set matrices y renderTarget
-			_context.Clear(true, false);//Clear Depth
+
+			auto c = _context.m_BackgroundColor;
+			_context.m_BackgroundColor = CColor(0, 0, 0, 0);
+			_context.Clear(true, true);//Clear Depth
+			_context.m_BackgroundColor = c;
+
 			std::vector<CRenderableObjectsManager *> layers = light.second->getLayers();
-			for (auto child = layers.begin(); child < layers.end(); child++){
+			for (auto child = layers.begin(); child < layers.end(); child++)
+			{
 				(*child)->Render(&_context);//Render de layers afectadas por la luz
 			}
 			//DUDA::::::DONDE SE USA m_ShadowMaskTexture???
-		}			
+		}
 	}
 	_context.UnsetRenderTargets();//Una vez pintadas las sombras, quitamos target para render normal
+}
+
+void CLightManager::reload()
+{
+	destroy();
+	Load(m_FileName);
 }

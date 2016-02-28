@@ -1,10 +1,13 @@
 #ifndef GENERATE_SHADOW_MAPS_SCENE_RENDERER_COMMAND_H
 #define GENERATE_SHADOW_MAPS_SCENE_RENDERER_COMMAND_H
 
-#include "Scene\SceneRendererCommand.h"
+#include "Scene/SceneRendererCommand.h"
+
+class CPoolRenderableObjectTechnique;
 
 class CGenerateShadowMapsSceneRendererCommand : public CSceneRendererCommand
 {
+	CPoolRenderableObjectTechnique *m_pool;
 public:
 	CGenerateShadowMapsSceneRendererCommand(CXMLTreeNode &TreeNode);
 	virtual ~CGenerateShadowMapsSceneRendererCommand();

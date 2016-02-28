@@ -1,8 +1,9 @@
-#include "Graphics\Scene\SetDepthStencilStateSceneRendererCommand.h"
+#include "SetDepthStencilStateSceneRendererCommand.h"
 
 
-CSetDepthStencilStateSceneRendererCommand::CSetDepthStencilStateSceneRendererCommand(CXMLTreeNode &TreeNode)
-: CSceneRendererCommand(TreeNode)
+CSetDepthStencilStateSceneRendererCommand::
+	CSetDepthStencilStateSceneRendererCommand(CXMLTreeNode &TreeNode)
+	: CSceneRendererCommand(TreeNode)
 {
 	D3D11_DEPTH_STENCILOP_DESC od;
 	ZeroMemory(&od, sizeof(D3D11_DEPTH_STENCILOP_DESC));
@@ -24,11 +25,12 @@ CSetDepthStencilStateSceneRendererCommand::CSetDepthStencilStateSceneRendererCom
 	l_DepthStencilStateDescription.BackFace = od;
 
 	if (FAILED(CEngine::GetSingleton().getContextManager()->GetDevice()->CreateDepthStencilState(&l_DepthStencilStateDescription, &m_DepthStencilState))){
-		assert(false);
+		DEBUG_ASSERT(false);
 	}	
 }
 
-CSetDepthStencilStateSceneRendererCommand::~CSetDepthStencilStateSceneRendererCommand(){
+CSetDepthStencilStateSceneRendererCommand::~CSetDepthStencilStateSceneRendererCommand()
+{
 }
 
 void CSetDepthStencilStateSceneRendererCommand::Execute(CContextManager	&_context)

@@ -25,8 +25,17 @@ fn HasTexture mat alertOnMissing:false = (
 	return ret
 )
 
+fn HasReflection mat alertOnMissing:false = (
+	local ret = mat.reflectionMap != undefined and classof mat.reflectionMap == Bitmaptexture and mat.reflectionMap.bitmap != undefined
+	if alertOnMissing and not ret then
+	(
+		DisplayMaterialError ("En el material " + mat.name + " no hay textura de skymap o no es un bitmap!!!")
+	)
+	return ret
+)
+
 fn HasNormal mat alertOnMissing:false = (
-	local ret = mat.bumpMap != undefined and classof mat.bumpMap.normal_map == Bitmaptexture and mat.bumpMap.normal_map.bitmap != undefined
+	local ret = mat.bumpMap != undefined and classof mat.bumpMap == Bitmaptexture and mat.bumpMap.bitmap != undefined
 	if alertOnMissing and not ret then
 	(
 		DisplayMaterialError ("En el material " + mat.name + " no hay textura normal o no es un bitmap!!!")
@@ -35,13 +44,11 @@ fn HasNormal mat alertOnMissing:false = (
 )
 
 fn HasWeights mat = (
-	local ret = false
-	
-	return ret
+	return false -- TODO: change when we have skeletal animations
 )
 
 fn HasLightmap mat alertOnMissing:false = (
-	local ret = mat.selfIllumMap != undefined and classof mat.selfIllumMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
+	local ret = mat.selfIllumMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
 	if alertOnMissing and not ret and mat.selfIllumMap != undefined then
 	(
 		DisplayMaterialError ("El material " + mat.name + " parece tener Lightmap pero no tiene una textura asociada v�lida!!!")
@@ -58,19 +65,20 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 	local MV_VERTEX_TYPE_TEXTURE1		=	0x20
 	local MV_VERTEX_TYPE_TEXTURE2		=	0x40
 	local MV_VERTEX_TYPE_POSITION4		=	0x80
-	local MV_VERTEX_TYPE_NORMAL4		=  0x160
-	local MV_VERTEX_TYPE_BINORMAL		=	0x320
-	local MV_VERTEX_TYPE_TANGENT		=	0x640
+	local MV_VERTEX_TYPE_NORMAL4		=   0x100
+	local MV_VERTEX_TYPE_BINORMAL		=	0x200
+	local MV_VERTEX_TYPE_TANGENT		=	0x400
 	
 	local ret = 0;
 	
 	ret = bit.or ret MV_VERTEX_TYPE_POSITION
 	ret = bit.or ret MV_VERTEX_TYPE_NORMAL
 	
-	if HasTexture mat then
+	if (HasTexture mat) or (HasReflection mat) then
 	(
 		ret = bit.or ret MV_VERTEX_TYPE_TEXTURE1
 	)
+	
 	
 	if HasNormal mat then
 	(
@@ -78,11 +86,11 @@ fn GetVertexTypeFromObjectMaterial obj mat = (
 		ret = bit.or ret MV_VERTEX_TYPE_TANGENT
 	)
 	
-	if HasWeights mat then
+	/*if HasWeights mat then
 	(
 		ret = bit.or ret MV_VERTEX_TYPE_BLEND_INDICES
 		ret = bit.or ret MV_VERTEX_TYPE_BLEND_WEIGHT
-	)
+	)*/
 	
 	if HasLightmap mat then
 	(

@@ -9,7 +9,12 @@ CLight::CLight() : CNamed("")
 }
 
 
-CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
+CLight::CLight(const CXMLTreeNode &TreeNode)
+	: CNamed(TreeNode)
+	, CActive(true)
+	, m_GenerateShadowMap(false)
+	, m_ShadowMap(nullptr)
+	, m_ShadowMaskTexture(nullptr)
 {
 	Vect3f pos(0.0f, 0.0f, 0.0f);
 	m_Position = TreeNode.GetVect3fProperty("pos", pos);
@@ -18,21 +23,44 @@ CLight::CLight(const CXMLTreeNode &TreeNode) : CNamed(TreeNode)
 	m_StartRangeAttenuation = TreeNode.GetFloatProperty("att_start_range");
 	m_EndRangeAttenuation = TreeNode.GetFloatProperty("att_end_range");
 	m_Intensity = TreeNode.GetFloatProperty("intensity");
-	m_active = true;
-	m_GenerateShadowMap = TreeNode.GetBoolProperty("generate_shadow_map",false);
 
-	if (m_GenerateShadowMap){
-		m_ShadowMap = new CDynamicTexture(TreeNode.GetPszProperty("shadow_texture_mask"), TreeNode.GetIntProperty("shadow_map_width"), TreeNode.GetIntProperty("shadow_map_height"), true);
-		m_ShadowMaskTexture = new CTexture();		
-	}
+	// Shadowmap
+	m_ShadowMaskFileName = TreeNode.GetPszProperty("shadow_texture_mask", "", false);
+
+	m_ShadowMapSize = TreeNode.GetVect2iProperty("shadow_map_size", Vect2i(1, 1), false);
+	setGenerateShadowMap(TreeNode.GetBoolProperty("generate_shadow_map", false));
 
 	CXMLTreeNode light = TreeNode;
 	for (int i = 0; i< light.GetNumChildren(); i++){
 		CXMLTreeNode layer = light(i);
 		if (layer.GetName() == std::string("layer")){
-			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(light(i).GetPszProperty("layer")));
-		}			
-	}	
+			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(layer.GetPszProperty("name")));
+		}
+	}
+}
+
+void CLight::setGenerateShadowMap(bool generate)
+{
+	if (m_GenerateShadowMap != generate)
+	{
+		if (generate)
+		{
+			m_ShadowMap = new CDynamicTexture(getName()+"_shadowmap", m_ShadowMapSize.x, m_ShadowMapSize.y, true, DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT);
+			CEngine::GetSingleton().getTextureManager()->add(m_ShadowMap->getName(), m_ShadowMap);
+			// TODO
+			//m_ShadowMaskTexture = ...
+		}
+		else
+		{
+			if (m_ShadowMap)
+			{
+				CEngine::GetSingleton().getTextureManager()->remove(m_ShadowMap->getName());
+				m_ShadowMap = nullptr;
+			}
+		}
+
+		m_GenerateShadowMap = generate;
+	}
 }
 
 
@@ -59,14 +87,12 @@ CLight::TLightType CLight::getLightTypeByName(const std::string &type)
 
 CLight::~CLight()
 {
+	//setGenerateShadowMap(false);
 }
 
 
 void CLight::Render(CRenderManager *RenderManager)
 {
-	if (m_active){
-		CEngine::GetSingleton().getEffectsManager()->SetLightsConstants();
-	}	
 }
 
 
@@ -75,8 +101,10 @@ void CLight::Render(CRenderManager *RenderManager)
 COmniLight::COmniLight(const CXMLTreeNode &TreeNode) : CLight(TreeNode)
 {
 }
-void COmniLight::SetShadowMap(CContextManager &_context){
-	
+
+void COmniLight::SetShadowMap(CContextManager &_context)
+{
+	DEBUG_ASSERT(false);
 }
 
 //-----------DIRECTIONAL
@@ -84,6 +112,7 @@ CDirectionalLight::CDirectionalLight(const CXMLTreeNode &TreeNode) : CLight(Tree
 {
 	Vect3f dir(0.0f, 0.0f, 0.0f);
 	m_Direction = TreeNode.GetVect3fProperty("dir", dir);
+	m_OrthoShadowMapSize = TreeNode.GetVect2fProperty("ortho_shadow_map_size", Vect2f(1, 1));
 }
 
 
@@ -97,7 +126,7 @@ void CDirectionalLight::Render(CRenderManager *RenderManager)
 void CDirectionalLight::SetShadowMap(CContextManager &_context)
 {
 	if (m_ShadowMap == NULL)
-		assert(false);
+		DEBUG_ASSERT(false);
 	m_ViewShadowMap.SetIdentity();
 	m_ViewShadowMap.SetFromLookAt(m_Position, m_Position + m_Direction, v3fY);
 	unsigned int l_ShadowMapWidth = m_ShadowMap->GetWidth();
@@ -121,8 +150,6 @@ void CDirectionalLight::SetShadowMap(CContextManager &_context)
 //-----------SPOT
 CSpotLight::CSpotLight(const CXMLTreeNode &TreeNode) : CDirectionalLight(TreeNode)
 {
-	Vect2f orthoSize(0.0f, 0.0f);
-	m_OrthoShadowMapSize = TreeNode.GetVect2fProperty("ortho_shadow_map_size", orthoSize);
 	m_Angle = TreeNode.GetFloatProperty("angle");
 	m_FallOff = TreeNode.GetFloatProperty("falloff");
 }
@@ -130,7 +157,7 @@ CSpotLight::CSpotLight(const CXMLTreeNode &TreeNode) : CDirectionalLight(TreeNod
 void CSpotLight::SetShadowMap(CContextManager &_context)
 {
 	if (m_ShadowMap == NULL)
-		assert(false);
+		DEBUG_ASSERT(false);
 	m_ViewShadowMap.SetIdentity();
 	m_ViewShadowMap.SetFromLookAt(m_Position, m_Position + m_Direction, v3fY);
 	unsigned int l_ShadowMapWidth = m_ShadowMap->GetWidth();

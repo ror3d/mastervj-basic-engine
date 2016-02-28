@@ -10,17 +10,16 @@ class CRenderManager;
 class CApplication
 {
 public:
-	CApplication( CContextManager *_ContextManager, CRenderManager *_renderManager );
+	CApplication( CContextManager *_ContextManager);
 	~CApplication();
 
-	CRenderManager *m_RenderManager;
 
 	void CreateCharController();
 	void InitPhysx();
+	void Init();
 	
 	void Update(float _ElapsedTime);
 	void Render();
-	bool sendedInfoToAnim;
 	bool activeMovAnim;
 
 	void Destroy() {/* TODO */}

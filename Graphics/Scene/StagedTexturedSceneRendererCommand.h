@@ -1,8 +1,9 @@
 #ifndef STAGED_TEXTURED_SCENE_RENDERER_COMMAND_H
 #define STAGED_TEXTURED_SCENE_RENDERER_COMMAND_H
 
-#include "Scene\SceneRendererCommand.h"
-#include "Graphics\Texture\DynamicTexture.h"
+#include "Scene/SceneRendererCommand.h"
+#include "Graphics/Texture/DynamicTexture.h"
+#include <vector>
 
 class CStagedTexturedSceneRendererCommand : public CSceneRendererCommand
 {
@@ -17,7 +18,6 @@ protected:
 			m_StageId = StageId;
 			m_Texture = Texture;
 		}
-		void Activate();
 	};
 	std::vector<CStageTexture> m_StageTextures;
 	std::vector<CDynamicTexture *> m_DynamicTextures;

@@ -1,23 +1,38 @@
 #include "Material.h"
-#include "Engine\Engine.h"
-#include "Renderable\RenderableObjectTechnique.h"
+#include "Engine/Engine.h"
+#include "Graphics/Renderable/RenderableObjectTechnique.h"
+#include "Texture/Texture.h"
+#include "Texture/TextureManager.h"
 #include "MaterialParameter.h"
 
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
 {
-	std::string technique = TreeNode.GetPszProperty("effect_technique");
-	m_RenderableObjectTechnique = new CRenderableObjectTechnique(TreeNode.GetPszProperty("effect_technique"), 
-		CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));
+	/*m_RenderableObjectTechnique = new CRenderableObjectTechnique(TreeNode.GetPszProperty("effect_technique"), 
+		CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));*/
+
+	std::string name;
+	const char * rot = TreeNode.GetPszProperty("renderable_object_technique", 0, false);
+	if (rot)
+	{
+		name = rot;
+	}
+	else
+	{
+		name = TreeNode.GetPszProperty("vertex_type", "", true);
+		DEBUG_ASSERT( name != std::string("") );
+	}
+
+	m_RenderableObjectTechnique = CEngine::GetSingleton().getRenderableObjectTechniqueManager()->get(name);
 	void *nextDir = &CEffectManager::m_MaterialEffectParameters.m_RawData[0];
 	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 	{
 		CXMLTreeNode l_paramMat = TreeNode(i);
 		if (l_paramMat.GetName() == std::string("texture")){
 			CXMLTreeNode l_Texture = l_paramMat;
-			CTexture * Texture = new CTexture();
-			Texture->load(l_Texture.GetPszProperty("filename"));
+			CTexture * Texture = CEngine::GetSingleton().getTextureManager()->GetTexture(l_Texture.GetPszProperty("filename"));
 			m_textures.push_back(Texture);
+		
 		}
 		else if (l_paramMat.GetName() == std::string("parameter"))
 		{
@@ -41,7 +56,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 					l_paramMat.GetFloatProperty("value"),
 					type);
 				m_Parameters.push_back(param);
-			}
+}
 			else if (l_paramMat.GetPszProperty("type") == std::string("Vect3f"))
 			{
 				type = CMaterialParameter::TMaterialType::VECT3F;
@@ -93,10 +108,5 @@ void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 
 void CMaterial::destroy()
 {
-	for (int i = 0; i < m_textures.size(); ++i)
-	{
-		delete m_textures[i];
-	}
-
 	m_textures.clear();
 }

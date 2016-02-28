@@ -19,6 +19,7 @@ protected:
 	std::vector<CRenderableVertexs*> m_renderableVertexs;
 	std::vector<CMaterial *> m_materials;
 	std::string m_fileName;
+	void CalcTangentsAndBinormals(void *VtxsData, unsigned short *IdxsData, size_t VtxCount, size_t IdxCount, size_t VertexStride, size_t GeometryStride, size_t NormalStride, size_t TangentStride, size_t BiNormalStride, size_t TextureCoordsStride);
 
 public:
 	CStaticMesh();
@@ -28,6 +29,12 @@ public:
 	bool Reload ();
 	void Render (CContextManager *_context) const;
 	void Destroy();
+
+	inline void setMaterial(unsigned int idx, CMaterial* mat)
+	{
+		DEBUG_ASSERT(idx < m_materials.size());
+		m_materials[idx] = mat;
+	}
 	Vect3f GetBsCenter(){ return m_BsCenter;  }
 	Vect3f GetAabbMin(){ return m_AabbMin;  }
 	Vect3f GetAabbMax(){ return m_AabbMax; }

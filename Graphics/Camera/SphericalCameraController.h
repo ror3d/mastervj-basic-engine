@@ -1,9 +1,9 @@
 #ifndef INC_SPHERICALCAMERA_H_
 #define INC_SPHERICALCAMERA_H_
 
-#include "CameraController.h"
+#include "YawPitchCameraController.h"
 
-class CSphericalCameraController : public CCameraController
+class CSphericalCameraController : public IYawPitchCameraController
 {
 private:
 	float						m_Zoom;
@@ -14,16 +14,13 @@ public:
 
 	void AddZoom(float Zoom) {m_Zoom+=Zoom;}
 	void SetZoom(float Zoom) {m_Zoom=Zoom;}
-	
-	void SetCamera(CCamera *Camera) const;
+
+	void UpdateCameraValues(CCamera *Camera) const;
 	Vect3f GetDirection() const;
 
-	void Update(Vect3f movement)
-	{
-		AddYaw(movement.x*30.0f);
-		AddPitch(movement.y*30.0f);
-		AddZoom(-movement.z*2.0f);
-	}
+	void UpdateRotation( Vect3f movement );
+
+	void Update( float ElapsedTime );
 };
 
 #endif

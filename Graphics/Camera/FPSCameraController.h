@@ -1,11 +1,11 @@
 #ifndef INC_CAMERAFPSHOOTER_H_
 #define INC_CAMERAFPSHOOTER_H_
 
-#include "CameraController.h"
+#include "YawPitchCameraController.h"
 
 class CCamera;
 
-class CFPSCameraController : public CCameraController
+class CFPSCameraController : public IYawPitchCameraController
 {
 private:
 	float						m_YawSpeed;
@@ -17,14 +17,16 @@ private:
 public:
 	CFPSCameraController();
 	virtual ~CFPSCameraController();
-	
+
 	void Move(float Strafe, float Forward, bool Speed, float ElapsedTime);
-	void SetCamera(CCamera *Camera) const;
+	void UpdateCameraValues(CCamera *Camera) const;
 	void AddYaw(float Radians);
 	void AddPitch(float Radians);
 	Vect3f GetDirection() const;
 	Vect3f GetCameraDisplacement() { return m_CameraDisplacement; }
 	float GetPitchDisplacement(){ return m_PitchDisplacement; }
+
+	void Update( float ElapsedTime );
 
 };
 

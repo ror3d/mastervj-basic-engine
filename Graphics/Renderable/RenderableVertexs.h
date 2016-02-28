@@ -1,17 +1,17 @@
 #ifndef RENDERABLE_VERTEXS_H
 #define RENDERABLE_VERTEXS_H
 
-#include <D3D11.h>
-
-#include <assert.h>
-
-#include <Utils/Utils.h>
-
-#include <D3D11.h>
 #include "Context/ContextManager.h"
 
 #include "Effect/EffectTechnique.h"
+#include "Effect/EffectVertexShader.h"
+#include "Effect/EffectPixelShader.h"
+
+#include <Utils/Utils.h>
+
 #include <Core/Engine/Engine.h>
+
+#include <D3D11.h>
 
 class CContextManager;
 class CEffect;
@@ -19,14 +19,14 @@ class CEffect;
 class CRenderableVertexs
 {
 public:
-	virtual bool Render(CContextManager *ContextManager, CEffect *Effect)
+	virtual bool Render(CContextManager *ContextManager, CEffectTechnique *Effect)
 	{
-		assert(!"This method mustn't be called");
+		DEBUG_ASSERT(!"This method mustn't be called");
 		return false;
 	}
 	virtual bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *EffectManager, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
-		assert(!"This method mustn't be called");
+		DEBUG_ASSERT(!"This method mustn't be called");
 		return false;
 	}
 };
@@ -63,20 +63,20 @@ public:
 	{
 		CHECKED_RELEASE(m_VertexBuffer);
 	}
-	bool Render(CContextManager *ContextManager, CEffect *Effect)
+	bool Render(CContextManager *ContextManager, CEffectTechnique *Effect)
 	{
-		if (Effect->getPixelShader() == NULL || Effect->getVertexShader() == NULL)
+		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
 			return false;
 		ID3D11DeviceContext *l_DeviceContext = ContextManager->GetDeviceContext();
 		UINT stride = sizeof(T);
 		UINT offset = 0;
 		l_DeviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
 		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
-		l_DeviceContext->IASetInputLayout(Effect->getVertexLayout());
-		l_DeviceContext->VSSetShader(Effect->getVertexShader(), NULL, 0);
-		ID3D11Buffer *l_ConstantBuffer = Effect->getConstantBuffer();
+		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
+		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
+		ID3D11Buffer *l_ConstantBuffer = Effect->GetVertexShader()->GetConstantBuffer(0);
 		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
-		l_DeviceContext->PSSetShader(Effect->getPixelShader(), NULL, 0);
+		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
 		l_DeviceContext->PSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->Draw(m_VertexsCount, 0);
 		return true;
@@ -137,6 +137,8 @@ public:
 
 	bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *Effect, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
+		if (Effect == NULL)
+			return false;
 		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
 			return false;
 		ID3D11DeviceContext *l_DeviceContext = ContextManager->GetDeviceContext();

@@ -1,7 +1,6 @@
 #include "DebugRender.h"
 
 #include "VertexTypes.h"
-#include "Effect/Effect.h"
 
 #include "Renderable/RenderableVertexs.h"
 

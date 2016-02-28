@@ -1,5 +1,6 @@
 #include "Renderable/PoolRenderableObjectTechnique.h"
-#include "Engine/Engine.h"
+#include <Core/Engine/Engine.h>
+#include <Base/XML/XMLTreeNode.h>
 
 
 CPoolRenderableObjectTechnique
@@ -12,31 +13,35 @@ CPoolRenderableObjectTechnique
 {
 }
 
-
-CPoolRenderableObjectTechnique::CPoolRenderableObjectTechnique(CXMLTreeNode &TreeNode){
+CPoolRenderableObjectTechnique::CPoolRenderableObjectTechnique(CXMLTreeNode &TreeNode)
+{
 	setName(TreeNode.GetPszProperty("name"));
 }
-CPoolRenderableObjectTechnique::~CPoolRenderableObjectTechnique(){
-	
-}
-void CPoolRenderableObjectTechnique::Destroy(){
-	m_RenderableObjectTechniqueElements.clear();
-	delete(&m_RenderableObjectTechniqueElements);
-}
-void CPoolRenderableObjectTechnique::AddElement(const std::string &Name, const std::string &TechniqueName,
-	CRenderableObjectTechnique *ROTOnRenderableObjectTechniqueManager){
-	
-	m_RenderableObjectTechniqueElements.push_back(
-		new CPoolRenderableObjectTechniqueElement(
-			Name,
-			CEngine::GetSingleton().getEffectsManager()->get(TechniqueName), 
-			ROTOnRenderableObjectTechniqueManager));
 
+CPoolRenderableObjectTechnique::~CPoolRenderableObjectTechnique()
+{
+	Destroy();
 }
-void CPoolRenderableObjectTechnique::Apply(){
+
+void CPoolRenderableObjectTechnique::Destroy()
+{
+	for (auto rote : m_RenderableObjectTechniqueElements)
+	{
+		delete rote;
+	}
+
+	m_RenderableObjectTechniqueElements.clear();
+}
+
+void CPoolRenderableObjectTechnique::AddElement(const std::string &Name, const std::string &TechniqueName, CRenderableObjectTechnique *ROTOnRenderableObjectTechniqueManager)
+{
+	m_RenderableObjectTechniqueElements.push_back(new CPoolRenderableObjectTechniqueElement(Name, CEngine::GetSingleton().getEffectsManager()->get(TechniqueName), ROTOnRenderableObjectTechniqueManager));
+}
+
+void CPoolRenderableObjectTechnique::Apply()
+{
 	for (auto elem : m_RenderableObjectTechniqueElements)
 	{
-		elem->m_OnRenderableObjectTechniqueManager
-			->SetEffectTechnique(elem->m_RenderableObjectTechnique.GetEffectTechnique());
+		elem->m_OnRenderableObjectTechniqueManager->SetEffectTechnique(elem->m_RenderableObjectTechnique.GetEffectTechnique());
 	}
 }

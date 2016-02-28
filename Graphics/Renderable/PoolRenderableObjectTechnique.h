@@ -2,8 +2,11 @@
 #define POOL_RENDERABLE_OBJECT_TECHNIQUE_H
 
 #include "Utils/Named.h"
-#include "XML/XMLTreeNode.h"
 #include "Renderable/RenderableObjectTechnique.h"
+
+#include <vector>
+
+class CXMLTreeNode;
 
 class CPoolRenderableObjectTechnique : public CNamed
 {
@@ -16,6 +19,7 @@ private:
 		CPoolRenderableObjectTechniqueElement(const std::string &Name,
 			CEffectTechnique *EffectTechnique, CRenderableObjectTechnique
 			*OnRenderableObjectTechniqueManager);
+		~CPoolRenderableObjectTechniqueElement() { }
 	};
 	std::vector<CPoolRenderableObjectTechniqueElement *>
 		m_RenderableObjectTechniqueElements;

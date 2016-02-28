@@ -27,13 +27,21 @@ CEffectManager::~CEffectManager()
 
 void CEffectManager::Reload()
 {
+	destroy();
+	load(m_FileName);
 }
 
 void CEffectManager::destroy()
 {
-	TMapManager::destroy();
+	for (auto it : m_resources)
+	{
+		it.second->destroy();
+	}
+
 	m_VertexShaders.destroy();
 	m_PixelShaders.destroy();
+
+	TMapManager::destroy();
 }
 
 void CEffectManager::load(const std::string &Filename)
@@ -41,6 +49,8 @@ void CEffectManager::load(const std::string &Filename)
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(Filename.c_str()))
 	{
+		m_FileName = Filename;
+
 		CXMLTreeNode l_Effects = l_XML["effects"];
 		if (l_Effects.Exists())
 		{
@@ -92,8 +102,7 @@ void CEffectManager::SetSceneConstants()
 
 void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 {
-	m_LightParameters.m_LightAmbient = (0.1f, 0.1f, 0.1f, 0.0f);
-	m_LightParameters.m_LightEnabled[IdLight] = true;
+	m_LightParameters.m_LightEnabled[IdLight] = 1.0f;
 	m_LightParameters.m_LightType[IdLight] = static_cast<float>(Light->getType());
 	m_LightParameters.m_LightPosition[IdLight] = Light->getPosition();
 	m_LightParameters.m_LightAttenuationStartRange[IdLight] = Light->getStartRangeAttenuation();
@@ -117,21 +126,34 @@ void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 	{
 		CDynamicTexture *l_ShadowMap = Light->getShadowMap();
 		CTexture *l_ShadowMask = Light->getShadowMaskTexture();
+		m_LightParameters.m_UseShadowMap[IdLight] = 1;
 		m_LightParameters.m_UseShadowMask[IdLight] = l_ShadowMask != NULL ? 1.0f : 0.0f;
 		m_LightParameters.m_LightView[IdLight] = Light->getViewShadowMap();
 		m_LightParameters.m_LightProjection[IdLight] = Light->getProjectionShadowMap();
 		l_ShadowMap->Activate(UAB_ID_SHADOW_MAP + IdLight * 2);
 		if (l_ShadowMask != NULL)
+		{
 			l_ShadowMask->Activate(UAB_ID_SHADOW_MAP + 1 + IdLight * 2);
+		}
+	}
+	else
+	{
+		m_LightParameters.m_UseShadowMap[IdLight] = 0;
+		m_LightParameters.m_UseShadowMask[IdLight] = 0;
 	}
 
+	// TODO: read from file!
+	m_SceneParameters.m_LightAmbient = Vect4f(0.1f, 0.1f, 0.1f, 1.0f);
 }
 
 void CEffectManager::SetLightsConstants()
 {
 	CLightManager *l_LightManager = CEngine::GetSingleton().getLightManager();
 
-	size_t i = 0;
+	for (size_t i = 0; i < MAX_LIGHTS_BY_SHADER; ++i)
+	{
+		m_LightParameters.m_LightEnabled[i] = false;
+	}
 	
 	for (size_t i = 0; i < l_LightManager->count(); ++i)
 	{

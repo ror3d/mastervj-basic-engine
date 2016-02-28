@@ -1,7 +1,7 @@
 #ifndef EFFECT_SHADER_H
 #define EFFECT_SHADER_H
 
-#include "Utils\Named.h"
+#include "Utils/Named.h"
 #include <d3d11.h>
 #include <vector>
 
@@ -15,9 +15,8 @@ protected:
 
 	std::vector<ID3D11Buffer *> m_ConstantBuffers;
 	std::vector<std::string> m_PreprocessorMacros;
-	D3D10_SHADER_MACRO *m_ShaderMacros;
+	std::vector<D3D10_SHADER_MACRO> m_ShaderMacros;
 
-	virtual void Destroy() = 0;
 	bool LoadShader(const std::string &Filename, const std::string &EntryPoint, const std::string &ShaderModel, ID3DBlob **BlobOut);
 
 	void CreateShaderMacro();
@@ -28,6 +27,7 @@ public:
 	virtual ~CEffectShader();
 	
 	virtual bool Load() = 0;
+	virtual void destroy() = 0;
 
 	virtual void SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer) = 0;
 

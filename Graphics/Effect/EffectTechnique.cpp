@@ -1,5 +1,8 @@
 #include "EffectTechnique.h"
-#include "Engine/Engine.h"
+#include "EffectPixelShader.h"
+#include "EffectVertexShader.h"
+
+#include <Core/Engine/Engine.h>
 
 
 CEffectTechnique::CEffectTechnique(CXMLTreeNode &TreeNode) : CNamed(TreeNode)
@@ -39,4 +42,13 @@ void CEffectTechnique::SetConstantBuffer(unsigned int IdBuffer, void *ConstantBu
 {
 	m_VertexShader->SetConstantBuffer(IdBuffer, ConstantBuffer);
 	m_PixelShader->SetConstantBuffer(IdBuffer, ConstantBuffer);
+}
+
+void CEffectTechnique::destroy()
+{
+	m_VertexShader->destroy();
+	m_PixelShader->destroy();
+
+	m_VertexShader = NULL;
+	m_PixelShader = NULL;
 }

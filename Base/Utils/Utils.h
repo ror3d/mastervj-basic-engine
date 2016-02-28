@@ -24,4 +24,16 @@ public: \
 
 #define DEG2RAD(x) (x * (float)(3.14159265358979323846 / 180.0))
 
+#ifdef _DEBUG
+#include <Windows.h>
+#define DEBUG_ASSERT(expression)		\
+	do {								\
+		if(!(expression)				\
+			&& IsDebuggerPresent())		\
+			DebugBreak();				\
+	} while(0)
+#else
+#define DEBUG_ASSERT(expression)	(void(0))
+#endif
+
 #endif

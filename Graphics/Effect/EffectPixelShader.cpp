@@ -4,12 +4,14 @@
 
 CEffectPixelShader::CEffectPixelShader(const CXMLTreeNode &TreeNode) : CEffectShader(TreeNode)
 {
-	assert(Load());
+	bool result = Load();
+	DEBUG_ASSERT(result);
 }
 
 
 CEffectPixelShader::~CEffectPixelShader()
 {
+	CHECKED_RELEASE( m_PixelShader );
 }
 
 bool CEffectPixelShader::Load()
@@ -37,7 +39,7 @@ void CEffectPixelShader::SetConstantBuffer(unsigned int IdBuffer, void
 	l_DeviceContext->PSSetConstantBuffers(IdBuffer, 1, &l_ConstantBuffer);
 }
 
-void CEffectPixelShader::Destroy()
+void CEffectPixelShader::destroy()
 {
-	delete m_ShaderMacros;
+
 }

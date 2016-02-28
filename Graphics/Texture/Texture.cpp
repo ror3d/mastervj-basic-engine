@@ -13,6 +13,12 @@ CTexture::CTexture() : CNamed("")
 {
 }
 
+CTexture::CTexture(const std::string& name) : CNamed(name)
+, m_Texture(NULL)
+, m_SamplerState(NULL)
+{
+}
+
 
 CTexture::~CTexture()
 {
@@ -40,7 +46,16 @@ bool CTexture::LoadFile()
 
 void CTexture::Unload()
 {
-	// TODO
+	if (m_Texture != NULL)
+	{
+		m_Texture->Release();
+		m_Texture = NULL;
+	}
+	if (m_SamplerState != NULL)
+	{
+		m_SamplerState->Release();
+		m_SamplerState = NULL;
+	}
 }
 
 bool CTexture::load(const std::string &Filename)
@@ -56,6 +71,8 @@ void CTexture::Activate(unsigned int StageId)
 	ID3D11DeviceContext *l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
 	l_DeviceContext->PSSetSamplers(StageId, 1, &m_SamplerState);
 	l_DeviceContext->PSSetShaderResources(StageId, 1, &m_Texture);
+
+	CEngine::GetSingleton().getTextureManager()->SetTextureAtStage(StageId, this);
 }
 
 bool CTexture::Reload()

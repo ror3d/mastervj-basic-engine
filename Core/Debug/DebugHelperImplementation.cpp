@@ -2,18 +2,14 @@
 #include "Core\Engine\Engine.h"
 #include <Core/Input/InputManagerImplementation.h>
 #include "Material\MaterialParameter.h"
-#include "Renderable/RenderableObject.h"
-#include "Renderable/RenderableVertexs.h"
-#include "Mesh/StaticMesh.h"
+#include "Camera/FPSCameraController.h"
 #include <PhysX/PhysXManager.h>
-
-#include <cassert>
 
 CDebugHelperImplementation::CDebugHelperImplementation(void *device)
 {
 	// TODO: inicializar AntTweakBar
 	int status = TwInit(TW_DIRECT3D11, device);
-	assert(status);
+	DEBUG_ASSERT(status);
 
 	{
 		TwStructMember structMembers[] =
@@ -35,7 +31,7 @@ CDebugHelperImplementation::~CDebugHelperImplementation()
 {
 	// TODO: finalizar AntTweakBar
 	int status = TwTerminate();
-	assert(status);
+	DEBUG_ASSERT(status);
 }
 
 void CDebugHelperImplementation::Log(const std::string& text) const
@@ -57,9 +53,11 @@ void CDebugHelperImplementation::Render()
 
 bool CDebugHelperImplementation::Update(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	m_posRot->Position = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetPosition();
-	m_posRot->Yaw = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetYaw();
-	m_posRot->Pitch = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetPitch();
+	ICameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>(cc);
+	m_posRot->Position = ccfps->GetPosition();
+	m_posRot->Yaw = ccfps->GetYaw();
+	m_posRot->Pitch = ccfps->GetPitch();
 	
 	// TODO: mandarle eventos al AntTweakBar
 	return TwEventWin(hWnd, msg, wParam, lParam);
@@ -73,7 +71,7 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 	if (it != m_Bars.end())
 	{
 		status = TwDeleteBar(it->second);
-		assert(status);
+		DEBUG_ASSERT(status);
 	}
 
 	TwBar* twBar = TwNewBar(bar.name.c_str());
@@ -83,7 +81,7 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 		if (bar.variables[i].type == BUTTON)
 		{
 			status = TwAddButton(twBar, bar.variables[i].name.c_str(), bar.variables[i].callback, bar.variables[i].data, "");
-			assert(status);
+			DEBUG_ASSERT(status);
 		}
 		else
 		{
@@ -130,12 +128,12 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 			{
 			case READ:
 				status = TwAddVarRO(twBar, bar.variables[i].name.c_str(), type, bar.variables[i].ptr, params.c_str());
-				assert(status);
+				DEBUG_ASSERT(status);
 				break;
 
 			case READ_WRITE:
 				status = TwAddVarRW(twBar, bar.variables[i].name.c_str(), type, bar.variables[i].ptr, params.c_str());
-				assert(status);
+				DEBUG_ASSERT(status);
 				break;
 			case SEPARATOR:
 				if (bar.variables[i].type == NONE)
@@ -177,7 +175,15 @@ void TW_CALL RemoveBar(void* ba)
 
 void TW_CALL SwitchCameraCallback(void* _app)
 {
-	CEngine::GetSingleton().getRenderManager()->SwitchCamera();
+	if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__debug"))
+	{
+		CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController("__fps");
+	}
+	else
+	{
+		CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController("__debug");
+	}
+	
 }
 
 void TW_CALL ReloadSceneCommands(void* _app)
@@ -192,7 +198,7 @@ void TW_CALL CreateScene(void* a)
 	desc.material = "box";
 	desc.size = Vect3f(4, 4, 4);
 	desc.position = Vect3f(0, 2.0f, 0);
-	CEngine::GetSingleton().getPhysicsManager()->createActor("boxCol", CPhysXManager::ActorType::Static, desc);
+	CEngine::GetSingleton().getPhysXManager()->createActor("boxCol", CPhysXManager::ActorType::Static, desc);
 }
 
 void TW_CALL OpenMaterialParams(void *material)
@@ -247,14 +253,6 @@ void TW_CALL OpenMaterialsBar(void *materialsMap)
 	CDebugHelper::GetDebugHelper()->RegisterBar(barMaterials);
 }
 
-void TW_CALL CookMeshes(void *data){
-	const std::vector<Vect3f> vecVertexDest;
-	std::vector<uint8> vecOut;
-	CStaticMesh * mesh = CEngine::GetSingleton().getStaticMeshManager()->get("Box001");
-	//mesh->getRenderableVertex();
-	
-	CEngine::GetSingleton().getPhysicsManager()->cookConvexMesh(vecVertexDest, vecOut);
-}
 
 void CDebugHelperImplementation::CreateMainBar(){
 	//----------------------MAIN BAR------------------------
@@ -276,8 +274,10 @@ void CDebugHelperImplementation::CreateMainBar(){
 		var.type = CDebugHelper::POSITION_ORIENTATION;
 		var.mode = CDebugHelper::READ_WRITE;
 		m_posRot = new SPositionOrientation();
-		m_posRot->Position = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetPosition();
-		m_posRot->Yaw = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetYaw();
+		ICameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+		CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>(cc);
+		m_posRot->Position = ccfps->GetPosition();
+		m_posRot->Yaw = ccfps->GetYaw();
 		var.pPositionOrientation = m_posRot;
 		var.ptr = m_posRot;
 
@@ -306,15 +306,6 @@ void CDebugHelperImplementation::CreateMainBar(){
 		var.name = "PhysX: Create Box";
 		var.type = CDebugHelper::BUTTON;
 		var.callback = CreateScene;
-		var.data = this;
-
-		mainBar.variables.push_back(var);
-	}
-	{
-		CDebugHelper::SDebugVariable var = {};
-		var.name = "PhysX: Cook";
-		var.type = CDebugHelper::BUTTON;
-		var.callback = CookMeshes;
 		var.data = this;
 
 		mainBar.variables.push_back(var);

@@ -12,16 +12,22 @@ protected:
 	ID3D11RenderTargetView *m_RenderTargetView;
 	ID3D11Texture2D *m_DepthStencilBuffer;
 	ID3D11DepthStencilView *m_DepthStencilView;
+
+	UINT m_Width;
+	UINT m_Height;
+
 	bool m_CreateDepthStencilBuffer;
+
+	DXGI_FORMAT m_format;
+
 	void Unload();
 	void Init();
 	virtual bool CreateSamplerState();
-	UINT m_Width;
-	UINT m_Height;
+
 public:
-	CDynamicTexture(const std::string &Name, int Width, int Height, bool
-		CreateDepthStencilBuffer);
 	CDynamicTexture(const CXMLTreeNode &TreeNode);
+	CDynamicTexture(const std::string &Name, int Width, int Height, bool
+		CreateDepthStencilBuffer, DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM);
 	~CDynamicTexture();
 	bool Reload();
 
