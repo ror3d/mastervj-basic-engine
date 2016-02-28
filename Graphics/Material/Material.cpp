@@ -19,7 +19,8 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 			Texture->load(l_Texture.GetPszProperty("filename"));
 			m_textures.push_back(Texture);
 		}
-		/*else if (l_paramMat.GetName() == std::string("parameter")){
+		else if (l_paramMat.GetName() == std::string("parameter"))
+		{
 			CMaterialParameter::TMaterialType type;
 			if (l_paramMat.GetPszProperty("type") == std::string("float"))
 			{
@@ -64,7 +65,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 
 			nextDir = reinterpret_cast<unsigned char*>(nextDir)+sizeof(Vect4f);
 			
-		}*/
+		}
 	}
 }
 

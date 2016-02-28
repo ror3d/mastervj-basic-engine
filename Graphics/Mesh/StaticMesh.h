@@ -28,4 +28,7 @@ public:
 	bool Reload ();
 	void Render (CContextManager *_context) const;
 	void Destroy();
+	Vect3f GetBsCenter(){ return m_BsCenter;  }
+	Vect3f GetAabbMin(){ return m_AabbMin;  }
+	Vect3f GetAabbMax(){ return m_AabbMax; }
 };

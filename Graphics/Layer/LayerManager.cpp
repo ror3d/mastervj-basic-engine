@@ -9,6 +9,7 @@ CLayerManager::CLayerManager(){
 CLayerManager::~CLayerManager(){
 	Destroy();
 }
+
 void CLayerManager::Destroy(){
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{

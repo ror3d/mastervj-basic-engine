@@ -2,6 +2,9 @@
 #include "Core\Engine\Engine.h"
 #include <Core/Input/InputManagerImplementation.h>
 #include "Material\MaterialParameter.h"
+#include "Renderable/RenderableObject.h"
+#include "Renderable/RenderableVertexs.h"
+#include "Mesh/StaticMesh.h"
 #include <PhysX/PhysXManager.h>
 
 #include <cassert>
@@ -55,6 +58,9 @@ void CDebugHelperImplementation::Render()
 bool CDebugHelperImplementation::Update(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	m_posRot->Position = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetPosition();
+	m_posRot->Yaw = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetYaw();
+	m_posRot->Pitch = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetPitch();
+	
 	// TODO: mandarle eventos al AntTweakBar
 	return TwEventWin(hWnd, msg, wParam, lParam);
 }
@@ -180,9 +186,6 @@ void TW_CALL ReloadSceneCommands(void* _app)
 }
 void TW_CALL CreateScene(void* a)
 {
-	//PxRigidDynamic* aSphereActor = thePhysics->createRigidDynamic(PxTransform(position));
-	//PxShape* aSphereShape = aSphereActor->createShape(PxSphereGeometry(radius), aMaterial);
-
 	CPhysXManager::ShapeDesc desc;
 	desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
 	desc.density = 1;
@@ -244,6 +247,15 @@ void TW_CALL OpenMaterialsBar(void *materialsMap)
 	CDebugHelper::GetDebugHelper()->RegisterBar(barMaterials);
 }
 
+void TW_CALL CookMeshes(void *data){
+	const std::vector<Vect3f> vecVertexDest;
+	std::vector<uint8> vecOut;
+	CStaticMesh * mesh = CEngine::GetSingleton().getStaticMeshManager()->get("Box001");
+	//mesh->getRenderableVertex();
+	
+	CEngine::GetSingleton().getPhysicsManager()->cookConvexMesh(vecVertexDest, vecOut);
+}
+
 void CDebugHelperImplementation::CreateMainBar(){
 	//----------------------MAIN BAR------------------------
 	CDebugHelper::SDebugBar mainBar;
@@ -265,6 +277,7 @@ void CDebugHelperImplementation::CreateMainBar(){
 		var.mode = CDebugHelper::READ_WRITE;
 		m_posRot = new SPositionOrientation();
 		m_posRot->Position = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetPosition();
+		m_posRot->Yaw = CEngine::GetSingleton().getRenderManager()->getFPSCamera()->GetYaw();
 		var.pPositionOrientation = m_posRot;
 		var.ptr = m_posRot;
 
@@ -293,6 +306,15 @@ void CDebugHelperImplementation::CreateMainBar(){
 		var.name = "PhysX: Create Box";
 		var.type = CDebugHelper::BUTTON;
 		var.callback = CreateScene;
+		var.data = this;
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "PhysX: Cook";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = CookMeshes;
 		var.data = this;
 
 		mainBar.variables.push_back(var);

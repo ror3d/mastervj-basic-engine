@@ -5,7 +5,6 @@
 #include <Base/Math/Color.h>
 #include "Utils\Utils.h"
 #include <d3d11.h>
-//#include <d3d9.h>
 
 #define MV_VERTEX_TYPE_POSITION				0x01
 #define MV_VERTEX_TYPE_COLOR				0x02

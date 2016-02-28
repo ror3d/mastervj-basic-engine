@@ -4,8 +4,7 @@
 
 #include <fstream>
 #include <sstream>
-
-#include <Core/Engine/Engine.h>
+#include "Core/Engine/Engine.h"
 
 /*
  * This class captures errors printed by lua to redirect them as we wish.
@@ -91,8 +90,8 @@ void CScriptManager::RegisterLUAFunctions()
 		.SetClass<Vect3f, float, float, float>("x", &Vect3f::x,
 					"y", &Vect3f::y,
 					"z", &Vect3f::z);
-	(*m_state)["CRenderableObjectsManager"]
-		.SetObj(*CEngine::GetSingleton().getRenderableObjectManager(),
-		"AddMeshInstance", static_cast<void(CRenderableObjectsManager::*)(const std::string&, const std::string&, const Vect3f &)>(&CRenderableObjectsManager::AddMeshInstance));
+	/*(*m_state)["CRenderableObjectsManager"]
+		.SetObj(*CEngine::GetSingleton().getLayerManager()->getDefaultLayer(),
+		"AddMeshInstance", static_cast<void(CRenderableObjectsManager::*)(const std::string&, const std::string&, const Vect3f &)>(&CRenderableObjectsManager::AddMeshInstance));*/
 
 }

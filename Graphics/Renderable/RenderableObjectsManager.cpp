@@ -1,6 +1,7 @@
 #include "RenderableObjectsManager.h"
 #include "RenderableObject.h"
 #include "Mesh/MeshInstance.h"
+#include "Mesh/StaticMesh.h"
 #include "Renderable/AnimatedInstanceModel.h"
 
 CRenderableObjectsManager::CRenderableObjectsManager()
@@ -52,8 +53,18 @@ void CRenderableObjectsManager::AddMeshInstance(CXMLTreeNode &TreeNode)
 	else
 	{
 		CMeshInstance * Object = new CMeshInstance(TreeNode);
-
 		add(InstanceName, Object);
+		CPhysXManager::ShapeDesc desc;
+		desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
+		desc.density = 1;
+		desc.material = "box";
+		Vect3f sizeColision = Vect3f(0,0,0);
+		sizeColision.x = Object->getStaticMesh()->GetAabbMax().x - Object->getStaticMesh()->GetAabbMin().x;
+		sizeColision.y = Object->getStaticMesh()->GetAabbMax().y - Object->getStaticMesh()->GetAabbMin().y;
+		sizeColision.z = Object->getStaticMesh()->GetAabbMax().z - Object->getStaticMesh()->GetAabbMin().z;
+		desc.size = sizeColision;
+		desc.position = Object->GetPosition() + Object->getStaticMesh()->GetBsCenter();
+		//CEngine::GetSingleton().getPhysicsManager()->createActor(Object->getStaticMesh()->getName(), CPhysXManager::ActorType::Static, desc);
 		return;
 	}
 }

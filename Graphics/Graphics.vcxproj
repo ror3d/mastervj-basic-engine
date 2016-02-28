@@ -19,6 +19,7 @@
     <ClInclude Include="Camera\FPSCameraController.h" />
     <ClInclude Include="Camera\Frustum.h" />
     <ClInclude Include="Camera\SphericalCameraController.h" />
+    <ClInclude Include="CharacterControllerManager.h" />
     <ClInclude Include="Cinematics\CameraInfo.h" />
     <ClInclude Include="Cinematics\CameraKey.h" />
     <ClInclude Include="Cinematics\CameraKeyController.h" />

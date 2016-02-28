@@ -3,6 +3,7 @@
 #include <PxPhysicsAPI.h>
 #include <cassert>
 
+
 #include <fstream>
 #include <iterator>
 #include <algorithm>
@@ -244,7 +245,6 @@ void CPhysXManager::registerMaterial(const std::string& name, float staticFricti
 bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData)
 {
 	physx::PxConvexMeshDesc meshDesc;
-
 	meshDesc.points.count = vec.size();
 	meshDesc.points.stride = sizeof(Vect3f);
 	meshDesc.points.data = vec.data();
@@ -413,11 +413,18 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	m_CharacterControllers[name] = cct;
 }
 
-Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime){
-	physx::PxController* cct = getCharControllers()["main"];
+void CPhysXManager::InitPhysx(){
+	registerMaterial("ground", 1, 0.9, 0.1);
+	registerMaterial("box", 1, 0.9, 0.8);
+	registerMaterial("controller_material", 10, 2, 0.5);
+	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
+}
+
+Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){
+	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
-	cct->move(v(movement), movement.Length() * 0.01f, elapsedTime, filters);
+	cct->move(v(movement), movement.Length() * 0.1f, elapsedTime, filters);
 	cct->setUpDirection(v(direction));
 	physx::PxRigidDynamic* actor = cct->getActor();
 	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();

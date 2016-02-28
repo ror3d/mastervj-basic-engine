@@ -159,13 +159,7 @@ bool CStaticMesh::Load(const std::string &FileName)
 			return false;
 		}
 		//Recogo medidas bounding box
-		/*CPhysXManager::ShapeDesc desc;
-		desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
-		desc.density = 1;
-		desc.material = "box";
-		//desc.size = Vect3f(4, 4, 4);
-		desc.position = ;
-		CEngine::GetSingleton().getPhysicsManager()->createActor(getName(),CPhysXManager::ActorType::Static,)*/
+		
 	}
 
 	return true;
@@ -179,7 +173,7 @@ void CStaticMesh::Render(CContextManager *_context) const
 		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
 		{
 			l_Material->apply();
-		m_renderableVertexs[i]->RenderIndexed(_context,
+			m_renderableVertexs[i]->RenderIndexed(_context,
 				l_Material->getRenderableObjectTechique()->GetEffectTechnique());
 		}
 		

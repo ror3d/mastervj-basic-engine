@@ -4,7 +4,7 @@ CMaterialParameter::CMaterialParameter(CXMLTreeNode &TreeNode, CMaterialParamete
 	, m_MaterialType(MaterialType)
 {
 	setName(TreeNode.GetPszProperty("name"));
-	m_paramValues = TreeNode.GetPszProperty("varParams");
+	m_paramValues = TreeNode.GetPszProperty("varParams","");
 }
 
 CMaterialParameter::~CMaterialParameter(){

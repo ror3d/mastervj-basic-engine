@@ -16,9 +16,12 @@ public:
 	CRenderManager *m_RenderManager;
 
 	void CreateCharController();
+	void InitPhysx();
 	
 	void Update(float _ElapsedTime);
 	void Render();
+	bool sendedInfoToAnim;
+	bool activeMovAnim;
 
 	void Destroy() {/* TODO */}
 private:

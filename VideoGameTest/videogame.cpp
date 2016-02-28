@@ -193,6 +193,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	// Añadir aquí el Init de la applicacioón
 
 	engine.Init();
+	engine.getPhysicsManager()->InitPhysx();
 
 	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
 	context.CreateContext(hWnd, 800, 600);
@@ -217,7 +218,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
-		//CApplication application(&debugRender, &s_Context);
 		CApplication application(&context, CEngine::GetSingleton().getRenderManager());
 
 		application.CreateCharController();
