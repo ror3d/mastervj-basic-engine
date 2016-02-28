@@ -58,7 +58,7 @@ inline physx::PxQuat q(const Quatf& q)
 { return physx::PxQuat(q.x, q.y, q.z, q.w); }
 
 
-class CPhysXManagerImplementation 
+class CPhysXManagerImplementation
 	: public CPhysXManager
 	, public physx::PxSimulationEventCallback
 	, public physx::PxUserControllerHitReport
@@ -118,9 +118,9 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 		m_DebugConnection = nullptr;
 	}
 #endif
-	
+
 	int ncpus = 0;
-	
+
 #if (defined(_MSC_VER) && _MSC_VER >= 1800) || __cplusplus <= 199711L
 	ncpus = std::thread::hardware_concurrency();
 #endif
@@ -146,7 +146,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 	DEBUG_ASSERT(m_Scene);
 
 	m_Scene->setSimulationEventCallback(this);
-	
+
 
 	m_ControllerManager = PxCreateControllerManager(*m_Scene);
 	m_ControllerManager->setOverlapRecoveryModule(true);
@@ -210,7 +210,7 @@ CPhysXManager::CPhysXManager()
 
 CPhysXManager::~CPhysXManager()
 {
-	for (auto pair : m_materials)
+	for (auto &pair : m_materials)
 	{
 		CHECKED_RELEASE(pair.second);
 	}
@@ -321,7 +321,7 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 	m_actors.actor.push_back(groundPlane);
 }
 
-void CPhysXManager::createActor(const std::string& name, ActorType actorType, const ShapeDesc& desc)
+void CPhysXManager::createActor(const std::string& name, ActorType actorType, const CPhysxColliderShapeDesc& desc)
 {
 	auto idx = m_actors.actor.size();
 
@@ -333,19 +333,19 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	physx::PxGeometry* geom;
 	switch (desc.shape)
 	{
-		case ShapeDesc::Shape::Box:
+		case CPhysxColliderShapeDesc::Shape::Box:
 			geom = new physx::PxBoxGeometry(desc.size.x, desc.size.y, desc.size.z);
 			break;
 
-		case ShapeDesc::Shape::Sphere:
+		case CPhysxColliderShapeDesc::Shape::Sphere:
 			geom = new physx::PxSphereGeometry(desc.radius);
 			break;
 
-		case ShapeDesc::Shape::Capsule:
+		case CPhysxColliderShapeDesc::Shape::Capsule:
 			geom = new physx::PxCapsuleGeometry(desc.radius, desc.halfHeight);
 			break;
 
-		case ShapeDesc::Shape::ConvexMesh:
+		case CPhysxColliderShapeDesc::Shape::ConvexMesh:
 		{
 			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
@@ -371,7 +371,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 	physx::PxShape* shape = body->createShape(*geom, *mat);
 	delete geom;
-	
+
 	//body->attachShape(*shape);
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)

@@ -47,8 +47,8 @@ static void __stdcall ReloadScene(void* _app)
 
 static void __stdcall CreateScene(void* a)
 {
-	CPhysXManager::ShapeDesc desc;
-	desc.shape = CPhysXManager::ShapeDesc::Shape::Box;
+	CPhysxColliderShapeDesc desc;
+	desc.shape = CPhysxColliderShapeDesc::Shape::Box;
 	desc.density = 1;
 	desc.material = "box";
 	desc.size = Vect3f(1, 1, 1);

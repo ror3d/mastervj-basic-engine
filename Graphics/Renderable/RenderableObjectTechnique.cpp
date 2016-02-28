@@ -1,4 +1,5 @@
-#include "Renderable\RenderableObjectTechnique.h"
+#include "Renderable/RenderableObjectTechnique.h"
+#include "Effect/EffectTechnique.h"
 
 CRenderableObjectTechnique::CRenderableObjectTechnique(
 	const std::string &Name, 
