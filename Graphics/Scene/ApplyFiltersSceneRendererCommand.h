@@ -2,9 +2,13 @@
 #define APPLY_FILTERS_SCENE_RENDERER_COMMAND_H
 
 #include "Scene/StagedTexturedSceneRendererCommand.h"
+#include <vector>
 
 class CApplyFiltersSceneRendererCommand : public CStagedTexturedSceneRendererCommand
 {
+private:
+	std::vector<CMaterial*> m_Materials;
+
 public:
 	CApplyFiltersSceneRendererCommand(CXMLTreeNode &TreeNode);
 	virtual void Execute(CContextManager &_context);

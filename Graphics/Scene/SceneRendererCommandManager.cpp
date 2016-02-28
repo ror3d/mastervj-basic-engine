@@ -19,6 +19,7 @@
 #include "RenderGUISceneRendererCommand.h"
 #include "PresentSceneRendererCommand.h"
 #include "RenderDebugGUISceneRendererCommand.h"
+#include "ApplyFiltersSceneRendererCommand.h"
 
 CSceneRendererCommandManager::CSceneRendererCommandManager(){
 
@@ -116,6 +117,10 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 				}
 				else if (scene_command.GetName() == std::string("present")){
 					add(new CPresentSceneRendererCommand(scene_command));
+				}
+				else if (scene_command.GetName() == std::string("apply_filters"))
+				{
+					add(new CApplyFiltersSceneRendererCommand(scene_command));
 				}
 
 				getLast()->setActive(true); //By default all commands enabled				
