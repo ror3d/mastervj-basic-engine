@@ -28,7 +28,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 	{
 		CXMLTreeNode l_paramMat = TreeNode(i);
-		if (l_paramMat.GetName() == std::string("texture")){
+		if ((l_paramMat.GetName() == std::string("texture")) || (l_paramMat.GetName() == std::string("normal"))){
 			CXMLTreeNode l_Texture = l_paramMat;
 			CTexture * Texture = CEngine::GetSingleton().getTextureManager()->GetTexture(l_Texture.GetPszProperty("filename"));
 			m_textures.push_back(Texture);
