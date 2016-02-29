@@ -20,9 +20,14 @@ void CCookedMeshManager::CookMeshes()
 		it->second->FillColliderDescriptor(desc);
 
 		desc->material = std::string("StaticObjectMaterial");
-		desc->position = CEngine::GetSingleton().getLayerManager()->get("solid")->get(it->second->getName())->GetPosition();
+		CRenderableObject * ob = CEngine::GetSingleton().getLayerManager()->get("solid")->get(it->second->getName());
+		if (ob == nullptr)
+		{
+			ob = CEngine::GetSingleton().getLayerManager()->get("IA")->get(it->second->getName());
+		}
+		desc->position = ob->GetPosition();
 		desc->orientation = Quatf(0, 0, 0, 1);//CEngine::GetSingleton().getLayerManager()->get("solid")->get(it->second->getName())->getQUATERNION!!
-		CEngine::GetSingleton().getPhysXManager()->createActor(it->second->getName(), CPhysXManager::ActorType::Static, *desc);
+		//CEngine::GetSingleton().getPhysXManager()->createActor(it->second->getName(), CPhysXManager::ActorType::Static, *desc);
 	}
 
 }
