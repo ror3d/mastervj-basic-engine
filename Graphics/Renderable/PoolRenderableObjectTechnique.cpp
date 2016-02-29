@@ -1,5 +1,6 @@
 #include "Renderable/PoolRenderableObjectTechnique.h"
-#include "Engine/Engine.h"
+#include <Core/Engine/Engine.h>
+#include <Base/XML/XMLTreeNode.h>
 
 
 CPoolRenderableObjectTechnique

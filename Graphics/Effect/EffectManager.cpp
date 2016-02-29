@@ -10,9 +10,10 @@
 
 #include <XML/XMLTreeNode.h>
 
-CSceneEffectParameters CEffectManager::m_SceneParameters;
-CAnimatedModelEffectParameters CEffectManager::m_AnimatedModelEffectParameters;
-CLightEffectParameters CEffectManager::m_LightParameters;
+CSceneEffectParameters CEffectManager::m_SceneParameters; //CB0
+CAnimatedModelEffectParameters CEffectManager::m_AnimatedModelEffectParameters;//CB2
+CLightEffectParameters CEffectManager::m_LightParameters;//CB1
+CMaterialEffectParameters CEffectManager::m_MaterialEffectParameters;//CB3
 
 CEffectManager::CEffectManager()
 {
@@ -163,5 +164,13 @@ void CEffectManager::SetLightsConstants()
 	for (auto it : m_resources)
 	{
 		it.second->SetConstantBuffer(1, &m_LightParameters);
+	}
+}
+
+void CEffectManager::SetMaterialsConstants(){
+
+	for (auto it : m_resources)
+	{
+		it.second->SetConstantBuffer(3, &m_MaterialEffectParameters);
 	}
 }

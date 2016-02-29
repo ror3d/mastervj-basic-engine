@@ -23,16 +23,19 @@ public:
 		STRING,
 
 		// other data types
-		POSITION_ORIENTATION
+		POSITION_ORIENTATION,
 
-
+		NONE,
+		LABEL,
+		CB
 	};
 
 
 	enum Mode
 	{
 		READ,
-		READ_WRITE
+		READ_WRITE,
+		SEPARATOR
 	};
 
 	typedef void __stdcall Callback(void*data);
@@ -76,8 +79,8 @@ public:
 	virtual void RegisterBar(const SDebugBar& bar) {};
 	virtual void RemoveBar(const std::string& bar) {};
 
+	virtual void CreateMainBar(){};
+
 	static CDebugHelper* GetDebugHelper();
 	static void SetCurrentDebugHelper(CDebugHelper* _DebugHelper);
 };
-
-

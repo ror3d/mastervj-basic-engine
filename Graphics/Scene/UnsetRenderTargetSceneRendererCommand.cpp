@@ -1,4 +1,5 @@
 #include "Scene/UnsetRenderTargetSceneRendererCommand.h"
+#include "Context/ContextManager.h"
 
 CUnsetRenderTargetSceneRendererCommand::CUnsetRenderTargetSceneRendererCommand(CXMLTreeNode &TreeNode) 
 	:CSceneRendererCommand(TreeNode){

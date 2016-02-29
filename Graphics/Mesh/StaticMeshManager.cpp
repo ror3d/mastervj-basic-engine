@@ -27,6 +27,8 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 	} 
 	else
 	{
+		CMaterialManager* mm = CEngine::GetSingleton().getMaterialManager();
+
 		for (int i = 0; i < l_StaticMesh.GetNumChildren(); ++i){
 			CXMLTreeNode l_Mesh = l_StaticMesh(i);
 
@@ -40,6 +42,18 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 
 				if(l_static_mesh->Load(l_Path))
 				{
+					for (int j = 0; j < l_Mesh.GetNumChildren(); ++j)
+					{
+						int nmat = 0;
+						CXMLTreeNode l_Mat = l_Mesh(j);
+						if (l_Mat.GetName() == std::string("material")
+							&& l_Mat.GetPszProperty("name") != nullptr)
+						{
+							CMaterial* mat = mm->get(l_Mat.GetPszProperty("name"));
+							l_static_mesh->setMaterial(nmat, mat);
+							nmat++;
+						}
+					}
 					add(m_Name, l_static_mesh);
 				}
 				

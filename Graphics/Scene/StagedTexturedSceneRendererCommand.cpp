@@ -27,14 +27,6 @@ void CStagedTexturedSceneRendererCommand::ActivateTextures()
 	}
 }
 
-void CStagedTexturedSceneRendererCommand::DeactivateTextures()
-{
-	for (int i = 0; i < m_StageTextures.size(); i++)
-	{
-		m_StageTextures[i].m_Texture->Deactivate();
-	}
-}
-
 void CStagedTexturedSceneRendererCommand::AddStageTexture(int StageId, CTexture *Texture)
 {
 	m_StageTextures.push_back(CStageTexture(StageId, Texture));

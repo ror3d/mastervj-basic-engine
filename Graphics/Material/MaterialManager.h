@@ -13,6 +13,8 @@ public:
 	virtual ~CMaterialManager();
 	void load(const std::string &Filename);
 	void reload();
+	std::map<std::string, CMaterial*> * getMaterialsMap(){ return &m_resources; }
+
 };
 
 #endif

@@ -5,12 +5,13 @@ fileIn "export-scene-utils.ms"
 shouldCopyTextures = true
 
 fn exportTextureFile texTypeName texMap = (
+	local texturePath = (openBitMap texMap.bitmap.filename).filename
 	local textureName = filenameFromPath texMap.filename
-	format "\t\t <% filename=\"%\"/>\n" texTypeName (getTexturePath textureName) to:file
+	format "\t\t <% filename=\"%\"/>\n" texTypeName (getTexturePath texturePath) to:file
 	if shouldCopyTextures then
 	(
-		format "Copying % from % to output dir %\n" textTypeName texMap.filename (getAbsTexturePath textureName)
-		copyFile texMap.filename (getAbsTexturePath textureName)
+		format "Copying % from % to output dir %\n" texTypeName texturePath (getAbsTexturePath textureName)
+		copyFile texturePath (getAbsTexturePath textureName)
 	)
 )
 
@@ -22,23 +23,23 @@ fn exportSingleTexture mat meshName = (
 )
 
 fn exportSingleReflection mat meshName = (
-	if HasReflection mat alertOnMissing:true then
+	if HasReflection mat alertOnMissing:false then
 	(
 		exportTextureFile "texture" mat.reflectionMap
 	)
 )
 
 fn exportSingleLightmap mat meshName = (
-	if HasLightmap mat alertOnMissing:true then
+	if HasLightmap mat alertOnMissing:false then
 	(
 		exportTextureFile "lightmap" mat.selfIllumMap
 	)
 )
 
 fn exportSingleNormal mat meshName = (
-	if HasNormal mat alertOnMissing:true then
+	if HasNormal mat alertOnMissing:false then
 	(
-		exportTextureFile "normal" mat.bumpMap.normal_map
+		exportTextureFile "normal" mat.bumpMap
 	)
 )
 

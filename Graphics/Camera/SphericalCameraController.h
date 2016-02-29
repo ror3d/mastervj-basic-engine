@@ -1,9 +1,9 @@
 #ifndef INC_SPHERICALCAMERA_H_
 #define INC_SPHERICALCAMERA_H_
 
-#include "CameraController.h"
+#include "YawPitchCameraController.h"
 
-class CSphericalCameraController : public CCameraController
+class CSphericalCameraController : public IYawPitchCameraController
 {
 private:
 	float						m_Zoom;

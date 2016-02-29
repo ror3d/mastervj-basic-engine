@@ -73,7 +73,7 @@ void CCameraKeyController::GetCurrentKey()
 	}
 }
 
-void CCameraKeyController::AnimateCamera(CCamera* cam) const
+void CCameraKeyController::UpdateCameraValues(CCamera* cam) const
 {
 	int nextKey = m_CurrentKey + 1;
 

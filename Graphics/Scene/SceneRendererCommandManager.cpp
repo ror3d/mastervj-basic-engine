@@ -18,6 +18,7 @@
 #include "DisableAlphaBlendSceneRendererCommand.h"
 #include "RenderGUISceneRendererCommand.h"
 #include "PresentSceneRendererCommand.h"
+#include "ApplyFiltersSceneRendererCommand.h"
 #include "RenderDebugGUISceneRendererCommand.h"
 #include "ApplyFiltersSceneRendererCommand.h"
 
@@ -115,6 +116,9 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 				else if (scene_command.GetName() == std::string("render_debug_antTweak")){
 					add(new CRenderDebugGUISceneRendererCommand(scene_command));
 				}
+				else if (scene_command.GetName() == std::string("apply_filters")){
+					add(new CApplyFiltersSceneRendererCommand(scene_command));
+				}
 				else if (scene_command.GetName() == std::string("present")){
 					add(new CPresentSceneRendererCommand(scene_command));
 				}
@@ -123,7 +127,7 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 					add(new CApplyFiltersSceneRendererCommand(scene_command));
 				}
 
-				getLast()->setActive(true); //By default all commands enabled				
+				getLast()->setActive(true); //By default all commands enabled
 			}
 			return true;
 		}		
@@ -131,13 +135,17 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 	return false;
 }
 
-bool CSceneRendererCommandManager::Reload(){
+bool CSceneRendererCommandManager::Reload()
+{
 	destroy();
 	return Load(m_Filename);
 }
 
-void CSceneRendererCommandManager::Execute(CContextManager &_context){
-	for (auto it = m_resources.begin(); it != m_resources.end(); it++){		
+void CSceneRendererCommandManager::Execute(CContextManager &_context)
+{
+	CEngine::GetSingleton().getTextureManager()->DeactivateTextures();
+	for (auto it = m_resources.begin(); it != m_resources.end(); it++)
+	{		
 		(*it)->Execute(_context);
 	}
 }

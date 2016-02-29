@@ -1,7 +1,7 @@
 #include "DynamicTexture.h"
 #include "Engine/Engine.h"
 
-CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool CreateDepthStencilBuffer)
+CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool CreateDepthStencilBuffer, DXGI_FORMAT format)
 	: CTexture(Name)
 	, m_Width(Width)
 	, m_Height(Height)
@@ -11,7 +11,7 @@ CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height,
 	, m_RenderTargetView(nullptr)
 	, m_RenderTargetTexture(nullptr)
 {
-	m_format = DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT;
+	m_format = format;
 	Init();
 }
 
@@ -39,8 +39,10 @@ CDynamicTexture::CDynamicTexture(const CXMLTreeNode &node)
 
 	m_CreateDepthStencilBuffer = node.GetBoolProperty("create_depth_stencil_buffer", false, false);
 
-	/*static std::map<std::string, DXGI_FORMAT> formats = {
+	static std::map<std::string, DXGI_FORMAT> formats = {
 		{ "A8R8G8B8", DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM },
+		{ "A32R32G32B32", DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_UINT },
+		{ "A32R32G32B32F", DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT },
 		{ "R32F", DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT }
 	};
 
@@ -50,11 +52,12 @@ CDynamicTexture::CDynamicTexture(const CXMLTreeNode &node)
 	if (it != formats.end())
 	{
 		m_format = it->second;
-}
+	}
 	else
-	{*/
-		m_format = DXGI_FORMAT::DXGI_FORMAT_R32G32B32A32_FLOAT;
-	//}
+	{
+		//DEBUG_ASSERT(!"Using default value!");
+		m_format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
+	}
 
 	Init();
 }
@@ -72,7 +75,7 @@ void CDynamicTexture::Init()
 	l_TextureDescription.Height = m_Height;
 	l_TextureDescription.MipLevels = 1; 
 	l_TextureDescription.ArraySize = 1;
-	l_TextureDescription.Format = m_format;//DXGI_FORMAT_R32G32B32A32_FLOAT;
+	l_TextureDescription.Format = m_format;
 	l_TextureDescription.SampleDesc.Count = 1;
 	l_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
 	l_TextureDescription.BindFlags = D3D11_BIND_RENDER_TARGET |

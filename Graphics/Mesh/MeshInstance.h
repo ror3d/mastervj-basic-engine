@@ -16,6 +16,7 @@ public:
 	CMeshInstance(const std::string &Name, const std::string &CoreName);
 	~CMeshInstance();
 	void Render(CContextManager *_context);
+	CStaticMesh * getStaticMesh(){ return m_StaticMesh; }
 };
 
 #endif

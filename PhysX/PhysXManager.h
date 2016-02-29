@@ -3,12 +3,13 @@
 #include <map>
 #include <string>
 #include <vector>
-
 #include <Base/Math/Math.h>
 
 #define USE_PHYSX_DEBUG 1
 
 #define PHYSX_UPDATE_STEP (1/60.f)
+
+class CRenderableVertexs;
 
 namespace physx
 {
@@ -70,6 +71,8 @@ public:
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 
+	void InitPhysx();
+
 	void createController(float height, float radius, float density, Vect3f pos, std::string name);
 
 	void update(float dt);
@@ -80,7 +83,7 @@ public:
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
-	Vect3f moveCharacterController(Vect3f movement, Vect3f direction, float _ElapsedTime);
+	Vect3f moveCharacterController(Vect3f movement, Vect3f direction, float _ElapsedTime, std::string name);
 
 	void createScene();
 

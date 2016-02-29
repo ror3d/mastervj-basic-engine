@@ -2,8 +2,6 @@
 #define MATERIAL_PARAMETER_H
 
 #include "Utils\Named.h"
-#include "Material\Material.h"
-#include "Utils\Utils.h"
 
 class CMaterialParameter : public CNamed
 {
@@ -17,14 +15,14 @@ public:
 	};
 protected:
 	TMaterialType m_MaterialType;
+	std::string m_paramValues;
 public:
-	CMaterialParameter(CMaterial Material, 
-		CXMLTreeNode &TreeNode,
-		CMaterialParameter::TMaterialType MaterialType);
+	CMaterialParameter(CXMLTreeNode &TreeNode,CMaterialParameter::TMaterialType MaterialType);
 	virtual ~CMaterialParameter();
 	virtual void Apply() = 0;
-	virtual void * GetValueAddress() const = 0;
-	UAB_GET_PROPERTY(TMaterialType, MaterialType);
+	TMaterialType getMaterialType(){ return m_MaterialType; }
+	std::string getParamValues(){ return m_paramValues;  }
+
 	//TODO: LUA
 	/*virtual CEmptyPointerClass * GetValueLuaAddress() const {
 		return
@@ -32,18 +30,31 @@ public:
 	}*/
 };
 
-template<typename T>
+template<typename T>                             
 class CTemplatedMaterialParameter : public CMaterialParameter
 {
 private:
 	T m_Value;
 	void *m_EffectAddress;
 public:
-	CTemplatedMaterialParameter(CMaterial *Material, CXMLTreeNode &TreeNode,
-		const T &Value, CMaterialParameter::TMaterialType MaterialType);
-	virtual ~CTemplatedMaterialParameter();
-	void Apply();
-	void * GetValueAddress() const;
+	CTemplatedMaterialParameter(CXMLTreeNode &TreeNode, void *dir, const T &Value, CMaterialParameter::TMaterialType MaterialType)
+		: CMaterialParameter(TreeNode, MaterialType)
+		, m_Value(Value)		
+		, m_EffectAddress(dir)
+	{
+	}
+
+	virtual ~CTemplatedMaterialParameter(){
+	}
+
+	T * getValue(){
+		return &m_Value;
+	}
+
+	void Apply()
+	{
+		memcpy(m_EffectAddress, &m_Value, sizeof(T));			
+	}
 };
 
 #endif

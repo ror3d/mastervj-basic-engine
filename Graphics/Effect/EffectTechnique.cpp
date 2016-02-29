@@ -1,5 +1,8 @@
 #include "EffectTechnique.h"
-#include "Engine/Engine.h"
+#include "EffectPixelShader.h"
+#include "EffectVertexShader.h"
+
+#include <Core/Engine/Engine.h>
 
 
 CEffectTechnique::CEffectTechnique(CXMLTreeNode &TreeNode) : CNamed(TreeNode)

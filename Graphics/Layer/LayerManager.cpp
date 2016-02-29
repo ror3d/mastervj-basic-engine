@@ -1,14 +1,21 @@
 #include "LayerManager.h"
 #include "Mesh/MeshInstance.h"
 #include "Renderable/AnimatedInstanceModel.h"
+#include "Renderable/RenderableObjectsManager.h"
 
 CLayerManager::CLayerManager(){
 
 }
 
-CLayerManager::~CLayerManager()
-{
-	destroy();
+CLayerManager::~CLayerManager(){
+	Destroy();
+}
+
+void CLayerManager::Destroy(){
+	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
+	{
+		it->second->destroy();
+	}
 }
 void CLayerManager::Load(const std::string &FileName){
 	CXMLTreeNode l_XML;
@@ -45,9 +52,7 @@ void CLayerManager::Load(const std::string &FileName){
 	}
 }
 
-void CLayerManager::Reload()
-{
-	destroy();
+void CLayerManager::Reload(){
 	Load(m_Filename);
 }
 

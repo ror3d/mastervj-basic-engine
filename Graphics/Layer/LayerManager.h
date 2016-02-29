@@ -2,10 +2,12 @@
 #define LAYER_MANAGER_H
 
 #include <string>
-#include "Utils\TMapManager.h"
+#include "Utils/TMapManager.h"
 #include "Utils/Active.h"
-#include "Renderable\RenderableObjectsManager.h"
-#include "Context\ContextManager.h"
+
+class CRenderableObjectsManager;
+class CContextManager;
+class CXMLTreeNode;
 
 class CLayerManager : public TMapManager<CRenderableObjectsManager>
 {
