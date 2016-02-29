@@ -5,6 +5,8 @@
 ----------------------------------------------------------------------------
 struct vertex (pos, normal, uv, uv2, binormal, tangencial)
 
+struct matDescriptor_s (texture, environment_map, light_map, normal_map)
+
 fn DisplayMaterialError errorString = (
 	messageBox errorString title:"MENSAJE PARA ARTISTAS"
 	format ("\n$$$$ Alerta: " + errorString + "\n\n")
@@ -139,4 +141,13 @@ fn GetVertexTypeStringFromObjectMaterial mat = (
 	
 	ret = ret + "VERTEX"
 	return ret
+)
+
+fn GetMatDescriptor mat = (
+	local matDesc = matDescriptor_s()
+	matDesc.texture = HasTexture mat
+	matDesc.environment_map = HasReflection mat
+	matDesc.light_map = HasLightmap mat
+	matDesc.normal_map = HasNormal mat
+	return matDesc
 )

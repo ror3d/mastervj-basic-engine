@@ -29,6 +29,7 @@ fn CollectCoresAndInstances = (
 				)
 				if isCore then
 				(
+					setUserProp $*[i] "export_core_name" $*[i].name
 					append g_allCores $*[i]
 				)
 			)
@@ -119,3 +120,15 @@ fn TranslationToRH translation =
 (
 	return ChangeCoordsBase translation
 )
+
+global g_tick
+fn tik = (
+	g_tick = timeStamp()
+	return OK
+)
+
+fn tok s:"" = (
+	local end = timeStamp()
+	format "$ % seconds elapsed for task %\n" ((end - g_tick) / 1000.0) s
+)
+
