@@ -121,7 +121,7 @@ fn TranslationToRH translation =
 	return ChangeCoordsBase translation
 )
 
-global g_tik
+global g_tick
 fn tik = (
 	g_tick = timeStamp()
 	return OK

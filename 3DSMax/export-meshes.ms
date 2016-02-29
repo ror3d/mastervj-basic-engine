@@ -206,7 +206,7 @@ function DotNetAddVertex VtxArray VtxMap Vtx =
 
 global CurrentObjInvMat = matrix3 1
 
-fn createVertexesForFace obj IdFace mat = (
+fn createVertexesForFace obj IdFace matDesc = (
 	local IdxsFace=getFace obj IdFace
 	-- Para coger los v?rtices de la primera cara
 	local Vtx1=getVert obj IdxsFace[1]
@@ -231,19 +231,7 @@ fn createVertexesForFace obj IdFace mat = (
 	local v2 = vertex pos: (ChangeCoordsBase (Vtx2*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal2)
 	local v3 = vertex pos: (ChangeCoordsBase (Vtx3*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal3)
 	
-	local faceMat = mat
-	
-	if faceMat == undefined then
-	(
-		format "$$$$ Alerta! El objeto % tiene caras con material incorrecto!!!\n" obj.name
-		--setFaceMatID obj IdFace 1
-		if (classOf obj.material) == Standardmaterial then
-			faceMat = obj.material
-		else
-			faceMat = obj.material[1]
-	)
-	
-	if HasTexture faceMat then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
+	if matDesc.texture then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
 	(
 		-- Para coger los ?ndices de las coordenadas de textura de la primera cara, el 1 se?ala al primer
 		--   conjunto de coordenadas aplicadas sobre la cara
@@ -260,7 +248,7 @@ fn createVertexesForFace obj IdFace mat = (
 		
 	)
 	
-	if HasReflection faceMat then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
+	if matDesc.environment_map then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
 	(
 		-- Para coger los ?ndices de las coordenadas de textura de la primera cara, el 1 se?ala al primer
 		--   conjunto de coordenadas aplicadas sobre la cara
@@ -277,7 +265,7 @@ fn createVertexesForFace obj IdFace mat = (
 		
 	)
 	
-	if HasLightmap faceMat then
+	if matDesc.light_map then
 	(
 		local IdxsMap2=meshop.getMapFace obj 2 IdFace
 		
@@ -291,7 +279,7 @@ fn createVertexesForFace obj IdFace mat = (
 		v3.uv2 = LUVMap3
 	)
 	
-	if HasNormal faceMat then
+	if matDesc.normal_map then
 	(		
 		--Binormal & Tang x Face
 		--Font: http://forums.cgsociety.org/archive/index.php?t-407814.html
@@ -389,13 +377,16 @@ fn createMesh obj = (
 		writeshort file (GetVertexTypeFromObjectMaterial obj mat)
 		
 		tik()
+		
+		local matDescriptor = GetMatDescriptor mat
+		
 		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
 		(
 			local faceMatId = getRealFaceMatID obj IdFace
 			if faceMatId == usedMaterials[i] then
 			(
-				local faceVtxs = createVertexesForFace obj idFace mat
+				local faceVtxs = createVertexesForFace obj idFace matDescriptor
 				for numVtx = 1 to 3 do
 				(
 					local idx = DotNetAddVertex vtxs l_VtxsMap faceVtxs[numVtx]
@@ -421,7 +412,7 @@ fn createMesh obj = (
 			writefloat file vtx.normal.y
 			writefloat file vtx.normal.z
 
-			if HasNormal mat then
+			if matDescriptor.normal_map then
 			(
 				
 				-- Binormal
@@ -436,14 +427,14 @@ fn createMesh obj = (
 				writefloat file 0
 			)
 			
-			if HasTexture mat or HasReflection mat then
+			if matDescriptor.texture or matDescriptor.environment_map then
 			(
 				-- UV
 				writefloat file vtx.uv.x
 				writefloat file (1 - vtx.uv.y)
 			)
 			
-			if HasLightmap mat then
+			if matDescriptor.light_map then
 			(
 				--UV Lightmap
 				writefloat file vtx.uv2.x
