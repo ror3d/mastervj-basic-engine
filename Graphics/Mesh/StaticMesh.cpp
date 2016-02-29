@@ -309,6 +309,9 @@ std::vector<Vect3f> CStaticMesh::getVect3fArrayInternal( const T* vertexes, unsi
 
 bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 {
+	std::string nameFile = "Data\\Meshes\\Cooked\\";
+	nameFile += getName() + ".bin";
+
 	if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Box )
 	{
 		// TODO get values for this and implement
@@ -327,20 +330,9 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 	}
 	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh )
 	{
-		bool l_loaded = false;
 		//std::shared_ptr<std::vector<uint8>> * cooked;
-		std::vector<uint8> * cooked;
-		// TODO: Try to read the cooked file
-		/* CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData)
-{
-			std::ifstream f(fname, std::ios::in | std::ifstream::binary);
-
-			if (f)
-			{
-				std::istream_iterator<uint8> iter(f);
-				std::copy(iter, std::istream_iterator<uint8>(), std::back_inserter(outCookedData));
-				return true;
-			}*/
+		std::vector<uint8> * cooked = new std::vector<uint8>();		
+		bool l_loaded = CEngine::GetSingleton().getPhysXManager()->loadCookedMesh(nameFile, *cooked);				
 
 		if ( !l_loaded )
 		{
@@ -357,19 +349,21 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 				std::vector<Vect3f> meshVtxs = getVect3fArray( meshFile.meshes[i] );
 				vertexes.insert( vertexes.end(), meshVtxs.begin(), meshVtxs.end() );
 			}
-			cooked = new std::vector<uint8>();
-			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
-			std::shared_ptr<std::vector<uint8>> vec = static_cast<std::shared_ptr<std::vector<uint8>>>(cooked);
-			shapeDesc->cookedMeshData = vec;
-
-			// TODO: Save the cooked data in a file
-			std::string nameFile = "Data\\"+ getName() + ".bin";
+			
+			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);			
 			CEngine::GetSingleton().getPhysXManager()->saveCookedMeshToFile(*cooked, nameFile);
 		}
+
+		std::shared_ptr<std::vector<uint8>> vec = static_cast<std::shared_ptr<std::vector<uint8>>>(cooked);
+		shapeDesc->cookedMeshData = vec;
+
 	}
 	else
 	{
 		DEBUG_ASSERT( !"Unrecognized collider type" );
 	}
+
+	
+
 	return true;
 }

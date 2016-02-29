@@ -2,6 +2,7 @@
 
 #include <Base/Utils/SingletonPattern.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics/Mesh/CookedMeshManager.h>
 #include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Effect/EffectManager.h>
@@ -32,6 +33,7 @@ private:
 	CDebugRender * debugRender;
 	CCameraManager * cameraManager;
 	CPhysXManager * physXManager;
+	CCookedMeshManager * cookedMeshManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -53,4 +55,5 @@ public:
 	inline CDebugRender * getDebugRender() const { return debugRender; }
 	inline CCameraManager * getCameraManager() const { return cameraManager; }
 	inline CPhysXManager * getPhysXManager() const { return physXManager; }
+	inline CCookedMeshManager * getCookedMeshManager() const { return cookedMeshManager;  }
 };

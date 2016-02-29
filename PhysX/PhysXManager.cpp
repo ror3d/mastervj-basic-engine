@@ -36,7 +36,7 @@
 */
 #else
 #endif
-//#define USE_PHYSX_DEBUG 1
+#define USE_PHYSX_DEBUG 1
 #if USE_PHYSX_DEBUG
 #define				PVD_HOST			"127.0.0.1"
 #endif
@@ -349,7 +349,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 		case CPhysxColliderShapeDesc::Shape::ConvexMesh:
 		{
-			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
+			physx::PxDefaultMemoryInputData input(desc.cookedMeshData.get()->data(), desc.cookedMeshData.get()->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
 			geom = new physx::PxConvexMeshGeometry(mesh);
 			break;
@@ -415,7 +415,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 
 void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
-	registerMaterial("box", 1, 0.9, 0.8);
+	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
 	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
 }

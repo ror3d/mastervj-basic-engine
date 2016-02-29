@@ -260,6 +260,9 @@
     <ClInclude Include="Camera\YawPitchCameraController.h">
       <Filter>Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh\CookedMeshmanager.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -458,8 +461,11 @@
     <ClCompile Include="Camera\YawPitchCameraController.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="MaterialParameter.cpp">
+    <ClCompile Include="Material\MaterialParameter.cpp">
       <Filter>Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\CookedMeshManager.cpp">
+      <Filter>Mesh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

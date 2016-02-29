@@ -14,6 +14,7 @@ public:
 	~ CStaticMeshManager ();
 	bool Load(const std::string &FileName);
 	bool Reload();
+	std::map<std::string, CStaticMesh*> GetResources(){ return m_resources;  }
 };
 
 #endif
