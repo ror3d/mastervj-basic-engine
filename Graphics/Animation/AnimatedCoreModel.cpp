@@ -41,9 +41,9 @@ bool CAnimatedCoreModel::LoadSkeleton(CXMLTreeNode& treeNode)
 	std::string fname = m_Path + treeNode.GetPszProperty("filename");
 	if (m_CalCoreModel->loadCoreSkeleton(fname))
 	{
-		return false;
+		return true;
 	}
-	return true;
+	return false;
 }
 bool CAnimatedCoreModel::LoadAnimation(CXMLTreeNode& treeNode)
 {

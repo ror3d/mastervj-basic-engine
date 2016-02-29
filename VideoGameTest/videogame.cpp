@@ -189,6 +189,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	// Añadir aquí el Init de la applicacioón
 
 	engine.Init();
+	engine.getPhysXManager()->InitPhysx();
 
 	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
 	context.CreateContext(hWnd, 800, 600);
@@ -216,7 +217,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		//CApplication application(&debugRender, &s_Context);
 		CApplication application(&context);
 
-		application.Init();
+		application.CreateCharController();
 
 		UpdateWindow(hWnd);
 		MSG msg;

@@ -45,7 +45,7 @@ void CLight::setGenerateShadowMap(bool generate)
 	{
 		if (generate)
 		{
-			m_ShadowMap = new CDynamicTexture(getName()+"_shadowmap", m_ShadowMapSize.x, m_ShadowMapSize.y, true);
+			m_ShadowMap = new CDynamicTexture(getName()+"_shadowmap", m_ShadowMapSize.x, m_ShadowMapSize.y, true, DXGI_FORMAT::DXGI_FORMAT_R32_FLOAT);
 			CEngine::GetSingleton().getTextureManager()->add(m_ShadowMap->getName(), m_ShadowMap);
 			// TODO
 			//m_ShadowMaskTexture = ...
@@ -135,7 +135,6 @@ void CDirectionalLight::SetShadowMap(CContextManager &_context)
 	CEffectManager::m_SceneParameters.m_View = m_ViewShadowMap;
 	CEffectManager::m_SceneParameters.m_Projection = m_ProjectionShadowMap;
 	ID3D11RenderTargetView *l_RenderTargetViews[1];
-	m_ShadowMap->Deactivate();
 	l_RenderTargetViews[0] = m_ShadowMap->GetRenderTargetView();
 	D3D11_VIEWPORT m_viewport;
 	m_viewport.Width = (float)l_ShadowMapWidth;

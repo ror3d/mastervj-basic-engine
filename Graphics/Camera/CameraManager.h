@@ -7,10 +7,10 @@
 #include "Frustum.h"
 
 class CCamera;
-class CCameraController;
+class ICameraController;
 class CContextManager;
 
-class CCameraManager : public TMapManager<CCameraController>
+class CCameraManager : public TMapManager<ICameraController>
 {
 protected:
 
@@ -32,7 +32,7 @@ public:
 	inline void SetCurrentCameraController( const std::string& name ) { m_currentCameraControllerName = name; }
 	inline std::string GetCurrentCameraControllerName() { return m_currentCameraControllerName; }
 
-	CCameraController* GetCurrentCameraController() { return get( m_currentCameraControllerName ); }
+	ICameraController* GetCurrentCameraController() { return get( m_currentCameraControllerName ); }
 };
 
 #endif

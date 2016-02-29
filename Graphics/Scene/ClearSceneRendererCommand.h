@@ -2,6 +2,7 @@
 #define CLEAR_SCENE_RENDERER_COMMAND_H
 
 #include "Scene/SceneRendererCommand.h"
+#include <Base/Math/Color.h>
 
 class CClearSceneRendererCommand : public CSceneRendererCommand
 {

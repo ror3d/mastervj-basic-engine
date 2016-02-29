@@ -40,12 +40,17 @@ bool CStaticMesh::Load(const std::string &FileName)
 	}
 	else
 	{
+		bool shouldReadMaterials = true;
 		//Header---------------------
 		unsigned short l_header, l_VertexType, l_numMaterials, l_NumBytes;
 		fread(&l_header, sizeof(unsigned short), 1, l_meshFile);   //lectura del header
-		if (l_header != 0xFE55)
+		if (l_header != 0xFE55 && l_header != 0xFE56)
 		{
 			return false;
+		}
+		if (l_header == 0xFE56)
+		{
+			shouldReadMaterials = false;
 		}
 
 		//Materials---------------------
@@ -58,17 +63,20 @@ bool CStaticMesh::Load(const std::string &FileName)
 		m_materials.resize(l_numMaterials);
 
 
-		for (int i = 0; i < l_numMaterials; ++i)
-		{  //lectura de los materiales
-			unsigned short l_NumChars;
-			fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
+		if (shouldReadMaterials)
+		{
+			for (int i = 0; i < l_numMaterials; ++i)
+			{  //lectura de los materiales
+				unsigned short l_NumChars;
+				fread(&l_NumChars, sizeof(unsigned short), 1, l_meshFile);
 
-			char *l_MaterialName = new char[l_NumChars + 1];
-			fread(&l_MaterialName[0], sizeof(char), l_NumChars + 1, l_meshFile);
+				char *l_MaterialName = new char[l_NumChars + 1];
+				fread(&l_MaterialName[0], sizeof(char), l_NumChars + 1, l_meshFile);
 
-			m_materials[i] = CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
+				m_materials[i] = CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
 
-			delete[] l_MaterialName;
+				delete[] l_MaterialName;
+			}
 		}
 
 		//Vertex & Index---------------------
@@ -153,6 +161,10 @@ bool CStaticMesh::Load(const std::string &FileName)
 				else
 					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
 			}
+			else
+			{
+				DEBUG_ASSERT( !"Vertex layout not implemented!" );
+			}
 
 			m_renderableVertexs.push_back(l_RV);
 
@@ -167,6 +179,8 @@ bool CStaticMesh::Load(const std::string &FileName)
 		{
 			return false;
 		}
+		//Recogo medidas bounding box
+		
 	}
 
 	fclose(l_meshFile);
@@ -182,10 +196,10 @@ void CStaticMesh::Render(CContextManager *_context) const
 		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
 	{
 			l_Material->apply();
-		m_renderableVertexs[i]->RenderIndexed(_context,
+			m_renderableVertexs[i]->RenderIndexed(_context,
 				l_Material->getRenderableObjectTechique()->GetEffectTechnique());
 		}
-		
+
 	}
 }
 

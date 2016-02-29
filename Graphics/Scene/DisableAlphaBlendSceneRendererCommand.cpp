@@ -1,4 +1,5 @@
-#include "Scene\DisableAlphaBlendSceneRendererCommand.h"
+#include "Scene/DisableAlphaBlendSceneRendererCommand.h"
+#include "Context/ContextManager.h"
 
 CDisableAlphaBlendSceneRendererCommand::CDisableAlphaBlendSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode)

@@ -20,6 +20,7 @@
     <ClInclude Include="Camera\FPSCameraController.h" />
     <ClInclude Include="Camera\Frustum.h" />
     <ClInclude Include="Camera\SphericalCameraController.h" />
+    <ClInclude Include="Camera\YawPitchCameraController.h" />
     <ClInclude Include="Cinematics\CameraKey.h" />
     <ClInclude Include="Cinematics\CameraKeyController.h" />
     <ClInclude Include="Cinematics\Cinematic.h" />
@@ -96,6 +97,7 @@
     <ClCompile Include="Camera\FPSCameraController.cpp" />
     <ClCompile Include="Camera\Frustum.cpp" />
     <ClCompile Include="Camera\SphericalCameraController.cpp" />
+    <ClCompile Include="Camera\YawPitchCameraController.cpp" />
     <ClCompile Include="Cinematics\CameraKey.cpp" />
     <ClCompile Include="Cinematics\CameraKeyController.cpp" />
     <ClCompile Include="Cinematics\Cinematic.cpp" />
@@ -113,6 +115,7 @@
     <ClCompile Include="Layer\LayerManager.cpp" />
     <ClCompile Include="Light\Light.cpp" />
     <ClCompile Include="Light\LightManager.cpp" />
+    <ClCompile Include="MaterialParameter.cpp" />
     <ClCompile Include="Material\Material.cpp" />
     <ClCompile Include="Material\MaterialManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

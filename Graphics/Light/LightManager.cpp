@@ -1,6 +1,7 @@
 #include "LightManager.h"
 #include "Light/Light.h"
 #include <Engine/Engine.h>
+#include "Renderable/RenderableObjectsManager.h"
 
 
 CLightManager::CLightManager()
@@ -45,7 +46,7 @@ void CLightManager::Load(const std::string &FileName)
 				{
 					CSpotLight * light = new CSpotLight(l_Light);
 					add(light->getName(), light);
-				}				
+				}
 			}
 		}
 	}
@@ -55,7 +56,7 @@ void CLightManager::Load(const std::string &FileName)
 
 void CLightManager::Render(CRenderManager *RenderManager)
 {
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
 		it.second->Render(RenderManager);
 	}
@@ -65,7 +66,7 @@ CLight& CLightManager::iterate(size_t id)
 {
 	int i = 0;
 	CLight *l_Light;
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
 		if (i == id)
 		{
@@ -79,7 +80,7 @@ CLight& CLightManager::iterate(size_t id)
 size_t CLightManager::count()
 {
 	size_t i = 0;
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
 		i++;
 	}
@@ -88,7 +89,7 @@ size_t CLightManager::count()
 
 void CLightManager::ExecuteShadowCreation(CContextManager &_context)
 {
-	for (auto light : m_resources)
+	for (auto const &light : m_resources)
 	{
 		if (light.second->getGenerateShadowMap() && light.second->isActive())
 		{
@@ -105,7 +106,7 @@ void CLightManager::ExecuteShadowCreation(CContextManager &_context)
 				(*child)->Render(&_context);//Render de layers afectadas por la luz
 			}
 			//DUDA::::::DONDE SE USA m_ShadowMaskTexture???
-		}			
+		}
 	}
 	_context.UnsetRenderTargets();//Una vez pintadas las sombras, quitamos target para render normal
 }

@@ -16,7 +16,7 @@ CEngine::CEngine()
 	, cameraManager(nullptr)
 	, physXManager(nullptr)
 {
-}
+} 
 CEngine::~CEngine()
 {
 	effectsManager->destroy();

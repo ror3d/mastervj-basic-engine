@@ -1,13 +1,14 @@
 #include "Scene/DeferredShadingSceneRendererCommand.h"
-#include <Core/Engine/Engine.h>
+#include "Renderable/RenderableObjectTechnique.h"
 #include "Light/Light.h"
+
+#include <Core/Engine/Engine.h>
 
 CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CStagedTexturedSceneRendererCommand(TreeNode)
 {
 	auto mm = CEngine::GetSingleton().getMaterialManager();
-	auto mat = mm->get(TreeNode.GetPszProperty("material"));
-	m_RenderableObjectTechnique = mat->getRenderableObjectTechique();
+	m_Material = mm->get(TreeNode.GetPszProperty("material"));
 
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++)
 	{
@@ -53,14 +54,14 @@ void CDeferredShadingSceneRendererCommand::Execute(CContextManager &_context)
 		CLight& light = lm->iterate(i);
 		// Set light to the buffer
 		em->SetLightConstants(0, &light);
-		m_RenderableObjectTechnique->GetEffectTechnique()->SetConstantBuffer(1, &CEffectManager::m_LightParameters);
+		m_Material->getRenderableObjectTechique()->GetEffectTechnique()->SetConstantBuffer(1, &CEffectManager::m_LightParameters);
 		// Render scene with that light
 
 		// TODO: Paint only enabled lights
-		_context.DrawScreenQuad(m_RenderableObjectTechnique->GetEffectTechnique(),
+		m_Material->apply();
+		_context.DrawScreenQuad(m_Material->getRenderableObjectTechique()->GetEffectTechnique(),
 								nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
 	}
-	DeactivateTextures();
 
 	CEngine::GetSingleton().getContextManager()->GetDeviceContext()->OMSetBlendState(NULL, NULL, 0xffffffff);
 }

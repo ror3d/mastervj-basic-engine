@@ -20,6 +20,7 @@ public:
 
 	void SetFocus(bool focus) { m_Focus = focus; }
 	void SetMouseSpeed(float _MouseSpeed) { m_MouseSpeed = _MouseSpeed; }
+	float* GetMouseSpeed(){ return &m_MouseSpeed; }
 
 	bool KeyEventReceived(unsigned int wParam, unsigned int lParam);
 	void UpdateCursor(int x, int y) { m_Cursor.x = x; m_Cursor.y = y; }
@@ -132,4 +133,3 @@ private:
 	bool								m_ButtonLeft, m_PreviousButtonLeft;
 	bool								m_ButtonMiddle, m_PreviousButtonMiddle;
 };
-
