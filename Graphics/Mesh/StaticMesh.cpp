@@ -171,9 +171,7 @@ bool CStaticMesh::MeshFile::Load( const std::string &FileName )
 			DEBUG_ASSERT(!"Unrecognized footer!");
 			fclose(l_meshFile);
 			return false;
-		}
-		//Recogo medidas bounding box
-		
+		}		
 	}
 
 	fclose(l_meshFile);
@@ -330,8 +328,19 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh )
 	{
 		bool l_loaded = false;
-
+		//std::shared_ptr<std::vector<uint8>> * cooked;
+		std::vector<uint8> * cooked;
 		// TODO: Try to read the cooked file
+		/* CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData)
+{
+			std::ifstream f(fname, std::ios::in | std::ifstream::binary);
+
+			if (f)
+			{
+				std::istream_iterator<uint8> iter(f);
+				std::copy(iter, std::istream_iterator<uint8>(), std::back_inserter(outCookedData));
+				return true;
+			}*/
 
 		if ( !l_loaded )
 		{
@@ -348,13 +357,14 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 				std::vector<Vect3f> meshVtxs = getVect3fArray( meshFile.meshes[i] );
 				vertexes.insert( vertexes.end(), meshVtxs.begin(), meshVtxs.end() );
 			}
-
-			std::shared_ptr<std::vector<uint8>> cooked;
-			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh( vertexes, *cooked );
-
-			shapeDesc->cookedMeshData = cooked;
+			cooked = new std::vector<uint8>();
+			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
+			std::shared_ptr<std::vector<uint8>> vec = static_cast<std::shared_ptr<std::vector<uint8>>>(cooked);
+			shapeDesc->cookedMeshData = vec;
 
 			// TODO: Save the cooked data in a file
+			std::string nameFile = "Data\\"+ getName() + ".bin";
+			CEngine::GetSingleton().getPhysXManager()->saveCookedMeshToFile(*cooked, nameFile);
 		}
 	}
 	else

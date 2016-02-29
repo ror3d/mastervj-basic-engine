@@ -242,7 +242,7 @@ void CPhysXManager::registerMaterial(const std::string& name, float staticFricti
 	m_materials[name] = m_PhysX->createMaterial(staticFriction, dynamicFriction, restitution);
 }
 
-bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData)
+bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData)
 {
 	physx::PxConvexMeshDesc meshDesc;
 
@@ -256,8 +256,7 @@ bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<u
 	physx::PxConvexMeshCookingResult::Enum result;
 	bool success = m_Cooking->cookConvexMesh(meshDesc, oBuf, &result);
 	DEBUG_ASSERT(success);
-
-	outCookedData.assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
+	outCookedData->assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
 	return success;
 }
 

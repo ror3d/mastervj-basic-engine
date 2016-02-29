@@ -51,6 +51,11 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 						}
 					}
 					add(l_static_mesh->getName(), l_static_mesh);
+
+					CPhysxColliderShapeDesc desc;
+					desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
+					l_static_mesh->FillColliderDescriptor(&desc);
+					//createActor
 				}
 			}
 		}
