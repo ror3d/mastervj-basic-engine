@@ -24,7 +24,7 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 	if( !l_StaticMesh.Exists() )
 	{
 		return false;
-	} 
+	}
 	else
 	{
 		CMaterialManager* mm = CEngine::GetSingleton().getMaterialManager();
@@ -34,13 +34,9 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 
 			if (l_Mesh.GetName() == std::string("static_mesh"))
 			{
+				CStaticMesh* l_static_mesh = new CStaticMesh(l_Mesh);
 
-				std::string m_Name = l_Mesh.GetPszProperty("name");
-				std::string l_Path = l_Mesh.GetPszProperty("filename", "");
-
-				CStaticMesh* l_static_mesh = new CStaticMesh();
-
-				if(l_static_mesh->Load(l_Path))
+				if(l_static_mesh->Load())
 				{
 					for (int j = 0; j < l_Mesh.GetNumChildren(); ++j)
 					{
@@ -54,9 +50,9 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 							nmat++;
 						}
 					}
-					add(m_Name, l_static_mesh);
+					add(l_static_mesh->getName(), l_static_mesh);	
+					
 				}
-				
 			}
 		}
 	}

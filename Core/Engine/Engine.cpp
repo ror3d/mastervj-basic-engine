@@ -15,6 +15,8 @@ CEngine::CEngine()
 	, sceneRendererCommandManager(nullptr)
 	, cameraManager(nullptr)
 	, physXManager(nullptr)
+	, cookedMeshManager(nullptr)
+	, iaManager(nullptr)
 {
 } 
 CEngine::~CEngine()
@@ -30,6 +32,8 @@ CEngine::~CEngine()
 	sceneRendererCommandManager->destroy();
 	cameraManager->destroy();
 	contextManager->destroy();
+	//cookedMeshManager->destroy();
+	//iaManager->destroy();
 
 	delete effectsManager;
 	delete textureManager;
@@ -43,6 +47,8 @@ CEngine::~CEngine()
 	delete physXManager;
 	delete cameraManager;
 	delete contextManager;
+	delete cookedMeshManager;
+	delete iaManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -56,6 +62,8 @@ CEngine::~CEngine()
 	physXManager = nullptr;
 	cameraManager = nullptr;
 	contextManager = nullptr;
+	cookedMeshManager = nullptr;
+	iaManager = nullptr;
 
 } //Destruimos vars
 
@@ -73,4 +81,6 @@ void CEngine::Init()
 	sceneRendererCommandManager = new CSceneRendererCommandManager();
 	cameraManager = new CCameraManager(contextManager);
 	physXManager = CPhysXManager::CreatePhysXManager();
+	cookedMeshManager = new CCookedMeshManager();
+	iaManager = new CIAManager();
 }

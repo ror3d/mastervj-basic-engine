@@ -28,6 +28,8 @@
     <ClInclude Include="Cinematics\CinematicObjectKeyframe.h" />
     <ClInclude Include="Cinematics\CinematicPlayer.h" />
     <ClInclude Include="Context\ContextManager.h" />
+    <ClInclude Include="IA\IAInstance.h" />
+    <ClInclude Include="IA\IAManager.h" />
     <ClInclude Include="Layer\LayerManager.h" />
     <ClInclude Include="Light\LightEffectParameters.h" />
     <ClInclude Include="Debug\DebugRender.h" />
@@ -47,6 +49,7 @@
     <ClInclude Include="Material\MaterialParameter.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Mesh\CookedMeshmanager.h" />
     <ClInclude Include="Mesh\MeshInstance.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="Mesh\StaticMeshManager.h" />
@@ -112,14 +115,17 @@
     <ClCompile Include="Effect\EffectTechnique.cpp" />
     <ClCompile Include="Effect\EffectVertexShader.cpp" />
     <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="IA\IAInstance.cpp" />
+    <ClCompile Include="IA\IAManager.cpp" />
     <ClCompile Include="Layer\LayerManager.cpp" />
     <ClCompile Include="Light\Light.cpp" />
     <ClCompile Include="Light\LightManager.cpp" />
-    <ClCompile Include="MaterialParameter.cpp" />
     <ClCompile Include="Material\Material.cpp" />
     <ClCompile Include="Material\MaterialManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Material\MaterialParameter.cpp" />
+    <ClCompile Include="Mesh\CookedMeshManager.cpp" />
     <ClCompile Include="Mesh\MeshInstance.cpp" />
     <ClCompile Include="Mesh\StaticMesh.cpp" />
     <ClCompile Include="Mesh\StaticMeshManager.cpp" />

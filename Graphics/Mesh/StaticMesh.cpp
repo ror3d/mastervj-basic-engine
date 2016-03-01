@@ -1,5 +1,6 @@
 #include "StaticMesh.h"
-#include <vector>
+
+#include "VertexTypes.h"
 
 #include "Texture/Texture.h"
 #include "Material/Material.h"
@@ -9,16 +10,18 @@
 
 #include <Renderable/RenderableObjectTechnique.h>
 
-#include "VertexTypes.h"
+#include <vector>
 
 
-CStaticMesh::CStaticMesh()
-	: CNamed("")
+CStaticMesh::CStaticMesh(const CXMLTreeNode& node)
+	: CNamed(node)
 	, m_BsCenter(0.0f, 0.0f, 0.0f)
 	, m_AabbMin(0.0f, 0.0f, 0.0f)
 	, m_AabbMax(0.0f, 0.0f, 0.0f)
 	, m_BsRadius(0.0f)
+	, m_meshLoaded(false)
 {
+	m_fileName = node.GetPszProperty("filename", "");
 }
 
 
@@ -28,14 +31,14 @@ CStaticMesh::~CStaticMesh()
 }
 
 
-bool CStaticMesh::Load(const std::string &FileName)
+bool CStaticMesh::MeshFile::Load( const std::string &FileName )
 {
-	m_fileName = FileName;
 	FILE *l_meshFile = NULL;
 	fopen_s(&l_meshFile, FileName.c_str(), "rb");
 
 	if (l_meshFile == NULL)
 	{
+		DEBUG_ASSERT(!"Could not open file!");
 		return false;
 	}
 	else
@@ -46,6 +49,8 @@ bool CStaticMesh::Load(const std::string &FileName)
 		fread(&l_header, sizeof(unsigned short), 1, l_meshFile);   //lectura del header
 		if (l_header != 0xFE55 && l_header != 0xFE56)
 		{
+			DEBUG_ASSERT(!"Unrecognized header!");
+			fclose(l_meshFile);
 			return false;
 		}
 		if (l_header == 0xFE56)
@@ -58,9 +63,11 @@ bool CStaticMesh::Load(const std::string &FileName)
 		fread(&l_numMaterials, sizeof(unsigned short), 1, l_meshFile); //lectura del numero de materiales
 		if (l_numMaterials == 0)
 		{
+			DEBUG_ASSERT(!"No materials found!");
+			fclose(l_meshFile);
 			return false;
 		}
-		m_materials.resize(l_numMaterials);
+		materials.resize(l_numMaterials);
 
 
 		if (shouldReadMaterials)
@@ -73,7 +80,7 @@ bool CStaticMesh::Load(const std::string &FileName)
 				char *l_MaterialName = new char[l_NumChars + 1];
 				fread(&l_MaterialName[0], sizeof(char), l_NumChars + 1, l_meshFile);
 
-				m_materials[i] = CEngine::GetSingletonPtr()->getMaterialManager()->get(l_MaterialName);
+				materials[i] = std::string(l_MaterialName);
 
 				delete[] l_MaterialName;
 			}
@@ -105,7 +112,9 @@ bool CStaticMesh::Load(const std::string &FileName)
 				l_NumBytes = sizeof(MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX)*l_NumVertexs;
 			else
 			{
-				throw std::runtime_error("unrecognized vertex type");
+				DEBUG_ASSERT( !"unrecognized vertex type" );
+				fclose(l_meshFile);
+				return false;
 			}
 
 			void *l_VtxsData = new char[l_NumBytes];
@@ -133,43 +142,25 @@ bool CStaticMesh::Load(const std::string &FileName)
 			else
 			{
 				DEBUG_ASSERT(!"Num Index Error");
+				delete[] l_VtxsData;
+				fclose(l_meshFile);
+				return false;
 			}
 
 			void *l_IdxData = new char[l_NumBytes];
 			fread(l_IdxData, 1, l_NumBytes, l_meshFile);
 
-			CRenderableVertexs *l_RV = NULL;
+			Mesh mesh;
+			mesh.vertexes = l_VtxsData;
+			mesh.vertexType = l_VertexType;
+			mesh.nVertexes = l_NumVertexs;
 
-			if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType())
-			{
-				if (l_IndexType == 16)
-					l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
-				else
-					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
-			}
-			else if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::GetVertexType())
-			{
-				if (l_IndexType == 16)
-					l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
-				else
-					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
-			}
-			else if (l_VertexType == MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::GetVertexType())
-			{
-				if (l_IndexType == 16)
-					l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
-				else
-					l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexsFile);
-			}
-			else
-			{
-				DEBUG_ASSERT( !"Vertex layout not implemented!" );
-			}
+			mesh.indices = l_IdxData;
+			mesh.indexSize = l_IndexType;
+			mesh.nIndices = l_NumIndexsFile;
 
-			m_renderableVertexs.push_back(l_RV);
+			meshes.push_back( std::move(mesh) );
 
-			delete[] l_VtxsData;
-			delete[] l_IdxData;
 		}
 
 		//Footer---------------------
@@ -177,14 +168,77 @@ bool CStaticMesh::Load(const std::string &FileName)
 		fread(&l_footer, sizeof(unsigned short), 1, l_meshFile);
 		if (l_footer != 0x55FE)
 		{
+			DEBUG_ASSERT(!"Unrecognized footer!");
+			fclose(l_meshFile);
 			return false;
-		}
-		//Recogo medidas bounding box
-		
+		}		
 	}
 
 	fclose(l_meshFile);
 
+	return true;
+}
+
+bool CStaticMesh::Load()
+{
+	m_meshLoaded = false;
+
+	MeshFile meshFile;
+	if ( !meshFile.Load( m_fileName ) )
+	{
+		return false;
+	}
+
+	for ( auto const &matName : meshFile.materials )
+	{
+		m_materials.push_back(CEngine::GetSingletonPtr()->getMaterialManager()->get( matName ));
+	}
+
+	for ( auto const &mesh : meshFile.meshes )
+	{
+		CRenderableVertexs *l_RV = NULL;
+
+		unsigned short l_VertexType = mesh.vertexType;
+		unsigned short l_IndexType = mesh.indexSize;
+
+		void * l_VtxsData = mesh.vertexes;
+		void * l_IdxData = mesh.indices;
+
+		unsigned int l_NumVertexs = mesh.nVertexes;
+		unsigned int l_NumIndexs = mesh.nIndices;
+
+		if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType())
+		{
+			if (l_IndexType == 16)
+				l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
+			else
+				l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
+		}
+		else if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::GetVertexType())
+		{
+			if (l_IndexType == 16)
+				l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
+			else
+				l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
+		}
+		else if (l_VertexType == MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::GetVertexType())
+		{
+			if (l_IndexType == 16)
+				l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
+			else
+				l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
+		}
+		else
+		{
+			DEBUG_ASSERT( !"Vertex layout not implemented!" );
+			return false;
+		}
+
+		m_renderableVertexs.push_back(l_RV);
+
+	}
+
+	m_meshLoaded = true;
 	return true;
 }
 
@@ -207,10 +261,7 @@ void CStaticMesh::Render(CContextManager *_context) const
 bool CStaticMesh::Reload()
 {
 	Destroy();
-	if (Load(m_fileName))
-		return true;
-	else
-		return false;
+	return Load();
 }
 
 void CStaticMesh::Destroy()
@@ -221,4 +272,98 @@ void CStaticMesh::Destroy()
 	}
 	m_renderableVertexs.clear();
 	m_materials.clear();
+}
+
+
+std::vector<Vect3f> CStaticMesh::getVect3fArray( const MeshFile::Mesh& mesh )
+{
+	unsigned int l_VertexType = mesh.vertexType;
+	if ( l_VertexType == MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType() )
+	{
+		return getVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_TEXTURE_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
+	}
+	else if ( l_VertexType == MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::GetVertexType() )
+	{
+		return getVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
+	}
+	else if ( l_VertexType == MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::GetVertexType() )
+	{
+		return getVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
+	}
+	else
+	{
+		return {};
+	}
+}
+
+template <typename T>
+std::vector<Vect3f> CStaticMesh::getVect3fArrayInternal( const T* vertexes, unsigned int nVtx )
+{
+	std::vector<Vect3f> ret;
+	for ( int i = 0; i < nVtx; ++i )
+	{
+		ret.push_back( vertexes[i].Position );
+	}
+	return ret;
+}
+
+bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
+{
+	std::string nameFile = "Data\\Meshes\\Cooked\\";
+	nameFile += getName() + ".bin";
+
+	if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Box )
+	{
+		// TODO get values for this and implement
+	}
+	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Sphere )
+	{
+		// TODO get values for this and implement
+	}
+	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Capsule )
+	{
+		// TODO get values for this and implement
+	}
+	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh )
+	{
+		// TODO get values for this and implement
+	}
+	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh )
+	{
+		//std::shared_ptr<std::vector<uint8>> * cooked;
+		std::vector<uint8> * cooked = new std::vector<uint8>();		
+		bool l_loaded = CEngine::GetSingleton().getPhysXManager()->loadCookedMesh(nameFile, *cooked);				
+
+		if ( !l_loaded )
+		{
+			MeshFile meshFile;
+			if ( !meshFile.Load( m_fileName ) )
+			{
+				return false;
+			}
+
+			std::vector<Vect3f> vertexes;
+
+			for ( int i = 0; i < meshFile.meshes.size(); ++i )
+			{
+				std::vector<Vect3f> meshVtxs = getVect3fArray( meshFile.meshes[i] );
+				vertexes.insert( vertexes.end(), meshVtxs.begin(), meshVtxs.end() );
+			}
+			
+			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);			
+			//CEngine::GetSingleton().getPhysXManager()->saveCookedMeshToFile(*cooked, nameFile);
+		}
+
+		std::shared_ptr<std::vector<uint8>> vec = static_cast<std::shared_ptr<std::vector<uint8>>>(cooked);
+		shapeDesc->cookedMeshData = vec;
+
+	}
+	else
+	{
+		DEBUG_ASSERT( !"Unrecognized collider type" );
+	}
+
+	
+
+	return true;
 }

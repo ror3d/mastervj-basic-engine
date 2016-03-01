@@ -2,6 +2,7 @@
 
 #include <Base/Utils/SingletonPattern.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics/Mesh/CookedMeshManager.h>
 #include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Effect/EffectManager.h>
@@ -14,6 +15,7 @@
 #include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
+#include <Graphics/IA/IAManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -32,6 +34,8 @@ private:
 	CDebugRender * debugRender;
 	CCameraManager * cameraManager;
 	CPhysXManager * physXManager;
+	CCookedMeshManager * cookedMeshManager;
+	CIAManager * iaManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -53,4 +57,6 @@ public:
 	inline CDebugRender * getDebugRender() const { return debugRender; }
 	inline CCameraManager * getCameraManager() const { return cameraManager; }
 	inline CPhysXManager * getPhysXManager() const { return physXManager; }
+	inline CCookedMeshManager * getCookedMeshManager() const { return cookedMeshManager;  }
+	inline CIAManager * getIAManager() const { return iaManager; }
 };

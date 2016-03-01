@@ -36,7 +36,7 @@
 */
 #else
 #endif
-//#define USE_PHYSX_DEBUG 1
+#define USE_PHYSX_DEBUG 1
 #if USE_PHYSX_DEBUG
 #define				PVD_HOST			"127.0.0.1"
 #endif
@@ -213,7 +213,7 @@ CPhysXManager::CPhysXManager()
 
 CPhysXManager::~CPhysXManager()
 {
-	for (auto pair : m_materials)
+	for (auto &pair : m_materials)
 	{
 		CHECKED_RELEASE(pair.second);
 	}
@@ -242,7 +242,7 @@ void CPhysXManager::registerMaterial(const std::string& name, float staticFricti
 	m_materials[name] = m_PhysX->createMaterial(staticFriction, dynamicFriction, restitution);
 }
 
-bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData)
+bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData)
 {
 	physx::PxConvexMeshDesc meshDesc;
 
@@ -256,8 +256,7 @@ bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<u
 	physx::PxConvexMeshCookingResult::Enum result;
 	bool success = m_Cooking->cookConvexMesh(meshDesc, oBuf, &result);
 	DEBUG_ASSERT(success);
-
-	outCookedData.assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
+	outCookedData->assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
 	return success;
 }
 
@@ -324,7 +323,7 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 	m_actors.actor.push_back(groundPlane);
 }
 
-void CPhysXManager::createActor(const std::string& name, ActorType actorType, const ShapeDesc& desc)
+void CPhysXManager::createActor(const std::string& name, ActorType actorType, const CPhysxColliderShapeDesc& desc)
 {
 	auto idx = m_actors.actor.size();
 
@@ -336,21 +335,21 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	physx::PxGeometry* geom;
 	switch (desc.shape)
 	{
-		case ShapeDesc::Shape::Box:
+		case CPhysxColliderShapeDesc::Shape::Box:
 			geom = new physx::PxBoxGeometry(desc.size.x, desc.size.y, desc.size.z);
 			break;
 
-		case ShapeDesc::Shape::Sphere:
+		case CPhysxColliderShapeDesc::Shape::Sphere:
 			geom = new physx::PxSphereGeometry(desc.radius);
 			break;
 
-		case ShapeDesc::Shape::Capsule:
+		case CPhysxColliderShapeDesc::Shape::Capsule:
 			geom = new physx::PxCapsuleGeometry(desc.radius, desc.halfHeight);
 			break;
 
-		case ShapeDesc::Shape::ConvexMesh:
+		case CPhysxColliderShapeDesc::Shape::ConvexMesh:
 		{
-			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
+			physx::PxDefaultMemoryInputData input(desc.cookedMeshData.get()->data(), desc.cookedMeshData.get()->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
 			geom = new physx::PxConvexMeshGeometry(mesh);
 			break;
@@ -416,7 +415,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 
 void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
-	registerMaterial("box", 1, 0.9, 0.8);
+	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
 	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
 }
@@ -425,7 +424,7 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction,
 	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
-	cct->move(v(movement), movement.Length() * 0.1f, elapsedTime, filters);
+	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
 	cct->setUpDirection(v(direction));
 	physx::PxRigidDynamic* actor = cct->getActor();
 	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();

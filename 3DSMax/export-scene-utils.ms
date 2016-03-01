@@ -3,37 +3,46 @@
 -- Export utilities
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
-
-fn GetCores = (
-	local ret = #()
+global g_allCores;
+global g_allInstances;
+fn CollectCoresAndInstances = (
+	g_allCores = #()
+	g_allInstances = #()
 	for i = 1 to $*.count do
 	(
 		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
 		(
-			local core = getUserProp $*[i] "render_export_core"
-			if core != undefined then
-			(
-				append ret $*[i]
-			)
-		)
-	)
-	return ret
-)
-
-fn GetInstances = (
-	local ret = #()
-	for i = 1 to $*.count do
-	(
-		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject and not $*[i].isHidden then
-		(
 			local core = getUserProp $*[i] "render_export_rend_obj"
 			if core != undefined then
 			(
-				append ret $*[i]
+				append g_allInstances $*[i]
+				
+				local isCore = true
+				for j = 1 to g_allCores.count do
+				(
+					if areNodesInstances g_allCores[j] $*[i] then
+					(
+						setUserProp $*[i] "export_core_name" g_allCores[j].name
+						isCore = false
+						break
+					)
+				)
+				if isCore then
+				(
+					append g_allCores $*[i]
+				)
 			)
 		)
 	)
-	return ret
+)
+
+fn GetCores = (
+	
+	return g_allCores
+)
+
+fn GetInstances = (
+	return g_allInstances
 )
 
 
