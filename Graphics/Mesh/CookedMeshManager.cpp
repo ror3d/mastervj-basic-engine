@@ -26,8 +26,11 @@ void CCookedMeshManager::CookMeshes()
 			ob = CEngine::GetSingleton().getLayerManager()->get("IA")->get(it->second->getName());
 		}
 		desc->position = ob->GetPosition();
+		desc->size = ob->GetScale();
+		desc->density = 10;
+		desc->radius = 0.1f;
 		desc->orientation = Quatf(0, 0, 0, 1);//CEngine::GetSingleton().getLayerManager()->get("solid")->get(it->second->getName())->getQUATERNION!!
-		//CEngine::GetSingleton().getPhysXManager()->createActor(it->second->getName(), CPhysXManager::ActorType::Static, *desc);
+		CEngine::GetSingleton().getPhysXManager()->createActor(it->second->getName(), CPhysXManager::ActorType::Static, *desc);
 	}
 
 }

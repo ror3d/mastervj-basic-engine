@@ -38,7 +38,7 @@ CApplication::~CApplication()
 
 void CApplication::CreateCharController()
 {
-	CEngine::GetSingleton().getPhysXManager()->createController(1.75f, 0.5f, 10, Vect3f(0, 0, 0), "main");
+	CEngine::GetSingleton().getPhysXManager()->createController(1.75f, 0.5f, 10, Vect3f(0, 1, 0), "main");
 }
 
 void CApplication::Update( float _ElapsedTime )

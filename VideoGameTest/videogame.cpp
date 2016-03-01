@@ -193,7 +193,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
 	context.CreateContext(hWnd, 800, 600);
-
+	
+	engine.getDebugRender()->Create();
 	engine.getEffectsManager()->load("Data\\effects.xml");
 	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
 	engine.getMaterialManager()->load("Data\\materials.xml");
@@ -252,7 +253,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 				application.Update(l_ElapsedTime);
 				engine.getIAManager()->Update(l_ElapsedTime);
 				application.Render();
-
+				context.Draw(CEngine::GetSingleton().getDebugRender()->GetAxis());
 				inputManager.EndFrame();
 			}
 		}

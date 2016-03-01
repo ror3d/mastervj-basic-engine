@@ -302,3 +302,8 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 void CContextManager::Present(){
 	m_SwapChain->Present(0, 0);
 }
+
+void CContextManager::Draw(CRenderableVertexs* _VerticesToRender){
+	
+	_VerticesToRender->Render(this, CEngine::GetSingleton().getEffectsManager()->get("forward_PosNorTex_technique"));
+}
