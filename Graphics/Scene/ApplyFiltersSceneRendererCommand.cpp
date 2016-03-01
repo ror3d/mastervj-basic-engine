@@ -35,8 +35,10 @@ void CApplyFiltersSceneRendererCommand::Execute(CContextManager &_context)
 
 		_context.SetRenderTargets(1, l_RenderTargetViews, m_DynamicTextures[i]->GetDepthStencilView());
 
+		m_Materials[i]->apply();
+
 		_context.DrawScreenQuad(m_Materials[i]->getRenderableObjectTechique()->GetEffectTechnique(),
-			nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
+			nullptr, 0, 0, m_DynamicTextures[i]->GetWidth(), m_DynamicTextures[i]->GetHeight(), CColor(1, 1, 1, 1));
 
 		_context.UnsetRenderTargets();
 

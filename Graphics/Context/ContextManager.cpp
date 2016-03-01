@@ -281,6 +281,11 @@ void CContextManager::UnsetRenderTargets(){
 	m_DeviceContext->RSSetViewports(1, &vp);
 }
 
+void CContextManager::DrawRelativeScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture,
+	float x, float y, float Width, float Height, const CColor &Color)
+{
+	DrawScreenQuad(EffectTechnique, Texture, x, y, Width* m_Viewport.Width, Height*m_Viewport.Height, Color);
+}
 void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture, 
 	float x, float y, float Width, float Height, const CColor &Color)
 {
@@ -288,8 +293,8 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 	if (Texture != NULL)
 		Texture->Activate(0);
 	D3D11_VIEWPORT l_Viewport;
-	l_Viewport.Width = Width* m_Viewport.Width;
-	l_Viewport.Height = Height*m_Viewport.Height;
+	l_Viewport.Width = Width;
+	l_Viewport.Height = Height;
 	l_Viewport.MinDepth = 0.0f;
 	l_Viewport.MaxDepth = 1.0f;
 	l_Viewport.TopLeftX = x*m_Viewport.Width;
