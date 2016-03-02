@@ -28,6 +28,12 @@
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="IA\IAInstance.cpp">
+      <Filter>IA</Filter>
+    </ClCompile>
+    <ClCompile Include="IA\IAManager.cpp">
+      <Filter>IA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemies">
@@ -41,6 +47,9 @@
     </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{55c8f47a-5678-4955-a640-097052f5e424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IA">
+      <UniqueIdentifier>{9771c5ca-a1ea-42db-a224-ca3baf886b2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +82,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Engine.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="IA\IAInstance.h">
+      <Filter>IA</Filter>
+    </ClInclude>
+    <ClInclude Include="IA\IAManager.h">
+      <Filter>IA</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

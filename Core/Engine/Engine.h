@@ -15,7 +15,7 @@
 #include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
-#include <Graphics/IA/IAManager.h>
+#include <Core/IA/IAManager.h>
 
 
 class CEngine : public CSingleton<CEngine>

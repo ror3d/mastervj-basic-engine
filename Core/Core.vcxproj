@@ -18,6 +18,8 @@
     <ClCompile Include="Enemies\FixedEnemy.cpp" />
     <ClCompile Include="Enemies\PatrolEnemy.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="IA\IAInstance.cpp" />
+    <ClCompile Include="IA\IAManager.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\InputManagerImplementation.cpp" />
   </ItemGroup>
@@ -30,6 +32,8 @@
     <ClInclude Include="Enemies\FixedEnemy.h" />
     <ClInclude Include="Enemies\PatrolEnemy.h" />
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="IA\IAInstance.h" />
+    <ClInclude Include="IA\IAManager.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputManagerImplementation.h" />
   </ItemGroup>
