@@ -88,6 +88,26 @@ public:
 		
 	}
 
+	static inline Quaternion<T> GetQuaternionFromRadians(Vector3<T> pitchRollYawInRads)
+	{
+		pitchRollYawInRads = pitchRollYawInRads * 180 / 3.14159f;
+		Vect3f euler = Vect3f(pitchRollYawInRads.z, pitchRollYawInRads.x, pitchRollYawInRads.y);
+		float c1 = cos(euler.x * 0.5);
+		float c2 = cos(euler.y * 0.5);
+		float c3 = cos(euler.z * 0.5);
+		float s1 = sin(euler.x * 0.5);
+		float s2 = sin(euler.y * 0.5);
+		float s3 = sin(euler.z * 0.5);
+
+		Vect4f result;
+		result.x = c1*c2*s3 - s1*s2*c3;
+		result.y = c1*s2*c3 + s1*c2*s3;
+		result.z = s1*c2*c3 - c1*s2*s3;
+		result.w = c1*c2*c3 + s1*s2*s3;
+
+		return  Quaternion<T>(result.x, result.y, result.z, result.w);
+	}
+
 	// member functions	
 public:
 	inline T& operator[](unsigned int index)

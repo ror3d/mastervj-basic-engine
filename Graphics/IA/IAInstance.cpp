@@ -24,7 +24,7 @@ void CIAInstance::Update(float elapsedTime)
 {
 	m_actualTime += elapsedTime;
 	float step = m_actualTime / m_timeToReachTarget;
-	if (m_IAOb->GetPosition().Distance(m_target)>1)
+	if (m_IAOb->GetPosition().Distance(m_target)>1.5f)
 	{
 		Vect3f actualPos = m_IAOb->GetPosition();
 		actualPos = actualPos.Lerp(m_target, step);
