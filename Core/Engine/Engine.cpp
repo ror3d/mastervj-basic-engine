@@ -10,11 +10,14 @@ CEngine::CEngine()
 	, staticMeshManager(nullptr)
 	, textureManager(nullptr)
 	, lightManager(nullptr)
+	, debugRender(nullptr)
 	, animatedModelManager(nullptr)
 	, renderableObjectTechniqueManager(nullptr)
 	, sceneRendererCommandManager(nullptr)
 	, cameraManager(nullptr)
 	, physXManager(nullptr)
+	, cookedMeshManager(nullptr)
+	, iaManager(nullptr)
 {
 } 
 CEngine::~CEngine()
@@ -30,6 +33,9 @@ CEngine::~CEngine()
 	sceneRendererCommandManager->destroy();
 	cameraManager->destroy();
 	contextManager->destroy();
+	//debugRender->destroy();
+	//cookedMeshManager->destroy();
+	//iaManager->destroy();
 
 	delete effectsManager;
 	delete textureManager;
@@ -43,6 +49,9 @@ CEngine::~CEngine()
 	delete physXManager;
 	delete cameraManager;
 	delete contextManager;
+	delete cookedMeshManager;
+	delete iaManager;
+	delete debugRender;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -56,6 +65,9 @@ CEngine::~CEngine()
 	physXManager = nullptr;
 	cameraManager = nullptr;
 	contextManager = nullptr;
+	cookedMeshManager = nullptr;
+	iaManager = nullptr;
+	debugRender = nullptr;
 
 } //Destruimos vars
 
@@ -63,14 +75,17 @@ void CEngine::Init()
 {
 	effectsManager = new CEffectManager();
 	textureManager = new CTextureManager();
-	materialManager = new CMaterialManager();
+	materialManager = new CMaterialManager();	
 	layerManager = new CLayerManager();
 	staticMeshManager = new CStaticMeshManager();
 	contextManager = new CContextManager();
+	debugRender = new CDebugRender();
 	lightManager = new CLightManager();
 	animatedModelManager = new CAnimatedModelManager();
 	renderableObjectTechniqueManager = new CRenderableObjectTechniqueManager();
 	sceneRendererCommandManager = new CSceneRendererCommandManager();
 	cameraManager = new CCameraManager(contextManager);
 	physXManager = CPhysXManager::CreatePhysXManager();
+	cookedMeshManager = new CCookedMeshManager();
+	iaManager = new CIAManager();
 }

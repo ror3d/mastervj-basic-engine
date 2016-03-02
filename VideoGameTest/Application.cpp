@@ -16,14 +16,14 @@
 #include <Graphics/Cinematics/Cinematic.h>
 
 #include <PhysX/PhysXManager.h>
+#include <Scripting/ScriptManager.h>
 
 #include <Engine/Engine.h>
 
-//CScriptManager *s_sm = nullptr;
+CScriptManager *s_sm = nullptr;
 
 CApplication::CApplication(CContextManager *_ContextManager)
-	: m_ContextManager(_ContextManager)
-	, m_Timer(0)
+: m_ContextManager(_ContextManager)
 {
 	CDebugHelper::GetDebugHelper()->Log("CApplication::CApplication");
 	CDebugHelper::GetDebugHelper()->CreateMainBar();
@@ -38,7 +38,7 @@ CApplication::~CApplication()
 
 void CApplication::CreateCharController()
 {
-	CEngine::GetSingleton().getPhysXManager()->createController(1.75f, 0.5f, 10, Vect3f(0, 0, 0), "main");
+	CEngine::GetSingleton().getPhysXManager()->createController(1.75f, 0.5f, 10, Vect3f(0, 1, 0), "main");
 }
 
 void CApplication::Update(float _ElapsedTime)
@@ -56,14 +56,19 @@ void CApplication::Update(float _ElapsedTime)
 	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>(cc);
 	if (ccfps != nullptr)
 	{
-
 		ccfps->SetPitch(ccfps->GetPitch() - ccfps->GetPitchDisplacement());
 		if (CInputManager::GetInputManager()->GetAxis("STATICMOUSEAxis") != 1)
 		{
 			ccfps->AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
 			ccfps->AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS")  * 0.005f);
 		}
-		CRenderableObject * character = CEngine::GetSingleton().getLayerManager()->getDefaultLayer()->get("main");
+		CRenderableObject * character = nullptr;
+		CRenderableObjectsManager * layer = CEngine::GetSingleton().getLayerManager()->get("models");
+		if (layer != nullptr)
+		{
+			character = layer->get("main");
+		}
+		
 		if (character != nullptr)
 		{
 			if (ccfps->GetPitch() > 0.8f)//No atraviesa suelo

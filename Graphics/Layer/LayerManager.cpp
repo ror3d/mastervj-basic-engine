@@ -24,28 +24,43 @@ void CLayerManager::Load(const std::string &FileName){
 		CXMLTreeNode l_MeshesInfo = l_XML["renderable_objects"];
 		if (l_MeshesInfo.Exists())
 		{
+			CRenderableObjectsManager * actualLayer;
 			for (int i = 0; i < l_MeshesInfo.GetNumChildren(); ++i)
 			{
 				CXMLTreeNode l_MeshInfo = l_MeshesInfo(i);
 
 				if (l_MeshInfo.GetName() == std::string("layer")){
-					CRenderableObjectsManager * renderObManager = new CRenderableObjectsManager();
-					add(l_MeshInfo.GetPszProperty("name"), renderObManager);
+					std::string layerName = l_MeshInfo.GetPszProperty("name");
+					CRenderableObjectsManager * layer = get(layerName);
+					if (layer == nullptr)
+					{
+						layer = new CRenderableObjectsManager();
+						add(l_MeshInfo.GetPszProperty("name"), layer);
+					}
+					else
+					{
+						actualLayer = layer;
+					}					
+					
 					if (l_MeshInfo.GetBoolProperty("default", false))
-						m_DefaultLayer = renderObManager;
+					{
+						m_DefaultLayer = layer;
+					}						
+					actualLayer = layer;
 				}
-				if (l_MeshInfo.GetName() != std::string("layer") && m_resources.size() == 0){
+				if (l_MeshInfo.GetName() != std::string("layer") && m_resources.size() == 0){ //Si no se espeficia ninguna layer se genera por defecto
 					CRenderableObjectsManager * renderObManager = new CRenderableObjectsManager();
 					add("default", renderObManager);
 					m_DefaultLayer = renderObManager;
+					actualLayer = m_DefaultLayer;
 				}
 			    if(l_MeshInfo.GetName() == std::string("mesh_instance"))
 				{
-					m_DefaultLayer->AddMeshInstance(l_MeshInfo);
+					actualLayer->AddMeshInstance(l_MeshInfo);
 				}
 				else if (l_MeshInfo.GetName() == std::string("animated_instance"))
 				{
-					m_DefaultLayer->AddAnimatedInstanceModel(l_MeshInfo);
+					actualLayer->AddAnimatedInstanceModel(l_MeshInfo);
 				}
 			}
 		}

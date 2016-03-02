@@ -115,6 +115,14 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 	m_Viewport.TopLeftY = 0;
 	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 
+	/*D3D11_RASTERIZER_DESC l_RasterDescription;
+	memset(&l_RasterDescription, 0, sizeof(D3D11_RASTERIZER_DESC));
+	l_RasterDescription.CullMode = D3D11_CULL_FRONT;
+	l_RasterDescription.FillMode = D3D11_FILL_SOLID;
+	ID3D11RasterizerState *l_RasterizerState;
+	m_D3DDevice->CreateRasterizerState(&l_RasterDescription, &l_RasterizerState);
+	m_DeviceContext->RSSetState(l_RasterizerState);*/
+
 
 	MV_POSITION_TEXTURE_VERTEX l_ScreenVertexsQuad[4] =
 	{
@@ -293,4 +301,9 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 
 void CContextManager::Present(){
 	m_SwapChain->Present(0, 0);
+}
+
+void CContextManager::Draw(CRenderableVertexs* _VerticesToRender){
+	
+	_VerticesToRender->Render(this, CEngine::GetSingleton().getEffectsManager()->get("forward_PosNorTex_technique"));
 }

@@ -79,7 +79,8 @@ void CScriptManager::Load(const std::string &xmlFile)
 void CScriptManager::RegisterLUAFunctions()
 {
 	LuaErrorCapturedStdout errorCapture;
-	// TODO
+	
+	
 
 	/*(*m_state)["CScriptManager"]
 		.SetObj(*this,
@@ -89,8 +90,8 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["Vect3f"]
 		.SetClass<Vect3f, float, float, float>("x", &Vect3f::x,
 					"y", &Vect3f::y,
-					"z", &Vect3f::z);*/
-	/*(*m_state)["CRenderableObjectsManager"]
+					"z", &Vect3f::z); 
+	(*m_state)["CRenderableObjectsManager"]
 		.SetObj(*CEngine::GetSingleton().getRenderableObjectManager(),
 		"AddMeshInstance", static_cast<void(CRenderableObjectsManager::*)(const std::string&, const std::string&, const Vect3f &)>(&CRenderableObjectsManager::AddMeshInstance));
 		*/

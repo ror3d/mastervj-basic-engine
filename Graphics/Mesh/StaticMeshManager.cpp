@@ -50,7 +50,8 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 							nmat++;
 						}
 					}
-					add(l_static_mesh->getName(), l_static_mesh);
+					add(l_static_mesh->getName(), l_static_mesh);	
+					
 				}
 			}
 		}

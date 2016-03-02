@@ -10,7 +10,8 @@ class CRenderableVertexs;
 class CDebugRender
 {
 public:
-	CDebugRender(ID3D11Device* _Device);
+	CDebugRender();
+	void Create();
 
 
 	CRenderableVertexs * GetSimpleTriangle() const { return m_SimpleTriangle; }

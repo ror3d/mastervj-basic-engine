@@ -78,7 +78,7 @@ public:
 
 	void update(float dt);
 
-	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData);
+	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
 
 	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 

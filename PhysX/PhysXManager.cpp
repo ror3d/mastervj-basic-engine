@@ -36,7 +36,7 @@
 */
 #else
 #endif
-//#define USE_PHYSX_DEBUG 1
+#define USE_PHYSX_DEBUG 1
 #if USE_PHYSX_DEBUG
 #define				PVD_HOST			"127.0.0.1"
 #endif
@@ -242,7 +242,7 @@ void CPhysXManager::registerMaterial(const std::string& name, float staticFricti
 	m_materials[name] = m_PhysX->createMaterial(staticFriction, dynamicFriction, restitution);
 }
 
-bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8>& outCookedData)
+bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData)
 {
 	physx::PxConvexMeshDesc meshDesc;
 
@@ -256,8 +256,7 @@ bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<u
 	physx::PxConvexMeshCookingResult::Enum result;
 	bool success = m_Cooking->cookConvexMesh(meshDesc, oBuf, &result);
 	DEBUG_ASSERT(success);
-
-	outCookedData.assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
+	outCookedData->assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
 	return success;
 }
 
@@ -350,9 +349,10 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 		case CPhysxColliderShapeDesc::Shape::ConvexMesh:
 		{
-			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
+			physx::PxDefaultMemoryInputData input(desc.cookedMeshData.get()->data(), desc.cookedMeshData.get()->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
-			geom = new physx::PxConvexMeshGeometry(mesh);
+			physx::PxMeshScale scale(physx::PxVec3(desc.size.x, desc.size.y, desc.size.z), physx::PxQuat(1.0f));
+			geom = new physx::PxConvexMeshGeometry(mesh,scale);
 			break;
 		}
 
@@ -416,7 +416,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 
 void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
-	registerMaterial("box", 1, 0.9, 0.8);
+	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
 	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
 }
@@ -425,7 +425,7 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction,
 	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
-	cct->move(v(movement), movement.Length() * 0.1f, elapsedTime, filters);
+	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
 	cct->setUpDirection(v(direction));
 	physx::PxRigidDynamic* actor = cct->getActor();
 	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
