@@ -10,6 +10,7 @@ CEngine::CEngine()
 	, staticMeshManager(nullptr)
 	, textureManager(nullptr)
 	, lightManager(nullptr)
+	, debugRender(nullptr)
 	, animatedModelManager(nullptr)
 	, renderableObjectTechniqueManager(nullptr)
 	, sceneRendererCommandManager(nullptr)
@@ -32,6 +33,7 @@ CEngine::~CEngine()
 	sceneRendererCommandManager->destroy();
 	cameraManager->destroy();
 	contextManager->destroy();
+	//debugRender->destroy();
 	//cookedMeshManager->destroy();
 	//iaManager->destroy();
 
@@ -49,6 +51,7 @@ CEngine::~CEngine()
 	delete contextManager;
 	delete cookedMeshManager;
 	delete iaManager;
+	delete debugRender;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -64,6 +67,7 @@ CEngine::~CEngine()
 	contextManager = nullptr;
 	cookedMeshManager = nullptr;
 	iaManager = nullptr;
+	debugRender = nullptr;
 
 } //Destruimos vars
 
@@ -71,10 +75,11 @@ void CEngine::Init()
 {
 	effectsManager = new CEffectManager();
 	textureManager = new CTextureManager();
-	materialManager = new CMaterialManager();
+	materialManager = new CMaterialManager();	
 	layerManager = new CLayerManager();
 	staticMeshManager = new CStaticMeshManager();
 	contextManager = new CContextManager();
+	debugRender = new CDebugRender();
 	lightManager = new CLightManager();
 	animatedModelManager = new CAnimatedModelManager();
 	renderableObjectTechniqueManager = new CRenderableObjectTechniqueManager();

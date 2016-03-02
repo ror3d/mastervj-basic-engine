@@ -4,7 +4,10 @@
 
 #include "Renderable/RenderableVertexs.h"
 
-CDebugRender::CDebugRender(ID3D11Device* _Device)
+CDebugRender::CDebugRender()
+{
+}
+void CDebugRender::Create() 
 {
 	{
 		//AXIS

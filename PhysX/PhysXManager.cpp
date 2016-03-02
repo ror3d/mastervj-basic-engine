@@ -351,7 +351,8 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 		{
 			physx::PxDefaultMemoryInputData input(desc.cookedMeshData.get()->data(), desc.cookedMeshData.get()->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
-			geom = new physx::PxConvexMeshGeometry(mesh);
+			physx::PxMeshScale scale(physx::PxVec3(desc.size.x, desc.size.y, desc.size.z), physx::PxQuat(1.0f));
+			geom = new physx::PxConvexMeshGeometry(mesh,scale);
 			break;
 		}
 

@@ -33,22 +33,27 @@ CApplication::CApplication(CContextManager *_ContextManager)
 
 CApplication::~CApplication()
 {
-	CDebugHelper::GetDebugHelper()->Log( "CApplication::~CApplication" );
+	CDebugHelper::GetDebugHelper()->Log("CApplication::~CApplication");
 }
 
 void CApplication::CreateCharController()
 {
-	CEngine::GetSingleton().getPhysXManager()->createController(1.75f, 0.5f, 10, Vect3f(0, 0, 0), "main");
+	CEngine::GetSingleton().getPhysXManager()->createController(1.75f, 0.5f, 10, Vect3f(0, 1, 0), "main");
 }
 
-void CApplication::Update( float _ElapsedTime )
+void CApplication::Update(float _ElapsedTime)
 {
+
+	CEngine& engine = CEngine::GetSingleton();
+	m_Timer += _ElapsedTime;
+	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
+
 	CEngine::GetSingleton().getPhysXManager()->update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 
 	// TODO: move this to somewhere else! (like inside the FPS cam controller)
 	ICameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
-	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>( cc );
+	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>(cc);
 	if (ccfps != nullptr)
 	{
 		ccfps->SetPitch(ccfps->GetPitch() - ccfps->GetPitchDisplacement());
@@ -77,7 +82,7 @@ void CApplication::Update( float _ElapsedTime )
 		}
 
 
-		Vect3f cameraPosition(0, 0, 0);		
+		Vect3f cameraPosition(0, 0, 0);
 		float velMultiplier = 0.1f;
 		float Strafe = CInputManager::GetInputManager()->GetAxis("STRAFE");
 		float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
@@ -121,7 +126,7 @@ void CApplication::Update( float _ElapsedTime )
 		}
 	}
 
-	CEngine::GetSingleton().getCameraManager()->Update( _ElapsedTime );
+	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 }
 
 

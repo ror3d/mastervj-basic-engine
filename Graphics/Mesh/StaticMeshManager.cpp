@@ -38,9 +38,9 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 
 				if(l_static_mesh->Load())
 				{
+					int nmat = 0;
 					for (int j = 0; j < l_Mesh.GetNumChildren(); ++j)
 					{
-						int nmat = 0;
 						CXMLTreeNode l_Mat = l_Mesh(j);
 						if (l_Mat.GetName() == std::string("material")
 							&& l_Mat.GetPszProperty("name") != nullptr)

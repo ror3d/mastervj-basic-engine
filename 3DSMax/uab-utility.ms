@@ -63,6 +63,7 @@ utility UABUtility "UAB Utility" width:160 height:527
 	)
 	on ExportMaterialButton pressed do
 	(
+		CollectCoresAndInstances()
 		createMaterials CopyTexturesCheck.checked
 		messageBox "Fichero Materials.xml creado correctamente" title:"Creación correcta"		
 	)
