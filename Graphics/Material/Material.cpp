@@ -53,7 +53,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 				CTemplatedMaterialParameter<Vect2f> *param = new CTemplatedMaterialParameter<Vect2f>(
 					l_paramMat,
 					nextDir,
-					l_paramMat.GetFloatProperty("value"),
+					l_paramMat.GetVect2fProperty("value", Vect2f(0, 0)),
 					type);
 				m_Parameters.push_back(param);
 }
@@ -63,7 +63,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 				CTemplatedMaterialParameter<Vect3f> *param = new CTemplatedMaterialParameter<Vect3f>(
 					l_paramMat,
 					nextDir,
-					l_paramMat.GetFloatProperty("value"),
+					l_paramMat.GetVect3fProperty("value", Vect3f(0, 0, 0)),
 					type);
 				m_Parameters.push_back(param);
 			}
@@ -73,7 +73,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 				CTemplatedMaterialParameter<Vect4f> *param = new CTemplatedMaterialParameter<Vect4f>(
 					l_paramMat,
 					nextDir,
-					l_paramMat.GetFloatProperty("value"),
+					l_paramMat.GetVect4fProperty("value", Vect4f(0, 0, 0, 0)),
 					type);
 				m_Parameters.push_back(param);
 			}
