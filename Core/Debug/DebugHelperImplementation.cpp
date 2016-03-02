@@ -55,10 +55,12 @@ bool CDebugHelperImplementation::Update(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 {
 	ICameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>(cc);
-	m_posRot->Position = ccfps->GetPosition();
-	m_posRot->Yaw = ccfps->GetYaw();
-	m_posRot->Pitch = ccfps->GetPitch();
-	
+	if (ccfps)
+	{
+		m_posRot->Position = ccfps->GetPosition();
+		m_posRot->Yaw = ccfps->GetYaw();
+		m_posRot->Pitch = ccfps->GetPitch();
+	}
 	// TODO: mandarle eventos al AntTweakBar
 	return TwEventWin(hWnd, msg, wParam, lParam);
 }
