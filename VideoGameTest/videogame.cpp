@@ -253,7 +253,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 				application.Update(l_ElapsedTime);
 				engine.getIAManager()->Update(l_ElapsedTime);
 				application.Render();
-				context.Draw(CEngine::GetSingleton().getDebugRender()->GetAxis());
+				//context.Draw(CEngine::GetSingleton().getDebugRender()->GetAxis());
 				inputManager.EndFrame();
 			}
 		}
