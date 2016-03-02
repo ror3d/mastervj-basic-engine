@@ -2,12 +2,35 @@
 #include "Context\ContextManager.h"
 #include "Engine\Engine.h"
 
-void CCaptureFrameBufferTexture::Init(const std::string &Name, unsigned int Width,
-	unsigned int Height)
+
+CCaptureFrameBufferTexture::CCaptureFrameBufferTexture(const CXMLTreeNode &node)
+	: CTexture(node.GetPszProperty("name"))
+{
+	int width = 64;
+	int height = 64;
+	if (node.GetBoolProperty("texture_width_as_frame_buffer", false, false))
+	{
+		width = CEngine::GetSingleton().getContextManager()->GetWidth();
+		height = CEngine::GetSingleton().getContextManager()->GetHeight();
+	}
+	else
+	{
+		width = node.GetIntProperty("width", 64);
+		height = node.GetIntProperty("height", 64);
+	}
+	Init(width, height);
+}
+
+CCaptureFrameBufferTexture::CCaptureFrameBufferTexture(const std::string &Name, unsigned int Width, unsigned int Height)
+	: CTexture(Name)
+{
+	Init(Width, Height);
+}
+
+void CCaptureFrameBufferTexture::Init(unsigned int Width, unsigned int Height)
 {
 	m_Width = Width;
 	m_Height = Height;
-	setName(Name);
 	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	ID3D11Texture2D *l_Buffer = NULL;
 	CEngine::GetSingleton().getContextManager()->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&l_Buffer);
@@ -38,6 +61,15 @@ void CCaptureFrameBufferTexture::Init(const std::string &Name, unsigned int Widt
 	if (FAILED(l_HR))
 		return;
 	CreateSamplerState();
+}
+
+CCaptureFrameBufferTexture::~CCaptureFrameBufferTexture()
+{
+	if (m_DataTexture == nullptr)
+	{
+		m_DataTexture->Release();
+		m_DataTexture = nullptr;
+	}
 }
 
 bool CCaptureFrameBufferTexture::Capture(unsigned int StageId)

@@ -3,6 +3,7 @@
 #include <Base/Utils/Utils.h>
 #include <PxPhysicsAPI.h>
 
+
 #include <fstream>
 #include <iterator>
 #include <algorithm>
@@ -35,7 +36,7 @@
 */
 #else
 #endif
-
+//#define USE_PHYSX_DEBUG 1
 #if USE_PHYSX_DEBUG
 #define				PVD_HOST			"127.0.0.1"
 #endif
@@ -58,7 +59,7 @@ inline physx::PxQuat q(const Quatf& q)
 { return physx::PxQuat(q.x, q.y, q.z, q.w); }
 
 
-class CPhysXManagerImplementation
+class CPhysXManagerImplementation 
 	: public CPhysXManager
 	, public physx::PxSimulationEventCallback
 	, public physx::PxUserControllerHitReport
@@ -118,9 +119,9 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 		m_DebugConnection = nullptr;
 	}
 #endif
-
+	
 	int ncpus = 0;
-
+	
 #if (defined(_MSC_VER) && _MSC_VER >= 1800) || __cplusplus <= 199711L
 	ncpus = std::thread::hardware_concurrency();
 #endif
@@ -146,7 +147,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 	DEBUG_ASSERT(m_Scene);
 
 	m_Scene->setSimulationEventCallback(this);
-
+	
 
 	m_ControllerManager = PxCreateControllerManager(*m_Scene);
 	m_ControllerManager->setOverlapRecoveryModule(true);
@@ -156,6 +157,8 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 
 CPhysXManagerImplementation::~CPhysXManagerImplementation()
 {
+	
+
 }
 
 // PxSimulationEventCallback
@@ -371,8 +374,8 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 	physx::PxShape* shape = body->createShape(*geom, *mat);
 	delete geom;
-
-	//body->attachShape(*shape);
+	
+	body->attachShape(*shape);
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)
 	{
@@ -411,11 +414,18 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	m_CharacterControllers[name] = cct;
 }
 
-Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime){
-	physx::PxController* cct = getCharControllers()["main"];
+void CPhysXManager::InitPhysx(){
+	registerMaterial("ground", 1, 0.9, 0.1);
+	registerMaterial("box", 1, 0.9, 0.8);
+	registerMaterial("controller_material", 10, 2, 0.5);
+	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
+}
+
+Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){
+	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
-	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
+	cct->move(v(movement), movement.Length() * 0.1f, elapsedTime, filters);
 	cct->setUpDirection(v(direction));
 	physx::PxRigidDynamic* actor = cct->getActor();
 	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();

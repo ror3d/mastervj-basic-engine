@@ -1,4 +1,6 @@
 #include "Scene/CaptureFrameBufferSceneRendererCommand.h"
+#include "Texture/CaptureFrameBufferTexture.h"
+#include "Engine/Engine.h"
 
 CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand(CXMLTreeNode &TreeNode) 
 	:CStagedTexturedSceneRendererCommand(TreeNode){
@@ -7,16 +9,26 @@ CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand
 		< / capture_frame_buffer>*/
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++){
 		CXMLTreeNode stagedTextNode = TreeNode(i);
-		if (stagedTextNode.GetName() == std::string("capture_texture")){
-			CTexture * text = new CTexture();
-			text->setName(stagedTextNode.GetPszProperty("name"));
-			//TODO FORMAT & TEXTUREWIDTH....
-			CStagedTexturedSceneRendererCommand::CStageTexture * stagedText = new CStagedTexturedSceneRendererCommand::CStageTexture(i, text);
-			m_StageTextures.push_back(*stagedText);
+		if (stagedTextNode.GetName() == std::string("capture_texture"))
+		{
+			//CDynamicTexture * text = new CDynamicTexture(stagedTextNode);
+			CCaptureFrameBufferTexture * text = new CCaptureFrameBufferTexture(stagedTextNode);
+			AddStageTexture(0, text);
+			
+			CEngine::GetSingleton().getTextureManager()->add(text->getName(), text);
 		}
 	}
 }
 
-void CCaptureFrameBufferSceneRendererCommand::Execute(CContextManager &_context){
+CCaptureFrameBufferSceneRendererCommand::~CCaptureFrameBufferSceneRendererCommand()
+{
+	// TODO
+}
 
+void CCaptureFrameBufferSceneRendererCommand::Execute(CContextManager &_context)
+{
+	for (auto stex : m_StageTextures)
+	{
+		dynamic_cast<CCaptureFrameBufferTexture*>(stex.m_Texture)->Capture(stex.m_StageId);
+	}
 }

@@ -8,6 +8,8 @@ CFPSCameraController::CFPSCameraController()
 , m_PitchSpeed(60.f)
 , m_Speed(5.0f)
 , m_FastSpeed(10.0f)
+, m_CameraDisplacement(-2,3.f,0.f)
+, m_PitchDisplacement(-0.5f)
 {
 	m_Position=Vect3f(0.0f, 2.0f, 0.0f);
 }
@@ -49,7 +51,7 @@ void CFPSCameraController::UpdateCameraValues(CCamera *Camera) const
 {
 	Vect3f l_Direction = GetDirection();
 	Camera->SetPosition(m_Position);
-	Camera->SetLookAt(m_Position+l_Direction);
+	Camera->SetLookAt(m_Position + l_Direction);
 	Camera->SetUp(GetUp());
 	Camera->SetMatrixs();
 }

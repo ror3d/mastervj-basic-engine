@@ -22,10 +22,12 @@ public:
 	virtual void Log(const std::string& text) const;
 
 	virtual void RegisterBar(const SDebugBar& bar);
-	virtual void RemoveBar(const std::string& bar);
+	void RemoveBar(std::string bar);
 
-	// TODO: descomentar esto
+	void CreateMainBar();
+
 	std::unordered_map<std::string, TwBar*> m_Bars;
+	SPositionOrientation * m_posRot;
 	TwType m_PosRotType;
 };
 

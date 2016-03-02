@@ -163,6 +163,7 @@ bool CEffectShader::CreateConstantBuffer()
 		CreateConstantBuffer(0, sizeof(CSceneEffectParameters))
 		&& CreateConstantBuffer(1, sizeof(CLightEffectParameters))
 		&& CreateConstantBuffer(2, sizeof(CAnimatedModelEffectParameters))
+		&& CreateConstantBuffer(3, sizeof(CMaterialEffectParameters))
 	);
 }
 

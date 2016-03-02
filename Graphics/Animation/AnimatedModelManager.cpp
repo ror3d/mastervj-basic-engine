@@ -4,9 +4,11 @@
 
 #include <XML/XMLTreeNode.h>
 
+#include "cal3d/loader.h"
+
 CAnimatedModelManager::CAnimatedModelManager()
 {
-
+	CalLoader::setLoadingMode(LOADER_ROTATE_X_AXIS);
 }
 CAnimatedModelManager::~CAnimatedModelManager()
 {

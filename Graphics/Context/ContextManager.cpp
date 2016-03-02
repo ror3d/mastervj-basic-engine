@@ -196,7 +196,7 @@ HRESULT CContextManager::CreateBackBuffer(HWND hWnd, int Width, int Height)
 		return hr;
 
 	SetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
-
+	
 	//m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 
 	return S_OK;
@@ -232,11 +232,11 @@ void CContextManager::DisableAlphaBlendState()
 	m_DeviceContext->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
 
-void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
+void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){	
 	if (clear_DepthStencil)
 	{
 		m_DeviceContext->ClearDepthStencilView(m_CurrentDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	}
+}
 
 	if (clear_RenderTarget)
 	{
@@ -273,7 +273,7 @@ void CContextManager::UnsetRenderTargets(){
 	m_DeviceContext->RSSetViewports(1, &vp);
 }
 
-void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture,
+void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture, 
 	float x, float y, float Width, float Height, const CColor &Color)
 {
 	CEffectManager::m_SceneParameters.m_BaseColor = Color;
