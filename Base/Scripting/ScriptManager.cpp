@@ -80,14 +80,16 @@ void CScriptManager::RegisterLUAFunctions()
 {
 	LuaErrorCapturedStdout errorCapture;
 	
+	bool loaded = (*m_state).Load("LUA/CharacterController.lua");
 	
+	std::string helloWorld = (*m_state)["foo"]("hi");
 
-	/*(*m_state)["CScriptManager"]
+	(*m_state)["CScriptManager"]
 		.SetObj(*this,
 				"RunCode", &CScriptManager::RunCode,
 				"RunFile", &CScriptManager::RunFile,
 				"Load", &CScriptManager::Load);
-	(*m_state)["Vect3f"]
+	/*(*m_state)["Vect3f"]
 		.SetClass<Vect3f, float, float, float>("x", &Vect3f::x,
 					"y", &Vect3f::y,
 					"z", &Vect3f::z); 

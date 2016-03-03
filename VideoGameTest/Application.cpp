@@ -59,8 +59,7 @@ void CApplication::Update(float _ElapsedTime)
 		ccfps->SetPitch(ccfps->GetPitch() - ccfps->GetPitchDisplacement());
 		if (CInputManager::GetInputManager()->GetAxis("STATICMOUSEAxis") != 1)
 		{
-			ccfps->AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
-			ccfps->AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS")  * 0.005f);
+			CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 		}
 		CRenderableObject * character = nullptr;
 		CRenderableObjectsManager * layer = CEngine::GetSingleton().getLayerManager()->get("models");
@@ -80,7 +79,6 @@ void CApplication::Update(float _ElapsedTime)
 				ccfps->SetPitch(-0.5f);
 			}
 		}
-
 
 		Vect3f cameraPosition(0, 0, 0);
 		float velMultiplier = 0.1f;
@@ -124,9 +122,7 @@ void CApplication::Update(float _ElapsedTime)
 			ccfps->SetPosition(cameraPosition);
 			ccfps->SetPitch(ccfps->GetPitch() + ccfps->GetPitchDisplacement());
 		}
-	}
-
-	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
+	}	
 }
 
 
