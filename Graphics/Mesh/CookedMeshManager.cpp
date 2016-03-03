@@ -24,8 +24,7 @@ void CCookedMeshManager::CookMeshes()
 		{
 			ob = CEngine::GetSingleton().getLayerManager()->get("IA")->get(it->second->getName());
 		}
-		desc->material = std::string("StaticObjectMaterial");				
-		desc->density = 10;
+		desc->material = std::string("StaticObjectMaterial");			
 		desc->radius = 0.1f;
 		desc->size = ob->GetScale();
 		desc->position = ob->GetPosition();

@@ -205,6 +205,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 	engine.getCookedMeshManager()->CookMeshes();
 	engine.getIAManager()->Create();
+	engine.getScriptManager()->Initialize();
+	engine.getScriptManager()->RegisterLUAFunctions();
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
@@ -253,7 +255,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 				application.Update(l_ElapsedTime);
 				engine.getIAManager()->Update(l_ElapsedTime);
 				application.Render();
-				context.Draw(CEngine::GetSingleton().getDebugRender()->GetAxis());
+				//context.Draw(CEngine::GetSingleton().getDebugRender()->GetAxis());
 				inputManager.EndFrame();
 			}
 		}

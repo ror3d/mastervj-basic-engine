@@ -361,29 +361,33 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 			break;
 	}
 
+	physx::PxTransform transform = physx::PxTransform(v(desc.position), q(desc.orientation));
+
 	physx::PxRigidActor* body;
 	switch (actorType)
 	{
 		case CPhysXManager::ActorType::Static:
-			body = m_PhysX->createRigidStatic(physx::PxTransform(v(desc.position), q(desc.orientation)));
+			body = m_PhysX->createRigidStatic(transform); //AQUI
 			break;
 		case CPhysXManager::ActorType::Dynamic:
-			body = m_PhysX->createRigidDynamic(physx::PxTransform(v(desc.position), q(desc.orientation)));
+			body = m_PhysX->createRigidDynamic(transform);
 			break;
 	}
 
 	physx::PxShape* shape = body->createShape(*geom, *mat);
 	delete geom;
-	
+		
+	shape->setLocalPose(transform); //AQUI
+
 	body->attachShape(*shape);
+	
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)
 	{
 		physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidBody*>(body), desc.density);
 	}
-
 	m_Scene->addActor(*body);
-
+	
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());

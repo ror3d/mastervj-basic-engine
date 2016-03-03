@@ -43,9 +43,6 @@
     <Filter Include="Cinematic">
       <UniqueIdentifier>{9f36ac37-457a-4873-a2ff-0885a2e0097f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CharacterController">
-      <UniqueIdentifier>{1b56b552-300a-4c32-b8f1-0c719e07b8e2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
