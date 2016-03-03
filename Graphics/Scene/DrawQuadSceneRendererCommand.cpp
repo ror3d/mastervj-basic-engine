@@ -39,6 +39,6 @@ void CDrawQuadSceneRendererCommand::Execute(CContextManager &_context)
 {
 	ActivateTextures();
 	m_Material->apply();
-	_context.DrawScreenQuad(m_Material->getRenderableObjectTechique()->GetEffectTechnique(),
+	_context.DrawRelativeScreenQuad(m_Material->getRenderableObjectTechique()->GetEffectTechnique(),
 							nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
 }
