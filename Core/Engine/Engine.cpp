@@ -19,6 +19,7 @@ CEngine::CEngine()
 	, cookedMeshManager(nullptr)
 	, iaManager(nullptr)
 	, scriptManager(nullptr)
+	, characterControllerManager(nullptr)
 {
 } 
 CEngine::~CEngine()
@@ -35,6 +36,7 @@ CEngine::~CEngine()
 	cameraManager->destroy();
 	contextManager->destroy();
 	scriptManager->Destroy();
+	characterControllerManager->destroy();
 	//debugRender->destroy();
 	//cookedMeshManager->destroy();
 	//iaManager->destroy();
@@ -55,6 +57,7 @@ CEngine::~CEngine()
 	delete iaManager;
 	delete debugRender;
 	delete scriptManager;
+	delete characterControllerManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -72,6 +75,7 @@ CEngine::~CEngine()
 	iaManager = nullptr;
 	debugRender = nullptr;
 	scriptManager = nullptr;
+	characterControllerManager = nullptr;
 
 } //Destruimos vars
 
@@ -93,4 +97,5 @@ void CEngine::Init()
 	cookedMeshManager = new CCookedMeshManager();
 	iaManager = new CIAManager();
 	scriptManager = new CScriptManager();
+	characterControllerManager = new CCharacterControllerManager();
 }

@@ -13,8 +13,6 @@ public:
 	CApplication( CContextManager *_ContextManager);
 	~CApplication();
 
-
-	void CreateCharController();
 	void InitPhysx();
 	void Init();
 	

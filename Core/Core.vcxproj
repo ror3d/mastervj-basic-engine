@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CharacterController\CharacterControllerInstance.cpp" />
+    <ClCompile Include="CharacterController\CharacterControllerManager.cpp" />
     <ClCompile Include="Debug\DebugHelper.cpp" />
     <ClCompile Include="Debug\DebugHelperImplementation.cpp" />
     <ClCompile Include="Enemies\BossEnemy.cpp" />
@@ -24,6 +26,8 @@
     <ClCompile Include="Input\InputManagerImplementation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CharacterController\CharacterControllerInstance.h" />
+    <ClInclude Include="CharacterController\CharacterControllerManager.h" />
     <ClInclude Include="Debug\DebugHelper.h" />
     <ClInclude Include="Debug\DebugHelperImplementation.h" />
     <ClInclude Include="Enemies\BossEnemy.h" />

@@ -17,6 +17,7 @@
 #include <PhysX/PhysXManager.h>
 #include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
+#include <Core/CharacterController/CharacterControllerManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -38,6 +39,7 @@ private:
 	CCookedMeshManager * cookedMeshManager;
 	CIAManager * iaManager;
 	CScriptManager * scriptManager;
+	CCharacterControllerManager * characterControllerManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -62,4 +64,5 @@ public:
 	inline CCookedMeshManager * getCookedMeshManager() const { return cookedMeshManager;  }
 	inline CIAManager * getIAManager() const { return iaManager; }
 	inline CScriptManager * getScriptManager() const { return scriptManager; }
+	inline CCharacterControllerManager * getCharacterControllerManager() const { return characterControllerManager; }
 };

@@ -222,7 +222,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		//CApplication application(&debugRender, &s_Context);
 		CApplication application(&context);
 
-		application.CreateCharController();
+		//application.CreateCharController();
+		engine.getCharacterControllerManager()->Create("main","__fps","models","main");
 
 		UpdateWindow(hWnd);
 		MSG msg;
