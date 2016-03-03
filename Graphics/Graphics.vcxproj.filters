@@ -43,6 +43,9 @@
     <Filter Include="Cinematic">
       <UniqueIdentifier>{9f36ac37-457a-4873-a2ff-0885a2e0097f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CharacterController">
+      <UniqueIdentifier>{8dbeed1d-f732-4a8d-b910-8ef39e4d251d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
@@ -109,9 +112,6 @@
     </ClInclude>
     <ClInclude Include="Animation\AnimatedModelManager.h">
       <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderable\AnimatedInstanceModel.h">
-      <Filter>Renderable</Filter>
     </ClInclude>
     <ClInclude Include="Renderable\RenderableObject.h">
       <Filter>Renderable</Filter>
@@ -260,6 +260,9 @@
     <ClInclude Include="Mesh\CookedMeshmanager.h">
       <Filter>Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="Animation\AnimatedInstanceModel.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -337,9 +340,6 @@
     </ClCompile>
     <ClCompile Include="Animation\AnimatedModelManager.cpp">
       <Filter>Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderable\AnimatedInstanceModel.cpp">
-      <Filter>Renderable</Filter>
     </ClCompile>
     <ClCompile Include="Cinematics\CameraKey.cpp">
       <Filter>Cinematic</Filter>
@@ -463,6 +463,9 @@
     </ClCompile>
     <ClCompile Include="Mesh\CookedMeshManager.cpp">
       <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimatedInstanceModel.cpp">
+      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

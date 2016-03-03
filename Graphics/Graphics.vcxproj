@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation\AnimatedCoreModel.h" />
+    <ClInclude Include="Animation\AnimatedInstanceModel.h" />
     <ClInclude Include="Animation\AnimatedModelManager.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraController.h" />
@@ -51,7 +52,6 @@
     <ClInclude Include="Mesh\MeshInstance.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="Mesh\StaticMeshManager.h" />
-    <ClInclude Include="Renderable\AnimatedInstanceModel.h" />
     <ClInclude Include="Renderable\PoolRenderableObjectTechnique.h" />
     <ClInclude Include="Renderable\RenderableObject.h" />
     <ClInclude Include="Renderable\RenderableObjectsManager.h" />
@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation\AnimatedCoreModel.cpp" />
+    <ClCompile Include="Animation\AnimatedInstanceModel.cpp" />
     <ClCompile Include="Animation\AnimatedModelManager.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
     <ClCompile Include="Camera\CameraInfo.cpp" />
@@ -125,7 +126,6 @@
     <ClCompile Include="Mesh\MeshInstance.cpp" />
     <ClCompile Include="Mesh\StaticMesh.cpp" />
     <ClCompile Include="Mesh\StaticMeshManager.cpp" />
-    <ClCompile Include="Renderable\AnimatedInstanceModel.cpp" />
     <ClCompile Include="Renderable\PoolRenderableObjectTechnique.cpp" />
     <ClCompile Include="Renderable\RenderableObject.cpp" />
     <ClCompile Include="Renderable\RenderableObjectsManager.cpp" />

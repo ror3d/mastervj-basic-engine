@@ -2,7 +2,7 @@
 #include "RenderableObject.h"
 #include "Mesh/MeshInstance.h"
 #include "Mesh/StaticMesh.h"
-#include "Renderable/AnimatedInstanceModel.h"
+#include "Animation/AnimatedInstanceModel.h"
 
 CRenderableObjectsManager::CRenderableObjectsManager()
 {

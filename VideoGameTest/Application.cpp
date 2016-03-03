@@ -5,7 +5,7 @@
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Camera/FPSCameraController.h>
 #include <Renderable/RenderableObjectsManager.h>
-#include "Renderable/AnimatedInstanceModel.h"
+#include "Animation/AnimatedInstanceModel.h"
 #include "Animation/AnimatedCoreModel.h"
 
 #include <Core/Input/InputManager.h>
