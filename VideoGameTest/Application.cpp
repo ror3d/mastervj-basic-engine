@@ -55,29 +55,13 @@ void CApplication::Update(float _ElapsedTime)
 	ICameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>(cc);
 	if (ccfps != nullptr)
-	{
-		ccfps->SetPitch(ccfps->GetPitch() - ccfps->GetPitchDisplacement());
-		if (CInputManager::GetInputManager()->GetAxis("STATICMOUSEAxis") != 1)
-		{
-			CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
-		}
+	{		
+		//CHAR MOVEMENT
 		CRenderableObject * character = nullptr;
 		CRenderableObjectsManager * layer = CEngine::GetSingleton().getLayerManager()->get("models");
 		if (layer != nullptr)
 		{
 			character = layer->get("main");
-		}
-		
-		if (character != nullptr)
-		{
-			if (ccfps->GetPitch() > 0.8f)//No atraviesa suelo
-			{
-				ccfps->SetPitch(0.8f);
-			}
-			if (ccfps->GetPitch() < -0.5f)//Vista superior personaje
-			{
-				ccfps->SetPitch(-0.5f);
-			}
 		}
 
 		Vect3f cameraPosition(0, 0, 0);
@@ -91,19 +75,23 @@ void CApplication::Update(float _ElapsedTime)
 		cameraPosition.y = CInputManager::GetInputManager()->GetAxis("JUMPAxis");
 
 		cameraPosition = CEngine::GetSingleton().getPhysXManager()->moveCharacterController(cameraPosition*velMultiplier, ccfps->GetUp(), _ElapsedTime, "main");
+		//CHAR MOVEMENT
 
+		//CAMERA UPDATE
+		ccfps->SetPosition(cameraPosition);
+
+		if (CInputManager::GetInputManager()->GetAxis("STATICMOUSEAxis") != 1)
+		{
+			CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
+		}
+		//CAMERA UPDATE
+
+		//ANIMATED MODEL
 		if (character != nullptr)
 		{
 			character->SetPosition(cameraPosition);
 			character->SetYaw(-m_Yaw + 3.14159*0.5f);
-
-			Vect3f rotacionDeseada = ccfps->GetCameraDisplacement();
-			rotacionDeseada = rotacionDeseada.RotateZ(ccfps->GetPitch());
-			rotacionDeseada = rotacionDeseada.RotateY(-m_Yaw);
-
-			ccfps->SetPosition(cameraPosition + rotacionDeseada);
-			ccfps->SetPitch(ccfps->GetPitch() + ccfps->GetPitchDisplacement());
-
+			
 			if ((Strafe == 0 && Forward == 0) && activeMovAnim)
 			{
 				((CAnimatedInstanceModel*)character)->ClearCycle(1, 0.2);
@@ -116,13 +104,17 @@ void CApplication::Update(float _ElapsedTime)
 				((CAnimatedInstanceModel*)character)->BlendCycle(1, 1.0, 0.2);
 				activeMovAnim = true;
 			}
-		}
+		}//ANIMATED MODEL
 		else
 		{
 			ccfps->SetPosition(cameraPosition);
 			ccfps->SetPitch(ccfps->GetPitch() + ccfps->GetPitchDisplacement());
 		}
 	}	
+	else
+	{
+		CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
+	}
 }
 
 
