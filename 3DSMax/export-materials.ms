@@ -8,7 +8,7 @@ fn exportTextureFile texTypeName texMap = (
 	local texturePath = (openBitMap texMap.bitmap.filename).filename
 	local textureName = filenameFromPath texMap.filename
 	
-	format "\t\t <% filename=\"%\"/>\n" texTypeName (getTexturePath textureName) to:file
+	format "\t\t <texture type=\"%\" filename=\"%\"/>\n" texTypeName (getTexturePath textureName) to:file
 	
 	local ext = toLower (getFilenameType textureName)
 	if ext != ".dds" and ext != ".jpg" and ext != ".jpeg" and ext != ".png" then
@@ -25,14 +25,14 @@ fn exportTextureFile texTypeName texMap = (
 fn exportSingleTexture mat meshName = (
 	if HasTexture mat alertOnMissing:true then
 	(
-		exportTextureFile "texture" mat.diffuseMap
+		exportTextureFile "albedo" mat.diffuseMap
 	)
 )
 
 fn exportSingleReflection mat meshName = (
 	if HasReflection mat alertOnMissing:false then
 	(
-		exportTextureFile "texture" mat.reflectionMap
+		exportTextureFile "environment" mat.reflectionMap
 	)
 )
 

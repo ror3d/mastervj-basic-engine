@@ -351,7 +351,7 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 			}
 			
 			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);			
-			CEngine::GetSingleton().getPhysXManager()->saveCookedMeshToFile(*cooked, nameFile);
+			//CEngine::GetSingleton().getPhysXManager()->saveCookedMeshToFile(*cooked, nameFile);
 		}
 
 		std::shared_ptr<std::vector<uint8>> vec = static_cast<std::shared_ptr<std::vector<uint8>>>(cooked);

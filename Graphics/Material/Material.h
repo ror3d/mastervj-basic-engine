@@ -16,7 +16,27 @@ class CMaterialParameter;
 class CMaterial : public CNamed
 {
 private:
-	std::vector<CTexture *> m_textures;
+	static int GetTextureStage(const std::string& type)
+	{
+		const std::string stages[] = {
+			"albedo",
+			"normal",
+			"lightmap",
+			"lightmap2",
+			"lightmap3",
+			"environment",
+			"shadowmap"
+		};
+		int i = 0;
+		for (auto const &t : stages)
+		{
+			if (t == type) return i;
+			++i;
+		}
+		return -1;
+	}
+
+	std::vector<std::pair<uint8, CTexture *>> m_textures;
 	std::vector<CMaterialParameter *> m_Parameters;
 	CRenderableObjectTechnique *m_RenderableObjectTechnique;
 	unsigned int m_CurrentParameterData;

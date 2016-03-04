@@ -6,10 +6,16 @@ CRenderLayerSceneRendererCommand::CRenderLayerSceneRendererCommand(CXMLTreeNode 
 	//<render_layer layer="solid" active="true"/>
 	std::string layerNameToRender = TreeNode.GetPszProperty("layer");
 	m_Layer = CEngine::GetSingleton().getLayerManager()->get(layerNameToRender);	
-	m_Layer->setActive(TreeNode.GetBoolProperty("active"));
+	if (m_Layer != nullptr)
+	{
+		m_Layer->setActive(TreeNode.GetBoolProperty("active"));
+	}
 }
 
 void CRenderLayerSceneRendererCommand::Execute(CContextManager &_context)
 {
-	m_Layer->Render(&_context);
+	if (m_Layer != nullptr)
+	{
+		m_Layer->Render(&_context);
+	}
 }

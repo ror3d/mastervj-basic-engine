@@ -94,6 +94,9 @@ public:
 		DEBUG_ASSERT(idx < m_materials.size());
 		m_materials[idx] = mat;
 	}
+	Vect3f GetBsCenter(){ return m_BsCenter;  }
+	Vect3f GetAabbMin(){ return m_AabbMin;  }
+	Vect3f GetAabbMax(){ return m_AabbMax; }
 
 	bool FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc );
 };

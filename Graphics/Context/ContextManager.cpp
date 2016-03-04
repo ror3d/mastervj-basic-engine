@@ -28,6 +28,7 @@ CContextManager::~CContextManager()
 
 void CContextManager::destroy()
 {
+	CHECKED_DELETE(m_DrawQuadRV);
 	CHECKED_RELEASE(m_RenderTargetView);
 	CHECKED_RELEASE(m_DepthStencil);
 	CHECKED_RELEASE(m_DepthStencilView);
@@ -115,20 +116,21 @@ HRESULT CContextManager::CreateContext(HWND hWnd, int Width, int Height)
 	m_Viewport.TopLeftY = 0;
 	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 
-	/*D3D11_RASTERIZER_DESC l_RasterDescription;
+	D3D11_RASTERIZER_DESC l_RasterDescription;
 	memset(&l_RasterDescription, 0, sizeof(D3D11_RASTERIZER_DESC));
-	l_RasterDescription.CullMode = D3D11_CULL_FRONT;
+	l_RasterDescription.CullMode = D3D11_CULL_BACK;
 	l_RasterDescription.FillMode = D3D11_FILL_SOLID;
+	l_RasterDescription.FrontCounterClockwise = TRUE;
 	ID3D11RasterizerState *l_RasterizerState;
 	m_D3DDevice->CreateRasterizerState(&l_RasterDescription, &l_RasterizerState);
-	m_DeviceContext->RSSetState(l_RasterizerState);*/
+	m_DeviceContext->RSSetState(l_RasterizerState);
 
 
 	MV_POSITION_TEXTURE_VERTEX l_ScreenVertexsQuad[4] =
 	{
 		{ Vect3f(-1.0f, 1.0f, 0.5f), Vect2f(0.0f, 0.0f) },
-		{ Vect3f(1.0f, 1.0f, 0.5f), Vect2f(1.0f, 0.0f) },
 		{ Vect3f(-1.0f, -1.0f, 0.5f), Vect2f(0.0f, 1.0f) },
+		{ Vect3f(1.0f, 1.0f, 0.5f), Vect2f(1.0f, 0.0f) },
 		{ Vect3f(1.0f, -1.0f, 0.5f), Vect2f(1.0f, 1.0f) }
 	};
 	m_DrawQuadRV = new CTrianglesStripRenderableVertexs
@@ -281,6 +283,11 @@ void CContextManager::UnsetRenderTargets(){
 	m_DeviceContext->RSSetViewports(1, &vp);
 }
 
+void CContextManager::DrawRelativeScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture,
+	float x, float y, float Width, float Height, const CColor &Color)
+{
+	DrawScreenQuad(EffectTechnique, Texture, x, y, Width* m_Viewport.Width, Height*m_Viewport.Height, Color);
+}
 void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture, 
 	float x, float y, float Width, float Height, const CColor &Color)
 {
@@ -288,8 +295,8 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 	if (Texture != NULL)
 		Texture->Activate(0);
 	D3D11_VIEWPORT l_Viewport;
-	l_Viewport.Width = Width* m_Viewport.Width;
-	l_Viewport.Height = Height*m_Viewport.Height;
+	l_Viewport.Width = Width;
+	l_Viewport.Height = Height;
 	l_Viewport.MinDepth = 0.0f;
 	l_Viewport.MaxDepth = 1.0f;
 	l_Viewport.TopLeftX = x*m_Viewport.Width;
@@ -301,4 +308,9 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 
 void CContextManager::Present(){
 	m_SwapChain->Present(0, 0);
+}
+
+void CContextManager::Draw(CRenderableVertexs* _VerticesToRender){
+	
+	_VerticesToRender->Render(this, CEngine::GetSingleton().getEffectsManager()->get("forward_PosNorTex_technique"));
 }

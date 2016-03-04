@@ -25,14 +25,25 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 
 	m_RenderableObjectTechnique = CEngine::GetSingleton().getRenderableObjectTechniqueManager()->get(name);
 	void *nextDir = &CEffectManager::m_MaterialEffectParameters.m_RawData[0];
+	int l_NextStage = 0;
 	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
 	{
 		CXMLTreeNode l_paramMat = TreeNode(i);
-		if (l_paramMat.GetName() == std::string("texture") || l_paramMat.GetName() == std::string("normal")){
+		if (l_paramMat.GetName() == std::string("texture"))
+		{
 			CXMLTreeNode l_Texture = l_paramMat;
 			CTexture * Texture = CEngine::GetSingleton().getTextureManager()->GetTexture(l_Texture.GetPszProperty("filename"));
-			m_textures.push_back(Texture);
-		
+			int stage = GetTextureStage(l_Texture.GetPszProperty("type", "", false));
+			if (stage < 0)
+			{
+				stage = l_paramMat.GetIntProperty("stage", -1, false);
+			}
+			if (stage < 0)
+			{
+				stage = l_NextStage;
+			}
+			m_textures.push_back(std::make_pair(stage,Texture));
+			l_NextStage++;
 		}
 		else if (l_paramMat.GetName() == std::string("parameter"))
 		{
@@ -53,7 +64,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 				CTemplatedMaterialParameter<Vect2f> *param = new CTemplatedMaterialParameter<Vect2f>(
 					l_paramMat,
 					nextDir,
-					l_paramMat.GetFloatProperty("value"),
+					l_paramMat.GetVect2fProperty("value", Vect2f(0, 0)),
 					type);
 				m_Parameters.push_back(param);
 }
@@ -63,7 +74,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 				CTemplatedMaterialParameter<Vect3f> *param = new CTemplatedMaterialParameter<Vect3f>(
 					l_paramMat,
 					nextDir,
-					l_paramMat.GetFloatProperty("value"),
+					l_paramMat.GetVect3fProperty("value", Vect3f(0, 0, 0)),
 					type);
 				m_Parameters.push_back(param);
 			}
@@ -73,7 +84,7 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 				CTemplatedMaterialParameter<Vect4f> *param = new CTemplatedMaterialParameter<Vect4f>(
 					l_paramMat,
 					nextDir,
-					l_paramMat.GetFloatProperty("value"),
+					l_paramMat.GetVect4fProperty("value", Vect4f(0, 0, 0, 0)),
 					type);
 				m_Parameters.push_back(param);
 			}
@@ -87,6 +98,11 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 
 CMaterial::~CMaterial()
 {
+	for (auto &param : m_Parameters)
+	{
+		delete param;
+	}
+	m_Parameters.clear();
 	destroy();
 }
 
@@ -101,7 +117,7 @@ void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 
 	for (int i = 0; i < m_textures.size(); ++i)
 	{
-		m_textures[i]->Activate(i);
+		m_textures[i].second->Activate(m_textures[i].first);
 	}
 
 }

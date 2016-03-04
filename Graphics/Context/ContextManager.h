@@ -38,6 +38,9 @@ public:
 	void UnsetRenderTargets();
 	void DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 		*Texture, float x, float y, float Width, float Height, const CColor &Color);
+	void DrawRelativeScreenQuad(CEffectTechnique *EffectTechnique, CTexture
+		*Texture, float x, float y, float Width, float Height, const CColor &Color);
+	void Draw(CRenderableVertexs* _VerticesToRender);
 
 	ID3D11Device* GetDevice() const { return m_D3DDevice; }
 	ID3D11DeviceContext* GetDeviceContext() const { return m_DeviceContext; }

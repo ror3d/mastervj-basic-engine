@@ -15,6 +15,7 @@
 #include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
+#include <Graphics/IA/IAManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -34,6 +35,7 @@ private:
 	CCameraManager * cameraManager;
 	CPhysXManager * physXManager;
 	CCookedMeshManager * cookedMeshManager;
+	CIAManager * iaManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -56,4 +58,5 @@ public:
 	inline CCameraManager * getCameraManager() const { return cameraManager; }
 	inline CPhysXManager * getPhysXManager() const { return physXManager; }
 	inline CCookedMeshManager * getCookedMeshManager() const { return cookedMeshManager;  }
+	inline CIAManager * getIAManager() const { return iaManager; }
 };

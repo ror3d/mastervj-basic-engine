@@ -55,7 +55,7 @@ CDynamicTexture::CDynamicTexture(const CXMLTreeNode &node)
 	}
 	else
 	{
-		DEBUG_ASSERT(!"Using default value!");
+		//DEBUG_ASSERT(!"Using default value!");
 		m_format = DXGI_FORMAT::DXGI_FORMAT_R8G8B8A8_UNORM;
 	}
 

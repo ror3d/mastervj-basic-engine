@@ -28,6 +28,8 @@
     <ClInclude Include="Cinematics\CinematicObjectKeyframe.h" />
     <ClInclude Include="Cinematics\CinematicPlayer.h" />
     <ClInclude Include="Context\ContextManager.h" />
+    <ClInclude Include="IA\IAInstance.h" />
+    <ClInclude Include="IA\IAManager.h" />
     <ClInclude Include="Layer\LayerManager.h" />
     <ClInclude Include="Light\LightEffectParameters.h" />
     <ClInclude Include="Debug\DebugRender.h" />
@@ -113,6 +115,8 @@
     <ClCompile Include="Effect\EffectTechnique.cpp" />
     <ClCompile Include="Effect\EffectVertexShader.cpp" />
     <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="IA\IAInstance.cpp" />
+    <ClCompile Include="IA\IAManager.cpp" />
     <ClCompile Include="Layer\LayerManager.cpp" />
     <ClCompile Include="Light\Light.cpp" />
     <ClCompile Include="Light\LightManager.cpp" />
