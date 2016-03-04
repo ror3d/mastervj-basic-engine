@@ -12,6 +12,7 @@ CCookedMeshManager::~CCookedMeshManager()
 }
 void CCookedMeshManager::CookMeshes()
 {
+	return;
 	std::map<std::string, CStaticMesh*> staticMeshes = CEngine::GetSingleton().getStaticMeshManager()->GetResources();
 
 	for (auto it = staticMeshes.begin(); it != staticMeshes.end(); it++){
