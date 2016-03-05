@@ -143,16 +143,12 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		m_Actions.push_back(action);
 	}
 	{
-		Action action = { "STATICMOUSE", KEYBOARD, Action::WHILE_PRESSED };
+		Action action = { "FIXCAMERA", KEYBOARD, Action::ON_PRESS };
 		action.keyboard.key = 'F';
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
-		action.triggersAxis = true;
-		action.axisName = "STATICMOUSEAxis";
-		action.axisValue = 1;
 		m_Actions.push_back(action);
 	}
-
 	{
 		Action action = { "MOVE_FWD", KEYBOARD, Action::WHILE_PRESSED };
 		action.keyboard.key = 'W';

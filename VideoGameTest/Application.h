@@ -26,6 +26,7 @@ public:
 private:
 	CContextManager *m_ContextManager;
 	float m_Timer;
+	bool m_FixedCamera;
 };
 
 #endif
