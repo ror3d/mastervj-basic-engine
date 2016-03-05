@@ -96,7 +96,7 @@ void CLightManager::ExecuteShadowCreation(CContextManager &_context)
 			light.second->SetShadowMap(_context); //Set matrices y renderTarget
 
 			auto c = _context.m_BackgroundColor;
-			_context.m_BackgroundColor = CColor(0, 0, 0, 0);
+			_context.m_BackgroundColor = CColor(1, 1, 1, 1);
 			_context.Clear(true, true);//Clear Depth
 			_context.m_BackgroundColor = c;
 
