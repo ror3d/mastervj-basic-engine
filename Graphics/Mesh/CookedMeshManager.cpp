@@ -12,7 +12,6 @@ CCookedMeshManager::~CCookedMeshManager()
 }
 void CCookedMeshManager::CookMeshes()
 {
-	return;
 	std::map<std::string, CStaticMesh*> staticMeshes = CEngine::GetSingleton().getStaticMeshManager()->GetResources();
 
 	for (auto it = staticMeshes.begin(); it != staticMeshes.end(); it++){
@@ -31,7 +30,7 @@ void CCookedMeshManager::CookMeshes()
 		desc->size = ob->GetScale();
 		desc->position = ob->GetPosition();
 		Quatf quat;
-		desc->orientation = quat.GetQuaternionFromRadians(ob->GetTransform().GetPitchRollYaw());
+		desc->orientation = quat.GetQuaternionFromRadians(Vect3f(ob->GetYaw(), ob->GetPitch(), ob->GetRoll()));
 		CEngine::GetSingleton().getPhysXManager()->createActor(it->second->getName(), CPhysXManager::ActorType::Static, *desc);
 	}
 
