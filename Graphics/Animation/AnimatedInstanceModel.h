@@ -1,8 +1,8 @@
 #ifndef ANIMATED_INSTANCE_MODEL_H
 #define ANIMATED_INSTANCE_MODEL_H
 
-#include "Renderable/RenderableObject.h"
-#include "Renderable/RenderableVertexs.h"
+#include "Graphics/Renderable/RenderableObject.h"
+#include "Graphics/Renderable/RenderableVertexs.h"
 
 
 #include <vector>

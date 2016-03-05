@@ -38,7 +38,6 @@ CApplication::~CApplication()
 
 void CApplication::Update(float _ElapsedTime)
 {
-
 	CEngine& engine = CEngine::GetSingleton();
 	m_Timer += _ElapsedTime;
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
@@ -46,13 +45,11 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine::GetSingleton().getPhysXManager()->update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 
-	CEngine::GetSingleton().getCharacterControllerManager()->UpdateInstances(_ElapsedTime);
-	//NO CHAR MODEL
-			//ccfps->SetPosition(cameraPosition);
-			//ccfps->SetPitch(ccfps->GetPitch() + ccfps->GetPitchDisplacement());
-		
-	
-	//SPHERICALCAM
+	if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__fps"))
+	{
+		CEngine::GetSingleton().getCharacterControllerManager()->UpdateInstances(_ElapsedTime);
+	}
+	else
 	{
 		CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 	}

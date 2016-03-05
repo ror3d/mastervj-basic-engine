@@ -60,6 +60,9 @@
     <Filter Include="CharacterController">
       <UniqueIdentifier>{2c9727a0-43aa-4f62-acc0-03476b68ec42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Time">
+      <UniqueIdentifier>{8270adc5-4da3-4b07-bf39-5e0dec98d80a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemies\BossEnemy.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="CharacterController\CharacterControllerManager.h">
       <Filter>CharacterController</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Time</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

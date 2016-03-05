@@ -18,6 +18,7 @@
 #include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
 #include <Core/CharacterController/CharacterControllerManager.h>
+#include <Core/TimeManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -40,6 +41,7 @@ private:
 	CIAManager * iaManager;
 	CScriptManager * scriptManager;
 	CCharacterControllerManager * characterControllerManager;
+	CTimerManager * timerManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -65,4 +67,5 @@ public:
 	inline CIAManager * getIAManager() const { return iaManager; }
 	inline CScriptManager * getScriptManager() const { return scriptManager; }
 	inline CCharacterControllerManager * getCharacterControllerManager() const { return characterControllerManager; }
+	inline CTimerManager * getTimerManager() const { return timerManager;  }
 };

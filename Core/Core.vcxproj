@@ -40,6 +40,7 @@
     <ClInclude Include="IA\IAManager.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputManagerImplementation.h" />
+    <ClInclude Include="TimeManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0323B8D9-42B2-4768-9F73-6DDEAFA020E7}</ProjectGuid>

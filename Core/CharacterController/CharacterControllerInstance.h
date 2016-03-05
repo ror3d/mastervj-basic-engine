@@ -14,15 +14,16 @@ public:
 	virtual ~CCharacterControllerInstance();
 
 	void Update(float _elapsedTime);
+	CFPSCameraController * getFpsCamera(){ return m_fpsCamera;  }
+	CRenderableObject * getObjectModel(){ return m_objectModel;  }
 	
 private:
 
 	CFPSCameraController * m_fpsCamera;
 	CRenderableObject * m_objectModel;
-	bool m_activeMovAnim;
 
-	bool Move(float _elapsedTime);
-	void AnimateModel(bool inMovement);
+	
+
 
 };
 

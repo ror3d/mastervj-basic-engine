@@ -206,7 +206,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getCookedMeshManager()->CookMeshes();
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();
-	engine.getScriptManager()->RegisterLUAFunctions();
+	engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
+	
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
@@ -219,11 +220,10 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
-		//CApplication application(&debugRender, &s_Context);
 		CApplication application(&context);
 
-		//application.CreateCharController();
-		engine.getCharacterControllerManager()->Create("main","__fps","models","main");
+		engine.getScriptManager()->RegisterLUAFunctions();	
+		
 
 		UpdateWindow(hWnd);
 		MSG msg;
@@ -250,6 +250,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 				DWORD l_CurrentTime = timeGetTime();
 				float l_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
+				CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
 				m_PreviousTime = l_CurrentTime;
 
 

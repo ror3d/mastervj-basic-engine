@@ -1,11 +1,11 @@
 #ifndef RENDERABLE_VERTEXS_H
 #define RENDERABLE_VERTEXS_H
 
-#include "Context/ContextManager.h"
+#include "Graphics/Context/ContextManager.h"
 
-#include "Effect/EffectTechnique.h"
-#include "Effect/EffectVertexShader.h"
-#include "Effect/EffectPixelShader.h"
+#include "Graphics/Effect/EffectTechnique.h"
+#include "Graphics/Effect/EffectVertexShader.h"
+#include "Graphics/Effect/EffectPixelShader.h"
 
 #include <Utils/Utils.h>
 
