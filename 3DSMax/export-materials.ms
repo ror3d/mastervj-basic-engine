@@ -11,7 +11,7 @@ fn exportTextureFile texTypeName texMap = (
 	format "\t\t <texture type=\"%\" filename=\"%\"/>\n" texTypeName (getTexturePath textureName) to:file
 	
 	local ext = toLower (getFilenameType textureName)
-	if ext != ".dds" and ext != ".jpg" and ext != ".jpeg" and ext != ".png" then
+	if ext != ".dds" and ext != ".jpg" and ext != ".jpeg" and ext != ".png" and ext != ".bmp" then
 	(
 		messageBox ("La textura " + texturePath +" no tiene formato aceptable!") title:"MENSAJE PARA ARTISTAS"
 	)

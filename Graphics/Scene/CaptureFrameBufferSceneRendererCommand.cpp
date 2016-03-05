@@ -14,7 +14,7 @@ CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand
 			//CDynamicTexture * text = new CDynamicTexture(stagedTextNode);
 			CCaptureFrameBufferTexture * text = new CCaptureFrameBufferTexture(stagedTextNode);
 			AddStageTexture(0, text);
-			
+
 			CEngine::GetSingleton().getTextureManager()->add(text->getName(), text);
 		}
 	}

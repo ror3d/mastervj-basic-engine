@@ -22,7 +22,11 @@ void CCookedMeshManager::CookMeshes()
 		CRenderableObject * ob = CEngine::GetSingleton().getLayerManager()->get("solid")->get(it->second->getName());
 		if (ob == nullptr)
 		{
-			ob = CEngine::GetSingleton().getLayerManager()->get("IA")->get(it->second->getName());
+			//ob = CEngine::GetSingleton().getLayerManager()->get("IA")->get(it->second->getName());
+		}
+		if (ob == nullptr)
+		{
+			continue;
 		}
 		desc->material = std::string("StaticObjectMaterial");				
 		desc->density = 10;
