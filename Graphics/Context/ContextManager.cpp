@@ -28,6 +28,7 @@ CContextManager::~CContextManager()
 
 void CContextManager::destroy()
 {
+	CHECKED_DELETE(m_DrawQuadRV);
 	CHECKED_RELEASE(m_RenderTargetView);
 	CHECKED_RELEASE(m_DepthStencil);
 	CHECKED_RELEASE(m_DepthStencilView);

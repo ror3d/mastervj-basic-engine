@@ -166,7 +166,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(2102);
+	//_CrtSetBreakAlloc(77928);
 
 	new CEngine();
 	CEngine& engine = CEngine::GetSingleton();
@@ -193,7 +193,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
 	context.CreateContext(hWnd, 800, 600);
-	
+
 	engine.getDebugRender()->Create();
 	engine.getEffectsManager()->load("Data\\effects.xml");
 	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
