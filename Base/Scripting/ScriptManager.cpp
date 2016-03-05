@@ -83,7 +83,7 @@ void CScriptManager::RegisterLUAFunctions()
 {
 	LuaErrorCapturedStdout errorCapture;
 	
-	bool loaded = (*m_state).Load("LUA/CharacterController.lua");
+	bool loaded = (*m_state).Load("Data/Scripting/CharacterController.lua");
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
