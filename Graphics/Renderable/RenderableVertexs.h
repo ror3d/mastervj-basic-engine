@@ -74,10 +74,7 @@ public:
 		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
 		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
 		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
-		ID3D11Buffer *l_ConstantBuffer = Effect->GetVertexShader()->GetConstantBuffer(0);
-		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
-		l_DeviceContext->PSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->Draw(m_VertexsCount, 0);
 		return true;
 	}
@@ -149,10 +146,7 @@ public:
 		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
 		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
 		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
-		ID3D11Buffer *l_ConstantBuffer = Effect->GetVertexShader()->GetConstantBuffer(0);
-		l_DeviceContext->VSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
-		l_DeviceContext->PSSetConstantBuffers(0, 1, &l_ConstantBuffer);
 		l_DeviceContext->DrawIndexed(IndexCount == -1 ? m_IndexsCount : IndexCount, StartIndexLocation, BaseVertexLocation);
 		return true;
 	}

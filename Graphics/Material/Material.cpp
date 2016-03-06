@@ -8,7 +8,7 @@
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)
 {
-	/*m_RenderableObjectTechnique = new CRenderableObjectTechnique(TreeNode.GetPszProperty("effect_technique"), 
+	/*m_RenderableObjectTechnique = new CRenderableObjectTechnique(TreeNode.GetPszProperty("effect_technique"),
 		CEngine::GetSingletonPtr()->getEffectsManager()->get(TreeNode.GetPszProperty("effect_technique")));*/
 
 	std::string name;
@@ -90,7 +90,6 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 			}
 
 			nextDir = reinterpret_cast<unsigned char*>(nextDir)+sizeof(Vect4f);
-			
 		}
 	}
 }
@@ -109,11 +108,12 @@ CMaterial::~CMaterial()
 void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 {
 	for (int i = 0; i < m_Parameters.size(); i++)
-	{		
+	{
 		m_Parameters[i]->Apply();
 	}
 
-	CEngine::GetSingleton().getEffectsManager()->SetMaterialsConstants();
+	CEngine::GetSingleton().getEffectsManager()->SetMaterialConstants(m_RenderableObjectTechnique->GetEffectTechnique());
+	CEngine::GetSingleton().getEffectsManager()->SetSceneConstants(m_RenderableObjectTechnique->GetEffectTechnique());
 
 	for (int i = 0; i < m_textures.size(); ++i)
 	{

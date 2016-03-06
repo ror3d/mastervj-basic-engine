@@ -33,7 +33,7 @@ void CEffectManager::Reload()
 
 void CEffectManager::destroy()
 {
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
 		it.second->destroy();
 	}
@@ -109,9 +109,9 @@ CEffectPixelShader * CEffectManager::GetPixelShader(const std::string &PixelShad
 
 void CEffectManager::SetSceneConstants()
 {
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
-		it.second->SetConstantBuffer(0, &m_SceneParameters);
+		SetSceneConstants( it.second );
 	}
 }
 
@@ -170,14 +170,14 @@ void CEffectManager::SetLightsConstants()
 	{
 		m_LightParameters.m_LightEnabled[i] = false;
 	}
-	
+
 	for (size_t i = 0; i < l_LightManager->count(); ++i)
 	{
 		CLight& l_Light = l_LightManager->iterate(i);
 		SetLightConstants(i, &l_Light);
 	}
 
-	for (auto it : m_resources)
+	for (auto const &it : m_resources)
 	{
 		it.second->SetConstantBuffer(1, &m_LightParameters);
 	}
@@ -185,8 +185,18 @@ void CEffectManager::SetLightsConstants()
 
 void CEffectManager::SetMaterialsConstants(){
 
-	for (auto it : m_resources)
+	for (auto const &res : m_resources)
 	{
-		it.second->SetConstantBuffer(3, &m_MaterialEffectParameters);
+		SetMaterialConstants( res.second );
 	}
+}
+
+void CEffectManager::SetMaterialConstants( CEffectTechnique* technique )
+{
+	technique->SetConstantBuffer(3, &m_MaterialEffectParameters);
+}
+
+void CEffectManager::SetSceneConstants( CEffectTechnique* technique )
+{
+	technique->SetConstantBuffer(0, &m_SceneParameters);
 }
