@@ -350,6 +350,7 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 				vertexes.insert( vertexes.end(), meshVtxs.begin(), meshVtxs.end() );
 			}
 			
+
 			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);			
 			//CEngine::GetSingleton().getPhysXManager()->saveCookedMeshToFile(*cooked, nameFile);
 		}
