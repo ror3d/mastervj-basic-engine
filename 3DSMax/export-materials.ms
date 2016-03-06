@@ -3,7 +3,7 @@ fileIn "vertex-types.ms"
 fileIn "export-scene-utils.ms"
 
 shouldCopyTextures = true
-acceptedExtensions = #(".dds", ".jpg", ".jpeg", ".png", ".bmp", ".tga")
+acceptedExtensions = #(".dds", ".jpg", ".jpeg", ".png", ".bmp")
 
 fn exportTextureFile texTypeName texMap = (
 	local texturePath = (openBitMap texMap.bitmap.filename).filename
