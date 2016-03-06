@@ -12,6 +12,8 @@ protected:
 	resourceMap_t m_resources;
 
 public:
+	typedef TMapManager<T> MapManagerType_t;
+
 	virtual ~TMapManager();
 	virtual T* get(const std::string& name) const;
 	virtual void add(const std::string& name, T* instance);

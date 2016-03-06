@@ -7,6 +7,20 @@ CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 {
 	std::string CoreName = treeNode.GetPszProperty("core_name");
 	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(CoreName);
+
+	// Create Actor
+	CPhysxColliderShapeDesc desc;
+	desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;// TODO get from file
+	m_StaticMesh->FillColliderDescriptor(&desc);
+
+	desc.material = std::string("StaticObjectMaterial");// TODO get from file
+	//desc.density = 10;// not used for static
+	desc.size = GetScale();
+	desc.position = GetPosition();
+	Quatf quat;
+	desc.orientation = quat.GetQuaternionFromRadians(Vect3f(GetYaw(), GetPitch(), GetRoll()));
+	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), CPhysXManager::ActorType::Static, desc);
+
 }
 
 CMeshInstance::CMeshInstance(const std::string &Name, const std::string &CoreName)

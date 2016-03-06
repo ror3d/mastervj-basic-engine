@@ -198,16 +198,16 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getEffectsManager()->load("Data\\effects.xml");
 	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
 	engine.getMaterialManager()->load("Data\\materials.xml");
+	engine.getCookedMeshManager()->SetCookedMeshPath("Cache\\Cooked\\");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
-	engine.getCookedMeshManager()->CookMeshes();
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();
 	engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
-	
+
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
@@ -222,8 +222,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		CApplication application(&context);
 
-		engine.getScriptManager()->RegisterLUAFunctions();	
-		
+		engine.getScriptManager()->RegisterLUAFunctions();
+
 
 		UpdateWindow(hWnd);
 		MSG msg;

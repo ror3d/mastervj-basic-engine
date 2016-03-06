@@ -171,7 +171,7 @@ bool CStaticMesh::MeshFile::Load( const std::string &FileName )
 			DEBUG_ASSERT(!"Unrecognized footer!");
 			fclose(l_meshFile);
 			return false;
-		}		
+		}
 	}
 
 	fclose(l_meshFile);
@@ -309,9 +309,6 @@ std::vector<Vect3f> CStaticMesh::getVect3fArrayInternal( const T* vertexes, unsi
 
 bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 {
-	std::string nameFile = "Data\\Meshes\\Cooked\\";
-	nameFile += getName() + ".bin";
-
 	if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Box )
 	{
 		// TODO get values for this and implement
@@ -331,8 +328,9 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh )
 	{
 		//std::shared_ptr<std::vector<uint8>> * cooked;
-		std::vector<uint8> * cooked = new std::vector<uint8>();		
-		bool l_loaded = CEngine::GetSingleton().getPhysXManager()->loadCookedMesh(nameFile, *cooked);				
+		std::vector<uint8> * cooked;
+
+		bool l_loaded = CEngine::GetSingleton().getCookedMeshManager()->Load( getName(), cooked );
 
 		if ( !l_loaded )
 		{
@@ -349,21 +347,22 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 				std::vector<Vect3f> meshVtxs = getVect3fArray( meshFile.meshes[i] );
 				vertexes.insert( vertexes.end(), meshVtxs.begin(), meshVtxs.end() );
 			}
-			
-			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);			
-			//CEngine::GetSingleton().getPhysXManager()->saveCookedMeshToFile(*cooked, nameFile);
+
+			cooked = new std::vector<uint8>();
+
+			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
+
+			CEngine::GetSingleton().getCookedMeshManager()->add( getName(), cooked );
 		}
 
-		std::shared_ptr<std::vector<uint8>> vec = static_cast<std::shared_ptr<std::vector<uint8>>>(cooked);
-		shapeDesc->cookedMeshData = vec;
-
+		shapeDesc->cookedMeshData = cooked;
 	}
 	else
 	{
 		DEBUG_ASSERT( !"Unrecognized collider type" );
 	}
 
-	
+
 
 	return true;
 }
