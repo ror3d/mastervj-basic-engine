@@ -11,6 +11,7 @@ private:
 
 public:
 	CApplyFiltersSceneRendererCommand(CXMLTreeNode &TreeNode);
+	~CApplyFiltersSceneRendererCommand();
 	virtual void Execute(CContextManager &_context);
 };
 

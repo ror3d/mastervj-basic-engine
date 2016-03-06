@@ -203,7 +203,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
-	engine.getCookedMeshManager()->CookMeshes();
+	//engine.getCookedMeshManager()->CookMeshes();
 	engine.getIAManager()->Create();
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
