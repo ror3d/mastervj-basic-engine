@@ -28,6 +28,9 @@
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\DebugPerf.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemies">
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Engine.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\DebugPerf.h">
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

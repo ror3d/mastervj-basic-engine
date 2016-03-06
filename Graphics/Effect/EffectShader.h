@@ -34,7 +34,11 @@ public:
 	virtual bool Reload();
 	inline ID3D11Buffer * GetConstantBuffer(unsigned int IdBuffer) const
 	{
-		return m_ConstantBuffers[IdBuffer];
+		if (m_ConstantBuffers.size() > IdBuffer)
+		{
+			return m_ConstantBuffers[IdBuffer];
+		}
+		return nullptr;
 	}
 };
 

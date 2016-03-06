@@ -5,10 +5,10 @@
 
 CEffectVertexShader::CEffectVertexShader(const CXMLTreeNode &TreeNode)
 	: CEffectShader(TreeNode)
+	, m_VertexShader(nullptr)
+	, m_VertexLayout(nullptr)
 {
 	m_VertexType = TreeNode.GetPszProperty("vertex_type");
-	bool success = Load();
-	DEBUG_ASSERT(success);
 }
 
 

@@ -2,10 +2,10 @@
 #include <Engine/Engine.h>
 
 
-CEffectPixelShader::CEffectPixelShader(const CXMLTreeNode &TreeNode) : CEffectShader(TreeNode)
+CEffectPixelShader::CEffectPixelShader(const CXMLTreeNode &TreeNode)
+	: CEffectShader(TreeNode)
+	, m_PixelShader(nullptr)
 {
-	bool result = Load();
-	DEBUG_ASSERT(result);
 }
 
 
@@ -34,9 +34,12 @@ void CEffectPixelShader::SetConstantBuffer(unsigned int IdBuffer, void
 	ID3D11DeviceContext
 		*l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
 	ID3D11Buffer *l_ConstantBuffer = GetConstantBuffer(IdBuffer);
-	l_DeviceContext->UpdateSubresource(l_ConstantBuffer, 0, NULL,
-									   ConstantBuffer, 0, 0);
-	l_DeviceContext->PSSetConstantBuffers(IdBuffer, 1, &l_ConstantBuffer);
+	if (l_ConstantBuffer)
+	{
+		l_DeviceContext->UpdateSubresource(l_ConstantBuffer, 0, NULL,
+										   ConstantBuffer, 0, 0);
+		l_DeviceContext->PSSetConstantBuffers(IdBuffer, 1, &l_ConstantBuffer);
+	}
 }
 
 void CEffectPixelShader::destroy()

@@ -18,7 +18,7 @@ void CCookedMeshManager::CookMeshes()
 		CPhysxColliderShapeDesc * desc = new CPhysxColliderShapeDesc();
 		desc->shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
 		it->second->FillColliderDescriptor(desc);
-		
+
 		CRenderableObject * ob = CEngine::GetSingleton().getLayerManager()->get("solid")->get(it->second->getName());
 		if (ob == nullptr)
 		{
@@ -28,7 +28,7 @@ void CCookedMeshManager::CookMeshes()
 		{
 			continue;
 		}
-		desc->material = std::string("StaticObjectMaterial");				
+		desc->material = std::string("StaticObjectMaterial");
 		desc->density = 10;
 		desc->radius = 0.1f;
 		desc->size = ob->GetScale();

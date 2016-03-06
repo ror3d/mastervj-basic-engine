@@ -3,6 +3,7 @@
 #include "Light/Light.h"
 
 #include <Core/Engine/Engine.h>
+#include <Core/Debug/DebugPerf.h>
 
 CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CStagedTexturedSceneRendererCommand(TreeNode)
@@ -43,6 +44,8 @@ CDeferredShadingSceneRendererCommand::~CDeferredShadingSceneRendererCommand()
 
 void CDeferredShadingSceneRendererCommand::Execute(CContextManager &_context)
 {
+	SCOPED_DEBUG_PERF(L"Deferred Shading");
+
 	CEngine::GetSingleton().getContextManager()->GetDeviceContext()->OMSetBlendState(m_EnabledAlphaBlendState, nullptr, 0xffffffff);
 
 	auto lm = CEngine::GetSingleton().getLightManager();
