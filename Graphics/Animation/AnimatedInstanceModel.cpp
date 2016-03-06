@@ -1,11 +1,11 @@
 #include "AnimatedInstanceModel.h"
 
-#include "Animation/AnimatedCoreModel.h"
 
 #include <Base/Math/MathUtils.h>
 #include "VertexTypes.h"
+#include "Animation/AnimatedCoreModel.h"
 #include "Renderable/RenderableVertexs.h"
-#include "RenderableObjectTechnique.h"
+#include "Renderable/RenderableObjectTechnique.h"
 
 #include <cal3d/cal3d.h>
 #include <XML/XMLTreeNode.h>

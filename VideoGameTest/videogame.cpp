@@ -194,19 +194,22 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
 	context.CreateContext(hWnd, 800, 600);
 
+	ShowWindow(hWnd, SW_SHOWDEFAULT);
+
 	engine.getDebugRender()->Create();
 	engine.getEffectsManager()->load("Data\\effects.xml");
 	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
 	engine.getMaterialManager()->load("Data\\materials.xml");
+	engine.getCookedMeshManager()->SetCookedMeshPath("Cache\\Cooked\\");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
-	//engine.getCookedMeshManager()->CookMeshes();
 	engine.getIAManager()->Create();
+	engine.getScriptManager()->Initialize();
+	engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
 
-	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
 	context.CreateBackBuffer(hWnd, 800, 600);
 	{
@@ -217,10 +220,10 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
-		//CApplication application(&debugRender, &s_Context);
 		CApplication application(&context);
 
-		application.CreateCharController();
+		engine.getScriptManager()->RegisterLUAFunctions();
+
 
 		UpdateWindow(hWnd);
 		MSG msg;
@@ -247,6 +250,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 				DWORD l_CurrentTime = timeGetTime();
 				float l_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
+				CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
 				m_PreviousTime = l_CurrentTime;
 
 

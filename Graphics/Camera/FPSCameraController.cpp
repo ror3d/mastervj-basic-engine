@@ -8,8 +8,10 @@ CFPSCameraController::CFPSCameraController()
 , m_PitchSpeed(60.f)
 , m_Speed(5.0f)
 , m_FastSpeed(10.0f)
-, m_CameraDisplacement(-2,3.f,0.f)
+, m_CameraDisplacement(-2,2.2f,0)
 , m_PitchDisplacement(-0.5f)
+, m_PitchfloorLimit(0.8f)
+, m_PitchSkyLimit(-0.5f)
 {
 	m_Position=Vect3f(0.0f, 2.0f, 0.0f);
 }
@@ -64,6 +66,26 @@ Vect3f CFPSCameraController::GetDirection() const
 
 void CFPSCameraController::Update( float ElapsedTime )
 {
+	m_Pitch = m_Pitch - m_PitchDisplacement;
+
 	AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
 	AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
+	if (m_Pitch > m_PitchfloorLimit)//No atraviesa suelo
+	{
+		m_Pitch = m_PitchfloorLimit;
+	}
+	if (m_Pitch < m_PitchSkyLimit)//Vista superior personaje
+	{
+		m_Pitch = m_PitchSkyLimit;
+	}
+
+	//IF CHARCONTROLLER
+	//receive updated pos
+
+	Vect3f rotacionDeseada = m_CameraDisplacement;
+	rotacionDeseada = rotacionDeseada.RotateZ(m_Pitch);
+	rotacionDeseada = rotacionDeseada.RotateY(-m_Yaw);
+
+	m_Position = m_Position + rotacionDeseada;
+	m_Pitch = m_Pitch + m_PitchDisplacement;
 }

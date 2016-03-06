@@ -1,41 +1,67 @@
 #include "CookedMeshmanager.h"
+
 #include <Engine/Engine.h>
 
-#include "Mesh/StaticMesh.h"
-#include "Renderable/RenderableObjectsManager.h"
-#include "Renderable/RenderableObject.h"
+#include <sstream>
+
 CCookedMeshManager::CCookedMeshManager()
 {
 }
 CCookedMeshManager::~CCookedMeshManager()
 {
 }
-void CCookedMeshManager::CookMeshes()
+
+std::string CCookedMeshManager::GetValidName( const std::string path )
 {
-	std::map<std::string, CStaticMesh*> staticMeshes = CEngine::GetSingleton().getStaticMeshManager()->GetResources();
-
-	for (auto it = staticMeshes.begin(); it != staticMeshes.end(); it++){
-		CPhysxColliderShapeDesc * desc = new CPhysxColliderShapeDesc();
-		desc->shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
-		it->second->FillColliderDescriptor(desc);
-
-		CRenderableObject * ob = CEngine::GetSingleton().getLayerManager()->get("solid")->get(it->second->getName());
-		if (ob == nullptr)
+	std::stringstream ss;
+	for ( int i = 0; i < path.size(); ++i )
+	{
+		char c = path[i];
+		if ( ( c >= 'A' && c <= 'Z' )
+			|| ( c >= 'a' && c <= 'z' )
+			|| ( c >= '0' && c <= '9' )
+			|| c == '_' || c == '+' )
 		{
-			//ob = CEngine::GetSingleton().getLayerManager()->get("IA")->get(it->second->getName());
+			ss << path[i];
 		}
-		if (ob == nullptr)
+		else if ( c == '-' )
 		{
-			continue;
+			ss << '_';
 		}
-		desc->material = std::string("StaticObjectMaterial");
-		desc->density = 10;
-		desc->radius = 0.1f;
-		desc->size = ob->GetScale();
-		desc->position = ob->GetPosition();
-		Quatf quat;
-		desc->orientation = quat.GetQuaternionFromRadians(Vect3f(ob->GetYaw(), ob->GetPitch(), ob->GetRoll()));
-		CEngine::GetSingleton().getPhysXManager()->createActor(it->second->getName(), CPhysXManager::ActorType::Static, *desc);
+		else
+		{
+			ss << '-';
+		}
 	}
-
+	return ss.str();
 }
+
+bool CCookedMeshManager::Load( const std::string& meshName, std::vector<uint8> * &cooked )
+{
+	if ( m_resources.find( meshName ) != m_resources.end() )
+	{
+		cooked = m_resources[meshName];
+		return true;
+	}
+	std::string nameFile = m_cookedMeshesPath;
+	nameFile +=  GetValidName(meshName) + ".bin";
+	cooked = new std::vector<uint8>;
+	bool ret = CEngine::GetSingleton().getPhysXManager()->loadCookedMesh( nameFile, *cooked );
+	if ( ret )
+	{
+		MapManagerType_t::add( meshName, cooked );
+	}
+	return ret;
+}
+
+void CCookedMeshManager::add( const std::string& meshName, std::vector<uint8>* cooked )
+{
+	std::string nameFile = m_cookedMeshesPath;
+	nameFile +=  GetValidName(meshName) + ".bin";
+
+	CEngine::GetSingleton().getPhysXManager()->saveCookedMeshToFile(*cooked, nameFile);
+
+	MapManagerType_t::add( meshName, cooked );
+}
+
+

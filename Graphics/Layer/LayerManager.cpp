@@ -1,6 +1,6 @@
 #include "LayerManager.h"
 #include "Mesh/MeshInstance.h"
-#include "Renderable/AnimatedInstanceModel.h"
+#include "Animation/AnimatedInstanceModel.h"
 #include "Renderable/RenderableObjectsManager.h"
 
 CLayerManager::CLayerManager(){
@@ -24,7 +24,7 @@ void CLayerManager::Load(const std::string &FileName){
 		CXMLTreeNode l_MeshesInfo = l_XML["renderable_objects"];
 		if (l_MeshesInfo.Exists())
 		{
-			CRenderableObjectsManager * actualLayer;
+			CRenderableObjectsManager * currentLayer;
 			for (int i = 0; i < l_MeshesInfo.GetNumChildren(); ++i)
 			{
 				CXMLTreeNode l_MeshInfo = l_MeshesInfo(i);
@@ -39,28 +39,28 @@ void CLayerManager::Load(const std::string &FileName){
 					}
 					else
 					{
-						actualLayer = layer;
-					}					
-					
+						currentLayer = layer;
+					}
+
 					if (l_MeshInfo.GetBoolProperty("default", false))
 					{
 						m_DefaultLayer = layer;
-					}						
-					actualLayer = layer;
+					}
+					currentLayer = layer;
 				}
 				if (l_MeshInfo.GetName() != std::string("layer") && m_resources.size() == 0){ //Si no se espeficia ninguna layer se genera por defecto
 					CRenderableObjectsManager * renderObManager = new CRenderableObjectsManager();
 					add("default", renderObManager);
 					m_DefaultLayer = renderObManager;
-					actualLayer = m_DefaultLayer;
+					currentLayer = m_DefaultLayer;
 				}
 			    if(l_MeshInfo.GetName() == std::string("mesh_instance"))
 				{
-					actualLayer->AddMeshInstance(l_MeshInfo);
+					currentLayer->AddMeshInstance(l_MeshInfo);
 				}
 				else if (l_MeshInfo.GetName() == std::string("animated_instance"))
 				{
-					actualLayer->AddAnimatedInstanceModel(l_MeshInfo);
+					currentLayer->AddAnimatedInstanceModel(l_MeshInfo);
 				}
 			}
 		}
@@ -81,7 +81,7 @@ void CLayerManager::Render(CContextManager &_context){
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{
 		it->second->Render(&_context);
-	}	
+	}
 }
 
 void CLayerManager::Render(CContextManager *_context, const std::string &LayerName){

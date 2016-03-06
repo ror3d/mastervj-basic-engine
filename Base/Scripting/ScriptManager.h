@@ -21,6 +21,7 @@ public:
 	void Load(const std::string &XMLFile);
 
 	void RegisterLUAFunctions();
+	sel::State * getLuaState(){ return m_state; }
 
 private:
 	sel::State *m_state;

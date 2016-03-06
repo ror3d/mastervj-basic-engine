@@ -50,7 +50,7 @@ struct CPhysxColliderShapeDesc {
 	Quatf orientation;
 	std::string material;
 	float density;
-	std::shared_ptr<std::vector<uint8>> cookedMeshData;
+	std::vector<uint8> *cookedMeshData;
 };
 
 class CPhysXManager

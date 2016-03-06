@@ -1,8 +1,8 @@
 #ifndef RENDERABLE_OBJECT_H
 #define RENDERABLE_OBJECT_H
 
-#include "Renderer/3DElement.h"
-#include <Base/Utils/Named.h>
+#include "Graphics/Renderer/3DElement.h"
+#include <Base/Utils/Named.h> 
 
 class CContextManager;
 class CXMLTreeNode;

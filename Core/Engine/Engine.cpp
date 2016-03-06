@@ -18,6 +18,10 @@ CEngine::CEngine()
 	, physXManager(nullptr)
 	, cookedMeshManager(nullptr)
 	, iaManager(nullptr)
+	, scriptManager(nullptr)
+	, characterControllerManager(nullptr)
+	, timerManager(nullptr)
+	, componentManager(nullptr)
 {
 } 
 CEngine::~CEngine()
@@ -33,6 +37,9 @@ CEngine::~CEngine()
 	sceneRendererCommandManager->destroy();
 	cameraManager->destroy();
 	contextManager->destroy();
+	scriptManager->Destroy();
+	characterControllerManager->destroy();
+	componentManager->destroy();
 	//debugRender->destroy();
 	//cookedMeshManager->destroy();
 	//iaManager->destroy();
@@ -52,6 +59,10 @@ CEngine::~CEngine()
 	delete cookedMeshManager;
 	delete iaManager;
 	delete debugRender;
+	delete scriptManager;
+	delete characterControllerManager;
+	delete timerManager;
+	delete componentManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -68,6 +79,10 @@ CEngine::~CEngine()
 	cookedMeshManager = nullptr;
 	iaManager = nullptr;
 	debugRender = nullptr;
+	scriptManager = nullptr;
+	characterControllerManager = nullptr;
+	timerManager = nullptr;
+	componentManager = nullptr;
 
 } //Destruimos vars
 
@@ -88,4 +103,8 @@ void CEngine::Init()
 	physXManager = CPhysXManager::CreatePhysXManager();
 	cookedMeshManager = new CCookedMeshManager();
 	iaManager = new CIAManager();
+	scriptManager = new CScriptManager();
+	characterControllerManager = new CCharacterControllerManager();
+	timerManager = new CTimerManager();
+	componentManager = new CComponentManager();
 }

@@ -59,7 +59,7 @@ inline physx::PxQuat q(const Quatf& q)
 { return physx::PxQuat(q.x, q.y, q.z, q.w); }
 
 
-class CPhysXManagerImplementation 
+class CPhysXManagerImplementation
 	: public CPhysXManager
 	, public physx::PxSimulationEventCallback
 	, public physx::PxUserControllerHitReport
@@ -119,9 +119,9 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 		m_DebugConnection = nullptr;
 	}
 #endif
-	
+
 	int ncpus = 0;
-	
+
 #if (defined(_MSC_VER) && _MSC_VER >= 1800) || __cplusplus <= 199711L
 	ncpus = std::thread::hardware_concurrency();
 #endif
@@ -147,7 +147,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 	DEBUG_ASSERT(m_Scene);
 
 	m_Scene->setSimulationEventCallback(this);
-	
+
 
 	m_ControllerManager = PxCreateControllerManager(*m_Scene);
 	m_ControllerManager->setOverlapRecoveryModule(true);
@@ -157,7 +157,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 
 CPhysXManagerImplementation::~CPhysXManagerImplementation()
 {
-	
+
 
 }
 
@@ -263,12 +263,19 @@ bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<u
 
 bool CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData)
 {
-	std::ifstream f(fname, std::ios::in | std::ifstream::binary);
+	std::basic_ifstream<uint8> f(fname, std::ios::in | std::ifstream::binary);
 
 	if (f)
 	{
-		std::istream_iterator<uint8> iter(f);
-		std::copy(iter, std::istream_iterator<uint8>(), std::back_inserter(outCookedData));
+		f.seekg( 0, f.end );
+		size_t length = f.tellg();
+		f.seekg( 0, f.beg );
+
+		uint8 *data = new uint8[length];
+		f.read( data, length );
+		std::copy( data, data+length, std::back_inserter( outCookedData ) );
+		delete[] data;
+
 		return true;
 	}
 
@@ -277,11 +284,11 @@ bool CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>&
 
 bool CPhysXManager::saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname)
 {
-	std::ofstream f(fname, std::ios::out | std::ifstream::binary);
+	std::basic_ofstream<uint8> f(fname, std::ios::out | std::ifstream::binary);
 
 	if (f)
 	{
-		std::ostream_iterator<uint8> iter(f);
+		std::ostream_iterator<uint8, uint8> iter(f);
 		std::copy(inCookedData.begin(), inCookedData.end(), iter);
 		return true;
 	}
@@ -332,7 +339,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 	physx::PxMaterial* mat = matIt->second;
 
-	physx::PxGeometry* geom;
+	physx::PxGeometry* geom = nullptr;
 	switch (desc.shape)
 	{
 		case CPhysxColliderShapeDesc::Shape::Box:
@@ -349,7 +356,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 		case CPhysxColliderShapeDesc::Shape::ConvexMesh:
 		{
-			physx::PxDefaultMemoryInputData input(desc.cookedMeshData.get()->data(), desc.cookedMeshData.get()->size());
+			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
 			physx::PxMeshScale scale(physx::PxVec3(desc.size.x, desc.size.y, desc.size.z), physx::PxQuat(1.0f));
 			geom = new physx::PxConvexMeshGeometry(mesh,scale);
@@ -361,27 +368,31 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 			break;
 	}
 
+	physx::PxTransform transform = physx::PxTransform(v(desc.position), q(desc.orientation));
+
 	physx::PxRigidActor* body;
 	switch (actorType)
 	{
 		case CPhysXManager::ActorType::Static:
-			body = m_PhysX->createRigidStatic(physx::PxTransform(v(desc.position), q(desc.orientation)));
+			body = m_PhysX->createRigidStatic(transform); //AQUI
 			break;
 		case CPhysXManager::ActorType::Dynamic:
-			body = m_PhysX->createRigidDynamic(physx::PxTransform(v(desc.position), q(desc.orientation)));
+			body = m_PhysX->createRigidDynamic(transform);
 			break;
 	}
 
 	physx::PxShape* shape = body->createShape(*geom, *mat);
 	delete geom;
-	
-	body->attachShape(*shape);
+
+	shape->setLocalPose(transform); //AQUI
+
+	//body->attachShape(*shape);
+
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)
 	{
 		physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidBody*>(body), desc.density);
 	}
-
 	m_Scene->addActor(*body);
 
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
@@ -418,7 +429,7 @@ void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
-	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
+	//createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
 }
 
 Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){

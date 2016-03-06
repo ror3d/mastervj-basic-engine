@@ -94,7 +94,7 @@ fn Deg2Rad a =
 
 fn GetYaw transform =
 (
-	return -(transform.rotation as eulerangles).z
+	return (transform.rotation as eulerangles).z
 )
 
 fn GetPitch transform =
