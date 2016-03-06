@@ -4,6 +4,7 @@
 #include "Material\MaterialParameter.h"
 #include "Camera/FPSCameraController.h"
 #include <PhysX/PhysXManager.h>
+#include "DebugPerf.h"
 
 CDebugHelperImplementation::CDebugHelperImplementation(void *device)
 {
@@ -42,7 +43,8 @@ void CDebugHelperImplementation::Log(const std::string& text) const
 
 void CDebugHelperImplementation::Render()
 {
-	// TODO: pintar el AntTweakBar
+	SCOPED_DEBUG_PERF(L"AntTweakBar Draw");
+
 	int status = TwDraw();
 	if (!status)
 	{
