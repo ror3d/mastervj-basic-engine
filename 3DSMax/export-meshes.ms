@@ -92,13 +92,14 @@ fn createRenderableObjectsFile instances = (
 	
 	for i = 1 to instances.count do
 	(
-		Pos = TranslationToRH (instances[i].transform.translation)
-		Yaw = GetYaw (instances[i].transform)
-		Pitch = GetPitch (instances[i].transform)
-		Roll = GetRoll (instances[i].transform)
+		local Pos = TranslationToRH (instances[i].transform.translation)
+		local Sc = ScaleToRH instances[i].transform.scale
+		local Yaw = GetYaw (instances[i].transform)
+		local Pitch = GetPitch (instances[i].transform)
+		local Roll = GetRoll (instances[i].transform)
 		local core = getUserProp instances[i] "export_core_name"
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n"\
-					instances[i].name core Pos[1] Pos[2] Pos[3] Yaw Pitch Roll instances[i].visibility to:file
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" scale=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n"\
+					instances[i].name core Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll instances[i].visibility to:file
 	)
 
 	format "</renderable_objects>\n" to:file 

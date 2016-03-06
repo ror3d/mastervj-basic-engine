@@ -127,9 +127,8 @@ fn ExportAllObjectCinematics =
 			local t = keys[i].frame / fps
 			local transf = at time keys[i] obj.transform
 			local pos = ChangeCoordsBase transf.position
-			local rot = ChangeCoordsBase(transf as eulerAngles)
-			-- TODO: should change coordinates?
-			local sca = transf.scale
+			local rot = ChangeCoordsBase(transf.rotation as eulerAngles)
+			local sca = ScaleToRH transf.scale
 			format "\t\t<cinematic_object_key_frame time=\"%\" pos=\"% % %\" rotation=\"% % %\" scale=\"% % %\" />\n"\
 					t pos[1] pos[2] pos[3] rot.x rot.y rot.z sca[1] sca[2] sca[3] to: file
 		)

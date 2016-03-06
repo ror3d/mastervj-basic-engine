@@ -94,24 +94,24 @@ fn Deg2Rad a =
 
 fn GetYaw transform =
 (
-	return -(transform as eulerangles).z
+	return -(transform.rotation as eulerangles).z
 )
 
 fn GetPitch transform =
 (
-	return -(transform as eulerangles).y
+	return -(transform.rotation as eulerangles).y
 )
 
 fn GetRoll transform =
 (
-	return (transform as eulerangles).x
+	return (transform.rotation as eulerangles).x
 ) 
 
 fn ChangeCoordsBase coords =
 (
 	if classof coords == EulerAngles then
 	(
-		return eulerAngles  (Deg2Rad -coords.z) (Deg2Rad -coords.y) (Deg2Rad coords.x)
+		return eulerAngles  -coords.z -coords.y coords.x
 	)
 	return point3 -coords[1] coords[3] coords[2]
 )
@@ -119,6 +119,11 @@ fn ChangeCoordsBase coords =
 fn TranslationToRH translation =
 (
 	return ChangeCoordsBase translation
+)
+
+fn ScaleToRH sc =
+(
+	return point3 sc[1] sc[3] sc[2]
 )
 
 global g_tick
