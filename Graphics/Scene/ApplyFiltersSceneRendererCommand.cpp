@@ -2,6 +2,8 @@
 #include <Engine/Engine.h>
 #include "Renderable/RenderableObjectTechnique.h"
 
+#include <Core/Debug/DebugPerf.h>
+
 CApplyFiltersSceneRendererCommand::CApplyFiltersSceneRendererCommand(CXMLTreeNode &TreeNode) : CStagedTexturedSceneRendererCommand(TreeNode)
 {
 	for (int i = 0; i < TreeNode.GetNumChildren(); ++i)
@@ -23,8 +25,15 @@ CApplyFiltersSceneRendererCommand::CApplyFiltersSceneRendererCommand(CXMLTreeNod
 	}
 }
 
+CApplyFiltersSceneRendererCommand::~CApplyFiltersSceneRendererCommand()
+{
+	m_Materials.clear();
+}
+
 void CApplyFiltersSceneRendererCommand::Execute(CContextManager &_context)
 {
+	SCOPED_DEBUG_PERF(L"Apply Filter");
+
 	ActivateTextures();
 
 	for (int i = 0; i < m_DynamicTextures.size(); ++i)

@@ -33,6 +33,8 @@ public:
 	void SetLightConstants(unsigned int IdLight, CLight *Light);
 	void SetLightsConstants();
 	void SetMaterialsConstants();
+	void SetSceneConstants( CEffectTechnique* technique );
+	void SetMaterialConstants( CEffectTechnique* technique );
 
 	void destroy();
 };

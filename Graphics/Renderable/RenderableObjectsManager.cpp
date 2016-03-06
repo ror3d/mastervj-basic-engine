@@ -22,23 +22,22 @@ void CRenderableObjectsManager::Update(float ElapsedTime)
 		{
 			it->second->Update(ElapsedTime);
 		}
-	}	
+	}
 }
 
 
 void CRenderableObjectsManager::Render(CContextManager *_context)
 {
-	if (m_active){
+	if (m_active)
+	{
+		CEffectManager *l_effectManager = CEngine::GetSingleton().getEffectsManager();
+
 		for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 		{
-			CEffectManager l_effectManager = *(CEngine::GetSingleton().getEffectsManager());
-
-			l_effectManager.m_SceneParameters.m_World = it->second->GetTransform();
-			l_effectManager.SetSceneConstants();
-
+			l_effectManager->m_SceneParameters.m_World = it->second->GetTransform();
 			it->second->Render(_context);
 		}
-	}	
+	}
 }
 
 

@@ -28,7 +28,8 @@ void CCookedMeshManager::CookMeshes()
 		{
 			continue;
 		}
-		desc->material = std::string("StaticObjectMaterial");			
+		desc->material = std::string("StaticObjectMaterial");				
+		desc->density = 10;
 		desc->radius = 0.1f;
 		desc->size = ob->GetScale();
 		desc->position = ob->GetPosition();

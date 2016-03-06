@@ -11,6 +11,7 @@ class CDebugRender
 {
 public:
 	CDebugRender();
+	~CDebugRender();
 	void Create();
 
 

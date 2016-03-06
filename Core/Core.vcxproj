@@ -17,6 +17,7 @@
     <ClCompile Include="Component\ScriptedComponent.cpp" />
     <ClCompile Include="Debug\DebugHelper.cpp" />
     <ClCompile Include="Debug\DebugHelperImplementation.cpp" />
+    <ClCompile Include="Debug\DebugPerf.cpp" />
     <ClCompile Include="Enemies\BossEnemy.cpp" />
     <ClCompile Include="Enemies\EnemyManager.cpp" />
     <ClCompile Include="Enemies\FixedEnemy.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Debug\DebugHelper.h" />
     <ClInclude Include="Debug\DebugHelperImplementation.h" />
+    <ClInclude Include="Debug\DebugPerf.h" />
     <ClInclude Include="Enemies\BossEnemy.h" />
     <ClInclude Include="Enemies\Enemy.h" />
     <ClInclude Include="Enemies\EnemyManager.h" />

@@ -65,7 +65,7 @@ void CCaptureFrameBufferTexture::Init(unsigned int Width, unsigned int Height)
 
 CCaptureFrameBufferTexture::~CCaptureFrameBufferTexture()
 {
-	if (m_DataTexture == nullptr)
+	if (m_DataTexture != nullptr)
 	{
 		m_DataTexture->Release();
 		m_DataTexture = nullptr;

@@ -3,6 +3,7 @@ fileIn "vertex-types.ms"
 fileIn "export-scene-utils.ms"
 
 shouldCopyTextures = true
+acceptedExtensions = #(".dds", ".jpg", ".jpeg", ".png", ".bmp", ".tga")
 
 fn exportTextureFile texTypeName texMap = (
 	local texturePath = (openBitMap texMap.bitmap.filename).filename
@@ -11,7 +12,7 @@ fn exportTextureFile texTypeName texMap = (
 	format "\t\t <texture type=\"%\" filename=\"%\"/>\n" texTypeName (getTexturePath textureName) to:file
 	
 	local ext = toLower (getFilenameType textureName)
-	if ext != ".dds" and ext != ".jpg" and ext != ".jpeg" and ext != ".png" and ext != ".bmp" then
+	if (findItem acceptedExtensions ext) == 0 then
 	(
 		messageBox ("La textura " + texturePath +" no tiene formato aceptable!") title:"MENSAJE PARA ARTISTAS"
 	)

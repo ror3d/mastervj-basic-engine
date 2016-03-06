@@ -1,6 +1,6 @@
 #include "Scene/CaptureFrameBufferSceneRendererCommand.h"
 #include "Texture/CaptureFrameBufferTexture.h"
-#include "Engine/Engine.h"
+#include <Engine/Engine.h>
 
 CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand(CXMLTreeNode &TreeNode) 
 	:CStagedTexturedSceneRendererCommand(TreeNode){
@@ -11,7 +11,6 @@ CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand
 		CXMLTreeNode stagedTextNode = TreeNode(i);
 		if (stagedTextNode.GetName() == std::string("capture_texture"))
 		{
-			//CDynamicTexture * text = new CDynamicTexture(stagedTextNode);
 			CCaptureFrameBufferTexture * text = new CCaptureFrameBufferTexture(stagedTextNode);
 			AddStageTexture(0, text);
 
@@ -22,7 +21,6 @@ CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand
 
 CCaptureFrameBufferSceneRendererCommand::~CCaptureFrameBufferSceneRendererCommand()
 {
-	// TODO
 }
 
 void CCaptureFrameBufferSceneRendererCommand::Execute(CContextManager &_context)
