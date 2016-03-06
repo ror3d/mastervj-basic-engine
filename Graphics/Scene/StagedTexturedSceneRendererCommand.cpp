@@ -8,20 +8,20 @@ CStagedTexturedSceneRendererCommand::CStagedTexturedSceneRendererCommand(CXMLTre
 }
 CStagedTexturedSceneRendererCommand::~CStagedTexturedSceneRendererCommand()
 {
-	CTextureManager & textureManager = *(CEngine::GetSingleton().getTextureManager());
+	CTextureManager * textureManager = CEngine::GetSingleton().getTextureManager();
 
-	if (!textureManager.isEmpty())
+	if (!textureManager->isEmpty())
 	{
 		for (auto const & text : m_DynamicTextures)
 		{
-			textureManager.remove(text->getName());
+			textureManager->remove(text->getName());
 		}
 
 		for (auto const & text : m_StageTextures)
 		{
-			if (textureManager.get(text.m_Texture->getName()) != NULL)
+			if (textureManager->get(text.m_Texture->getName()) != NULL)
 			{
-				textureManager.remove(text.m_Texture->getName());
+				textureManager->remove(text.m_Texture->getName());
 			}
 		}
 	}
