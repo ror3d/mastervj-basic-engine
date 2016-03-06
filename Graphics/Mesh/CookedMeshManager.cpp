@@ -29,7 +29,7 @@ void CCookedMeshManager::CookMeshes()
 		desc->size = ob->GetScale();
 		desc->position = ob->GetPosition();
 		Quatf quat;
-		desc->orientation = quat.GetQuaternionFromRadians(ob->GetTransform().GetPitchRollYaw());
+		desc->orientation = quat.GetQuaternionFromRadians(Vect3f(ob->GetYaw(), ob->GetPitch(), ob->GetRoll()));
 		CEngine::GetSingleton().getPhysXManager()->createActor(it->second->getName(), CPhysXManager::ActorType::Static, *desc);
 	}
 

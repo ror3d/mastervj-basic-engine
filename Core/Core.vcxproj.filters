@@ -40,6 +40,12 @@
     <ClCompile Include="CharacterController\CharacterControllerManager.cpp">
       <Filter>CharacterController</Filter>
     </ClCompile>
+    <ClCompile Include="Component\ComponentManager.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ScriptedComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemies">
@@ -62,6 +68,9 @@
     </Filter>
     <Filter Include="Time">
       <UniqueIdentifier>{8270adc5-4da3-4b07-bf39-5e0dec98d80a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{43e42ad3-3873-43a7-8eca-cc8531863f51}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +118,15 @@
     </ClInclude>
     <ClInclude Include="TimeManager.h">
       <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ComponentManager.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptedComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
