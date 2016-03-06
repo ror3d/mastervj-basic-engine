@@ -28,6 +28,7 @@ CApplication::CApplication(CContextManager *_ContextManager)
 	CDebugHelper::GetDebugHelper()->Log("CApplication::CApplication");
 	CDebugHelper::GetDebugHelper()->CreateMainBar();
 	activeMovAnim = false;
+	m_FixedCamera = false;
 }
 
 
@@ -45,13 +46,22 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine::GetSingleton().getPhysXManager()->update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 
-	if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__fps"))
+	
+	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
 	{
-		CEngine::GetSingleton().getCharacterControllerManager()->UpdateInstances(_ElapsedTime);
+		m_FixedCamera = m_FixedCamera ? false : true;
 	}
-	else
+
+	if (!m_FixedCamera)
 	{
-		CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
+		if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__fps"))
+		{
+			CEngine::GetSingleton().getCharacterControllerManager()->UpdateInstances(_ElapsedTime);
+		}
+		else
+		{
+			CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
+		}
 	}
 }
 

@@ -1,7 +1,8 @@
 #ifndef LIGHT_MANAGER_H
 #define LIGHT_MANAGER_H
 
-#include <Utils/TMapManager.h>
+#include <Base/Utils/TMapManager.h>
+#include <Base/Math/Color.h>
 
 class CRenderManager;
 class CLight;
@@ -13,6 +14,8 @@ class CLightManager : public TMapManager<CLight>
 {
 private:
 	std::string m_FileName;
+
+	CColor m_ambient;
 public:
 	CLightManager();
 	virtual ~CLightManager();
@@ -22,6 +25,8 @@ public:
 	size_t CLightManager::count();
 	void ExecuteShadowCreation(CContextManager &_context);
 	void reload();
+
+	inline CColor GetAmbientLight() { return m_ambient; }
 };
 
 #endif

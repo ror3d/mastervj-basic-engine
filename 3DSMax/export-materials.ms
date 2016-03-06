@@ -8,10 +8,10 @@ fn exportTextureFile texTypeName texMap = (
 	local texturePath = (openBitMap texMap.bitmap.filename).filename
 	local textureName = filenameFromPath texMap.filename
 	
-	format "\t\t <% filename=\"%\"/>\n" texTypeName (getTexturePath textureName) to:file
+	format "\t\t <texture type=\"%\" filename=\"%\"/>\n" texTypeName (getTexturePath textureName) to:file
 	
 	local ext = toLower (getFilenameType textureName)
-	if ext != ".dds" and ext != ".jpg" and ext != ".jpeg" and ext != ".png" then
+	if ext != ".dds" and ext != ".jpg" and ext != ".jpeg" and ext != ".png" and ext != ".bmp" then
 	(
 		messageBox ("La textura " + texturePath +" no tiene formato aceptable!") title:"MENSAJE PARA ARTISTAS"
 	)
@@ -22,17 +22,25 @@ fn exportTextureFile texTypeName texMap = (
 	)
 )
 
+fn writeDefaultMaterials = (
+	format "\t\t<parameter type=\"float\" name=\"specular\" value=\"1\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"gloss\" value=\"80.0\" varParams = \"min=1 max=100 step=0.5 precision=1\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"bump\" value=\"2.4\" varParams = \"min=0 max=5 step=0.1 precision=1\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"environment_factor\" value=\"0.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"cutout_factor\" value=\"1.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+)
+
 fn exportSingleTexture mat meshName = (
 	if HasTexture mat alertOnMissing:true then
 	(
-		exportTextureFile "texture" mat.diffuseMap
+		exportTextureFile "albedo" mat.diffuseMap
 	)
 )
 
 fn exportSingleReflection mat meshName = (
 	if HasReflection mat alertOnMissing:false then
 	(
-		exportTextureFile "texture" mat.reflectionMap
+		exportTextureFile "environment" mat.reflectionMap
 	)
 )
 
@@ -63,6 +71,8 @@ fn createSingleMaterial obj mat = (
 	exportSingleLightmap mat obj.name
 	
 	exportSingleNormal mat obj.name
+	
+	writeDefaultMaterials()
 	
 	format "\t</material>\n" to:file 
 )
