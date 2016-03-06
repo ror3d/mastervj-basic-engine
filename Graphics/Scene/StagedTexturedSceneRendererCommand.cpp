@@ -1,4 +1,5 @@
 #include "Scene\StagedTexturedSceneRendererCommand.h"
+#include <Engine/Engine.h>
 
 CStagedTexturedSceneRendererCommand::CStagedTexturedSceneRendererCommand(CXMLTreeNode &TreeNode)
 	:CSceneRendererCommand(TreeNode)
@@ -7,6 +8,26 @@ CStagedTexturedSceneRendererCommand::CStagedTexturedSceneRendererCommand(CXMLTre
 }
 CStagedTexturedSceneRendererCommand::~CStagedTexturedSceneRendererCommand()
 {
+	CTextureManager * textureManager = CEngine::GetSingleton().getTextureManager();
+
+	if (!textureManager->isEmpty())
+	{
+		for (auto const & text : m_DynamicTextures)
+		{
+			textureManager->remove(text->getName());
+		}
+
+		for (auto const & text : m_StageTextures)
+		{
+			if (textureManager->get(text.m_Texture->getName()) != NULL)
+			{
+				textureManager->remove(text.m_Texture->getName());
+			}
+		}
+	}
+
+	m_DynamicTextures.clear();
+	m_StageTextures.clear();
 }
 
 void CStagedTexturedSceneRendererCommand::CreateRenderTargetViewVector()

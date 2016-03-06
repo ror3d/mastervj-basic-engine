@@ -63,19 +63,40 @@ fn createStaticMeshesFile meshesToExport = (
 	MyCreateFile "static_meshes.xml"
 	
 	local cores = meshesToExport
-	
+
 	WriteXMLPrologToFile()
 	format "<static_meshes>\n" to:file
 	
 	for i=1 to cores.count do
 	(
-		format "\t<static_mesh name=\"%\" filename=\"%.mesh\">\n" cores[i].name (getMeshPath cores[i].name) to:file
-		local mats = getUsedMaterials cores[i]
+		-- Clone mesh and use the clone
+		if superclassof cores[i] != GeometryClass then
+		(
+			format "$$$$ % no es una malla!\n" cores[i].name
+			continue
+		)
+		local clone = #()
+		maxOps.cloneNodes cores[i] newNodes:&clone
+		if clone.count > 1 then
+		(
+			delete clone
+			format "$$$$ % no es un objeto adecuado!\n" cores[i]
+			continue
+		)
+		local n = cores[i].name
+		cores[i].name = "_" + n
+		clone[1].name = n
+		
+		format "\t<static_mesh name=\"%\" filename=\"%.mesh\">\n" n (getMeshPath n) to:file
+		local mats = getUsedMaterials(convertToMesh clone[1])
 		for j = 1 to mats.count do
 		(
-			format "\t\t<material name=\"%\" />\n" (getMaterial cores[i] mats[j]).name to:file
+			format "\t\t<material name=\"%\" />\n" (getMaterial clone[1] mats[j]).name to:file
 		)
 		format "\t</static_mesh>\n\n" to:file
+		
+		delete clone
+		cores[i].name = n
 	)
 	
 	format "</static_meshes>\n" to:file 

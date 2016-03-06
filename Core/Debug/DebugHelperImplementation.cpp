@@ -33,6 +33,8 @@ CDebugHelperImplementation::~CDebugHelperImplementation()
 	// TODO: finalizar AntTweakBar
 	int status = TwTerminate();
 	DEBUG_ASSERT(status);
+	delete m_posRot;
+	m_posRot = NULL;
 }
 
 void CDebugHelperImplementation::Log(const std::string& text) const

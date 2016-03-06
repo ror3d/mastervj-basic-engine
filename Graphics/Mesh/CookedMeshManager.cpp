@@ -39,20 +39,20 @@ std::string CCookedMeshManager::GetValidName( const std::string path )
 bool CCookedMeshManager::Load( const std::string& meshName, std::vector<uint8> * &cooked )
 {
 	if ( m_resources.find( meshName ) != m_resources.end() )
-	{
+		{
 		cooked = m_resources[meshName];
 		return true;
-	}
+		}
 	std::string nameFile = m_cookedMeshesPath;
 	nameFile +=  GetValidName(meshName) + ".bin";
 	cooked = new std::vector<uint8>;
 	bool ret = CEngine::GetSingleton().getPhysXManager()->loadCookedMesh( nameFile, *cooked );
 	if ( ret )
-	{
+		{
 		MapManagerType_t::add( meshName, cooked );
-	}
+		}
 	return ret;
-}
+	}
 
 void CCookedMeshManager::add( const std::string& meshName, std::vector<uint8>* cooked )
 {

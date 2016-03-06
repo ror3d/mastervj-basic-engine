@@ -25,6 +25,11 @@ CApplyFiltersSceneRendererCommand::CApplyFiltersSceneRendererCommand(CXMLTreeNod
 	}
 }
 
+CApplyFiltersSceneRendererCommand::~CApplyFiltersSceneRendererCommand()
+{
+	m_Materials.clear();
+}
+
 void CApplyFiltersSceneRendererCommand::Execute(CContextManager &_context)
 {
 	SCOPED_DEBUG_PERF(L"Apply Filter");

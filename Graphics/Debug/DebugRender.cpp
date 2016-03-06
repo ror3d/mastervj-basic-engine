@@ -7,6 +7,27 @@
 CDebugRender::CDebugRender()
 {
 }
+
+CDebugRender::~CDebugRender()
+{
+	delete m_ClassicBlendTriangle;
+	delete m_SimpleTriangle;
+	delete m_PremultBlendTriangle;
+	delete m_SimpleGrid;
+	//delete m_SimpleCube;
+	delete m_Axis;
+	delete m_LongAxis;
+	delete m_DrawQuadRV;
+	m_ClassicBlendTriangle = NULL;
+	m_SimpleTriangle = NULL;
+	m_PremultBlendTriangle = NULL;
+	m_SimpleGrid = NULL;
+	m_SimpleCube = NULL;
+	m_Axis = NULL;
+	m_LongAxis = NULL;
+	m_DrawQuadRV = NULL;
+}
+
 void CDebugRender::Create() 
 {
 	{

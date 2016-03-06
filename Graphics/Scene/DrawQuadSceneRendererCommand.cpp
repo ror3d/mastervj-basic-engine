@@ -17,20 +17,18 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++)
 	{
 		CXMLTreeNode texChild = TreeNode(i);
-		if ( texChild.GetName() == std::string( "texture" ) )
+		if (texChild.GetName() == std::string("texture"))
 		{
 			CTexture *tex = nullptr;
-			if ( texChild.GetBoolProperty( "load_file", false ) )
+			if (texChild.GetBoolProperty("load_file", false))
 			{
-				tex = new CTexture();
-				tex->load( texChild.GetPszProperty( "file" ) );
-				CEngine::GetSingleton().getTextureManager()->add( tex->getName(), tex );
+				tex = CEngine::GetSingleton().getTextureManager()->GetTexture(texChild.GetPszProperty("file"));
 			}
 			else
 			{
-				tex = CEngine::GetSingleton().getTextureManager()->GetTexture( texChild.GetPszProperty( "file" ) );
+				tex = CEngine::GetSingleton().getTextureManager()->get(texChild.GetPszProperty("file"));
 			}
-			AddStageTexture( texChild.GetIntProperty( "stage_id" ), tex );
+			AddStageTexture(texChild.GetIntProperty("stage_id"), tex);
 		}
 	}
 }
