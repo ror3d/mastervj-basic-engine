@@ -358,7 +358,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 		{
 			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
-			physx::PxMeshScale scale(physx::PxVec3(desc.size.x, desc.size.y, desc.size.z), physx::PxQuat(1.0f));
+			physx::PxMeshScale scale(physx::PxVec3(desc.size.x, desc.size.y, desc.size.z), physx::PxQuat::createIdentity());
 			geom = new physx::PxConvexMeshGeometry(mesh,scale);
 			break;
 		}
@@ -368,25 +368,25 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 			break;
 	}
 
-	physx::PxTransform transform = physx::PxTransform(v(desc.position), q(desc.orientation));
+	physx::PxTransform actorTransform = physx::PxTransform(physx::PxVec3(0, 0, 0), physx::PxQuat::createIdentity());
 
 	physx::PxRigidActor* body;
 	switch (actorType)
 	{
 		case CPhysXManager::ActorType::Static:
-			body = m_PhysX->createRigidStatic(transform); //AQUI
+			body = m_PhysX->createRigidStatic(actorTransform); //AQUI
 			break;
 		case CPhysXManager::ActorType::Dynamic:
-			body = m_PhysX->createRigidDynamic(transform);
+			body = m_PhysX->createRigidDynamic(actorTransform);
 			break;
 	}
 
 	physx::PxShape* shape = body->createShape(*geom, *mat);
 	delete geom;
 
-	shape->setLocalPose(transform); //AQUI
+	physx::PxTransform transform = physx::PxTransform(v(desc.position), q(desc.orientation));
 
-	//body->attachShape(*shape);
+	shape->setLocalPose(transform); //AQUI
 
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)
@@ -429,7 +429,7 @@ void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
-	//createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
+	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
 }
 
 Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){

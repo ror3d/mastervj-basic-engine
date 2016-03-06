@@ -17,8 +17,7 @@ CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 	//desc.density = 10;// not used for static
 	desc.size = GetScale();
 	desc.position = GetPosition();
-	Quatf quat;
-	desc.orientation = quat.GetQuaternionFromRadians(Vect3f(GetYaw(), GetPitch(), GetRoll()));
+	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(GetYaw(), GetPitch(), GetRoll()));
 	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), CPhysXManager::ActorType::Static, desc);
 
 }

@@ -16,14 +16,14 @@ class Quaternion
 	// member variables
 public:
 	T x, y, z, w;
-	
+
 	// constructors/destructor
 public:
 	inline Quaternion() : x(Zero<T>()), y(Zero<T>()), z(Zero<T>()), w(One<T>()){};
 	inline Quaternion(const Quaternion& q): x(q.x), y(q.y), z(q.z), w(q.w) {};
 	inline Quaternion(T qx, T qy, T qz, T qw): x(qx), y(qy), z(qz), w(qw) {};
-	inline Quaternion(Vector3<T> axis, T angle) 
-         { 
+	inline Quaternion(Vector3<T> axis, T angle)
+         {
            T sinus   = (T) sin(angle * Half<T>());
            T cosinus = (T) cos(angle * Half<T>());
            x = axis.x * sinus;
@@ -31,8 +31,8 @@ public:
            z = axis.z * sinus;
            w = cosinus;
          };
-	inline Quaternion(Matrix33<T> mat) 
-         { 
+	inline Quaternion(Matrix33<T> mat)
+         {
            T trace = mat.m00 + mat.m11 + mat.m22;
            //check the diagonal
            if(trace > Zero<T>())
@@ -63,7 +63,7 @@ public:
              T t;
              if(s != Zero<T>())   t = Half<T>() / s;
              else                 t = s;
-             
+
              w          = (mat.GetRow(k)[j] - mat.GetRow(j)[k]) * t;
              (*this)[j] = (mat.GetRow(j)[i] - mat.GetRow(i)[j]) * t;
              (*this)[k] = (mat.GetRow(k)[i] - mat.GetRow(i)[k]) * t;
@@ -74,23 +74,22 @@ public:
 	static inline Quaternion<T> ShortestArc( const Vector3<T>& from, const Vector3<T>& to )
 	{
 	  assert(abs(from.SquaredLength() - One<T>()) < Epsilon<T>() && abs(from.SquaredLength() - One<T>()) < Epsilon<T>() && "shortestArc from i to cal que siguin unitaris");
-	  
+
 
 		Vector3<T> cross = from ^ to; //Compute vector cross product
 		T dot = from * to ;      //Compute dot product
-		
+
 		dot = (T) sqrt( 2*(dot+1) ) ; //We will use this equation twice
-		
+
 		cross /= dot ; //Get the x, y, z components
-		
+
 		//Return with the w component (Note that w is inverted because of left-handed rotations )
-		return Quaternion<T>( cross[0], cross[1], cross[2], dot/2 ).GetNormalized() ; 
-		
+		return Quaternion<T>( cross[0], cross[1], cross[2], dot/2 ).GetNormalized() ;
+
 	}
 
 	static inline Quaternion<T> GetQuaternionFromRadians(Vector3<T> pitchRollYawInRads)
 	{
-		pitchRollYawInRads = pitchRollYawInRads * 180 / 3.14159f;
 		Vect3f euler = Vect3f(pitchRollYawInRads.z, pitchRollYawInRads.x, pitchRollYawInRads.y);
 		float c1 = cos(euler.x * 0.5);
 		float c2 = cos(euler.y * 0.5);
@@ -108,18 +107,18 @@ public:
 		return  Quaternion<T>(result.x, result.y, result.z, result.w);
 	}
 
-	// member functions	
+	// member functions
 public:
 	inline T& operator[](unsigned int index)
 	{
 		return (&x)[index];
 	}
-	
+
 	inline const T& operator[](unsigned int index) const
 	{
 		return (&x)[index];
-	}	
-	
+	}
+
 	inline void operator=(const Quaternion<T>& q)
 		{
 		x = q.x;
@@ -127,7 +126,7 @@ public:
 		z = q.z;
 		w = q.w;
 	}
-	
+
 	inline void operator*=(const Quaternion<T>& q)
 	{
 		T qx, qy, qz, qw;
@@ -135,13 +134,13 @@ public:
 		qy = y;
 		qz = z;
 		qw = w;
-		
+
 		x = qw * q.x + qx * q.w + qy * q.z - qz * q.y;
 		y = qw * q.y - qx * q.z + qy * q.w + qz * q.x;
 		z = qw * q.z + qx * q.y - qy * q.x + qz * q.w;
 		w = qw * q.w - qx * q.x - qy * q.y - qz * q.z;
 	}
-	
+
 	inline void operator*=(const Vector3<T>& v)
 	{
 		T qx, qy, qz, qw;
@@ -149,7 +148,7 @@ public:
 		qy = y;
 		qz = z;
 		qw = w;
-		
+
 		x = qw * v.x            + qy * v.z - qz * v.y;
 		y = qw * v.y - qx * v.z            + qz * v.x;
 		z = qw * v.z + qx * v.y - qy * v.x;
@@ -168,7 +167,7 @@ public:
   {
     return !operator==(rhs);
   }
-  
+
   inline Quaternion<T> operator *(T f) const
   {
     return Quaternion(x * f, y * f, z * f, w * f);
@@ -184,16 +183,16 @@ public:
 	{
 		T norm;
 		norm = x * q.x + y * q.y + z * q.z + w * q.w;
-		
+
 		bool bFlip;
 		bFlip = false;
-		
+
 		if(norm < Zero<T>())
 		{
 			norm = -norm;
 			bFlip = true;
 		}
-		
+
 		T inv_d;
 		if(One<T>() - norm < Epsilon<T>())
 		{
@@ -203,19 +202,19 @@ public:
 		{
 			T theta;
 			theta = (T) acos(norm);
-			
+
 			T s;
 			s = (T) (One<T>() / sin(theta));
-			
+
 			inv_d = (T) sin((One<T>() - d) * theta) * s;
 			d = (T) sin(d * theta) * s;
 		}
-		
+
 		if(bFlip)
 		{
 			d = -d;
 		}
-		
+
 		x = inv_d * x + d * q.x;
 		y = inv_d * y + d * q.y;
 		z = inv_d * z + d * q.z;
@@ -231,7 +230,7 @@ public:
 
 		return first.Normalize();
 	}
-	
+
 	inline void Clear()
 	{
 		x = Zero<T>();
@@ -251,28 +250,28 @@ public:
 	{
 		return Quaternion<T>(-x, -y, -z, w);
 	}
-	
+
 	inline void Invert()
 	{
 		Conjugate();
 		const T norm = (x*x) + (y*y) + (z*z) + (w*w);
-		
+
 		if (norm == Zero<T>()) return;
-		
+
 		const float inv_norm = One<T>() / norm;
 		x *= inv_norm;
 		y *= inv_norm;
 		z *= inv_norm;
 		w *= inv_norm;
 	}
-	
+
 	inline Quaternion<T> GetInverted() const
 	{
 		Quaternion<T> q = GetConjugate();
 		const T norm = (x*x) + (y*y) + (z*z) + (w*w);
-		
+
 		if (norm == Zero<T>()) return *this;
-		
+
 		const float inv_norm = One<T>() / norm;
 		q.x *= inv_norm;
 		q.y *= inv_norm;
@@ -281,32 +280,32 @@ public:
 
     return q;
 	}
-	
+
 	inline void Normalize()
 	{
 		const T norm = (x*x) + (y*y) + (z*z) + (w*w);
-		
+
 		if (norm == Zero<T>())
     {
       Clear();
     };
-		
+
 		const float inv_norm = One<T>() / norm;
 		x *= inv_norm;
 		y *= inv_norm;
 		z *= inv_norm;
 		w *= inv_norm;
 	}
-	
+
 	inline Quaternion<T> GetNormalized() const
 	{
 		const T norm = (x*x) + (y*y) + (z*z) + (w*w);
-		
+
 		if (norm == Zero<T>())
     {
       return Quaternion<T>();
     };
-		
+
 		const float inv_norm = One<T>() / norm;
     return Quaternion<T>(
 		                      x * inv_norm,
@@ -315,7 +314,7 @@ public:
 		                      w * inv_norm
                         );
 	}
-	
+
 	inline void Set(T qx, T qy, T qz, T qw)
 	{
 		x = qx;
