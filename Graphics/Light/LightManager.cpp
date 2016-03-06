@@ -25,28 +25,34 @@ void CLightManager::Load(const std::string &FileName)
 			for (int i = 0; i < l_Lights.GetNumChildren(); ++i)
 			{
 				CXMLTreeNode l_Light = l_Lights(i);
-				if ( l_Light.GetName() != std::string("light") )
+				if ( l_Light.GetName() == std::string("light") )
 				{
-					continue;
+					std::string typeName = l_Light.GetPszProperty("type");
+					if (typeName == "ambient")
+					{
+						Vect4f c = l_Light.GetVect4fProperty("color", Vect4f(0, 0, 0, 0), false);
+						m_ambient = CColor(c.x, c.y, c.z, c.w);
+						continue;
+					}
+					CLight::TLightType type = CLight::getLightTypeByName(typeName);
+
+					if (type == CLight::TLightType::OMNI)
+					{
+						COmniLight * light = new COmniLight(l_Light);
+						add(light->getName(), light);
+					}
+					else if (type == CLight::TLightType::DIRECTIONAL)
+					{
+						CDirectionalLight * light = new CDirectionalLight(l_Light);
+						add(light->getName(), light);
+					}
+					else if (type == CLight::TLightType::SPOT)
+					{
+						CSpotLight * light = new CSpotLight(l_Light);
+						add(light->getName(), light);
+					}
 				}
 
-				CLight::TLightType type = CLight::getLightTypeByName(l_Light.GetPszProperty("type"));
-
-				if (type == CLight::TLightType::OMNI)
-				{
-					COmniLight * light = new COmniLight(l_Light);
-					add(light->getName(), light);
-				}
-				else if (type == CLight::TLightType::DIRECTIONAL)
-				{
-					CDirectionalLight * light = new CDirectionalLight(l_Light);
-					add(light->getName(), light);
-				}
-				else if (type == CLight::TLightType::SPOT)
-				{
-					CSpotLight * light = new CSpotLight(l_Light);
-					add(light->getName(), light);
-				}
 			}
 		}
 	}

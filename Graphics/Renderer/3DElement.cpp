@@ -85,6 +85,9 @@ C3DElement::C3DElement(const CXMLTreeNode &treeNode)
 		m_Pitch = treeNode.GetFloatProperty( "pitch" );
 		m_Roll = treeNode.GetFloatProperty( "roll" );
 	}
+	m_Yaw = mathUtils::Deg2Rad(m_Yaw);
+	m_Pitch = mathUtils::Deg2Rad(m_Pitch);
+	m_Roll = mathUtils::Deg2Rad(m_Roll);
 	m_Visible = treeNode.GetBoolProperty( "visible", true, false );
 }
 

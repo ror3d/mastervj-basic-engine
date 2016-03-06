@@ -88,7 +88,7 @@ void CApplication::Update(float _ElapsedTime)
 
 
 			Vect3f cameraPosition(0, 0, 0);
-			float velMultiplier = 0.1f;
+			float velMultiplier = 1;
 			float Strafe = CInputManager::GetInputManager()->GetAxis("STRAFE");
 			float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
 			float m_Yaw = ccfps->GetYaw();

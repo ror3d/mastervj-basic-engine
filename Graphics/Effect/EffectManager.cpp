@@ -142,8 +142,7 @@ void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 		m_LightParameters.m_UseShadowMask[IdLight] = 0;
 	}
 
-	// TODO: read from file!
-	m_SceneParameters.m_LightAmbient = Vect4f(0.1f, 0.1f, 0.1f, 1.0f);
+	m_SceneParameters.m_LightAmbient = CEngine::GetSingleton().getLightManager()->GetAmbientLight();
 }
 
 void CEffectManager::SetLightsConstants()
