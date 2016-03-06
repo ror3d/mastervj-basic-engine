@@ -38,6 +38,7 @@ void CEffectManager::destroy()
 		it.second->destroy();
 	}
 
+
 	m_VertexShaders.destroy();
 	m_PixelShaders.destroy();
 
@@ -66,12 +67,28 @@ void CEffectManager::load(const std::string &Filename)
 				else if (l_Effect.GetName() == std::string("vertex_shader"))
 				{
 					CEffectVertexShader * Effect = new CEffectVertexShader(l_Effect);
-					m_VertexShaders.add(Effect->getName(), Effect);
+					bool success = Effect->Load();
+					if (success)
+					{
+						m_VertexShaders.add(Effect->getName(), Effect);
+					}
+					else
+					{
+						delete Effect;
+					}
 				}
 				else if (l_Effect.GetName() == std::string("pixel_shader"))
 				{
 					CEffectPixelShader * Effect = new CEffectPixelShader(l_Effect);
-					m_PixelShaders.add(Effect->getName(), Effect);
+					bool success = Effect->Load();
+					if (success)
+					{
+						m_PixelShaders.add(Effect->getName(), Effect);
+					}
+					else
+					{
+						delete Effect;
+					}
 				}
 			}
 		}
