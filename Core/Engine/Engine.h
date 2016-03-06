@@ -15,7 +15,11 @@
 #include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
-#include <Graphics/IA/IAManager.h>
+#include <Core/IA/IAManager.h>
+#include <Base/Scripting/ScriptManager.h>
+#include <Core/CharacterController/CharacterControllerManager.h>
+#include <Core/Time/TimeManager.h>
+#include <Core/Component/ComponentManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -36,6 +40,10 @@ private:
 	CPhysXManager * physXManager;
 	CCookedMeshManager * cookedMeshManager;
 	CIAManager * iaManager;
+	CScriptManager * scriptManager;
+	CCharacterControllerManager * characterControllerManager;
+	CTimerManager * timerManager;
+	CComponentManager * componentManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -59,4 +67,8 @@ public:
 	inline CPhysXManager * getPhysXManager() const { return physXManager; }
 	inline CCookedMeshManager * getCookedMeshManager() const { return cookedMeshManager;  }
 	inline CIAManager * getIAManager() const { return iaManager; }
+	inline CScriptManager * getScriptManager() const { return scriptManager; }
+	inline CCharacterControllerManager * getCharacterControllerManager() const { return characterControllerManager; }
+	inline CTimerManager * getTimerManager() const { return timerManager;  }
+	inline CComponentManager * getComponentManager() const { return componentManager;  }
 };

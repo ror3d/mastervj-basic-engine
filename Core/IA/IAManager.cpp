@@ -15,9 +15,11 @@ void CIAManager::Update(float elapsedTime)
 	/*m_actualTime += elapsedTime;
 	if (m_actualTime >= iaTurret->m_timeToUpdate){
 		iaTurret->Update(elapsedTime);
+	if (m_actualTime >= iaTurret->m_timeToUpdate){
+		iaTurret->UpdateTarget();
 		m_actualTime = 0;
 	}*/
-}
+	}
 
 void CIAManager::Create(){
 	//iaTurret = new CIAInstance("Box001", 0.01f);

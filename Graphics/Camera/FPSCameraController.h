@@ -14,6 +14,8 @@ private:
 	float						m_FastSpeed;
 	Vect3f						m_CameraDisplacement;
 	float						m_PitchDisplacement;
+	float						m_PitchfloorLimit;
+	float						m_PitchSkyLimit;
 public:
 	CFPSCameraController();
 	virtual ~CFPSCameraController();

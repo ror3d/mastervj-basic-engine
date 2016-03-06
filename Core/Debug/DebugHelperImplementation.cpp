@@ -194,6 +194,10 @@ void TW_CALL ReloadSceneCommands(void* _app)
 {
 	CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 }
+
+void TW_CALL ReloadLua(void* _app){
+	CEngine::GetSingleton().getScriptManager()->RegisterLUAFunctions();
+}
 void TW_CALL CreateScene(void* a)
 {
 	CPhysxColliderShapeDesc desc;
@@ -310,6 +314,15 @@ void CDebugHelperImplementation::CreateMainBar(){
 		var.name = "PhysX: Create Box";
 		var.type = CDebugHelper::BUTTON;
 		var.callback = CreateScene;
+		var.data = this;
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "Reload LUA";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = ReloadLua;
 		var.data = this;
 
 		mainBar.variables.push_back(var);

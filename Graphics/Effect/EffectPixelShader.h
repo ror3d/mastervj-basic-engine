@@ -1,7 +1,7 @@
 #ifndef EFFECT_PIXEL_SHADER
 #define EFFECT_PIXEL_SHADER
 
-#include "Effect/EffectShader.h"
+#include "Graphics/Effect/EffectShader.h"
 
 class CEffectPixelShader : public CEffectShader
 {

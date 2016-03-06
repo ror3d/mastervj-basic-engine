@@ -87,7 +87,21 @@ private:
         _funs.emplace_back(
             sel::make_unique<ObjFun<arity, Ret, Args...>>(
                 state, std::string(fun_name), lambda));
-    }
+	}
+
+	template <typename Ret, typename... Args>
+	void _register_member(lua_State *state,
+		T *t,
+		const char *fun_name,
+		Ret(T::*fun)(Args...) const) {
+		std::function<Ret(Args...)> lambda = [t, fun](Args... args) {
+			return (t->*fun)(args...);
+		};
+		const int arity = detail::_arity<Ret>::value;
+		_funs.emplace_back(
+			sel::make_unique<ObjFun<arity, Ret, Args...>>(
+			state, std::string(fun_name), lambda));
+	}
 
 
     void _register_members(lua_State *state, T *t) {}

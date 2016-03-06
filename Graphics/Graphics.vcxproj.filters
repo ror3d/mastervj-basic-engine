@@ -43,12 +43,6 @@
     <Filter Include="Cinematic">
       <UniqueIdentifier>{9f36ac37-457a-4873-a2ff-0885a2e0097f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CharacterController">
-      <UniqueIdentifier>{1b56b552-300a-4c32-b8f1-0c719e07b8e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="IA">
-      <UniqueIdentifier>{a8b95e7b-9c26-4eef-8350-41ca2e3deb9e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
@@ -115,9 +109,6 @@
     </ClInclude>
     <ClInclude Include="Animation\AnimatedModelManager.h">
       <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderable\AnimatedInstanceModel.h">
-      <Filter>Renderable</Filter>
     </ClInclude>
     <ClInclude Include="Renderable\RenderableObject.h">
       <Filter>Renderable</Filter>
@@ -266,11 +257,8 @@
     <ClInclude Include="Mesh\CookedMeshmanager.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="IA\IAInstance.h">
-      <Filter>IA</Filter>
-    </ClInclude>
-    <ClInclude Include="IA\IAManager.h">
-      <Filter>IA</Filter>
+    <ClInclude Include="Animation\AnimatedInstanceModel.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -349,9 +337,6 @@
     </ClCompile>
     <ClCompile Include="Animation\AnimatedModelManager.cpp">
       <Filter>Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderable\AnimatedInstanceModel.cpp">
-      <Filter>Renderable</Filter>
     </ClCompile>
     <ClCompile Include="Cinematics\CameraKey.cpp">
       <Filter>Cinematic</Filter>
@@ -476,11 +461,8 @@
     <ClCompile Include="Mesh\CookedMeshManager.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="IA\IAInstance.cpp">
-      <Filter>IA</Filter>
-    </ClCompile>
-    <ClCompile Include="IA\IAManager.cpp">
-      <Filter>IA</Filter>
+    <ClCompile Include="Animation\AnimatedInstanceModel.cpp">
+      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
