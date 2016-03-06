@@ -28,6 +28,9 @@
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\DebugPerf.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
     <ClCompile Include="IA\IAInstance.cpp">
       <Filter>IA</Filter>
     </ClCompile>
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Engine.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\DebugPerf.h">
+      <Filter>Debug</Filter>
     </ClInclude>
     <ClInclude Include="IA\IAInstance.h">
       <Filter>IA</Filter>
