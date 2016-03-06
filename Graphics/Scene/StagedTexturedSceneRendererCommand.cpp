@@ -10,19 +10,23 @@ CStagedTexturedSceneRendererCommand::~CStagedTexturedSceneRendererCommand()
 {
 	CTextureManager & textureManager = *(CEngine::GetSingleton().getTextureManager());
 
-	for (auto const & text : m_DynamicTextures)
+	if (!textureManager.isEmpty())
 	{
-		textureManager.remove(text->getName());
-	}
-	m_DynamicTextures.clear();
-
-	for (auto const & text : m_StageTextures)
-	{
-		if (textureManager.get(text.m_Texture->getName()) != NULL)
+		for (auto const & text : m_DynamicTextures)
 		{
-			textureManager.remove(text.m_Texture->getName());
+			textureManager.remove(text->getName());
+		}
+
+		for (auto const & text : m_StageTextures)
+		{
+			if (textureManager.get(text.m_Texture->getName()) != NULL)
+			{
+				textureManager.remove(text.m_Texture->getName());
+			}
 		}
 	}
+
+	m_DynamicTextures.clear();
 	m_StageTextures.clear();
 }
 
