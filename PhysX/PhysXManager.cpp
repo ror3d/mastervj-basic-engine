@@ -386,7 +386,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 	shape->setLocalPose(transform); //AQUI
 
-	body->attachShape(*shape);
+	//body->attachShape(*shape);
 
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)

@@ -194,6 +194,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
 	context.CreateContext(hWnd, 800, 600);
 
+	ShowWindow(hWnd, SW_SHOWDEFAULT);
+
 	engine.getDebugRender()->Create();
 	engine.getEffectsManager()->load("Data\\effects.xml");
 	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
@@ -208,8 +210,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getScriptManager()->Initialize();
 	engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
 
-
-	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
 	context.CreateBackBuffer(hWnd, 800, 600);
 	{

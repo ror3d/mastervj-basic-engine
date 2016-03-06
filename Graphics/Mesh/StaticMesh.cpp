@@ -328,7 +328,7 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh )
 	{
 		//std::shared_ptr<std::vector<uint8>> * cooked;
-		std::vector<uint8> * cooked;
+		std::vector<uint8> * cooked = nullptr;
 
 		bool l_loaded = CEngine::GetSingleton().getCookedMeshManager()->Load( getName(), cooked );
 
