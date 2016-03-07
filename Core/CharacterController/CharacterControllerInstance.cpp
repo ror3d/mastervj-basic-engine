@@ -13,7 +13,7 @@ CCharacterControllerInstance::CCharacterControllerInstance(std::string Name, CFP
 	, m_fpsCamera(fpsCam)
 	, m_objectModel(rendObjec)
 {
-	CEngine::GetSingleton().getPhysXManager()->createController(0.75f, 0.5f, 10, Vect3f(5, 10, 5), Name);
+	CEngine::GetSingleton().getPhysXManager()->createController(0.75f, 0.5f, 10, Vect3f(5, -0.8f, 5), Name);
 }
 
 CCharacterControllerInstance::~CCharacterControllerInstance()

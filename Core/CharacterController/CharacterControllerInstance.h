@@ -21,10 +21,6 @@ private:
 
 	CFPSCameraController * m_fpsCamera;
 	CRenderableObject * m_objectModel;
-
-	
-
-
 };
 
 #endif

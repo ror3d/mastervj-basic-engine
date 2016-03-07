@@ -374,7 +374,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	switch (actorType)
 	{
 		case CPhysXManager::ActorType::Static:
-			body = m_PhysX->createRigidStatic(actorTransform); //AQUI
+			body = m_PhysX->createRigidStatic(actorTransform); 
 			break;
 		case CPhysXManager::ActorType::Dynamic:
 			body = m_PhysX->createRigidDynamic(actorTransform);
@@ -386,7 +386,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 	physx::PxTransform transform = physx::PxTransform(v(desc.position), q(desc.orientation));
 
-	shape->setLocalPose(transform); //AQUI
+	shape->setLocalPose(transform);
 
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)
@@ -416,7 +416,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.slopeLimit = cosf(3.1415f / 6); //30º
 	desc.stepOffset = 0.5f;
 	desc.density = density;
-	desc.reportCallback = NULL;//TODO
+	desc.reportCallback = NULL; //TODO
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + radius + height * 0.5f, pos.z);
 	desc.material = l_material;
 	int index = m_CharacterControllers.size();
