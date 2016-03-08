@@ -183,7 +183,20 @@ const Mat44f & C3DElement::GetTransform()
 	{
 		if ( m_RotationUpdate )
 		{
-			m_RotationMatrix.SetFromAnglesYXZ( m_Yaw, m_Pitch, m_Roll );
+			m_RotationMatrix.SetIdentity();
+
+			Mat44f l_RotX;
+			l_RotX.SetIdentity();
+			l_RotX.RotByAngleX(m_Roll);
+			Mat44f l_RotY;
+			l_RotY.SetIdentity();
+			l_RotY.RotByAngleY(m_Yaw);
+			Mat44f l_RotZ;
+			l_RotZ.SetIdentity();
+			l_RotZ.RotByAngleZ(m_Pitch);
+
+			m_RotationMatrix = l_RotX*l_RotZ*l_RotY;
+
 			m_RotationUpdate = false;
 		}
 		if ( m_TranslationUpdate )
