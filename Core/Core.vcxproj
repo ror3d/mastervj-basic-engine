@@ -31,8 +31,9 @@
   <ItemGroup>
     <ClInclude Include="CharacterController\CharacterControllerInstance.h" />
     <ClInclude Include="CharacterController\CharacterControllerManager.h" />
-    <ClInclude Include="Component.h" />
+    <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\ComponentManager.h" />
+    <ClInclude Include="Component\ScriptedComponent.h" />
     <ClInclude Include="Debug\DebugHelper.h" />
     <ClInclude Include="Debug\DebugHelperImplementation.h" />
     <ClInclude Include="Debug\DebugPerf.h" />
@@ -46,7 +47,6 @@
     <ClInclude Include="IA\IAManager.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputManagerImplementation.h" />
-    <ClInclude Include="ScriptedComponent.h" />
     <ClInclude Include="TimeManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

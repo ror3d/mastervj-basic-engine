@@ -11,6 +11,7 @@ CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 	// Create Actor
 	CPhysxColliderShapeDesc desc;
 	desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;// TODO get from file
+	//desc.shape = CPhysxColliderShapeDesc::Shape::TriangleMesh;
 	m_StaticMesh->FillColliderDescriptor(&desc);
 
 	desc.material = std::string("StaticObjectMaterial");// TODO get from file

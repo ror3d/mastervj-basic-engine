@@ -80,6 +80,8 @@ public:
 
 	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
 
+	bool cookTriangleMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
+
 	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);

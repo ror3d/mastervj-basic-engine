@@ -260,6 +260,29 @@ bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<u
 	return success;
 }
 
+bool CPhysXManager::cookTriangleMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData){
+	physx::PxTriangleMeshDesc meshDesc;
+
+	meshDesc.points.count = vec.size();
+	meshDesc.points.stride = sizeof(Vect3f);
+	meshDesc.points.data = vec.data();
+
+/*	meshDesc.triangles.count = triCount;
+	meshDesc.triangles.stride = 3 * sizeof(PxU32);
+	meshDesc.triangles.data = indices32;*/
+
+	physx::PxDefaultMemoryOutputStream oBuf;
+	bool success = m_Cooking->cookTriangleMesh(meshDesc, oBuf);
+	DEBUG_ASSERT(success);
+
+	//outCookedData->assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
+	//TRIANGLE
+	//PxToolkit::MemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
+	//return physics.createTriangleMesh(readBuffer);
+
+	return success;
+}
+
 
 bool CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData)
 {
