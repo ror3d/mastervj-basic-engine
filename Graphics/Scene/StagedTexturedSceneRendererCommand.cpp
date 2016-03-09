@@ -16,14 +16,6 @@ CStagedTexturedSceneRendererCommand::~CStagedTexturedSceneRendererCommand()
 		{
 			textureManager->remove(text->getName());
 		}
-
-		for (auto const & text : m_StageTextures)
-		{
-			if (textureManager->get(text.m_Texture->getName()) != NULL)
-			{
-				textureManager->remove(text.m_Texture->getName());
-			}
-		}
 	}
 
 	m_DynamicTextures.clear();

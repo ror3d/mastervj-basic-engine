@@ -197,6 +197,17 @@ void TW_CALL ReloadSceneCommands(void* _app)
 	CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 }
 
+void TW_CALL ReloadScene(void* _app)
+{
+	CEngine::GetSingleton().getEffectsManager()->Reload();
+	CEngine::GetSingleton().getRenderableObjectTechniqueManager()->Reload();
+	CEngine::GetSingleton().getMaterialManager()->reload();;
+	CEngine::GetSingleton().getStaticMeshManager()->Reload();
+	//CEngine::GetSingleton().getAnimatedModelManager()->Reload();
+	CEngine::GetSingleton().getLayerManager()->Reload();
+	//CEngine::GetSingleton().getLightManager()->reload();
+}
+
 void TW_CALL ReloadLua(void* _app){
 	CEngine::GetSingleton().getScriptManager()->RegisterLUAFunctions();
 }
@@ -343,6 +354,15 @@ void CDebugHelperImplementation::CreateMainBar(){
 		var.mode = CDebugHelper::SEPARATOR;
 		var.type = CDebugHelper::LABEL;
 		var.params = "label='Reload Options'";
+
+		mainBar.variables.push_back(var);
+	}
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "  - Scene";
+		var.type = CDebugHelper::BUTTON;
+		var.callback = ReloadScene;
+		var.data = this;
 
 		mainBar.variables.push_back(var);
 	}
