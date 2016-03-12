@@ -9,10 +9,27 @@ class CRenderableVertexs;
 
 class CDebugRender
 {
+	ID3D11VertexShader *m_VertexShader;
+	ID3D11InputLayout *m_VertexLayout;
+	ID3D11PixelShader *m_PixelShader;
+	ID3D11Buffer *m_SceneConstantBufferV;
+	ID3D11Buffer *m_SceneConstantBufferP;
+	struct SceneConstantBuffer_t
+	{
+		Mat44f m_World;
+		Mat44f m_View;
+		Mat44f m_Projection;
+	}
+		m_SceneConstantBufferValues;
 public:
 	CDebugRender();
 	~CDebugRender();
-	void Create();
+	void Init();
+
+	void Render();
+
+	bool m_RenderAxis;
+	bool m_RenderLights;
 
 
 	CRenderableVertexs * GetSimpleTriangle() const { return m_SimpleTriangle; }

@@ -31,8 +31,7 @@ bool CEffectPixelShader::Load()
 void CEffectPixelShader::SetConstantBuffer(unsigned int IdBuffer, void
 										   *ConstantBuffer)
 {
-	ID3D11DeviceContext
-		*l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
+	ID3D11DeviceContext *l_DeviceContext = CEngine::GetSingleton().getContextManager()->GetDeviceContext();
 	ID3D11Buffer *l_ConstantBuffer = GetConstantBuffer(IdBuffer);
 	if (l_ConstantBuffer)
 	{

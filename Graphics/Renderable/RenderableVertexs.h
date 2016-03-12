@@ -24,7 +24,17 @@ public:
 		DEBUG_ASSERT(!"This method mustn't be called");
 		return false;
 	}
+	virtual bool Render(ID3D11DeviceContext* context, ID3D11InputLayout* inputLayout, ID3D11VertexShader* vshader, ID3D11PixelShader* pshader)
+	{
+		DEBUG_ASSERT(!"This method mustn't be called");
+		return false;
+	}
 	virtual bool RenderIndexed(CContextManager *ContextManager, CEffectTechnique *EffectManager, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	{
+		DEBUG_ASSERT(!"This method mustn't be called");
+		return false;
+	}
+	virtual bool RenderIndexed(ID3D11DeviceContext* context, ID3D11InputLayout* inputLayout, ID3D11VertexShader* vshader, ID3D11PixelShader* pshader, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
 	{
 		DEBUG_ASSERT(!"This method mustn't be called");
 		return false;
@@ -68,14 +78,18 @@ public:
 		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
 			return false;
 		ID3D11DeviceContext *l_DeviceContext = ContextManager->GetDeviceContext();
+		return Render(l_DeviceContext, Effect->GetVertexShader()->GetVertexLayout(), Effect->GetVertexShader()->GetVertexShader(), Effect->GetPixelShader()->GetPixelShader());
+	}
+	bool Render(ID3D11DeviceContext* context, ID3D11InputLayout* inputLayout, ID3D11VertexShader* vshader, ID3D11PixelShader* pshader)
+	{
 		UINT stride = sizeof(T);
 		UINT offset = 0;
-		l_DeviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
-		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
-		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
-		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
-		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
-		l_DeviceContext->Draw(m_VertexsCount, 0);
+		context->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
+		context->IASetPrimitiveTopology(m_PrimitiveTopology);
+		context->IASetInputLayout(inputLayout);
+		context->VSSetShader(vshader, NULL, 0);
+		context->PSSetShader(pshader, NULL, 0);
+		context->Draw(m_VertexsCount, 0);
 		return true;
 	}
 };
@@ -139,16 +153,21 @@ public:
 		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
 			return false;
 		ID3D11DeviceContext *l_DeviceContext = ContextManager->GetDeviceContext();
+		return RenderIndexed(l_DeviceContext, Effect->GetVertexShader()->GetVertexLayout(), Effect->GetVertexShader()->GetVertexShader(), Effect->GetPixelShader()->GetPixelShader(), IndexCount, StartIndexLocation, BaseVertexLocation);
+	}
+	inline bool RenderIndexed(ID3D11DeviceContext* context, ID3D11InputLayout* inputLayout, ID3D11VertexShader* vshader, ID3D11PixelShader* pshader, unsigned int IndexCount = -1, unsigned int StartIndexLocation = 0, unsigned int BaseVertexLocation = 0)
+	{
 		UINT stride = sizeof(T);
 		UINT offset = 0;
-		l_DeviceContext->IASetIndexBuffer(m_IndexBuffer, m_IndexType, 0);
-		l_DeviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
-		l_DeviceContext->IASetPrimitiveTopology(m_PrimitiveTopology);
-		l_DeviceContext->IASetInputLayout(Effect->GetVertexShader()->GetVertexLayout());
-		l_DeviceContext->VSSetShader(Effect->GetVertexShader()->GetVertexShader(), NULL, 0);
-		l_DeviceContext->PSSetShader(Effect->GetPixelShader()->GetPixelShader(), NULL, 0);
-		l_DeviceContext->DrawIndexed(IndexCount == -1 ? m_IndexsCount : IndexCount, StartIndexLocation, BaseVertexLocation);
+		context->IASetIndexBuffer(m_IndexBuffer, m_IndexType, 0);
+		context->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
+		context->IASetPrimitiveTopology(m_PrimitiveTopology);
+		context->IASetInputLayout(inputLayout);
+		context->VSSetShader(vshader, NULL, 0);
+		context->PSSetShader(pshader, NULL, 0);
+		context->DrawIndexed(IndexCount == -1 ? m_IndexsCount : IndexCount, StartIndexLocation, BaseVertexLocation);
 		return true;
+
 	}
 };
 
