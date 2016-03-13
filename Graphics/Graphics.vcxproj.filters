@@ -260,6 +260,9 @@
     <ClInclude Include="Animation\AnimatedInstanceModel.h">
       <Filter>Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Effect\EffectGeometryShader.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -463,6 +466,9 @@
     </ClCompile>
     <ClCompile Include="Animation\AnimatedInstanceModel.cpp">
       <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\EffectGeometryShader.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

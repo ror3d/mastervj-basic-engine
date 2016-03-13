@@ -2,6 +2,7 @@
 #include "EffectTechnique.h"
 #include "Effect/EffectVertexShader.h"
 #include "Effect/EffectPixelShader.h"
+#include "Effect/EffectGeometryShader.h"
 
 #include <Core/Engine/Engine.h>
 #include "Light/Light.h"
@@ -41,6 +42,7 @@ void CEffectManager::destroy()
 
 	m_VertexShaders.destroy();
 	m_PixelShaders.destroy();
+	m_GeometryShaders.destroy();
 
 	TMapManager::destroy();
 }
@@ -90,6 +92,19 @@ void CEffectManager::load(const std::string &Filename)
 						delete Effect;
 					}
 				}
+				else if (l_Effect.GetName() == std::string("geometry_shader"))
+				{
+					CEffectGeometryShader * Effect = new CEffectGeometryShader(l_Effect);
+					bool success = Effect->Load();
+					if (success)
+					{
+						m_GeometryShaders.add(Effect->getName(), Effect);
+					}
+					else
+					{
+						delete Effect;
+					}
+				}
 			}
 		}
 	}
@@ -106,6 +121,13 @@ CEffectPixelShader * CEffectManager::GetPixelShader(const std::string &PixelShad
 {
 	return m_PixelShaders.get(PixelShader);
 }
+
+
+CEffectGeometryShader * CEffectManager::GetGeometryShader(const std::string &GeometryShader)
+{
+	return m_GeometryShaders.get(GeometryShader);
+}
+
 
 void CEffectManager::SetSceneConstants()
 {

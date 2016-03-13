@@ -7,6 +7,7 @@
 class CEffectTechnique;
 class CEffectVertexShader;
 class CEffectPixelShader;
+class CEffectGeometryShader;
 class CLight;
 
 class CEffectManager : public TMapManager<CEffectTechnique>
@@ -14,6 +15,7 @@ class CEffectManager : public TMapManager<CEffectTechnique>
 private:
 	TMapManager<CEffectVertexShader> m_VertexShaders;
 	TMapManager<CEffectPixelShader> m_PixelShaders;
+	TMapManager<CEffectGeometryShader> m_GeometryShaders;
 	std::string m_FileName;
 
 public:
@@ -28,6 +30,7 @@ public:
 	void load( const std::string &Filename);
 	CEffectVertexShader * GetVertexShader( const std::string &VertexShader);
 	CEffectPixelShader * GetPixelShader( const std::string &PixelShader);
+	CEffectGeometryShader * GetGeometryShader( const std::string &GeometryShader);
 
 	void SetSceneConstants();
 	void SetLightConstants(unsigned int IdLight, CLight *Light);
