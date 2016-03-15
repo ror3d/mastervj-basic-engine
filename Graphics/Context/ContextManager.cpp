@@ -312,5 +312,5 @@ void CContextManager::Present(){
 
 void CContextManager::Draw(CRenderableVertexs* _VerticesToRender){
 	
-	_VerticesToRender->Render(this, CEngine::GetSingleton().getEffectsManager()->get("forward_PosNorTex_technique"));
+	_VerticesToRender->Render(this, CEngine::GetSingleton().getEffectsManager()->get("forward_PosNorTex_technique").getRef());
 }

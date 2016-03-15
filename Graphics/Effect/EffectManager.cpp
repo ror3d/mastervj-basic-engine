@@ -98,13 +98,13 @@ void CEffectManager::load(const std::string &Filename)
 
 CEffectVertexShader * CEffectManager::GetVertexShader(const std::string &VertexShader)
 {
-	return m_VertexShaders.get(VertexShader);
+	return m_VertexShaders.get(VertexShader).getRef();
 }
 
 
 CEffectPixelShader * CEffectManager::GetPixelShader(const std::string &PixelShader)
 {
-	return m_PixelShaders.get(PixelShader);
+	return m_PixelShaders.get(PixelShader).getRef();
 }
 
 void CEffectManager::SetSceneConstants()

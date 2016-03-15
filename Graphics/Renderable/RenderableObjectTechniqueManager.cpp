@@ -20,15 +20,17 @@ bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRen
 	const std::string &RenderableObjectTechniqueName,
 	const std::string &TechniqueName)
 {
-	CRenderableObjectTechnique *l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = get(RenderableObjectTechniqueName);
+	TMapManager<CRenderableObjectTechnique>::Ref l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = get(RenderableObjectTechniqueName);
 	
-	if (l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager == NULL)
+	if (l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager == nullptr)
 	{
-		CEffectTechnique *l_EffectTechnique = CEngine::GetSingleton().getEffectsManager()->get(TechniqueName);
-		l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = new CRenderableObjectTechnique(RenderableObjectTechniqueName, l_EffectTechnique);
-		add(l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager->getName(), l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager);
+		CRenderableObjectTechnique * renderableObjectTechnique = new CRenderableObjectTechnique(RenderableObjectTechniqueName, CEngine::GetSingleton().getEffectsManager()->get(TechniqueName));
+
+		add(RenderableObjectTechniqueName, renderableObjectTechnique);
+
+		l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = get(RenderableObjectTechniqueName);
 	}
-	PoolRenderableObjectTechniques->AddElement(RenderableObjectTechniqueName, TechniqueName, l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager);
+	PoolRenderableObjectTechniques->AddElement(RenderableObjectTechniqueName, TechniqueName, l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager.getRef());
 	return true;
 }
 
@@ -89,7 +91,7 @@ bool CRenderableObjectTechniqueManager::Reload()
 
 CPoolRenderableObjectTechnique * CRenderableObjectTechniqueManager::getPool(const std::string& pool)
 {
-	return m_PoolRenderableObjectTechniques.get(pool);
+	return &(*m_PoolRenderableObjectTechniques.get(pool));
 }
 
 TMapManager<CPoolRenderableObjectTechnique> & CRenderableObjectTechniqueManager::GetPoolRenderableObjectTechniques()

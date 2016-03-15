@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "CinematicPlayer.h"
+#include <Base/Utils/TMapManager.h>
 
 class CCinematicObjectKeyFrame;
 class CRenderableObject;
@@ -13,7 +14,7 @@ class CCinematicObject : public CCinematicPlayer
 private:
 	std::vector<CCinematicObjectKeyFrame *> m_CinematicObjectKeyFrames;
 	size_t m_CurrentKeyFrame;
-	CRenderableObject *m_RenderableObject;
+	TMapManager<CRenderableObject>::Ref m_RenderableObject;
 public:
 	CCinematicObject( CXMLTreeNode &TreeNode );
 	bool IsOk();

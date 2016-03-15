@@ -4,11 +4,12 @@
 #include "Scene\SceneRendererCommand.h"
 #include "Renderable\RenderableObjectsManager.h"
 #include "Engine\Engine.h"
+#include <Base/Utils/TMapManager.h>
 
 class CRenderLayerSceneRendererCommand : public CSceneRendererCommand
 {
 private:
-	CRenderableObjectsManager *m_Layer;
+	TMapManager<CRenderableObjectsManager>::Ref m_Layer;
 public:
 	CRenderLayerSceneRendererCommand(CXMLTreeNode &TreeNode);
 	void Execute(CContextManager &_context);

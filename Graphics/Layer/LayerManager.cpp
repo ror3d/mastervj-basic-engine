@@ -31,7 +31,7 @@ void CLayerManager::Load(const std::string &FileName){
 
 				if (l_MeshInfo.GetName() == std::string("layer")){
 					std::string layerName = l_MeshInfo.GetPszProperty("name");
-					CRenderableObjectsManager * layer = get(layerName);
+					CRenderableObjectsManager * layer = get(layerName).getRef();
 					if (layer == nullptr)
 					{
 						layer = new CRenderableObjectsManager();

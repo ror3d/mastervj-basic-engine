@@ -34,7 +34,7 @@ CLight::CLight(const CXMLTreeNode &TreeNode)
 	for (int i = 0; i< light.GetNumChildren(); i++){
 		CXMLTreeNode layer = light(i);
 		if (layer.GetName() == std::string("layer")){
-			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(layer.GetPszProperty("name")));
+			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(layer.GetPszProperty("name")).getRef());
 		}
 	}
 }

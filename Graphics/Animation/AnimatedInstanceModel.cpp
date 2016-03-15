@@ -17,7 +17,7 @@ CAnimatedInstanceModel::CAnimatedInstanceModel(CXMLTreeNode& TreeNode)
 	DEBUG_ASSERT(coreName);
 	auto core = CEngine::GetSingleton().getAnimatedModelManager()->get(coreName);
 	DEBUG_ASSERT(core);
-	Initialize(core);
+	Initialize(core.getRef());
 	BlendCycle(0, 1.0f, 0.0f);
 }
 

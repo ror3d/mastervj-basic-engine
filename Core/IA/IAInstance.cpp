@@ -54,11 +54,11 @@ void CIAInstance::GetTarget()
 	m_actualTime = 0;
 	
 	CRenderableObject * character = nullptr;
-	CRenderableObjectsManager * layer = CEngine::GetSingleton().getLayerManager()->get("models");
+	CRenderableObjectsManager * layer = &(*CEngine::GetSingleton().getLayerManager()->get("models"));
 	if (layer != nullptr)
 	{
 		//Position
-		character = layer->get("main");
+		character = &(*layer->get("main"));
 		m_target = character->GetPosition();
 		m_distToTarget = m_IAOb->GetPosition().Distance(m_target);
 		m_lastPosition = m_IAOb->GetPosition();

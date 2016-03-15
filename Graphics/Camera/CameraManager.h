@@ -32,7 +32,7 @@ public:
 	inline void SetCurrentCameraController( const std::string& name ) { m_currentCameraControllerName = name; }
 	inline std::string GetCurrentCameraControllerName() { return m_currentCameraControllerName; }
 
-	ICameraController* GetCurrentCameraController() { return get( m_currentCameraControllerName ); }
+	ICameraController* GetCurrentCameraController() { return get_internal( m_currentCameraControllerName ); }
 };
 
 #endif

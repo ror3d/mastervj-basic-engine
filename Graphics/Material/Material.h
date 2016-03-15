@@ -4,6 +4,7 @@
 #include <Base/Utils/Named.h>
 #include <Base/Utils/Utils.h>
 #include <Base/Math/Color.h>
+#include <Base/Utils/TMapManager.h>
 #include <vector>
 
 class CXMLTreeNode;
@@ -36,15 +37,16 @@ private:
 		return -1;
 	}
 
-	std::vector<std::pair<uint8, CTexture *>> m_textures;
+	std::vector<TMapManager<CTexture>::Ref> m_textures;
+	std::vector<uint8> m_stages;
 	std::vector<CMaterialParameter *> m_Parameters;
-	CRenderableObjectTechnique *m_RenderableObjectTechnique;
+	TMapManager<CRenderableObjectTechnique>::Ref m_RenderableObjectTechnique;
 	unsigned int m_CurrentParameterData;
 public:
 	CMaterial(CXMLTreeNode &TreeNode);
 	virtual ~CMaterial();
 	virtual void apply(CRenderableObjectTechnique *RenderableObjectTechnique = NULL);
-	CRenderableObjectTechnique * getRenderableObjectTechique(){ return m_RenderableObjectTechnique; }
+	CRenderableObjectTechnique * getRenderableObjectTechique() { return m_RenderableObjectTechnique.getRef(); }
 	std::vector<CMaterialParameter *> * getParameters(){ return &m_Parameters;  }
 	void * GetNextParameterAddress(unsigned int NumBytes);
 	void destroy();

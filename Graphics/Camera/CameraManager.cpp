@@ -41,7 +41,7 @@ void CCameraManager::Update( float ElapsedTime )
 
 void CCameraManager::SetMatrixes()
 {
-	ICameraController* cc = get(m_currentCameraControllerName);
+	ICameraController* cc = get(m_currentCameraControllerName).getRef();
 	CCamera l_Camera;
 	l_Camera.SetAspectRatio( m_context->GetAspectRatio() );
 	cc->UpdateCameraValues( &l_Camera );

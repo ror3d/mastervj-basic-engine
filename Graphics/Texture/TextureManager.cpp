@@ -12,16 +12,17 @@ CTextureManager::~CTextureManager()
 }
 
 
-CTexture * CTextureManager::GetTexture(const std::string &Filename)
+TMapManager<CTexture>::Ref CTextureManager::GetTexture(const std::string &Filename)
 {
-	CTexture *texture = get(Filename);
+	TMapManager<CTexture>::Ref texture = get(Filename);
 
 	if (texture == nullptr)
 	{
-		texture = new CTexture();
-		bool success = texture->load(Filename);
+		CTexture* tex = new CTexture();
+		bool success = tex->load(Filename);
 		DEBUG_ASSERT( success );
-		add(texture->getName(), texture);
+		add(tex->getName(), tex);
+		texture = get(Filename);
 	}
 
 	return texture;

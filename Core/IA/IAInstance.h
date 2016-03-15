@@ -2,6 +2,7 @@
 #define IA_INSTANCE_H
 
 #include "Utils/Named.h"
+#include <Base/Utils/TMapManager.h>
 
 class CRenderableObject;
 
@@ -26,7 +27,7 @@ public:
 	CIAInstance(std::string Name, float timeToUp);
 	virtual ~CIAInstance();
 
-	CRenderableObject * m_IAOb;
+	TMapManager<CRenderableObject>::Ref m_IAOb;
 	float m_timeToUpdate;
 
 	void Update(float elapsedTime);

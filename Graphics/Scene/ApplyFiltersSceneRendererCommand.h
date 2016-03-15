@@ -7,7 +7,7 @@
 class CApplyFiltersSceneRendererCommand : public CStagedTexturedSceneRendererCommand
 {
 private:
-	std::vector<CMaterial*> m_Materials;
+	std::vector<TMapManager<CMaterial>::Ref> m_Materials;
 
 public:
 	CApplyFiltersSceneRendererCommand(CXMLTreeNode &TreeNode);

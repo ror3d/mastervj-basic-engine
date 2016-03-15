@@ -11,11 +11,10 @@ public:
 	CTextureManager();
 	virtual ~CTextureManager();
 
-	CTexture * GetTexture(const std::string &Filename);
+	TMapManager<CTexture>::Ref GetTexture(const std::string &Filename);
 	void Reload();
 
 	void SetTextureAtStage(int stage, CTexture* texture) { m_activeTextures[stage] = texture; }
-	CTexture* GetTextureAtStage(int stage) { return m_activeTextures[stage]; }
 	void DeactivateTextures();
 	bool isEmpty() { return (m_resources.size() == 0); }
 };

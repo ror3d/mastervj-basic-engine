@@ -5,6 +5,7 @@
 #include <Base/Utils/Named.h>
 #include <Base/Math/MathTypes.h>
 #include "VertexTypes.h"
+#include <Utils/TMapManager.h>
 
 class CRenderManager;
 class CContextManager;
@@ -74,7 +75,7 @@ protected:
 	Vect3f m_BsCenter, m_AabbMin, m_AabbMax;
 	float m_BsRadius;
 	std::vector<CRenderableVertexs*> m_renderableVertexs;
-	std::vector<CMaterial *> m_materials;
+	std::vector<TMapManager<CMaterial>::Ref> m_materials;
 	std::string m_fileName;
 
 	bool m_meshLoaded;
@@ -86,10 +87,10 @@ public:
 
 	bool Load ();
 	bool Reload ();
-	void Render (CContextManager *_context) const;
+	void Render (CContextManager *_context);
 	void Destroy();
 
-	inline void setMaterial(unsigned int idx, CMaterial* mat)
+	inline void setMaterial(unsigned int idx, TMapManager<CMaterial>::Ref mat)
 	{
 		DEBUG_ASSERT(idx < m_materials.size());
 		m_materials[idx] = mat;

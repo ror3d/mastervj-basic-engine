@@ -3,6 +3,7 @@
 
 #include <Base/Utils/Named.h>
 #include <Base/Utils/Active.h>
+#include <Base/Utils/TMapManager.h>
 
 class CMaterial;
 class CContextManager;
@@ -10,7 +11,7 @@ class CContextManager;
 class CSceneRendererCommand : public CActive, public CNamed
 {
 protected:
-	CMaterial *m_Material;
+	TMapManager<CMaterial>::Ref m_Material;
 public:
 	CSceneRendererCommand(CXMLTreeNode &TreeNode);
 	virtual ~CSceneRendererCommand();

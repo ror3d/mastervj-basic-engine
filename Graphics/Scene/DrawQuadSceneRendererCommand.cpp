@@ -19,7 +19,7 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 		CXMLTreeNode texChild = TreeNode(i);
 		if (texChild.GetName() == std::string("texture"))
 		{
-			CTexture *tex = nullptr;
+			TMapManager<CTexture>::Ref tex;
 			if (texChild.GetBoolProperty("load_file", false))
 			{
 				tex = CEngine::GetSingleton().getTextureManager()->GetTexture(texChild.GetPszProperty("file"));
@@ -28,7 +28,7 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 			{
 				tex = CEngine::GetSingleton().getTextureManager()->get(texChild.GetPszProperty("file"));
 			}
-			AddStageTexture(texChild.GetIntProperty("stage_id"), tex);
+			AddStageTexture(texChild.GetIntProperty("stage_id"), std::move(tex));
 		}
 	}
 }

@@ -20,9 +20,9 @@ void CCharacterControllerManager::Create(std::string Name, std::string CameraNam
 	CFPSCameraController* fpsCamera = dynamic_cast<CFPSCameraController*>(cc);
 	DEBUG_ASSERT(fpsCamera != nullptr);
 	
-	CRenderableObjectsManager * layer = CEngine::GetSingleton().getLayerManager()->get(layerName);
+	CRenderableObjectsManager * layer = &(*CEngine::GetSingleton().getLayerManager()->get(layerName));
 	DEBUG_ASSERT(layer != nullptr);
-	CRenderableObject * character = layer->get(modelName);
+	CRenderableObject * character = &(*layer->get(modelName));
 	DEBUG_ASSERT(character != nullptr);
 	
 	add(Name, new CCharacterControllerInstance(Name, fpsCamera, character));

@@ -18,9 +18,9 @@ CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLT
 		{
 			continue;
 		}
-		CTexture *tex = nullptr;
+		TMapManager<CTexture>::Ref tex;
 		tex = CEngine::GetSingleton().getTextureManager()->GetTexture(texChild.GetPszProperty("file"));
-		AddStageTexture(texChild.GetIntProperty("stage_id"), tex);
+		AddStageTexture(texChild.GetIntProperty("stage_id"), std::move(tex));
 	}
 
 	D3D11_BLEND_DESC l_AlphablendDesc;

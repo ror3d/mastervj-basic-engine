@@ -2,6 +2,7 @@
 #define MESH_INSTANCE_H
 
 #include "Renderable/RenderableObject.h"
+#include "Utils/TMapManager.h"
 
 class CStaticMesh;
 class CContextManager;
@@ -10,13 +11,13 @@ class CXMLTreeNode;
 class CMeshInstance : public CRenderableObject
 {
 private:
-	CStaticMesh *m_StaticMesh;
+	TMapManager<CStaticMesh>::Ref m_StaticMesh;
 public:
 	CMeshInstance(CXMLTreeNode& treeNode);
 	CMeshInstance(const std::string &Name, const std::string &CoreName);
 	~CMeshInstance();
 	void Render(CContextManager *_context);
-	CStaticMesh * getStaticMesh(){ return m_StaticMesh; }
+	CStaticMesh * getStaticMesh(){ return m_StaticMesh.getRef(); }
 };
 
 #endif

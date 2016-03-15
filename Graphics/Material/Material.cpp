@@ -32,8 +32,8 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 		if (l_paramMat.GetName() == std::string("texture"))
 		{
 			CXMLTreeNode l_Texture = l_paramMat;
-			CTexture * Texture = CEngine::GetSingleton().getTextureManager()->GetTexture(l_Texture.GetPszProperty("filename"));
 			int stage = GetTextureStage(l_Texture.GetPszProperty("type", "", false));
+
 			if (stage < 0)
 			{
 				stage = l_paramMat.GetIntProperty("stage", -1, false);
@@ -42,7 +42,9 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 			{
 				stage = l_NextStage;
 			}
-			m_textures.push_back(std::make_pair(stage,Texture));
+
+			m_textures.push_back(CEngine::GetSingleton().getTextureManager()->GetTexture(l_Texture.GetPszProperty("filename")));
+			m_stages.push_back(stage);
 			l_NextStage++;
 		}
 		else if (l_paramMat.GetName() == std::string("parameter"))
@@ -117,7 +119,7 @@ void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 
 	for (int i = 0; i < m_textures.size(); ++i)
 	{
-		m_textures[i].second->Activate(m_textures[i].first);
+		m_textures[i].getRef()->Activate(m_stages[i]);
 	}
 
 }

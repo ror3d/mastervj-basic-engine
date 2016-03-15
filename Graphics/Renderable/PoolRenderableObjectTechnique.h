@@ -15,20 +15,16 @@ private:
 	{
 	public:
 		CRenderableObjectTechnique m_RenderableObjectTechnique;
-		CRenderableObjectTechnique *m_OnRenderableObjectTechniqueManager;
-		CPoolRenderableObjectTechniqueElement(const std::string &Name,
-			CEffectTechnique *EffectTechnique, CRenderableObjectTechnique
-			*OnRenderableObjectTechniqueManager);
+		TMapManager<CRenderableObjectTechnique>::Ref m_OnRenderableObjectTechniqueManager;
+		CPoolRenderableObjectTechniqueElement(const std::string &Name, TMapManager<CEffectTechnique>::Ref EffectTechnique, TMapManager<CRenderableObjectTechnique>::Ref OnRenderableObjectTechniqueManager);
 		~CPoolRenderableObjectTechniqueElement() { }
 	};
-	std::vector<CPoolRenderableObjectTechniqueElement *>
-		m_RenderableObjectTechniqueElements;
+	std::vector<CPoolRenderableObjectTechniqueElement *> m_RenderableObjectTechniqueElements;
 public:
 	CPoolRenderableObjectTechnique(CXMLTreeNode &TreeNode);
 	virtual ~CPoolRenderableObjectTechnique();
 	void Destroy();
-	void AddElement(const std::string &Name, const std::string &TechniqueName,
-		CRenderableObjectTechnique *ROTOnRenderableObjectTechniqueManager);
+	void AddElement(const std::string &Name, const std::string &TechniqueName, CRenderableObjectTechnique *ROTOnRenderableObjectTechniqueManager);
 	void Apply();
 };
 

@@ -45,8 +45,7 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 						if (l_Mat.GetName() == std::string("material")
 							&& l_Mat.GetPszProperty("name") != nullptr)
 						{
-							CMaterial* mat = mm->get(l_Mat.GetPszProperty("name"));
-							l_static_mesh->setMaterial(nmat, mat);
+							l_static_mesh->setMaterial(nmat, mm->get(l_Mat.GetPszProperty("name")));
 							nmat++;
 						}
 					}

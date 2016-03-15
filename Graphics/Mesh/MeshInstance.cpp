@@ -30,7 +30,6 @@ CMeshInstance::CMeshInstance(const std::string &Name, const std::string &CoreNam
 
 CMeshInstance::~CMeshInstance()
 {
-	m_StaticMesh = nullptr;
 }
 
 void CMeshInstance::Render(CContextManager *_context)

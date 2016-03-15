@@ -3,13 +3,9 @@
 #include <Base/XML/XMLTreeNode.h>
 
 
-CPoolRenderableObjectTechnique
-	::CPoolRenderableObjectTechniqueElement
-		::CPoolRenderableObjectTechniqueElement(const std::string &Name,
-	CEffectTechnique *EffectTechnique, CRenderableObjectTechnique
-	*OnRenderableObjectTechniqueManager)
-	: m_OnRenderableObjectTechniqueManager(OnRenderableObjectTechniqueManager)
-	, m_RenderableObjectTechnique(Name, EffectTechnique)
+CPoolRenderableObjectTechnique::CPoolRenderableObjectTechniqueElement::CPoolRenderableObjectTechniqueElement(const std::string &Name, TMapManager<CEffectTechnique>::Ref EffectTechnique, TMapManager<CRenderableObjectTechnique>::Ref OnRenderableObjectTechniqueManager)
+	: m_OnRenderableObjectTechniqueManager(std::move(OnRenderableObjectTechniqueManager))
+	, m_RenderableObjectTechnique(Name, std::move(EffectTechnique))
 {
 }
 
@@ -35,13 +31,13 @@ void CPoolRenderableObjectTechnique::Destroy()
 
 void CPoolRenderableObjectTechnique::AddElement(const std::string &Name, const std::string &TechniqueName, CRenderableObjectTechnique *ROTOnRenderableObjectTechniqueManager)
 {
-	m_RenderableObjectTechniqueElements.push_back(new CPoolRenderableObjectTechniqueElement(Name, CEngine::GetSingleton().getEffectsManager()->get(TechniqueName), ROTOnRenderableObjectTechniqueManager));
+	m_RenderableObjectTechniqueElements.push_back(new CPoolRenderableObjectTechniqueElement(Name, CEngine::GetSingleton().getEffectsManager()->get(TechniqueName), CEngine::GetSingleton().getRenderableObjectTechniqueManager()->get(ROTOnRenderableObjectTechniqueManager->getName())));
 }
 
 void CPoolRenderableObjectTechnique::Apply()
 {
 	for (auto elem : m_RenderableObjectTechniqueElements)
 	{
-		elem->m_OnRenderableObjectTechniqueManager->SetEffectTechnique(elem->m_RenderableObjectTechnique.GetEffectTechnique());
+		elem->m_OnRenderableObjectTechniqueManager->SetEffectTechnique(CEngine::GetSingleton().getEffectsManager()->get(elem->m_RenderableObjectTechnique.GetEffectTechnique()->getName()));
 	}
 }
