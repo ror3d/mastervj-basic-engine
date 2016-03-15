@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{5775BF0C-0D23-4B87-85C5-9235BCDA49F5}"
 EndProject
@@ -72,6 +72,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "3rdParty\lua-5.3.2\lua.vcxproj", "{81F73E5A-B785-4F4E-8AF5-D1AE902EDEED}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
@@ -207,8 +210,5 @@ Global
 		{B99E1FA1-C30A-45F2-9D57-9E9C21B2DF42} = {AF11CA96-DD73-44B4-8EDB-F89868271505}
 		{92B63265-5D15-49C8-B5AA-1B16378BE875} = {AF11CA96-DD73-44B4-8EDB-F89868271505}
 		{81F73E5A-B785-4F4E-8AF5-D1AE902EDEED} = {AF11CA96-DD73-44B4-8EDB-F89868271505}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

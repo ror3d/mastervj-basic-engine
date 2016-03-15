@@ -6,6 +6,7 @@
 #include "Graphics/Effect/EffectTechnique.h"
 #include "Graphics/Effect/EffectVertexShader.h"
 #include "Graphics/Effect/EffectPixelShader.h"
+#include "Graphics/Effect/EffectGeometryShader.h"
 
 #include <Utils/Utils.h>
 
@@ -24,7 +25,7 @@ public:
 		DEBUG_ASSERT(!"This method mustn't be called");
 		return false;
 	}
-	virtual bool Render(ID3D11DeviceContext* context, ID3D11InputLayout* inputLayout, ID3D11VertexShader* vshader, ID3D11PixelShader* pshader)
+	virtual bool Render(ID3D11DeviceContext* context, ID3D11InputLayout* inputLayout, ID3D11VertexShader* vshader, ID3D11PixelShader* pshader, ID3D11GeometryShader* gshader = NULL)
 	{
 		DEBUG_ASSERT(!"This method mustn't be called");
 		return false;
@@ -78,9 +79,10 @@ public:
 		if (Effect->GetPixelShader() == NULL || Effect->GetVertexShader() == NULL)
 			return false;
 		ID3D11DeviceContext *l_DeviceContext = ContextManager->GetDeviceContext();
-		return Render(l_DeviceContext, Effect->GetVertexShader()->GetVertexLayout(), Effect->GetVertexShader()->GetVertexShader(), Effect->GetPixelShader()->GetPixelShader());
+		auto geom = Effect->GetGeometryShader();
+		return Render(l_DeviceContext, Effect->GetVertexShader()->GetVertexLayout(), Effect->GetVertexShader()->GetVertexShader(), Effect->GetPixelShader()->GetPixelShader(), (geom ? geom->GetGeometryShader() : NULL));
 	}
-	bool Render(ID3D11DeviceContext* context, ID3D11InputLayout* inputLayout, ID3D11VertexShader* vshader, ID3D11PixelShader* pshader)
+	bool Render(ID3D11DeviceContext* context, ID3D11InputLayout* inputLayout, ID3D11VertexShader* vshader, ID3D11PixelShader* pshader, ID3D11GeometryShader* gshader = NULL)
 	{
 		UINT stride = sizeof(T);
 		UINT offset = 0;
@@ -88,8 +90,16 @@ public:
 		context->IASetPrimitiveTopology(m_PrimitiveTopology);
 		context->IASetInputLayout(inputLayout);
 		context->VSSetShader(vshader, NULL, 0);
+		if ( gshader )
+		{
+			context->GSSetShader( gshader, NULL, 0 );
+		}
 		context->PSSetShader(pshader, NULL, 0);
 		context->Draw(m_VertexsCount, 0);
+		if ( gshader )
+		{
+			context->GSSetShader( NULL, NULL, 0 );
+		}
 		return true;
 	}
 
@@ -105,6 +115,8 @@ public:
 		memcpy( mappedResource.pData, Vtxs, sizeof( T ) * vtxCount );
 
 		context->Unmap( m_VertexBuffer, 0 );
+
+		m_VertexsCount = vtxCount;
 
 		return true;
 	}

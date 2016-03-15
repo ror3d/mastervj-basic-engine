@@ -37,7 +37,7 @@ void CEffectGeometryShader::SetConstantBuffer(unsigned int IdBuffer, void
 	{
 		l_DeviceContext->UpdateSubresource(l_ConstantBuffer, 0, NULL,
 										   ConstantBuffer, 0, 0);
-		l_DeviceContext->PSSetConstantBuffers(IdBuffer, 1, &l_ConstantBuffer);
+		l_DeviceContext->GSSetConstantBuffers(IdBuffer, 1, &l_ConstantBuffer);
 	}
 }
 

@@ -49,7 +49,7 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 
 	}
 
-	m_toCreateParticles += m_particleSystemClass->emitRate / ElapsedTime;
+	m_toCreateParticles += m_particleSystemClass->emitRate * ElapsedTime;
 	size_t n = std::floorf(m_toCreateParticles);
 	m_toCreateParticles -= n;
 
@@ -62,6 +62,8 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		p.pos = GetPosition();
 		p.vel = m_particleSystemClass->startVelocityRange.first;
 		p.acc = m_particleSystemClass->accelerationRange.first;
+		p.size = m_particleSystemClass->sizeRange.first;
+		p.angle = 0;
 		p.currentFrame = 0;
 		p.lifetime = 0;
 		p.totalLifetime = m_particleSystemClass->life.first;
@@ -91,13 +93,7 @@ void CParticleSystemInstance::Render(CContextManager *_context)
 	auto material = m_particleSystemClass->material;
 	auto technique = material->getRenderableObjectTechique()->GetEffectTechnique();
 
-	auto geomShader = technique->GetGeometryShader();
-
 	material->apply();
 
-	devCtx->GSSetShader(geomShader->GetGeometryShader(), NULL, 0);
-
 	m_vertexs->Render(_context, technique);
-
-	devCtx->GSSetShader(NULL, NULL, 0);
 }
