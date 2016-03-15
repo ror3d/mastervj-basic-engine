@@ -191,6 +191,7 @@ public:
 
 template<class T>
 using CPointsListRenderableVertexs = CTemplatedRenderableVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_POINTLIST>;
+
 template<class T>
 using CLinesListRenderableVertexs = CTemplatedRenderableVertexs<T, D3D11_PRIMITIVE_TOPOLOGY_LINELIST>;
 template<class T>

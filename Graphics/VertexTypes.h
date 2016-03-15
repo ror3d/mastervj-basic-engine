@@ -185,6 +185,7 @@ struct StructName \
 };
 
 // Position, Position4, Normal, Normal4, TangentBinormal, WeightIndices, Color, UV, UV2
+CREATE_MVD3D11_VERTEX(PARTICLE_VERTEX, 1, 0, 0, 0, 0, 0, 1, 1, 1);
 
 CREATE_MVD3D11_VERTEX(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX, 1, 0, 1, 0, 0, 1, 0, 1, 0);
 CREATE_MVD3D11_VERTEX(MV_POSITION_NORMAL_TEXTURE_VERTEX, 1, 0, 1, 0, 0, 0, 0, 1, 0);

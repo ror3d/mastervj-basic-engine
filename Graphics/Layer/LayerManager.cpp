@@ -62,6 +62,10 @@ void CLayerManager::Load(const std::string &FileName){
 				{
 					currentLayer->AddAnimatedInstanceModel(l_MeshInfo);
 				}
+				else if (l_MeshInfo.GetName() == std::string("particle_emitter"))
+				{
+					currentLayer->AddParticleEmitter(l_MeshInfo);
+				}
 			}
 		}
 	}

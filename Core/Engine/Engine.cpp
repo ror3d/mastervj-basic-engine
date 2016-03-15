@@ -22,6 +22,7 @@ CEngine::CEngine()
 	, characterControllerManager(nullptr)
 	, timerManager(nullptr)
 	, componentManager(nullptr)
+	, particleManager(nullptr)
 {
 } 
 CEngine::~CEngine()
@@ -40,6 +41,7 @@ CEngine::~CEngine()
 	scriptManager->Destroy();
 	characterControllerManager->destroy();
 	componentManager->destroy();
+	particleManager->destroy();
 	//debugRender->destroy();
 	//cookedMeshManager->destroy();
 	//iaManager->destroy();
@@ -63,6 +65,7 @@ CEngine::~CEngine()
 	delete characterControllerManager;
 	delete timerManager;
 	delete componentManager;
+	delete particleManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -83,6 +86,7 @@ CEngine::~CEngine()
 	characterControllerManager = nullptr;
 	timerManager = nullptr;
 	componentManager = nullptr;
+	particleManager = nullptr;
 
 } //Destruimos vars
 
@@ -107,4 +111,5 @@ void CEngine::Init()
 	characterControllerManager = new CCharacterControllerManager();
 	timerManager = new CTimerManager();
 	componentManager = new CComponentManager();
+	particleManager = new CParticleSystemManager();
 }

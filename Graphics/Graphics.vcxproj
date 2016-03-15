@@ -53,6 +53,8 @@
     <ClInclude Include="Mesh\MeshInstance.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="Mesh\StaticMeshManager.h" />
+    <ClInclude Include="Particles\ParticleSystemInstance.h" />
+    <ClInclude Include="Particles\ParticleSystemManager.h" />
     <ClInclude Include="Renderable\PoolRenderableObjectTechnique.h" />
     <ClInclude Include="Renderable\RenderableObject.h" />
     <ClInclude Include="Renderable\RenderableObjectsManager.h" />
@@ -128,6 +130,8 @@
     <ClCompile Include="Mesh\MeshInstance.cpp" />
     <ClCompile Include="Mesh\StaticMesh.cpp" />
     <ClCompile Include="Mesh\StaticMeshManager.cpp" />
+    <ClCompile Include="Particles\ParticleSystemInstance.cpp" />
+    <ClCompile Include="Particles\ParticleSystemManager.cpp" />
     <ClCompile Include="Renderable\PoolRenderableObjectTechnique.cpp" />
     <ClCompile Include="Renderable\RenderableObject.cpp" />
     <ClCompile Include="Renderable\RenderableObjectsManager.cpp" />

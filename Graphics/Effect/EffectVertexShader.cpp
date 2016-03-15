@@ -94,6 +94,10 @@ bool CEffectVertexShader::Load()
 	{
 		l_Loaded = MV_POSITION_WEIGHT_INDICES_NORMAL_TANGENT_BINORMAL_TEXTURE_TEXTURE2_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
+	else if (m_VertexType == "PARTICLE_VERTEX")
+	{
+		l_Loaded = PARTICLE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
 	else
 	{
 		DEBUG_ASSERT(!"Vertex type '%s' not recognized on CEffectVertexShader::Load");
