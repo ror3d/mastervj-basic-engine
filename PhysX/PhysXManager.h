@@ -89,6 +89,14 @@ public:
 	void releaseCharacterControllers();
 
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
+	
+	struct {
+		std::map<std::string, size_t> index;
+		std::vector<std::string> name;
+		std::vector<Vect3f> position;
+		std::vector<Quatf> rotation;
+		std::vector<physx::PxActor*> actor;
+	} m_actors;
 
 protected:
 
@@ -110,11 +118,5 @@ private:
 	std::map<std::string, physx::PxMaterial*> m_materials;
 	std::map<std::string, physx::PxController*> m_CharacterControllers;
 
-	struct {
-		std::map<std::string, size_t> index;
-		std::vector<std::string> name;
-		std::vector<Vect3f> position;
-		std::vector<Quatf> rotation;
-		std::vector<physx::PxActor*> actor;
-	} m_actors;
+	
 };
