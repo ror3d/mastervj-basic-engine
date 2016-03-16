@@ -30,7 +30,7 @@ bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRen
 
 		l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = get(RenderableObjectTechniqueName);
 	}
-	PoolRenderableObjectTechniques->AddElement(RenderableObjectTechniqueName, TechniqueName, l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager.getRef());
+	PoolRenderableObjectTechniques->AddElement(RenderableObjectTechniqueName, TechniqueName, std::move(l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager));
 	return true;
 }
 
