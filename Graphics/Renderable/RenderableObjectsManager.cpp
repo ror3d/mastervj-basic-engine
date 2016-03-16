@@ -127,6 +127,10 @@ void CRenderableObjectsManager::Load(const std::string &FileName)
 	}
 }
 
+CAnimatedInstanceModel * CRenderableObjectsManager::GetCastedResource(std::string name){
+	return ((CAnimatedInstanceModel*) get(name));
+}
+
 void CRenderableObjectsManager::reload()
 {
 	destroy();

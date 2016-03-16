@@ -17,10 +17,12 @@ public:
 	void Destroy();
 
 	void RunCode(const std::string &Code);
+
 	void RunFile(const std::string &FileName);
 	void Load(const std::string &XMLFile);
 
 	void RegisterLUAFunctions();
+	void RegisterLUAFunctionsAfter();
 	sel::State * getLuaState(){ return m_state; }
 
 private:

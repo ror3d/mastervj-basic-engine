@@ -10,8 +10,6 @@
 
 #include <Core/Engine/Engine.h>
 
-
-
 CCameraManager::CCameraManager(CContextManager* context)
 	: m_context(context)
 {

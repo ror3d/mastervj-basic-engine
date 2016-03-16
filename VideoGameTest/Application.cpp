@@ -45,6 +45,7 @@ void CApplication::Update(float _ElapsedTime)
 
 	CEngine::GetSingleton().getPhysXManager()->update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
+	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 
 	
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))

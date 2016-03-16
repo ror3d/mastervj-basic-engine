@@ -199,6 +199,7 @@ void TW_CALL ReloadSceneCommands(void* _app)
 
 void TW_CALL ReloadLua(void* _app){
 	CEngine::GetSingleton().getScriptManager()->RegisterLUAFunctions();
+	CEngine::GetSingleton().getScriptManager()->RegisterLUAFunctionsAfter();
 }
 void TW_CALL CreateScene(void* a)
 {

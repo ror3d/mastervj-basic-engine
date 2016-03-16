@@ -19,10 +19,6 @@ public:
 	virtual void Update(float ElapsedTime);
 	virtual void Render(CContextManager  &_context);
 	virtual void RenderDebug(CContextManager  &_context);
-	static CScriptedComponent * CreateScriptedComponent(const std::string &Name,
-		CRenderableObject *Owner, const std::string &FnOnCreate, const std::string
-		&FnOnDestroy, const std::string &FnOnUpdate, const std::string &FnOnRender, const
-		std::string &FnOnRenderDebug);
 };
 
 #endif

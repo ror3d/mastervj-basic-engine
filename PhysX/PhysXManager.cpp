@@ -459,11 +459,11 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction,
 	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
-	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
-	cct->setUpDirection(v(direction));
 	physx::PxRigidDynamic* actor = cct->getActor();
-	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
-	physx::PxVec3 vel = actor->getLinearVelocity();
+	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
+	cct->setUpDirection(v(direction));	
+	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
+	//physx::PxVec3 vel = actor->getLinearVelocity();	
 	return v(cct->getPosition());
 }
 

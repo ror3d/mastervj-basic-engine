@@ -20,6 +20,7 @@
 #include <Core/CharacterController/CharacterControllerManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
+#include <Graphics/CinematicsAction/CinematicsActionManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -44,6 +45,7 @@ private:
 	CCharacterControllerManager * characterControllerManager;
 	CTimerManager * timerManager;
 	CComponentManager * componentManager;
+	CCinematicsActionManager * cinematicsActionManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -71,4 +73,5 @@ public:
 	inline CCharacterControllerManager * getCharacterControllerManager() const { return characterControllerManager; }
 	inline CTimerManager * getTimerManager() const { return timerManager;  }
 	inline CComponentManager * getComponentManager() const { return componentManager;  }
+	inline CCinematicsActionManager * getCinematicsActionManager() const { return cinematicsActionManager;  }
 };
