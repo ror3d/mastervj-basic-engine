@@ -14,6 +14,8 @@ class CRenderableVertexs;
 namespace physx
 {
 	class PxFoundation;
+	class PxShape;
+	class PxGeometry;
 	class PxPhysics;
 	class PxDefaultCpuDispatcher;
 	class PxScene;
@@ -71,6 +73,12 @@ public:
 	void createActor(const std::string& name, ActorType type, const CPhysxColliderShapeDesc& desc);
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
+
+	physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size);
+
+	void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation);
+
+	void CPhysXManager::createBoxTrigger(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation);
 
 	void InitPhysx();
 
