@@ -357,11 +357,13 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 
 	physx::PxShape* shape = m_PhysX->createShape(physx::PxBoxGeometry(size.x / 2, size.y / 2, size.z / 2), *mat);
 
+	shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+	shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
 	physx::PxVec3 Vec = physx::PxVec3(position.x, position.y, position.z);
 	physx::PxQuat Quat = physx::PxQuat(orientation.x, orientation.y, orientation.z, orientation.w);
 	physx::PxTransform Transform = physx::PxTransform(Vec, Quat);
 	physx::PxRigidStatic* StaticBody = m_PhysX->createRigidStatic(Transform);
-
+	
 	StaticBody->attachShape(*shape);
 
 	StaticBody->userData = reinterpret_cast<void*>(idx);
@@ -378,6 +380,7 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 	m_actors.rotation.push_back(orientation);
 	m_actors.actor.push_back(StaticBody);
 	//shape->release();
+	//shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
 	return shape;	
 }
 
