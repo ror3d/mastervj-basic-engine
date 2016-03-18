@@ -346,7 +346,7 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 
 }
 
-physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size)
+physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size, bool trigger)
 {
 	auto idx = m_actors.actor.size();
 
@@ -356,9 +356,13 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 	physx::PxMaterial* mat = matIt->second;
 
 	physx::PxShape* shape = m_PhysX->createShape(physx::PxBoxGeometry(size.x / 2, size.y / 2, size.z / 2), *mat);
+	
+	if (trigger)
+	{
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
+	}
 
-	shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
-	shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
 	physx::PxVec3 Vec = physx::PxVec3(position.x, position.y, position.z);
 	physx::PxQuat Quat = physx::PxQuat(orientation.x, orientation.y, orientation.z, orientation.w);
 	physx::PxTransform Transform = physx::PxTransform(Vec, Quat);
@@ -385,24 +389,13 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 }
 
 
-void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation)
+void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger)
 {
-	physx::PxShape* shape = createStatic(name, Material, position, orientation, size);
+	physx::PxShape* shape = createStatic(name, Material, position, orientation, size, trigger);
 
 	shape->release();
 }
 
-
-void CPhysXManager::createBoxTrigger(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation)
-{
-	physx::PxShape* shape = createStatic(name, Material, position, orientation, size);
-
-	shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
-	shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
-
-	shape->release();
-
-}
 
 void CPhysXManager::createActor(const std::string& name, ActorType actorType, const CPhysxColliderShapeDesc& desc)
 {
@@ -504,7 +497,7 @@ void CPhysXManager::InitPhysx(){
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
 	//createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
-	createBoxTrigger("BoxTrigger", Vect3f(5, 5, 5), "StaticObjectMaterial", Vect3f(5, 2, 5), Quatf(0, 0, 0, 1));
+	createStaticBox("BoxTrigger", Vect3f(5, 5, 5), "StaticObjectMaterial", Vect3f(5, 2, 5), Quatf(0, 0, 0, 1), true);
 }
 
 Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){
