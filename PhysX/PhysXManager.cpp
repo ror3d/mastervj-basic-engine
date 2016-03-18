@@ -346,7 +346,7 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 
 }
 
-physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size, bool trigger)
+physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size, bool trigger, CPhysxColliderShapeDesc::Shape figure)
 {
 	auto idx = m_actors.actor.size();
 
@@ -354,9 +354,23 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 	DEBUG_ASSERT(matIt != m_materials.end());
 
 	physx::PxMaterial* mat = matIt->second;
+	physx::PxShape* shape;
 
-	physx::PxShape* shape = m_PhysX->createShape(physx::PxBoxGeometry(size.x / 2, size.y / 2, size.z / 2), *mat);
-	
+	switch (figure)
+	{
+	case CPhysxColliderShapeDesc::Shape::Box:
+		shape = m_PhysX->createShape(physx::PxBoxGeometry(size.x / 2, size.y / 2, size.z / 2), *mat);
+		break;
+
+	case CPhysxColliderShapeDesc::Shape::Sphere:
+		shape = m_PhysX->createShape(physx::PxSphereGeometry(size.x/2), *mat);
+		break;
+
+	default:
+		throw std::logic_error("Not yet implemented");
+		break;
+	}
+
 	if (trigger)
 	{
 		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
@@ -383,15 +397,21 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 	m_actors.position.push_back(position);
 	m_actors.rotation.push_back(orientation);
 	m_actors.actor.push_back(StaticBody);
-	//shape->release();
-	//shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+
 	return shape;	
 }
 
 
 void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger)
 {
-	physx::PxShape* shape = createStatic(name, Material, position, orientation, size, trigger);
+	physx::PxShape* shape = createStatic(name, Material, position, orientation, size, trigger, CPhysxColliderShapeDesc::Shape::Box);
+
+	shape->release();
+}
+
+void CPhysXManager::createStaticSphere(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger)
+{
+	physx::PxShape* shape = createStatic(name, Material, position, orientation, size, trigger, CPhysxColliderShapeDesc::Shape::Sphere);
 
 	shape->release();
 }
@@ -497,7 +517,8 @@ void CPhysXManager::InitPhysx(){
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
 	//createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
-	createStaticBox("BoxTrigger", Vect3f(5, 5, 5), "StaticObjectMaterial", Vect3f(5, 2, 5), Quatf(0, 0, 0, 1), true);
+	createStaticBox("BoxTrigger", Vect3f(5, 5, 5), "StaticObjectMaterial", Vect3f(5, 2, 0), Quatf(0, 0, 0, 1), true);
+	createStaticSphere("SphereTrigger", Vect3f(5, 0, 0), "StaticObjectMaterial", Vect3f(5, 2, 5), Quatf(0, 0, 0, 1), true);
 }
 
 Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){
