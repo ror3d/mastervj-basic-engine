@@ -98,7 +98,6 @@ void CScriptManager::RegisterLUAFunctions()
 	bool loaded;
 	loaded = (*m_state).Load("Data/Scripting/CharacterController.lua");
 	loaded = (*m_state).Load("Data/Scripting/CinematicsActionManager.lua");
-	loaded = (*m_state).Load("Data/Scripting/CinematicsActions.lua");
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
