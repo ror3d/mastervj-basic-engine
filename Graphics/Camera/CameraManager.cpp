@@ -5,6 +5,7 @@
 
 #include "SphericalCameraController.h"
 #include "FPSCameraController.h"
+#include "Cinematics/CameraKeyController.h"
 
 #include <Base/Math/Math.h>
 

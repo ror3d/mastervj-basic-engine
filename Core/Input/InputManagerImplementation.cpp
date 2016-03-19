@@ -123,7 +123,7 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 
 	{
 		Action action = { "JUMP", KEYBOARD, Action::WHILE_PRESSED };
-		action.keyboard.key = 'C';
+		action.keyboard.key = 32;
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
 		action.triggersAxis = true;
@@ -134,7 +134,7 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 
 	{
 		Action action = { "COACH", KEYBOARD, Action::WHILE_PRESSED };
-		action.keyboard.key = 'X';
+		action.keyboard.key = 'C';
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
 		action.triggersAxis = true;

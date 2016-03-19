@@ -75,10 +75,13 @@ void CCinematicObject::Update( float ElapsedTime )
 	}
 
 	m_RenderableObject->SetPosition(mathUtils::Lerp(current->GetPosition(), next->GetPosition(), t));
-	m_RenderableObject->SetYawPitchRoll(
+	/*m_RenderableObject->SetYawPitchRoll(
 		mathUtils::Lerp( current->GetYaw(), next->GetYaw(), t ),
 		mathUtils::Lerp( current->GetPitch(), next->GetPitch(), t ),
-		mathUtils::Lerp( current->GetRoll(), next->GetRoll(), t ) );
+		mathUtils::Lerp( current->GetRoll(), next->GetRoll(), t ) );*/
+	Quatf q = current->GetQuat();
+	q.SLerp(t, next->GetQuat());
+	m_RenderableObject->SetQuat(q);
 	m_RenderableObject->SetScale( mathUtils::Lerp( current->GetScale(), next->GetScale(), t ) );
 	m_RenderableObject->Update(0);
 }

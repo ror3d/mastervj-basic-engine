@@ -196,7 +196,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
-	engine.getDebugRender()->Create();
+	engine.getDebugRender()->Init();
 	engine.getEffectsManager()->load("Data\\effects.xml");
 	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
 	engine.getMaterialManager()->load("Data\\materials.xml");
@@ -206,6 +206,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
+	
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();
 
@@ -219,8 +220,11 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		engine.getScriptManager()->RegisterLUAFunctions();
 		engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
-		engine.getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
 		engine.getScriptManager()->RegisterLUAFunctionsAfter();
+
+		engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
+		engine.getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
+
 
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);

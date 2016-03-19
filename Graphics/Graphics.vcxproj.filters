@@ -263,14 +263,11 @@
     <ClInclude Include="Animation\AnimatedInstanceModel.h">
       <Filter>Animation</Filter>
     </ClInclude>
-    <ClInclude Include="CinematicsAction\CinematicsAction.h">
-      <Filter>CinematicsAction</Filter>
-    </ClInclude>
     <ClInclude Include="CinematicsAction\CinematicsActionManager.h">
       <Filter>CinematicsAction</Filter>
     </ClInclude>
-    <ClInclude Include="CinematicsAction\CinematicsActionSetCamera.h">
-      <Filter>CinematicsAction</Filter>
+    <ClInclude Include="Cinematics\CinematicManager.h">
+      <Filter>Cinematic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -476,14 +473,11 @@
     <ClCompile Include="Animation\AnimatedInstanceModel.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
-    <ClCompile Include="CinematicsAction\CinematicsAction.cpp">
-      <Filter>CinematicsAction</Filter>
-    </ClCompile>
     <ClCompile Include="CinematicsAction\CinematicsActionManager.cpp">
       <Filter>CinematicsAction</Filter>
     </ClCompile>
-    <ClCompile Include="CinematicsAction\CinematicsActionSetCamera.cpp">
-      <Filter>CinematicsAction</Filter>
+    <ClCompile Include="Cinematics\CinematicManager.cpp">
+      <Filter>Cinematic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

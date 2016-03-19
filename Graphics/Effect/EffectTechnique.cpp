@@ -40,7 +40,7 @@ void CEffectTechnique::Refresh()
 
 void CEffectTechnique::SetConstantBuffer(unsigned int IdBuffer, void *ConstantBuffer)
 {
-	if (!m_VertexShader || !m_PixelShader) return;
+	if (!this || !m_VertexShader || !m_PixelShader) return;
 	m_VertexShader->SetConstantBuffer(IdBuffer, ConstantBuffer);
 	m_PixelShader->SetConstantBuffer(IdBuffer, ConstantBuffer);
 }

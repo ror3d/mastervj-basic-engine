@@ -227,6 +227,7 @@ function DotNetAddVertex VtxArray VtxMap Vtx =
 )
 
 global CurrentObjInvMat = matrix3 1
+global CurrentNrmInvMat = matrix3 1
 
 fn createVertexesForFace obj IdFace matDesc = (
 	local IdxsFace=getFace obj IdFace
@@ -244,9 +245,9 @@ fn createVertexesForFace obj IdFace matDesc = (
 	--local Normal1=getNormal obj IdxsFace[1]
 	--local Normal2=getNormal obj IdxsFace[2]
 	--local Normal3=getNormal obj IdxsFace[3]
-	local Normal1=normalize (UABGetVertexNormal obj IdxsFace[1] SmoothValue FaceNormal)
-	local Normal2=normalize (UABGetVertexNormal obj IdxsFace[2] SmoothValue FaceNormal)
-	local Normal3=normalize (UABGetVertexNormal obj IdxsFace[3] SmoothValue FaceNormal)
+	local Normal1=(normalize (UABGetVertexNormal obj IdxsFace[1] SmoothValue FaceNormal))*CurrentNrmInvMat
+	local Normal2=(normalize (UABGetVertexNormal obj IdxsFace[2] SmoothValue FaceNormal))*CurrentNrmInvMat
+	local Normal3=(normalize (UABGetVertexNormal obj IdxsFace[3] SmoothValue FaceNormal))*CurrentNrmInvMat
 	
 	
 	local v1 = vertex pos: (ChangeCoordsBase (Vtx1*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal1)
@@ -322,7 +323,7 @@ fn createVertexesForFace obj IdFace matDesc = (
 
 		v1.tangencial = (normalize v1.tangencial) * sign
 
-		v1.binormal = (normalize (cross (normalize (getFaceNormal obj idFace)) v1.tangencial)) * sign
+		v1.binormal = (normalize (cross Normal1 v1.tangencial)) * sign
 
 		v2.tangencial = v1.tangencial
 		v3.tangencial = v1.tangencial
@@ -345,6 +346,7 @@ fn createMesh obj = (
 	--obj.scale = [1, 1, 1]
 	
 	CurrentObjInvMat = inverse obj.transform
+	CurrentNrmInvMat = inverse (obj.transform.rotation as matrix3)
 	
 	tik()
 	UABCalcVertexsNormals obj

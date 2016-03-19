@@ -23,6 +23,7 @@ CEngine::CEngine()
 	, timerManager(nullptr)
 	, componentManager(nullptr)
 	, cinematicsActionManager(nullptr)
+	, cinematicManager(nullptr)
 {
 } 
 CEngine::~CEngine()
@@ -41,7 +42,8 @@ CEngine::~CEngine()
 	scriptManager->Destroy();
 	characterControllerManager->destroy();
 	componentManager->destroy();
-	cinematicsActionManager->destroy();
+	cinematicManager->destroy();
+	//cinematicsActionManager->destroy();
 	//debugRender->destroy();
 	//cookedMeshManager->destroy();
 	//iaManager->destroy();
@@ -66,6 +68,7 @@ CEngine::~CEngine()
 	delete timerManager;
 	delete componentManager;
 	delete cinematicsActionManager;
+	delete cinematicManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -87,6 +90,7 @@ CEngine::~CEngine()
 	timerManager = nullptr;
 	componentManager = nullptr;
 	cinematicsActionManager = nullptr;
+	cinematicManager = nullptr;
 
 } //Destruimos vars
 
@@ -112,4 +116,5 @@ void CEngine::Init()
 	timerManager = new CTimerManager();
 	componentManager = new CComponentManager();
 	cinematicsActionManager = new CCinematicsActionManager();
+	cinematicManager = new CCinematicManager();
 }

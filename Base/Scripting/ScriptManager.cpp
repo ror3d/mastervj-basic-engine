@@ -13,8 +13,6 @@
 #include <Graphics/Animation/AnimatedInstanceModel.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
-#include <Graphics/CinematicsAction/CinematicsAction.h>
-#include <Graphics/CinematicsAction/CinematicsActionSetCamera.h>
 
 namespace {
 	void StopScriptErrors(int sd, std::string message, std::exception_ptr ex) {
@@ -141,12 +139,11 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CinematicsActionManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicsActionManager(),
 		"m_FileName", &CCinematicsActionManager::m_FileName);
+	(*m_state)["CCinematicsManager"].SetObj(
+		*CEngine::GetSingleton().getCinematicManager(),
+		"Play", &CCinematicManager::Play);
 
-	//CinematicsAction
-	(*m_state)["CinematicsActionSetCamera"]
-		.SetClass<CCinematicsActionSetCamera, CXMLTreeNode>(
-		"Execute", &CCinematicsActionSetCamera::Execute,
-		"SetTime", &CCinematicsActionSetCamera::SetTime);
+	
 
 	//ComponentCharController
 	(*m_state)["CRenderableObjectsManagerModels"].SetObj(
@@ -162,7 +159,6 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CScriptedComponent"]		
 		.SetClass<CScriptedComponent, const std::string &, CAnimatedInstanceModel *, const
 		std::string &, const std::string &, const std::string &, const std::string &, const std::string &>();
-
 	
 }
 

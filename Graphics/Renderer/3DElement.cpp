@@ -13,6 +13,8 @@ C3DElement::C3DElement()
 	, m_TranslationUpdate(true)
 	, m_RotationUpdate(true)
 	, m_ScaleUpdate(true)
+	, m_quat(0, 0, 0, 1)
+	, m_isQuat(false)
 {
 }
 
@@ -27,6 +29,8 @@ C3DElement::C3DElement(const Vect3f &Position)
 	, m_RotationUpdate(true)
 	, m_ScaleUpdate(true)
 	, m_Visible(true)
+	, m_quat(0, 0, 0, 1)
+	, m_isQuat(false)
 {
 }
 
@@ -42,6 +46,8 @@ C3DElement::C3DElement(const Vect3f &Position, float Yaw, float Pitch, float Rol
 	, m_RotationUpdate(true)
 	, m_ScaleUpdate(true)
 	, m_Visible(true)
+	, m_quat(0, 0, 0, 1)
+	, m_isQuat(false)
 {
 }
 
@@ -56,6 +62,8 @@ C3DElement::C3DElement(float Yaw, float Pitch, float Roll)
 	, m_RotationUpdate(true)
 	, m_ScaleUpdate(true)
 	, m_Visible(true)
+	, m_quat(0, 0, 0, 1)
+	, m_isQuat(false)
 {
 }
 
@@ -69,9 +77,17 @@ C3DElement::C3DElement(const CXMLTreeNode &treeNode)
 	, m_Pitch(0.0f)
 	, m_Roll(0.0f)
 	, m_Scale(1.0f, 1.0f, 1.0f)
+	, m_quat(0, 0, 0, 1)
+	, m_isQuat(false)
 {
 	m_Position = treeNode.GetVect3fProperty( "pos" , Vect3f(0, 0, 0), false);
 	m_Scale = treeNode.GetVect3fProperty( "scale" , Vect3f(1, 1, 1), false);
+	if (treeNode.GetPszProperty("rotationq", nullptr, false) != nullptr)
+	{
+		Vect4f f4 = treeNode.GetVect4fProperty("rotationq", Vect4f(0, 0, 0, 1), true);
+		m_quat = Quatf(f4.x, f4.y, f4.z, f4.w);
+		m_isQuat = true;
+	}
 	if ( treeNode.GetPszProperty( "rotation", nullptr, false ) != nullptr )
 	{
 		Vect3f rot = treeNode.GetVect3fProperty( "rotation", Vect3f( 0, 0, 0 ), false );
@@ -185,17 +201,24 @@ const Mat44f & C3DElement::GetTransform()
 		{
 			m_RotationMatrix.SetIdentity();
 
-			Mat44f l_RotX;
-			l_RotX.SetIdentity();
-			l_RotX.RotByAngleX(m_Roll);
-			Mat44f l_RotY;
-			l_RotY.SetIdentity();
-			l_RotY.RotByAngleY(m_Yaw);
-			Mat44f l_RotZ;
-			l_RotZ.SetIdentity();
-			l_RotZ.RotByAngleZ(m_Pitch);
+			if (m_isQuat)
+			{
+				m_RotationMatrix.SetFromQuatPos(m_quat, Vect3f(0, 0, 0));
+			}
+			else
+			{
+				Mat44f l_RotX;
+				l_RotX.SetIdentity();
+				l_RotX.RotByAngleX(m_Roll);
+				Mat44f l_RotY;
+				l_RotY.SetIdentity();
+				l_RotY.RotByAngleY(m_Yaw);
+				Mat44f l_RotZ;
+				l_RotZ.SetIdentity();
+				l_RotZ.RotByAngleZ(m_Pitch);
 
-			m_RotationMatrix = l_RotX*l_RotZ*l_RotY;
+				m_RotationMatrix = l_RotX*l_RotZ*l_RotY;
+			}
 
 			m_RotationUpdate = false;
 		}

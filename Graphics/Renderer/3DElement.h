@@ -15,6 +15,8 @@ protected:
 	Mat44f m_TransformMatrix, m_RotationMatrix, m_TranslationMatrix, m_ScaleMatrix;
 	Vect3f m_Scale;
 	bool m_Visible;
+	Quatf m_quat;
+	bool m_isQuat;
 public:
 	C3DElement();
 	virtual ~C3DElement();
@@ -38,6 +40,12 @@ public:
 	bool GetVisible();
 	virtual void SetVisible(bool Visible);
 	virtual void Render(CContextManager *_context) = 0;
+	Quatf GetQuat() const { return m_quat; }
+	void SetQuat(const Quatf &q) {
+		m_quat = q;
+		m_isQuat = true;
+		m_RotationUpdate = true;
+	}
 };
 
 #endif
