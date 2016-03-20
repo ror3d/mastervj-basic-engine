@@ -227,8 +227,16 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 		m_SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
 		HRESULT hr = CreateBackBuffer(hWnd, Width, Height);
 		DEBUG_ASSERT(hr == S_OK);
-		m_Width = Width;
-		m_Height = Height;
+
+		m_Viewport.Width = (FLOAT)Width;
+		m_Viewport.Height = (FLOAT)Height;
+		m_Viewport.MinDepth = 0.0f;
+		m_Viewport.MaxDepth = 1.0f;
+		m_Viewport.TopLeftX = 0;
+		m_Viewport.TopLeftY = 0;
+
+		m_DeviceContext->RSSetViewports(1, &m_Viewport);
+		CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 	}
 }
 

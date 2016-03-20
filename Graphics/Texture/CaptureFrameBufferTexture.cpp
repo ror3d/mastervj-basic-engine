@@ -74,10 +74,8 @@ CCaptureFrameBufferTexture::~CCaptureFrameBufferTexture()
 
 bool CCaptureFrameBufferTexture::Capture(unsigned int StageId)
 {
-
 	ID3D11Texture2D *l_Surface = NULL;
-	HRESULT l_HR = CEngine::GetSingleton().getContextManager()->GetSwapChain()->GetBuffer(StageId, __uuidof(
-		ID3D11Texture2D), reinterpret_cast< void** >(&l_Surface));
+	HRESULT l_HR = CEngine::GetSingleton().getContextManager()->GetSwapChain()->GetBuffer(StageId, __uuidof(ID3D11Texture2D), reinterpret_cast< void** >(&l_Surface));
 	if (FAILED(l_HR) || l_Surface == NULL || m_DataTexture == NULL)
 		return false;
 	CEngine::GetSingleton().getContextManager()->GetDeviceContext()->CopyResource(m_DataTexture, l_Surface);
