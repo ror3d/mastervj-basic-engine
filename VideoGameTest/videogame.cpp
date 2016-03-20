@@ -223,7 +223,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		engine.getScriptManager()->RegisterLUAFunctionsAfter();
 
 		engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
-		engine.getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
+		
 
 
 		CDebugHelperImplementation debugHelper(context.GetDevice());

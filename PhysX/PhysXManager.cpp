@@ -15,6 +15,8 @@
 #include <Windows.h>
 #endif
 
+#include "Core/Engine/Engine.h"
+
 #ifdef _DEBUG
 #pragma comment(lib, "PhysX3DEBUG_x86.lib")
 #pragma comment(lib, "PhysX3CommonDEBUG_x86.lib")
@@ -180,21 +182,8 @@ void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pa
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
 {
-	for (physx::PxU32 i = 0; i < count; i++)
-	{
-		//ignore pairs when shapes have been deleted
-		if ((pairs[i].flags &  (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
-			continue;
-
-		size_t IndexTrigger = (size_t)pairs[i].triggerActor->userData;
-		size_t IndexActor = (size_t)pairs[i].otherActor->userData;
-
-		std::string triggerName = m_actors.name[IndexTrigger];
-		std::string actorName = m_actors.name[IndexActor];
-
-		printf("Trigger \"%s\" fired with \"%s\"", triggerName.c_str(), actorName.c_str());
-
-	}
+	CEngine& engine = CEngine::GetSingleton();
+	engine.getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
 }
 
 
