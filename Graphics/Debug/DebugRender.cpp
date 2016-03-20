@@ -11,6 +11,7 @@
 #pragma comment(lib, "d3dx11d.lib")
 #else
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dx11.lib")
 #endif
 
 CDebugRender::CDebugRender()

@@ -34,7 +34,9 @@ Compiler define
 */
 #ifdef _MSC_VER 
 #	define PX_VC
-#	if _MSC_VER >= 1800
+#	if _MSC_VER >= 1900
+#		define PX_VC14
+#	elif _MSC_VER >= 1800
 #		define PX_VC12
 #   elif _MSC_VER >= 1700
 #       define PX_VC11
@@ -95,6 +97,11 @@ Platform define
 #		if defined(__ARM_NEON__)
 #			define PX_ARM_NEON
 #		endif
+#   elif defined(__arm64__)
+#		define PX_A64
+#		if defined(__ARM_NEON__)
+#			define PX_ARM_NEON
+#		endif
 #   elif defined(__i386__)
 #       define PX_X86
 #		define PX_VMX
@@ -122,7 +129,7 @@ Platform define
 #	elif defined(__APPLE__)
 #   	define PX_APPLE
 #   	define PX_UNIX
-#		if defined(__arm__)
+#		if defined(__arm__) || defined(__arm64__)
 #			define PX_APPLE_IOS
 #		else
 #			define PX_OSX
@@ -134,6 +141,10 @@ Platform define
 #	endif
 #elif defined PX_GHS
 #	define PX_WIIU
+#endif
+
+#if defined(PX_X64) || defined(PX_A64)
+#define PX_P64 // pointers are 64 bit
 #endif
 
 /**
@@ -329,7 +340,7 @@ General defines
 #endif
 
 // Support GPU PhysX
-#if (defined(PX_WINDOWS) && !defined(PX_WINMODERN)) || defined(PX_LINUX)
+#if (defined(PX_WINDOWS) && !defined(PX_WINMODERN) && !defined(PX_VC14)) || defined(PX_LINUX)
 #define PX_SUPPORT_GPU_PHYSX 1
 #else
 #define PX_SUPPORT_GPU_PHYSX 0

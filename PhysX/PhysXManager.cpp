@@ -35,6 +35,13 @@
 #pragma comment(lib, "SimulationControllerDEBUG.lib")
 */
 #else
+#pragma comment(lib, "PhysX3_x86.lib")
+#pragma comment(lib, "PhysX3Common_x86.lib")
+#pragma comment(lib, "PhysX3Extensions.lib")
+#pragma comment(lib, "PhysXProfileSDK.lib")
+#pragma comment(lib, "PhysX3CharacterKinematic_x86.lib")
+#pragma comment(lib, "PhysXVisualDebuggerSDK.lib")
+#pragma comment(lib, "PhysX3Cooking_x86")
 #endif
 #define USE_PHYSX_DEBUG 1
 #if USE_PHYSX_DEBUG

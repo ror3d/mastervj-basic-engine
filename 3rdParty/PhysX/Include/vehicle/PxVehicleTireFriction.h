@@ -187,7 +187,7 @@ private:
 	PxU32 mMaxNbTireTypes;			
 
 
-#ifndef PX_X64
+#if !defined(PX_P64)
 	PxU32 mPad[1];
 #else
 	PxU32 mPad[2];

@@ -161,7 +161,7 @@ private:
 	PxReal* mDriveTorques;
 	PxReal* mBrakeTorques;
 
-#ifdef PX_X64
+#if defined(PX_P64)
 	PxU32 mPad[2];
 #else 
 	PxU32 mPad[1];
