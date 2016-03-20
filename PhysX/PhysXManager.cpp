@@ -188,7 +188,7 @@ void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pa
 }
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
-{	
+{
 	for (physx::PxU32 i = 0; i < count; i++)
 	{
 		if ((pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
@@ -198,12 +198,12 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
 
 		std::string l_triggerName = m_actors.name[l_indexTrigger];
-		
+
 		if (l_triggerName == "BoxTrigger")
 		{
 			CEngine::GetSingleton().getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
 		}
-		
+
 		if (l_triggerName == "SphereTrigger")
 		{
 			CEngine::GetSingleton().getCinematicsActionManager()->LoadXML("Data\\cinematicsSphere.xml");
@@ -420,7 +420,7 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 	physx::PxQuat Quat = physx::PxQuat(orientation.x, orientation.y, orientation.z, orientation.w);
 	physx::PxTransform Transform = physx::PxTransform(Vec, Quat);
 	physx::PxRigidStatic* StaticBody = m_PhysX->createRigidStatic(Transform);
-	
+
 	StaticBody->attachShape(*shape);
 
 	StaticBody->userData = reinterpret_cast<void*>(idx);
@@ -431,13 +431,13 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
 
 	m_actors.index[name] = idx;
-	m_actors.name.push_back(name);	
+	m_actors.name.push_back(name);
 
 	m_actors.position.push_back(position);
 	m_actors.rotation.push_back(orientation);
 	m_actors.actor.push_back(StaticBody);
 
-	return shape;	
+	return shape;
 }
 
 
@@ -500,7 +500,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	switch (actorType)
 	{
 		case CPhysXManager::ActorType::Static:
-			body = m_PhysX->createRigidStatic(actorTransform); 
+			body = m_PhysX->createRigidStatic(actorTransform);
 			break;
 		case CPhysXManager::ActorType::Dynamic:
 			body = m_PhysX->createRigidDynamic(actorTransform);
@@ -564,10 +564,10 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction,
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
 	physx::PxRigidDynamic* actor = cct->getActor();
-	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
-	cct->setUpDirection(v(direction));	
+	cct->move(v(movement), 0.0001, elapsedTime, filters);
+	cct->setUpDirection(v(direction));
 	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
-	//physx::PxVec3 vel = actor->getLinearVelocity();	
+	//physx::PxVec3 vel = actor->getLinearVelocity();
 	return v(cct->getPosition());
 }
 
