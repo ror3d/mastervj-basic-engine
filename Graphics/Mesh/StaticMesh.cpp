@@ -309,60 +309,57 @@ std::vector<Vect3f> CStaticMesh::getVect3fArrayInternal( const T* vertexes, unsi
 
 bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 {
-	if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Box )
-	{
-		// TODO get values for this and implement
-	}
-	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Sphere )
-	{
-		// TODO get values for this and implement
-	}
-	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Capsule )
-	{
-		// TODO get values for this and implement
-	}
-	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh )
-	{
-		// TODO get values for this and implement
-	}
-	else if ( shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh )
-	{
-		//std::shared_ptr<std::vector<uint8>> * cooked;
-		std::vector<uint8> * cooked = nullptr;
+	std::vector<uint8> * cooked = nullptr;
 
-		bool l_loaded = CEngine::GetSingleton().getCookedMeshManager()->Load( getName(), cooked );
+	bool l_loaded = CEngine::GetSingleton().getCookedMeshManager()->Load(getName(), cooked);
 
-		if ( !l_loaded )
+	if (!l_loaded)
+	{
+		MeshFile meshFile;
+		if (!meshFile.Load(m_fileName))
 		{
-			MeshFile meshFile;
-			if ( !meshFile.Load( m_fileName ) )
-			{
-				return false;
-			}
-
-			std::vector<Vect3f> vertexes;
-
-			for ( int i = 0; i < meshFile.meshes.size(); ++i )
-			{
-				std::vector<Vect3f> meshVtxs = getVect3fArray( meshFile.meshes[i] );
-				vertexes.insert( vertexes.end(), meshVtxs.begin(), meshVtxs.end() );
-			}
-
-			cooked = new std::vector<uint8>();
-
-			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
-
-			CEngine::GetSingleton().getCookedMeshManager()->add( getName(), cooked );
+			return false;
 		}
 
-		shapeDesc->cookedMeshData = cooked;
-	}
-	else
-	{
-		DEBUG_ASSERT( !"Unrecognized collider type" );
+		std::vector<Vect3f> vertexes;
+
+		for (int i = 0; i < meshFile.meshes.size(); ++i)
+		{
+			std::vector<Vect3f> meshVtxs = getVect3fArray(meshFile.meshes[i]);
+			vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
+		}
+
+		cooked = new std::vector<uint8>();
+
+		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Box)
+		{
+			// TODO get values for this and implement
+		}
+		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Sphere)
+		{
+			// TODO get values for this and implement
+		}
+		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Capsule)
+		{
+			// TODO get values for this and implement
+		}
+		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
+		{
+			CEngine::GetSingleton().getPhysXManager()->cookTriangleMesh(vertexes, cooked);
+			CEngine::GetSingleton().getCookedMeshManager()->add(getName(), cooked);
+		}
+		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh)
+		{		
+			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
+			CEngine::GetSingleton().getCookedMeshManager()->add(getName(), cooked);
+		}
+		else
+		{
+			DEBUG_ASSERT(!"Unrecognized collider type");
+		}
 	}
 
-
+	shapeDesc->cookedMeshData = cooked;
 
 	return true;
 }

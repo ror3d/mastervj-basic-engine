@@ -207,10 +207,11 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
+	
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();
-	engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
 
+		
 
 	context.CreateBackBuffer(hWnd, 800, 600);
 	{
@@ -218,14 +219,19 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CInputManager::SetCurrentInputManager(&inputManager);
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
+		engine.getScriptManager()->RegisterLUAFunctions();
+		engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
+		engine.getScriptManager()->RegisterLUAFunctionsAfter();
+
+		engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
+		
+
+
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
 		CApplication application(&context);
-
-		engine.getScriptManager()->RegisterLUAFunctions();
-
-
+		
 		UpdateWindow(hWnd);
 		MSG msg;
 		ZeroMemory(&msg, sizeof(msg));
@@ -253,7 +259,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 				float l_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
 				CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
 				m_PreviousTime = l_CurrentTime;
-
 
 				application.Update(l_ElapsedTime);
 				engine.getIAManager()->Update(l_ElapsedTime);

@@ -98,12 +98,51 @@ void CRenderableObjectsManager::AddAnimatedInstanceModel(CXMLTreeNode &TreeNode)
 void CRenderableObjectsManager::AddAnimatedInstanceModel(const std::string &CoreModelName, const std::string &InstanceModelName, const Vect3f &Position)
 {
 	// TODO!
-	DEBUG_ASSERT(!"NOT IMPLEMENTED");
 }
 
-void CRenderableObjectsManager::AddParticleEmitter(CXMLTreeNode &node)
+
+void CRenderableObjectsManager::Load(const std::string &FileName)
 {
-	auto pe = new CParticleSystemInstance(node);
+	CXMLTreeNode l_XML;
+	if (l_XML.LoadFile(FileName.c_str()))
+	{
+		m_FileName = FileName;
 
-	add(pe->getName(), pe);
+		CXMLTreeNode l_Meshes = l_XML["renderable_objects"];
+		if (l_Meshes.Exists())
+		{
+			for (int i = 0; i < l_Meshes.GetNumChildren(); ++i)
+			{
+				CXMLTreeNode l_Mesh = l_Meshes(i);
+
+				if (l_Mesh.GetName() == std::string("mesh_instance"))
+				{
+					AddMeshInstance(l_Mesh);
+				}
+				else if (l_Mesh.GetName() == std::string("animated_instance"))
+				{
+					AddAnimatedInstanceModel(l_Mesh);
+				}
+			}
+		}
+	}
 }
+
+CAnimatedInstanceModel * CRenderableObjectsManager::GetCastedResource(std::string name){
+	return ((CAnimatedInstanceModel*) get(name));
+}
+
+void CRenderableObjectsManager::reload()
+{
+	destroy();
+	Load(m_FileName);
+}
+
+
+void CRenderableObjectsManager::AddParticleEmitter( CXMLTreeNode &node )
+{
+	auto pe = new CParticleSystemInstance( node );
+
+	add( pe->getName(), pe );
+}
+

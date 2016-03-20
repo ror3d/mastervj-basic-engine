@@ -2,6 +2,7 @@
 
 #include "CameraKey.h"
 #include "Camera/Camera.h"
+#include "Engine/Engine.h"
 
 #include <XML/XMLTreeNode.h>
 
@@ -12,8 +13,10 @@ CCameraKeyController::CCameraKeyController( CXMLTreeNode &XMLTreeNode )
 	, m_TotalTime(0)
 	, m_Cycle(false)
 	, m_Reverse(false)
+	, m_Playing(false)
 {
 	CXMLTreeNode key_controller = XMLTreeNode["camera_key_controller"];
+	m_CameraName = key_controller.GetPszProperty("name", "", true);
 	for ( int i = 0; i < key_controller.GetNumChildren(); ++i )
 	{
 		CXMLTreeNode keyNode = key_controller( i );
@@ -73,46 +76,51 @@ void CCameraKeyController::GetCurrentKey()
 	}
 }
 
-void CCameraKeyController::UpdateCameraValues(CCamera* cam) const
-{
-	int nextKey = m_CurrentKey + 1;
-
-
-	if ( nextKey == m_Keys.size() )
+void CCameraKeyController::UpdateCameraValues(CCamera * cam) const
+{	
+	if (m_Playing)
 	{
-		nextKey = m_CurrentKey;
+		int nextKey = m_CurrentKey + 1;
+
+		if (nextKey == m_Keys.size())
+		{
+			nextKey = m_CurrentKey;
+		}
+
+		auto& curInf = m_Keys[m_CurrentKey]->m_CameraInfo;
+		auto& nextInf = m_Keys[nextKey]->m_CameraInfo;
+
+		float t = 1;
+		if (nextKey != m_CurrentKey)
+		{
+			t = (m_CurrentTime - m_Keys[m_CurrentKey]->m_Time) / (m_Keys[nextKey]->m_Time - m_Keys[m_CurrentKey]->m_Time);
+		}
+
+		Vect3f pos = mathUtils::Lerp(curInf.GetPosition(), nextInf.GetPosition(), t);
+		Vect3f up = mathUtils::Lerp(curInf.GetUp(), nextInf.GetUp(), t);
+		Vect3f lookat = mathUtils::Lerp(curInf.GetLookAt(), nextInf.GetLookAt(), t);
+		float nearP = mathUtils::Max(0.0001f, mathUtils::Lerp(curInf.GetZNear(), nextInf.GetZNear(), t));
+		float farP = mathUtils::Lerp(curInf.GetZFar(), nextInf.GetZFar(), t);
+		float fov = mathUtils::Lerp(curInf.GetFOV(), nextInf.GetFOV(), t);
+
+		cam->SetPosition(pos);
+		cam->SetLookAt(lookat + pos);
+		cam->SetUp(up);
+		cam->SetZNear(nearP);
+		cam->SetZFar(farP);
+		cam->SetFOV(fov);
+		cam->SetMatrixs();
 	}
-
-	auto& curInf = m_Keys[m_CurrentKey]->m_CameraInfo;
-	auto& nextInf = m_Keys[nextKey]->m_CameraInfo;
-
-	float t = 1;
-	if ( nextKey != m_CurrentKey )
-	{
-		t = ( m_CurrentTime - m_Keys[m_CurrentKey]->m_Time ) / ( m_Keys[nextKey]->m_Time - m_Keys[m_CurrentKey]->m_Time );
-	}
-
-	Vect3f pos = mathUtils::Lerp(curInf.GetPosition(), nextInf.GetPosition(), t);
-	Vect3f up = mathUtils::Lerp(curInf.GetUp(), nextInf.GetUp(), t);
-	Vect3f lookat = mathUtils::Lerp(curInf.GetLookAt(), nextInf.GetLookAt(), t);
-	float near = mathUtils::Max(0.0001f, mathUtils::Lerp(curInf.GetZNear(), nextInf.GetZNear(), t));
-	float far = mathUtils::Lerp(curInf.GetZFar(), nextInf.GetZFar(), t);
-	float fov = mathUtils::Lerp(curInf.GetFOV(), nextInf.GetFOV(), t);
-
-	cam->SetPosition( pos );
-	cam->SetLookAt( lookat + pos );
-	cam->SetUp( up );
-	cam->SetZNear( near );
-	cam->SetZFar( far );
-	cam->SetFOV( fov );
-	cam->SetMatrixs();
 }
 
 
 void CCameraKeyController::Update( float ElapsedTime )
 {
-	m_CurrentTime += ElapsedTime;
-	GetCurrentKey();
+	if (m_Playing)
+	{
+		m_CurrentTime += ElapsedTime;
+		GetCurrentKey();
+	}	
 }
 
 

@@ -43,6 +43,12 @@ void CXMLTreeNode::Release ()
 //----------------------------------------------------------------------------
 // Load File
 //----------------------------------------------------------------------------
+
+bool CXMLTreeNode::LoadFileFromString(std::string filename)
+{
+	return LoadFile(filename.c_str());
+}
+
 bool CXMLTreeNode::LoadFile (const char* _pszFileName)
 {
   m_bIsOk = false;
@@ -245,6 +251,12 @@ int CXMLTreeNode::GetIntProperty (const char* _pszKey, int _iDefault, bool warni
 //----------------------------------------------------------------------------
 // Returns a float param if found. Else a default value
 //----------------------------------------------------------------------------
+
+float CXMLTreeNode::GetFloatPropertyFromString(std::string _pszKey, float _fDefault, bool warningDefault) const 
+{
+	return GetFloatProperty(_pszKey.c_str(), _fDefault, warningDefault);
+}
+
 float CXMLTreeNode::GetFloatProperty (const char* _pszKey, float _fDefault, bool warningDefault) const
 {
   float fRet = _fDefault;
@@ -297,6 +309,10 @@ bool CXMLTreeNode::GetBoolProperty (const char* _pszKey, bool _bDefault, bool wa
 //----------------------------------------------------------------------------
 // Returns an string param if found. Else a default value
 //----------------------------------------------------------------------------
+const char* CXMLTreeNode::GetPszPropertyFromString(std::string _pszKey, std::string _pszDefault, bool warningDefault) const
+{
+	return GetPszProperty(_pszKey.c_str(), _pszDefault.c_str(), warningDefault);
+}
 const char* CXMLTreeNode::GetPszProperty (const char* _pszKey, const char* _pszDefault, bool warningDefault) const
 {
   const char* pszRet = _pszDefault;

@@ -35,7 +35,7 @@ void CComponentManager::RenderDebug(CContextManager  &_context)
 bool CComponentManager::AddComponent(const std::string &Name, CComponent *Component)
 {	
 	auto it = m_resources.find(Name);
-	if (it != m_resources.end()){
+	if (it == m_resources.end()){
 		add(Name, Component);
 	}
 	return false;

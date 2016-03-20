@@ -46,6 +46,9 @@
     <Filter Include="Particles">
       <UniqueIdentifier>{061a0bb3-4f2e-4ce7-a2a3-97208de56490}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CinematicsAction">
+      <UniqueIdentifier>{4b39dac3-15c1-4c01-8256-ca8fa68f6f82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
@@ -272,6 +275,12 @@
     <ClInclude Include="Particles\ParticleSystemInstance.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="CinematicsAction\CinematicsActionManager.h">
+      <Filter>CinematicsAction</Filter>
+    </ClInclude>
+    <ClInclude Include="Cinematics\CinematicManager.h">
+      <Filter>Cinematic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -484,6 +493,12 @@
     </ClCompile>
     <ClCompile Include="Particles\ParticleSystemInstance.cpp">
       <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="CinematicsAction\CinematicsActionManager.cpp">
+      <Filter>CinematicsAction</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematics\CinematicManager.cpp">
+      <Filter>Cinematic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

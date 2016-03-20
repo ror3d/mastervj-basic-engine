@@ -21,6 +21,8 @@
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
 #include <Graphics/Particles/ParticleSystemManager.h>
+#include <Graphics/CinematicsAction/CinematicsActionManager.h>
+#include <Graphics/Cinematics/CinematicManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -46,6 +48,8 @@ private:
 	CTimerManager * timerManager;
 	CComponentManager * componentManager;
 	CParticleSystemManager * particleManager;
+	CCinematicsActionManager * cinematicsActionManager;
+	CCinematicManager * cinematicManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -74,4 +78,6 @@ public:
 	inline CTimerManager * getTimerManager() const { return timerManager;  }
 	inline CComponentManager * getComponentManager() const { return componentManager;  }
 	inline CParticleSystemManager * getParticleManager() const { return particleManager; }
+	inline CCinematicsActionManager * getCinematicsActionManager() const { return cinematicsActionManager;  }
+	inline CCinematicManager * getCinematicManager() const { return cinematicManager;  }
 };

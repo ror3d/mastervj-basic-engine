@@ -13,6 +13,7 @@ class CCameraKeyController : public ICameraController
 {
 private:
 	std::vector<CCameraKey *> m_Keys;
+	std::string m_CameraName;
 	size_t m_CurrentKey;
 	size_t m_NextKey;
 	float m_CurrentTime;
@@ -20,6 +21,7 @@ private:
 
 	bool m_Cycle;
 	bool m_Reverse;
+	bool m_Playing;
 
 	void GetCurrentKey();
 public:
@@ -28,11 +30,13 @@ public:
 
 	void Update( float ElapsedTime );
 
+	void Play(){ m_Playing = true; }
+
 	void SetCurrentTime( float CurrentTime );
 	void ResetTime();
 	float GetTotalTime();
 
-	void UpdateCameraValues( CCamera* cam ) const;
+	void UpdateCameraValues(CCamera * cam) const;
 
 	bool IsCycle() const { return m_Cycle; }
 	void SetCycle( bool Cycle ) { m_Cycle = Cycle; }

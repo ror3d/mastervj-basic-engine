@@ -9,6 +9,7 @@
 class CContextManager;
 class CRenderableObject;
 class CXMLTreeNode;
+class CAnimatedInstanceModel;
 
 class CRenderableObjectsManager : public TMapManager<CRenderableObject>, public CActive
 {
@@ -23,6 +24,9 @@ public:
 	void AddMeshInstance(const std::string &CoreMeshName, const std::string &InstanceName, const Vect3f &Position);
 	void AddAnimatedInstanceModel(CXMLTreeNode &TreeNode);
 	void AddAnimatedInstanceModel(const std::string &CoreModelName, const std::string &InstanceModelName, const Vect3f &Position);
+	void Load(const std::string &FileName);
+	CAnimatedInstanceModel * GetCastedResource(std::string name);
+	void reload();
 	void AddParticleEmitter(CXMLTreeNode &node);
 };
 

@@ -5,12 +5,11 @@
 
 #include "SphericalCameraController.h"
 #include "FPSCameraController.h"
+#include "Cinematics/CameraKeyController.h"
 
 #include <Base/Math/Math.h>
 
 #include <Core/Engine/Engine.h>
-
-
 
 CCameraManager::CCameraManager(CContextManager* context)
 	: m_context(context)

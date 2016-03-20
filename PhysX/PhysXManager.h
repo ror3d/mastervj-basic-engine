@@ -14,6 +14,8 @@ class CRenderableVertexs;
 namespace physx
 {
 	class PxFoundation;
+	class PxShape;
+	class PxGeometry;
 	class PxPhysics;
 	class PxDefaultCpuDispatcher;
 	class PxScene;
@@ -72,6 +74,12 @@ public:
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 
+	physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size, bool trigger, CPhysxColliderShapeDesc::Shape shape);
+
+	void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger);
+
+	void CPhysXManager::createStaticSphere(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger);
+	
 	void InitPhysx();
 
 	void createController(float height, float radius, float density, Vect3f pos, std::string name);
@@ -79,6 +87,8 @@ public:
 	void update(float dt);
 
 	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
+
+	bool cookTriangleMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
 
 	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 
@@ -89,6 +99,14 @@ public:
 	void releaseCharacterControllers();
 
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
+	
+	struct {
+		std::map<std::string, size_t> index;
+		std::vector<std::string> name;
+		std::vector<Vect3f> position;
+		std::vector<Quatf> rotation;
+		std::vector<physx::PxActor*> actor;
+	} m_actors;
 
 protected:
 
@@ -110,11 +128,5 @@ private:
 	std::map<std::string, physx::PxMaterial*> m_materials;
 	std::map<std::string, physx::PxController*> m_CharacterControllers;
 
-	struct {
-		std::map<std::string, size_t> index;
-		std::vector<std::string> name;
-		std::vector<Vect3f> position;
-		std::vector<Quatf> rotation;
-		std::vector<physx::PxActor*> actor;
-	} m_actors;
+	
 };

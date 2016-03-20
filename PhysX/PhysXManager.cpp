@@ -15,6 +15,8 @@
 #include <Windows.h>
 #endif
 
+#include "Core/Engine/Engine.h"
+
 #ifdef _DEBUG
 #pragma comment(lib, "PhysX3DEBUG_x86.lib")
 #pragma comment(lib, "PhysX3CommonDEBUG_x86.lib")
@@ -186,7 +188,29 @@ void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pa
 }
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
-{
+{	
+	for (physx::PxU32 i = 0; i < count; i++)
+	{
+		if ((pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
+			continue;
+
+		size_t l_indexTrigger = (size_t)pairs[i].triggerActor->userData;
+		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
+
+		std::string l_triggerName = m_actors.name[l_indexTrigger];
+		
+		if (l_triggerName == "BoxTrigger")
+		{
+			CEngine::GetSingleton().getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
+		}
+		
+		if (l_triggerName == "SphereTrigger")
+		{
+			CEngine::GetSingleton().getCinematicsActionManager()->LoadXML("Data\\cinematicsSphere.xml");
+		}
+	}
+
+
 }
 
 
@@ -267,6 +291,29 @@ bool CPhysXManager::cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<u
 	return success;
 }
 
+bool CPhysXManager::cookTriangleMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData){
+	physx::PxTriangleMeshDesc meshDesc;
+
+	meshDesc.points.count = vec.size();
+	meshDesc.points.stride = sizeof(Vect3f);
+	meshDesc.points.data = vec.data();
+
+/*	meshDesc.triangles.count = triCount;
+	meshDesc.triangles.stride = 3 * sizeof(PxU32);
+	meshDesc.triangles.data = indices32;*/
+
+	physx::PxDefaultMemoryOutputStream oBuf;
+	bool success = m_Cooking->cookTriangleMesh(meshDesc, oBuf);
+	DEBUG_ASSERT(success);
+
+	//outCookedData->assign(oBuf.getData(), oBuf.getData() + oBuf.getSize());
+	//TRIANGLE
+	//PxToolkit::MemoryInputData readBuffer(writeBuffer.getData(), writeBuffer.getSize());
+	//return physics.createTriangleMesh(readBuffer);
+
+	return success;
+}
+
 
 bool CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData)
 {
@@ -335,7 +382,79 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 	m_actors.position.push_back(normal*planeDesc.w);
 	m_actors.rotation.push_back(Quatf::ShortestArc(Vect3f(0, 1, 0), normal));
 	m_actors.actor.push_back(groundPlane);
+
 }
+
+physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size, bool trigger, CPhysxColliderShapeDesc::Shape figure)
+{
+	auto idx = m_actors.actor.size();
+
+	auto matIt = m_materials.find(material);
+	DEBUG_ASSERT(matIt != m_materials.end());
+
+	physx::PxMaterial* mat = matIt->second;
+	physx::PxShape* shape;
+
+	switch (figure)
+	{
+	case CPhysxColliderShapeDesc::Shape::Box:
+		shape = m_PhysX->createShape(physx::PxBoxGeometry(size.x / 2, size.y / 2, size.z / 2), *mat);
+		break;
+
+	case CPhysxColliderShapeDesc::Shape::Sphere:
+		shape = m_PhysX->createShape(physx::PxSphereGeometry(size.x/2), *mat);
+		break;
+
+	default:
+		throw std::logic_error("Not yet implemented");
+		break;
+	}
+
+	if (trigger)
+	{
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
+	}
+
+	physx::PxVec3 Vec = physx::PxVec3(position.x, position.y, position.z);
+	physx::PxQuat Quat = physx::PxQuat(orientation.x, orientation.y, orientation.z, orientation.w);
+	physx::PxTransform Transform = physx::PxTransform(Vec, Quat);
+	physx::PxRigidStatic* StaticBody = m_PhysX->createRigidStatic(Transform);
+	
+	StaticBody->attachShape(*shape);
+
+	StaticBody->userData = reinterpret_cast<void*>(idx);
+	m_Scene->addActor(*StaticBody);
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
+
+	m_actors.index[name] = idx;
+	m_actors.name.push_back(name);	
+
+	m_actors.position.push_back(position);
+	m_actors.rotation.push_back(orientation);
+	m_actors.actor.push_back(StaticBody);
+
+	return shape;	
+}
+
+
+void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger)
+{
+	physx::PxShape* shape = createStatic(name, Material, position, orientation, size, trigger, CPhysxColliderShapeDesc::Shape::Box);
+
+	shape->release();
+}
+
+void CPhysXManager::createStaticSphere(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger)
+{
+	physx::PxShape* shape = createStatic(name, Material, position, orientation, size, trigger, CPhysxColliderShapeDesc::Shape::Sphere);
+
+	shape->release();
+}
+
 
 void CPhysXManager::createActor(const std::string& name, ActorType actorType, const CPhysxColliderShapeDesc& desc)
 {
@@ -381,7 +500,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	switch (actorType)
 	{
 		case CPhysXManager::ActorType::Static:
-			body = m_PhysX->createRigidStatic(actorTransform); //AQUI
+			body = m_PhysX->createRigidStatic(actorTransform); 
 			break;
 		case CPhysXManager::ActorType::Dynamic:
 			body = m_PhysX->createRigidDynamic(actorTransform);
@@ -393,7 +512,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 	physx::PxTransform transform = physx::PxTransform(v(desc.position), q(desc.orientation));
 
-	shape->setLocalPose(transform); //AQUI
+	shape->setLocalPose(transform);
 
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)
@@ -423,7 +542,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.slopeLimit = cosf(3.1415f / 6); //30º
 	desc.stepOffset = 0.5f;
 	desc.density = density;
-	desc.reportCallback = NULL;//TODO
+	desc.reportCallback = NULL; //TODO
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + radius + height * 0.5f, pos.z);
 	desc.material = l_material;
 	int index = m_CharacterControllers.size();
@@ -433,21 +552,22 @@ void CPhysXManager::createController(float height, float radius, float density, 
 }
 
 void CPhysXManager::InitPhysx(){
-	registerMaterial("ground", 1, 0.9, 0.1);
+	//registerMaterial("ground", 1, 0.9, 0.1);
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
-	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
+	//createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
+
 }
 
 Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){
 	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
-	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
-	cct->setUpDirection(v(direction));
 	physx::PxRigidDynamic* actor = cct->getActor();
-	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
-	physx::PxVec3 vel = actor->getLinearVelocity();
+	cct->move(v(movement), movement.Length() * 0.001f, elapsedTime, filters);
+	cct->setUpDirection(v(direction));	
+	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
+	//physx::PxVec3 vel = actor->getLinearVelocity();	
 	return v(cct->getPosition());
 }
 
