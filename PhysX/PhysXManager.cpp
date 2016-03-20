@@ -528,8 +528,7 @@ void CPhysXManager::InitPhysx(){
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
 	//createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
-	createStaticBox("BoxTrigger", Vect3f(5, 5, 5), "StaticObjectMaterial", Vect3f(5, 2, 0), Quatf(0, 0, 0, 1), true);
-	createStaticSphere("SphereTrigger", Vect3f(5, 0, 0), "StaticObjectMaterial", Vect3f(5, 2, 5), Quatf(0, 0, 0, 1), true);
+
 }
 
 Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){
