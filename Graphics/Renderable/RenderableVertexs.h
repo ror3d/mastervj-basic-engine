@@ -20,6 +20,11 @@ class CEffect;
 class CRenderableVertexs
 {
 public:
+	virtual bool UpdateVertices(ID3D11DeviceContext* context, void *Vtxs, unsigned int vtxCount)
+	{
+		DEBUG_ASSERT(!"This method mustn't be called");
+		return false;
+	}
 	virtual bool Render(CContextManager *ContextManager, CEffectTechnique *Effect)
 	{
 		DEBUG_ASSERT(!"This method mustn't be called");

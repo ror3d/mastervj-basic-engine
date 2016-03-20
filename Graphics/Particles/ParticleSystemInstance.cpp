@@ -7,10 +7,26 @@
 #include "Renderable/RenderableObjectTechnique.h"
 #include "Effect/EffectGeometryShader.h"
 
+std::random_device rnd;
+
+float getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<float> &rng)
+{
+	float r = ud(rnde);
+	return ((rng.second - rng.first) * r) + rng.first;
+}
+
+Vect3f getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<Vect3f> &rng)
+{
+	Vect3f r(ud(rnde), ud(rnde), ud(rnde));
+	return ((rng.second - rng.first) * r) + rng.first;
+}
+
 CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
 	: CRenderableObject(treeNode)
 	, m_activeParticles(0)
 	, m_toCreateParticles(0)
+	, m_randomEngine(rnd())
+	, m_unitDist(0, 1)
 {
 	std::string particleClass = treeNode.GetPszProperty("particle_class", "", true);
 	m_particleSystemClass = CEngine::GetSingleton().getParticleManager()->get(particleClass);
@@ -22,6 +38,11 @@ CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
 
 CParticleSystemInstance::~CParticleSystemInstance()
 {
+	if (m_vertexs)
+	{
+		delete m_vertexs;
+		m_vertexs = nullptr;
+	}
 }
 
 void CParticleSystemInstance::Update(float ElapsedTime)
@@ -60,13 +81,13 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 
 		// TODO: Randomize
 		p.pos = GetPosition();
-		p.vel = m_particleSystemClass->startVelocityRange.first;
-		p.acc = m_particleSystemClass->accelerationRange.first;
-		p.size = m_particleSystemClass->sizeRange.first;
+		p.vel = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startVelocityRange);
+		p.acc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->accelerationRange);
+		p.size = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->sizeRange);
 		p.angle = 0;
 		p.currentFrame = 0;
 		p.lifetime = 0;
-		p.totalLifetime = m_particleSystemClass->life.first;
+		p.totalLifetime = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->life);
 		// TODO: Rest of the properties
 		p.color = CColor(1, 1, 1, 1);
 	}
@@ -88,7 +109,7 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 void CParticleSystemInstance::Render(CContextManager *_context)
 {
 	auto devCtx = _context->GetDeviceContext();
-	static_cast<CPointsListRenderableVertexs<PARTICLE_VERTEX>*>(m_vertexs)->UpdateVertices(devCtx, m_particleVtxs, m_activeParticles);
+	m_vertexs->UpdateVertices(devCtx, m_particleVtxs, m_activeParticles);
 
 	auto material = m_particleSystemClass->material;
 	auto technique = material->getRenderableObjectTechique()->GetEffectTechnique();

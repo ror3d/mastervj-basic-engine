@@ -7,6 +7,7 @@
 #include <Base/Math/Math.h>
 #include <Base/Math/Color.h>
 #include <vector>
+#include <random>
 
 class CParticleSystemClass;
 class CRenderableVertexs;
@@ -15,7 +16,7 @@ class CRenderableVertexs;
 class CParticleSystemInstance : public CRenderableObject
 {
 public:
-	static const int MAX_PARTICLES_PER_EMITTER = 5;
+	static const int MAX_PARTICLES_PER_EMITTER = 6;
 private:
 	struct ParticleData
 	{
@@ -39,6 +40,9 @@ private:
 	PARTICLE_VERTEX m_particleVtxs[MAX_PARTICLES_PER_EMITTER];
 
 	CRenderableVertexs *m_vertexs;
+
+	std::mt19937 m_randomEngine;
+	std::uniform_real_distribution<float> m_unitDist;
 
 public:
 
