@@ -182,7 +182,28 @@ void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pa
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
 {	
-	CEngine::GetSingleton().getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
+	for (physx::PxU32 i = 0; i < count; i++)
+	{
+		if ((pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
+			continue;
+
+		size_t l_indexTrigger = (size_t)pairs[i].triggerActor->userData;
+		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
+
+		std::string l_triggerName = m_actors.name[l_indexTrigger];
+		
+		if (l_triggerName == "BoxTrigger")
+		{
+			CEngine::GetSingleton().getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
+		}
+		
+		if (l_triggerName == "SphereTrigger")
+		{
+			CEngine::GetSingleton().getCinematicsActionManager()->LoadXML("Data\\cinematicsSphere.xml");
+		}
+	}
+
+
 }
 
 
