@@ -23,6 +23,9 @@
 
 #pragma comment(lib, "Winmm.lib")
 
+#define WIDTH 800
+#define HEIGHT 600
+
 #define APPLICATION_NAME	"VIDEOGAME"
 
 void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
@@ -179,7 +182,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	// Calcular el tamano de nuestra ventana
 	RECT rc = {
-		0, 0, 800, 600
+		0, 0, WIDTH, HEIGHT
 	};
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
@@ -192,7 +195,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getPhysXManager()->InitPhysx();
 
 	CContextManager& context = *(CEngine::GetSingleton().getContextManager());
-	context.CreateContext(hWnd, 800, 600);
+	context.CreateContext(hWnd, WIDTH, HEIGHT);
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
@@ -207,13 +210,13 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
-	
+
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();
 
-		
 
-	context.CreateBackBuffer(hWnd, 800, 600);
+
+	context.CreateBackBuffer(hWnd, WIDTH, HEIGHT);
 	{
 		CInputManagerImplementation inputManager(hWnd);
 		CInputManager::SetCurrentInputManager(&inputManager);
@@ -224,14 +227,14 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		engine.getScriptManager()->RegisterLUAFunctionsAfter();
 
 		engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
-		
+
 
 
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
 
 		CApplication application(&context);
-		
+
 		UpdateWindow(hWnd);
 		MSG msg;
 		ZeroMemory(&msg, sizeof(msg));
