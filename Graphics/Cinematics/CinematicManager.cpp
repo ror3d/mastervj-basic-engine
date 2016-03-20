@@ -71,6 +71,7 @@ void CCinematicManager::Play()
 	}
 	for (auto it = m_cinematicsCameras.begin(); it != m_cinematicsCameras.end(); it++)
 	{
+		(*it)->ResetTime();
 		(*it)->Play(); 
 	}
 }

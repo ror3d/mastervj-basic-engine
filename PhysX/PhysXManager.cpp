@@ -181,9 +181,8 @@ void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pa
 }
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
-{
-	CEngine& engine = CEngine::GetSingleton();
-	engine.getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
+{	
+	CEngine::GetSingleton().getCinematicsActionManager()->LoadXML("Data\\cinematics.xml");
 }
 
 
