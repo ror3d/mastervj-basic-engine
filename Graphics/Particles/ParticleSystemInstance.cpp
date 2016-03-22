@@ -19,14 +19,16 @@ float getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, ran
 
 Vect3f getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<Vect3f> &rng)
 {
-	Vect3f r(ud(rnde), ud(rnde), ud(rnde));
-	return ((rng.second - rng.first) * r) + rng.first;
+	Vect3f s = ( rng.second - rng.first );
+	Vect3f r(ud(rnde)*s.x, ud(rnde)*s.y, ud(rnde)*s.z);
+	return r + rng.first;
 }
 
 CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<CColor> &rng)
 {
-	CColor r(ud(rnde), ud(rnde), ud(rnde), ud(rnde));
-	return ((rng.second - rng.first) * r) + rng.first;
+	CColor s = ( rng.second - rng.first );
+	CColor r(ud(rnde)*s.x, ud(rnde)*s.y, ud(rnde)*s.z, ud(rnde)*s.w);
+	return r + rng.first;
 }
 
 CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
@@ -102,8 +104,6 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		p.color = getRand( m_randomEngine, m_unitDist, m_particleSystemClass->color );
 	}
 
-	// TODO: sort particles
-
 	// Copy particles
 	for (int i = 0; i < m_activeParticles; ++i)
 	{
@@ -116,10 +116,13 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 	}
 	Vect4f cameraPos4 = CEffectManager::m_SceneParameters.m_CameraPosition;
 	Vect3f cameraPos( cameraPos4.x, cameraPos4.y, cameraPos4.z );
-	std::sort( &( m_particleVtxs[0] ), &( m_particleVtxs[MAX_PARTICLES_PER_EMITTER - 1] ),
-		[&cameraPos]( PARTICLE_VERTEX &a, PARTICLE_VERTEX &b ) -> bool {
-			return ( a.Position - cameraPos ).SquaredLength() < ( b.Position - cameraPos ).SquaredLength();
-	} );
+	if ( m_activeParticles > 1 )
+	{
+		std::sort( &( m_particleVtxs[0] ), &( m_particleVtxs[m_activeParticles - 1] ),
+			[&cameraPos]( PARTICLE_VERTEX &a, PARTICLE_VERTEX &b ) -> bool {
+			return ( a.Position - cameraPos ).SquaredLength() > ( b.Position - cameraPos ).SquaredLength();
+		} );
+	}
 }
 
 void CParticleSystemInstance::Render(CContextManager *_context)
