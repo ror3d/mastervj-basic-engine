@@ -16,7 +16,7 @@ class CRenderableVertexs;
 class CParticleSystemInstance : public CRenderableObject
 {
 public:
-	static const int MAX_PARTICLES_PER_EMITTER = 6;
+	static const int MAX_PARTICLES_PER_EMITTER = 200;
 private:
 	struct ParticleData
 	{
