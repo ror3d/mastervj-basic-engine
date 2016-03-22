@@ -3,24 +3,149 @@
 #include <Base/XML/XMLTreeNode.h>
 #include <Core/Engine/Engine.h>
 
+namespace
+{
+	template<typename T>
+	T getProp( const CXMLTreeNode& node, std::string prop, T defVal )
+	{
+		return T();
+	}
+
+	template<>
+	float getProp( const CXMLTreeNode& node, std::string prop, float defVal )
+	{
+		return node.GetFloatProperty( prop.c_str(), defVal, false );
+	}
+
+	template<>
+	Vect3f getProp( const CXMLTreeNode& node, std::string prop, Vect3f defVal )
+	{
+		return node.GetVect3fProperty( prop.c_str(), defVal, false );
+	}
+
+	template<>
+	CColor getProp( const CXMLTreeNode& node, std::string prop, CColor defVal )
+	{
+		return CColor(node.GetVect4fProperty( prop.c_str(), Vect4f(defVal.x, defVal.y, defVal.z, defVal.w), false ));
+	}
+
+	template<typename T>
+	range<T> getRangeValue( const CXMLTreeNode& node )
+	{
+		std::string n = node.GetName();
+		if ( n == "range" )
+		{
+			T lower = getProp<T>( node, "lower", T() );
+			T upper = getProp<T>( node, "upper", T() );
+			return make_range( lower, upper );
+		}
+		else if ( n == "value" )
+		{
+			T val = getProp<T>( node, "value", T() );
+			return make_range( val );
+		}
+		else
+		{
+			DEBUG_ASSERT( !"This should not happen!" );
+			return range<T>();
+		}
+	}
+}
+
 CParticleSystemClass::CParticleSystemClass(const CXMLTreeNode& node)
 	: CNamed(node)
 {
-	// TODO
+	std::string matName = node.GetPszProperty( "material", "", false );
+	DEBUG_ASSERT( matName.size() > 0 );
+	material = CEngine::GetSingleton().getMaterialManager()->get(matName);
+
+	emitRate = node.GetFloatProperty("emit_rate", 0, false);
+	DEBUG_ASSERT( emitRate > 0 );
+
+	numFrames = node.GetIntProperty("num_frames", 1, false);
+	timePerFrame = node.GetFloatProperty("time_per_frame", 0, false);
+	loopFrames = node.GetBoolProperty( "loop_frames", false, false );
+
+
+	for ( int i = 0; i < node.GetNumChildren(); ++i )
+	{
+		CXMLTreeNode prop = node( i );
+		std::string name = prop.GetName();
+		if (!( name == "range" || name == "value" ))
+		{
+			continue;
+		}
+		std::string type = prop.GetPszProperty( "name", "", false );
+		if ( type == "size" )
+		{
+			size = getRangeValue<float>( prop );
+		}
+		else if ( type == "velocity" )
+		{
+			startVelocity = getRangeValue<Vect3f>( prop );
+		}
+		else if ( type == "acceleration" )
+		{
+			acceleration = getRangeValue<Vect3f>( prop );
+		}
+		else if ( type == "angle" )
+		{
+			startAngle = getRangeValue<float>( prop );
+		}
+		else if ( type == "angle_speed" )
+		{
+			angleSpeed = getRangeValue<float>( prop );
+		}
+		else if ( type == "angle_acceleration" )
+		{
+			angleAcceleration = getRangeValue<float>( prop );
+		}
+		else if ( type == "color" )
+		{
+			color = getRangeValue<CColor>( prop );
+		}
+		else if ( type == "life" )
+		{
+			life = getRangeValue<float>( prop );
+		}
+	}
 }
 
 void CParticleSystemManager::Load(const std::string &Filename)
 {
-	CParticleSystemClass * c = new CParticleSystemClass("test");
+	m_Filename = Filename;
 
-	c->numFrames = 1;
-	c->startVelocity = make_range(Vect3f(1, 1, 1), Vect3f(-1, 1, -1));
-	c->acceleration = make_range(Vect3f(0, -2, 0));
-	c->size = make_range(0.1f, 0.3f);
-	c->startAngle = make_range( 0.f, 3.1415f );
-	c->material = CEngine::GetSingleton().getMaterialManager()->get("particle_test");
-	c->life = make_range(3.0f, 6.0f);
+	CXMLTreeNode l_XML;
+	if (!l_XML.LoadFile(Filename.c_str()))
+	{
+		DEBUG_ASSERT( !"Could not load file" );
+		return;
+	}
 
-	c->emitRate = 10;
-	add("test", c);
+	CXMLTreeNode l_Systems = l_XML["particle_classes"];
+	if ( !l_Systems.Exists() )
+	{
+		DEBUG_ASSERT( l_Systems.Exists() );
+		return;
+	}
+
+	for (int i = 0; i < l_Systems.GetNumChildren(); ++i)
+	{
+		CXMLTreeNode l_System = l_Systems(i);
+
+		if (l_System.GetName() == std::string("particle_class"))
+		{
+			CParticleSystemClass * c = new CParticleSystemClass(l_System);
+
+			add(c->getName(), c);
+		}
+	}
+
+}
+
+
+void CParticleSystemManager::reload()
+{
+	destroy();
+	Load(m_Filename);
 }

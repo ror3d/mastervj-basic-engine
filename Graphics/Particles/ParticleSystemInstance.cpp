@@ -72,7 +72,7 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		p.angularSpeed += p.angularAcc * ElapsedTime;
 		p.angle += p.angularSpeed * ElapsedTime;
 
-		if (m_particleSystemClass->timePerFrame > 0)
+		if (m_particleSystemClass->timePerFrame > 0 && m_particleSystemClass->timePerFrame > 0)
 		{
 			p.currentFrame = p.lifetime / m_particleSystemClass->timePerFrame;
 		}

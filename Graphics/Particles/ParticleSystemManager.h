@@ -58,9 +58,13 @@ public:
 
 class CParticleSystemManager : public TMapManager<CParticleSystemClass>
 {
+	std::string m_Filename;
+
 public:
 
 	void Load(const std::string &Filename);
+
+	void reload();
 };
 
 

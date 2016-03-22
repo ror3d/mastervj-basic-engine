@@ -31,7 +31,7 @@ void CMaterialManager::load(const std::string &Filename)
 				if (l_Material.GetName() == std::string("material"))
 				{
 					CMaterial * Material = new CMaterial(l_Material);
-					add(Material->getName() , Material);									
+					add(Material->getName() , Material);
 				}
 			}
 		}
