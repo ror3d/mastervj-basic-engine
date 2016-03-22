@@ -1,5 +1,7 @@
 #include "Scene/SetMatricesSceneRendererCommand.h"
+
 #include "Engine/Engine.h"
+#include <Graphics/Camera/CameraManager.h>
 
 CSetMatricesSceneRendererCommand::CSetMatricesSceneRendererCommand(CXMLTreeNode &TreeNode) :CSceneRendererCommand(TreeNode)
 {

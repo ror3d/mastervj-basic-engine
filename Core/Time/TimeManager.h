@@ -10,6 +10,8 @@ public:
 	float m_elapsedTime;
 
 	float getElapsedTime(){ return m_elapsedTime;  }
+
+	void destroy() {}
 };
 
 #endif

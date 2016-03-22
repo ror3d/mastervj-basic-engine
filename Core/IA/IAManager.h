@@ -16,6 +16,7 @@ public:
 	
 	void Update(float elapsedTime);
 	
+	void destroy() {}
 };
 
 #endif

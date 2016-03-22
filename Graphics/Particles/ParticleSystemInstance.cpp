@@ -2,8 +2,12 @@
 
 #include <Base/XML/XMLTreeNode.h>
 #include <Core/Engine/Engine.h>
+#include "ParticleSystemManager.h"
 
-#include "Renderable/RenderableVertexs.h"
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Material/Material.h>
+
+#include "Mesh/RenderableVertexs.h"
 #include "Renderable/RenderableObjectTechnique.h"
 #include "Effect/EffectGeometryShader.h"
 

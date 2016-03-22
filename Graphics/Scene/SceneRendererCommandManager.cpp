@@ -22,6 +22,8 @@
 #include "RenderDebugGUISceneRendererCommand.h"
 #include "ApplyFiltersSceneRendererCommand.h"
 
+#include <Graphics/Texture/TextureManager.h>
+
 CSceneRendererCommandManager::CSceneRendererCommandManager(){
 
 }

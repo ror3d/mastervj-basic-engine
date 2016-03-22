@@ -2,9 +2,20 @@
 
 #include <Base/Math/Math.h>
 
-#include <Graphics/Context/ContextManager.h>
+#include <Core/Engine/Engine.h>
+
+#include <Graphics/Layer/LayerManager.h>
+#include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Scene/SceneRendererCommandManager.h>
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Camera/CameraManager.h>
+#include <PhysX/PhysXManager.h>
+#include <Core/CharacterController/CharacterControllerManager.h>
+#include <Graphics/CinematicsAction/CinematicsActionManager.h>
+#include <Graphics/Cinematics/CinematicManager.h>
+
+
 #include <Graphics/Camera/FPSCameraController.h>
-#include <Renderable/RenderableObjectsManager.h>
 #include "Animation/AnimatedInstanceModel.h"
 #include "Animation/AnimatedCoreModel.h"
 
@@ -13,14 +24,8 @@
 #include <Core/Debug/DebugHelper.h>
 
 #include <XML/XMLTreeNode.h>
-#include <Graphics/Cinematics/Cinematic.h>
 
-#include <PhysX/PhysXManager.h>
-#include <Scripting/ScriptManager.h>
 
-#include <Engine/Engine.h>
-
-CScriptManager *s_sm = nullptr;
 
 CApplication::CApplication(CContextManager *_ContextManager)
 : m_ContextManager(_ContextManager)
@@ -48,7 +53,7 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
 
-	
+
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
 	{
 		m_FixedCamera = m_FixedCamera ? false : true;

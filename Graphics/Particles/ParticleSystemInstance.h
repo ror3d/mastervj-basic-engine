@@ -2,7 +2,7 @@
 #define PARTICLE_SYSTEM_INSTANCE_H
 
 #include "Renderable/RenderableObject.h"
-#include "VertexTypes.h"
+#include "Mesh/VertexTypes.h"
 
 #include <Base/Math/Math.h>
 #include <Base/Math/Color.h>

@@ -1,8 +1,10 @@
 #include "DebugRender.h"
 
-#include "VertexTypes.h"
+#include "Mesh/VertexTypes.h"
 
-#include "Renderable/RenderableVertexs.h"
+#include "Mesh/RenderableVertexs.h"
+
+#include <Graphics/Effect/EffectManager.h>
 
 #include <D3DX11.h>
 #include <D3Dcompiler.h>

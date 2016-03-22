@@ -1,8 +1,11 @@
 #include "Material.h"
 #include "Engine/Engine.h"
+#include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
+#include <Graphics/Effect/EffectManager.h>
+#include "Texture/TextureManager.h"
+
 #include "Graphics/Renderable/RenderableObjectTechnique.h"
 #include "Texture/Texture.h"
-#include "Texture/TextureManager.h"
 #include "MaterialParameter.h"
 
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)

@@ -4,6 +4,7 @@
 #include "EffectGeometryShader.h"
 
 #include <Core/Engine/Engine.h>
+#include <Graphics/Effect/EffectManager.h>
 
 
 CEffectTechnique::CEffectTechnique(CXMLTreeNode &TreeNode) : CNamed(TreeNode)

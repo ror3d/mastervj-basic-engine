@@ -1,5 +1,7 @@
 #include "SetDepthStencilStateSceneRendererCommand.h"
 
+#include <Core/Engine/Engine.h>
+#include <Graphics/Context/ContextManager.h>
 
 CSetDepthStencilStateSceneRendererCommand::
 	CSetDepthStencilStateSceneRendererCommand(CXMLTreeNode &TreeNode)
@@ -24,9 +26,10 @@ CSetDepthStencilStateSceneRendererCommand::
 	l_DepthStencilStateDescription.FrontFace = od;
 	l_DepthStencilStateDescription.BackFace = od;
 
-	if (FAILED(CEngine::GetSingleton().getContextManager()->GetDevice()->CreateDepthStencilState(&l_DepthStencilStateDescription, &m_DepthStencilState))){
+	if (FAILED(CEngine::GetSingleton().getContextManager()->GetDevice()->CreateDepthStencilState(&l_DepthStencilStateDescription, &m_DepthStencilState)))
+	{
 		DEBUG_ASSERT(false);
-	}	
+	}
 }
 
 CSetDepthStencilStateSceneRendererCommand::~CSetDepthStencilStateSceneRendererCommand()

@@ -1,5 +1,7 @@
 #include "Scene/SetPoolRenderableObjectsTechniqueSceneRendererCommand.h"
+
 #include "Engine/Engine.h"
+#include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 
 CSetPoolRenderableObjectsTechniqueSceneRendererCommand::CSetPoolRenderableObjectsTechniqueSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode)

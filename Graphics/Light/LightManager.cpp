@@ -1,6 +1,7 @@
 #include "LightManager.h"
 #include "Light/Light.h"
 #include <Engine/Engine.h>
+#include <Graphics/Context/ContextManager.h>
 #include "Renderable/RenderableObjectsManager.h"
 
 

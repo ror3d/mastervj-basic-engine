@@ -1,29 +1,29 @@
 #pragma once
 
 #include <Base/Utils/SingletonPattern.h>
-#include <Graphics/Mesh/StaticMeshManager.h>
-#include <Graphics/Mesh/CookedMeshManager.h>
-#include <Graphics/Layer/LayerManager.h>
-#include <Graphics/Material/MaterialManager.h>
-#include <Graphics/Effect/EffectManager.h>
-#include <Graphics/Texture/TextureManager.h>
-#include <Graphics/Light/LightManager.h>
-#include <Graphics/Animation/AnimatedModelManager.h>
-#include <Graphics/Context/ContextManager.h>
-#include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
-#include <Graphics/Scene/SceneRendererCommandManager.h>
-#include <Graphics/Debug/DebugRender.h>
-#include <Graphics/Camera/CameraManager.h>
-#include <PhysX/PhysXManager.h>
-#include <Core/IA/IAManager.h>
-#include <Base/Scripting/ScriptManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
-#include <Core/Time/TimeManager.h>
-#include <Core/Component/ComponentManager.h>
-#include <Graphics/Particles/ParticleSystemManager.h>
-#include <Graphics/CinematicsAction/CinematicsActionManager.h>
-#include <Graphics/Cinematics/CinematicManager.h>
 
+class CStaticMeshManager;
+class CLayerManager;
+class CMaterialManager;
+class CEffectManager;
+class CTextureManager;
+class CLightManager;
+class CAnimatedModelManager;
+class CRenderableObjectTechniqueManager;
+class CSceneRendererCommandManager;
+class CContextManager;
+class CDebugRender;
+class CCameraManager;
+class CPhysXManager;
+class CCookedMeshManager;
+class CIAManager;
+class CScriptManager;
+class CCharacterControllerManager;
+class CTimerManager;
+class CComponentManager;
+class CParticleSystemManager;
+class CCinematicsActionManager;
+class CCinematicManager;
 
 class CEngine : public CSingleton<CEngine>
 {

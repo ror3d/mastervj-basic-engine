@@ -1,7 +1,10 @@
 #include "Scene/SetRenderTargetSceneRendererCommand.h"
 #include "Engine/Engine.h"
 
-CSetRenderTargetSceneRendererCommand::CSetRenderTargetSceneRendererCommand(CXMLTreeNode &TreeNode) 
+#include <Graphics/Context/ContextManager.h>
+#include <Graphics/Texture/TextureManager.h>
+
+CSetRenderTargetSceneRendererCommand::CSetRenderTargetSceneRendererCommand(CXMLTreeNode &TreeNode)
 	:CStagedTexturedSceneRendererCommand(TreeNode)
 {
 	setName(TreeNode.GetPszProperty("name"));

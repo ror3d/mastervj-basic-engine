@@ -1,6 +1,7 @@
 #include "ScriptedComponent.h"
 
-#include "Core/Engine/Engine.h"
+#include <Core/Engine/Engine.h>
+#include <Base/Scripting/ScriptManager.h>
 
 CScriptedComponent::CScriptedComponent(const std::string &Name, CRenderableObject *Owner, const
 	std::string &FnOnCreate, const std::string &FnOnDestroy, const std::string

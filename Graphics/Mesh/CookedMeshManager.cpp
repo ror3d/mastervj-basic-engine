@@ -1,6 +1,7 @@
 #include "CookedMeshmanager.h"
 
 #include <Engine/Engine.h>
+#include <PhysX/PhysXManager.h>
 
 #include <sstream>
 

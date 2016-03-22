@@ -1,9 +1,15 @@
 #include "Scene/DeferredShadingSceneRendererCommand.h"
 #include "Renderable/RenderableObjectTechnique.h"
-#include "Light/Light.h"
+#include <Core/Debug/DebugPerf.h>
 
 #include <Core/Engine/Engine.h>
-#include <Core/Debug/DebugPerf.h>
+#include <Graphics/Context/ContextManager.h>
+#include <Graphics/Texture/TextureManager.h>
+#include <Graphics/Material/MaterialManager.h>
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Light/LightManager.h>
+#include <Graphics/Material/Material.h>
+#include "Light/Light.h"
 
 CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CStagedTexturedSceneRendererCommand(TreeNode)

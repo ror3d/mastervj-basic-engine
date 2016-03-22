@@ -1,6 +1,7 @@
 #include "Texture.h"
 
 #include "Context/ContextManager.h"
+#include <Graphics/Texture/TextureManager.h>
 #include <Engine/Engine.h>
 #include <d3dx11.h>
 

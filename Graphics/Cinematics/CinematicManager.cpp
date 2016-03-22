@@ -4,6 +4,7 @@
 #include "Engine/Engine.h"
 #include "Cinematics/CinematicObject.h"
 #include "Cinematics/CameraKeyController.h"
+#include <Graphics/Camera/CameraManager.h>
 
 CCinematicManager::CCinematicManager()
 {
@@ -72,6 +73,6 @@ void CCinematicManager::Play()
 	for (auto it = m_cinematicsCameras.begin(); it != m_cinematicsCameras.end(); it++)
 	{
 		(*it)->ResetTime();
-		(*it)->Play(); 
+		(*it)->Play();
 	}
 }

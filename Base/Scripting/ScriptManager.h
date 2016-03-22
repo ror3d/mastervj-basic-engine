@@ -25,6 +25,7 @@ public:
 	void RegisterLUAFunctionsAfter();
 	sel::State * getLuaState(){ return m_state; }
 
+	void destroy() {}
 private:
 	sel::State *m_state;
 };

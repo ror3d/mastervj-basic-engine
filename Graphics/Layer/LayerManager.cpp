@@ -1,5 +1,5 @@
 #include "LayerManager.h"
-#include "Mesh/MeshInstance.h"
+#include "Renderable/MeshInstance.h"
 #include "Animation/AnimatedInstanceModel.h"
 #include "Renderable/RenderableObjectsManager.h"
 
