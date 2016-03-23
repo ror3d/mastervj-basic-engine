@@ -32,6 +32,9 @@
     <ClInclude Include="Cinematics\CinematicPlayer.h" />
     <ClInclude Include="Context\ContextManager.h" />
     <ClInclude Include="Effect\EffectGeometryShader.h" />
+    <ClInclude Include="GUI\GUIComponent.h" />
+    <ClInclude Include="GUI\GUIContainer.h" />
+    <ClInclude Include="GUI\GUIManager.h" />
     <ClInclude Include="Layer\LayerManager.h" />
     <ClInclude Include="Light\LightEffectParameters.h" />
     <ClInclude Include="Debug\DebugRender.h" />
@@ -122,6 +125,9 @@
     <ClCompile Include="Effect\EffectTechnique.cpp" />
     <ClCompile Include="Effect\EffectVertexShader.cpp" />
     <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="GUI\GUIComponent.cpp" />
+    <ClCompile Include="GUI\GUIContainer.cpp" />
+    <ClCompile Include="GUI\GUIManager.cpp" />
     <ClCompile Include="Layer\LayerManager.cpp" />
     <ClCompile Include="Light\Light.cpp" />
     <ClCompile Include="Light\LightManager.cpp" />

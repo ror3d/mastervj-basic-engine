@@ -49,6 +49,9 @@
     <Filter Include="CinematicsAction">
       <UniqueIdentifier>{4b39dac3-15c1-4c01-8256-ca8fa68f6f82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{55142bad-d6ef-45bb-bdf5-f2a21e856400}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h">
@@ -283,6 +286,15 @@
     <ClInclude Include="Mesh\RenderableVertexs.h">
       <Filter>Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\GUIManager.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIComponent.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUIContainer.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -501,6 +513,15 @@
     </ClCompile>
     <ClCompile Include="Renderable\MeshInstance.cpp">
       <Filter>Renderable</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUIManager.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUIComponent.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUIContainer.cpp">
+      <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
