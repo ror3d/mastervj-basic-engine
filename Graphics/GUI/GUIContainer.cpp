@@ -18,19 +18,29 @@ void CGUIContainer::UpdateRect( Rect parentPxRect )
 {
 	CGUIContainer::UpdateRect( parentPxRect );
 
-	// TODO update children
+	Rect r = GetPxRect();
+	for ( auto &child : m_orderedComponents )
+	{
+		child->UpdateRect( r );
+	}
 }
 
 
 void CGUIContainer::Update( float deltaTime )
 {
-	// TODO
+	for ( auto &child : m_orderedComponents )
+	{
+		child->Update( deltaTime );
+	}
 }
 
 
-void CGUIContainer::Render()
+void CGUIContainer::Render( CGUIRenderer* batch )
 {
-	// TODO
+	for ( auto &child : m_orderedComponents )
+	{
+		child->Render( batch );
+	}
 }
 
 

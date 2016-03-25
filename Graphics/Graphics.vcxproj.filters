@@ -295,6 +295,12 @@
     <ClInclude Include="GUI\GUIContainer.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\GUIRenderer.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUISprite.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -521,6 +527,12 @@
       <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="GUI\GUIContainer.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUIRenderer.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\GUISprite.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
   </ItemGroup>

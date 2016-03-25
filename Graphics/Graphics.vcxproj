@@ -35,6 +35,8 @@
     <ClInclude Include="GUI\GUIComponent.h" />
     <ClInclude Include="GUI\GUIContainer.h" />
     <ClInclude Include="GUI\GUIManager.h" />
+    <ClInclude Include="GUI\GUIRenderer.h" />
+    <ClInclude Include="GUI\GUISprite.h" />
     <ClInclude Include="Layer\LayerManager.h" />
     <ClInclude Include="Light\LightEffectParameters.h" />
     <ClInclude Include="Debug\DebugRender.h" />
@@ -128,6 +130,8 @@
     <ClCompile Include="GUI\GUIComponent.cpp" />
     <ClCompile Include="GUI\GUIContainer.cpp" />
     <ClCompile Include="GUI\GUIManager.cpp" />
+    <ClCompile Include="GUI\GUIRenderer.cpp" />
+    <ClCompile Include="GUI\GUISprite.cpp" />
     <ClCompile Include="Layer\LayerManager.cpp" />
     <ClCompile Include="Light\Light.cpp" />
     <ClCompile Include="Light\LightManager.cpp" />

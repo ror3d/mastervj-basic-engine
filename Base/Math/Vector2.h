@@ -56,7 +56,7 @@ public:
 
 
   // Producto escalar (*)
-  inline T operator * (const Vector2<T>& otro) const;
+  inline Vector2<T> operator * (const Vector2<T>& otro) const;
   
   
   // Operadores y funciones de comparacion

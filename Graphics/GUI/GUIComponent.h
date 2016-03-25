@@ -7,7 +7,10 @@ struct Rect
 {
 	union
 	{
-		Vect2f position;
+		struct
+		{
+			Vect2f position;
+		};
 		struct
 		{
 			float x, y;
@@ -15,7 +18,10 @@ struct Rect
 	};
 	union
 	{
-		Vect2f size;
+		struct
+		{
+			Vect2f size;
+		};
 		struct
 		{
 			float w, h;
@@ -28,15 +34,18 @@ struct Rect
 	Rect( float x, float y, float w, float h ) : position( x, y ), size( w, h ) {}
 
 	Rect( const Rect& r ) : position(r.position), size(r.size) {}
-	Rect( Rect&& ) = default;
 };
 
 class CGUIContainer;
+class CGUIRenderer;
 
 class CGUIComponent : public CNamed
 {
 	CGUIContainer * m_parent;
 
+	/**
+	 * Position of the anchors, relative to the top-left vertex of the containing rect.
+	 */
 	struct
 	{
 		Vect2f topLeft, bottomRight;
@@ -123,5 +132,5 @@ public:
 
 	virtual void Update( float deltaTime ) = 0;
 
-	virtual void Render() = 0;
+	virtual void Render( CGUIRenderer* batch ) = 0;
 };

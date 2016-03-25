@@ -359,9 +359,10 @@ void Vector2<T>::GetPolar(T& ang, T& length) const
 /// Operador vectorial: producto escalar (dot product)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T> 
-inline T Vector2<T>::operator * (const Vector2<T>& otro) const
+inline Vector2<T> Vector2<T>::operator * (const Vector2<T>& otro) const
 {
-  return (x * otro.x + y * otro.y);
+  //return (x * otro.x + y * otro.y);
+	return Vector2<T>( x*otro.x, y*otro.y );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

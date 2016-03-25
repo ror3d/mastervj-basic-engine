@@ -107,7 +107,33 @@ Rect CGUIComponent::GetPxRect() const
 
 void CGUIComponent::UpdateRect( Rect parentPxRect )
 {
-	DEBUG_ASSERT( !"Implement!!!" );
+	Vect2f anchorTL = parentPxRect.position + parentPxRect.size * m_parentAnchors.topLeft;
+	Vect2f anchorBR = parentPxRect.position + parentPxRect.size * m_parentAnchors.bottomRight;
+
+	Vect2f anchorSize = anchorBR - anchorTL;
+
+	if ( anchorSize.x < 1.f/parentPxRect.w )
+	{
+		m_pxRect.w = m_size.x * parentPxRect.w;
+	}
+	else
+	{
+		m_pxRect.w = m_size.x * anchorSize.x;
+	}
+	if ( anchorSize.y < 1.f/parentPxRect.h )
+	{
+		m_pxRect.h = m_size.y * parentPxRect.w;
+	}
+	else
+	{
+		m_pxRect.h = m_size.y * anchorSize.x;
+	}
+
+
+
+	Vect2f pivotOffset = m_pivotOffset * m_pxRect.size;
+
+	m_pxRect.position = anchorTL + anchorSize * m_pivotPosition + pivotOffset;
 }
 
 

@@ -26,5 +26,5 @@ public:
 
 	virtual void Update( float deltaTime );
 
-	virtual void Render();
+	virtual void Render( CGUIRenderer* batch );
 };
