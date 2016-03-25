@@ -73,9 +73,13 @@ class CGUIComponent : public CNamed
 
 public:
 
+	CGUIComponent();
+
 	CGUIComponent( CGUIContainer* parent, const CXMLTreeNode& node );
 
 	virtual ~CGUIComponent();
+
+	void SetParent( CGUIContainer * parent );
 
 	CGUIContainer * GetParent() const { return m_parent; }
 

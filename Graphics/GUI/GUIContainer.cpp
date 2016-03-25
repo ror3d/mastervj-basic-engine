@@ -2,7 +2,7 @@
 
 
 CGUIContainer::CGUIContainer( CGUIContainer* parent, const CXMLTreeNode& node )
-	: CGUIContainer(parent, node)
+	: CGUIComponent(parent, node)
 {
 	// TODO: Init components
 }

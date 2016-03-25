@@ -8,6 +8,7 @@ CGUIComponent::CGUIComponent( CGUIContainer* parent, const CXMLTreeNode& node )
 	: CNamed(node)
 	, m_parent(parent)
 {
+	// TODO: Get values from node
 }
 
 CGUIComponent::~CGUIComponent()
@@ -136,4 +137,9 @@ void CGUIComponent::UpdateRect( Rect parentPxRect )
 	m_pxRect.position = anchorTL + anchorSize * m_pivotPosition + pivotOffset;
 }
 
+void CGUIComponent::SetParent( CGUIContainer * parent )
+{
+	m_parent = parent;
+	// TODO: remove child from old parent and add to new one
+}
 

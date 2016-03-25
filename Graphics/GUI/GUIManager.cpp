@@ -2,6 +2,18 @@
 #include "GUIContainer.h"
 #include "GUIRenderer.h"
 
+/** Example XML page
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<page name="main-menu" base-size="1920 1080" size="100% 100%">
+	<frame size="100 100" offset="50 50">
+		<image size="50% 50%" offset="50% 50%" pivot="50% 50%" />
+	</frame>
+</page>
+
+*/
+
+
 CGUIManager::CGUIManager()
 {
 	m_renderer = new CGUIRenderer();

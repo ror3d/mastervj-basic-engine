@@ -17,6 +17,8 @@ class CGUIContainer : public CGUIComponent
 
 public:
 
+	CGUIContainer();
+
 	CGUIContainer( CGUIContainer* parent, const CXMLTreeNode& node );
 
 	~CGUIContainer();
