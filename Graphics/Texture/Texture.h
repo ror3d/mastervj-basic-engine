@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <Utils/Named.h>
+#include <Base/Utils/Named.h>
 #include <set>
 
 struct ID3D11ShaderResourceView;

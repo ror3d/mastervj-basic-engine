@@ -43,11 +43,16 @@ private:
 public:
 	CMaterial(CXMLTreeNode &TreeNode);
 	virtual ~CMaterial();
-	virtual void apply(CRenderableObjectTechnique *RenderableObjectTechnique = NULL);
-	CRenderableObjectTechnique * getRenderableObjectTechique(){ return m_RenderableObjectTechnique; }
-	std::vector<CMaterialParameter *> * getParameters(){ return &m_Parameters;  }
-	void * GetNextParameterAddress(unsigned int NumBytes);
 	void destroy();
+
+	virtual void apply(CRenderableObjectTechnique *RenderableObjectTechnique = NULL);
+
+	CRenderableObjectTechnique * getRenderableObjectTechique(){ return m_RenderableObjectTechnique; }
+
+	std::vector<CMaterialParameter *> * getParameters(){ return &m_Parameters;  }
+	
+	CTexture *GetTexture( uint32 id );
+	CTexture *GetTextureAtStage( uint32 stage );
 };
 
 #endif
