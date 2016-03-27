@@ -81,21 +81,83 @@ Rectf CGUI::getAligned( const Rectf &r, Alignment alignToParent, Alignment align
 
 	return alignedRect;
 }
+
 Rectf CGUI::getNormalized( const Rectf &r )
 {
 	return Rectf( r.x / m_screen.w, r.y / m_screen.h, r.w / m_screen.w, r.h / m_screen.h );
 }
 
-void CGUI::Image( const Rectf& r, const std::string& material, uint32 sprite, Alignment alignToParent, Alignment alignSelf )
+void CGUI::Image(const std::string& material, const Rectf& r, Alignment alignToParent, Alignment alignSelf, uint32 sprite)
 {
 	DEBUG_ASSERT( m_inGUI );
 
-	Rectf imgRect = getNormalized(getAligned( r, alignToParent, alignSelf ));
+	Rectf imgRect = getAligned( r, alignToParent, alignSelf );
 
-	/*
-	m_contextManager->DrawScreenQuad( material->getRenderableObjectTechique()->GetEffectTechnique(),
-		material->GetTexture(0), imgRect.x, imgRect.y, imgRect.w, imgRect.h, CColor(1, 1, 1, 1) );
-		*/
+	ImageInternal( material, imgRect, sprite );
+}
+
+CGUI::MouseButtonState CGUI::Button( const std::string& material,
+									 const Rectf& r,
+									 Alignment alignToParent,
+									 Alignment alignSelf,
+									 uint32 idleSprite,
+									 int32 overSprite,
+									 int32 downSprite )
+{
+	Button( material, r, Vect2f( 0, 0 ), alignToParent, alignSelf, idleSprite, overSprite, downSprite );
+}
+
+CGUI::MouseButtonState CGUI::Button( const std::string& material,
+									 const Rectf& image,
+									 const Vect2f& activeAreaSizeOffset,
+									 Alignment alignToParent,
+									 Alignment alignSelf,
+									 uint32 idleSprite,
+									 int32 overSprite,
+									 int32 downSprite )
+{
+	DEBUG_ASSERT( m_inGUI );
+
+	if ( overSprite < 0 )
+	{
+		overSprite = idleSprite + 1;
+	}
+	if ( downSprite < 0 )
+	{
+		downSprite = overSprite + 1;
+	}
+
+	Rectf imgRect = getAligned( image, alignToParent, alignSelf );
+
+	Rectf activeBound = Rectf( imgRect.position - activeAreaSizeOffset, imgRect.size + activeAreaSizeOffset * 2 );
+
+	MouseButtonState state = getMouseState( activeBound );
+
+	uint32 sprite;
+	switch ( state )
+	{
+		case CGUI::MouseButtonState::UP:
+			break;
+		case CGUI::MouseButtonState::CLICKED:
+			break;
+		case CGUI::MouseButtonState::DOWN:
+			break;
+		case CGUI::MouseButtonState::RELEASED:
+			break;
+	}
+	ImageInternal( material, imgRect, sprite );
+
+}
+
+CGUI::MouseButtonState CGUI::getMouseState( const Rectf& bounds )
+{
+	return MouseButtonState::UP;
+}
+
+
+void CGUI::ImageInternal( const std::string& material, const Rectf& r, uint32 sprite = 0 )
+{
+	Rectf imgRect = getNormalized( r );
 	m_guiComponents.resize( 1 );
 	m_guiComponents[0].Position = Vect3f( imgRect.x, imgRect.y, 0 );
 

@@ -94,12 +94,20 @@ public:
 	void BeginGUI();
 	void EndGUI();
 
-	void Image(const Rectf& r, const std::string& material, uint32 sprite = 0, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT);
+	void Image(const std::string& material, const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT, uint32 sprite = 0);
+
+	MouseButtonState Button( const std::string& material, const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT, uint32 idleSprite = 0, int32 overSprite = -1, int32 downSprite = -1);
+	MouseButtonState Button( const std::string& material, const Rectf& image, const Vect2f& activeAreaSizeOffset, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT, uint32 idleSprite = 0, int32 overSprite = -1, int32 downSprite = -1);
 
 	void BeginFrame( const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT );
 	void EndFrame();
 
 private:
+
+	void ImageInternal( const std::string& material, const Rectf& r, uint32 sprite = 0 );
+
 	Rectf getAligned( const Rectf &r, Alignment alignToParent, Alignment alignSelf );
 	Rectf getNormalized( const Rectf &r );
+
+	MouseButtonState getMouseState( const Rectf& bounds );
 };
