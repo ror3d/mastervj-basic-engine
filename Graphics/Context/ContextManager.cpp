@@ -224,8 +224,9 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 		CHECKED_RELEASE(m_DepthStencil);
 		CHECKED_RELEASE(m_DepthStencilView);
 
-		m_SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
-		HRESULT hr = CreateBackBuffer(hWnd, Width, Height);
+		HRESULT hr = m_SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
+		DEBUG_ASSERT(hr == S_OK);
+		hr = CreateBackBuffer(hWnd, Width, Height);
 		DEBUG_ASSERT(hr == S_OK);
 
 		m_Viewport.Width = (FLOAT)Width;
@@ -236,6 +237,7 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 		m_Viewport.TopLeftY = 0;
 
 		m_DeviceContext->RSSetViewports(1, &m_Viewport);
+
 		CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 	}
 }
