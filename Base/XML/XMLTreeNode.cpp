@@ -224,6 +224,16 @@ xmlChar* CXMLTreeNode::GetProperty (const char* _pszKey) const
   return value;
 }
 
+std::vector<std::string> CXMLTreeNode::GetProperties() const
+{
+  DEBUG_ASSERT(m_pNode);
+  std::vector<std::string> ret;
+  for (auto p = m_pNode->properties; p != nullptr; p = p->next)
+  {
+	  ret.push_back((const char*)(p->name));
+  }
+  return ret;
+}
 
 //----------------------------------------------------------------------------
 // Returns an integer param if found. Else a default value

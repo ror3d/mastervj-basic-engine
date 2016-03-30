@@ -7,6 +7,10 @@
 #include <Graphics/Renderable/RenderableObjectTechnique.h>
 #include <Graphics/Mesh/RenderableVertexs.h>
 
+#include <Core/Input/InputManager.h>
+
+#include <Base/XML/XMLTreeNode.h>
+
 CGUI::CGUI()
 	: m_guiComponents( MAX_GUI_ELEMENTS )
 	, m_inGUI( false )
@@ -19,9 +23,66 @@ CGUI::~CGUI()
 	delete m_guiComponentsVtxs;
 }
 
-void CGUI::Init(CContextManager* cm)
+void CGUI::Init(const std::string& xml)
 {
-	m_contextManager = cm;
+	m_contextManager = CEngine::GetSingleton().getContextManager();
+
+	auto mm = CEngine::GetSingleton().getMaterialManager();
+
+	CXMLTreeNode xf;
+	if (xf.LoadFile(xml.c_str()))
+	{
+		DEBUG_ASSERT(xf.GetName() == std::string("gui_elements"));
+
+		for (int i = 0; i < xf.GetNumChildren(); ++i)
+		{
+			auto n = xf(i);
+			std::string elemTag(n.GetName());
+
+			if (elemTag == "spritemap")
+			{
+				std::string spritemapName = n.GetPszProperty("name");
+				int sWidth = n.GetIntProperty("width");
+				int sHeight = n.GetIntProperty("height");
+				for (int j = 0; j < n.GetNumChildren(); ++j)
+				{
+					auto spItem = n(j);
+					std::string spTag(spItem.GetName());
+					if (spTag == "material")
+					{
+						CMaterial *mat = new CMaterial(spItem);
+						mm->add(mat->getName(), mat);
+						m_spriteMats[spritemapName] = mat;
+					}
+					else if (spTag == "sprite")
+					{
+						std::string spName = spItem.GetPszProperty("name", "", false);
+						DEBUG_ASSERT(spName.size() != 0);
+						if (spName.size() == 0) continue;
+						SpriteDesc_t sprite;
+						sprite.spritemap = spritemapName;
+						Vect4f q = spItem.GetVect4fProperty("xywh", Vect4f(), false);
+						sprite.sprite = Rectf(q.x/sWidth, q.y/sHeight, q.z/sWidth, q.w/sHeight);
+						m_sprites[spName] = sprite;
+					}
+				}
+			}
+			else
+			{
+				auto ps = n.GetProperties();
+				std::string elemName = n.GetPszProperty("name", "", false);
+				DEBUG_ASSERT(elemName.size() != 0);
+				if (elemName.size() == 0) continue;
+				std::map<std::string, std::string> props;
+				props["type"] = elemTag;
+				for (auto const &p : ps)
+				{
+					props[p] = n.GetPszProperty(p.c_str(), "", false);
+				}
+				m_elements[elemName] = std::move(props);
+			}
+		}
+	}
 }
 
 void CGUI::BeginGUI()
@@ -32,7 +93,8 @@ void CGUI::BeginGUI()
 	m_screen = Rectf( 0, 0, m_contextManager->GetWidth(), m_contextManager->GetHeight() );
 	m_nestedPositionStack.clear();
 	m_nestedPositionStack.push_back( m_screen );
-	m_inGUI = true;;
+	m_mousePos = CInputManager::GetInputManager()->GetCursor();
+	m_inGUI = true;
 }
 
 void CGUI::EndGUI()
@@ -84,93 +146,115 @@ Rectf CGUI::getAligned( const Rectf &r, Alignment alignToParent, Alignment align
 
 Rectf CGUI::getNormalized( const Rectf &r )
 {
-	return Rectf( r.x / m_screen.w, r.y / m_screen.h, r.w / m_screen.w, r.h / m_screen.h );
+	Rectf n( r.x / m_screen.w, r.y / m_screen.h, r.w / m_screen.w, r.h / m_screen.h );
+	n.position = n.position * 2 - Vect2f(1, 1);
+	n.size *= 2;
+	n.position.y = -n.position.y - n.size.y;
+	return n;
 }
 
-void CGUI::Image(const std::string& material, const Rectf& r, Alignment alignToParent, Alignment alignSelf, uint32 sprite)
+void CGUI::Image(const std::string& spriteName, const Rectf& r, Alignment alignToParent, Alignment alignSelf)
 {
 	DEBUG_ASSERT( m_inGUI );
 
 	Rectf imgRect = getAligned( r, alignToParent, alignSelf );
 
-	ImageInternal( material, imgRect, sprite );
+	ImageInternal( spriteName, imgRect );
 }
 
-CGUI::MouseButtonState CGUI::Button( const std::string& material,
+CGUI::MouseButtonState CGUI::Button( const std::string& buttonSkin,
 									 const Rectf& r,
 									 Alignment alignToParent,
-									 Alignment alignSelf,
-									 uint32 idleSprite,
-									 int32 overSprite,
-									 int32 downSprite )
+									 Alignment alignSelf )
 {
-	Button( material, r, Vect2f( 0, 0 ), alignToParent, alignSelf, idleSprite, overSprite, downSprite );
+	return Button( buttonSkin, r, Vect2f( 0, 0 ), alignToParent, alignSelf );
 }
 
-CGUI::MouseButtonState CGUI::Button( const std::string& material,
+CGUI::MouseButtonState CGUI::Button( const std::string& buttonSkin,
 									 const Rectf& image,
 									 const Vect2f& activeAreaSizeOffset,
 									 Alignment alignToParent,
-									 Alignment alignSelf,
-									 uint32 idleSprite,
-									 int32 overSprite,
-									 int32 downSprite )
+									 Alignment alignSelf )
 {
 	DEBUG_ASSERT( m_inGUI );
-
-	if ( overSprite < 0 )
-	{
-		overSprite = idleSprite + 1;
-	}
-	if ( downSprite < 0 )
-	{
-		downSprite = overSprite + 1;
-	}
 
 	Rectf imgRect = getAligned( image, alignToParent, alignSelf );
 
 	Rectf activeBound = Rectf( imgRect.position - activeAreaSizeOffset, imgRect.size + activeAreaSizeOffset * 2 );
 
-	MouseButtonState state = getMouseState( activeBound );
+	auto buttonDesc = m_elements[buttonSkin];
 
-	uint32 sprite;
-	switch ( state )
+	DEBUG_ASSERT(buttonDesc["type"] == "button");
+
+	std::string sprite = buttonDesc["normal"];
+	CGUI::MouseButtonState rstate = MouseButtonState::OUTSIDE;
+	if (isMouseOver(activeBound))
 	{
-		case CGUI::MouseButtonState::UP:
-			break;
-		case CGUI::MouseButtonState::CLICKED:
-			break;
-		case CGUI::MouseButtonState::DOWN:
-			break;
-		case CGUI::MouseButtonState::RELEASED:
-			break;
-	}
-	ImageInternal( material, imgRect, sprite );
+		MouseButtonState state = getMouseState();
 
+		switch (state)
+		{
+			case CGUI::MouseButtonState::CLICKED:
+			case CGUI::MouseButtonState::DOWN:
+			case CGUI::MouseButtonState::RELEASED:
+				sprite = buttonDesc["pressed"];
+				break;
+			case CGUI::MouseButtonState::UP:
+				sprite = buttonDesc["over"];
+				break;
+		}
+		rstate = state;
+	}
+	ImageInternal( sprite, imgRect );
+
+	return rstate;
 }
 
-CGUI::MouseButtonState CGUI::getMouseState( const Rectf& bounds )
+CGUI::MouseButtonState CGUI::getMouseState()
 {
+	if (CInputManager::GetInputManager()->IsActionActive("MOUSE_PRESSED"))
+	{
+		return MouseButtonState::CLICKED;
+	}
+	if (CInputManager::GetInputManager()->IsActionActive("MOUSE_DOWN"))
+	{
+		return MouseButtonState::DOWN;
+	}
+	if (CInputManager::GetInputManager()->IsActionActive("MOUSE_RELEASED"))
+	{
+		return MouseButtonState::RELEASED;
+	}
 	return MouseButtonState::UP;
 }
 
+bool CGUI::isMouseOver(const Rectf& rect)
+{
+	Vect2i mouse = m_mousePos;
+	if (mouse.x >= rect.x && mouse.x <= rect.x + rect.w
+		&& mouse.y >= rect.y && mouse.y <= rect.y + rect.h)
+	{
+		return true;
+	}
+	return false;
+}
 
-void CGUI::ImageInternal( const std::string& material, const Rectf& r, uint32 sprite = 0 )
+
+void CGUI::ImageInternal( const std::string& spriteName, const Rectf& r )
 {
 	Rectf imgRect = getNormalized( r );
 	m_guiComponents.resize( 1 );
 	m_guiComponents[0].Position = Vect3f( imgRect.x, imgRect.y, 0 );
 
-	m_guiComponents[0].Color = CColor( 1, 1, 1, 1 );
-
 	m_guiComponents[0].UV = imgRect.size;
 
-	m_guiComponents[0].UV2.x = sprite;
+	auto &sprite = m_sprites[spriteName];
+
+	m_guiComponents[0].Color = CColor( sprite.sprite.x, sprite.sprite.y, sprite.sprite.w, sprite.sprite.h );
 
 
 	m_guiComponentsVtxs->UpdateVertices(m_contextManager->GetDeviceContext(), m_guiComponents.data(), m_guiComponents.size());
 
-	CMaterial* mat = CEngine::GetSingleton().getMaterialManager()->get( material );
+	CMaterial* mat = m_spriteMats[sprite.spritemap];
 	auto technique = mat->getRenderableObjectTechique()->GetEffectTechnique();
 
 	mat->apply();

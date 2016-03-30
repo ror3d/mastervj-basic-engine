@@ -175,6 +175,24 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 	}
 
 	{
+		Action action = { "MOUSE_PRESSED", MOUSE, Action::ON_PRESS };
+		action.mouse.button = Action::RIGHT;
+
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "MOUSE_DOWN", MOUSE, Action::WHILE_PRESSED };
+		action.mouse.button = Action::RIGHT;
+
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "MOUSE_RELEASED", MOUSE, Action::ON_RELEASE };
+		action.mouse.button = Action::RIGHT;
+
+		m_Actions.push_back(action);
+	}
+	{
 		Action action = { "MOVE_CAMERA", MOUSE, Action::WHILE_PRESSED };
 		action.mouse.button = Action::RIGHT;
 

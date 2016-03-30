@@ -4,6 +4,8 @@
 #include <Base/Math/Color.h>
 #include <Graphics/Mesh/VertexTypes.h>
 #include <vector>
+#include <map>
+#include <string>
 
 template <typename T>
 struct Rect
@@ -67,6 +69,7 @@ public:
 	};
 	enum class MouseButtonState
 	{
+		OUTSIDE = 0,
 		UP,
 		CLICKED,
 		DOWN,
@@ -85,29 +88,49 @@ private:
 	CRenderableVertexs *m_guiComponentsVtxs;
 
 	std::vector<Rectf> m_nestedPositionStack;
+
+	Vect2i m_mousePos;
+
+	std::map<std::string, CMaterial*> m_spriteMats;
+
+	struct SpriteDesc_t
+	{
+		std::string spritemap;
+		Rectf sprite;
+	};
+	std::map<std::string, SpriteDesc_t> m_sprites;
+
+	std::map<std::string, std::map<std::string, std::string>> m_elements;
+
 public:
 	CGUI();
 	~CGUI();
 
-	void Init( CContextManager* cm );
+	void Init( const std::string& xml );
 
 	void BeginGUI();
 	void EndGUI();
 
-	void Image(const std::string& material, const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT, uint32 sprite = 0);
+	void Image(const std::string& spriteName, const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT);
 
-	MouseButtonState Button( const std::string& material, const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT, uint32 idleSprite = 0, int32 overSprite = -1, int32 downSprite = -1);
-	MouseButtonState Button( const std::string& material, const Rectf& image, const Vect2f& activeAreaSizeOffset, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT, uint32 idleSprite = 0, int32 overSprite = -1, int32 downSprite = -1);
+	MouseButtonState Button( const std::string& buttonSkin, const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT);
+	MouseButtonState Button( const std::string& buttonSkin, const Rectf& image, const Vect2f& activeAreaSizeOffset, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT);
+
+	float Slider();
+
+	float Text();
 
 	void BeginFrame( const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT );
 	void EndFrame();
 
 private:
 
-	void ImageInternal( const std::string& material, const Rectf& r, uint32 sprite = 0 );
+	void ImageInternal( const std::string& spriteName, const Rectf& r );
 
 	Rectf getAligned( const Rectf &r, Alignment alignToParent, Alignment alignSelf );
 	Rectf getNormalized( const Rectf &r );
 
-	MouseButtonState getMouseState( const Rectf& bounds );
+	MouseButtonState getMouseState();
+
+	bool isMouseOver(const Rectf& rect);
 };
