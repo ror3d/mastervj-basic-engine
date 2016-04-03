@@ -1,14 +1,19 @@
 #include "Font.h"
+#include "GUI.h"
 
 #include <Base/XML/XMLTreeNode.h>
 #include <Core/Engine/Engine.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Material/Material.h>
+#include <Graphics/Renderable/RenderableObjectTechnique.h>
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Texture/Texture.h>
+#include <Graphics/Mesh/RenderableVertexs.h>
 
 
-CFont::CFont(CXMLTreeNode& fontNode)
+CFont::CFont(CXMLTreeNode& fontNode, CGUI* gui)
+	: m_glyphs( MAX_GLYPHS_BATCH )
+	, m_gui(gui)
 {
 	auto mm = CEngine::GetSingleton().getMaterialManager();
 	auto tm = CEngine::GetSingleton().getTextureManager();
@@ -57,8 +62,17 @@ CFont::CFont(CXMLTreeNode& fontNode)
 
 	CXMLTreeNode common = font["common"];
 
+	CXMLTreeNode info = font["info"];
+
 	Vect2f pageSize(common.GetFloatProperty("scaleW", 0, false), common.GetFloatProperty("scaleH", 0, false));
 
+	m_fontSize = info.GetFloatProperty( "size", 0, false );
+
+	DEBUG_ASSERT( m_fontSize != 0);
+
+	m_lineHeight = common.GetFloatProperty( "lineHeight", m_fontSize, false );
+
+	m_base = common.GetFloatProperty( "base", m_fontSize, false );
 
 	CXMLTreeNode pages = font["pages"];
 
@@ -85,7 +99,7 @@ CFont::CFont(CXMLTreeNode& fontNode)
 		{
 			continue;
 		}
-		int32 chId = ch.GetIntProperty("id");
+		uchar chId = ch.GetIntProperty("id");
 
 		CharDesc_t cdesc;
 		cdesc.offset = Vect2f(ch.GetFloatProperty("xoffset", 0, false), ch.GetFloatProperty("yoffset", 0, false));
@@ -104,22 +118,175 @@ CFont::CFont(CXMLTreeNode& fontNode)
 	for (int i = 0; i < kerns.GetNumChildren(); ++i)
 	{
 		auto k = kerns(i);
-		int32 f = k.GetIntProperty("first", 0, false);
-		int32 s = k.GetIntProperty("second", 0, false);
-		int32 a = k.GetIntProperty("amount", 0, false);
+		uchar f = k.GetIntProperty("first", 0, false);
+		uchar s = k.GetIntProperty("second", 0, false);
+		uchar a = k.GetIntProperty("amount", 0, false);
 
 		m_kernings[std::make_pair(f, s)] = a;
 	}
+
+	m_glyphsVtxs = new CPointsListRenderableVertexs<GUI_TEXT_VERTEX>(m_glyphs.data(), MAX_GLYPHS_BATCH, MAX_GLYPHS_BATCH, true);
 }
 
 CFont::~CFont()
 {
 }
 
+void CFont::SetColor( const CColor & color )
+{
+	m_color = color;
+}
+
 void CFont::DrawString(const std::string& text, const Rectf& bounds, bool overflowX /*= false*/)
 {
+	ustring str = GetUTF8String( text );
+	Vect2f screenSz = m_gui->m_screen.size;
+	Vect2f pos = bounds.position;
+
+	auto technique = m_material->getRenderableObjectTechique()->GetEffectTechnique();
+	m_material->apply();
+
+	for ( int b = 0; b < str.length(); b += MAX_GLYPHS_BATCH )
+	{
+		m_glyphs.clear();
+
+		uchar lastChar = -1;
+		for ( int i = b; (i - b < MAX_GLYPHS_BATCH) && (i < str.length()); ++i )
+		{
+			uchar c = text[i];
+			auto descIt = m_chars.find( i );
+
+			if ( descIt == m_chars.end() )
+			{
+				c = -1;
+				descIt = m_chars.find( -1 );
+			}
+
+			if ( lastChar == -1 )
+			{
+				auto kernIt = m_kernings.find( std::make_pair( lastChar, c ) );
+				if ( kernIt != m_kernings.end() )
+				{
+					pos.x += kernIt->second;
+				}
+			}
+			auto & desc = descIt->second;
+
+			Rectf charR( pos, desc.size );
+
+			charR.position += desc.offset;
+
+			charR.x /= screenSz.x;
+			charR.y /= screenSz.y;
+			charR.w /= screenSz.x;
+			charR.h /= screenSz.y;
+
+			m_glyphs.push_back( {Vect4f(charR.x, charR.y, charR.w, charR.h), desc.uvRect.position, desc.uvRect.size } );
+
+
+			pos.x += desc.xAdvance;
+
+			lastChar = c;
+		}
+
+		m_glyphsVtxs->UpdateVertices(m_gui->m_contextManager->GetDeviceContext(), m_glyphs.data(), m_glyphs.size());
+
+		m_glyphsVtxs->Render(m_gui->m_contextManager, technique);
+	}
 }
 
 float CFont::GetStringWidth(const std::string& text)
 {
+	return GetStringWidth( GetUTF8String( text ) );
+}
+
+CFont::ustring CFont::GetUTF8String( const std::string & text )
+{
+	ustring str;
+	for ( int i = 0; i < text.length(); ++i )
+	{
+		uchar uc = 0;
+		char c = text[i];
+		if ( c & 0x80 )
+		{
+			int n;
+			if ( c & 0xe0 == 0xc0 )
+			{
+				n = 1;
+				c = c & 0x1f;
+			}
+			else if ( c & 0xf0 == 0xe0 )
+			{
+				n = 2;
+				c = c & 0x0f;
+			}
+			else if ( c & 0xf8 == 0xf0 )
+			{
+				n = 3;
+				c = c & 0x07;
+			}
+			else if ( c & 0xfc == 0xf8 )
+			{
+				n = 4;
+				c = c & 0x03;
+			}
+			else if ( c & 0xfe == 0xfc )
+			{
+				n = 5;
+				c = c & 0x01;
+			}
+			else
+			{
+				DEBUG_ASSERT( false );
+			}
+			uc = c << ( 6 * n );
+			n--;
+			for ( ; n >= 0; --n )
+			{
+				i++;
+				DEBUG_ASSERT( i >= text.length() );
+				c = text[i];
+				DEBUG_ASSERT( c & 0xc0 == 0x80 );
+				c = c & 0x3f;
+				uc = uc | ( c << ( 6 * n ) );
+			}
+		}
+		else
+		{
+			uc = c;
+		}
+		str += uc;
+	}
+	return str;
+}
+
+float CFont::GetStringWidth( const ustring & text )
+{
+	float totalW = 0;
+
+	uchar lastChar = 0;
+	for ( int i = 0; i < text.length(); ++i )
+	{
+		uchar c = text[i];
+		auto descIt = m_chars.find(i);
+
+		if ( descIt == m_chars.end() )
+		{
+			descIt = m_chars.find( -1 );
+		}
+		auto & desc = descIt->second;
+
+		totalW += desc.offset.x + desc.xAdvance;
+
+		auto kernIt = m_kernings.find( std::make_pair( lastChar, c ) );
+		if ( kernIt != m_kernings.end() )
+		{
+			totalW += kernIt->second;
+		}
+
+		lastChar = c;
+	}
+
+
+	return 0.0f;
 }

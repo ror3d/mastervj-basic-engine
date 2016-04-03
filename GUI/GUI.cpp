@@ -17,7 +17,7 @@ CGUI::CGUI()
 	: m_guiComponents( MAX_GUI_ELEMENTS )
 	, m_inGUI( false )
 {
-	m_guiComponentsVtxs = new CPointsListRenderableVertexs<PARTICLE_VERTEX>(m_guiComponents.data(), MAX_GUI_ELEMENTS, MAX_GUI_ELEMENTS, true);
+	m_guiComponentsVtxs = new CPointsListRenderableVertexs<GUI_VERTEX>(m_guiComponents.data(), MAX_GUI_ELEMENTS, MAX_GUI_ELEMENTS, true);
 }
 
 CGUI::~CGUI()
@@ -46,7 +46,7 @@ void CGUI::Init(const std::string& xml)
 			}
 			else if (elemTag == "font")
 			{
-				CFont *font = new CFont(elem);
+				CFont *font = new CFont(elem, this);
 				m_fonts[font->getName()] = font;
 			}
 			else

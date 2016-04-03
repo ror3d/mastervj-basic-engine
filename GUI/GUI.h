@@ -48,11 +48,13 @@ private:
 
 	Rectf m_screen;
 
+	std::vector<Rectf> m_nestedPositionStack;
+
+
 	std::vector<GUI_VERTEX> m_guiComponents;
 
 	CRenderableVertexs *m_guiComponentsVtxs;
 
-	std::vector<Rectf> m_nestedPositionStack;
 
 	Vect2i m_mousePos;
 
@@ -69,6 +71,7 @@ private:
 
 	std::map<std::string, CFont*> m_fonts;
 
+	friend class CFont;
 public:
 	CGUI();
 	~CGUI();
