@@ -7,48 +7,13 @@
 #include <map>
 #include <string>
 
-template <typename T>
-struct Rect
-{
-	union
-	{
-		struct
-		{
-			Vector2<T> position;
-		};
-		struct
-		{
-			T x;
-			T y;
-		};
-	};
-	union
-	{
-		struct
-		{
-			Vector2<T> size;
-		};
-		struct
-		{
-			T w;
-			T h;
-		};
-	};
-
-	bool relative = false;
-
-	Rect() {};
-	Rect( const Rect& r ) : position( r.position ), size( r.size ), relative( r.relative ) {}
-	Rect( Vector2<T> pos, Vector2<T> size, bool relativeToParentSize = false) : position( pos ), size( size ), relative(relativeToParentSize) {}
-	Rect( float x, float y, float w, float h, bool relativeToParentSize = false ) : position( x, y ), size( w, h ), relative(relativeToParentSize) {}
-};
-
-using Rectf = Rect<float>;
-
+#include "./Rect.h"
 
 class CMaterial;
+class CXMLTreeNode;
 class CContextManager;
 class CRenderableVertexs;
+class CFont;
 
 class CGUI
 {
@@ -102,6 +67,8 @@ private:
 
 	std::map<std::string, std::map<std::string, std::string>> m_elements;
 
+	std::map<std::string, CFont*> m_fonts;
+
 public:
 	CGUI();
 	~CGUI();
@@ -118,12 +85,14 @@ public:
 
 	float Slider();
 
-	float Text();
+	float Text(const std::string &font, const std::string &text);
 
 	void BeginFrame( const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT );
 	void EndFrame();
 
 private:
+
+	void InitSpritemap(CXMLTreeNode &spritemapNode);
 
 	void ImageInternal( const std::string& spriteName, const Rectf& r );
 

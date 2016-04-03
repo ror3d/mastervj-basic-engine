@@ -11,11 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dummy.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="GUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Font.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="Rect.h" />
+    <ClInclude Include="Spritemap.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{775AB187-821E-45DB-8861-66F5251D8A2D}</ProjectGuid>

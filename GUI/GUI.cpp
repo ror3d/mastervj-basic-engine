@@ -1,5 +1,7 @@
 #include "GUI.h"
 
+#include "Font.h"
+
 #include <Core/Engine/Engine.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Material/MaterialManager.h>
@@ -21,13 +23,12 @@ CGUI::CGUI()
 CGUI::~CGUI()
 {
 	delete m_guiComponentsVtxs;
+	// TODO: Cleanup all the maps
 }
 
 void CGUI::Init(const std::string& xml)
 {
 	m_contextManager = CEngine::GetSingleton().getContextManager();
-
-	auto mm = CEngine::GetSingleton().getMaterialManager();
 
 	CXMLTreeNode xf;
 	if (xf.LoadFile(xml.c_str()))
@@ -36,51 +37,62 @@ void CGUI::Init(const std::string& xml)
 
 		for (int i = 0; i < xf.GetNumChildren(); ++i)
 		{
-			auto n = xf(i);
-			std::string elemTag(n.GetName());
+			auto elem = xf(i);
+			std::string elemTag(elem.GetName());
 
 			if (elemTag == "spritemap")
 			{
-				std::string spritemapName = n.GetPszProperty("name");
-				int sWidth = n.GetIntProperty("width");
-				int sHeight = n.GetIntProperty("height");
-				for (int j = 0; j < n.GetNumChildren(); ++j)
-				{
-					auto spItem = n(j);
-					std::string spTag(spItem.GetName());
-					if (spTag == "material")
-					{
-						CMaterial *mat = new CMaterial(spItem);
-						mm->add(mat->getName(), mat);
-						m_spriteMats[spritemapName] = mat;
-					}
-					else if (spTag == "sprite")
-					{
-						std::string spName = spItem.GetPszProperty("name", "", false);
-						DEBUG_ASSERT(spName.size() != 0);
-						if (spName.size() == 0) continue;
-						SpriteDesc_t sprite;
-						sprite.spritemap = spritemapName;
-						Vect4f q = spItem.GetVect4fProperty("xywh", Vect4f(), false);
-						sprite.sprite = Rectf(q.x/sWidth, q.y/sHeight, q.z/sWidth, q.w/sHeight);
-						m_sprites[spName] = sprite;
-					}
-				}
+				InitSpritemap(elem);
+			}
+			else if (elemTag == "font")
+			{
+				CFont *font = new CFont(elem);
+				m_fonts[font->getName()] = font;
 			}
 			else
 			{
-				auto ps = n.GetProperties();
-				std::string elemName = n.GetPszProperty("name", "", false);
+				auto ps = elem.GetProperties();
+				std::string elemName = elem.GetPszProperty("name", "", false);
 				DEBUG_ASSERT(elemName.size() != 0);
 				if (elemName.size() == 0) continue;
 				std::map<std::string, std::string> props;
 				props["type"] = elemTag;
 				for (auto const &p : ps)
 				{
-					props[p] = n.GetPszProperty(p.c_str(), "", false);
+					props[p] = elem.GetPszProperty(p.c_str(), "", false);
 				}
 				m_elements[elemName] = std::move(props);
 			}
+		}
+	}
+}
+
+void CGUI::InitSpritemap(CXMLTreeNode &spritemapNode)
+{
+	auto mm = CEngine::GetSingleton().getMaterialManager();
+	std::string spritemapName = spritemapNode.GetPszProperty("name");
+	int sWidth = spritemapNode.GetIntProperty("width");
+	int sHeight = spritemapNode.GetIntProperty("height");
+	for (int j = 0; j < spritemapNode.GetNumChildren(); ++j)
+	{
+		auto spItem = spritemapNode(j);
+		std::string spTag(spItem.GetName());
+		if (spTag == "material")
+		{
+			CMaterial *mat = new CMaterial(spItem);
+			mm->add(mat->getName(), mat);
+			m_spriteMats[spritemapName] = mat;
+		}
+		else if (spTag == "sprite")
+		{
+			std::string spName = spItem.GetPszProperty("name", "", false);
+			DEBUG_ASSERT(spName.size() != 0);
+			if (spName.size() == 0) continue;
+			SpriteDesc_t sprite;
+			sprite.spritemap = spritemapName;
+			Vect4f q = spItem.GetVect4fProperty("xywh", Vect4f(), false);
+			sprite.sprite = Rectf(q.x/sWidth, q.y/sHeight, q.z/sWidth, q.w/sHeight);
+			m_sprites[spName] = sprite;
 		}
 	}
 }

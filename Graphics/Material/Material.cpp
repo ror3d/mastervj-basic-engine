@@ -147,3 +147,16 @@ CTexture *CMaterial::GetTextureAtStage( uint32 stage )
 	}
 	return nullptr;
 }
+
+void CMaterial::SetTextureAtStage(CTexture* tex, uint32 stage)
+{
+	for ( auto &t : m_textures )
+	{
+		if ( t.first == stage )
+		{
+			t.second = tex;
+			return;
+		}
+	}
+	m_textures.push_back(std::make_pair(stage, tex));
+}

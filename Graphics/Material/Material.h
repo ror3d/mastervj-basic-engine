@@ -53,6 +53,8 @@ public:
 	
 	CTexture *GetTexture( uint32 id );
 	CTexture *GetTextureAtStage( uint32 stage );
+
+	void SetTextureAtStage(CTexture* tex, uint32 stage);
 };
 
 #endif
