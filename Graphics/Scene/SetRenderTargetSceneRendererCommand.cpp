@@ -12,10 +12,16 @@ CSetRenderTargetSceneRendererCommand::CSetRenderTargetSceneRendererCommand(CXMLT
 			//XML SceneRenderCommands:
 			//<dynamic_texture name="DiffuseMapTexture" texture_width_as_frame_buffer="true" format_type="A8R8G8B8" create_depth_stencil_buffer="false"/>
 			CDynamicTexture * dynText = new CDynamicTexture(text);
-			m_DynamicTextures.push_back(dynText);
 			CEngine::GetSingleton().getTextureManager()->add(dynText->getName(), dynText);
+			m_DynamicTexturesRefs.push_back(CEngine::GetSingleton().getTextureManager()->get(dynText->getName()));
 		}
 	}
+
+	for (int i = 0; i < m_DynamicTexturesRefs.size(); ++i)
+	{
+		m_DynamicTextures.push_back(dynamic_cast<CDynamicTexture *>(m_DynamicTexturesRefs[i].getRef()));
+	}
+
 	CreateRenderTargetViewVector();
 }
 

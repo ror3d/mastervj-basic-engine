@@ -12,9 +12,9 @@ CStagedTexturedSceneRendererCommand::~CStagedTexturedSceneRendererCommand()
 
 	if (!textureManager->isEmpty())
 	{
-		for (auto const & text : m_DynamicTextures)
+		for (int i = 0; i < m_DynamicTextures.size(); ++i)
 		{
-			textureManager->remove(text->getName());
+			textureManager->remove(m_DynamicTextures[i]->getName());
 		}
 	}
 
@@ -26,9 +26,9 @@ void CStagedTexturedSceneRendererCommand::CreateRenderTargetViewVector()
 {
 	/*El método CreateRenderTargetViewVector se llamará al terminar de leer el nodo
 y se rellenará con todos los RenderTargets de las texturas dinámicas.*/
-	for (auto t : m_DynamicTextures)
+	for (int i = 0; i < m_DynamicTextures.size(); i++)
 	{
-		m_RenderTargetViews.push_back(t->GetRenderTargetView());
+		m_RenderTargetViews.push_back(m_DynamicTextures[i]->GetRenderTargetView());
 	}
 }
 

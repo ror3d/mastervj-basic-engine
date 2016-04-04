@@ -19,7 +19,7 @@ private:
 	CalModel *m_CalModel;
 	CAnimatedCoreModel *m_AnimatedCoreModel;
 	CalHardwareModel *m_CalHardwareModel;
-	std::vector<CMaterial *> m_Materials;
+	std::vector<TMapManager<CMaterial>::Ref> m_Materials;
 	CRenderableVertexs *m_RenderableVertexs;
 	int m_NumVertices;
 	int m_NumFaces;

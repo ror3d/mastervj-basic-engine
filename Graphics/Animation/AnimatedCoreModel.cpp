@@ -1,6 +1,6 @@
 #include "AnimatedCoreModel.h"
 #include "Material/Material.h"
-#include "Material/MaterialManager.h"
+#include <Core/Engine/Engine.h>
 
 #include <cal3d/cal3d.h>
 #include <XML/XMLTreeNode.h>
@@ -21,7 +21,7 @@ CAnimatedCoreModel::~CAnimatedCoreModel()
 	}
 	for (auto it = m_Materials.begin(); it != m_Materials.end(); ++it)
 	{
-		delete *it;
+		delete it->getRef();
 	}
 	m_Materials.clear();
 }
@@ -82,7 +82,9 @@ void CAnimatedCoreModel::Load()
 				}
 				else if (std::string(node.GetName()) == "material")
 				{
-					m_Materials.push_back(new CMaterial(node));
+					CMaterial * mat = new CMaterial(node);
+					CEngine::GetSingleton().getMaterialManager()->add(mat->getName(), mat);
+					m_Materials.push_back(CEngine::GetSingleton().getMaterialManager()->get(mat->getName()));
 				}
 				else if (std::string(node.GetName()) == "animation")
 				{

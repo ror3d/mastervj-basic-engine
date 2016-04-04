@@ -1,6 +1,7 @@
 #ifndef RENDERABLE_OBJECT_H
 #define RENDERABLE_OBJECT_H
 
+#include "Utils/TMapManager.h"
 #include "Graphics/Renderer/3DElement.h"
 #include <Base/Utils/Named.h> 
 
@@ -14,8 +15,8 @@ public:
 
 	CRenderableObject() : CNamed("") {}
 	CRenderableObject(CXMLTreeNode& treeNode) : C3DElement(treeNode), CNamed(treeNode) {}
-
-	CRenderableObjectTechnique * m_renderableObjectTechnique;
+	
+	TMapManager<CRenderableObjectTechnique>::Ref m_renderableObjectTechnique;
 
 	virtual ~CRenderableObject() {}
 	virtual void Update(float ElapsedTime) {}

@@ -33,7 +33,7 @@ void CAnimatedInstanceModel::Initialize(CAnimatedCoreModel *AnimatedCoreModel)
 	m_AnimatedCoreModel = AnimatedCoreModel;
 	m_CalModel = new CalModel(m_AnimatedCoreModel->GetCoreModel());
 	m_CalHardwareModel = new CalHardwareModel(m_AnimatedCoreModel->GetCoreModel());
-	m_Materials = m_AnimatedCoreModel->GetMaterials();
+	m_Materials = std::move(m_AnimatedCoreModel->GetMaterials());
 
 	LoadVertexBuffer();
 }

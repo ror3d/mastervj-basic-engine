@@ -14,7 +14,7 @@ private:
 public:
 	CRenderableObjectTechniqueManager();
 	virtual ~CRenderableObjectTechniqueManager();
-	bool InsertRenderableObjectTechnique(CPoolRenderableObjectTechnique	*PoolRenderableObjectTechniques, 
+	bool InsertRenderableObjectTechnique(TMapManager<CPoolRenderableObjectTechnique>::Ref PoolRenderableObjectTechniques,
 		const std::string &RenderableObjectTechniqueName,
 		const std::string &TechniqueName);
 	void destroy();

@@ -17,11 +17,16 @@ CApplyFiltersSceneRendererCommand::CApplyFiltersSceneRendererCommand(CXMLTreeNod
 		else if (texture.GetName() == std::string("dynamic_texture"))
 		{
 			CDynamicTexture * dynText = new CDynamicTexture(texture);
-			m_DynamicTextures.push_back(dynText);
 			CEngine::GetSingleton().getTextureManager()->add(dynText->getName(), dynText);
+			m_DynamicTexturesRefs.push_back(CEngine::GetSingleton().getTextureManager()->get(dynText->getName()));
 
 			m_Materials.push_back(CEngine::GetSingleton().getMaterialManager()->get(texture.GetPszProperty("material")));
 		}
+	}
+
+	for (int i = 0; i < m_DynamicTexturesRefs.size(); ++i)
+	{
+		m_DynamicTextures.push_back(dynamic_cast<CDynamicTexture *>(m_DynamicTexturesRefs[i].getRef()));
 	}
 }
 

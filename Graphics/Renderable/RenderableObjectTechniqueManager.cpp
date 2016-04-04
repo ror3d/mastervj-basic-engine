@@ -16,7 +16,7 @@ CRenderableObjectTechniqueManager::~CRenderableObjectTechniqueManager()
 	destroy();
 }
 
-bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRenderableObjectTechnique	*PoolRenderableObjectTechniques,
+bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(TMapManager<CPoolRenderableObjectTechnique>::Ref PoolRenderableObjectTechniques,
 	const std::string &RenderableObjectTechniqueName,
 	const std::string &TechniqueName)
 {
@@ -56,6 +56,8 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 				if (l_Pool.GetName() == std::string("pool_renderable_object_technique"))
 				{
 					CPoolRenderableObjectTechnique * l_PoolRenderableObjectTechnique = new CPoolRenderableObjectTechnique(l_Pool);
+					m_PoolRenderableObjectTechniques.add(l_PoolRenderableObjectTechnique->getName(), l_PoolRenderableObjectTechnique);
+
 					for (int j = 0; j < l_Pool.GetNumChildren(); j++)
 					{
 						CXMLTreeNode l_Technique = l_Pool(j);
@@ -71,9 +73,8 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 							l_RenderableObjectTechniqueName = l_Technique.GetPszProperty("name", "");
 							l_TechniqueName = l_Technique.GetPszProperty("technique", "");
 						}
-						InsertRenderableObjectTechnique(l_PoolRenderableObjectTechnique, l_RenderableObjectTechniqueName, l_TechniqueName);
+						InsertRenderableObjectTechnique(m_PoolRenderableObjectTechniques.get(l_PoolRenderableObjectTechnique->getName()), l_RenderableObjectTechniqueName, l_TechniqueName);
 					}
-					m_PoolRenderableObjectTechniques.add(l_PoolRenderableObjectTechnique->getName(), l_PoolRenderableObjectTechnique);
 				}
 			}
 		}
@@ -91,7 +92,7 @@ bool CRenderableObjectTechniqueManager::Reload()
 
 CPoolRenderableObjectTechnique * CRenderableObjectTechniqueManager::getPool(const std::string& pool)
 {
-	return &(*m_PoolRenderableObjectTechniques.get(pool));
+	return m_PoolRenderableObjectTechniques.get(pool).getRef();
 }
 
 TMapManager<CPoolRenderableObjectTechnique> & CRenderableObjectTechniqueManager::GetPoolRenderableObjectTechniques()

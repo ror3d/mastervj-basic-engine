@@ -1,10 +1,12 @@
-#pragma once
+#ifndef ANIMATED_CORE_MODEL_H
+#define ANIMATED_CORE_MODEL_H
 
 #include <vector>
 #include <string>
 
 #include <Base/Utils/Named.h>
 #include <Base/Math/MathTypes.h>
+#include <Base/Utils/TMapManager.h>
 
 
 class CalCoreModel;
@@ -15,7 +17,7 @@ class CAnimatedCoreModel : public CNamed
 {
 private:
 	CalCoreModel *m_CalCoreModel;
-	std::vector<CMaterial *> m_Materials;
+	std::vector<TMapManager<CMaterial>::Ref> m_Materials;
 	std::string m_Path;
 	Vect3f m_BSPosition;
 	Vect3f m_BSRadius;
@@ -27,5 +29,7 @@ public:
 	CAnimatedCoreModel(CXMLTreeNode& treeNode);
 	virtual ~CAnimatedCoreModel();
 	CalCoreModel *GetCoreModel() const;
-	const std::vector<CMaterial *> & GetMaterials() const { return m_Materials; }
+	std::vector<TMapManager<CMaterial>::Ref> GetMaterials() { return std::move(m_Materials); }
 };
+
+#endif
