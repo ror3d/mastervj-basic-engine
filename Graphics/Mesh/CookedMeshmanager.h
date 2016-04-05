@@ -6,7 +6,7 @@
 
 #include <vector>
 
-class CCookedMeshManager : TMapManager<std::vector<uint8>>
+class CCookedMeshManager : public TMapManager<std::vector<uint8>>
 {
 protected:
 	std::string m_cookedMeshesPath;

@@ -41,7 +41,7 @@ CEngine::~CEngine()
 	characterControllerManager->destroy();
 	componentManager->destroy();
 	//debugRender->destroy();
-	//cookedMeshManager->destroy();
+	cookedMeshManager->destroy();
 	//iaManager->destroy();
 
 	delete effectsManager;

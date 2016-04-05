@@ -24,7 +24,7 @@ public:
 	CPoolRenderableObjectTechnique(CXMLTreeNode &TreeNode);
 	virtual ~CPoolRenderableObjectTechnique();
 	void Destroy();
-	void AddElement(const std::string &Name, const std::string &TechniqueName, TMapManager<CRenderableObjectTechnique>::Ref ROTOnRenderableObjectTechniqueManager);
+	void AddElement(const std::string &Name, const std::string &TechniqueName, TMapManager<CRenderableObjectTechnique>::Ref&& ROTOnRenderableObjectTechniqueManager);
 	void Apply();
 };
 

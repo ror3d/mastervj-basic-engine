@@ -42,9 +42,12 @@ protected:
 	dirtyReferencesSet_t m_dirtyReferences;
 
 	T* get_internal(const std::string& name) const;
+	bool m_reloading;
+
 
 public:
 	typedef TMapManager<T> MapManagerType_t;
+
 
 
 	class Ref
@@ -55,6 +58,7 @@ public:
 		TMapManager<T> * manager;
 
 		Ref(const Ref& r) = delete;
+		void operator=(const Ref& r) = delete;
 	public:
 
 		Ref()
@@ -89,7 +93,10 @@ public:
 			if (dirty != nullptr)
 			{
 				manager->release(dirty);
+				dirty = nullptr;
 			}
+			manager = nullptr;
+			ref = nullptr;
 		}
 
 
@@ -156,9 +163,16 @@ public:
 			}
 			return ref;
 		}
+
+		void setRef(const std::string& refName)
+		{
+			name = refName;
+			dirty->b = true;
+		}
 	};
 
 	virtual ~TMapManager();
+	TMapManager() : m_reloading(false) {}
 
 	virtual Ref get(const std::string& name)
 	{
@@ -177,7 +191,15 @@ public:
 template<class T>
 void TMapManager<T>::add(const std::string& name, T* instance)
 {
-	DEBUG_ASSERT(m_resources.find(name) == m_resources.end());
+	DEBUG_ASSERT(m_reloading || m_resources.find(name) == m_resources.end());
+	if (m_reloading)
+	{
+		auto &it = m_resources.find(name);
+		if (it != m_resources.end())
+		{
+			delete it->second;
+		}
+	}
 	m_resources[name] = instance;
 }
 
@@ -191,7 +213,7 @@ void TMapManager<T>::remove(const std::string& name)
 template<class T>
 TMapManager<T>::~TMapManager()
 {
-	DEBUG_ASSERT(m_resources.size() == 0 || "Resources not destroyed!");
+	DEBUG_ASSERT(m_resources.size() == 0 || !"Resources not destroyed!");
 }
 
 template<class T>

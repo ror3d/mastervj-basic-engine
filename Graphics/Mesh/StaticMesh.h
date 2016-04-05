@@ -93,7 +93,7 @@ public:
 	inline void setMaterial(unsigned int idx, TMapManager<CMaterial>::Ref mat)
 	{
 		DEBUG_ASSERT(idx < m_materials.size());
-		m_materials[idx] = mat;
+		m_materials[idx] = std::move(mat);
 	}
 	Vect3f GetBsCenter(){ return m_BsCenter;  }
 	Vect3f GetAabbMin(){ return m_AabbMin;  }

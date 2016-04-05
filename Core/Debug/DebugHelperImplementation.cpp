@@ -199,12 +199,12 @@ void TW_CALL ReloadSceneCommands(void* _app)
 
 void TW_CALL ReloadScene(void* _app)
 {
-	CEngine::GetSingleton().getEffectsManager()->Reload();
-	CEngine::GetSingleton().getRenderableObjectTechniqueManager()->Reload();
-	CEngine::GetSingleton().getMaterialManager()->reload();;
-	CEngine::GetSingleton().getStaticMeshManager()->Reload();
+	//CEngine::GetSingleton().getEffectsManager()->Reload();
+	//CEngine::GetSingleton().getRenderableObjectTechniqueManager()->Reload();
+	CEngine::GetSingleton().getMaterialManager()->reload();
+	//CEngine::GetSingleton().getStaticMeshManager()->Reload();
 	//CEngine::GetSingleton().getAnimatedModelManager()->Reload();
-	CEngine::GetSingleton().getLayerManager()->Reload();
+	//CEngine::GetSingleton().getLayerManager()->Reload();
 	//CEngine::GetSingleton().getLightManager()->reload();
 }
 

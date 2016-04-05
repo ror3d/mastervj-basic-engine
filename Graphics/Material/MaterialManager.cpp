@@ -41,6 +41,8 @@ void CMaterialManager::load(const std::string &Filename)
 
 void CMaterialManager::reload()
 {
-	destroy();
+	m_reloading = true;
+	//destroy();
 	load(m_Filename);
+	m_reloading = false;
 }

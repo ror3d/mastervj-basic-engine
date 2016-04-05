@@ -19,10 +19,7 @@ CAnimatedCoreModel::~CAnimatedCoreModel()
 	{
 		delete m_CalCoreModel;
 	}
-	for (auto it = m_Materials.begin(); it != m_Materials.end(); ++it)
-	{
-		delete it->getRef();
-	}
+
 	m_Materials.clear();
 }
 

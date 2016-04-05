@@ -15,6 +15,7 @@ public:
 
 	void SetEffectTechnique(TMapManager<CEffectTechnique>::Ref EffectTechnique);
 	CEffectTechnique* GetEffectTechnique() { return m_EffectTechnique.getRef(); }
+	TMapManager<CEffectTechnique>::Ref* GetEffectTechniqueRef() { return &m_EffectTechnique; }
 };
 
 #endif
