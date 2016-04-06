@@ -116,7 +116,7 @@ void CGUI::EndGUI()
 	m_inGUI = false;
 }
 
-Rectf CGUI::getAligned( const Rectf &r, Alignment alignToParent, Alignment alignSelf )
+Rectf CGUI::getAligned( const Rectf &r, Rectf::Alignment alignToParent, Rectf::Alignment alignSelf )
 {
 	Rectf alignedRect(r);
 
@@ -147,11 +147,11 @@ Rectf CGUI::getAligned( const Rectf &r, Alignment alignToParent, Alignment align
 		}
 	};
 
-	align( alignedRect.position.x, ( ((uint32)alignToParent) >> 4 ) & 0xf, frame.size.x );
-	align( alignedRect.position.y, ((uint32)alignToParent) & 0xf, frame.size.y );
+	align( alignedRect.position.y, ( ((uint32)alignToParent) >> 4 ) & 0xf, frame.size.y );
+	align( alignedRect.position.x, ( (uint32)alignToParent) & 0xf, frame.size.x );
 
-	align( alignedRect.position.x, ( ( (uint32)alignSelf ) >> 4 ) & 0xf, -alignedRect.size.x );
-	align( alignedRect.position.y, ((uint32)alignSelf) & 0xf, -alignedRect.size.y );
+	align( alignedRect.position.y, ( ((uint32)alignSelf) >> 4 ) & 0xf, -alignedRect.size.y );
+	align( alignedRect.position.x, ( (uint32)alignSelf ) & 0xf, -alignedRect.size.x );
 
 	return alignedRect;
 }
@@ -165,7 +165,7 @@ Rectf CGUI::getNormalized( const Rectf &r )
 	return n;
 }
 
-void CGUI::Image(const std::string& spriteName, const Rectf& r, Alignment alignToParent, Alignment alignSelf)
+void CGUI::Image(const std::string& spriteName, const Rectf& r, Rectf::Alignment alignToParent, Rectf::Alignment alignSelf)
 {
 	DEBUG_ASSERT( m_inGUI );
 
@@ -176,8 +176,8 @@ void CGUI::Image(const std::string& spriteName, const Rectf& r, Alignment alignT
 
 CGUI::MouseButtonState CGUI::Button( const std::string& buttonSkin,
 									 const Rectf& r,
-									 Alignment alignToParent,
-									 Alignment alignSelf )
+									 Rectf::Alignment alignToParent,
+									 Rectf::Alignment alignSelf )
 {
 	return Button( buttonSkin, r, Vect2f( 0, 0 ), alignToParent, alignSelf );
 }
@@ -185,8 +185,8 @@ CGUI::MouseButtonState CGUI::Button( const std::string& buttonSkin,
 CGUI::MouseButtonState CGUI::Button( const std::string& buttonSkin,
 									 const Rectf& image,
 									 const Vect2f& activeAreaSizeOffset,
-									 Alignment alignToParent,
-									 Alignment alignSelf )
+									 Rectf::Alignment alignToParent,
+									 Rectf::Alignment alignSelf )
 {
 	DEBUG_ASSERT( m_inGUI );
 
@@ -274,7 +274,7 @@ void CGUI::ImageInternal( const std::string& spriteName, const Rectf& r )
 	m_guiComponentsVtxs->Render(m_contextManager, technique);
 }
 
-void CGUI::BeginFrame( const Rectf& r, Alignment alignToParent, Alignment alignSelf )
+void CGUI::BeginFrame( const Rectf& r, Rectf::Alignment alignToParent, Rectf::Alignment alignSelf )
 {
 	DEBUG_ASSERT( m_inGUI );
 
@@ -288,4 +288,15 @@ void CGUI::EndFrame()
 	DEBUG_ASSERT( m_nestedPositionStack.size() > 1 );
 
 	m_nestedPositionStack.pop_back();
+}
+
+void CGUI::Text(const std::string &fontName, const std::string &text, const Rectf& bounds, Rectf::Alignment alignToParent /*= Rectf::Alignment::TOP_LEFT*/, Rectf::Alignment alignSelf /*= Rectf::Alignment::TOP_LEFT*/, bool overflowX /*= true*/)
+{
+	DEBUG_ASSERT(m_fonts.find(fontName) != m_fonts.end());
+
+	auto font = m_fonts[fontName];
+
+	font->SetColor(CColor(0, 0, 0, 1));
+	font->SetAlignment(alignSelf);
+	font->DrawString(text, getAligned(bounds, alignToParent, alignSelf), overflowX);
 }

@@ -103,6 +103,10 @@ bool CEffectVertexShader::Load()
 	{
 		l_Loaded = GUI_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
+	else if (m_VertexType == "GUI_TEXT_VERTEX")
+	{
+		l_Loaded = GUI_TEXT_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
 	else
 	{
 		DEBUG_ASSERT(!"Vertex type '%s' not recognized on CEffectVertexShader::Load");

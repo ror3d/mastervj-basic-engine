@@ -48,6 +48,7 @@ class CFont : public CNamed
 	float m_base;
 
 	CColor m_color;
+	Rectf::Alignment m_textAlign;
 
 	struct CharDesc_t
 	{
@@ -69,13 +70,19 @@ class CFont : public CNamed
 
 	ustring GetUTF8String( const std::string& text );
 
-	float GetStringWidth( const ustring& text );
+	float GetStringWidth( const ustring& text, bool offsetFirstCharacter = true );
+
+	float GetLineWidth(const ustring& text, size_t start = 0);
+
+	float GetLineStartXPosition(const ustring& text, const Rectf& bounds, size_t start = 0);
 public:
 
 	CFont(CXMLTreeNode& node, CGUI* gui);
 	~CFont();
 
 	void SetColor( const CColor& color );
+
+	void SetAlignment(Rectf::Alignment textAlign) { m_textAlign = textAlign; }
 
 	void DrawString(const std::string& text, const Rectf& bounds, bool overflowX = false);
 

@@ -20,18 +20,6 @@ class CGUI
 public:
 	static const int MAX_GUI_ELEMENTS = 200;
 
-	enum class Alignment
-	{
-		TOP_LEFT = 0x11,
-		TOP_CENTER = 0x12,
-		TOP_RIGHT = 0x14,
-		MIDDLE_LEFT = 0x21,
-		CENTER = 0x22,
-		MIDDLE_RIGHT = 0x24,
-		BOTTOM_LEFT = 0x41,
-		BOTTOM_CENTER = 0x42,
-		BOTTOM_RIGHT = 0x44
-	};
 	enum class MouseButtonState
 	{
 		OUTSIDE = 0,
@@ -81,16 +69,16 @@ public:
 	void BeginGUI();
 	void EndGUI();
 
-	void Image(const std::string& spriteName, const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT);
+	void Image(const std::string& spriteName, const Rectf& r, Rectf::Alignment alignToParent = Rectf::Alignment::TOP_LEFT, Rectf::Alignment alignSelf = Rectf::Alignment::TOP_LEFT);
 
-	MouseButtonState Button( const std::string& buttonSkin, const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT);
-	MouseButtonState Button( const std::string& buttonSkin, const Rectf& image, const Vect2f& activeAreaSizeOffset, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT);
+	MouseButtonState Button( const std::string& buttonSkin, const Rectf& r, Rectf::Alignment alignToParent = Rectf::Alignment::TOP_LEFT, Rectf::Alignment alignSelf = Rectf::Alignment::TOP_LEFT);
+	MouseButtonState Button( const std::string& buttonSkin, const Rectf& image, const Vect2f& activeAreaSizeOffset, Rectf::Alignment alignToParent = Rectf::Alignment::TOP_LEFT, Rectf::Alignment alignSelf = Rectf::Alignment::TOP_LEFT);
 
 	float Slider();
 
-	float Text(const std::string &font, const std::string &text);
+	void Text(const std::string &font, const std::string &text, const Rectf& bounds, Rectf::Alignment alignToParent = Rectf::Alignment::TOP_LEFT, Rectf::Alignment alignSelf = Rectf::Alignment::TOP_LEFT, bool overflowX = true );
 
-	void BeginFrame( const Rectf& r, Alignment alignToParent = Alignment::TOP_LEFT, Alignment alignSelf = Alignment::TOP_LEFT );
+	void BeginFrame( const Rectf& r, Rectf::Alignment alignToParent = Rectf::Alignment::TOP_LEFT, Rectf::Alignment alignSelf = Rectf::Alignment::TOP_LEFT );
 	void EndFrame();
 
 private:
@@ -99,7 +87,7 @@ private:
 
 	void ImageInternal( const std::string& spriteName, const Rectf& r );
 
-	Rectf getAligned( const Rectf &r, Alignment alignToParent, Alignment alignSelf );
+	Rectf getAligned( const Rectf &r, Rectf::Alignment alignToParent, Rectf::Alignment alignSelf );
 	Rectf getNormalized( const Rectf &r );
 
 	MouseButtonState getMouseState();

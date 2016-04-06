@@ -3,6 +3,19 @@
 template <typename T>
 struct Rect
 {
+	enum class Alignment
+	{
+		TOP_LEFT = 0x11,
+		TOP_CENTER = 0x12,
+		TOP_RIGHT = 0x14,
+		MIDDLE_LEFT = 0x21,
+		CENTER = 0x22,
+		MIDDLE_RIGHT = 0x24,
+		BOTTOM_LEFT = 0x41,
+		BOTTOM_CENTER = 0x42,
+		BOTTOM_RIGHT = 0x44
+	};
+
 	union
 	{
 		struct

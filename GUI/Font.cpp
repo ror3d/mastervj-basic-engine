@@ -9,11 +9,14 @@
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Texture/Texture.h>
 #include <Graphics/Mesh/RenderableVertexs.h>
+#include <Graphics/Effect/EffectManager.h>
 
 
 CFont::CFont(CXMLTreeNode& fontNode, CGUI* gui)
-	: m_glyphs( MAX_GLYPHS_BATCH )
+	: CNamed(fontNode)
+	, m_glyphs( MAX_GLYPHS_BATCH )
 	, m_gui(gui)
+	, m_textAlign(Rectf::Alignment::TOP_LEFT)
 {
 	auto mm = CEngine::GetSingleton().getMaterialManager();
 	auto tm = CEngine::GetSingleton().getTextureManager();
@@ -35,6 +38,7 @@ CFont::CFont(CXMLTreeNode& fontNode, CGUI* gui)
 			CMaterial *mat = new CMaterial(matNode);
 			mat->setName(matName);
 			mm->add(matName, mat);
+			m_material = mat;
 			break;
 		}
 	}
@@ -84,9 +88,10 @@ CFont::CFont(CXMLTreeNode& fontNode, CGUI* gui)
 			std::string texFile = page.GetPszProperty("file", "", false);
 			DEBUG_ASSERT(texFile.size() > 0);
 			texFile = fontPath + texFile;
-			CTexture *tex = new CTexture(texFile);
-			tex->Reload();
+			CTexture *tex = new CTexture();
+			tex->load(texFile, false);
 			tm->add(tex->getName(), tex);
+			m_pages.push_back(tex);
 		}
 	}
 
@@ -143,8 +148,13 @@ void CFont::DrawString(const std::string& text, const Rectf& bounds, bool overfl
 	Vect2f screenSz = m_gui->m_screen.size;
 	Vect2f pos = bounds.position;
 
+	pos.x = GetLineStartXPosition(str, bounds, 0);
+
 	auto technique = m_material->getRenderableObjectTechique()->GetEffectTechnique();
 	m_material->apply();
+	m_pages[0]->Activate(0);
+
+	CEffectManager::m_SceneParameters.m_BaseColor = m_color;
 
 	for ( int b = 0; b < str.length(); b += MAX_GLYPHS_BATCH )
 	{
@@ -153,8 +163,15 @@ void CFont::DrawString(const std::string& text, const Rectf& bounds, bool overfl
 		uchar lastChar = -1;
 		for ( int i = b; (i - b < MAX_GLYPHS_BATCH) && (i < str.length()); ++i )
 		{
-			uchar c = text[i];
-			auto descIt = m_chars.find( i );
+			uchar c = str[i];
+			if (c == '\n')
+			{
+				lastChar = -1;
+				pos.x = GetLineStartXPosition(str, bounds, i+1);
+				pos.y += m_lineHeight;
+				continue;
+			}
+			auto descIt = m_chars.find( c );
 
 			if ( descIt == m_chars.end() )
 			{
@@ -195,6 +212,38 @@ void CFont::DrawString(const std::string& text, const Rectf& bounds, bool overfl
 	}
 }
 
+float CFont::GetLineWidth(const ustring& text, size_t start /*= 0*/)
+{
+	size_t count = text.length()-start;
+	for (int i = 0; i+start < text.size(); ++i)
+	{
+		if (text[i+start] == '\n')
+		{
+			count = i;
+			break;
+		}
+	}
+	return GetStringWidth(text.substr(start, count));
+}
+
+float CFont::GetLineStartXPosition(const ustring& text, const Rectf& bounds, size_t start /*= 0*/)
+{
+	float w = GetLineWidth(text, start);
+	float s = bounds.x;
+	switch ((unsigned int(m_textAlign)) & 0x0f)
+	{
+		case 0x02:
+			s = s + bounds.w/2 - w / 2;
+			break;
+		case 0x04:
+			s = s + bounds.w - w;
+			break;
+		default:
+			break;
+	}
+	return std::roundf(s);
+}
+
 float CFont::GetStringWidth(const std::string& text)
 {
 	return GetStringWidth( GetUTF8String( text ) );
@@ -210,27 +259,27 @@ CFont::ustring CFont::GetUTF8String( const std::string & text )
 		if ( c & 0x80 )
 		{
 			int n;
-			if ( c & 0xe0 == 0xc0 )
+			if ( (c & 0xe0) == 0xc0 )
 			{
 				n = 1;
 				c = c & 0x1f;
 			}
-			else if ( c & 0xf0 == 0xe0 )
+			else if ( (c & 0xf0) == 0xe0 )
 			{
 				n = 2;
 				c = c & 0x0f;
 			}
-			else if ( c & 0xf8 == 0xf0 )
+			else if ( (c & 0xf8) == 0xf0 )
 			{
 				n = 3;
 				c = c & 0x07;
 			}
-			else if ( c & 0xfc == 0xf8 )
+			else if ( (c & 0xfc) == 0xf8 )
 			{
 				n = 4;
 				c = c & 0x03;
 			}
-			else if ( c & 0xfe == 0xfc )
+			else if ( (c & 0xfe) == 0xfc )
 			{
 				n = 5;
 				c = c & 0x01;
@@ -244,9 +293,9 @@ CFont::ustring CFont::GetUTF8String( const std::string & text )
 			for ( ; n >= 0; --n )
 			{
 				i++;
-				DEBUG_ASSERT( i >= text.length() );
+				DEBUG_ASSERT( i < text.length() );
 				c = text[i];
-				DEBUG_ASSERT( c & 0xc0 == 0x80 );
+				DEBUG_ASSERT( (c & 0xc0) == 0x80 );
 				c = c & 0x3f;
 				uc = uc | ( c << ( 6 * n ) );
 			}
@@ -260,7 +309,7 @@ CFont::ustring CFont::GetUTF8String( const std::string & text )
 	return str;
 }
 
-float CFont::GetStringWidth( const ustring & text )
+float CFont::GetStringWidth( const ustring& text, bool offsetFirstCharacter /*= false*/ )
 {
 	float totalW = 0;
 
@@ -268,7 +317,7 @@ float CFont::GetStringWidth( const ustring & text )
 	for ( int i = 0; i < text.length(); ++i )
 	{
 		uchar c = text[i];
-		auto descIt = m_chars.find(i);
+		auto descIt = m_chars.find(c);
 
 		if ( descIt == m_chars.end() )
 		{
@@ -276,7 +325,11 @@ float CFont::GetStringWidth( const ustring & text )
 		}
 		auto & desc = descIt->second;
 
-		totalW += desc.offset.x + desc.xAdvance;
+		if (i != 0 || offsetFirstCharacter)
+		{
+			totalW += desc.offset.x;
+		}
+		totalW += desc.xAdvance;
 
 		auto kernIt = m_kernings.find( std::make_pair( lastChar, c ) );
 		if ( kernIt != m_kernings.end() )
@@ -288,5 +341,5 @@ float CFont::GetStringWidth( const ustring & text )
 	}
 
 
-	return 0.0f;
+	return totalW;
 }
