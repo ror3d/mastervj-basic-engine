@@ -15,7 +15,7 @@ public:
 	CCinematic( CXMLTreeNode &TreeNode );
 	virtual ~CCinematic();
 	virtual void Stop();
-	virtual void Play( bool Cycle );
+	virtual void Play();
 	virtual void Pause();
 	void AddCinematicObject( CCinematicObject *CinematicObject );
 	virtual void Update( float ElapsedTime );

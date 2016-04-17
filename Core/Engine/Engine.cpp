@@ -25,6 +25,7 @@ CEngine::CEngine()
 	, cinematicsActionManager(nullptr)
 	, cinematicManager(nullptr)
 	, particleManager(nullptr)
+	, triggerManager(nullptr)
 {
 } 
 CEngine::~CEngine()
@@ -45,6 +46,7 @@ CEngine::~CEngine()
 	componentManager->destroy();
 	particleManager->destroy();
 	cinematicManager->destroy();
+	triggerManager->destroy();
 	//cinematicsActionManager->destroy();
 	//debugRender->destroy();
 	//cookedMeshManager->destroy();
@@ -72,6 +74,7 @@ CEngine::~CEngine()
 	delete particleManager;
 	delete cinematicsActionManager;
 	delete cinematicManager;
+	delete triggerManager;
 
 	effectsManager = nullptr;
 	textureManager = nullptr;
@@ -95,6 +98,7 @@ CEngine::~CEngine()
 	particleManager = nullptr;
 	cinematicsActionManager = nullptr;
 	cinematicManager = nullptr;
+	triggerManager = nullptr;
 
 } //Destruimos vars
 
@@ -122,4 +126,5 @@ void CEngine::Init()
 	particleManager = new CParticleSystemManager();
 	cinematicsActionManager = new CCinematicsActionManager();
 	cinematicManager = new CCinematicManager();
+	triggerManager = new CTriggerManager();
 }

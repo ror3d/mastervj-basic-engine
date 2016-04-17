@@ -23,6 +23,7 @@
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+#include <Core/Trigger/TriggerManager.h>
 
 
 class CEngine : public CSingleton<CEngine>
@@ -50,6 +51,7 @@ private:
 	CParticleSystemManager * particleManager;
 	CCinematicsActionManager * cinematicsActionManager;
 	CCinematicManager * cinematicManager;
+	CTriggerManager * triggerManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -80,4 +82,5 @@ public:
 	inline CParticleSystemManager * getParticleManager() const { return particleManager; }
 	inline CCinematicsActionManager * getCinematicsActionManager() const { return cinematicsActionManager;  }
 	inline CCinematicManager * getCinematicManager() const { return cinematicManager;  }
+	inline CTriggerManager * getTriggerManager() const { return triggerManager;  }
 };

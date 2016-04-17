@@ -210,6 +210,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
+	engine.getTriggerManager()->Load("Data\\triggers.xml");
 
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();

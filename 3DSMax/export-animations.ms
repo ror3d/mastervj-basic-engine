@@ -111,8 +111,8 @@ fn ExportAllObjectCinematics =
 			format "\n$$$$ Alert: % should not be included in the track animation export list!\n\n" obj.name
 			continue
 		)
-		
-		format "\t<cinematic_object resource=\"%\">\n" obj.name to: file
+		local l_CinemLoopType = getUserProp obj "cinematics_loop"
+		format "\t<cinematic_object resource=\"%\" loopType = \"%\" >\n" obj.name l_CinemLoopType to: file
 		local keys = getAllKeys #(obj.position.controller, obj.rotation.controller, obj.scale.controller)
 		
 		if keys.count == 0 then

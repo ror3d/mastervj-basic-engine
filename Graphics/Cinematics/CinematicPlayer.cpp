@@ -59,9 +59,8 @@ void CCinematicPlayer::Stop()
 }
 
 
-void CCinematicPlayer::Play( bool Cycle )
+void CCinematicPlayer::Play()
 {
-	m_Cycle = Cycle;
 	m_Playing = true;
 }
 

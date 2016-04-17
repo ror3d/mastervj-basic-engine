@@ -49,6 +49,12 @@
     <ClCompile Include="Component\ScriptedComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Trigger\Trigger.cpp">
+      <Filter>Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger\TriggerManager.cpp">
+      <Filter>Trigger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemies">
@@ -74,6 +80,9 @@
     </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{43e42ad3-3873-43a7-8eca-cc8531863f51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Trigger">
+      <UniqueIdentifier>{18c408c5-fc47-463b-9dda-0a7086dee1fe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +131,6 @@
     <ClInclude Include="CharacterController\CharacterControllerManager.h">
       <Filter>CharacterController</Filter>
     </ClInclude>
-    <ClInclude Include="TimeManager.h">
-      <Filter>Time</Filter>
-    </ClInclude>
     <ClInclude Include="Component\ComponentManager.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -133,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="Component\ScriptedComponent.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Time\TimeManager.h">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger\Trigger.h">
+      <Filter>Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger\TriggerManager.h">
+      <Filter>Trigger</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -119,8 +119,9 @@ fn createRenderableObjectsFile instances = (
 		local Pitch = GetPitch (instances[i].transform)
 		local Roll = GetRoll (instances[i].transform)
 		local core = getUserProp instances[i] "export_core_name"
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" scale=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n"\
-					instances[i].name core Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll instances[i].visibility to:file
+		local PhysxType = getUserProp instances[i] "physics_generate"
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" scale=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\" physxType=\"%\"/>\n"\
+					instances[i].name core Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll instances[i].visibility PhysxType to:file
 	)
 
 	format "</renderable_objects>\n" to:file 
@@ -401,7 +402,6 @@ fn createMesh obj = (
 		writeshort file (GetVertexTypeFromObjectMaterial obj mat)
 		
 		tik()
-		
 		local matDescriptor = GetMatDescriptor mat
 		
 		--TODO: coger solo vertices afectados por ese mat...

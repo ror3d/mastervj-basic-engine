@@ -122,7 +122,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		(
 			txtAnimModel.text = l_AnimModel
 		)
-		
+		*/
 		--Generate Physics
 		local l_GeneratePhysics = getUserProp m_ObjSelected "physics_generate"
 		if l_GeneratePhysics != undefined then
@@ -136,7 +136,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 				)
 			)
 		)
-		
+		/*
 		--Layer Physics 
 		local l_LayerPhysics = getUserProp m_ObjSelected "physics_layer"
 		if l_LayerPhysics != undefined then
@@ -226,6 +226,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		
 		--Anim Model Core 
 		setUserProp Obj "anim_model_core" txtAnimModel.text
+		*/
 		
 		--Generate Physics
 		if cbGeneratePhysics.checked then
@@ -236,6 +237,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		(
 			setUserProp Obj "physics_generate" "undefined"
 		)
+		/*
 		
 		--Layer Physics 
 		if cbLayerPhysics.checked then

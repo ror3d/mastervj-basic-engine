@@ -12,6 +12,17 @@ CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 	: m_CurrentKeyFrame(0)
 {
 	std::string rendObjName = treeNode.GetPszProperty( "resource" );
+	std::string loopType = treeNode.GetPszProperty("loopType");
+	if (loopType == std::string("Cycle"))
+	{
+		m_Cycle = true;
+	}
+	else if (loopType == std::string("One-Shoot") || loopType == std::string("Reverse"))
+	{
+		m_Cycle = false;
+		//TODO: anim reverse
+	}
+	
 	m_RenderableObject = CEngine::GetSingleton().getLayerManager()->getDefaultLayer()->get(rendObjName);
 
 
@@ -75,10 +86,6 @@ void CCinematicObject::Update( float ElapsedTime )
 	}
 
 	m_RenderableObject->SetPosition(mathUtils::Lerp(current->GetPosition(), next->GetPosition(), t));
-	/*m_RenderableObject->SetYawPitchRoll(
-		mathUtils::Lerp( current->GetYaw(), next->GetYaw(), t ),
-		mathUtils::Lerp( current->GetPitch(), next->GetPitch(), t ),
-		mathUtils::Lerp( current->GetRoll(), next->GetRoll(), t ) );*/
 	Quatf q = current->GetQuat();
 	q.SLerp(t, next->GetQuat());
 	m_RenderableObject->SetQuat(q);

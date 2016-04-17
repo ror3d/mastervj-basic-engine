@@ -4,39 +4,52 @@
 
 CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 	: CRenderableObject(treeNode)
-{
-	std::string CoreName = treeNode.GetPszProperty("core_name");
-	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(CoreName);
-	
-	if ((CoreName == "SphereTrigger") || (CoreName == "BoxTrigger"))
-	{
+{	
+	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(treeNode.GetPszProperty("core_name"));
 
-		if (CoreName == "SphereTrigger")
-		{
-			CEngine::GetSingleton().getPhysXManager()->createStaticSphere(getName(), GetScale(), "StaticObjectMaterial", GetPosition(), GetQuat(), true);
-		}
-		if (CoreName == "BoxTrigger")
-		{
-			CEngine::GetSingleton().getPhysXManager()->createStaticBox(getName(), GetScale(), "StaticObjectMaterial", GetPosition(), GetQuat(), true);
-		}
-	}
-	else
+	CPhysxColliderShapeDesc desc;
+
+	desc.material = std::string("StaticObjectMaterial");// TODO get from file
+	desc.size = GetScale();
+	desc.position = GetPosition();
+	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetYaw(), GetPitch(), -GetRoll()));
+
+	std::string collisionType = treeNode.GetPszProperty("physxType","");
+	if (collisionType == std::string("Box"))
 	{
-		// Create Actor
-		CPhysxColliderShapeDesc desc;
-		desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;// TODO get from file
-		//desc.shape = CPhysxColliderShapeDesc::Shape::TriangleMesh;
+		desc.shape = CPhysxColliderShapeDesc::Shape::Box;
+	} 
+	else if (collisionType == std::string("Capsule"))
+	{
+		desc.shape = CPhysxColliderShapeDesc::Shape::Capsule;
+		//TODO: get radius and halfHeight
+		desc.radius = 1;
+		desc.halfHeight = 1;
+	}
+	else if (collisionType == std::string("Sphere"))
+	{
+		desc.shape = CPhysxColliderShapeDesc::Shape::Sphere;
+		desc.radius = 1;
+		//TODO: get radius
+	}
+	else if (collisionType == std::string("Plane"))
+	{
+		//TODO: Tratar como box con escala y 0.001?
+		desc.size.y = 0.001f;
+	}
+	else if (collisionType == std::string("Triangle Mesh"))
+	{
+		desc.shape = CPhysxColliderShapeDesc::Shape::TriangleMesh;
 		m_StaticMesh->FillColliderDescriptor(&desc);
-
-		desc.material = std::string("StaticObjectMaterial");// TODO get from file
-		//desc.density = 10;// not used for static
-		desc.size = GetScale();
-		desc.position = GetPosition();
-		desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetYaw(), GetPitch(), -GetRoll()));
-		CEngine::GetSingleton().getPhysXManager()->createActor(getName(), CPhysXManager::ActorType::Static, desc);
 	}
+	else // collisionType == std::string("Convex Mesh") or unrecognized type
+	{
+		desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
+		m_StaticMesh->FillColliderDescriptor(&desc);
+	}
+		
+	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), CPhysXManager::ActorType::Static, desc);
 	
-
 }
 
 CMeshInstance::CMeshInstance(const std::string &Name, const std::string &CoreName)

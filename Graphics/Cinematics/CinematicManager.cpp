@@ -67,7 +67,7 @@ void CCinematicManager::Play()
 {
 	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
 	{
-		(*it)->Play(true); //TODO: cargar si anim con bucle y el nombre desde XML, para poder llamar por nombre
+		(*it)->Play(); //TODO: cargar si anim con bucle y el nombre desde XML, para poder llamar por nombre
 	}
 	for (auto it = m_cinematicsCameras.begin(); it != m_cinematicsCameras.end(); it++)
 	{

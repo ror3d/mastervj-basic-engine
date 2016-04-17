@@ -33,11 +33,11 @@ void CCinematic::Stop()
 }
 
 
-void CCinematic::Play( bool Cycle )
+void CCinematic::Play()
 {
 	for (auto it = m_CinematicObjects.begin(); it != m_CinematicObjects.end(); ++it)
 	{
-		(*it)->Play(Cycle);
+		(*it)->Play();
 	}
 }
 
