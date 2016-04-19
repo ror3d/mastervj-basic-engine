@@ -27,7 +27,15 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	checkbox cbExportCinematics "Export" pos:[268,230] width:56 height:17
 	
 	local CinematicsLoopTypes = #("Cycle", "Reverse", "One-Shot")
-	radiobuttons rbCinematicsLoopType "" pos:[290,250] width:219 height:16 enabled:false labels:#("Cycle", "Reverse", "One-Shot") columns:3
+	radiobuttons rbCinematicsLoopType "" pos:[290,250] width:255 height:16 enabled:false labels:#("Cycle", "Reverse", "One-Shot") columns:3
+
+	GroupBox grpTrigger "Triggers" pos:[263,281] width:277 height:146
+	checkbox cbIsTrigger "Is Trigger" pos:[269,301] width:117 height:13
+	local TriggerTypes = #("Sphere", "Box")
+	radiobuttons rdoTriggerType "" pos:[295,324] width:134 height:16 enabled:false labels:#("Sphere", "Box") default:2 columns:2
+	checkbox cbTriggerActivedOnce "Active Once" pos:[439,325] width:87 height:14
+	dropdownList ddlTriggerActionType "Action Type" pos:[298,347] width:202 height:40 enabled:true items:#("Launch Cinematic")
+	edittext edtTriggerTextAction "Action Name" pos:[299,396] width:200 height:21
 	
 
 	local m_ObjSelected = undefined
@@ -50,6 +58,8 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		cbExportLight.enabled = enabled
 		cbExportCinematics.enabled = enabled
 		rbCinematicsLoopType.enabled = enabled
+		
+		cbIsTrigger.enabled = false
 	)
 	
 	----------------------------------------------------
@@ -71,6 +81,11 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		rbCinematicsLoopType.enabled = false
 		rbCinematicsLoopType.state = 1
 		
+		cbIsTrigger.checked = false
+		rdoTriggerType.enabled = false
+		cbTriggerActivedOnce.enabled = false
+		ddlTriggerActionType.enabled = false
+		edtTriggerTextAction.enabled = false
 		
 		lblObjectName.caption = ""
 		
@@ -99,6 +114,31 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		if l_ExportRenderableObject != undefined then
 		(
 			cbExportRenderableObject.checked = true
+		)
+		
+		--Trigger
+		local l_IsTrigger = getUserProp m_ObjSelected "is_trigger"
+		local l_TriggerType = getUserProp m_ObjSelected "tigger_type"
+		
+		if l_IsTrigger!= undefined then
+		(
+			cbIsTrigger.checked = true
+			rdoTriggerType.enabled = true
+			cbTriggerActivedOnce.checked = getUserProp m_ObjSelected "trigger_active_once" 
+			local l_TriggerActionType = getUserProp m_ObjSelected "trigger_action_type" 
+			for i = 1 to ddlTriggerActionType.items.count do
+			(
+				if ddlTriggerActionType.items[i] == l_TriggerActionType then
+				(
+					ddlTriggerActionType.selection = i
+				)
+			)
+			local l_TriggerActionName = getUserProp m_ObjSelected "trigger_action_name" 
+			if l_TriggerActionName != undefined then
+			(
+				edtTriggerTextAction.text = l_TriggerActionName
+			)
+			 
 		)
 		
 		/*
@@ -195,6 +235,8 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 			)
 		)
 		
+	
+		
 		return true
 	)
 	
@@ -281,6 +323,33 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 			setUserProp Obj "cinematics_export" false
 			setUserProp Obj "cinematics_loop" ""
 		)
+		
+		--Trigger
+		if cbIsTrigger.checked then
+		(
+			setUserProp Obj "is_trigger" true
+			setUserProp Obj "trigger_type" TriggerTypes[rdoTriggerType.state]
+			if cbTriggerActivedOnce.checked then
+			(
+				setUserProp Obj "trigger_active_once" true
+			)
+			else
+			(
+				setUserProp Obj "trigger_active_once" false
+			)
+			
+			setUserProp Obj "trigger_action_type" ddlTriggerActionType.selected
+			setUserProp Obj "trigger_action_name" edtTriggerTextAction.text
+		)
+		else
+		(
+			setUserProp Obj "is_trigger" false
+			setUserProp Obj "trigger_type" ""
+			setUserProp Obj "trigger_active_once" false
+			setUserProp Obj "trigger_action_type" ""
+			setUserProp Obj "trigger_action_name" ""
+		)
+		
 	)
 	
 	fn selectedObjectChanged =
@@ -376,6 +445,14 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	on cbExportCinematics changed state do
 	(
 		rbCinematicsLoopType.enabled = state
+	)
+	
+	on cbIsTrigger changed state do
+	(
+		rdoTriggerType.enabled = state
+		cbTriggerActivedOnce.enabled = state
+		ddlTriggerActionType.enabled = state
+		edtTriggerTextAction.enabled = state
 	)
 )
 

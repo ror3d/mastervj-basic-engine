@@ -130,6 +130,36 @@ fn createRenderableObjectsFile instances = (
 	MyCloseFile()
 )
 
+fn createTriggersFile instances = (
+	MyCreateFile "Triggers.xml"
+	WriteXMLPrologToFile()
+	format "<triggers>\n" to:file
+	
+	for i = 1 to instances.count do
+	(
+		if getUserProp instances[i] "is_trigger" == true then
+		(
+			local Pos = TranslationToRH (instances[i].transform.translation)
+			local Sc = ScaleToRH instances[i].transform.scale
+			local Yaw = GetYaw (instances[i].transform)
+			local Pitch = GetPitch (instances[i].transform)
+			local Roll = GetRoll (instances[i].transform)
+			local l_trigger_type= getUserProp instances[i] "trigger_type"
+			local l_trigger_active_once = getUserProp instances[i] "trigger_active_once"
+			local l_trigger_action_type = getUserProp instances[i] "trigger_action_type"
+			local l_trigger_action_name = getUserProp instances[i] "trigger_action_name"
+			
+			format "\t<mesh_instance name=\"%\" typeTrigger=\"%\" ActivateTriggerOnce=\"%\" TriggerActionType=\"%\" TriggerActionName=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" />\n"\
+							instances[i].name l_trigger_type ActivateTriggerOnce TriggerActionType TriggerActionName Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll  to:file
+	
+		)
+		
+	)
+	format "</triggers>\n" to:file 
+	format "____CreatedTriggers____\n"
+	MyCloseFile()
+)
+
 ---------------------------------------------------------------------
 -- NORMALS
 ---------------------------------------------------------------------
