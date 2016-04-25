@@ -124,6 +124,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		(
 			cbIsTrigger.checked = true
 			rdoTriggerType.enabled = true
+			ddlTriggerActionType.enabled = true
 			cbTriggerActivedOnce.checked = getUserProp m_ObjSelected "trigger_active_once" 
 			local l_TriggerActionType = getUserProp m_ObjSelected "trigger_action_type" 
 			for i = 1 to ddlTriggerActionType.items.count do
@@ -133,6 +134,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 					ddlTriggerActionType.selection = i
 				)
 			)
+			edtTriggerTextAction.enabled = true
 			local l_TriggerActionName = getUserProp m_ObjSelected "trigger_action_name" 
 			if l_TriggerActionName != undefined then
 			(

@@ -42,6 +42,7 @@ utility UABUtility "UAB Utility" width:160 height:527
 	(
 		CollectCoresAndInstances()
 		createRenderableObjectsFile(GetInstances())
+		createTriggersFile(GetInstances())
 	)
 	on LightsButton pressed do
 	(

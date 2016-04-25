@@ -15,6 +15,7 @@ fn TestExportAll = (
 	createDirs()
 	createStaticMeshes()
 	createRenderableObjects()
+	createTriggersFile()
 	createMaterials true
 	createMeshes()
 )

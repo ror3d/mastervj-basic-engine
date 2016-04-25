@@ -150,7 +150,7 @@ fn createTriggersFile instances = (
 			local l_trigger_action_name = getUserProp instances[i] "trigger_action_name"
 			
 			format "\t<mesh_instance name=\"%\" typeTrigger=\"%\" ActivateTriggerOnce=\"%\" TriggerActionType=\"%\" TriggerActionName=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" />\n"\
-							instances[i].name l_trigger_type ActivateTriggerOnce TriggerActionType TriggerActionName Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll  to:file
+							instances[i].name l_trigger_type l_trigger_active_once l_trigger_action_type l_trigger_action_name Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll  to:file
 	
 		)
 		
