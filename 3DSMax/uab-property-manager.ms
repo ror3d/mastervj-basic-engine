@@ -375,7 +375,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	on UABPropertyManager open do
 	(
 		ddlLayerRender.items = #("solid", "alpha_objects","alpha_blend_objects", "particles")
-		ddlGeneratePhysics.items = #("Triangle Mesh", "Convex Shape", "Bounding Box", "Bounding Sphere", "Bounding Capsule", "Plane shape (?)")
+		ddlGeneratePhysics.items = #("Triangle Mesh", "Convex Shape", "Bounding Box", "Bounding Sphere", "Bounding Capsule", "Plane shape (?)", "None")
 		ddlLayerPhysics.items=#("PhysicsLayer")
 		ddlGenerateLogic.items = #("logicGenerate")
 		txtAnimModel.enabled=false

@@ -29,12 +29,13 @@ void CTrigger::Activate(){
 
 void CTrigger::LaunchAction()
 {
-	if (m_action == 0)
+	if (m_action == "Launch Cinematic")
 	{
 		CEngine::GetSingleton().getCinematicsActionManager()->LoadXML(m_nameAction);
 	}
-	else
+	else if (m_action == "Launch Animation")
 	{
+
 		//TODO
 	}
 	

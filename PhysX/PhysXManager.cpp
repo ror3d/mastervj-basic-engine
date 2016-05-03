@@ -472,7 +472,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 		{
 			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
 			physx::PxConvexMesh *mesh = m_PhysX->createConvexMesh(input);
-			physx::PxMeshScale scale(physx::PxVec3(desc.size.x, desc.size.y, desc.size.z), physx::PxQuat::createIdentity());
+			physx::PxMeshScale scale(physx::PxVec3(mathUtils::Abs(desc.size.x), mathUtils::Abs(desc.size.y), mathUtils::Abs(desc.size.z)), physx::PxQuat::createIdentity());
 			geom = new physx::PxConvexMeshGeometry(mesh,scale);
 			break;
 		}
@@ -480,7 +480,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 		{
 			physx::PxDefaultMemoryInputData input(desc.cookedMeshData->data(), desc.cookedMeshData->size());
 			physx::PxTriangleMesh *mesh = m_PhysX->createTriangleMesh(input);
-			physx::PxMeshScale scale(physx::PxVec3(desc.size.x, desc.size.y, desc.size.z), physx::PxQuat::createIdentity());
+			physx::PxMeshScale scale(physx::PxVec3(mathUtils::Abs(desc.size.x), mathUtils::Abs(desc.size.y), mathUtils::Abs(desc.size.z)), physx::PxQuat::createIdentity());
 			geom = new physx::PxTriangleMeshGeometry(mesh, scale);
 			break;
 		}

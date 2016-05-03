@@ -2,10 +2,12 @@
 #include <Engine/Engine.h>
 #include "StaticMesh.h"
 
+
 CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 	: CRenderableObject(treeNode)
 {	
-	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(treeNode.GetPszProperty("core_name"));
+	std::string nameCore = treeNode.GetPszProperty("core_name");
+	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(nameCore);
 
 	CPhysxColliderShapeDesc desc;
 
@@ -15,6 +17,9 @@ CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetYaw(), GetPitch(), -GetRoll()));
 
 	std::string collisionType = treeNode.GetPszProperty("physxType","");
+	if (collisionType == std::string("None"))
+		return;
+
 	if (collisionType == std::string("Box"))
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::Box;
