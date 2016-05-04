@@ -3,8 +3,9 @@
 #include "CharacterControllerInstance.h"
 #include <Core/Engine/Engine.h>
 #include <Camera/FPSCameraController.h>
-#include <Renderable/RenderableObject.h>
 #include <Renderable/RenderableObjectsManager.h>
+#include <Graphics/Camera/CameraManager.h>
+#include <Graphics/Layer/LayerManager.h>
 
 CCharacterControllerManager::CCharacterControllerManager()
 {
@@ -19,12 +20,12 @@ void CCharacterControllerManager::Create(std::string Name, std::string CameraNam
 	ICameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CFPSCameraController* fpsCamera = dynamic_cast<CFPSCameraController*>(cc);
 	DEBUG_ASSERT(fpsCamera != nullptr);
-	
+
 	CRenderableObjectsManager * layer = CEngine::GetSingleton().getLayerManager()->get(layerName);
 	DEBUG_ASSERT(layer != nullptr);
 	CRenderableObject * character = layer->get(modelName);
 	DEBUG_ASSERT(character != nullptr);
-	
+
 	add(Name, new CCharacterControllerInstance(Name, fpsCamera, character));
 }
 

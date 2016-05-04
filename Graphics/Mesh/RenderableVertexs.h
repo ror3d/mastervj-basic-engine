@@ -8,14 +8,11 @@
 #include "Graphics/Effect/EffectPixelShader.h"
 #include "Graphics/Effect/EffectGeometryShader.h"
 
-#include <Utils/Utils.h>
+#include <Base/Utils/Utils.h>
 
 #include <Core/Engine/Engine.h>
 
 #include <D3D11.h>
-
-class CContextManager;
-class CEffect;
 
 class CRenderableVertexs
 {

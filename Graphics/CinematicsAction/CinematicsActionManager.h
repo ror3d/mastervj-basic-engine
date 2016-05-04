@@ -15,6 +15,8 @@ public:
 
 	void Update();
 	void LoadXML(std::string fileName);
+
+	void destroy() {}
 };
 
 #endif

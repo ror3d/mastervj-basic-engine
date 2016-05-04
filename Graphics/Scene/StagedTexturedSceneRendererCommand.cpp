@@ -1,4 +1,5 @@
-#include "Scene\StagedTexturedSceneRendererCommand.h"
+#include "Scene/StagedTexturedSceneRendererCommand.h"
+#include <Graphics/Texture/TextureManager.h>
 #include <Engine/Engine.h>
 
 CStagedTexturedSceneRendererCommand::CStagedTexturedSceneRendererCommand(CXMLTreeNode &TreeNode)

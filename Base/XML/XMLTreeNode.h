@@ -15,6 +15,7 @@
 #include "libxml/parser.h"
 #include "libxml/xmlwriter.h"
 #include <string>
+#include <vector>
 #include "Math/Vector4.h"
 
 //Class
@@ -36,7 +37,7 @@ public:
 
   bool								Exists             	() const { return m_pNode != NULL; }
   bool								ExistsKey          	(const char* _pszKey) const;
-  const char*						GetName            	();
+  const char*						GetName            	() const;
 
   // To get properties from xml file
   int								GetIntProperty     	(const char* _pszKey, int _iDefault=0, bool warningDefault = true) const;
@@ -56,13 +57,15 @@ public:
 	Vect3i							GetVect3iProperty  	(const char* _pszKey, const Vect3i& _Default, bool warningDefault = true) const;
 	Vect4i							GetVect4iProperty  	(const char* _pszKey, const Vect4i& _Default, bool warningDefault = true) const;
 
+	std::vector<std::string> GetProperties() const;
+
   // To get keywords from xml file
   int									GetIntKeyword      	(const char* _pszKey, int _iDefault=0) const;
   float								GetFloatKeyword    	(const char* _pszKey, float _fDefault=0.0) const;
   bool								GetBoolKeyword     	(const char* _pszKey, bool _bDefault=false) const;
   const char*					GetPszKeyword      	(const char* _pszKey, const char* _pszDefault=NULL) const;
 
-  int									GetNumChildren     	() ;
+  int									GetNumChildren     	() const;
 
   CXMLTreeNode 				operator[]         	(const char* _pszKey) const;
   CXMLTreeNode 				operator()         	(int _iIndex) const;

@@ -1,8 +1,11 @@
 #include "Material.h"
 #include "Engine/Engine.h"
+#include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
+#include <Graphics/Effect/EffectManager.h>
+#include "Texture/TextureManager.h"
+
 #include "Graphics/Renderable/RenderableObjectTechnique.h"
 #include "Texture/Texture.h"
-#include "Texture/TextureManager.h"
 #include "MaterialParameter.h"
 
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
@@ -125,4 +128,35 @@ void CMaterial::apply(CRenderableObjectTechnique *RenderableObjectTechnique)
 void CMaterial::destroy()
 {
 	m_textures.clear();
+}
+
+
+CTexture *CMaterial::GetTexture( uint32 id )
+{
+	return m_textures[id].second;
+}
+
+CTexture *CMaterial::GetTextureAtStage( uint32 stage )
+{
+	for ( auto &t : m_textures )
+	{
+		if ( t.first == stage )
+		{
+			return t.second;
+		}
+	}
+	return nullptr;
+}
+
+void CMaterial::SetTextureAtStage(CTexture* tex, uint32 stage)
+{
+	for ( auto &t : m_textures )
+	{
+		if ( t.first == stage )
+		{
+			t.second = tex;
+			return;
+		}
+	}
+	m_textures.push_back(std::make_pair(stage, tex));
 }

@@ -1,9 +1,10 @@
 #include "ContextManager.h"
 
-#include "VertexTypes.h"
-#include "Renderable/RenderableVertexs.h"
+#include "Mesh/VertexTypes.h"
+#include "Mesh/RenderableVertexs.h"
 #include <Math/Matrix44.h>
 
+#include <Graphics/Effect/EffectManager.h>
 
 #pragma comment(lib,"d3d11.lib")
 
@@ -207,7 +208,7 @@ HRESULT CContextManager::CreateBackBuffer(HWND hWnd, int Width, int Height)
 		return hr;
 
 	SetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
-	
+
 	//m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 
 	return S_OK;
@@ -243,7 +244,7 @@ void CContextManager::DisableAlphaBlendState()
 	m_DeviceContext->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
 
-void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){	
+void CContextManager::Clear(bool clear_DepthStencil, bool clear_RenderTarget){
 	if (clear_DepthStencil)
 	{
 		m_DeviceContext->ClearDepthStencilView(m_CurrentDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -289,7 +290,7 @@ void CContextManager::DrawRelativeScreenQuad(CEffectTechnique *EffectTechnique, 
 {
 	DrawScreenQuad(EffectTechnique, Texture, x, y, Width* m_Viewport.Width, Height*m_Viewport.Height, Color);
 }
-void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture, 
+void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture *Texture,
 	float x, float y, float Width, float Height, const CColor &Color)
 {
 	CEffectManager::m_SceneParameters.m_BaseColor = Color;
@@ -312,6 +313,6 @@ void CContextManager::Present(){
 }
 
 void CContextManager::Draw(CRenderableVertexs* _VerticesToRender){
-	
+
 	_VerticesToRender->Render(this, CEngine::GetSingleton().getEffectsManager()->get("forward_PosNorTex_technique"));
 }

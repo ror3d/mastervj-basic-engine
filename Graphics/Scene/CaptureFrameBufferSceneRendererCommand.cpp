@@ -1,8 +1,9 @@
 #include "Scene/CaptureFrameBufferSceneRendererCommand.h"
 #include "Texture/CaptureFrameBufferTexture.h"
 #include <Engine/Engine.h>
+#include <Graphics/Texture/TextureManager.h>
 
-CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand(CXMLTreeNode &TreeNode) 
+CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand(CXMLTreeNode &TreeNode)
 	:CStagedTexturedSceneRendererCommand(TreeNode){
 	/*<capture_frame_buffer>
 		<capture_texture name = "DeferredCapturedTexture"	texture_width_as_frame_buffer = "true" format_type = "A8R8G8B8" / >

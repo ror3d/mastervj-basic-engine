@@ -1,5 +1,7 @@
 #include "DynamicTexture.h"
 #include "Engine/Engine.h"
+#include <Graphics/Context/ContextManager.h>
+#include <map>
 
 CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool CreateDepthStencilBuffer, DXGI_FORMAT format)
 	: CTexture(Name)
@@ -73,7 +75,7 @@ void CDynamicTexture::Init()
 	ZeroMemory(&l_TextureDescription, sizeof(D3D11_TEXTURE2D_DESC));
 	l_TextureDescription.Width = m_Width;
 	l_TextureDescription.Height = m_Height;
-	l_TextureDescription.MipLevels = 1; 
+	l_TextureDescription.MipLevels = 1;
 	l_TextureDescription.ArraySize = 1;
 	l_TextureDescription.Format = m_format;
 	l_TextureDescription.SampleDesc.Count = 1;

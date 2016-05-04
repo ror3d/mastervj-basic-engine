@@ -5,6 +5,8 @@
 #include <d3d11_1.h>
 #include <atlbase.h>
 
+#include <Graphics/Context/ContextManager.h>
+
 namespace
 {
 	CComPtr<ID3DUserDefinedAnnotation> pPerf;

@@ -1,8 +1,11 @@
 #include "Scene/DrawQuadSceneRendererCommand.h"
+
+#include "Engine/Engine.h"
+#include <Graphics/Material/MaterialManager.h>
+#include <Graphics/Texture/TextureManager.h>
+#include <Graphics/Context/ContextManager.h>
 #include "Material/Material.h"
 #include "Renderable/RenderableObjectTechnique.h"
-#include "Engine/Engine.h"
-#include "VertexTypes.h"
 
 CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CStagedTexturedSceneRendererCommand(TreeNode)

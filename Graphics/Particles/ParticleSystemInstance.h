@@ -2,7 +2,7 @@
 #define PARTICLE_SYSTEM_INSTANCE_H
 
 #include "Renderable/RenderableObject.h"
-#include "VertexTypes.h"
+#include "Mesh/VertexTypes.h"
 
 #include <Base/Math/Math.h>
 #include <Base/Math/Color.h>
@@ -16,7 +16,7 @@ class CRenderableVertexs;
 class CParticleSystemInstance : public CRenderableObject
 {
 public:
-	static const int MAX_PARTICLES_PER_EMITTER = 6;
+	static const int MAX_PARTICLES_PER_EMITTER = 200;
 private:
 	struct ParticleData
 	{

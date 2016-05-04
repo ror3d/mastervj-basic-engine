@@ -122,7 +122,7 @@ bool CXMLTreeNode::_FindSubTree(xmlNodePtr _pNode, const char* _pszKey, CXMLTree
 //----------------------------------------------------------------------------
 // Returns the main node keyword
 //----------------------------------------------------------------------------
-const char* CXMLTreeNode::GetName ()
+const char* CXMLTreeNode::GetName () const
 {
   if (m_pNode)
   {
@@ -186,7 +186,7 @@ CXMLTreeNode CXMLTreeNode::operator() (int _iIndex) const
 //----------------------------------------------------------------------------
 // Returns the number of children a tree has
 //----------------------------------------------------------------------------
-int CXMLTreeNode::GetNumChildren ()
+int CXMLTreeNode::GetNumChildren () const
 {
   DEBUG_ASSERT(m_pNode);
 
@@ -224,6 +224,16 @@ xmlChar* CXMLTreeNode::GetProperty (const char* _pszKey) const
   return value;
 }
 
+std::vector<std::string> CXMLTreeNode::GetProperties() const
+{
+  DEBUG_ASSERT(m_pNode);
+  std::vector<std::string> ret;
+  for (auto p = m_pNode->properties; p != nullptr; p = p->next)
+  {
+	  ret.push_back((const char*)(p->name));
+  }
+  return ret;
+}
 
 //----------------------------------------------------------------------------
 // Returns an integer param if found. Else a default value
@@ -252,7 +262,7 @@ int CXMLTreeNode::GetIntProperty (const char* _pszKey, int _iDefault, bool warni
 // Returns a float param if found. Else a default value
 //----------------------------------------------------------------------------
 
-float CXMLTreeNode::GetFloatPropertyFromString(std::string _pszKey, float _fDefault, bool warningDefault) const 
+float CXMLTreeNode::GetFloatPropertyFromString(std::string _pszKey, float _fDefault, bool warningDefault) const
 {
 	return GetFloatProperty(_pszKey.c_str(), _fDefault, warningDefault);
 }

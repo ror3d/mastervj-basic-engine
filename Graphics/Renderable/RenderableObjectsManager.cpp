@@ -1,9 +1,11 @@
 #include "RenderableObjectsManager.h"
 #include "RenderableObject.h"
-#include "Mesh/MeshInstance.h"
+#include "Renderable/MeshInstance.h"
 #include "Mesh/StaticMesh.h"
 #include "Animation/AnimatedInstanceModel.h"
 #include "Particles/ParticleSystemInstance.h"
+#include <Graphics/Effect/EffectManager.h>
+#include <Core/Engine/Engine.h>
 
 CRenderableObjectsManager::CRenderableObjectsManager()
 {

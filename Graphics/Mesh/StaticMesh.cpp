@@ -4,11 +4,14 @@
 
 #include "Texture/Texture.h"
 #include "Material/Material.h"
-#include "Renderable/RenderableVertexs.h"
+#include "Mesh/RenderableVertexs.h"
+#include <Graphics/Mesh/CookedMeshManager.h>
+#include <PhysX/PhysXManager.h>
 
 #include <Core/Engine/Engine.h>
 
 #include <Renderable/RenderableObjectTechnique.h>
+#include <Graphics/Material/MaterialManager.h>
 
 #include <algorithm>
 #include <vector>
@@ -340,34 +343,34 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 
 		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
 		{
-			std::vector<Vect3f> vertexes;
+		std::vector<Vect3f> vertexes;
 			std::vector<unsigned short> indexes;
-			
+
 			uint16 offset = 0;
-			for (int i = 0; i < meshFile.meshes.size(); ++i)
-			{
-				std::vector<Vect3f> meshVtxs = getVect3fArray(meshFile.meshes[i]);
+		for (int i = 0; i < meshFile.meshes.size(); ++i)
+		{
+			std::vector<Vect3f> meshVtxs = getVect3fArray(meshFile.meshes[i]);
 				auto idxs = reinterpret_cast<unsigned short*>(meshFile.meshes[i].indices);
 				size_t sz = indexes.size();
 				indexes.resize(indexes.size() + meshFile.meshes[i].nIndices);
 				std::transform(idxs, idxs + meshFile.meshes[i].nIndices,
 					indexes.begin()+sz,
 					[offset](unsigned short v) { return v + offset; });
-				vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
+			vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
 				offset = vertexes.size();
-			}
+		}
 
 			CEngine::GetSingleton().getPhysXManager()->cookTriangleMesh(vertexes, indexes, cooked, meshFile.meshes[0].indexSize);
 		}
 		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh)
-		{		
+		{
 			std::vector<Vect3f> vertexes;
 
 			for (int i = 0; i < meshFile.meshes.size(); ++i)
-			{
+		{
 				std::vector<Vect3f> meshVtxs = getVect3fArray(meshFile.meshes[i]);
 				vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
-			}
+		}
 			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
 			
 		}

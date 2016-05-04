@@ -1,6 +1,7 @@
 #include "EffectVertexShader.h"
 #include "Engine/Engine.h"
-#include "VertexTypes.h"
+#include "Mesh/VertexTypes.h"
+#include <Graphics/Context/ContextManager.h>
 
 
 CEffectVertexShader::CEffectVertexShader(const CXMLTreeNode &TreeNode)
@@ -97,6 +98,14 @@ bool CEffectVertexShader::Load()
 	else if (m_VertexType == "PARTICLE_VERTEX")
 	{
 		l_Loaded = PARTICLE_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	else if (m_VertexType == "GUI_VERTEX")
+	{
+		l_Loaded = GUI_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
+	}
+	else if (m_VertexType == "GUI_TEXT_VERTEX")
+	{
+		l_Loaded = GUI_TEXT_VERTEX::CreateInputLayout(l_Device, l_VSBlob, &m_VertexLayout);
 	}
 	else
 	{

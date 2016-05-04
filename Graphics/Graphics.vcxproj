@@ -52,17 +52,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Mesh\CookedMeshmanager.h" />
-    <ClInclude Include="Mesh\MeshInstance.h" />
+    <ClInclude Include="Mesh\RenderableVertexs.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
     <ClInclude Include="Mesh\StaticMeshManager.h" />
+    <ClInclude Include="Mesh\VertexTypes.h" />
     <ClInclude Include="Particles\ParticleSystemInstance.h" />
     <ClInclude Include="Particles\ParticleSystemManager.h" />
+    <ClInclude Include="Renderable\MeshInstance.h" />
     <ClInclude Include="Renderable\PoolRenderableObjectTechnique.h" />
     <ClInclude Include="Renderable\RenderableObject.h" />
     <ClInclude Include="Renderable\RenderableObjectsManager.h" />
     <ClInclude Include="Renderable\RenderableObjectTechnique.h" />
     <ClInclude Include="Renderable\RenderableObjectTechniqueManager.h" />
-    <ClInclude Include="Renderable\RenderableVertexs.h" />
     <ClInclude Include="Renderer\3DElement.h" />
     <ClInclude Include="Scene\ApplyFiltersSceneRendererCommand.h" />
     <ClInclude Include="Scene\CaptureFrameBufferSceneRendererCommand.h" />
@@ -92,7 +93,6 @@
     <ClInclude Include="Texture\DynamicTexture.h" />
     <ClInclude Include="Texture\Texture.h" />
     <ClInclude Include="Texture\TextureManager.h" />
-    <ClInclude Include="VertexTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation\AnimatedCoreModel.cpp" />
@@ -131,11 +131,11 @@
     </ClCompile>
     <ClCompile Include="Material\MaterialParameter.cpp" />
     <ClCompile Include="Mesh\CookedMeshManager.cpp" />
-    <ClCompile Include="Mesh\MeshInstance.cpp" />
     <ClCompile Include="Mesh\StaticMesh.cpp" />
     <ClCompile Include="Mesh\StaticMeshManager.cpp" />
     <ClCompile Include="Particles\ParticleSystemInstance.cpp" />
     <ClCompile Include="Particles\ParticleSystemManager.cpp" />
+    <ClCompile Include="Renderable\MeshInstance.cpp" />
     <ClCompile Include="Renderable\PoolRenderableObjectTechnique.cpp" />
     <ClCompile Include="Renderable\RenderableObject.cpp" />
     <ClCompile Include="Renderable\RenderableObjectsManager.cpp" />

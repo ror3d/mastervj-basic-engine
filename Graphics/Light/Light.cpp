@@ -2,6 +2,9 @@
 #include <Engine/Engine.h>
 #include "Texture/DynamicTexture.h"
 #include "Context/ContextManager.h"
+#include <Graphics/Texture/TextureManager.h>
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Layer/LayerManager.h>
 
 
 CLight::CLight() : CNamed("")

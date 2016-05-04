@@ -2,8 +2,8 @@
 #define CONTEXT_MANAGER_H
 
 #include <d3d11.h>
-#include "Graphics\Texture\Texture.h"
-#include "Graphics\Effect\EffectTechnique.h"
+#include "Graphics/Texture/Texture.h"
+#include "Graphics/Effect/EffectTechnique.h"
 #include <Base/Math/Color.h>
 
 #define MAX_RENDER_TARGET_VIEW 4

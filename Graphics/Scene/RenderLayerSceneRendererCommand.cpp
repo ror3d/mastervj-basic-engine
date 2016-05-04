@@ -1,11 +1,13 @@
 #include "Scene/RenderLayerSceneRendererCommand.h"
+#include <Graphics/Layer/LayerManager.h>
 
-CRenderLayerSceneRendererCommand::CRenderLayerSceneRendererCommand(CXMLTreeNode &TreeNode) 
-	:CSceneRendererCommand(TreeNode){
+CRenderLayerSceneRendererCommand::CRenderLayerSceneRendererCommand(CXMLTreeNode &TreeNode)
+	: CSceneRendererCommand(TreeNode)
+{
 	//TODO: save active
 	//<render_layer layer="solid" active="true"/>
 	std::string layerNameToRender = TreeNode.GetPszProperty("layer");
-	m_Layer = CEngine::GetSingleton().getLayerManager()->get(layerNameToRender);	
+	m_Layer = CEngine::GetSingleton().getLayerManager()->get(layerNameToRender);
 	if (m_Layer != nullptr)
 	{
 		m_Layer->setActive(TreeNode.GetBoolProperty("active"));

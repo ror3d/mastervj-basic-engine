@@ -18,10 +18,6 @@
     <ClCompile Include="Debug\DebugHelper.cpp" />
     <ClCompile Include="Debug\DebugHelperImplementation.cpp" />
     <ClCompile Include="Debug\DebugPerf.cpp" />
-    <ClCompile Include="Enemies\BossEnemy.cpp" />
-    <ClCompile Include="Enemies\EnemyManager.cpp" />
-    <ClCompile Include="Enemies\FixedEnemy.cpp" />
-    <ClCompile Include="Enemies\PatrolEnemy.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="IA\IAInstance.cpp" />
     <ClCompile Include="IA\IAManager.cpp" />
@@ -39,11 +35,6 @@
     <ClInclude Include="Debug\DebugHelper.h" />
     <ClInclude Include="Debug\DebugHelperImplementation.h" />
     <ClInclude Include="Debug\DebugPerf.h" />
-    <ClInclude Include="Enemies\BossEnemy.h" />
-    <ClInclude Include="Enemies\Enemy.h" />
-    <ClInclude Include="Enemies\EnemyManager.h" />
-    <ClInclude Include="Enemies\FixedEnemy.h" />
-    <ClInclude Include="Enemies\PatrolEnemy.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="IA\IAInstance.h" />
     <ClInclude Include="IA\IAManager.h" />

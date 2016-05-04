@@ -2,10 +2,13 @@
 
 
 #include <Base/Math/MathUtils.h>
-#include "VertexTypes.h"
+#include "Mesh/VertexTypes.h"
 #include "Animation/AnimatedCoreModel.h"
-#include "Renderable/RenderableVertexs.h"
+#include "Mesh/RenderableVertexs.h"
 #include "Renderable/RenderableObjectTechnique.h"
+#include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Material/Material.h>
 
 #include <cal3d/cal3d.h>
 #include <XML/XMLTreeNode.h>
@@ -141,7 +144,7 @@ bool CAnimatedInstanceModel::LoadVertexBuffer()
 	m_CalHardwareModel->setNormalBuffer(((char*)l_Vertexs) + 12, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
 	m_CalHardwareModel->setWeightBuffer(((char*)l_Vertexs) + 24, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
 	m_CalHardwareModel->setMatrixIndexBuffer(((char*)l_Vertexs) + 40, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));
-	
+
 
 	m_CalHardwareModel->setTextureCoordNum(1);
 	m_CalHardwareModel->setTextureCoordBuffer(0, ((char*)l_Vertexs) + 56, sizeof(MV_POSITION_WEIGHT_INDICES_NORMAL_TEXTURE_VERTEX));

@@ -1,10 +1,19 @@
 #include "DebugHelperImplementation.h"
-#include "Core\Engine\Engine.h"
-#include <Core/Input/InputManagerImplementation.h>
-#include "Material\MaterialParameter.h"
-#include "Camera/FPSCameraController.h"
-#include <PhysX/PhysXManager.h>
+
 #include "DebugPerf.h"
+
+#include <Core/Engine/Engine.h>
+#include <Core/Input/InputManagerImplementation.h>
+#include <Graphics/Material/MaterialParameter.h>
+#include <Graphics/Camera/FPSCameraController.h>
+#include <Graphics/Camera/CameraManager.h>
+#include <Graphics/Scene/SceneRendererCommandManager.h>
+#include <Base/Scripting/ScriptManager.h>
+#include <Graphics/Context/ContextManager.h>
+#include <Graphics/Material/MaterialManager.h>
+#include <Graphics/Material/Material.h>
+
+#include <PhysX/PhysXManager.h>
 
 CDebugHelperImplementation::CDebugHelperImplementation(void *device)
 {
@@ -147,7 +156,7 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 				else if (bar.variables[i].type == LABEL){
 					status = TwAddButton(twBar, "labelName", NULL, NULL, params.c_str());
 				}
-					
+
 				assert(status);
 				break;
 
@@ -189,7 +198,7 @@ void TW_CALL SwitchCameraCallback(void* _app)
 	{
 		CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController("__debug");
 	}
-	
+
 }
 
 void TW_CALL ReloadSceneCommands(void* _app)
@@ -206,7 +215,7 @@ void TW_CALL OpenMaterialParams(void *material)
 {
 	CMaterial * mat = (CMaterial *) material;
 	std::vector<CMaterialParameter *> * paramsMaterial = mat->getParameters();
-	
+
 	CDebugHelper::SDebugBar barMaterialParams;
 	barMaterialParams.name = mat->getName()+ " Parameters";
 	for (auto it = paramsMaterial->begin(); it != paramsMaterial->end(); ++it)
@@ -218,7 +227,7 @@ void TW_CALL OpenMaterialParams(void *material)
 			var.mode = CDebugHelper::READ_WRITE;
 			var.pFloat = ((CTemplatedMaterialParameter<float>*)(*it))->getValue();
 			var.params = (*it)->getParamValues();
-		}		
+		}
 
 		barMaterialParams.variables.push_back(var);
 	}

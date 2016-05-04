@@ -1,5 +1,7 @@
 #include "Trigger.h"
-#include "Core/Engine/Engine.h"
+#include <XML/XMLTreeNode.h>
+#include <Core/Engine/Engine.h>
+#include <Graphics/CinematicsAction/CinematicsActionManager.h>
 
 CTrigger::CTrigger(CXMLTreeNode Node) : CNamed(Node)
 	, m_activated(false)

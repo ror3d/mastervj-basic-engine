@@ -10,7 +10,6 @@
 #include "Vector3.h"
 #include "Matrix33.h"
 #include "Matrix44.h"
-#include "Utils/Types.h"
 
 #include <memory>
 
@@ -36,7 +35,7 @@
 ///           `-----------------> eje x del sistema de referencia en coordenadas del padre
 ///
 ///         En memoria los datos están contiguos por columnas:
-///                m00 m10 m20 / m01 m11 m21 / m02 m12 m22 / m03 m13 m23 
+///                m00 m10 m20 / m01 m11 m21 / m02 m12 m22 / m03 m13 m23
 /// \endverbatim
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +77,7 @@ public:
                    const Vector3<T>& pos);
   inline Matrix34 (const T angleY, const T angleX, const T angleZ);
 
- 
+
 
   // Reseteos parciales (traslación/rotación/escalado) y totales (a identidad, a cero)
   inline Matrix34<T>& ResetTranslation   ();
@@ -131,7 +130,7 @@ public:
   inline Matrix34<T>& SetSubMatrix33 (const Matrix33<T>& mat_sub);
 
 
-  // Acceso  
+  // Acceso
   inline Vector3<T>				 GetVectorBasis           (int i) const;
 	inline T								 GetVectorBasisLength    (int i) const;
   inline Vector3<T>				 GetPosBasis              () const;
@@ -178,15 +177,15 @@ public:
 
   // Operadores de aritmética de matrices
   Matrix34<T>        operator + (const Matrix34<T>& otra) const;
-  Matrix34<T>        operator - (const Matrix34<T>& otra) const; 
+  Matrix34<T>        operator - (const Matrix34<T>& otra) const;
   Matrix34<T>        operator * (const Matrix34<T>& otra) const;
   Matrix34<T>        operator * (const T escalar) const;
   friend Matrix34<T> operator * (const T escalar, const Matrix34<T>& mat);
   Matrix34<T>        operator / (const T escalar) const;
   Vector3<T>         operator * (const Vector3<T>& vector) const;
   Vector3<T>         operator ^ (const Vector3<T>& vector) const;
-  
-  
+
+
   // Operadores aritméticos de actualización
   Matrix34<T>& operator += (const Matrix34<T>& otra);
   Matrix34<T>& operator -= (const Matrix34<T>& otra);
@@ -242,7 +241,7 @@ public:
 
   // [const modificando el parámetro]
   void GetInvertedTR (Matrix34<T>& retMat) const;
-  
+
 
   // Acceso/determinación a/de propiedades matriciales
   inline T Determinant          () const;
@@ -250,7 +249,7 @@ public:
   bool     IsOrthonormalEpsilon () const;
 
 private:
-  
+
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

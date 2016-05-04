@@ -1,9 +1,7 @@
 #ifndef ANIMATED_INSTANCE_MODEL_H
 #define ANIMATED_INSTANCE_MODEL_H
 
-#include "Graphics/Renderable/RenderableObject.h"
-#include "Graphics/Renderable/RenderableVertexs.h"
-
+#include "Renderable/RenderableObject.h"
 
 #include <vector>
 
@@ -12,6 +10,8 @@ class CXMLTreeNode;
 class CalModel;
 class CalHardwareModel;
 class CAnimatedCoreModel;
+class CRenderableVertexs;
+class CMaterial;
 
 class CAnimatedInstanceModel : public CRenderableObject
 {

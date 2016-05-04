@@ -3,6 +3,7 @@
 #include <XML/XMLTreeNode.h>
 
 #include <Core/Engine/Engine.h>
+#include <Graphics/Material/MaterialManager.h>
 
 
 CStaticMeshManager::CStaticMeshManager()

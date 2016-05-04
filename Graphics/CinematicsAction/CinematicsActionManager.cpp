@@ -1,6 +1,7 @@
 #include "CinematicsActionManager.h"
 
 #include "Engine/Engine.h"
+#include <Base/Scripting/ScriptManager.h>
 
 CCinematicsActionManager::CCinematicsActionManager()
 	: m_FileName("")

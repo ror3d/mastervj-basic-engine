@@ -3,6 +3,8 @@
 #include <Base/Utils/Utils.h>
 #include <PxPhysicsAPI.h>
 
+#include <Graphics/CinematicsAction/CinematicsActionManager.h>
+#include <Core/Trigger/TriggerManager.h>
 
 #include <fstream>
 #include <iterator>
@@ -15,7 +17,7 @@
 #include <Windows.h>
 #endif
 
-#include "Core/Engine/Engine.h"
+#include <Core/Engine/Engine.h>
 
 #ifdef _DEBUG
 #pragma comment(lib, "PhysX3DEBUG_x86.lib")

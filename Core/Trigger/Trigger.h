@@ -1,8 +1,9 @@
 #ifndef TRIGGER_H
 #define TRIGGER_H
 
-#include "Utils/Named.h"
-#include "XML/XMLTreeNode.h"
+#include <Utils/Named.h>
+
+class CXMLTreeNode;
 
 class CTrigger : public CNamed
 {

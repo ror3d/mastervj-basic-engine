@@ -4,6 +4,8 @@
 
 #include "Core/Engine/Engine.h"
 #include "Renderable/RenderableObjectsManager.h"
+#include <Graphics/Layer/LayerManager.h>
+
 #include "Renderable/RenderableObject.h"
 
 #include <XML/XMLTreeNode.h>
@@ -66,7 +68,7 @@ void CCinematicObject::AddCinematicObjectKeyFrame( CCinematicObjectKeyFrame *Cin
 void CCinematicObject::Update( float ElapsedTime )
 {
 	CCinematicPlayer::Update( ElapsedTime );
-	
+
 	m_CurrentKeyFrame = 0;
 	while (m_CurrentKeyFrame < m_CinematicObjectKeyFrames.size() - 2
 		   && m_CinematicObjectKeyFrames[m_CurrentKeyFrame+1]->getKeyFrameTime() < m_CurrentTime)

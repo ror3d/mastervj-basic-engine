@@ -1,7 +1,9 @@
 #include "TriggerManager.h"
 #include "XML/XMLTreeNode.h"
 #include "Trigger.h"
-#include "Core/Engine/Engine.h"
+#include <Core/Engine/Engine.h>
+#include <Math/Math.h>
+#include <PhysX/PhysXManager.h>
 
 CTriggerManager::CTriggerManager()
 {

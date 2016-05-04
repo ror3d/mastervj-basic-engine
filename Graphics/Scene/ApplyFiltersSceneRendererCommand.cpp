@@ -2,6 +2,10 @@
 #include <Engine/Engine.h>
 #include "Renderable/RenderableObjectTechnique.h"
 
+#include <Graphics/Context/ContextManager.h>
+#include <Graphics/Texture/TextureManager.h>
+#include <Graphics/Material/MaterialManager.h>
+#include <Graphics/Material/Material.h>
 #include <Core/Debug/DebugPerf.h>
 
 CApplyFiltersSceneRendererCommand::CApplyFiltersSceneRendererCommand(CXMLTreeNode &TreeNode) : CStagedTexturedSceneRendererCommand(TreeNode)

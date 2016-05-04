@@ -32,7 +32,7 @@ public:
 
 	bool m_RenderLights;
 
-
+	void destroy () {}
 private:
 
 	CRenderableVertexs				*m_Axis;

@@ -79,7 +79,7 @@ public:
 	void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger);
 
 	void CPhysXManager::createStaticSphere(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger);
-	
+
 	void InitPhysx();
 
 	void createController(float height, float radius, float density, Vect3f pos, std::string name);
@@ -99,7 +99,9 @@ public:
 	void releaseCharacterControllers();
 
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
-	
+
+	void destroy() {}
+
 	struct {
 		std::map<std::string, size_t> index;
 		std::vector<std::string> name;
@@ -128,5 +130,5 @@ private:
 	std::map<std::string, physx::PxMaterial*> m_materials;
 	std::map<std::string, physx::PxController*> m_CharacterControllers;
 
-	
+
 };

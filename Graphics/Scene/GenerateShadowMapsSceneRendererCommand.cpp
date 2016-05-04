@@ -1,10 +1,12 @@
 #include "Scene/GenerateShadowMapsSceneRendererCommand.h"
+
 #include <Core/Engine/Engine.h>
+#include <Core/Debug/DebugPerf.h>
+#include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
+#include <Graphics/Light/LightManager.h>
 #include "Renderable/PoolRenderableObjectTechnique.h"
 
-#include <Core/Debug/DebugPerf.h>
-
-CGenerateShadowMapsSceneRendererCommand::CGenerateShadowMapsSceneRendererCommand(CXMLTreeNode &TreeNode) 
+CGenerateShadowMapsSceneRendererCommand::CGenerateShadowMapsSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode)
 	, m_pool(nullptr)
 {

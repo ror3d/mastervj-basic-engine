@@ -22,6 +22,8 @@
 #include "RenderDebugGUISceneRendererCommand.h"
 #include "ApplyFiltersSceneRendererCommand.h"
 
+#include <Graphics/Texture/TextureManager.h>
+
 CSceneRendererCommandManager::CSceneRendererCommandManager(){
 
 }
@@ -62,75 +64,80 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 			for (int i = 0; i < scene_rend_comm.GetNumChildren(); ++i)
 			{
 				CXMLTreeNode scene_command = scene_rend_comm(i);
-				if (scene_command.GetName() == std::string("set_depth_stencil_state")){
+				std::string command = scene_command.GetName();
+				if (command == "set_depth_stencil_state"){
 					add(new CSetDepthStencilStateSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("set_pool_renderable_objects_technique")){
+				else if (command == "set_pool_renderable_objects_technique"){
 					add(new CSetPoolRenderableObjectsTechniqueSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("generate_shadow_maps")){
+				else if (command == "generate_shadow_maps"){
 					add(new CGenerateShadowMapsSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("set_render_target")){
+				else if (command == "set_render_target"){
 					add(new CSetRenderTargetSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("set_matrices")){
+				else if (command == "set_matrices"){
 					add(new CSetMatricesSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("render_debug_layer")){
+				else if (command == "render_debug_layer"){
 					add(new CRenderDebugLayerSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("unset_render_target")){
+				else if (command == "unset_render_target"){
 					add(new CUnsetRenderTargetSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("clear")){
+				else if (command == "clear"){
 					add(new CClearSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("render_draw_quad")){
+				else if (command == "render_draw_quad"){
 					add(new CDrawQuadSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("render_deferred_shading")){
+				else if (command == "render_deferred_shading"){
 					add(new CDeferredShadingSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("capture_frame_buffer")){
+				else if (command == "capture_frame_buffer"){
 					add(new CCaptureFrameBufferSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("set_light_constants")){
+				else if (command == "set_light_constants"){
 					add(new CRenderDebugLightsSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("render_layer")){
+				else if (command == "render_layer"){
 					add(new CRenderLayerSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("render_debug_grid")){
+				else if (command == "render_debug_grid"){
 					add(new CRenderDebugGridSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("enable_alpha_blend")){
+				else if (command == "enable_alpha_blend"){
 					add(new CEnableAlphaBlendSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("disable_alpha_blend")){
+				else if (command == "disable_alpha_blend"){
 					add(new CDisableAlphaBlendSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("render_debug_gui")){
+				else if (command == "render_debug_gui"){
 					add(new CRenderGUISceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("render_debug_antTweak")){
+				else if (command == "render_debug_antTweak"){
 					add(new CRenderDebugGUISceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("apply_filters")){
+				else if (command == "apply_filters"){
 					add(new CApplyFiltersSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("present")){
+				else if (command == "present"){
 					add(new CPresentSceneRendererCommand(scene_command));
 				}
-				else if (scene_command.GetName() == std::string("apply_filters"))
+				else if (command == "apply_filters")
 				{
 					add(new CApplyFiltersSceneRendererCommand(scene_command));
+				}
+				else if ( command == std::string( "render_gui" ) )
+				{
+					add( new CRenderGUISceneRendererCommand( scene_command ) );
 				}
 
 				getLast()->setActive(true); //By default all commands enabled
 			}
 			return true;
-		}		
+		}
 	}
 	return false;
 }
@@ -145,7 +152,7 @@ void CSceneRendererCommandManager::Execute(CContextManager &_context)
 {
 	CEngine::GetSingleton().getTextureManager()->DeactivateTextures();
 	for (auto it = m_resources.begin(); it != m_resources.end(); it++)
-	{		
+	{
 		(*it)->Execute(_context);
 	}
 }
