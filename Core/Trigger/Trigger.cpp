@@ -7,8 +7,8 @@ CTrigger::CTrigger(CXMLTreeNode Node) : CNamed(Node)
 	, m_activated(false)
 {
 	m_once = Node.GetBoolProperty("ActivateTriggerOnce");
-	m_action = Node.GetIntProperty("TriggerActionType");
-	m_nameAction = Node.GetPszProperty("TriggerActionName");
+	//m_action = Node.GetIntProperty("TriggerActionType");
+	//m_nameAction = Node.GetPszProperty("TriggerActionName");
 }
 
 CTrigger::~CTrigger()

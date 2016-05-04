@@ -19,7 +19,7 @@ CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetYaw(), GetPitch(), -GetRoll()));
 
 	std::string collisionType = treeNode.GetPszProperty("physxType","");
-	if (collisionType == std::string("None"))
+	if (collisionType == std::string("None") || collisionType == std::string("undefined"))
 		return;
 
 	if (collisionType == std::string("Box"))
