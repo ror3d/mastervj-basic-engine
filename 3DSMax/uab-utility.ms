@@ -42,6 +42,7 @@ utility UABUtility "UAB Utility" width:160 height:527
 	(
 		CollectCoresAndInstances()
 		createRenderableObjectsFile(GetInstances())
+		createLogic(GetInstances())
 		createTriggersFile(GetInstances())
 	)
 	on LightsButton pressed do
@@ -104,6 +105,7 @@ utility UABUtility "UAB Utility" width:160 height:527
 		local cores = GetCores()
 		createStaticMeshesFile(cores)
 		createRenderableObjectsFile()
+		createLogic()
 		createMaterials CopyTexturesCheck.checked
 		createMeshes(cores)
 		

@@ -130,6 +130,29 @@ fn createRenderableObjectsFile instances = (
 	MyCloseFile()
 )
 
+fn createLogic instances = (
+	MyCreateFile "logic.xml"
+	
+	WriteXMLPrologToFile()
+	format "<logic>\n" to:file
+	
+	for i = 1 to instances.count do
+	(	
+		local l_logicType = getUserProp instances[i] "logic_type"
+		if l_logicType != undefined then
+		(						
+			local l_logicActivates = getUserProp instances[i] "logic_activates"		
+			format "\t<% name=\"%\" activates=\"%\"/>\n"\
+			l_logicType instances[i].name l_logicActivates to:file
+		)		
+	)
+
+	format "</logic>\n" to:file 
+	format "____CreatedLogic____\n"
+	
+	MyCloseFile()
+)
+
 fn createTriggersFile instances = (
 	MyCreateFile "Triggers.xml"
 	WriteXMLPrologToFile()
@@ -146,11 +169,9 @@ fn createTriggersFile instances = (
 			local Roll = GetRoll (instances[i].transform)
 			local l_trigger_type= getUserProp instances[i] "trigger_type"
 			local l_trigger_active_once = getUserProp instances[i] "trigger_active_once"
-			local l_trigger_action_type = getUserProp instances[i] "trigger_action_type"
-			local l_trigger_action_name = getUserProp instances[i] "trigger_action_name"
 			
-			format "\t<mesh_instance name=\"%\" typeTrigger=\"%\" ActivateTriggerOnce=\"%\" TriggerActionType=\"%\" TriggerActionName=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" />\n"\
-							instances[i].name l_trigger_type l_trigger_active_once l_trigger_action_type l_trigger_action_name Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll  to:file
+			format "\t<mesh_instance name=\"%\" typeTrigger=\"%\" ActivateTriggerOnce=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" />\n"\
+							instances[i].name l_trigger_type l_trigger_active_once  Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll  to:file
 	
 		)
 		
