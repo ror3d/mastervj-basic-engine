@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "ISoundManager.h"
+//#include "ISoundManager.h"
 #include <Graphics/Camera/Camera.h>
 #include <Graphics/Renderer/3DElement.h>
 
@@ -12,8 +12,6 @@ class SoundManager
 {
 
 public:
-	void SetPath(const std::string &path) { m_Path = path; }
-
 	virtual bool Init() = 0;
 
 	virtual void Update(const CCamera *camera) = 0;
@@ -45,4 +43,12 @@ public:
 	virtual void SetRTPCValue(const SoundRTPC &_rtpc, float value, const C3DElement*  _speaker) = 0;
 
 	virtual void BroadcastState(const SoundStateValue &_state) = 0;
+
+	//self
+	virtual AkGameObjectID GenerateObjectID() = 0;
+	virtual bool initBanks() = 0;
+	virtual void Terminate() = 0;
+	virtual void Clean() = 0;
+	virtual void SetListenerPosition(const CCamera *camera) = 0;
+	
 };

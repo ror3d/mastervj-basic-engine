@@ -60,7 +60,7 @@ AkGameObjectID m_DefaultSpeakerId;
 std::unordered_map<std::string, AkGameObjectID> m_NamedSpeakers;
 std::unordered_map<const C3DElement*, AkGameObjectID> m_GameObjectSpeakers;
 
-AkGameObjectID GenerateObjectID()
+AkGameObjectID GenerateObjectID() 
 {
 	AkGameObjectID result;
 	if (m_FreeObjectIDs.size() > 0)
@@ -77,6 +77,7 @@ AkGameObjectID GenerateObjectID()
 
 bool LoadSoundBanksXML(std::string filename)
 {
+	//TODO
 	
 }
 
@@ -270,5 +271,80 @@ void UnregisterSpeaker(const C3DElement* _speaker)
 	{
 		assert(false);
 	}
+}
+
+void Terminate()
+{
+	AK::SoundEngine::ClearBanks(); //Limpiamos cualquier bank
+	AK::SoundEngine::UnregisterAllGameObj();
+
+	AK::SOUNDENGINE_DLL::Term();
+}
+
+void Clean()
+{
+	//Una vez hecho el clear hay que volver a llamar al bank init (no se si aqui on terminate)
+	//TODO
+	AK::SoundEngine::ClearBanks(); //Limpiamos cualquier bank
+
+	for (auto it : m_NamedSpeakers)
+	{
+		AK::SoundEngine::UnregisterGameObj(it.second);
+		m_FreeObjectIDs.push_back(it.second);
+	}
+	m_NamedSpeakers.clear();
+}
+
+void SetListenerPosition(const CCamera *camera)
+{
+	Vect3f l_Position = camera->GetPosition();
+	Vect3f l_Orientation = camera->GetLookAt();
+	Vect3f l_VectorUp = camera->GetUp();
+
+	AkListenerPosition l_ListenerPosition = {};
+
+	l_ListenerPosition.Position.X = l_Position.x;
+	l_ListenerPosition.Position.Y = l_Position.y;
+	l_ListenerPosition.Position.Z = l_Position.z;
+
+	l_ListenerPosition.OrientationFront.X = l_Orientation.x;
+	l_ListenerPosition.OrientationFront.Y = l_Orientation.y;
+	l_ListenerPosition.OrientationFront.Z = l_Orientation.z;
+
+	l_ListenerPosition.OrientationTop.X = l_VectorUp.x;
+	l_ListenerPosition.OrientationTop.Y = l_VectorUp.y;
+	l_ListenerPosition.OrientationTop.Z = l_VectorUp.z;
+
+	AK::SoundEngine::SetListenerPosition(l_ListenerPosition);
+}
+
+void Update(const CCamera *camera)
+{
+	for (auto it : m_GameObjectSpeakers)
+	{
+		Vect3f l_Position = it.first->GetPosition();
+		float l_Yaw = it.first->GetYaw();
+		float l_Pitch = it.first->GetPitch();
+
+		Vect3f l_Orientation(cos(l_Yaw) * cos(l_Pitch), sin(l_Pitch), sin(l_Yaw) * cos(l_Pitch));
+
+		AkSoundPosition l_SoundPosition = {}; 
+
+		l_SoundPosition.Position.X = l_Position.x;
+		l_SoundPosition.Position.Y = l_Position.y;
+		l_SoundPosition.Position.Z = l_Position.z;
+
+		l_SoundPosition.Orientation.X = l_Orientation.x;
+		l_SoundPosition.Orientation.Y = l_Orientation.y;
+		l_SoundPosition.Orientation.Z = l_Orientation.z;
+
+		AK::SoundEngine::SetPosition(it.second, l_SoundPosition);
+	}
+
+	SetListenerPosition(camera);
+
+	//Actualiza WWISE
+	AK::SOUNDENGINE_DLL::Tick();
+
 }
 

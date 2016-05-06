@@ -9,10 +9,13 @@ public:
 
 	virtual ~ISoundManager() {}
 
+	void SetPath(const std::string &path) { m_Path = path; }
+
 protected:
 	ISoundManager()
 	{}
 
-protected:
+//protected:
+public:
 	std::string		m_Path;
 };
