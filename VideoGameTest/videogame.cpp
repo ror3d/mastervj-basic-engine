@@ -35,6 +35,7 @@
 #include <Core/CharacterController/CharacterControllerManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
+#include <Core/Component/ScriptedComponent.h>
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
@@ -233,7 +234,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 
 	engine.getIAManager()->Create();
-	engine.getScriptManager()->Initialize();
 
 
 
@@ -243,11 +243,13 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CInputManager::SetCurrentInputManager(&inputManager);
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
-		engine.getScriptManager()->RegisterLUAFunctions();
-		engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
-		engine.getScriptManager()->RegisterLUAFunctionsAfter();
+		engine.getScriptManager()->Initialize("Data\\scripting.xml");
 
-		engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
+		CScriptedComponent::InitAll();
+
+		//engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
+
+		//engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
 
 
 

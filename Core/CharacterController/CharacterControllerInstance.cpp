@@ -11,7 +11,7 @@ CCharacterControllerInstance::CCharacterControllerInstance(std::string Name, CFP
 	, m_fpsCamera(fpsCam)
 	, m_objectModel(rendObjec)
 {
-	CEngine::GetSingleton().getScriptManager()->RunCode("InitComponentManager()");
+	//CEngine::GetSingleton().getScriptManager()->RunCode("InitComponentManager()");
 }
 
 CCharacterControllerInstance::~CCharacterControllerInstance()
@@ -20,6 +20,6 @@ CCharacterControllerInstance::~CCharacterControllerInstance()
 
 void CCharacterControllerInstance::Update(float _elapsedTime)
 {
-	CScriptedComponent * comp = (CScriptedComponent*) m_objectModel->GetComponentManager()->get("ScriptedCharacterController");
-	comp->Update(_elapsedTime);
+//	CScriptedComponent * comp = (CScriptedComponent*) m_objectModel->GetComponentManager()->get("ScriptedCharacterController");
+//	comp->Update(_elapsedTime);
 }

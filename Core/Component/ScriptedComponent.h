@@ -3,22 +3,33 @@
 
 #include "Component.h"
 
+#include <vector>
+
+class CScriptManager;
+
 class CScriptedComponent : public CComponent
 {
 private:
-	std::string m_FnOnCreate;
-	std::string m_FnOnDestroy;
-	std::string m_FnOnUpdate;
-	std::string m_FnOnRender;
-	std::string m_FnOnRenderDebug;
+	CScriptManager* m_scriptMgr;
+
+	unsigned m_componentStateId;
+
+	static unsigned s_nextComponentStateId;
+
+	void SetComponent();
+
+	static std::vector<CScriptedComponent*> s_components;
 public:
-	CScriptedComponent(const std::string &Name, CRenderableObject *Owner, const
-	std::string &FnOnCreate, const std::string &FnOnDestroy, const std::string
-	&FnOnUpdate, const std::string &FnOnRender, const std::string &FnOnRenderDebug);
+	CScriptedComponent(const std::string& Name, CRenderableObject* Owner);
 	virtual ~CScriptedComponent();
+	void Init();
 	virtual void Update(float ElapsedTime);
-	virtual void Render(CContextManager  &_context);
-	virtual void RenderDebug(CContextManager  &_context);
+	virtual void Render(CContextManager&  _context);
+	virtual void RenderDebug(CContextManager&  _context);
+
+	virtual void Destroy();
+
+	static void InitAll();
 };
 
 #endif

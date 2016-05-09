@@ -23,6 +23,8 @@
 #include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
 
+#include <Core/Component/ComponentManager.h>
+
 #include <XML/XMLTreeNode.h>
 
 
@@ -47,6 +49,8 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine& engine = CEngine::GetSingleton();
 	m_Timer += _ElapsedTime;
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
+
+	CEngine::GetSingleton().getComponentManager()->Update(_ElapsedTime);
 
 	CEngine::GetSingleton().getPhysXManager()->update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);

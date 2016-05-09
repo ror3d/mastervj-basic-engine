@@ -4,6 +4,9 @@
 
 #include <fstream>
 #include <sstream>
+
+#include <Base/XML/XMLTreeNode.h>
+
 #include "Core/Engine/Engine.h"
 #include "Core/Input/InputManager.h"
 #include "Core/CharacterController/CharacterControllerInstance.h"
@@ -11,6 +14,7 @@
 #include <Graphics/Renderable/RenderableObject.h>
 #include <Graphics/Renderable/RenderableObjectsManager.h>
 #include <Graphics/Animation/AnimatedInstanceModel.h>
+#include <Core/Component/ComponentManager.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
@@ -20,42 +24,52 @@
 #include <Graphics/Layer/LayerManager.h>
 #include <Core/CharacterController/CharacterControllerManager.h>
 
-namespace {
-	void StopScriptErrors(int sd, std::string message, std::exception_ptr ex) {
-		if (ex) {
+namespace
+{
+	void StopScriptErrors(int sd, std::string message, std::exception_ptr ex)
+	{
+		if (ex)
+		{
 			std::rethrow_exception(ex);
 		}
-		else throw message;
+		else
+		{
+			throw message;
+		}
 	}
 }
 
 /*
  * This class captures errors printed by lua to redirect them as we wish.
  */
-class LuaErrorCapturedStdout {
+class LuaErrorCapturedStdout
+{
 public:
-	LuaErrorCapturedStdout() {
+	LuaErrorCapturedStdout()
+	{
 		_old = std::cout.rdbuf(_out.rdbuf());
 	}
 
-	~LuaErrorCapturedStdout() {
+	~LuaErrorCapturedStdout()
+	{
 		std::cout.rdbuf(_old);
 		OutputDebugStringA(_out.str().c_str());
 	}
 
-	std::string Content() const {
+	std::string Content() const
+	{
 		return _out.str();
 	}
 
 private:
 	std::stringstream _out;
-	std::streambuf *_old;
+	std::streambuf* _old;
 };
 
 CScriptManager::CScriptManager()
 	: m_state(nullptr)
-{
-}
+	, m_initialized(false)
+{}
 
 
 CScriptManager::~CScriptManager()
@@ -66,32 +80,67 @@ CScriptManager::~CScriptManager()
 	}
 }
 
-void CScriptManager::Initialize()
+void CScriptManager::Initialize(const std::string& file)
 {
 	LuaErrorCapturedStdout errorCapture;
 	m_state = new sel::State{ true };
+
+
+	CXMLTreeNode scripts;
+
+	scripts.LoadFile(file.c_str());
+
+	if (!scripts.Exists())
+	{
+		return;
+	}
+
+	for (int i = 0; i < scripts.GetNumChildren(); ++i)
+	{
+		auto script = scripts(i);
+
+		std::string name = script.GetPszProperty("class", "", false);
+		std::string file = script.GetPszProperty("file", "", false);
+		if (name != "" && file != "" && m_loadedScripts.find(name) == m_loadedScripts.end())
+		{
+			std::ifstream t(file);
+			if (t)
+			{
+				t.seekg(0, std::ios::end);
+				size_t size = t.tellg();
+				std::string buffer(size, ' ');
+				t.seekg(0);
+				t.read(&buffer[0], size);
+
+				m_loadedScripts[name] = buffer;
+			}
+		}
+	}
+
+	RegisterLUAFunctions();
+
+	m_initialized = true;
 }
 
 void CScriptManager::Destroy()
-{
-}
+{}
 
-void CScriptManager::RunCode(const std::string &code)
+void CScriptManager::RunCode(const std::string& code)
 {
 	LuaErrorCapturedStdout errorCapture;
 	(*m_state)(code.c_str());
 }
 
-void CScriptManager::RunFile(const std::string &fileName)
+void CScriptManager::RunFile(const std::string& fileName)
 {
 	LuaErrorCapturedStdout errorCapture;
 	std::ifstream f(fileName);
 	std::string code((std::istreambuf_iterator<char>(f)),
-					std::istreambuf_iterator<char>());
+					 std::istreambuf_iterator<char>());
 	(*m_state)(code.c_str());
 }
 
-void CScriptManager::Load(const std::string &xmlFile)
+void CScriptManager::Load(const std::string& xmlFile)
 {
 	LuaErrorCapturedStdout errorCapture;
 	// TODO
@@ -102,14 +151,14 @@ void CScriptManager::RegisterLUAFunctions()
 	LuaErrorCapturedStdout errorCapture;
 
 	bool loaded;
-	loaded = (*m_state).Load("Data/Scripting/CharacterController.lua");
-	loaded = (*m_state).Load("Data/Scripting/CinematicsActionManager.lua");
+//	loaded = (*m_state).Load("Data/Scripting/CharacterController.lua");
+//	loaded = (*m_state).Load("Data/Scripting/CinematicsActionManager.lua");
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
-				"RunCode", &CScriptManager::RunCode,
-				"RunFile", &CScriptManager::RunFile,
-				"Load", &CScriptManager::Load);
+		"RunCode", &CScriptManager::RunCode,
+		"RunFile", &CScriptManager::RunFile,
+		"Load", &CScriptManager::Load);
 
 	//Global
 	(*m_state)["CXMLTreeNode"]
@@ -154,17 +203,20 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CRenderableObjectsManagerModels"].SetObj(
 		*CEngine::GetSingleton().getLayerManager()->get("models"),
 		"GetResource", &CRenderableObjectsManager::GetCastedResource);
-	(*m_state)["CAnimatedInstanceModel"]
-		.SetClass<CAnimatedInstanceModel, CXMLTreeNode>(
-		"GetComponentManager", &CAnimatedInstanceModel::GetComponentManager,
-		"AddComponent", &CAnimatedInstanceModel::AddComponent);
-	(*m_state)["CComponentManager"]
-		.SetClass<CComponentManager>(
-		"GetResource", &CComponentManager::get);
+	//(*m_state)["CAnimatedInstanceModel"]
+	//	.SetClass<CAnimatedInstanceModel, CXMLTreeNode>("GetComponentManager",
+	//	&CAnimatedInstanceModel::GetComponentManager,
+	//	"AddComponent", &CAnimatedInstanceModel::AddComponent);
+	//(*m_state)["CComponentManager"].SetClass<CComponentManager>("GetResource",
+	//															&CComponentManager::get);
 	(*m_state)["CScriptedComponent"]
-		.SetClass<CScriptedComponent, const std::string &, CAnimatedInstanceModel *, const
-		std::string &, const std::string &, const std::string &, const std::string &, const std::string &>();
+		.SetClass<CScriptedComponent, const std::string&, CAnimatedInstanceModel*>();
 
+
+	(*m_state)["DebugPrint"] = [](const std::string& s)
+	{
+		OutputDebugString(s.c_str());
+	};
 }
 
 void CScriptManager::RegisterLUAFunctionsAfter()
@@ -183,8 +235,8 @@ void CScriptManager::RegisterLUAFunctionsAfter()
 		"SetPosition", &CRenderableObject::SetPosition,
 		"SetYaw", &CRenderableObject::SetYaw);
 	(*m_state)["animatedModel"].SetObj(
-		*((CAnimatedInstanceModel*)CEngine::GetSingleton().getCharacterControllerManager()->get("main")->getObjectModel()),
+		*((CAnimatedInstanceModel*)
+		CEngine::GetSingleton().getCharacterControllerManager()->get("main")->getObjectModel()),
 		"ClearCycle", &CAnimatedInstanceModel::ClearCycle,
 		"BlendCycle", &CAnimatedInstanceModel::BlendCycle);
-
 }

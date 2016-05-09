@@ -9,10 +9,10 @@ class CContextManager;
 class CComponent : public CNamed
 {
 private:
-	CRenderableObject *m_Owner;
+	CRenderableObject* m_Owner;
 
 public:
-	CComponent(const std::string &Name, CRenderableObject *Owner)
+	CComponent(const std::string& Name, CRenderableObject* Owner)
 		: CNamed(Name)
 		, m_Owner(Owner)
 	{
@@ -20,11 +20,16 @@ public:
 
 	virtual ~CComponent() {}
 
-	virtual void Update(float ElapsedTime) {}
-	virtual void Render(CContextManager  &_context) {}
-	virtual void RenderDebug(CContextManager  &_context) {}
+	virtual void Update(float ElapsedTime) = 0;
+	virtual void Render(CContextManager&  _context) = 0;
+	virtual void RenderDebug(CContextManager&  _context) = 0;
 
-	CRenderableObject * GetOwner(){ return m_Owner; }
+	virtual void Destroy() {}
+
+	CRenderableObject* GetOwner()
+	{
+		return m_Owner;
+	}
 };
 
 #endif
