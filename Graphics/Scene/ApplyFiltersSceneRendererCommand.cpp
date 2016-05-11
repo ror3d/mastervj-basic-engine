@@ -18,15 +18,10 @@ CApplyFiltersSceneRendererCommand::CApplyFiltersSceneRendererCommand(CXMLTreeNod
 		{
 			CDynamicTexture * dynText = new CDynamicTexture(texture);
 			CEngine::GetSingleton().getTextureManager()->add(dynText->getName(), dynText);
-			m_DynamicTexturesRefs.push_back(CEngine::GetSingleton().getTextureManager()->get(dynText->getName()));
+			m_DynamicTextures.push_back(CEngine::GetSingleton().getTextureManager()->get(dynText->getName()));
 
 			m_Materials.push_back(CEngine::GetSingleton().getMaterialManager()->get(texture.GetPszProperty("material")));
 		}
-	}
-
-	for (int i = 0; i < m_DynamicTexturesRefs.size(); ++i)
-	{
-		m_DynamicTextures.push_back(dynamic_cast<CDynamicTexture *>(m_DynamicTexturesRefs[i].getRef()));
 	}
 }
 
@@ -43,16 +38,18 @@ void CApplyFiltersSceneRendererCommand::Execute(CContextManager &_context)
 
 	for (int i = 0; i < m_DynamicTextures.size(); ++i)
 	{
+		auto text = dynamic_cast<CDynamicTexture *>(m_DynamicTextures[i].getRef());
+
 		ID3D11RenderTargetView *l_RenderTargetViews[1];
 
-		l_RenderTargetViews[0] = m_DynamicTextures[i]->GetRenderTargetView();
+		l_RenderTargetViews[0] = text->GetRenderTargetView();
 
-		_context.SetRenderTargets(1, l_RenderTargetViews, m_DynamicTextures[i]->GetDepthStencilView());
+		_context.SetRenderTargets(1, l_RenderTargetViews, text->GetDepthStencilView());
 
 		m_Materials[i]->apply();
 
 		_context.DrawScreenQuad(m_Materials[i]->getRenderableObjectTechique()->GetEffectTechnique(),
-			nullptr, 0, 0, m_DynamicTextures[i]->GetWidth(), m_DynamicTextures[i]->GetHeight(), CColor(1, 1, 1, 1));
+			nullptr, 0, 0, text->GetWidth(), text->GetHeight(), CColor(1, 1, 1, 1));
 
 		_context.UnsetRenderTargets();
 

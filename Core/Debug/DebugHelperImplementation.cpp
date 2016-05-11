@@ -201,11 +201,13 @@ void TW_CALL ReloadScene(void* _app)
 {
 	//CEngine::GetSingleton().getEffectsManager()->Reload();
 	//CEngine::GetSingleton().getRenderableObjectTechniqueManager()->Reload();
+	//CEngine::GetSingleton().getTextureManager()->Reload();
 	CEngine::GetSingleton().getMaterialManager()->reload();
 	//CEngine::GetSingleton().getStaticMeshManager()->Reload();
 	//CEngine::GetSingleton().getAnimatedModelManager()->Reload();
 	//CEngine::GetSingleton().getLayerManager()->Reload();
 	//CEngine::GetSingleton().getLightManager()->reload();
+	CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 }
 
 void TW_CALL ReloadLua(void* _app){

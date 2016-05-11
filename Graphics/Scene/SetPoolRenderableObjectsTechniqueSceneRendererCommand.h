@@ -8,10 +8,9 @@ class CSetPoolRenderableObjectsTechniqueSceneRendererCommand : public
 	CSceneRendererCommand
 {
 private:
-	CPoolRenderableObjectTechnique *m_Pool;
+	TMapManager<CPoolRenderableObjectTechnique>::Ref m_Pool;
 public:
-	CSetPoolRenderableObjectsTechniqueSceneRendererCommand(CXMLTreeNode
-		&TreeNode);
+	CSetPoolRenderableObjectsTechniqueSceneRendererCommand(CXMLTreeNode &TreeNode);
 	void Execute(CContextManager &_context);
 };
 

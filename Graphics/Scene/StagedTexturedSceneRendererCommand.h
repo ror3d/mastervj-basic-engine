@@ -21,8 +21,7 @@ protected:
 		}
 	};
 	std::vector<CStageTexture *> m_StageTextures;
-	std::vector<CDynamicTexture *> m_DynamicTextures;
-	std::vector<TMapManager<CTexture>::Ref> m_DynamicTexturesRefs;
+	std::vector<TMapManager<CTexture>::Ref> m_DynamicTextures;
 	std::vector<ID3D11RenderTargetView *> m_RenderTargetViews;
 public:
 	CStagedTexturedSceneRendererCommand(CXMLTreeNode &TreeNode);

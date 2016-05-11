@@ -246,9 +246,9 @@ void CStaticMesh::Render(CContextManager *_context)
 {
 	for (size_t i = 0; i<m_renderableVertexs.size(); ++i)
 	{
-		CMaterial *l_Material = m_materials[i].getRef();
+		CMaterial * l_Material = m_materials[i].getRef();
 		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
-	{
+		{
 			l_Material->apply();
 			m_renderableVertexs[i]->RenderIndexed(_context, l_Material->getRenderableObjectTechique()->GetEffectTechnique());
 		}

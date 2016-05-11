@@ -185,6 +185,7 @@ public:
 	virtual void add(const std::string& name, T* instance);
 	virtual void remove(const std::string& name);
 	virtual void destroy();
+	virtual void setDirty();
 	virtual void release(BoolRefCount_t* dirty);
 };
 
@@ -225,6 +226,15 @@ void TMapManager<T>::destroy()
 	}
 	m_resources.clear();
 
+	for (auto d : m_dirtyReferences)
+	{
+		d->b = true;
+	}
+}
+
+template<class T>
+void TMapManager<T>::setDirty()
+{
 	for (auto d : m_dirtyReferences)
 	{
 		d->b = true;

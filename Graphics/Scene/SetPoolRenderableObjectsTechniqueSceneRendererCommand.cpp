@@ -4,9 +4,7 @@
 CSetPoolRenderableObjectsTechniqueSceneRendererCommand::CSetPoolRenderableObjectsTechniqueSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode)
 {
-	m_Pool = CEngine::GetSingleton()
-				.getRenderableObjectTechniqueManager()
-					->getPool(TreeNode.GetPszProperty("pool"));
+	m_Pool = CEngine::GetSingleton().getRenderableObjectTechniqueManager()->getPool(TreeNode.GetPszProperty("pool"));
 }
 
 void CSetPoolRenderableObjectsTechniqueSceneRendererCommand::Execute(CContextManager &_context)

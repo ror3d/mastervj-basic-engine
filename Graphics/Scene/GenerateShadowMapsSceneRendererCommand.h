@@ -7,7 +7,7 @@ class CPoolRenderableObjectTechnique;
 
 class CGenerateShadowMapsSceneRendererCommand : public CSceneRendererCommand
 {
-	CPoolRenderableObjectTechnique *m_pool;
+	TMapManager<CPoolRenderableObjectTechnique>::Ref m_pool;
 public:
 	CGenerateShadowMapsSceneRendererCommand(CXMLTreeNode &TreeNode);
 	virtual ~CGenerateShadowMapsSceneRendererCommand();

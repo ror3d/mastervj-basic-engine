@@ -28,7 +28,8 @@ void CStagedTexturedSceneRendererCommand::CreateRenderTargetViewVector()
 y se rellenará con todos los RenderTargets de las texturas dinámicas.*/
 	for (int i = 0; i < m_DynamicTextures.size(); i++)
 	{
-		m_RenderTargetViews.push_back(m_DynamicTextures[i]->GetRenderTargetView());
+		auto text = dynamic_cast<CDynamicTexture *>(m_DynamicTextures[i].getRef());
+		m_RenderTargetViews.push_back(text->GetRenderTargetView());
 	}
 }
 

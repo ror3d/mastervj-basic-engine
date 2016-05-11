@@ -6,7 +6,6 @@
 
 CGenerateShadowMapsSceneRendererCommand::CGenerateShadowMapsSceneRendererCommand(CXMLTreeNode &TreeNode) 
 	: CSceneRendererCommand(TreeNode)
-	, m_pool(nullptr)
 {
 	std::string pool = TreeNode.GetPszProperty("pool", "", false);
 	if (pool != "")
