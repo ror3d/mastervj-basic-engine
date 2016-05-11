@@ -1,6 +1,6 @@
-#include <Base/Utils/Utils.h>
 #include "SoundManager.h"
-#include "ISoundManager.h"
+//#include "ISoundManager.h"
+
 
 #include <AK/SoundEngine/Common/AkSoundEngine.h>
 #include <AK/SoundEngine/Common/AkTypes.h>
@@ -13,6 +13,9 @@
 #include <AK/MusicEngine/Common/AkMusicEngine.h>
 
 #include <AkSoundEngineDLL.h>
+
+#include <Graphics/Camera/Camera.h>
+#include <Graphics/Renderer/3DElement.h>
 
 #pragma comment(lib, "AkSoundEngineDLL.lib")
 //#pragma comment(lib, "AkSoundEngine.lib")
@@ -42,7 +45,7 @@ namespace AK
 	{
 		return VirtualAlloc(in_pMemAddress, in_size, in_dwAllocationType, in_dwProtect);
 	}
-	void * VirtualFreeHook(
+	void VirtualFreeHook(
 		void * in_pMemAddress,
 		size_t in_size,
 		DWORD in_dwFreeType
@@ -60,7 +63,141 @@ AkGameObjectID m_DefaultSpeakerId;
 std::unordered_map<std::string, AkGameObjectID> m_NamedSpeakers;
 std::unordered_map<const C3DElement*, AkGameObjectID> m_GameObjectSpeakers;
 
-AkGameObjectID GenerateObjectID() 
+ISoundManager* ISoundManager::InstantiateSoundManager()
+{
+	return new CSoundManager();
+}
+
+CSoundManager::CSoundManager() : m_SoundBanksFilename(""), m_SpeakersFilename(""), m_InitOk(false)
+{
+	//CHECK	
+} 
+
+CSoundManager::~CSoundManager()
+{
+	Terminate();
+}
+
+
+void CSoundManager::PlayEvent(const SoundEvent &_event)
+{
+	PlayEvent(_event, m_DefaultSpeakerId);
+}
+void CSoundManager::PlayEvent(const SoundEvent &_event, const std::string &_speaker)
+{
+	auto it = m_NamedSpeakers.find(_speaker);
+	if (it != m_NamedSpeakers.end())
+	{
+		PlayEvent(_event, it->second);
+	}
+	else
+	{
+		assert(false);
+	}
+}
+void CSoundManager::PlayEvent(const SoundEvent &_event, const C3DElement *_speaker)
+{
+	auto it = m_GameObjectSpeakers.find(_speaker);
+	if (it != m_GameObjectSpeakers.end())
+	{
+		PlayEvent(_event, it->second);
+	}
+	else
+	{
+		assert(false);
+	}
+}
+void CSoundManager::PlayEvent(const SoundEvent &_event, const AkGameObjectID &ID)
+{
+	AK::SoundEngine::PostEvent(_event.m_EventName.c_str(), ID); //TODO
+}
+
+void CSoundManager::SetSwitch(const SoundSwitchValue &switchValue)
+{
+	SetSwitch(switchValue, m_DefaultSpeakerId);
+}
+void CSoundManager::SetSwitch(const SoundSwitchValue &switchValue, const std::string &_speaker)
+{
+	auto it = m_NamedSpeakers.find(_speaker);
+	if (it != m_NamedSpeakers.end())
+	{
+		SetSwitch(switchValue, it->second);
+	}
+	else
+	{
+		assert(false);
+	}
+}
+void CSoundManager::SetSwitch(const SoundSwitchValue &switchValue, const C3DElement *_speaker)
+{
+	auto it = m_GameObjectSpeakers.find(_speaker);
+	if (it != m_GameObjectSpeakers.end())
+	{
+		SetSwitch(switchValue, it->second);
+	}
+	else
+	{
+		assert(false);
+	}
+}
+void CSoundManager::SetSwitch(const SoundSwitchValue &switchValue, const AkGameObjectID &ID)
+{
+	AKRESULT l_Result = AK::SoundEngine::SetSwitch(switchValue.m_SoundSwitch.m_SwitchName.c_str(), switchValue.valueName.c_str(), ID);
+	assert(l_Result);
+}
+
+void CSoundManager::SetRTPCValue(const SoundRTPC &_rtpc, float value)
+{
+	SetRTPCValue(_rtpc, value, m_DefaultSpeakerId);
+}
+void CSoundManager::SetRTPCValue(const SoundRTPC &_rtpc, float value, const std::string &_speaker)
+{
+	std::unordered_map<std::string, AkGameObjectID>::iterator it;
+	it = m_NamedSpeakers.find(_speaker);
+	if (it != m_NamedSpeakers.end())
+	{
+		SetRTPCValue(_rtpc, value, it->second);
+	}
+	else
+	{
+		assert(false);
+	}
+}
+void CSoundManager::SetRTPCValue(const SoundRTPC &_rtpc, float value, const C3DElement*_speaker)
+{
+	std::unordered_map<const C3DElement*, AkGameObjectID>::iterator it;
+	it = m_GameObjectSpeakers.find(_speaker);
+	if (it != m_GameObjectSpeakers.end())
+	{
+		SetRTPCValue(_rtpc, value, it->second);
+	}
+	else
+	{
+		assert(false);
+	}
+}
+void CSoundManager::SetRTPCValue(const SoundRTPC &_rtpc, float value, const AkGameObjectID& ID)
+{
+	AKRESULT l_Result = AK::SoundEngine::SetRTPCValue(_rtpc.RTPCName.c_str(), AkRtpcValue(value), ID);
+	assert (l_Result);
+}
+
+
+void CSoundManager::BroadcastRTPCValue(const SoundRTPC& Rtpc, float value)
+{
+	//AKRESULT l_Result = AK::SoundEngine::SetRTPCValue(Rtpc.RTPCName.c_str(), AkRtpcValue()value); //TODO
+	//assert (l_Result);
+}
+void CSoundManager::BroadcastState(const SoundStateValue &_state)
+{
+	//AKRESULT l_Result = AK::SoundEngine::SetState(_state.soundState.stateName.c_str(), _state.valueName.c_str()); //TODO
+	//assert (l_Result);
+}
+
+
+
+
+AkGameObjectID CSoundManager::GenerateObjectID()
 {
 	AkGameObjectID result;
 	if (m_FreeObjectIDs.size() > 0)
@@ -75,13 +212,34 @@ AkGameObjectID GenerateObjectID()
 	return result;
 }
 
-bool LoadSoundBanksXML(std::string filename)
+bool CSoundManager::LoadSoundBanksXML(std::string filename)
 {
-	//TODO
+	CXMLTreeNode l_XML;
+
+	if (l_XML.LoadFile((filename).c_str()))
+	{
+		CXMLTreeNode l_Soundbanks = l_XML["soundbanks"];
+
+		if (l_Soundbanks.Exists())
+		{
+			for (int i = 0; i < l_Soundbanks.GetNumChildren(); ++i)
+			{
+				CXMLTreeNode l_Element = l_Soundbanks(i);
+
+				if (l_Element.GetName() == std::string("sound_bank"))
+				{
+					std::string l_Bank = l_Element.GetPszProperty("name", "");
+					LoadSoundBank(l_Bank);
+				}
+			}
+		}
+	}
+
+	return true;
 	
 }
 
-bool LoadSpeakersXML(std::string filename)
+bool CSoundManager::LoadSpeakersXML(std::string filename)
 {
 
 	CXMLTreeNode l_Speakers;
@@ -117,7 +275,7 @@ bool LoadSpeakersXML(std::string filename)
 		return false;
 }
 
-bool Init()
+bool CSoundManager::Init()
 {
 	//Initialize Audio Engine
 	//Memory
@@ -172,23 +330,30 @@ bool Init()
 	return true;
 }
 
-bool Load(const std::string &soundbanks_filename, const std::string &speakers_filename)
+bool CSoundManager::Load(const std::string &soundbanks_filename, const std::string &speakers_filename)
 {
 	std::string m_SoundBanksFilename = soundbanks_filename;
 	std::string m_SpeakersFilename = speakers_filename;
 
 	bool l_IsOK = true;
-	l_IsOK = LoadSoundBanksXML("Data\\soundbanks.xml");//TODO
-	l_IsOK &= LoadSpeakersXML("Data\\speakers.xml");//TODO
+	l_IsOK = LoadSoundBanksXML("Data\\soundbanks.xml");
+	l_IsOK &= LoadSpeakersXML("Data\\speakers.xml");
 
 	return l_IsOK;
 }
 
-bool initBanks()
+bool CSoundManager::Reload()
+{
+	Clean();
+	return Load(m_SoundBanksFilename, m_SpeakersFilename);
+}
+
+bool CSoundManager::initBanks()
 {
 	//load initialization and main soundbanks
 	AkOSChar *path;
 	AKRESULT retValue;
+	//std::string m_Path;
 	CONVERT_CHAR_TO_OSCHAR(m_Path.c_str(), path);
 	retValue = AK::SOUNDENGINE_DLL::SetBasePath(path);
 	retValue = AK::StreamMgr::SetCurrentLanguage(L"English(US)");
@@ -202,7 +367,7 @@ bool initBanks()
 	return true;
 }
 
-bool LoadSoundBank(const std::string &bank)
+bool CSoundManager::LoadSoundBank(const std::string &bank)
 {
 	AkBankID bankID;
 	AKRESULT retValue;
@@ -215,7 +380,7 @@ bool LoadSoundBank(const std::string &bank)
 	return true;
 }
 
-bool UnloadSoundBank(const std::string &bank)
+bool CSoundManager::UnloadSoundBank(const std::string &bank)
 {
 	AkBankID bankID;
 	AKRESULT retValue;
@@ -230,7 +395,7 @@ bool UnloadSoundBank(const std::string &bank)
 }
 
 
-void RegisterSpeaker(const C3DElement* _speaker)
+void CSoundManager::RegisterSpeaker(const C3DElement* _speaker)
 {
 	assert(m_GameObjectSpeakers.find(_speaker) == m_GameObjectSpeakers.end());
 
@@ -258,7 +423,7 @@ void RegisterSpeaker(const C3DElement* _speaker)
 
 }
 
-void UnregisterSpeaker(const C3DElement* _speaker)
+void CSoundManager::UnregisterSpeaker(const C3DElement* _speaker)
 {
 	auto it = m_GameObjectSpeakers.find(_speaker);
 	if (it != m_GameObjectSpeakers.end())
@@ -273,7 +438,7 @@ void UnregisterSpeaker(const C3DElement* _speaker)
 	}
 }
 
-void Terminate()
+void CSoundManager::Terminate()
 {
 	AK::SoundEngine::ClearBanks(); //Limpiamos cualquier bank
 	AK::SoundEngine::UnregisterAllGameObj();
@@ -281,7 +446,7 @@ void Terminate()
 	AK::SOUNDENGINE_DLL::Term();
 }
 
-void Clean()
+void CSoundManager::Clean()
 {
 	//Una vez hecho el clear hay que volver a llamar al bank init (no se si aqui on terminate)
 	//TODO
@@ -295,7 +460,7 @@ void Clean()
 	m_NamedSpeakers.clear();
 }
 
-void SetListenerPosition(const CCamera *camera)
+void CSoundManager::SetListenerPosition(const CCamera *camera)
 {
 	Vect3f l_Position = camera->GetPosition();
 	Vect3f l_Orientation = camera->GetLookAt();
@@ -318,7 +483,7 @@ void SetListenerPosition(const CCamera *camera)
 	AK::SoundEngine::SetListenerPosition(l_ListenerPosition);
 }
 
-void Update(const CCamera *camera)
+void CSoundManager::Update(const CCamera *camera)
 {
 	for (auto it : m_GameObjectSpeakers)
 	{

@@ -1,54 +1,65 @@
+#ifndef _SOUNDMANAGER_H
+#define _SOUNDMANAGER_H
 #pragma once
 
+#include "ISoundManager.h"
 
 #include <string>
 #include <vector>
 #include <unordered_map>
-//#include "ISoundManager.h"
-#include <Graphics/Camera/Camera.h>
-#include <Graphics/Renderer/3DElement.h>
 
-class SoundManager
+class CSoundManager : public ISoundManager
 {
 
+private:
+	std::string m_SoundBanksFilename;
+	std::string m_SpeakersFilename;
+	bool m_InitOk;
+
+private:	
+	AkGameObjectID GenerateObjectID();
+
 public:
-	virtual bool Init() = 0;
+	CSoundManager();
+	virtual ~CSoundManager();
+	
+	virtual bool Init();
+	virtual void Update(const CCamera *camera);
+	virtual bool Load(const std::string &soundbanks_filename, const std::string &speakers_filename);
+	virtual bool Reload();
 
-	virtual void Update(const CCamera *camera) = 0;
+	bool LoadSoundBank(const std::string &bank);
+	bool UnloadSoundBank(const std::string &bank);
 
-	virtual void Load(const std::string &soundbanks_filename, const std::string &speakers_filename) = 0;
-
-	virtual bool Reload() = 0;
-
-	virtual bool LoadSoundBank(const std::string &bank) = 0;
-	virtual bool UnloadSoundBank(const std::string &bank) = 0;
-
-	virtual void RegisterSpeaker(const C3DElement* _speaker) = 0;
-	virtual void UnregisterSpeaker(const C3DElement*  _speaker) = 0;
+	void RegisterSpeaker(const C3DElement* _speaker);
+	void UnregisterSpeaker(const C3DElement*  _speaker);
 
 	bool LoadSoundBanksXML(std::string filename);
 	bool LoadSpeakersXML(std::string filename);
 
-	virtual void PlayEvent(const SoundEvent &_event) = 0;
-	virtual void PlayEvent(const SoundEvent &_event, const std::string &_speaker) = 0;
-	virtual void PlayEvent(const SoundEvent &_event, const C3DElement*  _speaker) = 0;
+	void PlayEvent(const SoundEvent &_event);
+	void PlayEvent(const SoundEvent &_event, const std::string &_speaker);
+	void PlayEvent(const SoundEvent &_event, const C3DElement* _speaker);
+	void PlayEvent(const SoundEvent &_event, const AkGameObjectID &ID);
 
-	virtual void SetSwitch(const SoundSwitchValue &switchvalue) = 0;
-	virtual void SetSwitch(const SoundSwitchValue &switchvalue, const std::string &_speaker) = 0;
-	virtual void SetSwitch(const SoundSwitchValue &switchvalue, const C3DElement*  _speaker) = 0;
+	void SetSwitch(const SoundSwitchValue &switchvalue);
+	void SetSwitch(const SoundSwitchValue &switchvalue, const std::string &_speaker);
+	void SetSwitch(const SoundSwitchValue &switchvalue, const C3DElement*  _speaker);
+	void SetSwitch(const SoundSwitchValue &switchValue, const AkGameObjectID &ID);
 
-	virtual void BroadcastRTPCValue(const SoundRTPC &_rtpc, float value) = 0;
-	virtual void SetRTPCValue(const SoundRTPC &_rtpc, float value) = 0;
-	virtual void SetRTPCValue(const SoundRTPC &_rtpc, float value, const std::string &_speaker) = 0;
-	virtual void SetRTPCValue(const SoundRTPC &_rtpc, float value, const C3DElement*  _speaker) = 0;
+	void BroadcastRTPCValue(const SoundRTPC &_rtpc, float value);
+	void SetRTPCValue(const SoundRTPC &_rtpc, float value);
+	void SetRTPCValue(const SoundRTPC &_rtpc, float value, const std::string &_speaker);
+	void SetRTPCValue(const SoundRTPC &_rtpc, float value, const C3DElement*  _speaker);
+	void SetRTPCValue(const SoundRTPC &_rtpc, float value, const AkGameObjectID &ID);
 
-	virtual void BroadcastState(const SoundStateValue &_state) = 0;
+	void BroadcastState(const SoundStateValue &_state);
 
 	//self
-	virtual AkGameObjectID GenerateObjectID() = 0;
-	virtual bool initBanks() = 0;
-	virtual void Terminate() = 0;
-	virtual void Clean() = 0;
-	virtual void SetListenerPosition(const CCamera *camera) = 0;
+	bool initBanks();
+	void Terminate();
+	void Clean();
+	void SetListenerPosition(const CCamera *camera);
 	
 };
+#endif
