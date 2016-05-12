@@ -4,11 +4,14 @@
 
 #include "Texture/Texture.h"
 #include "Material/Material.h"
-#include "Renderable/RenderableVertexs.h"
+#include "Mesh/RenderableVertexs.h"
+#include <Graphics/Mesh/CookedMeshManager.h>
+#include <PhysX/PhysXManager.h>
 
 #include <Core/Engine/Engine.h>
 
 #include <Renderable/RenderableObjectTechnique.h>
+#include <Graphics/Material/MaterialManager.h>
 
 #include <vector>
 
@@ -349,7 +352,7 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 			CEngine::GetSingleton().getCookedMeshManager()->add(getName(), cooked);
 		}
 		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh)
-		{		
+		{
 			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
 			CEngine::GetSingleton().getCookedMeshManager()->add(getName(), cooked);
 		}

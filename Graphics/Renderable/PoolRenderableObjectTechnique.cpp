@@ -1,6 +1,7 @@
 #include "Renderable/PoolRenderableObjectTechnique.h"
 #include <Core/Engine/Engine.h>
 #include <Base/XML/XMLTreeNode.h>
+#include <Graphics/Effect/EffectManager.h>
 
 
 CPoolRenderableObjectTechnique

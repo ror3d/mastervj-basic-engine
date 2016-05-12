@@ -10,6 +10,8 @@
 #include <Base/Math/Math.h>
 
 #include <Core/Engine/Engine.h>
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Context/ContextManager.h>
 
 CCameraManager::CCameraManager(CContextManager* context)
 	: m_context(context)

@@ -1,8 +1,9 @@
 #ifndef MATERIAL_MANAGER_H
 #define MATERIAL_MANAGER_H
 
-#include "Material.h"
 #include <Utils/TMapManager.h>
+
+class CMaterial;
 
 class CMaterialManager : public TMapManager<CMaterial>
 {

@@ -2,10 +2,16 @@
 
 #include <Base/XML/XMLTreeNode.h>
 #include <Core/Engine/Engine.h>
+#include "ParticleSystemManager.h"
 
-#include "Renderable/RenderableVertexs.h"
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Material/Material.h>
+
+#include "Mesh/RenderableVertexs.h"
 #include "Renderable/RenderableObjectTechnique.h"
 #include "Effect/EffectGeometryShader.h"
+
+#include <algorithm>
 
 std::random_device rnd;
 
@@ -17,8 +23,16 @@ float getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, ran
 
 Vect3f getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<Vect3f> &rng)
 {
-	Vect3f r(ud(rnde), ud(rnde), ud(rnde));
-	return ((rng.second - rng.first) * r) + rng.first;
+	Vect3f s = ( rng.second - rng.first );
+	Vect3f r(ud(rnde)*s.x, ud(rnde)*s.y, ud(rnde)*s.z);
+	return r + rng.first;
+}
+
+CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<CColor> &rng)
+{
+	CColor s = ( rng.second - rng.first );
+	CColor r(ud(rnde)*s.x, ud(rnde)*s.y, ud(rnde)*s.z, ud(rnde)*s.w);
+	return r + rng.first;
 }
 
 CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
@@ -47,6 +61,7 @@ CParticleSystemInstance::~CParticleSystemInstance()
 
 void CParticleSystemInstance::Update(float ElapsedTime)
 {
+	// Update existing particles
 	for (int i = 0; i < m_activeParticles; ++i)
 	{
 		ParticleData &p = m_particles[i];
@@ -63,7 +78,7 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		p.angularSpeed += p.angularAcc * ElapsedTime;
 		p.angle += p.angularSpeed * ElapsedTime;
 
-		if (m_particleSystemClass->timePerFrame > 0)
+		if (m_particleSystemClass->timePerFrame > 0 && m_particleSystemClass->timePerFrame > 0)
 		{
 			p.currentFrame = p.lifetime / m_particleSystemClass->timePerFrame;
 		}
@@ -74,25 +89,24 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 	size_t n = std::floorf(m_toCreateParticles);
 	m_toCreateParticles -= n;
 
+	// Create new particles
 	for (int i = 0; i < n && m_activeParticles < MAX_PARTICLES_PER_EMITTER; ++i)
 	{
 		ParticleData &p = m_particles[m_activeParticles];
 		m_activeParticles++;
 
-		// TODO: Randomize
 		p.pos = GetPosition();
-		p.vel = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startVelocityRange);
-		p.acc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->accelerationRange);
-		p.size = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->sizeRange);
-		p.angle = 0;
+		p.vel = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startVelocity);
+		p.acc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->acceleration);
+		p.size = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->size);
+		p.angle = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startAngle);
+		p.angularSpeed = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->angleSpeed);
+		p.angularAcc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->angleAcceleration);
 		p.currentFrame = 0;
 		p.lifetime = 0;
 		p.totalLifetime = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->life);
-		// TODO: Rest of the properties
-		p.color = CColor(1, 1, 1, 1);
+		p.color = getRand( m_randomEngine, m_unitDist, m_particleSystemClass->color );
 	}
-
-	// TODO: sort particles
 
 	// Copy particles
 	for (int i = 0; i < m_activeParticles; ++i)
@@ -103,6 +117,15 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		m_particleVtxs[i].UV.x = p.size;
 		m_particleVtxs[i].UV.y = p.angle;
 		m_particleVtxs[i].UV2.x = p.currentFrame;
+	}
+	Vect4f cameraPos4 = CEffectManager::m_SceneParameters.m_CameraPosition;
+	Vect3f cameraPos( cameraPos4.x, cameraPos4.y, cameraPos4.z );
+	if ( m_activeParticles > 1 )
+	{
+		std::sort( &( m_particleVtxs[0] ), &( m_particleVtxs[m_activeParticles - 1] ),
+			[&cameraPos]( PARTICLE_VERTEX &a, PARTICLE_VERTEX &b ) -> bool {
+			return ( a.Position - cameraPos ).SquaredLength() > ( b.Position - cameraPos ).SquaredLength();
+		} );
 	}
 }
 

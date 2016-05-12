@@ -1,7 +1,11 @@
 #include "MaterialManager.h"
-#include <Core/Engine/Engine.h>
 
 #include "Effect/EffectManager.h"
+
+#include "Material.h"
+
+#include <Core/Engine/Engine.h>
+#include <Base/XML/XMLTreeNode.h>
 
 CMaterialManager::CMaterialManager()
 	: m_Filename("")
@@ -31,7 +35,7 @@ void CMaterialManager::load(const std::string &Filename)
 				if (l_Material.GetName() == std::string("material"))
 				{
 					CMaterial * Material = new CMaterial(l_Material);
-					add(Material->getName() , Material);									
+					add(Material->getName() , Material);
 				}
 			}
 		}

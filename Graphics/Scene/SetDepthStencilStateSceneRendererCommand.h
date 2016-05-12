@@ -1,8 +1,9 @@
 #ifndef SET_DEPTH_STENCIL_STATE_SCENE_RENDERER_COMMAND_H
 #define SET_DEPTH_STENCIL_STATE_SCENE_RENDERER_COMMAND_H
 
-#include "Scene\SceneRendererCommand.h"
-#include "Engine\Engine.h"
+#include "Scene/SceneRendererCommand.h"
+
+class ID3D11DepthStencilState;
 
 class CSetDepthStencilStateSceneRendererCommand : public CSceneRendererCommand
 {

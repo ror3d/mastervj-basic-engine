@@ -3,6 +3,7 @@
 #include <D3DX11.h>
 #include <D3Dcompiler.h>
 #include "EffectParameters.h"
+#include <Graphics/Context/ContextManager.h>
 
 #include <sstream>
 

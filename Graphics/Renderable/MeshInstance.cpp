@@ -1,13 +1,15 @@
 #include "MeshInstance.h"
 #include <Engine/Engine.h>
-#include "StaticMesh.h"
+#include "Mesh/StaticMesh.h"
+#include <Graphics/Mesh/StaticMeshManager.h>
+#include <PhysX/PhysXManager.h>
 
 CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 	: CRenderableObject(treeNode)
 {
 	std::string CoreName = treeNode.GetPszProperty("core_name");
 	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(CoreName);
-	
+
 	if ((CoreName == "SphereTrigger") || (CoreName == "BoxTrigger"))
 	{
 
@@ -35,7 +37,7 @@ CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 		desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetYaw(), GetPitch(), -GetRoll()));
 		CEngine::GetSingleton().getPhysXManager()->createActor(getName(), CPhysXManager::ActorType::Static, desc);
 	}
-	
+
 
 }
 

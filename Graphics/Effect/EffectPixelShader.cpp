@@ -1,5 +1,6 @@
 #include "EffectPixelShader.h"
 #include <Engine/Engine.h>
+#include <Graphics/Context/ContextManager.h>
 
 
 CEffectPixelShader::CEffectPixelShader(const CXMLTreeNode &TreeNode)

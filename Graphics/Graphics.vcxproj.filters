@@ -100,7 +100,6 @@
     <ClInclude Include="Effect\EffectManager.h">
       <Filter>Effect</Filter>
     </ClInclude>
-    <ClInclude Include="VertexTypes.h" />
     <ClInclude Include="Texture\TextureManager.h">
       <Filter>Texture</Filter>
     </ClInclude>
@@ -122,14 +121,8 @@
     <ClInclude Include="Renderable\RenderableObjectsManager.h">
       <Filter>Renderable</Filter>
     </ClInclude>
-    <ClInclude Include="Renderable\RenderableVertexs.h">
-      <Filter>Renderable</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\3DElement.h">
       <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh\MeshInstance.h">
-      <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Mesh\StaticMesh.h">
       <Filter>Mesh</Filter>
@@ -281,6 +274,15 @@
     <ClInclude Include="Cinematics\CinematicManager.h">
       <Filter>Cinematic</Filter>
     </ClInclude>
+    <ClInclude Include="Renderable\MeshInstance.h">
+      <Filter>Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\VertexTypes.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\RenderableVertexs.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -343,9 +345,6 @@
     </ClCompile>
     <ClCompile Include="Renderer\3DElement.cpp">
       <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh\MeshInstance.cpp">
-      <Filter>Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Mesh\StaticMesh.cpp">
       <Filter>Mesh</Filter>
@@ -499,6 +498,9 @@
     </ClCompile>
     <ClCompile Include="Cinematics\CinematicManager.cpp">
       <Filter>Cinematic</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderable\MeshInstance.cpp">
+      <Filter>Renderable</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

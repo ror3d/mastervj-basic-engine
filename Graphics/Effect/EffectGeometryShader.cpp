@@ -1,5 +1,6 @@
 #include "EffectGeometryShader.h"
 #include <Engine/Engine.h>
+#include <Graphics/Context/ContextManager.h>
 
 
 CEffectGeometryShader::CEffectGeometryShader(const CXMLTreeNode &TreeNode)

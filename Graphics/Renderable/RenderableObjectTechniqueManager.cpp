@@ -1,9 +1,11 @@
-#include "Renderable\RenderableObjectTechniqueManager.h"
+#include "Renderable/RenderableObjectTechniqueManager.h"
 
-#include "Renderable\RenderableObjectTechnique.h"
-#include "Renderable\PoolRenderableObjectTechnique.h"
+#include "Renderable/RenderableObjectTechnique.h"
+#include "Renderable/PoolRenderableObjectTechnique.h"
 
-#include "Engine\Engine.h"
+#include "Engine/Engine.h"
+#include <Graphics/Effect/EffectManager.h>
+
 
 CRenderableObjectTechniqueManager::CRenderableObjectTechniqueManager()
 	: m_Filename("")
@@ -21,7 +23,7 @@ bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRen
 	const std::string &TechniqueName)
 {
 	CRenderableObjectTechnique *l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = get(RenderableObjectTechniqueName);
-	
+
 	if (l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager == NULL)
 	{
 		CEffectTechnique *l_EffectTechnique = CEngine::GetSingleton().getEffectsManager()->get(TechniqueName);
@@ -78,7 +80,7 @@ bool CRenderableObjectTechniqueManager::Load(const std::string &FileName)
 		return true;
 	}
 	return false;
-	
+
 }
 
 bool CRenderableObjectTechniqueManager::Reload()

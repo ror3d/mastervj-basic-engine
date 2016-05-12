@@ -1,5 +1,6 @@
 #include "TextureManager.h"
 #include <Core/Engine/Engine.h>
+#include <Graphics/Context/ContextManager.h>
 
 
 CTextureManager::CTextureManager()

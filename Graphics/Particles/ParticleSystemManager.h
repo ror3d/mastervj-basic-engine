@@ -4,6 +4,7 @@
 #include <Base/Utils/TMapManager.h>
 #include <Base/Utils/Named.h>
 #include <Base/Math/Math.h>
+#include <Base/Math/Color.h>
 
 class CMaterial;
 class CXMLTreeNode;
@@ -15,7 +16,7 @@ public:
 	T first;
 	T second;
 
-	range() {}
+	range() : first(), second() {}
 	range(const T &v) : first(v), second(v) {}
 	range(const T &f, const T &s) : first(f), second(s) {}
 };
@@ -44,18 +45,26 @@ public:
 	bool loopFrames;
 
 	float emitRate;
-	range<float> sizeRange;
+	range<float> size;
 	range<float> life;
-	range<Vect3f> startVelocityRange;
-	range<Vect3f> accelerationRange;
+	range<Vect3f> startVelocity;
+	range<Vect3f> acceleration;
+	range<float> startAngle;
+	range<float> angleSpeed;
+	range<float> angleAcceleration;
+	range<CColor> color;
 };
 
 
 class CParticleSystemManager : public TMapManager<CParticleSystemClass>
 {
+	std::string m_Filename;
+
 public:
 
 	void Load(const std::string &Filename);
+
+	void reload();
 };
 
 

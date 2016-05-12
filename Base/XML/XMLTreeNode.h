@@ -36,7 +36,7 @@ public:
 
   bool								Exists             	() const { return m_pNode != NULL; }
   bool								ExistsKey          	(const char* _pszKey) const;
-  const char*						GetName            	();
+  const char*						GetName            	() const;
 
   // To get properties from xml file
   int								GetIntProperty     	(const char* _pszKey, int _iDefault=0, bool warningDefault = true) const;
@@ -62,7 +62,7 @@ public:
   bool								GetBoolKeyword     	(const char* _pszKey, bool _bDefault=false) const;
   const char*					GetPszKeyword      	(const char* _pszKey, const char* _pszDefault=NULL) const;
 
-  int									GetNumChildren     	() ;
+  int									GetNumChildren     	() const;
 
   CXMLTreeNode 				operator[]         	(const char* _pszKey) const;
   CXMLTreeNode 				operator()         	(int _iIndex) const;
