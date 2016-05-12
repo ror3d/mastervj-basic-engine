@@ -24,6 +24,7 @@ class CComponentManager;
 class CParticleSystemManager;
 class CCinematicsActionManager;
 class CCinematicManager;
+class CSoundManager;
 
 class CEngine : public CSingleton<CEngine>
 {
@@ -50,6 +51,7 @@ private:
 	CParticleSystemManager * particleManager;
 	CCinematicsActionManager * cinematicsActionManager;
 	CCinematicManager * cinematicManager;
+	CSoundManager * soundManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -80,4 +82,5 @@ public:
 	inline CParticleSystemManager * getParticleManager() const { return particleManager; }
 	inline CCinematicsActionManager * getCinematicsActionManager() const { return cinematicsActionManager;  }
 	inline CCinematicManager * getCinematicManager() const { return cinematicManager;  }
+	inline CSoundManager * getSoundManager() const { return soundManager; }
 };

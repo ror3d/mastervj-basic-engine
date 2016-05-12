@@ -2,9 +2,9 @@
 #define _ISOUNDMANAGER_H
 #pragma once
 
-#include <AK/SoundEngine/Common/AkTypes.h>
 #include <string>
 //#include <Graphics/Renderer/3DElement.h>
+#include <AK/SoundEngine/Common/AkTypes.h>
 
 class CCamera;
 class C3DElement;
@@ -41,7 +41,7 @@ public:
 	void SetPath(const std::string& path){ m_Path = path; }
 
 	virtual bool Init() = 0;
-	virtual void Update(const CCamera *Camera);
+	virtual void Update(const CCamera *Camera) = 0;
 	virtual bool Load(const std::string& SoundBanksFilename, const std::string& SpeakersFilename) = 0;
 	virtual bool Reload() = 0;
 	//std::string m_Path;

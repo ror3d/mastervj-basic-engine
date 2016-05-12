@@ -4,7 +4,7 @@
 
 #include "ISoundManager.h"
 
-#include <string>
+//#include <string>
 #include <vector>
 #include <unordered_map>
 
@@ -58,6 +58,7 @@ public:
 	//self
 	bool initBanks();
 	void Terminate();
+	void destroy() { Terminate(); }
 	void Clean();
 	void SetListenerPosition(const CCamera *camera);
 	

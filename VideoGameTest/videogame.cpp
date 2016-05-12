@@ -38,6 +38,7 @@
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+#include <Sound/SoundManager.h>
 
 
 #include <AntTweakBar.h>
@@ -231,6 +232,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
+	engine.getSoundManager()->Load("Data\\Sounds\\soundbanks.xml", "Data\\Sounds\\speakers.xml");
 
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();
