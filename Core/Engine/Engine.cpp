@@ -69,13 +69,13 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(cookedMeshManager);
 	CHECKED_DESTROY(iaManager);
 	CHECKED_DESTROY(debugRender);
-	CHECKED_DESTROY(scriptManager);
 	CHECKED_DESTROY(characterControllerManager);
 	CHECKED_DESTROY(timerManager);
 	CHECKED_DESTROY(componentManager);
 	CHECKED_DESTROY(particleManager);
 	CHECKED_DESTROY(cinematicManager);
 	CHECKED_DESTROY(cinematicsActionManager);
+	CHECKED_DESTROY(scriptManager);
 
 } //Destruimos vars
 

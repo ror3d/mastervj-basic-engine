@@ -6,6 +6,7 @@
 #include <vector>
 
 class CScriptManager;
+class CXMLTreeNode;
 
 class CScriptedComponent : public CComponent
 {
@@ -18,14 +19,17 @@ private:
 
 	void SetComponent();
 
-	static std::vector<CScriptedComponent*> s_components;
+	static std::vector<CScriptedComponent*> s_componentsToInit;
 public:
-	CScriptedComponent(const std::string& Name, CRenderableObject* Owner);
+	CScriptedComponent(const std::string& name, CRenderableObject* Owner);
+	CScriptedComponent(CXMLTreeNode& node, CRenderableObject* Owner);
 	virtual ~CScriptedComponent();
 	void Init();
 	virtual void Update(float ElapsedTime);
 	virtual void Render(CContextManager&  _context);
 	virtual void RenderDebug(CContextManager&  _context);
+
+	virtual void SendMsg(const std::string msg);
 
 	virtual void Destroy();
 

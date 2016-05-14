@@ -15,6 +15,7 @@
 #include <Graphics/Renderable/RenderableObjectsManager.h>
 #include <Graphics/Animation/AnimatedInstanceModel.h>
 #include <Core/Component/ComponentManager.h>
+#include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
@@ -171,28 +172,54 @@ void CScriptManager::RegisterLUAFunctions()
 		"GetPszProperty", &CXMLTreeNode::GetPszProperty,
 		"GetPszPropertyFromString", &CXMLTreeNode::GetPszPropertyFromString,
 		"GetFloatPropertyFromString", &CXMLTreeNode::GetFloatPropertyFromString);
+
 	(*m_state)["Vect3f"]
-		.SetClass<Vect3f, float, float, float>("x", &Vect3f::x,
-		"y", &Vect3f::y,
-		"z", &Vect3f::z);
+		.SetClass<Vect3f, float, float, float>(
+			"x", &Vect3f::x,
+			"y", &Vect3f::y,
+			"z", &Vect3f::z);
+
+	(*m_state)["CRenderableObject"]
+		.SetClass<CRenderableObject>(
+		"SetPosition", &CRenderableObject::SetPosition,
+		"SetYaw", &CRenderableObject::SetYaw,
+		"GetYaw", &CRenderableObject::GetYaw,
+		"GetCharacterController", &CRenderableObject::GetCharacterController);
+
+	(*m_state)["CCharacterControllerComponent"]
+		.SetClass<CCharacterControllerComponent, CRenderableObject*>(
+		"IsGrounded", &CCharacterControllerComponent::IsGrounded,
+		"Move", &CCharacterControllerComponent::Move);
+
+	(*m_state)["ICameraController"].SetClass<ICameraController>(
+		"SetPosition", &ICameraController::SetPosition,
+		"GetPosition", &ICameraController::GetPosition
+		);
+		
 
 	//Engine References
 	(*m_state)["CPhysicsManager"].SetObj(
 		*CEngine::GetSingleton().getPhysXManager(),
 		"moveCharController", &CPhysXManager::moveCharacterController,
 		"createController", &CPhysXManager::createController);
+
 	(*m_state)["CInputManager"].SetObj<CInputManager>(
 		*CInputManager::GetInputManager(),
 		"GetAxis", &CInputManager::GetAxis);
+
 	(*m_state)["timeManager"].SetObj(
 		*CEngine::GetSingleton().getTimerManager(),
 		"GetElapsedTime", &CTimerManager::getElapsedTime);
+
 	(*m_state)["CCameraManager"].SetObj(
 		*CEngine::GetSingleton().getCameraManager(),
-		"SetCurrentCameraController", &CCameraManager::SetCurrentCameraController);
+		"SetCurrentCameraController", &CCameraManager::SetCurrentCameraController,
+		"GetCurrentCamera", &CCameraManager::GetCurrentCameraController);
+
 	(*m_state)["CinematicsActionManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicsActionManager(),
 		"m_FileName", &CCinematicsActionManager::m_FileName);
+
 	(*m_state)["CCinematicsManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", &CCinematicManager::Play);
@@ -230,10 +257,6 @@ void CScriptManager::RegisterLUAFunctionsAfter()
 		"GetUp", &CFPSCameraController::GetUp,
 		"SetPosition", &CFPSCameraController::SetPosition,
 		"Update", &CFPSCameraController::Update);
-	(*m_state)["objectModel"].SetObj(
-		*CEngine::GetSingleton().getCharacterControllerManager()->get("main")->getObjectModel(),
-		"SetPosition", &CRenderableObject::SetPosition,
-		"SetYaw", &CRenderableObject::SetYaw);
 	(*m_state)["animatedModel"].SetObj(
 		*((CAnimatedInstanceModel*)
 		CEngine::GetSingleton().getCharacterControllerManager()->get("main")->getObjectModel()),

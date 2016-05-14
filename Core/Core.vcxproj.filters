@@ -37,6 +37,12 @@
     <ClCompile Include="Component\ScriptedComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Component\CharControllerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -102,6 +108,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\ScriptedComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\CharControllerComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>

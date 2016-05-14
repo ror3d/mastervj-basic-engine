@@ -10,55 +10,35 @@
 
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 
-std::vector<CScriptedComponent*> CScriptedComponent::s_components;
+std::vector<CScriptedComponent*> CScriptedComponent::s_componentsToInit;
 
 void CScriptedComponent::InitAll()
 {
-	for (auto &comp : s_components)
+	for (auto &comp : s_componentsToInit)
 	{
 		comp->Init();
 	}
-	s_components.clear();
+	s_componentsToInit.clear();
 }
 
-CScriptedComponent::CScriptedComponent(const std::string& Name,
-                                       CRenderableObject* Owner)
-	: CComponent(Name, Owner)
+CScriptedComponent::CScriptedComponent(const std::string& name,
+									   CRenderableObject* Owner)
+	: CComponent(name, Owner)
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
 {
-	if (m_scriptMgr->IsInitialized())
-	{
-		Init();
-	}
-	else
-	{
-		s_components.push_back(this);
-	}
-	/*
-	std::ifstream t(Name);
-	t.seekg(0, std::ios::end);
-	size_t size = t.tellg();
-	std::string buffer(size, ' ');
-	t.seekg(0);
-	t.read(&buffer[0], size);
+	Init();
+}
 
-	std::stringstream ss;
-	ss << "_currentComponent = { " << buffer << " };"
-	   << "_componentStates[" << m_componentStateId << "] = _currentComponent;";
-
-	m_scriptMgr->RunCode(ss.str());
-
-	m_scriptMgr->RunCode("_currentComponent.OnCreate()");
-	*/
-
-	/*
-	std::stringstream ss;
-	ss << "_currentComponent = " << Name << ":new();"
-		<< "_componentStates[" << m_componentStateId << "] = _currentComponent;"
-		<< "_currentComponent:OnCreate();";
-	m_scriptMgr->RunCode(ss.str());
-	*/
+CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
+									   CRenderableObject* Owner)
+	: CComponent(node, Owner)
+	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
+	, m_componentStateId(s_nextComponentStateId++)
+{
+	std::string name = node.GetPszProperty("class");
+	setName(name);
+	Init();
 }
 
 CScriptedComponent::~CScriptedComponent()
@@ -66,6 +46,12 @@ CScriptedComponent::~CScriptedComponent()
 
 void CScriptedComponent::Init()
 {
+	if (!m_scriptMgr->IsInitialized())
+	{
+		s_componentsToInit.push_back(this);
+		return;
+	}
+
 	if (m_componentStateId == 0)
 	{
 		m_scriptMgr->RunCode("_componentStates = {}");
@@ -82,8 +68,18 @@ void CScriptedComponent::Init()
 	std::stringstream ss;
 	ss << getName() << " = _currentComponent;"
 		<< script
-		<< "_componentStates[" << m_componentStateId << "] = _currentComponent;"
-		"if (_currentComponent.OnCreate ~= nil) then _currentComponent:OnCreate(); end";
+		<< "_componentStates[" << m_componentStateId << "] = _currentComponent;";
+	for (auto const& prop : m_properties)
+	{
+		std::string val = prop.value;
+		if (prop.type == "string")
+		{
+			val = "\"" + val + "\"";
+		}
+		ss << getName() << "." << prop.name << " = " << val << ";";
+	}
+	ss << "if (_currentComponent.OnCreate ~= nil) then _currentComponent:OnCreate(); end\n";
+	OutputDebugStringA(ss.str().c_str());
 	m_scriptMgr->RunCode(ss.str());
 }
 
@@ -133,3 +129,11 @@ void CScriptedComponent::RenderDebug(CContextManager&  _context)
 	m_scriptMgr->RunCode(ss.str());
 }
 
+void CScriptedComponent::SendMsg(const std::string msg)
+{
+	SetComponent();
+
+	std::stringstream ss;
+	ss << "if (_currentComponent." << msg << " ~= nil) then _currentComponent:" << msg << "(); end";
+	m_scriptMgr->RunCode(ss.str());
+}

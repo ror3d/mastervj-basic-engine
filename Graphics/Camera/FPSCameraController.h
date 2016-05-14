@@ -20,6 +20,8 @@ public:
 	CFPSCameraController();
 	virtual ~CFPSCameraController();
 
+	virtual std::string GetType() { return "FPSCameraController"; }
+
 	void Move(float Strafe, float Forward, bool Speed, float ElapsedTime);
 	void UpdateCameraValues(CCamera *Camera) const;
 	void AddYaw(float Radians);

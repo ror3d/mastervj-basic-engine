@@ -10,6 +10,7 @@ class CContextManager;
 class CXMLTreeNode;
 class CRenderableObjectTechnique;
 class CComponent;
+class CCharacterControllerComponent;
 
 class CRenderableObject : public C3DElement, public CNamed
 {
@@ -23,16 +24,14 @@ public:
 
 	virtual ~CRenderableObject() {}
 	virtual void Update(float ElapsedTime) {}
-	virtual void Render(CContextManager* _context) = 0;
+	virtual void Render(CContextManager* _context) { throw std::exception("You shall not use this!"); };
 
 	void AddComponent(std::string Name, CComponent* component);
 
-	/*
-	ComponentContainer_t* GetComponentManager()
-	{
-		return m_componentManager;
-	}
-	*/
+	void SendMsg(const std::string message);
+
+	CCharacterControllerComponent* GetCharacterController();
+
 private:
 	ComponentContainer_t m_componentContainer;
 };
