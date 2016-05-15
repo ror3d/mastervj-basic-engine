@@ -14,6 +14,10 @@ public:
     void operator=(const sel::Selector &s) {
         _tuple = s.GetTuple<typename std::remove_reference<T>::type...>();
     }
+
+    void operator=(const std::tuple<typename std::remove_reference<T>::type...> &t) {
+        _tuple = t;
+    }
 };
 
 template <typename... T>
