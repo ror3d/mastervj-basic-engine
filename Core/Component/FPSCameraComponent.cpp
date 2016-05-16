@@ -30,12 +30,12 @@ void CFPSCameraComponent::Init()
 	cc->SetYaw( owner->GetYaw() );
 
 	CEngine::GetSingleton().getCameraManager()->add(getName(), cc);
+	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController( getName() );
 }
 
 void CFPSCameraComponent::Update(float elapsedTime)
 {
 	CRenderableObject *owner = GetOwner();
-	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController( getName() );
 	CFPSCameraController* cc = dynamic_cast<CFPSCameraController*>(CEngine::GetSingleton().getCameraManager()->get( getName() ));
 	DEBUG_ASSERT( cc != nullptr );
 

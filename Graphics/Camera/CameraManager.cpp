@@ -19,9 +19,8 @@ CCameraManager::CCameraManager(CContextManager* context)
 	auto spheriCam = new CSphericalCameraController();
 	spheriCam->SetZoom( 5 );
 	add( "__debug",  spheriCam);
-	add( "__fps", new CFPSCameraController() );
 
-	m_currentCameraControllerName = "__fps";
+	m_currentCameraControllerName = "__debug";
 }
 
 CCameraManager::~CCameraManager()
