@@ -19,6 +19,7 @@
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Layer/LayerManager.h>
 #include <Core/CharacterController/CharacterControllerManager.h>
+#include <Core/Logic/LogicManager.h>
 
 namespace {
 	void StopScriptErrors(int sd, std::string message, std::exception_ptr ex) {
@@ -100,10 +101,16 @@ void CScriptManager::Load(const std::string &xmlFile)
 void CScriptManager::RegisterLUAFunctions()
 {
 	LuaErrorCapturedStdout errorCapture;
+	(*m_state)["Vect3f"]
+		.SetClass<Vect3f, float, float, float>("x", &Vect3f::x,
+		"y", &Vect3f::y,
+		"z", &Vect3f::z);
+
 
 	bool loaded;
 	loaded = (*m_state).Load("Data/Scripting/CharacterController.lua");
 	loaded = (*m_state).Load("Data/Scripting/CinematicsActionManager.lua");
+	loaded = (*m_state).Load("Data/Scripting/LogicManager.lua");
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
@@ -121,11 +128,9 @@ void CScriptManager::RegisterLUAFunctions()
 		"GetName", &CXMLTreeNode::GetName,
 		"GetPszProperty", &CXMLTreeNode::GetPszProperty,
 		"GetPszPropertyFromString", &CXMLTreeNode::GetPszPropertyFromString,
-		"GetFloatPropertyFromString", &CXMLTreeNode::GetFloatPropertyFromString);
-	(*m_state)["Vect3f"]
-		.SetClass<Vect3f, float, float, float>("x", &Vect3f::x,
-		"y", &Vect3f::y,
-		"z", &Vect3f::z);
+		"GetFloatPropertyFromString", &CXMLTreeNode::GetFloatPropertyFromString,
+		"GetVect3fPropertyFromString", &CXMLTreeNode::GetVect3fPropertyFromString);
+	
 
 	//Engine References
 	(*m_state)["CPhysicsManager"].SetObj(
@@ -146,7 +151,13 @@ void CScriptManager::RegisterLUAFunctions()
 		"m_FileName", &CCinematicsActionManager::m_FileName);
 	(*m_state)["CCinematicsManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicManager(),
-		"Play", &CCinematicManager::Play);
+		"Play", &CCinematicManager::Play,
+		"PlayByName", &CCinematicManager::PlayByName);
+	(*m_state)["CLogicManager"].SetObj(
+		*CEngine::GetSingleton().getLogicManager(),
+		"m_FileName", &CLogicManager::m_FileName,
+		"RemoveLogicElement", &CLogicManager::RemoveActivedLogic,
+		"GetActivableObject", &CLogicManager::GetActivableObject);
 
 
 

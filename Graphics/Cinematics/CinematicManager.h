@@ -15,6 +15,7 @@ public:
 
 	void Load(std::string nameFile);
 	void Play();
+	void PlayByName(std::string nameToRun);
 	void destroy();
 	void Update(float _elapsedTime);
 

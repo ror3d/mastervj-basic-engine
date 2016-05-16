@@ -43,6 +43,9 @@
     <ClCompile Include="Trigger\TriggerManager.cpp">
       <Filter>Trigger</Filter>
     </ClCompile>
+    <ClCompile Include="Logic\LogicManager.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -68,6 +71,9 @@
     </Filter>
     <Filter Include="Trigger">
       <UniqueIdentifier>{18c408c5-fc47-463b-9dda-0a7086dee1fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logic">
+      <UniqueIdentifier>{99150795-34cb-4ebb-94fd-fc13a44b550b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Trigger\TriggerManager.h">
       <Filter>Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\LogicManager.h">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

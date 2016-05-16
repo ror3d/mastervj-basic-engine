@@ -15,6 +15,7 @@ CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 {
 	std::string rendObjName = treeNode.GetPszProperty( "resource" );
 	std::string loopType = treeNode.GetPszProperty("loopType");
+	m_name = treeNode.GetPszISOProperty("resource");
 	if (loopType == std::string("Cycle"))
 	{
 		m_Cycle = true;

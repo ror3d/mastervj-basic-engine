@@ -393,6 +393,12 @@ Vect2f CXMLTreeNode::GetVect2fProperty  (const char* _pszKey, const Vect2f& _Def
 //----------------------------------------------------------------------------
 // Returns an Vect3f param if found. Else a default value
 //----------------------------------------------------------------------------
+
+Vect3f CXMLTreeNode::GetVect3fPropertyFromString(std::string _pszKey, const Vect3f& _Default, bool warningDefault) const
+{
+	return GetVect3fProperty(_pszKey.c_str(), _Default, warningDefault);
+}
+
 Vect3f CXMLTreeNode::GetVect3fProperty  (const char* _pszKey, const Vect3f& _Default, bool warningDefault) const
 {
   xmlChar* value = GetProperty(_pszKey);

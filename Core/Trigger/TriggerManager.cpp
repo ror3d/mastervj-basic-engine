@@ -32,15 +32,16 @@ bool CTriggerManager::Load(std::string fileName)
 			pos = treeNode.GetVect3fProperty("pos", pos);
 			Vect3f rot;
 			rot = treeNode.GetVect3fProperty("rotation", rot);
-			rot.y = -rot.x;
-			rot.z = -rot.z;	//From MeshInstance: Quatf::GetQuaternionFromRadians(Vect3f(-GetYaw(), GetPitch(), -GetRoll()));
-
-			if (typeTrigger == "SphereTrigger")
+			rot.x = mathUtils::Deg2Rad(-rot.x);
+			rot.y = mathUtils::Deg2Rad(rot.y);
+			rot.z = mathUtils::Deg2Rad(-rot.z);	//From MeshInstance: Quatf::GetQuaternionFromRadians(Vect3f(-GetYaw(), GetPitch(), -GetRoll()));
+			
+			if (typeTrigger == "Sphere")
 			{
 				CEngine::GetSingleton().getPhysXManager()->createStaticSphere(
 					name, scale, "StaticObjectMaterial", pos, Quatf::GetQuaternionFromRadians(rot), true);
 			}
-			else if (typeTrigger == "BoxTrigger")
+			else if (typeTrigger == "Box")
 			{
 				CEngine::GetSingleton().getPhysXManager()->createStaticBox(
 					name, scale, "StaticObjectMaterial", pos, Quatf::GetQuaternionFromRadians(rot), true);

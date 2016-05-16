@@ -10,9 +10,10 @@
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
+
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+
 
 
 #include <Graphics/Camera/FPSCameraController.h>
@@ -22,6 +23,8 @@
 #include <Core/Input/InputManager.h>
 #include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
+#include <Core/CharacterController/CharacterControllerManager.h>
+#include <Core/Logic/LogicManager.h>
 
 #include <XML/XMLTreeNode.h>
 
@@ -52,6 +55,7 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
+	CEngine::GetSingleton().getLogicManager()->Update();
 
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))

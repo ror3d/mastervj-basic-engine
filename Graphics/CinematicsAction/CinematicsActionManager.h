@@ -3,8 +3,6 @@
 
 #include "Utils/TMapManager.h"
 
-class CCinematicsAction;
-
 class CCinematicsActionManager
 {
 public:

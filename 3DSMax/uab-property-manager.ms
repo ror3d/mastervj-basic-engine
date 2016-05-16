@@ -122,7 +122,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		local l_IsTrigger = getUserProp m_ObjSelected "is_trigger"
 		local l_TriggerType = getUserProp m_ObjSelected "tigger_type"
 		
-		if l_IsTrigger!= undefined then
+		if l_IsTrigger!= "undefined" then
 		(
 			
 			cbIsTrigger.checked = true
@@ -307,7 +307,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		else
 		(
 			setUserProp Obj "logic_type" undefined
-			setUserProp Obj "logic_activates" undefined
+			setUserProp Obj "logic_activates" ""
 		)
 		
 		
@@ -377,7 +377,7 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		ddlLayerRender.items = #("solid", "alpha_objects","alpha_blend_objects", "particles")
 		ddlGeneratePhysics.items = #("Triangle Mesh", "Convex Shape", "Bounding Box", "Bounding Sphere", "Bounding Capsule", "Plane shape (?)", "None")
 		ddlLayerPhysics.items=#("PhysicsLayer")
-		ddlGenerateLogic.items = #("PlacaPres", "Elevator", "Door", "Palanca", "Salida")
+		ddlGenerateLogic.items = #("PlacaPres", "Elevator", "Door", "Palanca", "Salida", "SpawnPlayer")
 		txtAnimModel.enabled=false
 		
 		callbacks.addScript #selectionSetChanged "UABPropertyManager.selectedObjectChanged()" id:#UABProperties

@@ -388,7 +388,7 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 	switch (figure)
 	{
 	case CPhysxColliderShapeDesc::Shape::Box:
-		shape = m_PhysX->createShape(physx::PxBoxGeometry(size.x / 2, size.y / 2, size.z / 2), *mat);
+		shape = m_PhysX->createShape(physx::PxBoxGeometry(mathUtils::Abs(size.x / 2), mathUtils::Abs(size.y / 2), mathUtils::Abs(size.z / 2)), *mat);
 		break;
 
 	case CPhysxColliderShapeDesc::Shape::Sphere:
@@ -415,10 +415,10 @@ physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::
 
 	StaticBody->userData = reinterpret_cast<void*>(idx);
 	m_Scene->addActor(*StaticBody);
-	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
+	/*DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());
-	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
+	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());*/
 
 	m_actors.index[name] = idx;
 	m_actors.name.push_back(name);
@@ -534,9 +534,11 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 void CPhysXManager::createController(float height, float radius, float density, Vect3f pos, std::string name){
 	physx::PxMaterial* l_material = m_materials["controller_material"];
 	physx::PxCapsuleControllerDesc desc;
+	//Skin predefined contact offset 0.1f
+	desc.contactOffset = 0.01f;
 	desc.height = height;
 	desc.radius = radius;
-	desc.climbingMode = physx::PxCapsuleClimbingMode::eEASY;
+	desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
 	desc.slopeLimit = cosf(3.1415f / 6); //30º
 	desc.stepOffset = 0.5f;
 	desc.density = density;
@@ -564,8 +566,8 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction,
 	physx::PxRigidDynamic* actor = cct->getActor();
 	cct->move(v(movement), 0.0001, elapsedTime, filters);
 	cct->setUpDirection(v(direction));
-	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
-	//physx::PxVec3 vel = actor->getLinearVelocity();
+	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
+	physx::PxVec3 vel = actor->getLinearVelocity();
 	return v(cct->getPosition());
 }
 

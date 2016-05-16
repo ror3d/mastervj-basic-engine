@@ -39,6 +39,7 @@
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Core/Trigger/TriggerManager.h>
+#include <Core/Logic/LogicManager.h>
 
 
 #include <AntTweakBar.h>
@@ -233,10 +234,12 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 	engine.getTriggerManager()->Load("Data\\triggers.xml");
+	
 
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();
 
+	
 
 
 	context.CreateBackBuffer(hWnd, WIDTH, HEIGHT);
@@ -246,10 +249,11 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
 		engine.getScriptManager()->RegisterLUAFunctions();
+		engine.getLogicManager()->LoadXML("Data\\logic.xml");
 		engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
 		engine.getScriptManager()->RegisterLUAFunctionsAfter();
 
-		engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
+		engine.getCinematicManager()->Load("Data\\Animations\\Tutorial Logica Simple 03-05-16.xml");
 
 
 
