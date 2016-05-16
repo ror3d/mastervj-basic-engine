@@ -52,7 +52,6 @@ void CApplication::Update(float _ElapsedTime)
 	m_Timer += _ElapsedTime;
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
 
-	CEngine::GetSingleton().getComponentManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
@@ -81,9 +80,11 @@ void CApplication::Update(float _ElapsedTime)
 	if ( m_FixedTimer >= PHYSX_UPDATE_STEP )
 	{
 		m_FixedTimer = fmod(m_FixedTimer, PHYSX_UPDATE_STEP);
-		CEngine::GetSingleton().getComponentManager()->FixedUpdate( PHYSX_UPDATE_STEP );
 		CEngine::GetSingleton().getPhysXManager()->update( PHYSX_UPDATE_STEP );
+		CEngine::GetSingleton().getComponentManager()->FixedUpdate( PHYSX_UPDATE_STEP );
 	}
+
+	CEngine::GetSingleton().getComponentManager()->Update(_ElapsedTime);
 
 	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 }

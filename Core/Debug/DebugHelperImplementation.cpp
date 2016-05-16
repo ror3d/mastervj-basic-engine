@@ -208,7 +208,6 @@ void TW_CALL ReloadSceneCommands(void* _app)
 
 void TW_CALL ReloadLua(void* _app){
 	CEngine::GetSingleton().getScriptManager()->RegisterLUAFunctions();
-	CEngine::GetSingleton().getScriptManager()->RegisterLUAFunctionsAfter();
 }
 
 void TW_CALL OpenMaterialParams(void *material)
@@ -309,8 +308,8 @@ void CDebugHelperImplementation::CreateMainBar(){
 		var.params = " min=0.1 max=10 step=0.1 precision=1 ";
 
 		mainBar.variables.push_back(var);
-	}	
-	
+	}
+
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "Separator";

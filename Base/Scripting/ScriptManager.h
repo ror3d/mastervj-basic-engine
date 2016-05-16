@@ -24,7 +24,6 @@ public:
 	void Load(const std::string &XMLFile);
 
 	void RegisterLUAFunctions();
-	void RegisterLUAFunctionsAfter();
 	sel::State * getLuaState(){ return m_state; }
 
 	const std::string &GetScript(const std::string &name)
