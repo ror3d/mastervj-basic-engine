@@ -77,11 +77,11 @@ void CApplication::Update(float _ElapsedTime)
 
 	m_FixedTimer += _ElapsedTime;
 
-	if ( m_FixedTimer >= 1 / 60.f )
+	if ( m_FixedTimer >= PHYSX_UPDATE_STEP )
 	{
-		m_FixedTimer = 0;
-		CEngine::GetSingleton().getComponentManager()->FixedUpdate( 1/60.f );
-		CEngine::GetSingleton().getPhysXManager()->update( 1/60.f );
+		m_FixedTimer = fmod(m_FixedTimer, PHYSX_UPDATE_STEP);
+		CEngine::GetSingleton().getComponentManager()->FixedUpdate( PHYSX_UPDATE_STEP );
+		CEngine::GetSingleton().getPhysXManager()->update( PHYSX_UPDATE_STEP );
 	}
 }
 
