@@ -16,7 +16,7 @@ public:
 public:
 	void Initialize(const std::string& file);
 	bool IsInitialized() { return m_initialized; }
-	void Destroy();
+	void destroy() {}
 
 	void RunCode(const std::string &Code);
 
@@ -26,8 +26,6 @@ public:
 	void RegisterLUAFunctions();
 	void RegisterLUAFunctionsAfter();
 	sel::State * getLuaState(){ return m_state; }
-
-	void destroy() {}
 
 	const std::string &GetScript(const std::string &name)
 	{

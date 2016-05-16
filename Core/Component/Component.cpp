@@ -2,6 +2,9 @@
 
 #include <Base/XML/XMLTreeNode.h>
 
+#include <Core/Engine/Engine.h>
+#include <Core/Component/ComponentManager.h>
+
 CComponent::CComponent(CXMLTreeNode& node, CRenderableObject* Owner)
 	: CNamed(node)
 	, m_Owner(Owner)
@@ -21,3 +24,16 @@ CComponent::CComponent(CXMLTreeNode& node, CRenderableObject* Owner)
 	}
 }
 
+CComponent::CComponent( const std::string& Name, CRenderableObject* Owner )
+	: CNamed(Name)
+	, m_Owner(Owner)
+{
+}
+
+void CComponent::Initialize()
+{
+	if ( CEngine::GetSingleton().getComponentManager()->IsInitialized() )
+	{
+		Init();
+	}
+}

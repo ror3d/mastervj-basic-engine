@@ -245,7 +245,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		engine.getScriptManager()->Initialize("Data\\scripting.xml");
 
-		CScriptedComponent::InitAll();
+		engine.getComponentManager()->FirstInitialization();
 
 		//engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
 

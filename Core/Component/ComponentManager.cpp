@@ -3,11 +3,20 @@
 #include "Graphics/Context/ContextManager.h"
 
 CComponentManager::CComponentManager()
+	: m_initialized(false)
 {
 }
 
 CComponentManager::~CComponentManager()
 {
+}
+
+void CComponentManager::FixedUpdate(float ElapsedTime)
+{
+	for (auto it = m_components.begin(); it != m_components.end(); it++)
+	{
+		(*it)->FixedUpdate(ElapsedTime);
+	}
 }
 
 void CComponentManager::Update(float ElapsedTime)
@@ -43,6 +52,19 @@ bool CComponentManager::AddComponent(CComponent* Component)
 	}
 
 	return false;
+}
+
+void CComponentManager::FirstInitialization()
+{
+	if ( !m_initialized )
+	{
+		m_initialized = true;
+
+		for (auto it = m_components.begin(); it != m_components.end(); it++)
+		{
+			(*it)->Initialize();
+		}
+	}
 }
 
 void CComponentManager::destroy()

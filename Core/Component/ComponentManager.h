@@ -11,14 +11,19 @@ class CComponentManager
 {
 private:
 	std::set<CComponent*> m_components;
+	bool m_initialized;
 public:
 	CComponentManager();
 	virtual ~CComponentManager();
 	void Update(float ElapsedTime);
+	void FixedUpdate(float ElapsedTime);
 	void Render(CContextManager  &_context);
 	void RenderDebug(CContextManager  &_context);
 	bool AddComponent(CComponent *Component);
+	void FirstInitialization();
 	void destroy();
-}; 
+
+	inline bool IsInitialized() const { return m_initialized; }
+};
 
 #endif

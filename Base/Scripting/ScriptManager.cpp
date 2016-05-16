@@ -123,9 +123,6 @@ void CScriptManager::Initialize(const std::string& file)
 	m_initialized = true;
 }
 
-void CScriptManager::Destroy()
-{}
-
 void CScriptManager::RunCode(const std::string& code)
 {
 	LuaErrorCapturedStdout errorCapture;
@@ -182,6 +179,7 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CRenderableObject"]
 		.SetClass<CRenderableObject>(
 		"SetPosition", &CRenderableObject::SetPosition,
+		"GetPosition", &CRenderableObject::GetPosition,
 		"SetYaw", &CRenderableObject::SetYaw,
 		"GetYaw", &CRenderableObject::GetYaw,
 		"GetCharacterController", &CRenderableObject::GetCharacterController);
@@ -195,7 +193,7 @@ void CScriptManager::RegisterLUAFunctions()
 		"SetPosition", &ICameraController::SetPosition,
 		"GetPosition", &ICameraController::GetPosition
 		);
-		
+
 
 	//Engine References
 	(*m_state)["CPhysicsManager"].SetObj(
@@ -242,7 +240,7 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{
-		OutputDebugString(s.c_str());
+		OutputDebugString((s+"\n").c_str());
 	};
 }
 

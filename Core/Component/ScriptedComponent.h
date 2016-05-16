@@ -19,21 +19,21 @@ private:
 
 	void SetComponent();
 
-	static std::vector<CScriptedComponent*> s_componentsToInit;
+protected:
+	virtual void Init();
+
 public:
 	CScriptedComponent(const std::string& name, CRenderableObject* Owner);
 	CScriptedComponent(CXMLTreeNode& node, CRenderableObject* Owner);
 	virtual ~CScriptedComponent();
-	void Init();
 	virtual void Update(float ElapsedTime);
+	virtual void FixedUpdate(float ElapsedTime);
 	virtual void Render(CContextManager&  _context);
 	virtual void RenderDebug(CContextManager&  _context);
 
 	virtual void SendMsg(const std::string msg);
 
 	virtual void Destroy();
-
-	static void InitAll();
 };
 
 #endif

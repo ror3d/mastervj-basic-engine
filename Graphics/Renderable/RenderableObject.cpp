@@ -30,7 +30,6 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 		{
 			std::string name = comp.GetPszProperty("class");
 			component = new CScriptedComponent(comp, this);
-			cmgr->AddComponent(component);
 		}
 		else if (type == "character_controller")
 		{
@@ -41,6 +40,7 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 			OutputDebugString("Component type not recognized\n");
 			continue;
 		}
+		cmgr->AddComponent(component);
 		AddComponent(component->getName(), component);
 	}
 }
@@ -48,6 +48,7 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 void CRenderableObject::AddComponent(std::string Name, CComponent* component)
 {
 	m_componentContainer.add(Name, component);
+	component->Initialize();
 }
 
 void CRenderableObject::SendMsg(const std::string msg)
@@ -60,7 +61,7 @@ void CRenderableObject::SendMsg(const std::string msg)
 
 CCharacterControllerComponent* CRenderableObject::GetCharacterController()
 {
-	auto comp = m_componentContainer.get("_CharacterController");
+	auto comp = m_componentContainer.get(getName() + "_CharacterController");
 	if (comp)
 	{
 		return dynamic_cast<CCharacterControllerComponent*>(comp);

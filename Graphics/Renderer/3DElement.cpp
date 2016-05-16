@@ -120,13 +120,13 @@ void C3DElement::SetPosition(const Vect3f &Position)
 }
 
 
-const Vect3f & C3DElement::GetPosition() const
+Vect3f C3DElement::GetPosition() const
 {
 	return m_Position;
 }
 
 
-const Vect3f & C3DElement::GetPrevPosition() const
+Vect3f C3DElement::GetPrevPosition() const
 {
 	return m_Position;
 }

@@ -30,7 +30,9 @@
 
 
 CApplication::CApplication(CContextManager *_ContextManager)
-: m_ContextManager(_ContextManager)
+	: m_ContextManager(_ContextManager)
+	, m_FixedTimer(0)
+	, m_Timer(0)
 {
 	CDebugHelper::GetDebugHelper()->Log("CApplication::CApplication");
 	CDebugHelper::GetDebugHelper()->CreateMainBar();
@@ -51,8 +53,6 @@ void CApplication::Update(float _ElapsedTime)
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
 
 	CEngine::GetSingleton().getComponentManager()->Update(_ElapsedTime);
-
-	CEngine::GetSingleton().getPhysXManager()->update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
@@ -60,7 +60,7 @@ void CApplication::Update(float _ElapsedTime)
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
 	{
-		m_FixedCamera = m_FixedCamera ? false : true;
+		m_FixedCamera = !m_FixedCamera;
 	}
 
 	if (!m_FixedCamera)
@@ -73,6 +73,15 @@ void CApplication::Update(float _ElapsedTime)
 		{
 			CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 		}
+	}
+
+	m_FixedTimer += _ElapsedTime;
+
+	if ( m_FixedTimer >= 1 / 60.f )
+	{
+		m_FixedTimer = 0;
+		CEngine::GetSingleton().getComponentManager()->FixedUpdate( 1/60.f );
+		CEngine::GetSingleton().getPhysXManager()->update( 1/60.f );
 	}
 }
 

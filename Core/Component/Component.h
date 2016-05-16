@@ -23,18 +23,19 @@ private:
 protected:
 	std::vector<Property> m_properties;
 
+	virtual void Init() {}
+
 public:
 	CComponent(CXMLTreeNode& node, CRenderableObject* Owner);
 
-	CComponent(const std::string& Name, CRenderableObject* Owner)
-		: CNamed(Name)
-		, m_Owner(Owner)
-	{
-	}
+	CComponent( const std::string& Name, CRenderableObject* Owner );
 
 	virtual ~CComponent() {}
 
-	virtual void Update(float ElapsedTime) = 0;
+	void Initialize();
+
+	virtual void Update( float ElapsedTime ) {}
+	virtual void FixedUpdate( float ElapsedTime ) {}
 	virtual void Render(CContextManager&  _context) {}
 	virtual void RenderDebug(CContextManager&  _context) {}
 

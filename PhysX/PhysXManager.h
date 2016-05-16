@@ -94,7 +94,11 @@ public:
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
-	Vect3f moveCharacterController(Vect3f movement, Vect3f direction, float _ElapsedTime, std::string name);
+	Vect3f moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name);
+
+	bool isCharacterControllerGrounded(const std::string &name);
+
+	void releaseCharacterController(const std::string &name);
 
 	void releaseCharacterControllers();
 

@@ -10,24 +10,12 @@
 
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 
-std::vector<CScriptedComponent*> CScriptedComponent::s_componentsToInit;
-
-void CScriptedComponent::InitAll()
-{
-	for (auto &comp : s_componentsToInit)
-	{
-		comp->Init();
-	}
-	s_componentsToInit.clear();
-}
-
 CScriptedComponent::CScriptedComponent(const std::string& name,
 									   CRenderableObject* Owner)
 	: CComponent(name, Owner)
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
 {
-	Init();
 }
 
 CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
@@ -38,7 +26,6 @@ CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
 {
 	std::string name = node.GetPszProperty("class");
 	setName(name);
-	Init();
 }
 
 CScriptedComponent::~CScriptedComponent()
@@ -46,16 +33,7 @@ CScriptedComponent::~CScriptedComponent()
 
 void CScriptedComponent::Init()
 {
-	if (!m_scriptMgr->IsInitialized())
-	{
-		s_componentsToInit.push_back(this);
-		return;
-	}
-
-	if (m_componentStateId == 0)
-	{
-		m_scriptMgr->RunCode("_componentStates = {}");
-	}
+	m_scriptMgr->RunCode( "if (_componentStates == nil) then _componentStates = {}; end" );
 
 	std::string script = m_scriptMgr->GetScript(getName());
 	DEBUG_ASSERT(script != "");
@@ -108,6 +86,15 @@ void CScriptedComponent::Update(float ElapsedTime)
 
 	std::stringstream ss;
 	ss << "if (_currentComponent.OnUpdate ~= nil) then _currentComponent:OnUpdate(" << ElapsedTime << "); end";
+	m_scriptMgr->RunCode(ss.str());
+}
+
+void CScriptedComponent::FixedUpdate(float ElapsedTime)
+{
+	SetComponent();
+
+	std::stringstream ss;
+	ss << "if (_currentComponent.OnFixedUpdate ~= nil) then _currentComponent:OnFixedUpdate(" << ElapsedTime << "); end";
 	m_scriptMgr->RunCode(ss.str());
 }
 
