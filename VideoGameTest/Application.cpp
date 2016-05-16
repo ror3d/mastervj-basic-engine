@@ -57,8 +57,6 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
 
-	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
-
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
 	{
 		m_FixedCamera = !m_FixedCamera;
@@ -86,6 +84,8 @@ void CApplication::Update(float _ElapsedTime)
 		CEngine::GetSingleton().getComponentManager()->FixedUpdate( PHYSX_UPDATE_STEP );
 		CEngine::GetSingleton().getPhysXManager()->update( PHYSX_UPDATE_STEP );
 	}
+
+	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 }
 
 

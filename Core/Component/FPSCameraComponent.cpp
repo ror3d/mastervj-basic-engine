@@ -32,7 +32,7 @@ void CFPSCameraComponent::Init()
 	CEngine::GetSingleton().getCameraManager()->add(getName(), cc);
 }
 
-void CFPSCameraComponent::FixedUpdate(float elapsedTime)
+void CFPSCameraComponent::Update(float elapsedTime)
 {
 	CRenderableObject *owner = GetOwner();
 	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController( getName() );
