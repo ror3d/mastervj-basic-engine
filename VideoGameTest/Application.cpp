@@ -65,7 +65,8 @@ void CApplication::Update(float _ElapsedTime)
 
 	if (!m_FixedCamera)
 	{
-		if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__fps"))
+		if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__fps") 
+			|| CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__cinematics"))
 		{
 			CEngine::GetSingleton().getCharacterControllerManager()->UpdateInstances(_ElapsedTime);
 		}

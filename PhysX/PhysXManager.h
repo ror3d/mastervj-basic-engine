@@ -88,7 +88,7 @@ public:
 
 	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
 
-	bool cookTriangleMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
+	bool cookTriangleMesh(const std::vector<Vect3f>& vec, const std::vector<unsigned short>& ind, std::vector<uint8> * outCookedData, unsigned short indexSize);
 
 	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 

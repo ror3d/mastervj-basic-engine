@@ -22,6 +22,7 @@
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+#include <Core/Trigger/TriggerManager.h>
 
 #ifndef CHECKED_DESTROY
 #define CHECKED_DESTROY(x) do{ if(x) { x->destroy(); delete x; x = nullptr; } } while(0)
@@ -49,8 +50,9 @@ CEngine::CEngine()
 	, cinematicsActionManager(nullptr)
 	, cinematicManager(nullptr)
 	, particleManager(nullptr)
+	, triggerManager(nullptr)
 {
-}
+} 
 CEngine::~CEngine()
 {
 	CHECKED_DESTROY(layerManager);
@@ -75,6 +77,7 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(particleManager);
 	CHECKED_DESTROY(cinematicManager);
 	CHECKED_DESTROY(cinematicsActionManager);
+	CHECKED_DESTROY(triggerManager);
 
 } //Destruimos vars
 
@@ -82,7 +85,7 @@ void CEngine::Init()
 {
 	effectsManager = new CEffectManager();
 	textureManager = new CTextureManager();
-	materialManager = new CMaterialManager();
+	materialManager = new CMaterialManager();	
 	layerManager = new CLayerManager();
 	staticMeshManager = new CStaticMeshManager();
 	contextManager = new CContextManager();
@@ -102,4 +105,5 @@ void CEngine::Init()
 	particleManager = new CParticleSystemManager();
 	cinematicsActionManager = new CCinematicsActionManager();
 	cinematicManager = new CCinematicManager();
+	triggerManager = new CTriggerManager();
 }

@@ -46,7 +46,7 @@ T* TMapManager<T>::get( const std::string& name ) const
 template<class T>
 void TMapManager<T>::add( const std::string& name, T* instance )
 {
-	DEBUG_ASSERT( m_resources.find( name ) == m_resources.end() );
+	//DEBUG_ASSERT( m_resources.find( name ) == m_resources.end() );
 	m_resources[name] = instance;
 }
 

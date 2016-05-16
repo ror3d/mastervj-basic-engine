@@ -123,11 +123,22 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 
 	{
 		Action action = { "JUMP", KEYBOARD, Action::WHILE_PRESSED };
-		action.keyboard.key = 32;
+		action.keyboard.key = VK_SPACE;
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
 		action.triggersAxis = true;
 		action.axisName = "JUMPAxis";
+		action.axisValue = 1;
+		m_Actions.push_back(action);
+	}
+
+	{
+		Action action = { "RUN", KEYBOARD, Action::WHILE_PRESSED };
+		action.keyboard.key = VK_SHIFT; 
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		action.triggersAxis = true;
+		action.axisName = "RunAxis";
 		action.axisValue = 1;
 		m_Actions.push_back(action);
 	}

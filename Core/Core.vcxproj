@@ -25,6 +25,8 @@
     <ClCompile Include="IA\IAManager.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\InputManagerImplementation.cpp" />
+    <ClCompile Include="Trigger\Trigger.cpp" />
+    <ClCompile Include="Trigger\TriggerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CharacterController\CharacterControllerInstance.h" />
@@ -41,7 +43,9 @@
     <ClInclude Include="IA\IAManager.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputManagerImplementation.h" />
-    <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="Time\TimeManager.h" />
+    <ClInclude Include="Trigger\Trigger.h" />
+    <ClInclude Include="Trigger\TriggerManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0323B8D9-42B2-4768-9F73-6DDEAFA020E7}</ProjectGuid>

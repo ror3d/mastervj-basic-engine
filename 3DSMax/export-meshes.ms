@@ -119,13 +119,65 @@ fn createRenderableObjectsFile instances = (
 		local Pitch = GetPitch (instances[i].transform)
 		local Roll = GetRoll (instances[i].transform)
 		local core = getUserProp instances[i] "export_core_name"
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" scale=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"/>\n"\
-					instances[i].name core Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll instances[i].visibility to:file
+		local PhysxType = getUserProp instances[i] "physics_generate"
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" scale=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\" physxType=\"%\"/>\n"\
+					instances[i].name core Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll instances[i].visibility PhysxType to:file
 	)
 
 	format "</renderable_objects>\n" to:file 
 	format "____CreatedRenderableObjects____\n"
 	
+	MyCloseFile()
+)
+
+fn createLogic instances = (
+	MyCreateFile "logic.xml"
+	
+	WriteXMLPrologToFile()
+	format "<logic>\n" to:file
+	
+	for i = 1 to instances.count do
+	(	
+		local l_logicType = getUserProp instances[i] "logic_type"
+		if l_logicType != undefined then
+		(						
+			local l_logicActivates = getUserProp instances[i] "logic_activates"		
+			format "\t<% name=\"%\" activates=\"%\"/>\n"\
+			l_logicType instances[i].name l_logicActivates to:file
+		)		
+	)
+
+	format "</logic>\n" to:file 
+	format "____CreatedLogic____\n"
+	
+	MyCloseFile()
+)
+
+fn createTriggersFile instances = (
+	MyCreateFile "Triggers.xml"
+	WriteXMLPrologToFile()
+	format "<triggers>\n" to:file
+	
+	for i = 1 to instances.count do
+	(
+		if getUserProp instances[i] "is_trigger" == true then
+		(
+			local Pos = TranslationToRH (instances[i].transform.translation)
+			local Sc = ScaleToRH instances[i].transform.scale
+			local Yaw = GetYaw (instances[i].transform)
+			local Pitch = GetPitch (instances[i].transform)
+			local Roll = GetRoll (instances[i].transform)
+			local l_trigger_type= getUserProp instances[i] "trigger_type"
+			local l_trigger_active_once = getUserProp instances[i] "trigger_active_once"
+			
+			format "\t<mesh_instance name=\"%\" typeTrigger=\"%\" ActivateTriggerOnce=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" />\n"\
+							instances[i].name l_trigger_type l_trigger_active_once  Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll  to:file
+	
+		)
+		
+	)
+	format "</triggers>\n" to:file 
+	format "____CreatedTriggers____\n"
 	MyCloseFile()
 )
 
@@ -401,7 +453,6 @@ fn createMesh obj = (
 		writeshort file (GetVertexTypeFromObjectMaterial obj mat)
 		
 		tik()
-		
 		local matDescriptor = GetMatDescriptor mat
 		
 		--TODO: coger solo vertices afectados por ese mat...

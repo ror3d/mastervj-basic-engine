@@ -14,7 +14,7 @@ public:
 	virtual void Update( float ElapsedTime );
 	virtual void SetAnimTime(float Time);
 	virtual void Stop();
-	virtual void Play( bool Cycle );
+	virtual void Play();
 	virtual void Pause();
 	bool IsFinished() { return m_CurrentTime >= m_Duration; }
 	float GetDuration() { return m_Duration; }

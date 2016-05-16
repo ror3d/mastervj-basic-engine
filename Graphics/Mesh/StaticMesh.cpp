@@ -13,6 +13,7 @@
 #include <Renderable/RenderableObjectTechnique.h>
 #include <Graphics/Material/MaterialManager.h>
 
+#include <algorithm>
 #include <vector>
 
 
@@ -316,6 +317,7 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 
 	bool l_loaded = CEngine::GetSingleton().getCookedMeshManager()->Load(getName(), cooked);
 
+
 	if (!l_loaded)
 	{
 		MeshFile meshFile;
@@ -323,45 +325,61 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 		{
 			return false;
 		}
+		cooked = new std::vector<uint8>();
 
+		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
+		{
+			int numVertex = 0 ;
+			for (int i = 0; i < meshFile.meshes.size(); ++i)
+			{
+				numVertex += meshFile.meshes[i].nVertexes;
+			}
+			if (numVertex >= 1<<16)
+			{
+				DEBUG_ASSERT(!"MESH WITH MORE THAN 65000 vertexes");
+				shapeDesc->shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
+			}
+		}
+
+		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
+		{
 		std::vector<Vect3f> vertexes;
+			std::vector<unsigned short> indexes;
 
+			uint16 offset = 0;
 		for (int i = 0; i < meshFile.meshes.size(); ++i)
 		{
 			std::vector<Vect3f> meshVtxs = getVect3fArray(meshFile.meshes[i]);
+				auto idxs = reinterpret_cast<unsigned short*>(meshFile.meshes[i].indices);
+				size_t sz = indexes.size();
+				indexes.resize(indexes.size() + meshFile.meshes[i].nIndices);
+				std::transform(idxs, idxs + meshFile.meshes[i].nIndices,
+					indexes.begin()+sz,
+					[offset](unsigned short v) { return v + offset; });
 			vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
+				offset = vertexes.size();
 		}
 
-		cooked = new std::vector<uint8>();
-
-		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Box)
-		{
-			// TODO get values for this and implement
-		}
-		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Sphere)
-		{
-			// TODO get values for this and implement
-		}
-		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::Capsule)
-		{
-			// TODO get values for this and implement
-		}
-		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
-		{
-			CEngine::GetSingleton().getPhysXManager()->cookTriangleMesh(vertexes, cooked);
-			CEngine::GetSingleton().getCookedMeshManager()->add(getName(), cooked);
+			CEngine::GetSingleton().getPhysXManager()->cookTriangleMesh(vertexes, indexes, cooked, meshFile.meshes[0].indexSize);
 		}
 		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh)
 		{
+			std::vector<Vect3f> vertexes;
+
+			for (int i = 0; i < meshFile.meshes.size(); ++i)
+		{
+				std::vector<Vect3f> meshVtxs = getVect3fArray(meshFile.meshes[i]);
+				vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
+		}
 			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
-			CEngine::GetSingleton().getCookedMeshManager()->add(getName(), cooked);
+
 		}
 		else
 		{
-			DEBUG_ASSERT(!"Unrecognized collider type");
+			DEBUG_ASSERT(!"Collider type is not Triangle or Convex");
 		}
 	}
-
+	CEngine::GetSingleton().getCookedMeshManager()->add(getName(), cooked);
 	shapeDesc->cookedMeshData = cooked;
 
 	return true;
