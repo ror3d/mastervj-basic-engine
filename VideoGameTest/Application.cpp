@@ -57,24 +57,26 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
 
+	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
 	{
 		m_FixedCamera = !m_FixedCamera;
 	}
 
+	/*
 	if (!m_FixedCamera)
 	{
-		if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__fps") 
+		if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__fps")
 			|| CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__cinematics"))
 		{
 			CEngine::GetSingleton().getCharacterControllerManager()->UpdateInstances(_ElapsedTime);
 		}
 		else if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__debug"))
 		{
-			CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 		}
 	}
+	*/
 
 	m_FixedTimer += _ElapsedTime;
 

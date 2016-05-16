@@ -10,6 +10,7 @@
 #include <Core/Component/Component.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/CharControllerComponent.h>
+#include <Core/Component/FPSCameraComponent.h>
 
 CRenderableObject::CRenderableObject()
 	: CNamed("")
@@ -34,6 +35,10 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 		else if (type == "character_controller")
 		{
 			component = new CCharacterControllerComponent(comp, this);
+		}
+		else if (type == "fps_camera")
+		{
+			component = new CFPSCameraComponent(comp, this);
 		}
 		else
 		{

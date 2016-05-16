@@ -9,6 +9,7 @@ CComponent::CComponent(CXMLTreeNode& node, CRenderableObject* Owner)
 	: CNamed(node)
 	, m_Owner(Owner)
 {
+	DEBUG_ASSERT( Owner != nullptr );
 	for (int i = 0; i < node.GetNumChildren(); ++i)
 	{
 		auto prop = node(i);

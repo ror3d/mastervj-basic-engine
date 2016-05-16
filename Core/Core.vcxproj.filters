@@ -49,6 +49,9 @@
     <ClCompile Include="Trigger\TriggerManager.cpp">
       <Filter>Trigger</Filter>
     </ClCompile>
+    <ClCompile Include="Component\FPSCameraComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="Trigger\TriggerManager.h">
       <Filter>Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\FPSCameraComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
