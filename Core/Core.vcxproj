@@ -11,8 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CharacterController\CharacterControllerInstance.cpp" />
-    <ClCompile Include="CharacterController\CharacterControllerManager.cpp" />
     <ClCompile Include="Component\CharControllerComponent.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
@@ -30,8 +28,6 @@
     <ClCompile Include="Trigger\TriggerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CharacterController\CharacterControllerInstance.h" />
-    <ClInclude Include="CharacterController\CharacterControllerManager.h" />
     <ClInclude Include="Component\CharControllerComponent.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\ComponentManager.h" />

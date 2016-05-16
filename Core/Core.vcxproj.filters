@@ -25,12 +25,6 @@
     <ClCompile Include="IA\IAManager.cpp">
       <Filter>IA</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterController\CharacterControllerInstance.cpp">
-      <Filter>CharacterController</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterController\CharacterControllerManager.cpp">
-      <Filter>CharacterController</Filter>
-    </ClCompile>
     <ClCompile Include="Component\ComponentManager.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -66,9 +60,6 @@
     <Filter Include="IA">
       <UniqueIdentifier>{9771c5ca-a1ea-42db-a224-ca3baf886b2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CharacterController">
-      <UniqueIdentifier>{2c9727a0-43aa-4f62-acc0-03476b68ec42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Time">
       <UniqueIdentifier>{8270adc5-4da3-4b07-bf39-5e0dec98d80a}</UniqueIdentifier>
     </Filter>
@@ -103,12 +94,6 @@
     </ClInclude>
     <ClInclude Include="IA\IAManager.h">
       <Filter>IA</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterController\CharacterControllerInstance.h">
-      <Filter>CharacterController</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterController\CharacterControllerManager.h">
-      <Filter>CharacterController</Filter>
     </ClInclude>
     <ClInclude Include="Component\ComponentManager.h">
       <Filter>Component</Filter>

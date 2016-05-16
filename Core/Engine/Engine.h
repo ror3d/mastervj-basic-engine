@@ -18,7 +18,6 @@ class CPhysXManager;
 class CCookedMeshManager;
 class CIAManager;
 class CScriptManager;
-class CCharacterControllerManager;
 class CTimerManager;
 class CComponentManager;
 class CParticleSystemManager;
@@ -45,7 +44,6 @@ private:
 	CCookedMeshManager * cookedMeshManager;
 	CIAManager * iaManager;
 	CScriptManager * scriptManager;
-	CCharacterControllerManager * characterControllerManager;
 	CTimerManager * timerManager;
 	CComponentManager * componentManager;
 	CParticleSystemManager * particleManager;
@@ -76,7 +74,6 @@ public:
 	inline CCookedMeshManager * getCookedMeshManager() const { return cookedMeshManager;  }
 	inline CIAManager * getIAManager() const { return iaManager; }
 	inline CScriptManager * getScriptManager() const { return scriptManager; }
-	inline CCharacterControllerManager * getCharacterControllerManager() const { return characterControllerManager; }
 	inline CTimerManager * getTimerManager() const { return timerManager;  }
 	inline CComponentManager * getComponentManager() const { return componentManager;  }
 	inline CParticleSystemManager * getParticleManager() const { return particleManager; }

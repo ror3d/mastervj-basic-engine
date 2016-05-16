@@ -16,7 +16,6 @@
 #include <PhysX/PhysXManager.h>
 #include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
 #include <Graphics/Particles/ParticleSystemManager.h>
@@ -44,7 +43,6 @@ CEngine::CEngine()
 	, cookedMeshManager(nullptr)
 	, iaManager(nullptr)
 	, scriptManager(nullptr)
-	, characterControllerManager(nullptr)
 	, timerManager(nullptr)
 	, componentManager(nullptr)
 	, cinematicsActionManager(nullptr)
@@ -52,7 +50,7 @@ CEngine::CEngine()
 	, particleManager(nullptr)
 	, triggerManager(nullptr)
 {
-} 
+}
 CEngine::~CEngine()
 {
 	CHECKED_DESTROY(layerManager);
@@ -72,7 +70,6 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(cookedMeshManager);
 	CHECKED_DESTROY(iaManager);
 	CHECKED_DESTROY(debugRender);
-	CHECKED_DESTROY(characterControllerManager);
 	CHECKED_DESTROY(timerManager);
 	CHECKED_DESTROY(particleManager);
 	CHECKED_DESTROY(cinematicManager);
@@ -85,7 +82,7 @@ void CEngine::Init()
 {
 	effectsManager = new CEffectManager();
 	textureManager = new CTextureManager();
-	materialManager = new CMaterialManager();	
+	materialManager = new CMaterialManager();
 	layerManager = new CLayerManager();
 	staticMeshManager = new CStaticMeshManager();
 	contextManager = new CContextManager();
@@ -99,7 +96,6 @@ void CEngine::Init()
 	cookedMeshManager = new CCookedMeshManager();
 	iaManager = new CIAManager();
 	scriptManager = new CScriptManager();
-	characterControllerManager = new CCharacterControllerManager();
 	timerManager = new CTimerManager();
 	componentManager = new CComponentManager();
 	particleManager = new CParticleSystemManager();

@@ -9,7 +9,6 @@
 
 #include "Core/Engine/Engine.h"
 #include "Core/Input/InputManager.h"
-#include "Core/CharacterController/CharacterControllerInstance.h"
 #include "Graphics/Camera/FPSCameraController.h"
 #include <Graphics/Renderable/RenderableObject.h>
 #include <Graphics/Renderable/RenderableObjectsManager.h>
@@ -23,7 +22,6 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Layer/LayerManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
 
 namespace
 {

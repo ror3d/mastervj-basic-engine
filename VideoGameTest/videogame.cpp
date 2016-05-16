@@ -32,7 +32,6 @@
 #include <PhysX/PhysXManager.h>
 #include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
 #include <Core/Component/ScriptedComponent.h>
