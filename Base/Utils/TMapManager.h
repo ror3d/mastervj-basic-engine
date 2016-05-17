@@ -3,12 +3,16 @@
 #include <map>
 #include <string>
 #include "Utils.h"
+#include "Named.h"
 
 template<class T>
 class TMapManager
 {
-protected:
+public:
 	typedef std::map<std::string, T*> resourceMap_t;
+	typedef typename resourceMap_t::iterator iterator;
+	typedef typename resourceMap_t::const_iterator const_iterator;
+protected:
 	resourceMap_t m_resources;
 
 public:
@@ -17,8 +21,15 @@ public:
 	virtual ~TMapManager();
 	virtual T* get(const std::string& name) const;
 	virtual void add(const std::string& name, T* instance);
+	template < typename = typename std::enable_if< std::is_base_of<CNamed, T>::value >::type >
+		void add(T* instance);
 	virtual void remove(const std::string& name);
 	virtual void destroy();
+
+	iterator begin() { return m_resources.begin(); }
+	iterator end() { return m_resources.end(); }
+	const_iterator begin() const { return m_resources.begin(); }
+	const_iterator end() const { return m_resources.end(); }
 };
 
 template<class T>
@@ -37,6 +48,13 @@ void TMapManager<T>::add( const std::string& name, T* instance )
 {
 	//DEBUG_ASSERT( m_resources.find( name ) == m_resources.end() );
 	m_resources[name] = instance;
+}
+
+template <class T>
+	template< typename = typename std::enable_if< std::is_base_of<CNamed, T>::value >::type >
+void TMapManager<T>::add(T* instance)
+{
+	add(instance->getName(), instance);
 }
 
 template<class T>

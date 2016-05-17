@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 namespace sel {
 	class State;
@@ -13,8 +14,9 @@ public:
 	~CScriptManager();
 
 public:
-	void Initialize();
-	void Destroy();
+	void Initialize(const std::string& file);
+	bool IsInitialized() { return m_initialized; }
+	void destroy() {}
 
 	void RunCode(const std::string &Code);
 
@@ -25,8 +27,20 @@ public:
 	void RegisterLUAFunctionsAfter();
 	sel::State * getLuaState(){ return m_state; }
 
-	void destroy() {}
+	const std::string &GetScript(const std::string &name)
+	{
+		auto it = m_loadedScripts.find(name);
+		if (it != m_loadedScripts.end())
+		{
+			return it->second;
+		}
+		return "";
+	}
 private:
 	sel::State *m_state;
+
+	std::map<std::string, std::string> m_loadedScripts;
+
+	bool m_initialized;
 };
 

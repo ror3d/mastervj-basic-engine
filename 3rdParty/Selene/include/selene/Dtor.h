@@ -18,8 +18,8 @@ public:
     }
 
     int Apply(lua_State *l) {
-        T *t = (T *)luaL_checkudata(l, 1, _metatable_name.c_str());
-        t->~T();
+        ObjPtr<T>* t = (ObjPtr<T>*)luaL_checkudata(l, 1, _metatable_name.c_str());
+		t->release();
         return 0;
     }
 };

@@ -16,6 +16,7 @@ CRenderGUISceneRendererCommand::CRenderGUISceneRendererCommand(CXMLTreeNode &Tre
 
 void CRenderGUISceneRendererCommand::Execute(CContextManager &_context)
 {
+	/*
 	m_GUI->BeginGUI();
 
 	m_GUI->Image( "btn-test-i", Rectf( 50, 50, 200, 50 ), Rectf::Alignment::CENTER, Rectf::Alignment::CENTER);
@@ -53,4 +54,5 @@ void CRenderGUISceneRendererCommand::Execute(CContextManager &_context)
 	m_GUI->Text("Arial32", "hola què tal com anem?\naixò hauria de ser una altra línia.", Rectf(0, 0, 300, 300), Rectf::Alignment::CENTER, Rectf::Alignment::TOP_RIGHT);
 
 	m_GUI->EndGUI();
+	*/
 }

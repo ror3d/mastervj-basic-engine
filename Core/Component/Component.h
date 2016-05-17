@@ -2,29 +2,51 @@
 #define COMPONENT_H
 
 #include "Utils/Named.h"
+#include <map>
 
 class CRenderableObject;
 class CContextManager;
+class CXMLTreeNode;
 
 class CComponent : public CNamed
 {
+public:
+	struct Property
+	{
+		std::string name;
+		std::string type;
+		std::string value;
+	};
 private:
-	CRenderableObject *m_Owner;
+	CRenderableObject* m_Owner;
+
+protected:
+	std::vector<Property> m_properties;
+
+	virtual void Init() {}
 
 public:
-	CComponent(const std::string &Name, CRenderableObject *Owner)
-		: CNamed(Name)
-		, m_Owner(Owner)
-	{
-	}
+	CComponent(CXMLTreeNode& node, CRenderableObject* Owner);
+
+	CComponent( const std::string& Name, CRenderableObject* Owner );
 
 	virtual ~CComponent() {}
 
-	virtual void Update(float ElapsedTime) {}
-	virtual void Render(CContextManager  &_context) {}
-	virtual void RenderDebug(CContextManager  &_context) {}
+	void Initialize();
 
-	CRenderableObject * GetOwner(){ return m_Owner; }
+	virtual void Update( float ElapsedTime ) {}
+	virtual void FixedUpdate( float ElapsedTime ) {}
+	virtual void Render(CContextManager&  _context) {}
+	virtual void RenderDebug(CContextManager&  _context) {}
+
+	virtual void SendMsg(const std::string) {}
+
+	virtual void Destroy() = 0;
+
+	CRenderableObject* GetOwner()
+	{
+		return m_Owner;
+	}
 };
 
 #endif

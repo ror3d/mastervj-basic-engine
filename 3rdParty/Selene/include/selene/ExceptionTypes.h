@@ -16,7 +16,7 @@ public:
     explicit TypeError(std::string expected, std::string const & actual)
       : _message(std::move(expected)
                  + " expected, got " + actual + '.') {}
-    char const * what() const  override {
+    char const * what() const _noexcept override {
         return _message.c_str();
     }
 };
@@ -30,7 +30,7 @@ public:
     {
         return _type;
     }
-    char const * what() const  override {
+    char const * what() const _noexcept override {
         return "Tried to copy an object of an unregistered type. "
                "Please register classes before passing instances by value.";
     }

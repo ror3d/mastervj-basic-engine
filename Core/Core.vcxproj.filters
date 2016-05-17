@@ -37,11 +37,20 @@
     <ClCompile Include="Component\ScriptedComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Component\CharControllerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
     <ClCompile Include="Trigger\Trigger.cpp">
       <Filter>Trigger</Filter>
     </ClCompile>
     <ClCompile Include="Trigger\TriggerManager.cpp">
       <Filter>Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\FPSCameraComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Logic\LogicManager.cpp">
       <Filter>Logic</Filter>
@@ -116,6 +125,9 @@
     <ClInclude Include="Component\ScriptedComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Component\CharControllerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Time\TimeManager.h">
       <Filter>Time</Filter>
     </ClInclude>
@@ -127,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="Logic\LogicManager.h">
       <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\FPSCameraComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

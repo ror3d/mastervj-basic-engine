@@ -57,11 +57,12 @@ CEngine::CEngine()
 } 
 CEngine::~CEngine()
 {
-
+	CHECKED_DESTROY(layerManager);
+	CHECKED_DESTROY(componentManager);
+	CHECKED_DESTROY(scriptManager);
 	CHECKED_DESTROY(effectsManager);
 	CHECKED_DESTROY(textureManager);
 	CHECKED_DESTROY(materialManager);
-	CHECKED_DESTROY(layerManager);
 	CHECKED_DESTROY(staticMeshManager);
 	CHECKED_DESTROY(lightManager);
 	CHECKED_DESTROY(animatedModelManager);
@@ -73,10 +74,8 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(cookedMeshManager);
 	CHECKED_DESTROY(iaManager);
 	CHECKED_DESTROY(debugRender);
-	CHECKED_DESTROY(scriptManager);
 	CHECKED_DESTROY(characterControllerManager);
 	CHECKED_DESTROY(timerManager);
-	CHECKED_DESTROY(componentManager);
 	CHECKED_DESTROY(particleManager);
 	CHECKED_DESTROY(cinematicManager);
 	CHECKED_DESTROY(cinematicsActionManager);

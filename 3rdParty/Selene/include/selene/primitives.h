@@ -6,6 +6,8 @@
 #include <type_traits>
 #include "MetatableRegistry.h"
 
+#include "ObjPtr.h"
+
 extern "C" {
 #include <lua.h>
 #include <lauxlib.h>
@@ -22,31 +24,31 @@ namespace detail {
 
 template <typename T>
 struct is_primitive {
-	static const bool value = false;
+	static _constexpr bool value = false;
 };
 template <>
 struct is_primitive<int> {
-	static const bool value = true;
+	static _constexpr bool value = true;
 };
 template <>
 struct is_primitive<unsigned int> {
-	static const bool value = true;
+	static _constexpr bool value = true;
 };
 template <>
 struct is_primitive<bool> {
-	static const bool value = true;
+	static _constexpr bool value = true;
 };
 template <>
 struct is_primitive<float> {
-	static const bool value = true;
+	static _constexpr bool value = true;
 };
 template <>
 struct is_primitive<double> {
-	static const bool value = true;
+	static _constexpr bool value = true;
 };
 template <>
 struct is_primitive<std::string> {
-	static const bool value = true;
+	static _constexpr bool value = true;
 };
 
 template<typename T>
@@ -61,7 +63,7 @@ using decay_primitive =
 template <typename T>
 inline T* _get(_id<T*>, lua_State *l, const int index) {
 	if(MetatableRegistry::IsType(l, typeid(T), index)) {
-		return (T*)lua_topointer(l, index);
+		return ((ObjPtr<T>*)lua_touserdata(l, index))->get();
 	}
 	return nullptr;
 }
@@ -75,7 +77,7 @@ inline T& _get(_id<T&>, lua_State *l, const int index) {
 		};
 	}
 
-	T *ptr = (T*)lua_topointer(l, index);
+	T *ptr = ((ObjPtr<T>*)lua_touserdata(l, index))->get();
 	if(ptr == nullptr) {
 		throw TypeError{MetatableRegistry::GetTypeName(l, typeid(T))};
 	}
@@ -140,7 +142,7 @@ struct GetParameterFromLuaTypeError {
 template <typename T>
 inline T* _check_get(_id<T*>, lua_State *l, const int index) {
 	MetatableRegistry::CheckType(l, typeid(T), index);
-	return (T *)lua_topointer(l, index);
+	return ((ObjPtr<T>*)lua_touserdata(l, index))->get();
 }
 
 template <typename T>
@@ -259,6 +261,18 @@ inline std::string _check_get(_id<std::string>, lua_State *l, const int index) {
 	return std::string{buff, size};
 }
 
+inline std::string _check_get(_id<const std::string&>, lua_State *l, const int index) {
+	size_t size = 0;
+	char const * buff = lua_tolstring(l, index, &size);
+	if(buff == nullptr) {
+		throw GetParameterFromLuaTypeError{
+			[](lua_State *l, int index){luaL_checkstring(l, index);},
+			index
+		};
+	}
+	return std::string{buff, size};
+}
+
 // Worker type-trait struct to _get_n
 // Getting multiple elements returns a tuple
 template <typename... Ts>
@@ -314,7 +328,8 @@ inline void _push(lua_State *l, T* t) {
 	lua_pushnil(l);
   }
   else {
-	lua_pushlightuserdata(l, t);
+	void *addr = lua_newuserdata(l, sizeof(ObjPtr<T>));
+	new( addr ) ObjPtr<T>( t );
 	MetatableRegistry::SetMetatable(l, typeid(T));
   }
 }
@@ -324,7 +339,8 @@ inline typename std::enable_if<
 	!is_primitive<typename std::decay<T>::type>::value
 >::type
 _push(lua_State *l, T& t) {
-	lua_pushlightuserdata(l, &t);
+	void *addr = lua_newuserdata(l, sizeof(ObjPtr<T>));
+	new( addr ) ObjPtr<T>( &t );
 	MetatableRegistry::SetMetatable(l, typeid(T));
 }
 
@@ -338,9 +354,8 @@ _push(lua_State *l, T&& t) {
 	{
 		throw CopyUnregisteredType(typeid(t));
 	}
-
-	void *addr = lua_newuserdata(l, sizeof(T));
-	new(addr) T(std::forward<T>(t));
+	void *addr = lua_newuserdata(l, sizeof(ObjPtr<T>));
+	new( addr ) ObjPtr<T>( new T(std::forward<T>(t)), true );
 	MetatableRegistry::SetMetatable(l, typeid(T));
 }
 
@@ -403,7 +418,7 @@ inline void _push(lua_State *, std::tuple<>) {}
 
 template <typename... T>
 inline void _push(lua_State *l, const std::tuple<T...> &values) {
-	const int num_values = sizeof...(T);
+	_constexpr int num_values = sizeof...(T);
 	_push_dispatcher(l, values,
 					 typename _indices_builder<num_values>::type());
 }

@@ -543,7 +543,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.stepOffset = 0.5f;
 	desc.density = density;
 	desc.reportCallback = NULL; //TODO
-	desc.position = physx::PxExtendedVec3(pos.x, pos.y + radius + height * 0.5f, pos.z);
+	desc.position = physx::PxExtendedVec3(pos.x, pos.y + height*0.5f + radius + desc.contactOffset, pos.z);
 	desc.material = l_material;
 	int index = m_CharacterControllers.size();
 	desc.userData = (void*) index;
@@ -552,23 +552,47 @@ void CPhysXManager::createController(float height, float radius, float density, 
 }
 
 void CPhysXManager::InitPhysx(){
-	//registerMaterial("ground", 1, 0.9, 0.1);
+	registerMaterial("ground", 1, 0.9, 0.1);
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
 	//createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
 
 }
 
-Vect3f CPhysXManager::moveCharacterController(Vect3f movement, Vect3f direction, float elapsedTime, std::string name){
+
+Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name)
+{
 	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
 	physx::PxRigidDynamic* actor = cct->getActor();
-	cct->move(v(movement), 0.0001, elapsedTime, filters);
-	cct->setUpDirection(v(direction));
-	physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
-	physx::PxVec3 vel = actor->getLinearVelocity();
-	return v(cct->getPosition());
+	cct->move(v(displacement), 0.0001, elapsedTime, filters);
+	cct->setUpDirection(v(up));
+	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
+	//physx::PxVec3 vel = actor->getLinearVelocity();
+	return v(cct->getFootPosition());
+}
+
+bool CPhysXManager::isCharacterControllerGrounded( const std::string &name )
+{
+	physx::PxController* cct = getCharControllers()[name];
+
+	physx::PxControllerState state;
+	cct->getState( state );
+	return state.touchedActor != nullptr;
+}
+
+void CPhysXManager::releaseCharacterController( const std::string &name )
+{
+	auto it = m_CharacterControllers.find( name );
+	if ( it == m_CharacterControllers.end() )
+	{
+		DEBUG_ASSERT( it == m_CharacterControllers.end() );
+		return;
+	}
+	physx::PxController *cct = it->second;
+	cct->release();
+	m_CharacterControllers.erase( it );
 }
 
 void CPhysXManager::releaseCharacterControllers(){

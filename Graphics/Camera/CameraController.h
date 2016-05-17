@@ -12,12 +12,15 @@ protected:
 public:
 	ICameraController();
 	virtual ~ICameraController();
-	virtual void UpdateCameraValues(CCamera *Camera) const = 0;
 
-	const Vect3f & GetPosition() const { return m_Position; }
+	virtual std::string GetType() { return "ICameraController"; }
+
+	virtual void UpdateCameraValues(CCamera *Camera) const {}
+
+	Vect3f GetPosition() const { return m_Position; }
 	void SetPosition(const Vect3f &Position) { m_Position = Position; }
 
-	virtual void Update( float ElapsedTime ) = 0;
+	virtual void Update(float ElapsedTime) {}
 };
 
 #endif

@@ -334,9 +334,9 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 			{
 				numVertex += meshFile.meshes[i].nVertexes;
 			}
-			if (numVertex >= 65000)
+			if (numVertex >= 1<<16)
 			{
-				//DEBUG_ASSERT(!"MESH WITH MORE THAN 65000 vertexes");
+				DEBUG_ASSERT(!"MESH WITH MORE THAN 65000 vertexes");
 				shapeDesc->shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
 			}
 		}
@@ -372,7 +372,7 @@ bool CStaticMesh::FillColliderDescriptor( CPhysxColliderShapeDesc* shapeDesc )
 				vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
 		}
 			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
-			
+
 		}
 		else
 		{

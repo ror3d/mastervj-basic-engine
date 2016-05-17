@@ -2,30 +2,38 @@
 #define RENDERABLE_OBJECT_H
 
 #include "Graphics/Renderer/3DElement.h"
-#include <Base/Utils/Named.h> 
-#include <Core/Component/ComponentManager.h>
+#include <Base/Utils/Named.h>
+#include <Base/Utils/TMapManager.h>
 
 
 class CContextManager;
 class CXMLTreeNode;
 class CRenderableObjectTechnique;
-class CScriptedComponent;
+class CComponent;
+class CCharacterControllerComponent;
 
 class CRenderableObject : public C3DElement, public CNamed
 {
 public:
+	typedef TMapManager<CComponent> ComponentContainer_t;
 
-	CRenderableObject() : CNamed("") { m_componentManager = new CComponentManager(); }
-	CRenderableObject(CXMLTreeNode& treeNode) : C3DElement(treeNode), CNamed(treeNode) { m_componentManager = new CComponentManager(); }
+	CRenderableObject();
+	CRenderableObject(CXMLTreeNode& treeNode);
 
-	CRenderableObjectTechnique * m_renderableObjectTechnique;
-	CComponentManager * m_componentManager;
+	CRenderableObjectTechnique* m_renderableObjectTechnique;
 
 	virtual ~CRenderableObject() {}
 	virtual void Update(float ElapsedTime) {}
-	virtual void Render(CContextManager *_context) = 0;
-	CComponentManager * GetComponentManager(){ return m_componentManager;  }
-	void AddComponent(std::string Name, CScriptedComponent * component);
+	virtual void Render(CContextManager* _context) { throw std::exception("You shall not use this!"); };
+
+	void AddComponent(std::string Name, CComponent* component);
+
+	void SendMsg(const std::string message);
+
+	CCharacterControllerComponent* GetCharacterController();
+
+private:
+	ComponentContainer_t m_componentContainer;
 };
 
 #endif

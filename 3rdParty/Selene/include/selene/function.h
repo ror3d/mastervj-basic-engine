@@ -62,7 +62,7 @@ public:
 		int handler_index = SetErrorHandler(_state);
 		_ref.Push(_state);
 		detail::_push_n(_state, std::forward<Args>(args)...);
-		const int num_args = sizeof...(Args);
+		_constexpr int num_args = sizeof...(Args);
 
 		protected_call(num_args, 1, handler_index);
 
@@ -88,7 +88,7 @@ public:
 		int handler_index = SetErrorHandler(_state);
 		_ref.Push(_state);
 		detail::_push_n(_state, std::forward<Args>(args)...);
-		const int num_args = sizeof...(Args);
+		_constexpr int num_args = sizeof...(Args);
 
 		protected_call(num_args, 1, handler_index);
 	}
@@ -113,8 +113,8 @@ public:
 		int handler_index = SetErrorHandler(_state);
 		_ref.Push(_state);
 		detail::_push_n(_state, std::forward<Args>(args)...);
-		const int num_args = sizeof...(Args);
-		const int num_ret = sizeof...(R);
+		_constexpr int num_args = sizeof...(Args);
+		_constexpr int num_ret = sizeof...(R);
 
 		protected_call(num_args, num_ret, handler_index);
 
@@ -129,7 +129,7 @@ namespace detail {
 
 template<typename T>
 struct is_primitive<sel::function<T>> {
-	static const bool value = true;
+	static _constexpr bool value = true;
 };
 
 template <typename R, typename...Args>
