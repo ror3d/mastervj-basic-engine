@@ -10,7 +10,6 @@
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
-
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 
@@ -23,8 +22,6 @@
 #include <Core/Input/InputManager.h>
 #include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
-#include <Core/Logic/LogicManager.h>
 
 #include <Core/Component/ComponentManager.h>
 
@@ -55,13 +52,9 @@ void CApplication::Update(float _ElapsedTime)
 	m_Timer += _ElapsedTime;
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
 
-	CEngine::GetSingleton().getComponentManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
-	CEngine::GetSingleton().getLogicManager()->Update();
-
-	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
 	{
@@ -87,9 +80,13 @@ void CApplication::Update(float _ElapsedTime)
 	if ( m_FixedTimer >= PHYSX_UPDATE_STEP )
 	{
 		m_FixedTimer = fmod(m_FixedTimer, PHYSX_UPDATE_STEP);
-		CEngine::GetSingleton().getComponentManager()->FixedUpdate( PHYSX_UPDATE_STEP );
 		CEngine::GetSingleton().getPhysXManager()->update( PHYSX_UPDATE_STEP );
+		CEngine::GetSingleton().getComponentManager()->FixedUpdate( PHYSX_UPDATE_STEP );
 	}
+
+	CEngine::GetSingleton().getComponentManager()->Update(_ElapsedTime);
+
+	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 }
 
 

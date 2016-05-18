@@ -21,9 +21,9 @@ CSphericalCameraController::~CSphericalCameraController()
 
 Vect3f CSphericalCameraController::GetDirection() const
 {
-	return Vect3f(m_Zoom*cos(m_Yaw)*cos(m_Pitch),
+	return Vect3f(-m_Zoom*sin(m_Yaw)*cos(m_Pitch),
 		m_Zoom*sin( m_Pitch ),
-		m_Zoom*sin( m_Yaw )*cos( m_Pitch ) );
+		m_Zoom*cos( m_Yaw )*cos( m_Pitch ) );
 }
 
 void CSphericalCameraController::UpdateRotation( Vect3f movement )
@@ -48,8 +48,8 @@ void CSphericalCameraController::Update( float ElapsedTime )
 	float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
 
 	Vect3f cameraPosition = Vect3f(0, 0, 0);
-	cameraPosition.x = Forward*(cos(m_Yaw)) + Strafe*(cos(m_Yaw + 3.14159f*0.5f));
-	cameraPosition.z = Forward*(sin(m_Yaw)) + Strafe*(sin(m_Yaw + 3.14159f*0.5f));
+	cameraPosition.x = -Forward*sin(m_Yaw) - Strafe*cos(m_Yaw);
+	cameraPosition.z = Forward*cos(m_Yaw) - Strafe*sin(m_Yaw);
 	cameraPosition.y = CInputManager::GetInputManager()->GetAxis("JUMPAxis");
 	m_Position += cameraPosition*0.1f;
 }

@@ -32,7 +32,6 @@
 #include <PhysX/PhysXManager.h>
 #include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
 #include <Core/Component/ScriptedComponent.h>
@@ -255,6 +254,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		//engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
 
 		//engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
+		engine.getCinematicManager()->Load("Data\\Animations\\AscensorSimple.xml");
+		engine.getCinematicManager()->PlayByName("AscensorInicial");
 
 
 

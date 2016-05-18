@@ -70,7 +70,9 @@ public:
 
 	void registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution);
 
-	void createActor(const std::string& name, ActorType type, const CPhysxColliderShapeDesc& desc);
+	void createActor(const std::string& name, ActorType type, const CPhysxColliderShapeDesc& desc, bool isKinematic);
+
+	void MoveActor(std::string name, Vect3f position, Quatf rotation);
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 

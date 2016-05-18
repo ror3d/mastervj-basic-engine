@@ -11,6 +11,7 @@
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/PhysxComponent.h>
 
 CRenderableObject::CRenderableObject()
 	: CNamed("")
@@ -39,6 +40,10 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 		else if (type == "fps_camera")
 		{
 			component = new CFPSCameraComponent(comp, this);
+		}
+		else if (type == "physx")
+		{
+			component = new CPhysxComponent(comp, this, treeNode.GetPszProperty("core_name"));
 		}
 		else
 		{
@@ -70,6 +75,15 @@ CCharacterControllerComponent* CRenderableObject::GetCharacterController()
 	if (comp)
 	{
 		return dynamic_cast<CCharacterControllerComponent*>(comp);
+	}
+	return nullptr;
+}
+
+CPhysxComponent * CRenderableObject::GetPhysxComponent(){
+	auto comp = m_componentContainer.get(getName() + "_PhysxComponent");
+	if (comp)
+	{
+		return dynamic_cast<CPhysxComponent*>(comp);
 	}
 	return nullptr;
 }

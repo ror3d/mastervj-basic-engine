@@ -9,7 +9,6 @@
 
 #include "Core/Engine/Engine.h"
 #include "Core/Input/InputManager.h"
-#include "Core/CharacterController/CharacterControllerInstance.h"
 #include "Graphics/Camera/FPSCameraController.h"
 #include <Graphics/Renderable/RenderableObject.h>
 #include <Graphics/Renderable/RenderableObjectsManager.h>
@@ -23,8 +22,6 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Layer/LayerManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
-#include <Core/Logic/LogicManager.h>
 
 namespace
 {
@@ -37,8 +34,8 @@ namespace
 		else
 		{
 			throw message;
+		}
 	}
-}
 }
 
 /*
@@ -95,7 +92,7 @@ void CScriptManager::Initialize(const std::string& file)
 	if (!scripts.Exists())
 	{
 		return;
-}
+	}
 
 	for (int i = 0; i < scripts.GetNumChildren(); ++i)
 	{
@@ -107,7 +104,7 @@ void CScriptManager::Initialize(const std::string& file)
 		{
 			std::ifstream t(file);
 			if (t)
-{
+			{
 				t.seekg(0, std::ios::end);
 				size_t size = t.tellg();
 				std::string buffer(size, ' ');
@@ -117,7 +114,7 @@ void CScriptManager::Initialize(const std::string& file)
 				m_loadedScripts[name] = buffer;
 			}
 		}
-}
+	}
 
 	RegisterLUAFunctions();
 
@@ -135,7 +132,7 @@ void CScriptManager::RunFile(const std::string& fileName)
 	LuaErrorCapturedStdout errorCapture;
 	std::ifstream f(fileName);
 	std::string code((std::istreambuf_iterator<char>(f)),
-					std::istreambuf_iterator<char>());
+					 std::istreambuf_iterator<char>());
 	(*m_state)(code.c_str());
 }
 
@@ -148,11 +145,6 @@ void CScriptManager::Load(const std::string& xmlFile)
 void CScriptManager::RegisterLUAFunctions()
 {
 	LuaErrorCapturedStdout errorCapture;
-	(*m_state)["Vect3f"]
-		.SetClass<Vect3f, float, float, float>("x", &Vect3f::x,
-		"y", &Vect3f::y,
-		"z", &Vect3f::z);
-
 
 	bool loaded;
 //	loaded = (*m_state).Load("Data/Scripting/CharacterController.lua");
@@ -160,9 +152,9 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
-				"RunCode", &CScriptManager::RunCode,
-				"RunFile", &CScriptManager::RunFile,
-				"Load", &CScriptManager::Load);
+		"RunCode", &CScriptManager::RunCode,
+		"RunFile", &CScriptManager::RunFile,
+		"Load", &CScriptManager::Load);
 
 	//Global
 	(*m_state)["CXMLTreeNode"]
@@ -188,14 +180,24 @@ void CScriptManager::RegisterLUAFunctions()
 		"GetPosition", &CRenderableObject::GetPosition,
 		"SetYaw", &CRenderableObject::SetYaw,
 		"GetYaw", &CRenderableObject::GetYaw,
+			"AsAnimatedInstance", &CRenderableObject::AsAnimatedInstance,
 		"GetCharacterController", &CRenderableObject::GetCharacterController);
+
+	(*m_state)["CAnimatedInstanceModel"]
+		.SetClass<CAnimatedInstanceModel, CXMLTreeNode&>(
+			"ClearCycle", &CAnimatedInstanceModel::ClearCycle,
+			"BlendCycle", &CAnimatedInstanceModel::BlendCycle,
+			"ExecuteAction", &CAnimatedInstanceModel::ExecuteAction,
+			"IsCycleAnimationActive", &CAnimatedInstanceModel::IsCycleAnimationActive,
+			"IsActionAnimationActive", &CAnimatedInstanceModel::IsActionAnimationActive);
 
 	(*m_state)["CCharacterControllerComponent"]
 		.SetClass<CCharacterControllerComponent, CRenderableObject*>(
 		"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 		"Move", &CCharacterControllerComponent::Move);
 
-	(*m_state)["ICameraController"].SetClass<ICameraController>(
+	(*m_state)["ICameraController"]
+		.SetClass<ICameraController>(
 		"SetPosition", &ICameraController::SetPosition,
 		"GetPosition", &ICameraController::GetPosition
 		);
@@ -228,48 +230,15 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", &CCinematicManager::Play,
 		"PlayByName", &CCinematicManager::PlayByName);
-	(*m_state)["CLogicManager"].SetObj(
+	/*(*m_state)["CLogicManager"].SetObj(
 		*CEngine::GetSingleton().getLogicManager(),
 		"m_FileName", &CLogicManager::m_FileName,
 		"RemoveLogicElement", &CLogicManager::RemoveActivedLogic,
-		"GetActivableObject", &CLogicManager::GetActivableObject);
-
-
-
-	//ComponentCharController
-	(*m_state)["CRenderableObjectsManagerModels"].SetObj(
-		*CEngine::GetSingleton().getLayerManager()->get("models"),
-		"GetResource", &CRenderableObjectsManager::GetCastedResource);
-	//(*m_state)["CAnimatedInstanceModel"]
-	//	.SetClass<CAnimatedInstanceModel, CXMLTreeNode>("GetComponentManager",
-	//	&CAnimatedInstanceModel::GetComponentManager,
-	//	"AddComponent", &CAnimatedInstanceModel::AddComponent);
-	//(*m_state)["CComponentManager"].SetClass<CComponentManager>("GetResource",
-	//															&CComponentManager::get);
-	(*m_state)["CScriptedComponent"]
-		.SetClass<CScriptedComponent, const std::string&, CAnimatedInstanceModel*>();
+		"GetActivableObject", &CLogicManager::GetActivableObject);*/
 
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{
 		OutputDebugString((s+"\n").c_str());
 	};
-}
-
-void CScriptManager::RegisterLUAFunctionsAfter()
-{
-	LuaErrorCapturedStdout errorCapture;
-
-	//Character Controller
-	(*m_state)["fpsCamera"].SetObj(
-		*CEngine::GetSingleton().getCharacterControllerManager()->get("main")->getFpsCamera(),
-		"GetYaw", &CFPSCameraController::GetYaw,
-		"GetUp", &CFPSCameraController::GetUp,
-		"SetPosition", &CFPSCameraController::SetPosition,
-		"Update", &CFPSCameraController::Update);
-	(*m_state)["animatedModel"].SetObj(
-		*((CAnimatedInstanceModel*)
-		CEngine::GetSingleton().getCharacterControllerManager()->get("main")->getObjectModel()),
-		"ClearCycle", &CAnimatedInstanceModel::ClearCycle,
-		"BlendCycle", &CAnimatedInstanceModel::BlendCycle);
 }

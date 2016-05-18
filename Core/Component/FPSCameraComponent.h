@@ -17,7 +17,7 @@ public:
 	CFPSCameraComponent(CRenderableObject* Owner);
 	virtual ~CFPSCameraComponent();
 
-	virtual void FixedUpdate( float elapsedTime );
+	virtual void Update( float elapsedTime );
 
 	virtual void Destroy();
 };
