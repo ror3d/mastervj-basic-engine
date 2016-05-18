@@ -22,6 +22,7 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Layer/LayerManager.h>
+#include <GUI/GUI.h>
 
 namespace
 {
@@ -201,6 +202,22 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetPosition", &ICameraController::SetPosition,
 			"GetPosition", &ICameraController::GetPosition
 			);
+
+	(*m_state)["Rect"]
+		.SetClass<Rectf, float, float, float, float, bool>(
+			"x", &Rectf::x,
+			"y", &Rectf::y,
+			"w", &Rectf::w,
+			"h", &Rectf::h,
+			"isRelative", &Rectf::relative
+		);
+	(*m_state)("CGui = {};");
+	(*m_state)["CGui.BeginFrame"] = [](Rectf r, int alignToParent, int alignSelf) -> void { CGUI::GetInstance()->BeginFrame(r, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf); };
+	(*m_state)["CGui.EndFrame"] = []() -> void { CGUI::GetInstance()->EndFrame(); };
+	(*m_state)["CGui.Image"] = [](std::string spriteName, Rectf r, int alignToParent, int alignSelf) -> void { CGUI::GetInstance()->Image(spriteName, r, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf); };
+	//(*m_state)["CGui.Button"] = static_cast<CGUI::MouseButtonState (*) ( const std::string&, const Rectf&, const Vect2f&, Rectf::Alignment, Rectf::Alignment)>(&CGUI::Button);
+	(*m_state)["CGui.Button"] = [](std::string skin, Rectf r, int alignToParent, int alignSelf) -> int { return (int)CGUI::GetInstance()->Button(skin, r, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf); };
+	(*m_state)["CGui.Text"] = [](std::string font, std::string text, Rectf bounds, int alignToParent, int alignSelf, bool overflowX) -> int { return (int)CGUI::GetInstance()->Text(font, text, bounds, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf, overflowX); };
 
 
 	//Engine References

@@ -13,6 +13,8 @@
 
 #include <Base/XML/XMLTreeNode.h>
 
+CGUI* CGUI::m_instance = nullptr;
+
 CGUI::CGUI()
 	: m_guiComponents( MAX_GUI_ELEMENTS )
 	, m_inGUI( false )
