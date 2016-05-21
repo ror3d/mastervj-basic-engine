@@ -9,10 +9,12 @@
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Camera/CameraManager.h>
+#include <Graphics/Camera/Camera.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/CharacterController/CharacterControllerManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+#include <Sound/SoundManager.h>
 
 
 #include <Graphics/Camera/FPSCameraController.h>
@@ -52,6 +54,10 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
+	//CCamera l_Camera = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+	CCamera l_Camera = { };
+	CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
+	
 
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))

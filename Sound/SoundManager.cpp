@@ -109,7 +109,7 @@ void CSoundManager::PlayEvent(const SoundEvent &_event, const C3DElement *_speak
 }
 void CSoundManager::PlayEvent(const SoundEvent &_event, const AkGameObjectID &ID)
 {
-	AK::SoundEngine::PostEvent(_event.m_EventName.c_str(), ID); //TODO
+	AK::SoundEngine::PostEvent(_event.m_EventName.c_str(), ID);
 }
 
 void CSoundManager::SetSwitch(const SoundSwitchValue &switchValue)
@@ -214,25 +214,47 @@ AkGameObjectID CSoundManager::GenerateObjectID()
 
 bool CSoundManager::LoadSoundBanksXML(std::string filename)
 {
+
 	CXMLTreeNode l_XML;
 
 	if (l_XML.LoadFile((filename).c_str()))
 	{
-		CXMLTreeNode l_Soundbanks = l_XML["soundbanks"];
+		CXMLTreeNode l_SoundbanksInfo = l_XML["SoundBanksInfo"];
 
-		if (l_Soundbanks.Exists())
-		{
-			for (int i = 0; i < l_Soundbanks.GetNumChildren(); ++i)
+			for (int i = 0; i < l_SoundbanksInfo.GetNumChildren(); ++i)
 			{
-				CXMLTreeNode l_Element = l_Soundbanks(i);
+				CXMLTreeNode l_Soundbanks = l_SoundbanksInfo(i);
 
-				if (l_Element.GetName() == std::string("sound_bank"))
+				if (l_Soundbanks.GetName() == std::string("SoundBanks"))
+
+				if (l_Soundbanks.Exists())
 				{
-					std::string l_Bank = l_Element.GetPszProperty("name", "");
-					LoadSoundBank(l_Bank);
+					for (int i = 0; i < l_Soundbanks.GetNumChildren(); ++i)
+					{
+						CXMLTreeNode l_Element = l_Soundbanks(i);
+						std::string test = l_Element.GetName();
+						if (l_Element.GetName() == std::string("SoundBank"))
+						{
+							int l_SoundBankID = l_Element.GetIntProperty("Id", 0);
+							if (l_SoundBankID != 1355168291)
+							{
+								for (int j = 0; j < l_Element.GetNumChildren(); ++j)
+								{
+									CXMLTreeNode l_SoundBankElement = l_Element(j);
+
+									if (l_SoundBankElement.GetName() == std::string("Path"))
+									{
+
+										std::string l_Bank = l_SoundBankElement.GetPszKeyword("Path", "");
+										LoadSoundBank(l_Bank);
+
+									}
+								}
+							}
+						}//DE PRUEBA BORRAR LUEGO ES LO DEL ID
+					}
 				}
 			}
-		}
 	}
 
 	return true;
@@ -267,6 +289,7 @@ bool CSoundManager::LoadSpeakersXML(std::string filename)
 			m_NamedSpeakers[l_Name] = id;
 			AK::SoundEngine::RegisterGameObj(id);
 			AK::SoundEngine::SetPosition(id, l_SoundPosition);
+			
 
 		}
 		return true;
@@ -336,9 +359,11 @@ bool CSoundManager::Load(const std::string &soundbanks_filename, const std::stri
 	std::string m_SpeakersFilename = speakers_filename;
 
 	bool l_IsOK = true;
-	l_IsOK = LoadSoundBanksXML("Data\\soundbanks.xml");
+	l_IsOK = LoadSoundBanksXML("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml");
 	l_IsOK &= LoadSpeakersXML("Data\\speakers.xml");
 
+	/*const SoundEvent &_event
+	PlayEvent();*/
 	return l_IsOK;
 }
 
@@ -507,6 +532,13 @@ void CSoundManager::Update(const CCamera *camera)
 	}
 
 	SetListenerPosition(camera);
+
+	if (play != true)
+	{
+		SoundEvent _event = SoundEvent("Play");
+		PlayEvent(_event);
+		play = true;
+	}
 
 	//Actualiza WWISE
 	AK::SOUNDENGINE_DLL::Tick();

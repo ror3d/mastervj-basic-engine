@@ -39,6 +39,7 @@
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
+#include <Graphics/Renderer/3DElement.h>
 
 
 #include <AntTweakBar.h>
@@ -228,12 +229,15 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getCookedMeshManager()->SetCookedMeshPath("Cache\\Cooked\\");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
-	engine.getParticleManager()->Load("Data\\particle_classes.xml");
+	//engine.getParticleManager()->Load("Data\\particle_classes.xml");
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
-	engine.getSoundManager()->Load("Data\\Sounds\\soundbanks.xml", "Data\\Sounds\\speakers.xml");
-
+	engine.getSoundManager()->Init();
+	engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
+	C3DElement l_speaker = {};
+	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
+	//engine.getSoundManager()->PlayEvent()
 	engine.getIAManager()->Create();
 	engine.getScriptManager()->Initialize();
 
