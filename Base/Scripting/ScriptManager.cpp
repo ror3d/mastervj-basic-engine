@@ -177,6 +177,7 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CRenderableObject"]
 		.SetClass<CRenderableObject>(
+			"GetName", &CRenderableObject::getName,
 			"SetPosition", &CRenderableObject::SetPosition,
 			"GetPosition", &CRenderableObject::GetPosition,
 			"SetYaw", &CRenderableObject::SetYaw,

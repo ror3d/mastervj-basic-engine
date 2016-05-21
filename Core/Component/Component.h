@@ -20,6 +20,8 @@ public:
 private:
 	CRenderableObject* m_Owner;
 
+	bool m_Enabled;
+
 protected:
 	std::vector<Property> m_properties;
 
@@ -47,6 +49,9 @@ public:
 	{
 		return m_Owner;
 	}
+
+	inline void SetEnabled(bool en) { m_Enabled = en; }
+	inline bool GetEnabled() const { return m_Enabled; }
 };
 
 #endif

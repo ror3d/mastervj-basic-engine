@@ -40,7 +40,12 @@ void CScriptedComponent::Init()
 
 	sel::State* state = m_scriptMgr->getLuaState();
 
-	(*state)["_currentComponent"].SetObj(*this, "GetGameObject", &CComponent::GetOwner);
+	(*state)["_currentComponent"]
+		.SetObj(*this,
+			"GetGameObject", &CComponent::GetOwner,
+			"SendMessage", &CComponent::SendMsg,
+			"SetEnabled", &CComponent::SetEnabled,
+			"GetEnabled", &CComponent::GetEnabled);
 
 
 	std::stringstream ss;
