@@ -20,12 +20,16 @@ public:
 private:
 	CRenderableObject* m_Owner;
 
+	bool m_Initiaized;
+
 	bool m_Enabled;
 
 protected:
 	std::vector<Property> m_properties;
 
 	virtual void Init() {}
+
+	virtual void OnObjectInitialized() {};
 
 public:
 	CComponent(CXMLTreeNode& node, CRenderableObject* Owner);
@@ -35,6 +39,8 @@ public:
 	virtual ~CComponent() {}
 
 	void Initialize();
+
+	void ObjectInitialized();
 
 	virtual void Update( float ElapsedTime ) {}
 	virtual void FixedUpdate( float ElapsedTime ) {}

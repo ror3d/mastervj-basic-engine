@@ -16,6 +16,7 @@
 #include <Core/Component/ComponentManager.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/ScriptedComponent.h>
+#include <Core/Component/FPSCameraComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Time/TimeManager.h>
@@ -101,7 +102,7 @@ void CScriptManager::Initialize(const std::string& file)
 
 		std::string name = script.GetPszProperty("class", "", false);
 		std::string file = script.GetPszProperty("file", "", false);
-		if (name != "" && file != "" && m_loadedScripts.find(name) == m_loadedScripts.end())
+		if (file != "" && m_loadedScripts.find(name) == m_loadedScripts.end())
 		{
 			std::ifstream t(file);
 			if (t)
@@ -112,7 +113,14 @@ void CScriptManager::Initialize(const std::string& file)
 				t.seekg(0);
 				t.read(&buffer[0], size);
 
-				m_loadedScripts[name] = buffer;
+				if ( name != "" )
+				{
+					m_loadedScripts[name] = buffer;
+				}
+				else // Run the script now
+				{
+					RunCode( buffer );
+				}
 			}
 		}
 	}
@@ -182,7 +190,10 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetPosition", &CRenderableObject::GetPosition,
 			"SetYaw", &CRenderableObject::SetYaw,
 			"GetYaw", &CRenderableObject::GetYaw,
+			"SetVisible", &CRenderableObject::SetVisible,
+			"IsVisible", &CRenderableObject::GetVisible,
 			"AsAnimatedInstance", &CRenderableObject::AsAnimatedInstance,
+			"GetCamera", &CRenderableObject::GetCamera,
 			"GetCharacterController", &CRenderableObject::GetCharacterController);
 
 	(*m_state)["CAnimatedInstanceModel"]
@@ -197,6 +208,11 @@ void CScriptManager::RegisterLUAFunctions()
 		.SetClass<CCharacterControllerComponent, CRenderableObject*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move);
+
+	(*m_state)["CFPSCameraComponent"]
+		.SetClass<CFPSCameraComponent, CRenderableObject*>(
+			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera);
+
 
 	(*m_state)["ICameraController"]
 		.SetClass<ICameraController>(
@@ -218,7 +234,7 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CGui.Image"] = [](std::string spriteName, Rectf r, int alignToParent, int alignSelf) -> void { CGUI::GetInstance()->Image(spriteName, r, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf); };
 	//(*m_state)["CGui.Button"] = static_cast<CGUI::MouseButtonState (*) ( const std::string&, const Rectf&, const Vect2f&, Rectf::Alignment, Rectf::Alignment)>(&CGUI::Button);
 	(*m_state)["CGui.Button"] = [](std::string skin, Rectf r, int alignToParent, int alignSelf) -> int { return (int)CGUI::GetInstance()->Button(skin, r, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf); };
-	(*m_state)["CGui.Text"] = [](std::string font, std::string text, Rectf bounds, int alignToParent, int alignSelf, bool overflowX) -> int { return (int)CGUI::GetInstance()->Text(font, text, bounds, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf, overflowX); };
+	(*m_state)["CGui.Text"] = [](std::string font, std::string text, Rectf bounds, int alignToParent, int alignSelf, bool overflowX) -> void { return CGUI::GetInstance()->Text(font, text, bounds, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf, overflowX); };
 
 
 	//Engine References
@@ -229,7 +245,8 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CInputManager"].SetObj<CInputManager>(
 		*CInputManager::GetInputManager(),
-		"GetAxis", &CInputManager::GetAxis);
+		"GetAxis", &CInputManager::GetAxis,
+		"IsActionActive", &CInputManager::IsActionActive);
 
 	(*m_state)["timeManager"].SetObj(
 		*CEngine::GetSingleton().getTimerManager(),
