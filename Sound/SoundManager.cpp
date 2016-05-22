@@ -246,7 +246,7 @@ bool CSoundManager::LoadSoundBanksXML(std::string filename)
 									{
 
 										std::string l_Bank = l_SoundBankElement.GetPszKeyword("Path", "");
-										LoadSoundBank(l_Bank);
+										LoadSoundBank("Data\\Sound\\Soundbanks\\" + l_Bank);
 
 									}
 								}
@@ -384,7 +384,7 @@ bool CSoundManager::initBanks()
 	retValue = AK::StreamMgr::SetCurrentLanguage(L"English(US)");
 
 	AkBankID bankID;
-	retValue = AK::SoundEngine::LoadBank("Init.bnk", AK_DEFAULT_POOL_ID, bankID);
+	retValue = AK::SoundEngine::LoadBank("Data\\Sound\\Soundbanks\\Init.bnk", AK_DEFAULT_POOL_ID, bankID);
 	if (retValue != AK_Success)
 	{
 		return false;
@@ -398,6 +398,7 @@ bool CSoundManager::LoadSoundBank(const std::string &bank)
 	AKRESULT retValue;
 
 	retValue = AK::SoundEngine::LoadBank(bank.c_str(), AK_DEFAULT_POOL_ID, bankID);
+
 	if (retValue != AK_Success)
 	{
 		return false;
