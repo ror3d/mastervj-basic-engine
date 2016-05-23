@@ -29,6 +29,7 @@ struct SoundRTPC
 };
 struct SoundStateValue
 {
+	std::string SoundState;
 	std::string SSvalueName;
 };
 

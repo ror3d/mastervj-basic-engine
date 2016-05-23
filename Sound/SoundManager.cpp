@@ -185,13 +185,13 @@ void CSoundManager::SetRTPCValue(const SoundRTPC &_rtpc, float value, const AkGa
 
 void CSoundManager::BroadcastRTPCValue(const SoundRTPC& Rtpc, float value)
 {
-	//AKRESULT l_Result = AK::SoundEngine::SetRTPCValue(Rtpc.RTPCName.c_str(), AkRtpcValue()value); //TODO
-	//assert (l_Result);
+	AKRESULT l_Result = AK::SoundEngine::SetRTPCValue(Rtpc.RTPCName.c_str(), AkRtpcValue(value)); 
+	assert (l_Result);
 }
 void CSoundManager::BroadcastState(const SoundStateValue &_state)
 {
-	//AKRESULT l_Result = AK::SoundEngine::SetState(_state.soundState.stateName.c_str(), _state.valueName.c_str()); //TODO
-	//assert (l_Result);
+	AKRESULT l_Result = AK::SoundEngine::SetState(_state.SoundState.c_str(), _state.SSvalueName.c_str());
+	assert (l_Result);
 }
 
 
@@ -236,7 +236,7 @@ bool CSoundManager::LoadSoundBanksXML(std::string filename)
 						if (l_Element.GetName() == std::string("SoundBank"))
 						{
 							int l_SoundBankID = l_Element.GetIntProperty("Id", 0);
-							if (l_SoundBankID != 1355168291)
+							if (l_SoundBankID != 1355168291) //No es el init.bnk
 							{
 								for (int j = 0; j < l_Element.GetNumChildren(); ++j)
 								{
@@ -251,7 +251,7 @@ bool CSoundManager::LoadSoundBanksXML(std::string filename)
 									}
 								}
 							}
-						}//DE PRUEBA BORRAR LUEGO ES LO DEL ID
+						}
 					}
 				}
 			}
