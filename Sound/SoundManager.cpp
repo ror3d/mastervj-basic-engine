@@ -533,13 +533,21 @@ void CSoundManager::Update(const CCamera *camera)
 	}
 
 	SetListenerPosition(camera);
-
-	if (play != true)
+	// TODO
+	if ((play == 0) || (play > 1000)) 
 	{
+		/*SoundEvent _event = SoundEvent("Stop");
+		PlayEvent(_event);
+		_event = SoundEvent("Play");*/
 		SoundEvent _event = SoundEvent("Play");
 		PlayEvent(_event);
-		play = true;
+		play = 0;
+		play++;
 	}
+	else {
+		play++;
+	}
+	
 
 	//Actualiza WWISE
 	AK::SOUNDENGINE_DLL::Tick();

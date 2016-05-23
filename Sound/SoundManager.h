@@ -20,7 +20,7 @@ private:
 	AkGameObjectID GenerateObjectID();
 
 public:
-	bool play = false;
+	int play = 0;
 	CSoundManager();
 	virtual ~CSoundManager();
 	
