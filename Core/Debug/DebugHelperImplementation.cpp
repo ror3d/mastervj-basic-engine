@@ -42,8 +42,8 @@ CDebugHelperImplementation::~CDebugHelperImplementation()
 	// TODO: finalizar AntTweakBar
 	int status = TwTerminate();
 	DEBUG_ASSERT(status);
-	delete m_posRot;
-	m_posRot = NULL;
+	//delete m_posRot;
+	//m_posRot = NULL;
 }
 
 void CDebugHelperImplementation::Log(const std::string& text) const
@@ -66,6 +66,7 @@ void CDebugHelperImplementation::Render()
 
 bool CDebugHelperImplementation::Update(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	/*
 	ICameraController* cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CFPSCameraController* ccfps = dynamic_cast<CFPSCameraController*>(cc);
 	if (ccfps)
@@ -74,6 +75,7 @@ bool CDebugHelperImplementation::Update(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 		m_posRot->Yaw = ccfps->GetYaw();
 		m_posRot->Pitch = ccfps->GetPitch();
 	}
+	*/
 	// TODO: mandarle eventos al AntTweakBar
 	return TwEventWin(hWnd, msg, wParam, lParam);
 }
@@ -190,12 +192,14 @@ void TW_CALL RemoveBar(void* ba)
 
 void TW_CALL SwitchCameraCallback(void* _app)
 {
+	static std::string prevCamera = "__debug";
 	if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__debug"))
 	{
-		CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController("__fps");
+		CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController(prevCamera);
 	}
 	else
 	{
+		prevCamera = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName();
 		CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController("__debug");
 	}
 
@@ -208,17 +212,6 @@ void TW_CALL ReloadSceneCommands(void* _app)
 
 void TW_CALL ReloadLua(void* _app){
 	CEngine::GetSingleton().getScriptManager()->RegisterLUAFunctions();
-	CEngine::GetSingleton().getScriptManager()->RegisterLUAFunctionsAfter();
-}
-void TW_CALL CreateScene(void* a)
-{
-	CPhysxColliderShapeDesc desc;
-	desc.shape = CPhysxColliderShapeDesc::Shape::Box;
-	desc.density = 1;
-	desc.material = "box";
-	desc.size = Vect3f(4, 4, 4);
-	desc.position = Vect3f(0, 2.0f, 0);
-	CEngine::GetSingleton().getPhysXManager()->createActor("boxCol", CPhysXManager::ActorType::Static, desc);
 }
 
 void TW_CALL OpenMaterialParams(void *material)
@@ -287,8 +280,7 @@ void CDebugHelperImplementation::CreateMainBar(){
 
 		mainBar.variables.push_back(var);
 	}
-	//m_RenderManager->getFPSCamera()->
-	{
+	/*{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "Pos";
 		var.type = CDebugHelper::POSITION_ORIENTATION;
@@ -302,7 +294,7 @@ void CDebugHelperImplementation::CreateMainBar(){
 		var.ptr = m_posRot;
 
 		mainBar.variables.push_back(var);
-	}
+	}*/
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "switch camera";
@@ -321,24 +313,7 @@ void CDebugHelperImplementation::CreateMainBar(){
 
 		mainBar.variables.push_back(var);
 	}
-	{
-		CDebugHelper::SDebugVariable var = {};
-		var.name = "PhysX: Create Box";
-		var.type = CDebugHelper::BUTTON;
-		var.callback = CreateScene;
-		var.data = this;
 
-		mainBar.variables.push_back(var);
-	}
-	{
-		CDebugHelper::SDebugVariable var = {};
-		var.name = "Reload LUA";
-		var.type = CDebugHelper::BUTTON;
-		var.callback = ReloadLua;
-		var.data = this;
-
-		mainBar.variables.push_back(var);
-	}
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "Separator";
@@ -356,15 +331,24 @@ void CDebugHelperImplementation::CreateMainBar(){
 
 		mainBar.variables.push_back(var);
 	}
-	{
-		CDebugHelper::SDebugVariable var = {};
-		var.name = "  - Commands";
-		var.type = CDebugHelper::BUTTON;
-		var.callback = ReloadSceneCommands;
-		var.data = this;
+		{
+			CDebugHelper::SDebugVariable var = {};
+			var.name = "  - Commands";
+			var.type = CDebugHelper::BUTTON;
+			var.callback = ReloadSceneCommands;
+			var.data = this;
 
-		mainBar.variables.push_back(var);
-	}
+			mainBar.variables.push_back(var);
+		}
+		{
+			CDebugHelper::SDebugVariable var = {};
+			var.name = "  - LUA";
+			var.type = CDebugHelper::BUTTON;
+			var.callback = ReloadLua;
+			var.data = this;
+
+			mainBar.variables.push_back(var);
+		}
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = "Separator";

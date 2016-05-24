@@ -14,9 +14,9 @@ private:
     std::string _metatable_name;
 
     T *_get(lua_State *state) {
-        T *ret = (T *)luaL_checkudata(state, 1, _metatable_name.c_str());
+        ObjPtr<T>* ret = (ObjPtr<T>*)luaL_checkudata(state, 1, _metatable_name.c_str());
         lua_remove(state, 1);
-        return ret;
+        return ret->get();
     }
 
 public:
@@ -54,9 +54,9 @@ private:
     std::string _metatable_name;
 
     T *_get(lua_State *state) {
-        T *ret = (T *)luaL_checkudata(state, 1, _metatable_name.c_str());
+        ObjPtr<T>* ret = (ObjPtr<T>*)luaL_checkudata(state, 1, _metatable_name.c_str());
         lua_remove(state, 1);
-        return ret;
+        return ret->get();
     }
 
 public:

@@ -25,16 +25,25 @@
     <ClCompile Include="IA\IAManager.cpp">
       <Filter>IA</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterController\CharacterControllerInstance.cpp">
-      <Filter>CharacterController</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterController\CharacterControllerManager.cpp">
-      <Filter>CharacterController</Filter>
-    </ClCompile>
     <ClCompile Include="Component\ComponentManager.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\ScriptedComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\CharControllerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger\Trigger.cpp">
+      <Filter>Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger\TriggerManager.cpp">
+      <Filter>Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\FPSCameraComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,14 +60,14 @@
     <Filter Include="IA">
       <UniqueIdentifier>{9771c5ca-a1ea-42db-a224-ca3baf886b2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CharacterController">
-      <UniqueIdentifier>{2c9727a0-43aa-4f62-acc0-03476b68ec42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Time">
       <UniqueIdentifier>{8270adc5-4da3-4b07-bf39-5e0dec98d80a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{43e42ad3-3873-43a7-8eca-cc8531863f51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Trigger">
+      <UniqueIdentifier>{18c408c5-fc47-463b-9dda-0a7086dee1fe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -86,15 +95,6 @@
     <ClInclude Include="IA\IAManager.h">
       <Filter>IA</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterController\CharacterControllerInstance.h">
-      <Filter>CharacterController</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterController\CharacterControllerManager.h">
-      <Filter>CharacterController</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeManager.h">
-      <Filter>Time</Filter>
-    </ClInclude>
     <ClInclude Include="Component\ComponentManager.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -102,6 +102,21 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\ScriptedComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\CharControllerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Time\TimeManager.h">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger\Trigger.h">
+      <Filter>Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger\TriggerManager.h">
+      <Filter>Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\FPSCameraComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>

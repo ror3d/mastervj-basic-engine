@@ -16,12 +16,12 @@
 #include <PhysX/PhysXManager.h>
 #include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+#include <Core/Trigger/TriggerManager.h>
 #include <Sound/SoundManager.h>
 
 #ifndef CHECKED_DESTROY
@@ -44,22 +44,23 @@ CEngine::CEngine()
 	, cookedMeshManager(nullptr)
 	, iaManager(nullptr)
 	, scriptManager(nullptr)
-	, characterControllerManager(nullptr)
 	, timerManager(nullptr)
 	, componentManager(nullptr)
 	, cinematicsActionManager(nullptr)
 	, cinematicManager(nullptr)
 	, particleManager(nullptr)
+	, triggerManager(nullptr)
 	, soundManager(nullptr)
 {
 }
 CEngine::~CEngine()
 {
-
+	CHECKED_DESTROY(layerManager);
+	CHECKED_DESTROY(componentManager);
+	CHECKED_DESTROY(scriptManager);
 	CHECKED_DESTROY(effectsManager);
 	CHECKED_DESTROY(textureManager);
 	CHECKED_DESTROY(materialManager);
-	CHECKED_DESTROY(layerManager);
 	CHECKED_DESTROY(staticMeshManager);
 	CHECKED_DESTROY(lightManager);
 	CHECKED_DESTROY(animatedModelManager);
@@ -71,13 +72,11 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(cookedMeshManager);
 	CHECKED_DESTROY(iaManager);
 	CHECKED_DESTROY(debugRender);
-	CHECKED_DESTROY(scriptManager);
-	CHECKED_DESTROY(characterControllerManager);
 	CHECKED_DESTROY(timerManager);
-	CHECKED_DESTROY(componentManager);
 	CHECKED_DESTROY(particleManager);
 	CHECKED_DESTROY(cinematicManager);
 	CHECKED_DESTROY(cinematicsActionManager);
+	CHECKED_DESTROY(triggerManager);
 	CHECKED_DESTROY(soundManager);
 
 } //Destruimos vars
@@ -100,11 +99,11 @@ void CEngine::Init()
 	cookedMeshManager = new CCookedMeshManager();
 	iaManager = new CIAManager();
 	scriptManager = new CScriptManager();
-	characterControllerManager = new CCharacterControllerManager();
 	timerManager = new CTimerManager();
 	componentManager = new CComponentManager();
 	particleManager = new CParticleSystemManager();
 	cinematicsActionManager = new CCinematicsActionManager();
 	cinematicManager = new CCinematicManager();
+	triggerManager = new CTriggerManager();
 	soundManager = new CSoundManager();
 }

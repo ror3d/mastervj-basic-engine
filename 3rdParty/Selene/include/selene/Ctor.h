@@ -13,9 +13,9 @@ private:
 public:
     Ctor(lua_State *l,
          const std::string &metatable_name)
-         : _ctor([metatable_name](lua_State *state, Args... args) {
-             void *addr = lua_newuserdata(state, sizeof(T));
-             new(addr) T(args...);
+         : _ctor([metatable_name, l](lua_State *state, Args... args) {
+			 void *addr = lua_newuserdata(l, sizeof(ObjPtr<T>));
+			 new( addr ) ObjPtr<T>( new T(args...), true );
              luaL_setmetatable(state, metatable_name.c_str());
            }) {
         lua_pushlightuserdata(l, (void *)static_cast<BaseFun *>(this));

@@ -88,13 +88,17 @@ public:
 
 	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
 
-	bool cookTriangleMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
+	bool cookTriangleMesh(const std::vector<Vect3f>& vec, const std::vector<unsigned short>& ind, std::vector<uint8> * outCookedData, unsigned short indexSize);
 
 	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
-	Vect3f moveCharacterController(Vect3f movement, Vect3f direction, float _ElapsedTime, std::string name);
+	Vect3f moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name);
+
+	bool isCharacterControllerGrounded(const std::string &name);
+
+	void releaseCharacterController(const std::string &name);
 
 	void releaseCharacterControllers();
 

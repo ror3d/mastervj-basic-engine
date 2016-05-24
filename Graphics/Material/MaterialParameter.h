@@ -1,7 +1,7 @@
 #ifndef MATERIAL_PARAMETER_H
 #define MATERIAL_PARAMETER_H
 
-#include "Utils\Named.h"
+#include "Utils/Named.h"
 
 class CMaterialParameter : public CNamed
 {
@@ -30,7 +30,7 @@ public:
 	}*/
 };
 
-template<typename T>                             
+template<typename T>
 class CTemplatedMaterialParameter : public CMaterialParameter
 {
 private:
@@ -39,7 +39,7 @@ private:
 public:
 	CTemplatedMaterialParameter(CXMLTreeNode &TreeNode, void *dir, const T &Value, CMaterialParameter::TMaterialType MaterialType)
 		: CMaterialParameter(TreeNode, MaterialType)
-		, m_Value(Value)		
+		, m_Value(Value)
 		, m_EffectAddress(dir)
 	{
 	}
@@ -53,7 +53,7 @@ public:
 
 	void Apply()
 	{
-		memcpy(m_EffectAddress, &m_Value, sizeof(T));			
+		memcpy(m_EffectAddress, &m_Value, sizeof(T));
 	}
 };
 

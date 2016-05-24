@@ -129,3 +129,34 @@ void CMaterial::destroy()
 {
 	m_textures.clear();
 }
+
+
+CTexture *CMaterial::GetTexture( uint32 id )
+{
+	return m_textures[id].second;
+}
+
+CTexture *CMaterial::GetTextureAtStage( uint32 stage )
+{
+	for ( auto &t : m_textures )
+	{
+		if ( t.first == stage )
+		{
+			return t.second;
+		}
+	}
+	return nullptr;
+}
+
+void CMaterial::SetTextureAtStage(CTexture* tex, uint32 stage)
+{
+	for ( auto &t : m_textures )
+	{
+		if ( t.first == stage )
+		{
+			t.second = tex;
+			return;
+		}
+	}
+	m_textures.push_back(std::make_pair(stage, tex));
+}

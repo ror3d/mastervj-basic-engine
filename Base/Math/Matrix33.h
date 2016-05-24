@@ -9,7 +9,6 @@
 #include "MathUtils.h"
 #include "Vector2.h"
 #include "Vector3.h"
-#include "Utils/Types.h"
 
 #include <memory>
 
@@ -34,7 +33,7 @@
 ///           `-----------------> eje x del sistema de referencia en coordenadas del padre
 ///
 ///         En memoria los datos están contiguos por columnas:
-///                m00 m10 m20 / m01 m11 m21 / m02 m12 m22 / m03 m13 m23 
+///                m00 m10 m20 / m01 m11 m21 / m02 m12 m22 / m03 m13 m23
 /// \endverbatim
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
@@ -106,7 +105,7 @@ public:
   inline Matrix33<T>& SetScale          (const Matrix33<T>& mat_escala);
   inline Matrix33<T>& SetScale          (const Vector3<T>& vect_escala);
   inline Matrix33<T>& SetScale          (const T escala_x, const T escala_y, const T escala_z);
-  
+
 
   // Acceso
   inline Vector3<T>        GetRow                  (int i) const;
@@ -181,7 +180,7 @@ public:
   Matrix33<T>  GetRotedByAnglesXZ  (const T angleX, const T angleZ) const;
   Matrix33<T>  GetRotedByAnglesYXZ (const T angleY, const T angleX, const T angleZ) const;
   Matrix33<T>  GetScaled           (const T escala_x, const T escala_y, const T escala_z) const;
-  
+
 
   // Funciones de matriz: Inversión, transposición, escalado, rotación [no const]
   Matrix33<T>& Invert         ();
@@ -195,8 +194,8 @@ public:
   Matrix33<T>& Scale          (const T escala_x, const T escala_y, const T escala_z);
 
   // (*)
-  Matrix33<T>& AlignYX        (const Vector3<T>& vY, const Vector3<T>& vX); 
-  Matrix33<T>& AlignYZ        (const Vector3<T>& vY, const Vector3<T>& vZ); 
+  Matrix33<T>& AlignYX        (const Vector3<T>& vY, const Vector3<T>& vX);
+  Matrix33<T>& AlignYZ        (const Vector3<T>& vY, const Vector3<T>& vZ);
   Matrix33<T>& AlignXZ        (const Vector3<T>& vX, const Vector3<T>& vZ);
 
 
@@ -221,8 +220,8 @@ typedef Matrix33<double>  Mat33d;
 ////////////////////////////////////////////////////////////////////////////////////////
 extern const Mat33f  m33fIDENTITY;
 extern const Mat33f  m33fZERO;
-extern const Mat33f  m33fONES; 
-                              
+extern const Mat33f  m33fONES;
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTANTES DOUBLE
 ////////////////////////////////////////////////////////////////////////////////////////

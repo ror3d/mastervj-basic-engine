@@ -32,12 +32,13 @@
 #include <PhysX/PhysXManager.h>
 #include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
-#include <Core/CharacterController/CharacterControllerManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
+#include <Core/Component/ScriptedComponent.h>
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+#include <Core/Trigger/TriggerManager.h>
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
 
@@ -233,15 +234,15 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
+	engine.getTriggerManager()->Load("Data\\triggers.xml");
 	engine.getSoundManager()->Init();
 	engine.getSoundManager()->initBanks();
 	engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
-	
+
 	C3DElement l_speaker = {};
 	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
 	//engine.getSoundManager()->PlayEvent()
 	engine.getIAManager()->Create();
-	engine.getScriptManager()->Initialize();
 
 
 
@@ -251,11 +252,13 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CInputManager::SetCurrentInputManager(&inputManager);
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
-		engine.getScriptManager()->RegisterLUAFunctions();
-		engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
-		engine.getScriptManager()->RegisterLUAFunctionsAfter();
+		engine.getScriptManager()->Initialize("Data\\scripting.xml");
 
-		engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
+		engine.getComponentManager()->FirstInitialization();
+
+		//engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
+
+		//engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
 
 
 

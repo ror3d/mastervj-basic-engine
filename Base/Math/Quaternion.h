@@ -7,7 +7,6 @@
 #include "MathUtils.h"
 #include "Vector3.h"
 #include "Vector4.h"
-#include "Utils/Types.h"
 
 
 template<typename T>

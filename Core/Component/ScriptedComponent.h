@@ -3,22 +3,39 @@
 
 #include "Component.h"
 
+#include <vector>
+
+class CScriptManager;
+class CXMLTreeNode;
+
 class CScriptedComponent : public CComponent
 {
 private:
-	std::string m_FnOnCreate;
-	std::string m_FnOnDestroy;
-	std::string m_FnOnUpdate;
-	std::string m_FnOnRender;
-	std::string m_FnOnRenderDebug;
+	CScriptManager* m_scriptMgr;
+
+	unsigned m_componentStateId;
+
+	static unsigned s_nextComponentStateId;
+
+	void SetComponent();
+
+protected:
+	virtual void Init();
+
+	virtual void OnObjectInitialized();
+
 public:
-	CScriptedComponent(const std::string &Name, CRenderableObject *Owner, const
-	std::string &FnOnCreate, const std::string &FnOnDestroy, const std::string
-	&FnOnUpdate, const std::string &FnOnRender, const std::string &FnOnRenderDebug);
+	CScriptedComponent(const std::string& name, CRenderableObject* Owner);
+	CScriptedComponent(CXMLTreeNode& node, CRenderableObject* Owner);
 	virtual ~CScriptedComponent();
 	virtual void Update(float ElapsedTime);
-	virtual void Render(CContextManager  &_context);
-	virtual void RenderDebug(CContextManager  &_context);
+	virtual void FixedUpdate(float ElapsedTime);
+	virtual void Render(CContextManager&  _context);
+	virtual void RenderDebug(CContextManager&  _context);
+
+	virtual void SendMsg(const std::string msg);
+
+	virtual void Destroy();
 };
 
 #endif

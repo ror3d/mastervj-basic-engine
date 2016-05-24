@@ -10,20 +10,26 @@ class CFPSCameraController : public IYawPitchCameraController
 private:
 	float						m_YawSpeed;
 	float						m_PitchSpeed;
-	float						m_Speed;
-	float						m_FastSpeed;
 	Vect3f						m_CameraDisplacement;
 	float						m_PitchDisplacement;
 	float						m_PitchfloorLimit;
 	float						m_PitchSkyLimit;
+
+	Vect3f m_TargetPosition;
 public:
 	CFPSCameraController();
+	CFPSCameraController(const Vect3f& cameraOffset, float YawSpeed, float PitchSpeed, float PitchDisplacement, float PitchFloorLimit, float PitchSkyLimit);
 	virtual ~CFPSCameraController();
 
-	void Move(float Strafe, float Forward, bool Speed, float ElapsedTime);
+	virtual std::string GetType() { return "FPSCameraController"; }
+
 	void UpdateCameraValues(CCamera *Camera) const;
 	void AddYaw(float Radians);
 	void AddPitch(float Radians);
+
+	inline void SetTargetPosition( const Vect3f &pos ) { m_TargetPosition = pos; }
+	inline Vect3f GetTargetPosition() const { return m_TargetPosition; }
+
 	Vect3f GetDirection() const;
 	Vect3f GetCameraDisplacement() { return m_CameraDisplacement; }
 	float GetPitchDisplacement(){ return m_PitchDisplacement; }

@@ -3,45 +3,41 @@
 
 #include <Core/Input/InputManager.h>
 
+#include "Utils/Utils.h"
+
 CFPSCameraController::CFPSCameraController()
-: m_YawSpeed(100.f)
-, m_PitchSpeed(60.f)
-, m_Speed(5.0f)
-, m_FastSpeed(10.0f)
-, m_CameraDisplacement(-2,1.2f,0)
-, m_PitchDisplacement(-0.5f)
-, m_PitchfloorLimit(0.8f)
-, m_PitchSkyLimit(-0.5f)
+: m_YawSpeed(0.08f)
+, m_PitchSpeed(0.5f)
+, m_CameraDisplacement(0, 0, -2)//(0,1.2f,-2)
+, m_PitchDisplacement(0)//(-0.5f)
+, m_PitchfloorLimit(DEG2RAD(60))
+, m_PitchSkyLimit(DEG2RAD(-60))
 {
-	m_Position=Vect3f(0.0f, 2.0f, 0.0f);
+}
+
+CFPSCameraController::CFPSCameraController( const Vect3f& cameraOffset,
+											float YawSpeed,
+											float PitchSpeed,
+											float PitchDisplacement,
+											float PitchFloorLimit,
+											float PitchSkyLimit )
+	: m_CameraDisplacement(cameraOffset)
+	, m_YawSpeed(YawSpeed)
+	, m_PitchSpeed(PitchSpeed)
+	, m_PitchDisplacement(PitchDisplacement)
+	, m_PitchfloorLimit(PitchFloorLimit)
+	, m_PitchSkyLimit(PitchSkyLimit)
+{
+
 }
 
 CFPSCameraController::~CFPSCameraController()
 {
 }
 
-void CFPSCameraController::Move(float Strafe, float Forward, bool Speed, float ElapsedTime)
-{
-	Vect3f l_AddPos;
-	l_AddPos.y=0.0f;
-	l_AddPos.x=Forward*(cos(m_Yaw))+Strafe*(cos(m_Yaw+3.14159f*0.5f));
-	l_AddPos.z=Forward*(sin(m_Yaw))+Strafe*(sin(m_Yaw+3.14159f*0.5f));
-
-	float l_ConstantSpeed=ElapsedTime*m_Speed;
-	if(Speed)
-		l_ConstantSpeed*=m_FastSpeed;
-
-	if (l_AddPos.SquaredLength() > 0)
-	{
-		l_AddPos.Normalize();
-		l_AddPos *= l_ConstantSpeed;
-		m_Position += l_AddPos;
-	}
-}
-
 void CFPSCameraController::AddYaw(float Radians)
 {
-	IYawPitchCameraController::AddYaw(-Radians*m_YawSpeed);
+	IYawPitchCameraController::AddYaw(Radians*m_YawSpeed);
 }
 
 void CFPSCameraController::AddPitch(float Radians)
@@ -60,7 +56,7 @@ void CFPSCameraController::UpdateCameraValues(CCamera *Camera) const
 
 Vect3f CFPSCameraController::GetDirection() const
 {
-	Vect3f l_Direction(cos(m_Yaw)*cos(m_Pitch), sin(m_Pitch), sin(m_Yaw)*cos(m_Pitch));
+	Vect3f l_Direction(-sin(m_Yaw)*cos(m_Pitch), sin(m_Pitch), cos(m_Yaw)*cos(m_Pitch));
 	return l_Direction;
 }
 
@@ -68,8 +64,8 @@ void CFPSCameraController::Update( float ElapsedTime )
 {
 	m_Pitch = m_Pitch - m_PitchDisplacement;
 
-	AddYaw(-CInputManager::GetInputManager()->GetAxis("X_AXIS") * 0.0005f);
-	AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS") * 0.005f);
+	AddYaw(CInputManager::GetInputManager()->GetAxis("X_AXIS"));
+	AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS"));
 	if (m_Pitch > m_PitchfloorLimit)//No atraviesa suelo
 	{
 		m_Pitch = m_PitchfloorLimit;
@@ -82,10 +78,14 @@ void CFPSCameraController::Update( float ElapsedTime )
 	//IF CHARCONTROLLER
 	//receive updated pos
 
-	Vect3f rotacionDeseada = m_CameraDisplacement;
-	rotacionDeseada = rotacionDeseada.RotateZ(m_Pitch);
-	rotacionDeseada = rotacionDeseada.RotateY(-m_Yaw);
+	//Vect3f rotacionDeseada = m_CameraDisplacement;
+	//rotacionDeseada = rotacionDeseada.RotateY(-m_Yaw);
+	//rotacionDeseada = rotacionDeseada.RotateX(m_Pitch);
+	Mat33f rot;
+	rot.SetIdentity();
+	rot.RotByAngleX( -m_Pitch );
+	rot.RotByAngleY( -m_Yaw );
 
-	m_Position = m_Position + rotacionDeseada;
+	m_Position = m_TargetPosition + rot * m_CameraDisplacement;
 	m_Pitch = m_Pitch + m_PitchDisplacement;
 }

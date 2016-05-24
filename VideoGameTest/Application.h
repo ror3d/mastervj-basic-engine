@@ -13,9 +13,6 @@ public:
 	CApplication( CContextManager *_ContextManager);
 	~CApplication();
 
-	void InitPhysx();
-	void Init();
-	
 	void Update(float _ElapsedTime);
 	void Render();
 	bool activeMovAnim;
@@ -24,6 +21,7 @@ public:
 private:
 	CContextManager *m_ContextManager;
 	float m_Timer;
+	float m_FixedTimer;
 	bool m_FixedCamera;
 };
 

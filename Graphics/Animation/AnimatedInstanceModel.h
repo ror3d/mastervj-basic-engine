@@ -39,6 +39,8 @@ public:
 	void ClearCycle(int Id, float DelayOut);
 	bool IsCycleAnimationActive(int Id) const;
 	bool IsActionAnimationActive(int Id) const;
+
+	virtual CAnimatedInstanceModel* AsAnimatedInstance() { return this; }
 };
 
 #endif

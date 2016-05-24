@@ -11,7 +11,7 @@ CStagedTexturedSceneRendererCommand::~CStagedTexturedSceneRendererCommand()
 {
 	CTextureManager * textureManager = CEngine::GetSingleton().getTextureManager();
 
-	if (!textureManager->isEmpty())
+	if (textureManager && !textureManager->isEmpty())
 	{
 		for (auto const & text : m_DynamicTextures)
 		{

@@ -14,11 +14,11 @@ CCinematicsActionManager::~CCinematicsActionManager()
 
 void CCinematicsActionManager::Update()
 {
-	CEngine::GetSingleton().getScriptManager()->RunCode("CinematicsActionManager_Update()");
+	//CEngine::GetSingleton().getScriptManager()->RunCode("CinematicsActionManager_Update()");
 }
 
 void CCinematicsActionManager::LoadXML(std::string fileName)
 {
 	m_FileName = fileName;
-	CEngine::GetSingleton().getScriptManager()->RunCode("CinematicsActionManager_LoadXML()");
+	//CEngine::GetSingleton().getScriptManager()->RunCode("CinematicsActionManager_LoadXML()");
 }

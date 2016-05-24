@@ -15,6 +15,7 @@
 #include "libxml/parser.h"
 #include "libxml/xmlwriter.h"
 #include <string>
+#include <vector>
 #include "Math/Vector4.h"
 
 //Class
@@ -55,6 +56,8 @@ public:
 	Vect2i							GetVect2iProperty  	(const char* _pszKey, const Vect2i& _Default, bool warningDefault = true) const;
 	Vect3i							GetVect3iProperty  	(const char* _pszKey, const Vect3i& _Default, bool warningDefault = true) const;
 	Vect4i							GetVect4iProperty  	(const char* _pszKey, const Vect4i& _Default, bool warningDefault = true) const;
+
+	std::vector<std::string> GetProperties() const;
 
   // To get keywords from xml file
   int									GetIntKeyword      	(const char* _pszKey, int _iDefault=0) const;
