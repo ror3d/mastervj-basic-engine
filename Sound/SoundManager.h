@@ -62,6 +62,7 @@ public:
 	void destroy() { Terminate(); }
 	void Clean();
 	void SetListenerPosition(const CCamera *camera);
+	void ConvertToSoundEvent(std::string _string, std::string &_speaker);
 	
 };
 #endif

@@ -23,6 +23,7 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Layer/LayerManager.h>
+#include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
 
 namespace
@@ -265,6 +266,10 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", &CCinematicManager::Play);
 
+	(*m_state)["CSoundManager"].SetObj(
+		*CEngine::GetSingleton().getSoundManager(),
+		//"PlayEvent", &CSoundManager::PlayEvent, 
+		"ConvertToSoundEvent", &CSoundManager::ConvertToSoundEvent);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

@@ -16,6 +16,7 @@
 
 #include <Graphics/Camera/Camera.h>
 #include <Graphics/Renderer/3DElement.h>
+#include "Core/Engine/Engine.h"
 
 #pragma comment(lib, "AkSoundEngineDLL.lib")
 //#pragma comment(lib, "AkSoundEngine.lib")
@@ -75,7 +76,7 @@ CSoundManager::CSoundManager() : m_SoundBanksFilename(""), m_SpeakersFilename(""
 
 CSoundManager::~CSoundManager()
 {
-	Terminate();
+	//Terminate();
 }
 
 
@@ -509,6 +510,16 @@ void CSoundManager::SetListenerPosition(const CCamera *camera)
 	AK::SoundEngine::SetListenerPosition(l_ListenerPosition);
 }
 
+void CSoundManager::ConvertToSoundEvent(std::string _string, std::string &_speaker)
+{ 
+	SoundEvent _event = SoundEvent(_string); 
+	if (_speaker == "")
+		PlayEvent(_event); 
+	else
+		PlayEvent(_event, _speaker);
+}
+
+
 void CSoundManager::Update(const CCamera *camera)
 {
 	for (auto it : m_GameObjectSpeakers)
@@ -533,20 +544,20 @@ void CSoundManager::Update(const CCamera *camera)
 	}
 
 	SetListenerPosition(camera);
-	// TODO
-	if ((play == 0) || (play > 1000)) 
+	//CEngine::GetSingleton().getScriptManager->RunCode("SoundManager_Play()");
+	/*if ((play == 0)) //|| (play > 1000)) 
 	{
 		/*SoundEvent _event = SoundEvent("Stop");
 		PlayEvent(_event);
 		_event = SoundEvent("Play");*/
-		SoundEvent _event = SoundEvent("Play");
+		/*SoundEvent _event = SoundEvent("Play");
 		PlayEvent(_event);
 		play = 0;
 		play++;
 	}
 	else {
 		play++;
-	}
+	}*/
 	
 
 	//Actualiza WWISE
