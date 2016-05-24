@@ -12,6 +12,7 @@
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
 #include <Core/Component/PhysxComponent.h>
+#include <Core\Component\TriggerComponent.h>
 
 CRenderableObject::CRenderableObject()
 	: CNamed("")
@@ -44,6 +45,10 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 		else if (type == "physx")
 		{
 			component = new CPhysxComponent(comp, this, treeNode.GetPszProperty("core_name"));
+		}
+		else if (type == "trigger")
+		{
+			component = new CTriggerComponent(comp, this);
 		}
 		else
 		{
@@ -79,11 +84,22 @@ CCharacterControllerComponent* CRenderableObject::GetCharacterController()
 	return nullptr;
 }
 
-CPhysxComponent * CRenderableObject::GetPhysxComponent(){
+CPhysxComponent * CRenderableObject::GetPhysxComponent()
+{
 	auto comp = m_componentContainer.get(getName() + "_PhysxComponent");
 	if (comp)
 	{
 		return dynamic_cast<CPhysxComponent*>(comp);
+	}
+	return nullptr;
+}
+
+CTriggerComponent * CRenderableObject::GetTriggerComponent()
+{
+	auto comp = m_componentContainer.get(getName() + "_TriggerComponent");
+	if (comp)
+	{
+		return dynamic_cast<CTriggerComponent*>(comp);
 	}
 	return nullptr;
 }

@@ -104,8 +104,10 @@ fn createMaterials copyTextures = (
 	
 	for i=1 to cores.count do
 	(
+		print cores[i].name
 		if classof cores[i].material == Standardmaterial then
 		(
+			print cores[i].material.name
 			if not matExistsElseAdd l_MatsMap cores[i].material then
 			(
 				createSingleMaterial cores[i] cores[i].material
@@ -114,7 +116,7 @@ fn createMaterials copyTextures = (
 		else -- Si se trata de un multimaterial
 		(
 			for j = 1 to cores[i].material.numsubs do
-			(
+			(		
 				--Si ya existe no exportamos
 				if not matExistsElseAdd l_MatsMap cores[i].material[j] then
 				(

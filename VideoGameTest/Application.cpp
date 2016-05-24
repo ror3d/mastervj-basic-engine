@@ -22,6 +22,7 @@
 #include <Core/Input/InputManager.h>
 #include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
+#include <Core\Trigger\TriggerManager.h>
 
 #include <Core/Component/ComponentManager.h>
 

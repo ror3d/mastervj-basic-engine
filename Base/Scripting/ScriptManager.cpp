@@ -22,6 +22,8 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Layer/LayerManager.h>
+#include <Core\Component\TriggerComponent.h>
+#include <Core\Trigger\TriggerManager.h>
 
 namespace
 {
@@ -147,8 +149,6 @@ void CScriptManager::RegisterLUAFunctions()
 	LuaErrorCapturedStdout errorCapture;
 
 	bool loaded;
-//	loaded = (*m_state).Load("Data/Scripting/CharacterController.lua");
-//	loaded = (*m_state).Load("Data/Scripting/CinematicsActionManager.lua");
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
@@ -180,8 +180,10 @@ void CScriptManager::RegisterLUAFunctions()
 		"GetPosition", &CRenderableObject::GetPosition,
 		"SetYaw", &CRenderableObject::SetYaw,
 		"GetYaw", &CRenderableObject::GetYaw,
+		"GetName", &CRenderableObject::getName,
 			"AsAnimatedInstance", &CRenderableObject::AsAnimatedInstance,
-		"GetCharacterController", &CRenderableObject::GetCharacterController);
+		"GetCharacterController", &CRenderableObject::GetCharacterController,
+		"GetTriggerComponent", &CRenderableObject::GetTriggerComponent);
 
 	(*m_state)["CAnimatedInstanceModel"]
 		.SetClass<CAnimatedInstanceModel, CXMLTreeNode&>(
@@ -195,6 +197,13 @@ void CScriptManager::RegisterLUAFunctions()
 		.SetClass<CCharacterControllerComponent, CRenderableObject*>(
 		"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 		"Move", &CCharacterControllerComponent::Move);
+
+	(*m_state)["TriggerComponent"]
+		.SetClass<CTriggerComponent, CRenderableObject*>(
+		"GetStateTrigger", &CTriggerComponent::GetStateTrigger,
+		"SetStateTrigger", &CTriggerComponent::SetStateTrigger,
+		"GetName", &CTriggerComponent::getName,
+		"GetTriggerLocalName", &CTriggerComponent::GetTriggerLocalName);
 
 	(*m_state)["ICameraController"]
 		.SetClass<ICameraController>(
@@ -229,13 +238,13 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CCinematicsManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", &CCinematicManager::Play,
-		"PlayByName", &CCinematicManager::PlayByName);
-	/*(*m_state)["CLogicManager"].SetObj(
-		*CEngine::GetSingleton().getLogicManager(),
-		"m_FileName", &CLogicManager::m_FileName,
-		"RemoveLogicElement", &CLogicManager::RemoveActivedLogic,
-		"GetActivableObject", &CLogicManager::GetActivableObject);*/
+		"PlayByName", &CCinematicManager::PlayByName,
+		"StopByName", &CCinematicManager::StopByName,
+		"PauseByName", &CCinematicManager::PauseByName);
 
+	(*m_state)["CTriggerManager"].SetObj(
+		*CEngine::GetSingleton().getTriggerManager(),
+		"GetTrigger", &CTriggerManager::get);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

@@ -7,25 +7,35 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 	checkbox cbLayerRender "Layer" pos:[14,106] width:54 height:19
 	dropdownList ddlLayerRender "" pos:[81,108] width:158 height:21
 	edittext txtAnimModel "Anim. Model " pos:[14,140] width:226 height:23	
-	checkbox cbLayerPhysics "Layer" pos:[14,254] width:48 height:19
-	GroupBox grpLights "Lights" pos:[8,383] width:248 height:58
-	checkbox cbExportLight "Export Light" pos:[14,405] width:92 height:19	
-	dropdownList ddlLayerPhysics "" pos:[81,255] width:158 height:21	
-	GroupBox grpLogic "Render" pos:[8,29] width:532 height:174
+	
+	
+	checkbox cbLayerPhysics "Layer" pos:[20,296] width:48 height:19
+	GroupBox grpLights "Lights" pos:[267,413] width:248 height:58
+	checkbox cbExportLight "Export Light" pos:[282,436] width:92 height:19	
+	
+	
+	dropdownList ddlLayerPhysics "" pos:[77,294] width:158 height:21	
+	
+	
+	GroupBox grpLogic "Render" pos:[8,29] width:532 height:149
 	button btnGet "Get" pos:[25,456] width:85 height:30
 	button btnSet "Set" pos:[129,456] width:85 height:30
 	checkbox autoloadCkbx "Auto load on selection change" pos:[25,500] width:187 height:19	
 	
+	
+	
 	-- Physics
-	GroupBox grpRender "Physics" pos:[8,203] width:248 height:88
-	checkbox cbGeneratePhysics "Generate" pos:[14,220] width:66 height:19
-	dropdownList ddlGeneratePhysics "" pos:[81,220] width:158 height:21
+	GroupBox grpRender "Physics" pos:[8,186] width:248 height:139
+	checkbox cbGeneratePhysics "Generate" pos:[14,206] width:66 height:19
+	dropdownList ddlGeneratePhysics "" pos:[81,206] width:158 height:21
 	
 	--LOGIC
-	GroupBox grpPhysics "Logic" pos:[8,291] width:248 height:82
-	checkbox cbGenerateLogic "Generate" pos:[14,311] width:65 height:19
-	dropdownList ddlGenerateLogic "" pos:[81,310] width:158 height:21
-	edittext edtLogicActivatesText "Activates" pos:[28,339] width:200 height:21	
+	GroupBox grpPhysics "Logic" pos:[8,339] width:248 height:82
+	checkbox cbGenerateLogic "Generate" pos:[18,367] width:65 height:19
+	dropdownList ddlGenerateLogic "" pos:[91,364] width:158 height:21
+	edittext edtLogicActivatesText "Activates" pos:[32,388] width:200 height:21	
+	
+	
 	
 	--ANIMATIONS
 	GroupBox grp15 "Cinematics" pos:[261,212] width:279 height:61
@@ -35,10 +45,9 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 
 	--TRIGGERS
 	GroupBox grpTrigger "Triggers" pos:[263,281] width:277 height:120
-	checkbox cbIsTrigger "Is Trigger" pos:[269,301] width:117 height:13
-	local TriggerTypes = #("Sphere", "Box")
-	radiobuttons rdoTriggerType "" pos:[295,324] width:134 height:16 enabled:false labels:#("Sphere", "Box") default:2 columns:2
-	checkbox cbTriggerActivedOnce "Active Once" pos:[439,325] width:87 height:14
+	checkbox cbIsTrigger "Trigger" pos:[20,265] width:66 height:13
+	checkbox cbTriggerActivedOnce "Active Once" pos:[105,265] width:87 height:14
+	checkbox cbPhysxStatic "Static" pos:[20,235] width:95 height:21
 	
 
 	local m_ObjSelected = undefined	
@@ -48,17 +57,20 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		cbExportRenderableObject.enabled = enabled
 		
 		cbLayerRender.enabled = false --enabled
+		
 		cbGeneratePhysics.enabled = false --enabled
 		cbLayerPhysics.enabled = false --enabled
+		cbPhysxStatic.enabled = false
+		cbIsTrigger.enabled = false
+		cbTriggerActivedOnce.enabled = false
+		
 		cbGenerateLogic.enabled = false --enabled
 		txtAnimModel.enabled = false --enabled
 		txtAnimModel.enabled = false --enabled
 		
 		cbExportLight.enabled = enabled
 		cbExportCinematics.enabled = enabled
-		rbCinematicsLoopType.enabled = enabled
-		
-		cbIsTrigger.enabled = false
+		rbCinematicsLoopType.enabled = enabled	
 	)
 	
 	----------------------------------------------------
@@ -71,6 +83,9 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		cbLayerRender.checked = false
 		cbGeneratePhysics.checked = false
 		cbLayerPhysics.checked = false
+		cbPhysxStatic.checked = false
+		cbIsTrigger.checked = false
+		cbTriggerActivedOnce.enabled = false
 		
 		cbGenerateLogic.checked = false
 		ddlGenerateLogic.enabled = false
@@ -83,11 +98,6 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		cbExportCinematics.checked = false
 		rbCinematicsLoopType.enabled = false
 		rbCinematicsLoopType.state = 1
-		
-		cbIsTrigger.checked = false
-		rdoTriggerType.enabled = false
-		cbTriggerActivedOnce.enabled = false
-		
 		
 		lblObjectName.caption = ""
 		
@@ -118,27 +128,6 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 			cbExportRenderableObject.checked = true
 		)
 		
-		--Trigger
-		local l_IsTrigger = getUserProp m_ObjSelected "is_trigger"
-		local l_TriggerType = getUserProp m_ObjSelected "tigger_type"
-		
-		if l_IsTrigger!= "undefined" then
-		(
-			
-			cbIsTrigger.checked = true
-			rdoTriggerType.enabled = true
-			cbTriggerActivedOnce.enabled = true
-			local l_TriggActivedOnce = getUserProp m_ObjSelected "trigger_active_once"
-			if l_TriggActivedOnce != "" then
-			(
-				cbTriggerActivedOnce.checked = true
-			)
-			else
-			(
-				cbTriggerActivedOnce.checked = false
-			)
-									 
-		)
 		
 		/*
 		--Layer Render
@@ -174,6 +163,38 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 					cbGeneratePhysics.checked = true
 				)
 			)
+			
+			local isStatic = getUserProp m_ObjSelected "physics_static"
+			print "isStatic"
+			print isStatic
+			if isStatic == true then
+			(
+				cbPhysxStatic.checked = true
+			)
+			
+			local l_IsTrigger = getUserProp m_ObjSelected "is_trigger"		
+			if l_IsTrigger!= "undefined" then
+			(				
+				cbIsTrigger.checked = true
+				cbTriggerActivedOnce.enabled = true
+				local l_TriggActivedOnce = getUserProp m_ObjSelected "trigger_active_once"
+				if l_TriggActivedOnce != "" then
+				(
+					cbTriggerActivedOnce.checked = true
+				)
+				else
+				(
+					cbTriggerActivedOnce.checked = false
+				)
+										 
+			)
+		)
+		else
+		(
+			ddlGeneratePhysics.enabled = false
+			cbPhysxStatic.enabled = false
+			cbIsTrigger.enabled = false
+			cbTriggerActivedOnce.enabled = false
 		)
 		/*
 		--Layer Physics 
@@ -281,6 +302,14 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		if cbGeneratePhysics.checked then
 		(
 			setUserProp Obj "physics_generate" ddlGeneratePhysics.selected
+			if cbPhysxStatic.checked == true then
+			(
+					setUserProp Obj "physics_static" "true"
+			)
+			else
+			(
+					setUserProp Obj "physics_static" "false"
+			)			
 		)
 		else
 		(
@@ -337,7 +366,6 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		if cbIsTrigger.checked then
 		(
 			setUserProp Obj "is_trigger" true
-			setUserProp Obj "trigger_type" TriggerTypes[rdoTriggerType.state]
 			if cbTriggerActivedOnce.checked then
 			(
 				setUserProp Obj "trigger_active_once" true
@@ -350,7 +378,6 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 		else
 		(
 			setUserProp Obj "is_trigger" undefined
-			setUserProp Obj "trigger_type" undefined
 			setUserProp Obj "trigger_active_once" ""
 		)
 		
@@ -444,24 +471,22 @@ rollout UABPropertyManager "UABPropertyManager" width:558 height:531
 			selectedObjectChanged()
 		)
 	)
-	on cbExportCinematics changed state do
+	on cbGeneratePhysics changed state do
 	(
-		rbCinematicsLoopType.enabled = state
+		ddlGeneratePhysics.enabled = state
+		cbPhysxStatic.enabled = state
+		cbIsTrigger.enabled = state
+		cbTriggerActivedOnce.enabled = state	
 	)
-	on cbIsTrigger changed state do
-	(
-		rdoTriggerType.enabled = state
-		cbTriggerActivedOnce.enabled = state		
-	)
-	on cbPhysx changed state do
-	(
-		ddlGeneratePhysics.enabled = state	
-	)
-	on cbGenerateLogic changed state do 
+	on cbGenerateLogic changed state do
 	(			
 			ddlGenerateLogic.enabled = state
 			edtLogicActivatesText.enabled = state
 	)
-)	
+	on cbExportCinematics changed state do
+	(
+		rbCinematicsLoopType.enabled = state
+	)
+)
 
--- CreateDialog UABPropertyManag
+-- CreateDialog UABPropertyMan

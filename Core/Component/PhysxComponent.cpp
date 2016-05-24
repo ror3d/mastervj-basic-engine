@@ -14,24 +14,46 @@ CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CRenderableObject* Owner, s
 	m_colType = node.GetPszProperty("collider_type");
 	m_isStatic = node.GetBoolProperty("static");	
 	m_isKinematic = node.GetPszProperty("kinematic");
-	
+	m_coreName = nameCore;	
+	m_isTrigger = node.GetBoolProperty("trigger", false);
+}
+
+CPhysxComponent::CPhysxComponent(CRenderableObject* Owner)
+	: CComponent(Owner->getName() + "_PhysxComponent", Owner)
+{
+}
+
+CPhysxComponent::~CPhysxComponent()
+{
+}
+
+void CPhysxComponent::Init()
+{
 	CPhysxColliderShapeDesc desc;
 	desc.material = std::string("StaticObjectMaterial");// TODO get from file
-	desc.size = Owner->GetScale();
-	desc.position = Owner->GetPosition();
-	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-Owner->GetYaw(), Owner->GetPitch(), -Owner->GetRoll()));
+	desc.size = GetOwner()->GetScale();
+	if (m_isTrigger)
+	{
+		Vect3f sizeS = desc.size;
+		sizeS.y *= 5.0f;
+		sizeS.x *= 1.2f;
+		sizeS.z *= 1.2f;
+		desc.size = sizeS;
+	}
+	desc.position = GetOwner()->GetPosition();
+	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
 
-	CPhysXManager::ActorType actorType;	
+	CPhysXManager::ActorType actorType;
 	if (m_isStatic)
 	{
 		actorType = CPhysXManager::ActorType::Static;
 	}
 	else
-	{		
+	{
 		actorType = CPhysXManager::ActorType::Dynamic;
 	}
 
-	CStaticMesh * m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(nameCore);
+	CStaticMesh * m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(m_coreName);
 
 	if (m_colType == std::string("Box"))
 	{
@@ -66,21 +88,7 @@ CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CRenderableObject* Owner, s
 		m_StaticMesh->FillColliderDescriptor(&desc);
 		actorType = CPhysXManager::ActorType::Static;
 	}
-
-	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), actorType, desc, m_isKinematic);
-}
-
-CPhysxComponent::CPhysxComponent(CRenderableObject* Owner)
-	: CComponent(Owner->getName() + "_PhysxComponent", Owner)
-{
-}
-
-CPhysxComponent::~CPhysxComponent()
-{
-}
-
-void CPhysxComponent::Init()
-{
+	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), actorType, desc, m_isKinematic, m_isTrigger);
 }
 
 void CPhysxComponent::Destroy()

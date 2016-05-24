@@ -52,6 +52,9 @@
     <ClCompile Include="Component\PhysxComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Component\TriggerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -132,6 +135,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\PhysxComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\TriggerComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>

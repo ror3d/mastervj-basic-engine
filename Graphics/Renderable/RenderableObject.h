@@ -13,6 +13,7 @@ class CComponent;
 class CCharacterControllerComponent;
 class CAnimatedInstanceModel;
 class CPhysxComponent;
+class CTriggerComponent;
 
 class CRenderableObject : public C3DElement, public CNamed
 {
@@ -34,6 +35,7 @@ public:
 
 	CCharacterControllerComponent* GetCharacterController();
 	CPhysxComponent * GetPhysxComponent();
+	CTriggerComponent * GetTriggerComponent();
 
 	virtual CAnimatedInstanceModel* AsAnimatedInstance() { return nullptr; }
 

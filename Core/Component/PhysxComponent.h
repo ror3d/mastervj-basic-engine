@@ -10,8 +10,10 @@ class CPhysxComponent : public CComponent
 	
 private: 
 	std::string m_colType;
+	std::string m_coreName;
 	bool m_isStatic;
 	bool m_isKinematic;
+	bool m_isTrigger;
 
 protected:
 	virtual void Init();
