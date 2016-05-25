@@ -120,14 +120,17 @@ CFont::CFont(CXMLTreeNode& fontNode, CGUI* gui)
 
 	auto kerns = font["kernings"];
 
-	for (int i = 0; i < kerns.GetNumChildren(); ++i)
+	if (kerns.Exists())
 	{
-		auto k = kerns(i);
-		uchar f = k.GetIntProperty("first", 0, false);
-		uchar s = k.GetIntProperty("second", 0, false);
-		uchar a = k.GetIntProperty("amount", 0, false);
+		for (int i = 0; i < kerns.GetNumChildren(); ++i)
+		{
+			auto k = kerns(i);
+			uchar f = k.GetIntProperty("first", 0, false);
+			uchar s = k.GetIntProperty("second", 0, false);
+			uchar a = k.GetIntProperty("amount", 0, false);
 
-		m_kernings[std::make_pair(f, s)] = a;
+			m_kernings[std::make_pair(f, s)] = a;
+		}
 	}
 
 	m_glyphsVtxs = new CPointsListRenderableVertexs<GUI_TEXT_VERTEX>(m_glyphs.data(), MAX_GLYPHS_BATCH, MAX_GLYPHS_BATCH, true);
@@ -150,11 +153,11 @@ void CFont::DrawString(const std::string& text, const Rectf& bounds, bool overfl
 
 	pos.x = GetLineStartXPosition(str, bounds, 0);
 
+	CEffectManager::m_SceneParameters.m_BaseColor = m_color;
+
 	auto technique = m_material->getRenderableObjectTechique()->GetEffectTechnique();
 	m_material->apply();
 	m_pages[0]->Activate(0);
-
-	CEffectManager::m_SceneParameters.m_BaseColor = m_color;
 
 	for ( int b = 0; b < str.length(); b += MAX_GLYPHS_BATCH )
 	{

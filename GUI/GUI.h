@@ -61,6 +61,8 @@ private:
 
 	std::map<std::string, CFont*> m_fonts;
 
+	CColor m_fontColor;
+
 	friend class CFont;
 public:
 	CGUI();
@@ -85,6 +87,8 @@ public:
 
 	void BeginFrame( const Rectf& r, Rectf::Alignment alignToParent = Rectf::Alignment::TOP_LEFT, Rectf::Alignment alignSelf = Rectf::Alignment::TOP_LEFT );
 	void EndFrame();
+
+	inline void SetFontColor(const CColor& color) { m_fontColor = color; }
 
 private:
 
