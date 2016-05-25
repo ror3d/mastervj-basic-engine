@@ -530,6 +530,13 @@ void CSoundManager::LaunchSoundEventDynamicSpeaker(std::string _string, C3DEleme
 	PlayEvent(_event, _dynamicspeaker);
 }
 
+void CSoundManager::SetVolume(std::string _string, float value)
+{
+	SoundRTPC _rtpc;
+	_rtpc.RTPCName = _string;
+	SetRTPCValue(_rtpc, value);
+}
+
 
 void CSoundManager::Update(const CCamera *camera)
 {

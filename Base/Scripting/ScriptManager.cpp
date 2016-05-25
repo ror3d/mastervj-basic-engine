@@ -292,7 +292,9 @@ void CScriptManager::RegisterLUAFunctions()
 		//"PlayEvent", &CSoundManager::PlayEvent, 
 		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
 		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
-		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker);
+		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
+		"SetVolume", &CSoundManager::SetVolume);
+		
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{
