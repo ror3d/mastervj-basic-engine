@@ -62,7 +62,9 @@ public:
 	void destroy() { Terminate(); }
 	void Clean();
 	void SetListenerPosition(const CCamera *camera);
-	void ConvertToSoundEvent(std::string _string, std::string &_speaker);
+	void CSoundManager::LaunchSoundEventDefaultSpeaker(std::string _string);
+	void CSoundManager::LaunchSoundEventXMLSpeaker(std::string _string, std::string &_speaker);
+	void CSoundManager::LaunchSoundEventDynamicSpeaker(std::string _string, C3DElement *_dynamicspeaker);
 	
 };
 #endif

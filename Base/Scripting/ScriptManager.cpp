@@ -23,6 +23,7 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Layer/LayerManager.h>
+#include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
 
@@ -184,6 +185,26 @@ void CScriptManager::RegisterLUAFunctions()
 			"y", &Vect3f::y,
 			"z", &Vect3f::z);
 
+	(*m_state)["C3DElement"]
+		.SetClass<C3DElement>(
+			"GetPitch", &C3DElement::GetPitch,
+			"SetPitch", &C3DElement::SetPitch,
+			"GetPosition", &C3DElement::GetPosition,
+			"SetPosition", &C3DElement::SetPosition,
+			"GetQuat", &C3DElement::GetQuat,
+			"SetQuat", &C3DElement::SetQuat,
+			"GetRoll", &C3DElement::GetRoll,
+			"SetRoll", &C3DElement::SetRoll,
+			"GetScale", &C3DElement::GetScale,
+			"SetScale", &C3DElement::SetScale,
+			"GetTransform", &C3DElement::GetTransform,
+			"GetVisible", &C3DElement::GetVisible,
+			"SetVisible", &C3DElement::SetVisible,
+			"GetYaw", &C3DElement::GetYaw,
+			"SetYaw", &C3DElement::SetYaw,
+			"SetYawPitchRoll", &C3DElement::SetYawPitchRoll,
+			"GetPrevPosition", &C3DElement::GetPrevPosition);
+
 	(*m_state)["CRenderableObject"]
 		.SetClass<CRenderableObject>(
 			"GetName", &CRenderableObject::getName,
@@ -269,7 +290,9 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CSoundManager"].SetObj(
 		*CEngine::GetSingleton().getSoundManager(),
 		//"PlayEvent", &CSoundManager::PlayEvent, 
-		"ConvertToSoundEvent", &CSoundManager::ConvertToSoundEvent);
+		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
+		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
+		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

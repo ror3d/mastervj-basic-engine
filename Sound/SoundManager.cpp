@@ -320,11 +320,11 @@ bool CSoundManager::Init()
 
 	//Setting pool sizes for this game
 	//This sizes are tuned for this game, each game should have its own optimal values
-	l_initSettings.uDefaultPoolSize = 512 * 1024 * 1024;
+	l_initSettings.uDefaultPoolSize = 16 * 1024 * 1024;
 	l_initSettings.uMaxNumPaths = 16;
 	l_initSettings.uMaxNumTransitions = 128;
 
-	l_platInitSettings.uLEngineDefaultPoolSize = 512 * 1024 * 1024; //If the value is higher than udefaultPoolSize crasher without saying why.
+	l_platInitSettings.uLEngineDefaultPoolSize = 16 * 1024 * 1024; //If the value is higher than udefaultPoolSize crasher without saying why.
 
 	AkMusicSettings musicInit;
 	AK::MusicEngine::GetDefaultInitSettings(musicInit);
@@ -510,13 +510,24 @@ void CSoundManager::SetListenerPosition(const CCamera *camera)
 	AK::SoundEngine::SetListenerPosition(l_ListenerPosition);
 }
 
-void CSoundManager::ConvertToSoundEvent(std::string _string, std::string &_speaker)
+void CSoundManager::LaunchSoundEventDefaultSpeaker(std::string _string)
 { 
-	SoundEvent _event = SoundEvent(_string); 
-	if (_speaker == "")
-		PlayEvent(_event); 
-	else
-		PlayEvent(_event, _speaker);
+	SoundEvent _event = SoundEvent(_string);
+	PlayEvent(_event);
+		
+}
+
+void CSoundManager::LaunchSoundEventXMLSpeaker(std::string _string, std::string &_speaker)
+{
+	SoundEvent _event = SoundEvent(_string);
+	PlayEvent(_event, _speaker);
+
+}
+
+void CSoundManager::LaunchSoundEventDynamicSpeaker(std::string _string, C3DElement *_dynamicspeaker)
+{
+	SoundEvent _event = SoundEvent(_string);
+	PlayEvent(_event, _dynamicspeaker);
 }
 
 
@@ -543,22 +554,7 @@ void CSoundManager::Update(const CCamera *camera)
 		AK::SoundEngine::SetPosition(it.second, l_SoundPosition);
 	}
 
-	SetListenerPosition(camera);
-	//CEngine::GetSingleton().getScriptManager->RunCode("SoundManager_Play()");
-	/*if ((play == 0)) //|| (play > 1000)) 
-	{
-		/*SoundEvent _event = SoundEvent("Stop");
-		PlayEvent(_event);
-		_event = SoundEvent("Play");*/
-		/*SoundEvent _event = SoundEvent("Play");
-		PlayEvent(_event);
-		play = 0;
-		play++;
-	}
-	else {
-		play++;
-	}*/
-	
+	SetListenerPosition(camera);	
 
 	//Actualiza WWISE
 	AK::SOUNDENGINE_DLL::Tick();
