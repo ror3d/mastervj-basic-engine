@@ -9,6 +9,7 @@
 #include "Renderable/RenderableObjectTechnique.h"
 #include "Texture/Texture.h"
 #include "MaterialParameter.h"
+#include <Windows.h>
 
 CMaterialManager::CMaterialManager()
 	: m_Filename("")

@@ -7,6 +7,7 @@
 
 #include <sstream>
 #include<fstream>
+#include <Windows.h>
 
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 

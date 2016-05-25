@@ -4,6 +4,7 @@
 #include <Core/Engine/Engine.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Material/Material.h>
+#include <Windows.h>
 
 namespace
 {
