@@ -4,7 +4,11 @@
 #include "Mesh/RenderableVertexs.h"
 #include <Math/Matrix44.h>
 
+#include <Core/Engine/Engine.h>
 #include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Scene/SceneRendererCommandManager.h>
+
+
 
 #pragma comment(lib,"d3d11.lib")
 
@@ -226,11 +230,21 @@ void CContextManager::Resize(HWND hWnd, unsigned int Width, unsigned int Height)
 		CHECKED_RELEASE(m_DepthStencil);
 		CHECKED_RELEASE(m_DepthStencilView);
 
-		m_SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
-		HRESULT hr = CreateBackBuffer(hWnd, Width, Height);
+		HRESULT hr = m_SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
 		DEBUG_ASSERT(hr == S_OK);
-		m_Width = Width;
-		m_Height = Height;
+		hr = CreateBackBuffer(hWnd, Width, Height);
+		DEBUG_ASSERT(hr == S_OK);
+
+		m_Viewport.Width = (FLOAT)Width;
+		m_Viewport.Height = (FLOAT)Height;
+		m_Viewport.MinDepth = 0.0f;
+		m_Viewport.MaxDepth = 1.0f;
+		m_Viewport.TopLeftX = 0;
+		m_Viewport.TopLeftY = 0;
+
+		m_DeviceContext->RSSetViewports(1, &m_Viewport);
+
+		CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 	}
 }
 

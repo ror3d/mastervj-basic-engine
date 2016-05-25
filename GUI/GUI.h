@@ -30,6 +30,8 @@ public:
 	};
 
 private:
+	static CGUI* m_instance;
+
 	CContextManager *m_contextManager;
 
 	bool m_inGUI;
@@ -63,6 +65,9 @@ private:
 public:
 	CGUI();
 	~CGUI();
+
+	static inline CGUI* GetInstance() { return m_instance; }
+	static void SetInstance(CGUI* gui) { m_instance = gui; }
 
 	void Init( const std::string& xml );
 

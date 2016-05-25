@@ -22,6 +22,8 @@ private:
 protected:
 	virtual void Init();
 
+	virtual void OnObjectInitialized();
+
 public:
 	CScriptedComponent(const std::string& name, CRenderableObject* Owner);
 	CScriptedComponent(CXMLTreeNode& node, CRenderableObject* Owner);

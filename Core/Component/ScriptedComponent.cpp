@@ -2,11 +2,12 @@
 
 #include <Core/Engine/Engine.h>
 #include <Base/Scripting/ScriptManager.h>
+#include <Graphics/Renderable/RenderableObject.h>
 
 #include <selene.h>
 
 #include <sstream>
-#include<fstream>
+#include <fstream>
 
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 
@@ -40,7 +41,12 @@ void CScriptedComponent::Init()
 
 	sel::State* state = m_scriptMgr->getLuaState();
 
-	(*state)["_currentComponent"].SetObj(*this, "GetGameObject", &CComponent::GetOwner);
+	(*state)["_currentComponent"]
+		.SetObj(*this,
+			"GetGameObject", &CComponent::GetOwner,
+			"SendMessage", &CComponent::SendMsg,
+			"SetEnabled", &CComponent::SetEnabled,
+			"GetEnabled", &CComponent::GetEnabled);
 
 
 	std::stringstream ss;
@@ -57,15 +63,24 @@ void CScriptedComponent::Init()
 		ss << getName() << "." << prop.name << " = " << val << ";";
 	}
 	ss << "if (_currentComponent.OnCreate ~= nil) then _currentComponent:OnCreate(); end\n";
-	OutputDebugStringA(ss.str().c_str());
+	//OutputDebugStringA(ss.str().c_str());
 	m_scriptMgr->RunCode(ss.str());
+}
+
+void CScriptedComponent::OnObjectInitialized()
+{
+	SetComponent();
+
+	std::stringstream ss;
+	ss << "if (_currentComponent.OnObjectInitialized ~= nil) then _currentComponent:OnObjectInitialized(); end";
+	m_scriptMgr->RunCode( ss.str() );
 }
 
 void CScriptedComponent::Destroy()
 {
 	std::stringstream ss;
 	ss << "_currentComponent = _componentStates[" << m_componentStateId << "];"
-		<< "if (_currentComponent.OnDestroy ~= nil) then _currentComponent:OnDestroy(); end"
+		<< "if (_currentComponent.OnDestroy ~= nil) then _currentComponent:OnDestroy(); end\n"
 		<< "_currentComponent = nil;"
 		<< "_componentStates[" << m_componentStateId << "] = nil;";
 	m_scriptMgr->RunCode(ss.str());
@@ -82,15 +97,25 @@ void CScriptedComponent::SetComponent()
 
 void CScriptedComponent::Update(float ElapsedTime)
 {
-	SetComponent();
+	if (!GetOwner()->GetVisible() && GetOwner()->getName() != "TriggerChangeZone")
+	{
+		return;
+	}
+
+ 	SetComponent();
 
 	std::stringstream ss;
 	ss << "if (_currentComponent.OnUpdate ~= nil) then _currentComponent:OnUpdate(" << ElapsedTime << "); end";
-	m_scriptMgr->RunCode(ss.str());
+	m_scriptMgr->RunCode( ss.str() );
 }
 
 void CScriptedComponent::FixedUpdate(float ElapsedTime)
 {
+	if (!GetOwner()->GetVisible() && GetOwner()->getName() != "TriggerChangeZone")
+	{
+		return;
+	}
+
 	SetComponent();
 
 	std::stringstream ss;
@@ -100,6 +125,11 @@ void CScriptedComponent::FixedUpdate(float ElapsedTime)
 
 void CScriptedComponent::Render(CContextManager&  _context)
 {
+	if ( ! GetOwner()->GetVisible() )
+	{
+		return;
+	}
+
 	SetComponent();
 
 	std::stringstream ss;
@@ -109,6 +139,11 @@ void CScriptedComponent::Render(CContextManager&  _context)
 
 void CScriptedComponent::RenderDebug(CContextManager&  _context)
 {
+	if ( ! GetOwner()->GetVisible() )
+	{
+		return;
+	}
+
 	SetComponent();
 
 	std::stringstream ss;

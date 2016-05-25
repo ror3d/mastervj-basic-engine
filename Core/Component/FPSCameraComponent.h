@@ -20,6 +20,8 @@ public:
 	virtual void Update( float elapsedTime );
 
 	virtual void Destroy();
+
+	void SetAsCurrentCamera();
 };
 
 #endif

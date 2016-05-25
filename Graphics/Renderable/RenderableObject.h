@@ -9,8 +9,11 @@
 class CContextManager;
 class CXMLTreeNode;
 class CRenderableObjectTechnique;
+
 class CComponent;
 class CCharacterControllerComponent;
+class CFPSCameraComponent;
+
 class CAnimatedInstanceModel;
 class CPhysxComponent;
 class CTriggerComponent;
@@ -36,6 +39,8 @@ public:
 	CCharacterControllerComponent* GetCharacterController();
 	CPhysxComponent * GetPhysxComponent();
 	CTriggerComponent * GetTriggerComponent();
+
+	CFPSCameraComponent* GetCamera();
 
 	virtual CAnimatedInstanceModel* AsAnimatedInstance() { return nullptr; }
 

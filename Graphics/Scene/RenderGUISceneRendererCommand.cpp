@@ -16,6 +16,8 @@ CRenderGUISceneRendererCommand::CRenderGUISceneRendererCommand(CXMLTreeNode &Tre
 
 void CRenderGUISceneRendererCommand::Execute(CContextManager &_context)
 {
+	CGUI::SetInstance(m_GUI);
+	// TODO call scripts to render gui
 	/*
 	m_GUI->BeginGUI();
 

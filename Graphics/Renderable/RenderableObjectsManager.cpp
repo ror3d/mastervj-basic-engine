@@ -20,7 +20,7 @@ CRenderableObjectsManager::~CRenderableObjectsManager()
 
 void CRenderableObjectsManager::Update(float ElapsedTime)
 {
-	if (m_active){
+	if (m_active){ //Disabled for update components anyway
 		for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 		{
 			it->second->Update(ElapsedTime);

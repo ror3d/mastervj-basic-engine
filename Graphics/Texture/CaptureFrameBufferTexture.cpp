@@ -32,8 +32,6 @@ void CCaptureFrameBufferTexture::Init(unsigned int Width, unsigned int Height)
 	m_Width = Width;
 	m_Height = Height;
 	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
-	ID3D11Texture2D *l_Buffer = NULL;
-	CEngine::GetSingleton().getContextManager()->GetSwapChain()->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&l_Buffer);
 	D3D11_TEXTURE2D_DESC l_Texture2DDescription;
 	l_Texture2DDescription.Width = Width;
 	l_Texture2DDescription.Height = Height;
@@ -74,13 +72,12 @@ CCaptureFrameBufferTexture::~CCaptureFrameBufferTexture()
 
 bool CCaptureFrameBufferTexture::Capture(unsigned int StageId)
 {
-
 	ID3D11Texture2D *l_Surface = NULL;
-	HRESULT l_HR = CEngine::GetSingleton().getContextManager()->GetSwapChain()->GetBuffer(StageId, __uuidof(
-		ID3D11Texture2D), reinterpret_cast< void** >(&l_Surface));
+	HRESULT l_HR = CEngine::GetSingleton().getContextManager()->GetSwapChain()->GetBuffer(StageId, __uuidof(ID3D11Texture2D), reinterpret_cast< void** >(&l_Surface));
 	if (FAILED(l_HR) || l_Surface == NULL || m_DataTexture == NULL)
 		return false;
 	CEngine::GetSingleton().getContextManager()->GetDeviceContext()->CopyResource(m_DataTexture, l_Surface);
+	l_Surface->Release();
 	return true;
 }
 

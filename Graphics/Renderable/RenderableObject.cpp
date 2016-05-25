@@ -58,6 +58,10 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 		cmgr->AddComponent(component);
 		AddComponent(component->getName(), component);
 	}
+	for ( auto const& comp : m_componentContainer )
+	{
+		comp.second->ObjectInitialized();
+	}
 }
 
 void CRenderableObject::AddComponent(std::string Name, CComponent* component)
@@ -72,6 +76,16 @@ void CRenderableObject::SendMsg(const std::string msg)
 	{
 		it->second->SendMsg(msg);
 	}
+}
+
+CFPSCameraComponent* CRenderableObject::GetCamera()
+{
+	auto comp = m_componentContainer.get(getName() + "_Camera");
+	if (comp)
+	{
+		return dynamic_cast<CFPSCameraComponent*>(comp);
+	}
+	return nullptr;
 }
 
 CCharacterControllerComponent* CRenderableObject::GetCharacterController()
