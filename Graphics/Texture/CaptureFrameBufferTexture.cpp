@@ -1,6 +1,7 @@
 #include "CaptureFrameBufferTexture.h"
 #include "Context\ContextManager.h"
 #include "Engine\Engine.h"
+#include <Base/XML/XMLTreeNode.h>
 
 
 CCaptureFrameBufferTexture::CCaptureFrameBufferTexture(const CXMLTreeNode &node)

@@ -2,6 +2,7 @@
 #include "Engine/Engine.h"
 #include "Mesh/VertexTypes.h"
 #include <Graphics/Context/ContextManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 
 CEffectVertexShader::CEffectVertexShader(const CXMLTreeNode &TreeNode)

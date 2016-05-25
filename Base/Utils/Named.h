@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <XML/XMLTreeNode.h>
 
+class CXMLTreeNode;
 class CNamed
 {
 private:

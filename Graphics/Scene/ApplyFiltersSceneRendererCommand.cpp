@@ -7,6 +7,7 @@
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Material/Material.h>
 #include <Core/Debug/DebugPerf.h>
+#include <Base/XML/XMLTreeNode.h>
 
 CApplyFiltersSceneRendererCommand::CApplyFiltersSceneRendererCommand(CXMLTreeNode &TreeNode) : CStagedTexturedSceneRendererCommand(TreeNode)
 {

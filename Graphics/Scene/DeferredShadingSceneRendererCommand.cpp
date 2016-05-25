@@ -9,6 +9,7 @@
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Light/LightManager.h>
 #include <Graphics/Material/Material.h>
+#include <Base/XML/XMLTreeNode.h>
 #include "Light/Light.h"
 
 CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLTreeNode &TreeNode)

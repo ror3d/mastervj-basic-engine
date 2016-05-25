@@ -12,6 +12,7 @@
 
 #include <Renderable/RenderableObjectTechnique.h>
 #include <Graphics/Material/MaterialManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 #include <algorithm>
 #include <vector>

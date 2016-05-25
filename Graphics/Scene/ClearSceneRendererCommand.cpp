@@ -1,5 +1,6 @@
 #include "Scene/ClearSceneRendererCommand.h"
 #include "Context/ContextManager.h"
+#include <Base/XML/XMLTreeNode.h>
 
 CClearSceneRendererCommand::CClearSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode)

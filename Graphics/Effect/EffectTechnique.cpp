@@ -5,6 +5,7 @@
 
 #include <Core/Engine/Engine.h>
 #include <Graphics/Effect/EffectManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 
 CEffectTechnique::CEffectTechnique(CXMLTreeNode &TreeNode) : CNamed(TreeNode)
