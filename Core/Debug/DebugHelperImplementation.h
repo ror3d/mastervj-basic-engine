@@ -22,7 +22,7 @@ public:
 	virtual void Log(const std::string& text) const;
 
 	virtual void RegisterBar(const SDebugBar& bar);
-	void RemoveBar(std::string bar);
+	virtual void RemoveBar(const std::string& bar);
 
 	void CreateMainBar();
 

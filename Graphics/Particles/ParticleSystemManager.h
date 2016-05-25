@@ -19,6 +19,7 @@ public:
 	range() : first(), second() {}
 	range(const T &v) : first(v), second(v) {}
 	range(const T &f, const T &s) : first(f), second(s) {}
+	range(const range<T> &r) : first(r.first), second(r.second) {}
 };
 
 template<typename T>
@@ -37,6 +38,7 @@ class CParticleSystemClass : public CNamed
 public:
 	CParticleSystemClass(const std::string& name) : CNamed(name) {}
 	CParticleSystemClass(const CXMLTreeNode& node);
+	CParticleSystemClass(const CParticleSystemClass& original);
 
 	CMaterial *material;
 
@@ -65,6 +67,10 @@ public:
 	void Load(const std::string &Filename);
 
 	void reload();
+
+	void writeFile();
+
+	std::map<std::string, CParticleSystemClass*> * getMap() { return &m_resources; }
 };
 
 

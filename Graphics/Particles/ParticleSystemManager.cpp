@@ -3,6 +3,7 @@
 #include <Base/XML/XMLTreeNode.h>
 #include <Core/Engine/Engine.h>
 #include <Graphics/Material/MaterialManager.h>
+#include <Graphics/Material/Material.h>
 
 namespace
 {
@@ -112,6 +113,26 @@ CParticleSystemClass::CParticleSystemClass(const CXMLTreeNode& node)
 	}
 }
 
+
+CParticleSystemClass::CParticleSystemClass(const CParticleSystemClass& original)
+	: CNamed(original.getName())
+	, material(original.material)
+	, numFrames(original.numFrames)
+	, timePerFrame(original.timePerFrame)
+	, loopFrames(original.loopFrames)
+	, emitRate(original.emitRate)
+	, size(original.size)
+	, life(original.life)
+	, startVelocity(original.startVelocity)
+	, acceleration(original.acceleration)
+	, startAngle(original.startAngle)
+	, angleSpeed(original.angleSpeed)
+	, angleAcceleration(original.angleAcceleration)
+	, color(original.color)
+{
+
+}
+
 void CParticleSystemManager::Load(const std::string &Filename)
 {
 	m_Filename = Filename;
@@ -149,4 +170,122 @@ void CParticleSystemManager::reload()
 {
 	destroy();
 	Load(m_Filename);
+}
+
+void AddFloatValue(std::string name, range<float> value, FILE * file)
+{
+	std::string valStr = "";
+
+	if (value.first == value.second)
+	{
+		valStr = "\t\t<value name=\"" + name + "\" value=\"" + std::to_string(value.first) + "\"/>\n";
+	}
+	else
+	{
+		valStr = "\t\t<range name=\"" + name + "\" lower=\"" + std::to_string(value.first) + "\" upper=\"" + std::to_string(value.second) + "\"/>\n";
+	}
+
+	fputs(valStr.c_str(), file);
+}
+
+void AddVect3fValue(std::string name, range<Vect3f> value, FILE * file)
+{
+	std::string valStr = "";
+
+	if (value.first == value.second)
+	{
+		valStr = "\t\t<value name=\"" + name + "\" ";
+		valStr += "value=\"" + std::to_string(value.first.x) + " ";
+		valStr += std::to_string(value.first.y) + " ";
+		valStr += std::to_string(value.first.z) + "\"/>\n";
+	}
+	else
+	{
+		valStr = "\t\t<range name=\"" + name + "\" ";
+		valStr += "lower=\"" + std::to_string(value.first.x) + " ";
+		valStr += std::to_string(value.first.y) + " ";
+		valStr += std::to_string(value.first.z) + "\" ";
+		valStr += "upper=\"" + std::to_string(value.second.x) + " ";
+		valStr += std::to_string(value.second.y) + " ";
+		valStr += std::to_string(value.second.z) + "\"/>\n";
+	}
+
+	fputs(valStr.c_str(), file);
+}
+
+void AddColorValue(std::string name, range<CColor> value, FILE * file)
+{
+	std::string valStr = "";
+
+	if (value.first == value.second)
+	{
+		valStr = "\t\t<value name=\"" + name + "\" ";
+		valStr += "value=\"" + std::to_string(value.first.x) + " ";
+		valStr += std::to_string(value.first.y) + " ";
+		valStr += std::to_string(value.first.z) + " ";
+		valStr += std::to_string(value.first.w) + "\"/>\n";
+	}
+	else
+	{
+		valStr = "\t\t<range name=\"" + name + "\" ";
+		valStr += "lower=\"" + std::to_string(value.first.x) + " ";
+		valStr += std::to_string(value.first.y) + " ";
+		valStr += std::to_string(value.first.z) + " ";
+		valStr += std::to_string(value.first.w) + "\" ";
+		valStr += "upper=\"" + std::to_string(value.second.x) + " ";
+		valStr += std::to_string(value.second.y) + " ";
+		valStr += std::to_string(value.second.z) + " ";
+		valStr += std::to_string(value.second.w) + "\"/>\n";
+	}
+
+	fputs(valStr.c_str(), file);
+}
+
+std::string boolToString(bool value)
+{
+	return value ? "true" : "false";
+}
+
+
+void CParticleSystemManager::writeFile()
+{
+	FILE * file = fopen("Data\\particle_classes2.xml", "ab+");
+
+	fputs("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n", file);
+
+	fputs("<particle_classes>\n", file);
+
+	for (auto part : m_resources)
+	{
+		CParticleSystemClass * particle = part.second;
+
+		std::string particleStr = "\t<particle_class ";
+		particleStr += "name=\"" + particle->getName() + "\" ";
+		particleStr += "material=\"" + particle->material->getName() + "\" ";
+		particleStr += "emit_rate=\"" + std::to_string(particle->emitRate) + "\" ";
+		particleStr += "num_frames=\"" + std::to_string(particle->numFrames) + "\" ";
+		particleStr += "time_per_frame=\"" + std::to_string(particle->timePerFrame) + "\" ";
+		particleStr += "loop_frames=\"" + boolToString(particle->loopFrames) + "\">\n";
+
+		fputs(particleStr.c_str(), file);
+
+		AddFloatValue("size", particle->size, file);
+		AddVect3fValue("velocity", particle->startVelocity, file);
+		AddVect3fValue("acceleration", particle->acceleration, file);
+		AddFloatValue("angle", particle->startAngle, file);
+		AddFloatValue("angle_speed", particle->angleSpeed, file);
+		AddFloatValue("angle_acceleration", particle->angleAcceleration, file);
+		AddColorValue("color", particle->color, file);
+		AddFloatValue("life", particle->life, file);
+
+		fputs("\t</particle_class>\n", file);
+	}
+
+	fputs("</particle_classes>\n", file);
+	
+	fclose(file);
+
+	DeleteFile("Data\\particle_classes.xml.bkp");
+	rename("Data\\particle_classes.xml", "Data\\particle_classes.xml.bkp");
+	rename("Data\\particle_classes2.xml", "Data\\particle_classes.xml");
 }

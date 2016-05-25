@@ -18,6 +18,7 @@ protected:
 	std::string m_paramValues;
 public:
 	CMaterialParameter(CXMLTreeNode &TreeNode,CMaterialParameter::TMaterialType MaterialType);
+	CMaterialParameter(const CMaterialParameter& param);
 	virtual ~CMaterialParameter();
 	virtual void Apply() = 0;
 	TMaterialType getMaterialType(){ return m_MaterialType; }
@@ -44,7 +45,15 @@ public:
 	{
 	}
 
-	virtual ~CTemplatedMaterialParameter(){
+	CTemplatedMaterialParameter(const CTemplatedMaterialParameter<T>& param)
+		: CMaterialParameter(param)
+		, m_Value(param.m_Value)
+		, m_EffectAddress(param.m_EffectAddress)
+	{
+	}
+
+	virtual ~CTemplatedMaterialParameter()
+	{
 	}
 
 	T * getValue(){

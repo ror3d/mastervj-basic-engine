@@ -39,6 +39,7 @@
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Core/Trigger/TriggerManager.h>
+#include "resource.h"
 
 
 #include <AntTweakBar.h>

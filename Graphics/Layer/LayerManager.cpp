@@ -3,24 +3,33 @@
 #include "Animation/AnimatedInstanceModel.h"
 #include "Renderable/RenderableObjectsManager.h"
 
-CLayerManager::CLayerManager(){
+CLayerManager::CLayerManager()
+{
 
 }
 
-CLayerManager::~CLayerManager(){
+CLayerManager::~CLayerManager()
+{
 	Destroy();
 }
 
-void CLayerManager::Destroy(){
+void CLayerManager::Destroy()
+{
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{
 		it->second->destroy();
 	}
+	m_resources.clear();
 }
-void CLayerManager::Load(const std::string &FileName){
+
+void CLayerManager::Load(const std::string &FileName)
+{
 	CXMLTreeNode l_XML;
+
 	if (l_XML.LoadFile(FileName.c_str()))
 	{
+		m_Filename = FileName;
+
 		CXMLTreeNode l_MeshesInfo = l_XML["renderable_objects"];
 		if (l_MeshesInfo.Exists())
 		{
@@ -71,7 +80,9 @@ void CLayerManager::Load(const std::string &FileName){
 	}
 }
 
-void CLayerManager::Reload(){
+void CLayerManager::Reload()
+{
+	Destroy();
 	Load(m_Filename);
 }
 

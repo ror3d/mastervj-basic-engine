@@ -97,6 +97,36 @@ CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	}
 }
 
+CMaterial::CMaterial(const CMaterial& original)
+	: CNamed(original.getName())
+	, m_textures(original.m_textures)
+	, m_RenderableObjectTechnique(original.m_RenderableObjectTechnique)
+	, m_CurrentParameterData(original.m_CurrentParameterData)
+{
+	for (auto it : original.m_Parameters)
+	{
+		if (it->getMaterialType() == CMaterialParameter::TMaterialType::FLOAT)
+		{
+			CTemplatedMaterialParameter<float> param = *(CTemplatedMaterialParameter<float>*) it;
+			m_Parameters.push_back(new CTemplatedMaterialParameter<float>(param));
+		}
+		else if (it->getMaterialType() == CMaterialParameter::TMaterialType::VECT2F)
+		{
+			CTemplatedMaterialParameter<Vect2f> param = *(CTemplatedMaterialParameter<Vect2f>*) it;
+			m_Parameters.push_back(new CTemplatedMaterialParameter<Vect2f>(param));
+		}
+		else if (it->getMaterialType() == CMaterialParameter::TMaterialType::VECT3F)
+		{
+			CTemplatedMaterialParameter<Vect3f> param = *(CTemplatedMaterialParameter<Vect3f>*) it;
+			m_Parameters.push_back(new CTemplatedMaterialParameter<Vect3f>(param));
+		}
+		else if (it->getMaterialType() == CMaterialParameter::TMaterialType::VECT4F)
+		{
+			CTemplatedMaterialParameter<Vect4f> param = *(CTemplatedMaterialParameter<Vect4f>*) it;
+			m_Parameters.push_back(new CTemplatedMaterialParameter<Vect4f>(param));
+		}
+	}
+}
 
 CMaterial::~CMaterial()
 {

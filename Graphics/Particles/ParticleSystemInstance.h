@@ -51,6 +51,11 @@ public:
 	virtual ~CParticleSystemInstance();
 	virtual void Update(float ElapsedTime);
 	virtual void Render(CContextManager *_context);
+	virtual CParticleSystemClass* getParticleClass() { return m_particleSystemClass; }
+	virtual void setParticleClass(CParticleSystemClass* particleClass)
+	{
+		m_particleSystemClass = particleClass;
+	}
 
 };
 

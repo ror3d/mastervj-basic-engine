@@ -42,14 +42,17 @@ private:
 	unsigned int m_CurrentParameterData;
 public:
 	CMaterial(CXMLTreeNode &TreeNode);
+	CMaterial(const CMaterial& original);
 	virtual ~CMaterial();
 	void destroy();
 
 	virtual void apply(CRenderableObjectTechnique *RenderableObjectTechnique = NULL);
 
 	CRenderableObjectTechnique * getRenderableObjectTechique(){ return m_RenderableObjectTechnique; }
+	void setRenderableObjectTechique(CRenderableObjectTechnique* rot){ m_RenderableObjectTechnique = rot; }
 
 	std::vector<CMaterialParameter *> * getParameters(){ return &m_Parameters;  }
+	void setParameters(std::vector<CMaterialParameter *> params){ m_Parameters = params; }
 	
 	CTexture *GetTexture( uint32 id );
 	CTexture *GetTextureAtStage( uint32 stage );
