@@ -99,7 +99,7 @@ if exist $(SolutionDir)bin\lib\lua_d.dll  xcopy /y /f $(SolutionDir)bin\lib\lua_
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty/PhysX/Lib/vc$(PlatformToolsetVersion)$(Platform)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty/PhysX/Lib/vc$(PlatformToolsetVersion)$(Platform)/;$(WWISESDK)\Win32_vc120\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>if exist $(SolutionDir)bin\lib\AntTweakBarDebug.dll  xcopy /y /f $(SolutionDir)bin\lib\AntTweakBarDebug.dll $(LocalDebuggerWorkingDirectory).

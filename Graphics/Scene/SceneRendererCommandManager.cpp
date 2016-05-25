@@ -23,6 +23,7 @@
 #include "ApplyFiltersSceneRendererCommand.h"
 
 #include <Graphics/Texture/TextureManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 CSceneRendererCommandManager::CSceneRendererCommandManager(){
 

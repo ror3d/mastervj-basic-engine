@@ -2,6 +2,7 @@
 
 #include <Core/Engine/Engine.h>
 #include <Graphics/Context/ContextManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 CSetDepthStencilStateSceneRendererCommand::
 	CSetDepthStencilStateSceneRendererCommand(CXMLTreeNode &TreeNode)

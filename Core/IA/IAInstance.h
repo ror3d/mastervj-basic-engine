@@ -3,6 +3,8 @@
 
 #include "Utils/Named.h"
 
+#include <Base/Math/Math.h>
+
 class CRenderableObject;
 
 class CIAInstance : public CNamed

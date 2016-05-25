@@ -16,7 +16,7 @@
 #include "libxml/xmlwriter.h"
 #include <string>
 #include <vector>
-#include "Math/Vector4.h"
+#include <Base/Math/Vector4.h>
 
 //Class
 class CXMLTreeNode

@@ -2,7 +2,7 @@
 #define COMPONENT_H
 
 #include "Utils/Named.h"
-#include <map>
+#include <vector>
 
 class CRenderableObject;
 class CContextManager;

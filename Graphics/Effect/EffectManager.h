@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Math/Matrix44.h>
-#include <Utils/TMapManager.h>
+#include <Base/Math/Matrix44.h>
+#include <Base/Utils/TMapManager.h>
 #include "EffectParameters.h"
 
 class CEffectTechnique;

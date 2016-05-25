@@ -48,8 +48,8 @@
 
 #pragma comment(lib, "Winmm.lib")
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 960
+#define HEIGHT 540
 
 #define APPLICATION_NAME	"VIDEOGAME"
 

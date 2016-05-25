@@ -3,7 +3,7 @@
 
 #include "Component.h"
 
-#include <vector>
+#include <Base/Math/Math.h>
 
 class CCharacterControllerComponent : public CComponent
 {

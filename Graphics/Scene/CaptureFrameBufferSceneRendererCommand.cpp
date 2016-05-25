@@ -2,6 +2,7 @@
 #include "Texture/CaptureFrameBufferTexture.h"
 #include <Engine/Engine.h>
 #include <Graphics/Texture/TextureManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand(CXMLTreeNode &TreeNode)
 	:CStagedTexturedSceneRendererCommand(TreeNode){

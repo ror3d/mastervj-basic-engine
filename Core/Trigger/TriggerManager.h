@@ -3,6 +3,7 @@
 
 #include "Utils/TMapManager.h"
 
+#include <vector>
 
 class CTriggerComponent;
 class CXMLTreeNode;
