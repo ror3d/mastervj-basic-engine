@@ -23,6 +23,8 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Layer/LayerManager.h>
+#include <Graphics/Renderer/3DElement.h>
+#include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
 
 namespace
@@ -124,7 +126,7 @@ void CScriptManager::Initialize(const std::string& file)
 					if (rol)
 					{
 						toRunOnLoad.push_back(name);
-					}
+				}
 				}
 			}
 		}
@@ -206,6 +208,26 @@ void CScriptManager::RegisterLUAFunctions()
 			"x", &Vect3f::x,
 			"y", &Vect3f::y,
 			"z", &Vect3f::z);
+
+	(*m_state)["C3DElement"]
+		.SetClass<C3DElement>(
+			"GetPitch", &C3DElement::GetPitch,
+			"SetPitch", &C3DElement::SetPitch,
+			"GetPosition", &C3DElement::GetPosition,
+			"SetPosition", &C3DElement::SetPosition,
+			"GetQuat", &C3DElement::GetQuat,
+			"SetQuat", &C3DElement::SetQuat,
+			"GetRoll", &C3DElement::GetRoll,
+			"SetRoll", &C3DElement::SetRoll,
+			"GetScale", &C3DElement::GetScale,
+			"SetScale", &C3DElement::SetScale,
+			"GetTransform", &C3DElement::GetTransform,
+			"GetVisible", &C3DElement::GetVisible,
+			"SetVisible", &C3DElement::SetVisible,
+			"GetYaw", &C3DElement::GetYaw,
+			"SetYaw", &C3DElement::SetYaw,
+			"SetYawPitchRoll", &C3DElement::SetYawPitchRoll,
+			"GetPrevPosition", &C3DElement::GetPrevPosition);
 
 	(*m_state)["CRenderableObject"]
 		.SetClass<CRenderableObject>(
@@ -291,4 +313,17 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", &CCinematicManager::Play);
 
+	(*m_state)["CSoundManager"].SetObj(
+		*CEngine::GetSingleton().getSoundManager(),
+		//"PlayEvent", &CSoundManager::PlayEvent, 
+		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
+		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
+		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
+		"SetVolume", &CSoundManager::SetVolume);
+		
+
+	(*m_state)["DebugPrint"] = [](const std::string& s)
+	{
+		OutputDebugString((s+"\n").c_str());
+	};
 }

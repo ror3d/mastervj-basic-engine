@@ -64,7 +64,7 @@ void CLayerManager::Load(const std::string &FileName){
 				}
 				else if (l_MeshInfo.GetName() == std::string("particle_emitter"))
 				{
-					currentLayer->AddParticleEmitter(l_MeshInfo);
+					//currentLayer->AddParticleEmitter(l_MeshInfo);
 				}
 			}
 		}

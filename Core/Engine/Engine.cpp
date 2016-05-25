@@ -22,6 +22,7 @@
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Core/Trigger/TriggerManager.h>
+#include <Sound/SoundManager.h>
 
 #ifndef CHECKED_DESTROY
 #define CHECKED_DESTROY(x) do{ if(x) { x->destroy(); delete x; x = nullptr; } } while(0)
@@ -49,6 +50,7 @@ CEngine::CEngine()
 	, cinematicManager(nullptr)
 	, particleManager(nullptr)
 	, triggerManager(nullptr)
+	, soundManager(nullptr)
 {
 }
 CEngine::~CEngine()
@@ -75,6 +77,7 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(cinematicManager);
 	CHECKED_DESTROY(cinematicsActionManager);
 	CHECKED_DESTROY(triggerManager);
+	CHECKED_DESTROY(soundManager);
 
 } //Destruimos vars
 
@@ -102,4 +105,5 @@ void CEngine::Init()
 	cinematicsActionManager = new CCinematicsActionManager();
 	cinematicManager = new CCinematicManager();
 	triggerManager = new CTriggerManager();
+	soundManager = new CSoundManager();
 }
