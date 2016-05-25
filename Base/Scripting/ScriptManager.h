@@ -26,6 +26,8 @@ public:
 	void RegisterLUAFunctions();
 	sel::State * getLuaState(){ return m_state; }
 
+	void RunScript(const std::string &name);
+
 	const std::string &GetScript(const std::string &name)
 	{
 		auto it = m_loadedScripts.find(name);

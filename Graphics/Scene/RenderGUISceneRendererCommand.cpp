@@ -5,6 +5,8 @@
 #include <GUI/GUI.h>
 #include <Core/Input/InputManager.h>
 
+#include <Base/Scripting/ScriptManager.h>
+
 #pragma execution_character_set("utf-8")
 
 CRenderGUISceneRendererCommand::CRenderGUISceneRendererCommand(CXMLTreeNode &TreeNode)
@@ -17,6 +19,9 @@ CRenderGUISceneRendererCommand::CRenderGUISceneRendererCommand(CXMLTreeNode &Tre
 void CRenderGUISceneRendererCommand::Execute(CContextManager &_context)
 {
 	CGUI::SetInstance(m_GUI);
+	m_GUI->BeginGUI();
+	CEngine::GetSingleton().getScriptManager()->RunScript("gui");
+	m_GUI->EndGUI();
 	// TODO call scripts to render gui
 	/*
 	m_GUI->BeginGUI();

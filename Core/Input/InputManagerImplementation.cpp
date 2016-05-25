@@ -161,6 +161,13 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		m_Actions.push_back(action);
 	}
 	{
+		Action action = { "BACK", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = VK_F1;
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
 		Action action = { "DIVIDE", KEYBOARD, Action::ON_PRESS };
 		action.keyboard.key = 'G';
 		action.keyboard.needsAlt = false;
@@ -528,10 +535,17 @@ void CInputManagerImplementation::BeginFrame()
 				break;
 
 			case Action::ON_RELEASE:
-				// TODO: añadir acciones de release
+				if (otherNeeds && !current && previous)
+				{
+					isActionActive = true;
+				}
 				break;
 			case Action::WHILE_RELEASED:
 				// TODO: añadir acciones de botón no pulsado
+				if (otherNeeds && !current)
+				{
+					isActionActive = true;
+				}
 				break;
 
 			default:
