@@ -23,6 +23,17 @@ CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand
 
 CCaptureFrameBufferSceneRendererCommand::~CCaptureFrameBufferSceneRendererCommand()
 {
+	CTextureManager * textureManager = CEngine::GetSingleton().getTextureManager();
+
+	if (!textureManager->isEmpty())
+	{
+		for (auto const & text : m_StageTextures)
+		{
+			textureManager->remove(text.m_Texture->getName());
+		}
+	}
+
+	m_StageTextures.clear();
 }
 
 void CCaptureFrameBufferSceneRendererCommand::Execute(CContextManager &_context)
