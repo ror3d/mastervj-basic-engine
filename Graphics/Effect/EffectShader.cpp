@@ -4,6 +4,7 @@
 #include <D3Dcompiler.h>
 #include "EffectParameters.h"
 #include <Graphics/Context/ContextManager.h>
+#include <Core/Debug/DebugHelper.h>
 
 #include <sstream>
 
@@ -249,6 +250,8 @@ bool CEffectShader::LoadShader(const std::string& Filename, const std::string
 	}
 	else
 	{
+		CDebugHelper::GetDebugHelper()->Log("Reloading Shader " + getName());
+
 		hr = D3DX11CompileFromFile(Filename.c_str(), m_ShaderMacros.data(), NULL,
 		                           EntryPoint.c_str(), ShaderModel.c_str(),
 		                           dwShaderFlags, 0, NULL, BlobOut,
