@@ -535,6 +535,16 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 	return v(cct->getFootPosition());
 }
 
+void CPhysXManager::setPosition(const Vect3f pos, const std::string &name)
+{
+	physx::PxController* cct = getCharControllers()[name];
+	physx::PxExtended x = pos.x;
+	physx::PxExtended y = pos.y;
+	physx::PxExtended z = pos.z;
+	physx::PxExtendedVec3 vecPos(x,y,z);
+	cct->setPosition(vecPos);
+}
+
 bool CPhysXManager::isCharacterControllerGrounded( const std::string &name )
 {
 	physx::PxController* cct = getCharControllers()[name];

@@ -209,7 +209,8 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CCharacterControllerComponent"]
 		.SetClass<CCharacterControllerComponent, CRenderableObject*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
-			"Move", &CCharacterControllerComponent::Move);
+			"Move", &CCharacterControllerComponent::Move,
+			"SetPos", &CCharacterControllerComponent::SetPosition);
 
 	(*m_state)["CFPSCameraComponent"]
 		.SetClass<CFPSCameraComponent, CRenderableObject*>(

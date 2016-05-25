@@ -48,3 +48,8 @@ void CCharacterControllerComponent::Move(const Vect3f& velocity, const Vect3f& u
 	GetOwner()->SetPosition(CEngine::GetSingleton().getPhysXManager()->moveCharacterController( velocity, up, elapsedTime, getName() ) + m_offset);
 }
 
+void CCharacterControllerComponent::SetPosition(const Vect3f& pos)
+{
+	CEngine::GetSingleton().getPhysXManager()->setPosition(pos, getName());
+}
+

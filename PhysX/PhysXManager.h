@@ -74,6 +74,8 @@ public:
 
 	void MoveActor(std::string name, Vect3f position, Quatf rotation);
 
+	void setPosition(Vect3f pos, const std::string &name);
+
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 
 	void InitPhysx();
