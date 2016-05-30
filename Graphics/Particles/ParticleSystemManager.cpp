@@ -134,6 +134,11 @@ CParticleSystemClass::CParticleSystemClass(const CParticleSystemClass& original)
 
 }
 
+CParticleSystemClass::~CParticleSystemClass()
+{
+
+}
+
 void CParticleSystemManager::Load(const std::string &Filename)
 {
 	m_Filename = Filename;
@@ -166,6 +171,9 @@ void CParticleSystemManager::Load(const std::string &Filename)
 
 }
 
+CParticleSystemManager::~CParticleSystemManager()
+{
+}
 
 void CParticleSystemManager::reload()
 {
@@ -173,73 +181,61 @@ void CParticleSystemManager::reload()
 	Load(m_Filename);
 }
 
-void AddFloatValue(std::string name, range<float> value, FILE * file)
+void AddFloatRangeValue(CXMLTreeNode &xml, std::string name, range<float> value)
 {
-	std::string valStr = "";
-
 	if (value.first == value.second)
 	{
-		valStr = "\t\t<value name=\"" + name + "\" value=\"" + std::to_string(value.first) + "\"/>\n";
+		xml.StartElement("value");
+		xml.WritePszProperty("name", name.c_str());
+		xml.WriteFloatProperty("value", value.first);
 	}
 	else
 	{
-		valStr = "\t\t<range name=\"" + name + "\" lower=\"" + std::to_string(value.first) + "\" upper=\"" + std::to_string(value.second) + "\"/>\n";
+		xml.StartElement("range");
+		xml.WritePszProperty("name", name.c_str());
+		xml.WriteFloatProperty("lower", value.first);
+		xml.WriteFloatProperty("upper", value.second);
 	}
 
-	fputs(valStr.c_str(), file);
+	xml.EndElement();
 }
 
-void AddVect3fValue(std::string name, range<Vect3f> value, FILE * file)
+void AddVect3fRangeValue(CXMLTreeNode &xml, std::string name, range<Vect3f> value)
 {
-	std::string valStr = "";
-
 	if (value.first == value.second)
 	{
-		valStr = "\t\t<value name=\"" + name + "\" ";
-		valStr += "value=\"" + std::to_string(value.first.x) + " ";
-		valStr += std::to_string(value.first.y) + " ";
-		valStr += std::to_string(value.first.z) + "\"/>\n";
+		xml.StartElement("value");
+		xml.WritePszProperty("name", name.c_str());
+		xml.WriteVect3fProperty("value", value.first);
 	}
 	else
 	{
-		valStr = "\t\t<range name=\"" + name + "\" ";
-		valStr += "lower=\"" + std::to_string(value.first.x) + " ";
-		valStr += std::to_string(value.first.y) + " ";
-		valStr += std::to_string(value.first.z) + "\" ";
-		valStr += "upper=\"" + std::to_string(value.second.x) + " ";
-		valStr += std::to_string(value.second.y) + " ";
-		valStr += std::to_string(value.second.z) + "\"/>\n";
+		xml.StartElement("range");
+		xml.WritePszProperty("name", name.c_str());
+		xml.WriteVect3fProperty("lower", value.first);
+		xml.WriteVect3fProperty("upper", value.second);
 	}
 
-	fputs(valStr.c_str(), file);
+	xml.EndElement();
 }
 
-void AddColorValue(std::string name, range<CColor> value, FILE * file)
+void AddColorRangeValue(CXMLTreeNode &xml, std::string name, range<CColor> value)
 {
-	std::string valStr = "";
-
 	if (value.first == value.second)
 	{
-		valStr = "\t\t<value name=\"" + name + "\" ";
-		valStr += "value=\"" + std::to_string(value.first.x) + " ";
-		valStr += std::to_string(value.first.y) + " ";
-		valStr += std::to_string(value.first.z) + " ";
-		valStr += std::to_string(value.first.w) + "\"/>\n";
+		xml.StartElement("value");
+		xml.WritePszProperty("name", name.c_str());
+		xml.WriteVect4fProperty("value", value.first);
 	}
 	else
 	{
-		valStr = "\t\t<range name=\"" + name + "\" ";
-		valStr += "lower=\"" + std::to_string(value.first.x) + " ";
-		valStr += std::to_string(value.first.y) + " ";
-		valStr += std::to_string(value.first.z) + " ";
-		valStr += std::to_string(value.first.w) + "\" ";
-		valStr += "upper=\"" + std::to_string(value.second.x) + " ";
-		valStr += std::to_string(value.second.y) + " ";
-		valStr += std::to_string(value.second.z) + " ";
-		valStr += std::to_string(value.second.w) + "\"/>\n";
+		xml.StartElement("range");
+		xml.WritePszProperty("name", name.c_str());
+		xml.WriteVect4fProperty("lower", value.first);
+		xml.WriteVect4fProperty("upper", value.second);
 	}
 
-	fputs(valStr.c_str(), file);
+	xml.EndElement();
 }
 
 std::string boolToString(bool value)
@@ -247,44 +243,42 @@ std::string boolToString(bool value)
 	return value ? "true" : "false";
 }
 
-
 void CParticleSystemManager::writeFile()
 {
-	FILE * file = fopen("Data\\particle_classes2.xml", "ab+");
+	CXMLTreeNode NewXML;
 
-	fputs("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n", file);
-
-	fputs("<particle_classes>\n", file);
-
-	for (auto part : m_resources)
+	if (NewXML.StartNewFile("Data\\particle_classes2.xml"))
 	{
-		CParticleSystemClass * particle = part.second;
+		NewXML.StartElement("particle_classes");
 
-		std::string particleStr = "\t<particle_class ";
-		particleStr += "name=\"" + particle->getName() + "\" ";
-		particleStr += "material=\"" + particle->material->getName() + "\" ";
-		particleStr += "emit_rate=\"" + std::to_string(particle->emitRate) + "\" ";
-		particleStr += "num_frames=\"" + std::to_string(particle->numFrames) + "\" ";
-		particleStr += "time_per_frame=\"" + std::to_string(particle->timePerFrame) + "\" ";
-		particleStr += "loop_frames=\"" + boolToString(particle->loopFrames) + "\">\n";
+		for (auto part : m_resources)
+		{
+			CParticleSystemClass * particle = part.second;
+			
+			NewXML.StartElement("particle_class");
 
-		fputs(particleStr.c_str(), file);
+			NewXML.WritePszProperty("name", particle->getName().c_str());
+			NewXML.WritePszProperty("material", particle->material->getName().c_str());
+			NewXML.WriteFloatProperty("emit_rate", particle->emitRate);
+			NewXML.WriteIntProperty("num_frames", particle->numFrames);
+			NewXML.WriteFloatProperty("time_per_frame", particle->timePerFrame);
+			NewXML.WriteBoolProperty("loop_frames", particle->loopFrames);
 
-		AddFloatValue("size", particle->size, file);
-		AddVect3fValue("velocity", particle->startVelocity, file);
-		AddVect3fValue("acceleration", particle->acceleration, file);
-		AddFloatValue("angle", particle->startAngle, file);
-		AddFloatValue("angle_speed", particle->angleSpeed, file);
-		AddFloatValue("angle_acceleration", particle->angleAcceleration, file);
-		AddColorValue("color", particle->color, file);
-		AddFloatValue("life", particle->life, file);
+			AddFloatRangeValue(NewXML, "size", particle->size);
+			AddVect3fRangeValue(NewXML, "velocity", particle->startVelocity);
+			AddVect3fRangeValue(NewXML, "acceleration", particle->acceleration);
+			AddFloatRangeValue(NewXML, "angle", particle->startAngle);
+			AddFloatRangeValue(NewXML, "angle_speed", particle->angleSpeed);
+			AddFloatRangeValue(NewXML, "angle_acceleration", particle->angleAcceleration);
+			AddColorRangeValue(NewXML, "color", particle->color);
+			AddFloatRangeValue(NewXML, "life", particle->life);
 
-		fputs("\t</particle_class>\n", file);
+			NewXML.EndElement();
+		}
+
+		NewXML.EndElement();
+		NewXML.EndNewFile();
 	}
-
-	fputs("</particle_classes>\n", file);
-	
-	fclose(file);
 
 	DeleteFile("Data\\particle_classes.xml.bkp");
 	rename("Data\\particle_classes.xml", "Data\\particle_classes.xml.bkp");

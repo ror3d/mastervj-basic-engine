@@ -39,6 +39,7 @@ public:
 	CParticleSystemClass(const std::string& name) : CNamed(name) {}
 	CParticleSystemClass(const CXMLTreeNode& node);
 	CParticleSystemClass(const CParticleSystemClass& original);
+	~CParticleSystemClass();
 
 	CMaterial *material;
 
@@ -63,6 +64,7 @@ class CParticleSystemManager : public TMapManager<CParticleSystemClass>
 	std::string m_Filename;
 
 public:
+	~CParticleSystemManager();
 
 	void Load(const std::string &Filename);
 

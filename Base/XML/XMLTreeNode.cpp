@@ -918,7 +918,7 @@ bool CXMLTreeNode::WriteVect3fProperty	(const char* _pszKey, const Vect3f& _valu
 }
 
 //----------------------------------------------------------------------------
-// Writes a Vect2f property
+// Writes a Vect4f property
 //----------------------------------------------------------------------------
 bool CXMLTreeNode::WriteVect4fProperty	(const char* _pszKey, const Vect4f& _value)
 {
@@ -926,7 +926,7 @@ bool CXMLTreeNode::WriteVect4fProperty	(const char* _pszKey, const Vect4f& _valu
 
   if (_pszKey && m_pWriter)
   {
-    char pszValue[32];
+    char pszValue[50];
     sprintf_s(pszValue, "%f %f %f %f", _value.x, _value.y, _value.z, _value.w);
     int rc = xmlTextWriterWriteAttribute	(m_pWriter, BAD_CAST _pszKey, BAD_CAST pszValue);
     if (rc >= 0)

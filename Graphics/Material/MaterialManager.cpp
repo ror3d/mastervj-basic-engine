@@ -56,85 +56,74 @@ void CMaterialManager::reload()
 
 void CMaterialManager::writeFile()
 {
-	FILE * file = fopen("Data\\materials2.xml", "ab+");
+	CXMLTreeNode NewXML;
 
-	fputs("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n", file);
-
-	fputs("<materials>\n", file);
-
-	for (auto mat : m_resources)
+	if (NewXML.StartNewFile("Data\\materials2.xml"))
 	{
-		CMaterial * material = mat.second;
+		NewXML.StartElement("materials");
 
-		std::string materialStr = "\t<material ";
-		materialStr += "name=\"" + material->getName() + "\" ";
-		materialStr += "vertex_type=\"" + material->getRenderableObjectTechique()->getName() + "\">\n";
-
-		fputs(materialStr.c_str(), file);
-
-		std::string textureStr = "\t\t<texture ";
-		textureStr += "stage=\"0\" filename=\"" + material->GetTextureAtStage(0)->getName() + "\"/>\n";
-
-		fputs(textureStr.c_str(), file);
-
-		for (auto it = material->getParameters()->begin(); it != material->getParameters()->end(); ++it)
+		for (auto mat : m_resources)
 		{
-			std::string paramterStr = "\t\t<parameter ";
-			std::string type = "";
+			CMaterial * material = mat.second;
 
-			CMaterialParameter::TMaterialType matType = (*it)->getMaterialType();
-			if (matType == CMaterialParameter::TMaterialType::FLOAT)
+			NewXML.StartElement("material");
+
+			NewXML.WritePszProperty("name", material->getName().c_str());
+			NewXML.WritePszProperty("vertex_type", material->getRenderableObjectTechique()->getName().c_str());
+
+			NewXML.StartElement("texture");
+			NewXML.WriteIntProperty("stage", 0);
+			NewXML.WritePszProperty("filename", material->GetTextureAtStage(0)->getName().c_str());
+			NewXML.EndElement();
+			
+			for (auto it = material->getParameters()->begin(); it != material->getParameters()->end(); ++it)
 			{
-				type = "float";
-				CTemplatedMaterialParameter<float> *param = (CTemplatedMaterialParameter<float>*)(*it);
-				paramterStr += "type=\"" + type + "\" ";
-				paramterStr += "name=\"" + (*it)->getName() + "\" ";
-				paramterStr += "value=\"" + std::to_string(*param->getValue()) + "\" ";
-				paramterStr += "varParams=\"" + (*it)->getParamValues() + "\"/>\n";
-			}
-			else if (matType == CMaterialParameter::TMaterialType::VECT2F)
-			{
-				type = "Vect2f";
-				CTemplatedMaterialParameter<Vect2f> *vect2f = (CTemplatedMaterialParameter<Vect2f>*)(*it);
-				paramterStr += "type=\"" + type + "\" ";
-				paramterStr += "name=\"" + (*it)->getName() + "\" ";
-				paramterStr += "value=\"" + std::to_string(vect2f->getValue()->x) + " ";
-				paramterStr += std::to_string(vect2f->getValue()->y) + "\" ";
-				paramterStr += "varParams=\"" + (*it)->getParamValues() + "\"/>\n";
-			}
-			else if (matType == CMaterialParameter::TMaterialType::VECT3F)
-			{
-				type = "Vect3f";
-				CTemplatedMaterialParameter<Vect3f> *vect3f = (CTemplatedMaterialParameter<Vect3f>*)(*it);
-				paramterStr += "type=\"" + type + "\" ";
-				paramterStr += "name=\"" + (*it)->getName() + "\" ";
-				paramterStr += "value=\"" + std::to_string(vect3f->getValue()->x) + " ";
-				paramterStr += std::to_string(vect3f->getValue()->y) + " ";
-				paramterStr += std::to_string(vect3f->getValue()->z) + "\" ";
-				paramterStr += "varParams=\"" + (*it)->getParamValues() + "\"/>\n";
-			}
-			else if (matType == CMaterialParameter::TMaterialType::VECT4F)
-			{
-				type = "Vect4f";
-				CTemplatedMaterialParameter<Vect4f> *vect4f = (CTemplatedMaterialParameter<Vect4f>*)(*it);
-				paramterStr += "type=\"" + type + "\" ";
-				paramterStr += "name=\"" + (*it)->getName() + "\" ";
-				paramterStr += "value=\"" + std::to_string(vect4f->getValue()->x) + " ";
-				paramterStr += std::to_string(vect4f->getValue()->y) + " ";
-				paramterStr += std::to_string(vect4f->getValue()->z) + " ";
-				paramterStr += std::to_string(vect4f->getValue()->w) + "\" ";
-				paramterStr += "varParams=\"" + (*it)->getParamValues() + "\"/>\n";
+
+				NewXML.StartElement("parameter");
+
+				CMaterialParameter::TMaterialType matType = (*it)->getMaterialType();
+				if (matType == CMaterialParameter::TMaterialType::FLOAT)
+				{
+					CTemplatedMaterialParameter<float> *param = (CTemplatedMaterialParameter<float>*)(*it);
+					NewXML.WritePszProperty("type", "float");
+					NewXML.WritePszProperty("name", (*it)->getName().c_str());
+					NewXML.WriteFloatProperty("value", *param->getValue());
+					NewXML.WritePszProperty("varParams", (*it)->getParamValues().c_str());
+				}
+				else if (matType == CMaterialParameter::TMaterialType::VECT2F)
+				{
+					CTemplatedMaterialParameter<Vect2f> *vect2f = (CTemplatedMaterialParameter<Vect2f>*)(*it);
+					NewXML.WritePszProperty("type", "Vect2f");
+					NewXML.WritePszProperty("name", (*it)->getName().c_str());
+					NewXML.WriteVect2fProperty("value", *vect2f->getValue());
+					NewXML.WritePszProperty("varParams", (*it)->getParamValues().c_str());
+				}
+				else if (matType == CMaterialParameter::TMaterialType::VECT3F)
+				{
+					CTemplatedMaterialParameter<Vect3f> *vect3f = (CTemplatedMaterialParameter<Vect3f>*)(*it);
+					NewXML.WritePszProperty("type", "Vect3f");
+					NewXML.WritePszProperty("name", (*it)->getName().c_str());
+					NewXML.WriteVect3fProperty("value", *vect3f->getValue());
+					NewXML.WritePszProperty("varParams", (*it)->getParamValues().c_str());
+				}
+				else if (matType == CMaterialParameter::TMaterialType::VECT4F)
+				{
+					CTemplatedMaterialParameter<Vect4f> *vect4f = (CTemplatedMaterialParameter<Vect4f>*)(*it);
+					NewXML.WritePszProperty("type", "Vect4f");
+					NewXML.WritePszProperty("name", (*it)->getName().c_str());
+					NewXML.WriteVect4fProperty("value", *vect4f->getValue());
+					NewXML.WritePszProperty("varParams", (*it)->getParamValues().c_str());
+				}
+
+				NewXML.EndElement();
 			}
 
-			fputs(paramterStr.c_str(), file);
+			NewXML.EndElement();
 		}
 
-		fputs("\t</material>\n", file);
+		NewXML.EndElement();
+		NewXML.EndNewFile();
 	}
-
-	fputs("</materials>\n", file);
-
-	fclose(file);
 
 	DeleteFile("Data\\materials.xml.bkp");
 	rename("Data\\materials.xml", "Data\\materials.xml.bkp");
