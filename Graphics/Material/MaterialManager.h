@@ -1,7 +1,7 @@
 #ifndef MATERIAL_MANAGER_H
 #define MATERIAL_MANAGER_H
 
-#include <Utils/TMapManager.h>
+#include <Base/Utils/TMapManager.h>
 
 class CMaterial;
 

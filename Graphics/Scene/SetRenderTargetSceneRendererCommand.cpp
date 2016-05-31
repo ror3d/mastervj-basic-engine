@@ -3,6 +3,7 @@
 
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Texture/TextureManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 CSetRenderTargetSceneRendererCommand::CSetRenderTargetSceneRendererCommand(CXMLTreeNode &TreeNode)
 	:CStagedTexturedSceneRendererCommand(TreeNode)

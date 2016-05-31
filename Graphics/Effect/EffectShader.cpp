@@ -5,6 +5,7 @@
 #include "EffectParameters.h"
 #include <Graphics/Context/ContextManager.h>
 #include <Core/Debug/DebugHelper.h>
+#include <Base/XML/XMLTreeNode.h>
 
 #include <sstream>
 

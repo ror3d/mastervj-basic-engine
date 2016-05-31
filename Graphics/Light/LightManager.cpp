@@ -3,6 +3,7 @@
 #include <Engine/Engine.h>
 #include <Graphics/Context/ContextManager.h>
 #include "Renderable/RenderableObjectsManager.h"
+#include <Base/XML/XMLTreeNode.h>
 
 
 CLightManager::CLightManager()

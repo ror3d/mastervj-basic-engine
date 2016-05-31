@@ -4,6 +4,7 @@
 #include <Core/Debug/DebugPerf.h>
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Light/LightManager.h>
+#include <Base/XML/XMLTreeNode.h>
 #include "Renderable/PoolRenderableObjectTechnique.h"
 
 CGenerateShadowMapsSceneRendererCommand::CGenerateShadowMapsSceneRendererCommand(CXMLTreeNode &TreeNode)

@@ -5,6 +5,7 @@
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Layer/LayerManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 
 CLight::CLight() : CNamed("")

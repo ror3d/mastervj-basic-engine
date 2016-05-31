@@ -4,6 +4,7 @@
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Context/ContextManager.h>
+#include <Base/XML/XMLTreeNode.h>
 #include "Material/Material.h"
 #include "Renderable/RenderableObjectTechnique.h"
 

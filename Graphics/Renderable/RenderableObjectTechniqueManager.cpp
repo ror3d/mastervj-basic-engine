@@ -5,6 +5,7 @@
 
 #include "Engine/Engine.h"
 #include <Graphics/Effect/EffectManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 
 CRenderableObjectTechniqueManager::CRenderableObjectTechniqueManager()

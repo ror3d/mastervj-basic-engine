@@ -1,7 +1,7 @@
 #ifndef RENDERABLE_OBJECT_TECHNIQUE_H
 #define RENDERABLE_OBJECT_TECHNIQUE_H
 
-#include <Utils/Named.h>
+#include <Base/Utils/Named.h>
 class CEffectTechnique;
 
 class CRenderableObjectTechnique : public CNamed

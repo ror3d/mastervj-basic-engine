@@ -4,7 +4,7 @@
 #include <string>
 
 #include <Base/Utils/Named.h>
-#include <Base/Math/MathTypes.h>
+#include <Base/Math/Math.h>
 
 
 class CalCoreModel;
