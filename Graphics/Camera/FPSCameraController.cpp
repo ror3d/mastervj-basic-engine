@@ -8,7 +8,7 @@
 CFPSCameraController::CFPSCameraController()
 : m_YawSpeed(0.08f)
 , m_PitchSpeed(0.5f)
-, m_CameraDisplacement(0, 0, -5)//(0,0,-2)
+, m_CameraDisplacement(0, 0, -8)//(0,0,-2)
 , m_PitchDisplacement(0)//(-0.5f)
 , m_PitchfloorLimit(DEG2RAD(60))
 , m_PitchSkyLimit(DEG2RAD(-60))

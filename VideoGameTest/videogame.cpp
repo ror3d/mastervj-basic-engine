@@ -261,7 +261,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		//engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
 
 		//engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
-		engine.getCinematicManager()->Load("Data\\Animations\\AscensorSimple.xml");
+		engine.getCinematicManager()->Load("Data\\Animations\\Animations.xml");
+		engine.getCinematicManager()->Play();
 
 
 
