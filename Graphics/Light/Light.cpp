@@ -7,6 +7,7 @@
 #include <Graphics/Layer/LayerManager.h>
 #include <Base/XML/XMLTreeNode.h>
 
+#include "Camera/Camera.h"
 
 CLight::CLight() : CNamed("")
 {
@@ -106,7 +107,7 @@ COmniLight::COmniLight(const CXMLTreeNode &TreeNode) : CLight(TreeNode)
 {
 }
 
-void COmniLight::SetShadowMap(CContextManager &_context)
+void COmniLight::SetShadowMap(CContextManager &_context, const CCamera& cam)
 {
 	DEBUG_ASSERT(false);
 }
@@ -116,6 +117,7 @@ CDirectionalLight::CDirectionalLight(const CXMLTreeNode &TreeNode) : CLight(Tree
 {
 	Vect3f dir(0.0f, 0.0f, 0.0f);
 	m_Direction = TreeNode.GetVect3fProperty("dir", dir);
+	m_Direction.Normalize();
 	m_OrthoShadowMapSize = TreeNode.GetVect2fProperty("ortho_shadow_map_size", Vect2f(1, 1));
 }
 
@@ -127,12 +129,17 @@ void CDirectionalLight::Render(CRenderManager *RenderManager)
 	}
 }
 
-void CDirectionalLight::SetShadowMap(CContextManager &_context)
+void CDirectionalLight::SetShadowMap(CContextManager &_context, const CCamera& cam)
 {
 	if (m_ShadowMap == NULL)
 		DEBUG_ASSERT(false);
 	m_ViewShadowMap.SetIdentity();
-	m_ViewShadowMap.SetFromLookAt(m_Position, m_Position + m_Direction, v3fY);
+	Vect3f camForward = cam.GetLookAt() + cam.GetPosition();
+	camForward.y = 0;
+	if (camForward.SquaredLength() > 0.00001)
+		camForward.Normalize();
+	Vect3f pos = m_Position + cam.GetPosition() - (camForward * 1);
+	m_ViewShadowMap.SetFromLookAt(pos, pos + m_Direction, v3fY);
 	unsigned int l_ShadowMapWidth = m_ShadowMap->GetWidth();
 	unsigned int l_ShadowMapHeight = m_ShadowMap->GetHeight();
 	m_ProjectionShadowMap.SetFromOrtho(m_OrthoShadowMapSize.x, m_OrthoShadowMapSize.y, 0.1f, m_EndRangeAttenuation);
@@ -158,7 +165,7 @@ CSpotLight::CSpotLight(const CXMLTreeNode &TreeNode) : CDirectionalLight(TreeNod
 	m_FallOff = TreeNode.GetFloatProperty("falloff");
 }
 
-void CSpotLight::SetShadowMap(CContextManager &_context)
+void CSpotLight::SetShadowMap(CContextManager &_context, const CCamera& cam)
 {
 	if (m_ShadowMap == NULL)
 		DEBUG_ASSERT(false);

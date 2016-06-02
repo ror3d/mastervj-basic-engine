@@ -13,6 +13,7 @@ class CDynamicTexture;
 class CTexture;
 class CRenderableObjectsManager;
 class CContextManager;
+class CCamera;
 
 class CLight : public CNamed, public CActive
 {
@@ -66,7 +67,7 @@ public:
 	Mat44f getViewShadowMap(){ return m_ViewShadowMap; }
 	Mat44f getProjectionShadowMap(){ return m_ProjectionShadowMap; }
 	std::vector<CRenderableObjectsManager *> getLayers(){ return m_Layers;  }
-	virtual void SetShadowMap(CContextManager &_context) = 0;
+	virtual void SetShadowMap(CContextManager &_context, const CCamera& cam) = 0;
 };
 
 //-----------OMNI
@@ -76,7 +77,7 @@ public:
 	COmniLight();
 	COmniLight(const CXMLTreeNode &TreeNode);
 	virtual const TLightType getType() const { return TLightType::OMNI; }
-	void SetShadowMap(CContextManager &_context);
+	void SetShadowMap(CContextManager &_context, const CCamera& cam);
 };
 
 //-----------DIRECTIONAL
@@ -92,7 +93,7 @@ public:
 	void setDiretion(const Vect3f direction) { m_Direction = direction; }
 	virtual void Render(CRenderManager *RenderManager);
 	virtual const TLightType getType() const { return TLightType::DIRECTIONAL; }
-	void SetShadowMap(CContextManager &_context);
+	void SetShadowMap(CContextManager &_context, const CCamera& cam);
 };
 
 //-----------SPOT
@@ -109,7 +110,7 @@ public:
 	void setAngle(const float angle) { m_Angle = angle; }
 	void setFallOff(const float fallOff) { m_FallOff = fallOff; }
 	virtual const TLightType getType() const { return TLightType::SPOT; }
-	void SetShadowMap(CContextManager &_context);
+	void SetShadowMap(CContextManager &_context, const CCamera& cam);
 };
 
 #endif

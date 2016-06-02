@@ -5,8 +5,13 @@
 #include "Renderable/RenderableObjectsManager.h"
 #include <Base/XML/XMLTreeNode.h>
 
+#include "Camera/Camera.h"
+#include "Camera/CameraManager.h"
+#include "Camera/CameraController.h"
+
 
 CLightManager::CLightManager()
+	: m_ambient(0, 0, 0, 0)
 {
 }
 
@@ -97,11 +102,16 @@ size_t CLightManager::count()
 
 void CLightManager::ExecuteShadowCreation(CContextManager &_context)
 {
+	CCamera cam;
+	ICameraController *cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+
+	cc->UpdateCameraValues(&cam);
+
 	for (auto const &light : m_resources)
 	{
 		if (light.second->getGenerateShadowMap() && light.second->isActive())
 		{
-			light.second->SetShadowMap(_context); //Set matrices y renderTarget
+			light.second->SetShadowMap(_context, cam); //Set matrices y renderTarget
 
 			auto c = _context.m_BackgroundColor;
 			_context.m_BackgroundColor = CColor(1, 1, 1, 1);
