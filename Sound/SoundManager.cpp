@@ -554,7 +554,7 @@ void CSoundManager::Update(const CCamera *camera)
 		l_SoundPosition.Position.Y = l_Position.y;
 		l_SoundPosition.Position.Z = l_Position.z;
 
-		l_SoundPosition.Orientation.X = l_Orientation.x;
+		//l_SoundPosition.Orientation.X = l_Orientation.x;
 		l_SoundPosition.Orientation.Y = l_Orientation.y;
 		l_SoundPosition.Orientation.Z = l_Orientation.z;
 
