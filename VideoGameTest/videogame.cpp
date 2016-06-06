@@ -42,6 +42,7 @@
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Core/Logic/LogicManager.h>
+#include <Core/Scene/SceneManager.h>
 
 
 #include <AntTweakBar.h>
@@ -215,6 +216,9 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	HWND hWnd = CreateWindow(APPLICATION_NAME, APPLICATION_NAME, WS_OVERLAPPEDWINDOW, 100, 100, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, wc.hInstance, NULL);
 
 	// Añadir aquí el Init de la applicacioón
+
+	CSceneManager sceneManager;
+	sceneManager.Initialize( "Data\\Scenes\\" );
 
 	engine.Init();
 	engine.getPhysXManager()->InitPhysx();

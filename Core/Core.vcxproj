@@ -27,6 +27,8 @@
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\InputManagerImplementation.cpp" />
     <ClCompile Include="Logic\LogicManager.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Trigger\Trigger.cpp" />
     <ClCompile Include="Trigger\TriggerManager.cpp" />
   </ItemGroup>
@@ -47,6 +49,8 @@
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputManagerImplementation.h" />
     <ClInclude Include="Logic\LogicManager.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Time\TimeManager.h" />
     <ClInclude Include="Trigger\Trigger.h" />
     <ClInclude Include="Trigger\TriggerManager.h" />
