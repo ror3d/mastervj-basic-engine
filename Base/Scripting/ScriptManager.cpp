@@ -333,6 +333,7 @@ void CScriptManager::RegisterLUAFunctions()
 		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
 		"LaunchSoundEventXMLSpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
+		"RegisterSpeaker", &CSoundManager::RegisterSpeaker,
 		"SetVolume", &CSoundManager::SetVolume);
 	(*m_state)["CTriggerManager"].SetObj(
 		*CEngine::GetSingleton().getTriggerManager(),
