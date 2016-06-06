@@ -503,7 +503,7 @@ void CSoundManager::SetListenerPosition(const CCamera *camera)
 	l_ListenerPosition.OrientationFront.Y = l_Orientation.y;
 	l_ListenerPosition.OrientationFront.Z = l_Orientation.z;
 
-	l_ListenerPosition.OrientationTop.X = l_VectorUp.x;
+	//l_ListenerPosition.OrientationTop.X = l_VectorUp.x;
 	l_ListenerPosition.OrientationTop.Y = l_VectorUp.y;
 	l_ListenerPosition.OrientationTop.Z = l_VectorUp.z;
 
@@ -554,7 +554,7 @@ void CSoundManager::Update(const CCamera *camera)
 		l_SoundPosition.Position.Y = l_Position.y;
 		l_SoundPosition.Position.Z = l_Position.z;
 
-		//l_SoundPosition.Orientation.X = l_Orientation.x;
+		l_SoundPosition.Orientation.X = l_Orientation.x;
 		l_SoundPosition.Orientation.Y = l_Orientation.y;
 		l_SoundPosition.Orientation.Z = l_Orientation.z;
 
