@@ -15,7 +15,7 @@ public:
 	static void AddSeparator(CDebugHelper::SDebugBar &bar);
 	static void AddLabel(CDebugHelper::SDebugBar &bar, std::string name);
 	static void AddButtonTexture(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, CParticleSystemClass *value);
-	static void AddColor(CDebugHelper::SDebugBar &bar, std::string name, CColor *value);
+	static void AddColor(CDebugHelper::SDebugBar &bar, std::string name, CColor *value, std::string params);
 	static void AddButtonFloat(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<float> *value);
 	static void AddButtonColor(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<CColor> *value);
 	static void AddButtonVect3f(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<Vect3f> *value);

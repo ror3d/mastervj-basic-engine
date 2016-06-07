@@ -95,7 +95,7 @@ void CBarHelper::AddButtonTexture(CDebugHelper::SDebugBar &bar, std::string name
 	bar.variables.push_back(var);
 }
 
-void CBarHelper::AddColor(CDebugHelper::SDebugBar &bar, std::string name, CColor *value)
+void CBarHelper::AddColor(CDebugHelper::SDebugBar &bar, std::string name, CColor *value, std::string params)
 {
 	CDebugHelper::SDebugVariable var = {};
 
@@ -103,6 +103,7 @@ void CBarHelper::AddColor(CDebugHelper::SDebugBar &bar, std::string name, CColor
 	var.type = CDebugHelper::COLOR;
 	var.mode = CDebugHelper::READ_WRITE;
 	var.pColor = value;
+	var.params = params;
 
 	bar.variables.push_back(var);
 }
@@ -153,8 +154,8 @@ void CBarHelper::AddRangeFloat(CDebugHelper::SDebugBar &bar, std::string name, r
 void CBarHelper::AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColor> *value, std::string params = "")
 {
 	AddButtonColor(bar, "E " + name, CBarCalls::EqualVarsColor, value);
-	AddColor(bar, "L " + name, &value->first);
-	AddColor(bar, "U " + name, &value->second);
+	AddColor(bar, "L " + name, &value->first, "colormode=hls");
+	AddColor(bar, "U " + name, &value->second, "colormode=hls");
 }
 
 void CBarHelper::AddRangeVect3f(CDebugHelper::SDebugBar &bar, std::string name, range<Vect3f> *value, std::string params = "")
