@@ -28,7 +28,7 @@ CEffectManager::~CEffectManager()
 
 void CEffectManager::Reload()
 {
-	destroy();
+	setDirty();
 	load(m_FileName);
 }
 
@@ -128,6 +128,22 @@ CEffectGeometryShader * CEffectManager::GetGeometryShader(const std::string &Geo
 	return m_GeometryShaders.get(GeometryShader);
 }
 
+TMapManager<CEffectVertexShader>::Ref CEffectManager::GetVertexShaderRef(const std::string &VertexShader)
+{
+	return m_VertexShaders.ref(VertexShader);
+}
+
+
+TMapManager<CEffectPixelShader>::Ref CEffectManager::GetPixelShaderRef(const std::string &PixelShader)
+{
+	return m_PixelShaders.ref(PixelShader);
+}
+
+
+TMapManager<CEffectGeometryShader>::Ref CEffectManager::GetGeometryShaderRef(const std::string &GeometryShader)
+{
+	return m_GeometryShaders.ref(GeometryShader);
+}
 
 void CEffectManager::SetSceneConstants()
 {

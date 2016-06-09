@@ -31,6 +31,7 @@ CTexture * CTextureManager::GetTexture(const std::string &Filename)
 
 void CTextureManager::Reload()
 {
+	setDirty();
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{
 		it->second->Reload();

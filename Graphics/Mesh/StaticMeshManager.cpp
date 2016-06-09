@@ -1,6 +1,7 @@
 #include "StaticMeshManager.h"
 #include "StaticMesh.h"
 #include <XML/XMLTreeNode.h>
+#include <Base/Utils/TMapManager.h>
 
 #include <Core/Engine/Engine.h>
 #include <Graphics/Material/MaterialManager.h>
@@ -46,8 +47,8 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 						if (l_Mat.GetName() == std::string("material")
 							&& l_Mat.GetPszProperty("name") != nullptr)
 						{
-							CMaterial* mat = mm->get(l_Mat.GetPszProperty("name"));
-							l_static_mesh->setMaterial(nmat, mat);
+							auto mat = mm->ref(l_Mat.GetPszProperty("name"));
+							l_static_mesh->setMaterial(nmat, std::move(mat));
 							nmat++;
 						}
 					}
@@ -61,6 +62,6 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 
 bool CStaticMeshManager::Reload()
 {
-	destroy();
+	setDirty();
 	return Load(m_FileName);
 }

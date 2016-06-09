@@ -25,28 +25,33 @@
 #include <Graphics/Texture/TextureManager.h>
 #include <Base/XML/XMLTreeNode.h>
 
-CSceneRendererCommandManager::CSceneRendererCommandManager(){
+CSceneRendererCommandManager::CSceneRendererCommandManager()
+{
 
 }
 
-CSceneRendererCommandManager::~CSceneRendererCommandManager(){
+CSceneRendererCommandManager::~CSceneRendererCommandManager()
+{
 
 }
 
-std::string CSceneRendererCommandManager::GetNextName(){
-
+std::string CSceneRendererCommandManager::GetNextName()
+{
 	return nullptr;
 }
 
-void CSceneRendererCommandManager::add(CSceneRendererCommand * command){
+void CSceneRendererCommandManager::add(CSceneRendererCommand * command)
+{
 	m_resources.push_back(command);
 }
 
-CSceneRendererCommand * CSceneRendererCommandManager::getLast(){
+CSceneRendererCommand * CSceneRendererCommandManager::getLast()
+{
 	return m_resources.back();
 }
 
-void CSceneRendererCommandManager::destroy(){
+void CSceneRendererCommandManager::destroy()
+{
 	for (auto it = m_resources.begin(); it != m_resources.end(); ++it)
 	{
 		delete (*it);
@@ -66,64 +71,85 @@ bool CSceneRendererCommandManager::Load(const std::string &FileName){
 			{
 				CXMLTreeNode scene_command = scene_rend_comm(i);
 				std::string command = scene_command.GetName();
-				if (command == "set_depth_stencil_state"){
+
+				if (command == "set_depth_stencil_state")
+				{
 					add(new CSetDepthStencilStateSceneRendererCommand(scene_command));
 				}
-				else if (command == "set_pool_renderable_objects_technique"){
+				else if (command == "set_pool_renderable_objects_technique")
+				{
 					add(new CSetPoolRenderableObjectsTechniqueSceneRendererCommand(scene_command));
 				}
-				else if (command == "generate_shadow_maps"){
+				else if (command == "generate_shadow_maps")
+				{
 					add(new CGenerateShadowMapsSceneRendererCommand(scene_command));
 				}
-				else if (command == "set_render_target"){
+				else if (command == "set_render_target")
+				{
 					add(new CSetRenderTargetSceneRendererCommand(scene_command));
 				}
-				else if (command == "set_matrices"){
+				else if (command == "set_matrices")
+				{
 					add(new CSetMatricesSceneRendererCommand(scene_command));
 				}
-				else if (command == "render_debug_layer"){
+				else if (command == "render_debug_layer")
+				{
 					add(new CRenderDebugLayerSceneRendererCommand(scene_command));
 				}
-				else if (command == "unset_render_target"){
+				else if (command == "unset_render_target")
+				{
 					add(new CUnsetRenderTargetSceneRendererCommand(scene_command));
 				}
-				else if (command == "clear"){
+				else if (command == "clear")
+				{
 					add(new CClearSceneRendererCommand(scene_command));
 				}
-				else if (command == "render_draw_quad"){
+				else if (command == "render_draw_quad")
+				{
 					add(new CDrawQuadSceneRendererCommand(scene_command));
 				}
-				else if (command == "render_deferred_shading"){
+				else if (command == "render_deferred_shading")
+				{
 					add(new CDeferredShadingSceneRendererCommand(scene_command));
 				}
-				else if (command == "capture_frame_buffer"){
+				else if (command == "capture_frame_buffer")
+				{
 					add(new CCaptureFrameBufferSceneRendererCommand(scene_command));
 				}
-				else if (command == "set_light_constants"){
+				else if (command == "set_light_constants")
+				{
 					add(new CRenderDebugLightsSceneRendererCommand(scene_command));
 				}
-				else if (command == "render_layer"){
+				else if (command == "render_layer")
+				{
 					add(new CRenderLayerSceneRendererCommand(scene_command));
 				}
-				else if (command == "render_debug_grid"){
+				else if (command == "render_debug_grid")
+				{
 					add(new CRenderDebugGridSceneRendererCommand(scene_command));
 				}
-				else if (command == "enable_alpha_blend"){
+				else if (command == "enable_alpha_blend")
+				{
 					add(new CEnableAlphaBlendSceneRendererCommand(scene_command));
 				}
-				else if (command == "disable_alpha_blend"){
+				else if (command == "disable_alpha_blend")
+				{
 					add(new CDisableAlphaBlendSceneRendererCommand(scene_command));
 				}
-				else if (command == "render_debug_gui"){
+				else if (command == "render_debug_gui")
+				{
 					add(new CRenderGUISceneRendererCommand(scene_command));
 				}
-				else if (command == "render_debug_antTweak"){
+				else if (command == "render_debug_antTweak")
+				{
 					add(new CRenderDebugGUISceneRendererCommand(scene_command));
 				}
-				else if (command == "apply_filters"){
+				else if (command == "apply_filters")
+				{
 					add(new CApplyFiltersSceneRendererCommand(scene_command));
 				}
-				else if (command == "present"){
+				else if (command == "present")
+				{
 					add(new CPresentSceneRendererCommand(scene_command));
 				}
 				else if (command == "apply_filters")

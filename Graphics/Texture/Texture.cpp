@@ -94,7 +94,6 @@ void CTexture::Activate(unsigned int StageId)
 
 bool CTexture::Reload()
 {
-	Unload();
 	return load(getName());
 }
 

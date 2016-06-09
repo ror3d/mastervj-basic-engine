@@ -17,7 +17,7 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 	</render_draw_quad>*/
 	auto mm = CEngine::GetSingleton().getMaterialManager();
 	std::string nameMat = TreeNode.GetPszProperty("material");
-	m_Material = mm->get(TreeNode.GetPszProperty("material"));
+	m_Material = mm->ref(TreeNode.GetPszProperty("material"));
 
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++)
 	{
@@ -33,7 +33,8 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 			{
 				tex = CEngine::GetSingleton().getTextureManager()->get(texChild.GetPszProperty("file"));
 			}
-			AddStageTexture(texChild.GetIntProperty("stage_id"), tex);
+
+			AddStageTexture(texChild.GetIntProperty("stage_id"), CEngine::GetSingleton().getTextureManager()->ref(tex->getName()));
 		}
 	}
 }
@@ -42,6 +43,6 @@ void CDrawQuadSceneRendererCommand::Execute(CContextManager &_context)
 {
 	ActivateTextures();
 	m_Material->apply();
-	_context.DrawRelativeScreenQuad(m_Material->getRenderableObjectTechique()->GetEffectTechnique(),
-							nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
+	auto mat = m_Material->getName();
+	_context.DrawRelativeScreenQuad(m_Material->getRenderableObjectTechique()->GetEffectTechnique() , nullptr, 0, 0, 1, 1, CColor(1, 1, 1, 1));
 }

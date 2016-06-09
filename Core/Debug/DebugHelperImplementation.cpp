@@ -12,6 +12,11 @@
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Material/Material.h>
+#include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Light/LightManager.h>
+#include <Graphics/Texture/TextureManager.h>
 
 #include <PhysX/PhysXManager.h>
 
@@ -207,11 +212,11 @@ void TW_CALL SwitchCameraCallback(void* _app)
 
 void TW_CALL ReloadSceneCommands(void* _app)
 {
-	CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
+	CEngine::GetSingleton().getTextureManager()->Reload();
 }
 
 void TW_CALL ReloadLua(void* _app){
-	CEngine::GetSingleton().getScriptManager()->Initialize("Data\\scripting.xml");
+	CEngine::GetSingleton().getMaterialManager()->reload();
 }
 
 void TW_CALL OpenMaterialParams(void *material)

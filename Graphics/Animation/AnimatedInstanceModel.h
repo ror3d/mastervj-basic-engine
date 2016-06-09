@@ -17,9 +17,8 @@ class CAnimatedInstanceModel : public CRenderableObject
 {
 private:
 	CalModel *m_CalModel;
-	CAnimatedCoreModel *m_AnimatedCoreModel;
+	TMapManager<CAnimatedCoreModel>::Ref m_AnimatedCoreModel;
 	CalHardwareModel *m_CalHardwareModel;
-	std::vector<CMaterial *> m_Materials;
 	CRenderableVertexs *m_RenderableVertexs;
 	int m_NumVertices;
 	int m_NumFaces;
@@ -30,7 +29,7 @@ public:
 	CAnimatedInstanceModel(CXMLTreeNode& TreeNode);
 	virtual ~CAnimatedInstanceModel();
 
-	void Initialize(CAnimatedCoreModel *AnimatedCoreModel);
+	void Initialize(TMapManager<CAnimatedCoreModel>::Ref AnimatedCoreModel);
 	void Render(CContextManager *context);
 	void Update(float ElapsedTime);
 	void ExecuteAction(int Id, float DelayIn, float DelayOut, float

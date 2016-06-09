@@ -7,6 +7,7 @@
 #include "Math/Color.h"
 #include "Math/Matrix44.h"
 #include <vector>
+#include <Base/Utils/TMapManager.h>
 
 class CRenderManager;
 class CDynamicTexture;
@@ -33,7 +34,7 @@ protected:
 	//ShadowMap
 	bool m_GenerateShadowMap;
 	CDynamicTexture *m_ShadowMap;
-	CTexture *m_ShadowMaskTexture;
+	TMapManager<CTexture>::Ref m_ShadowMaskTexture;
 	std::vector<CRenderableObjectsManager *> m_Layers;
 	Mat44f m_ViewShadowMap;
 	Mat44f m_ProjectionShadowMap;
@@ -61,11 +62,11 @@ public:
 	//ShadowMap
 	bool getGenerateShadowMap(){ return m_GenerateShadowMap;  }
 	void setGenerateShadowMap(bool generate);
-	CDynamicTexture * getShadowMap(){ return m_ShadowMap;  }
-	CTexture * getShadowMaskTexture(){ return m_ShadowMaskTexture;  }
+	CDynamicTexture * getShadowMap(){ return m_ShadowMap; }
+	CTexture * getShadowMaskTexture(){ return m_ShadowMaskTexture.getRef(); }
 	Mat44f getViewShadowMap(){ return m_ViewShadowMap; }
 	Mat44f getProjectionShadowMap(){ return m_ProjectionShadowMap; }
-	std::vector<CRenderableObjectsManager *> getLayers(){ return m_Layers;  }
+	std::vector<CRenderableObjectsManager *> getLayers(){ return m_Layers; }
 	virtual void SetShadowMap(CContextManager &_context) = 0;
 };
 

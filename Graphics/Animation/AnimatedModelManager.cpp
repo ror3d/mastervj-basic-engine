@@ -10,6 +10,7 @@ CAnimatedModelManager::CAnimatedModelManager()
 {
 	CalLoader::setLoadingMode(LOADER_ROTATE_X_AXIS);
 }
+
 CAnimatedModelManager::~CAnimatedModelManager()
 {
 
@@ -17,6 +18,8 @@ CAnimatedModelManager::~CAnimatedModelManager()
 
 void CAnimatedModelManager::Load(const std::string &Filename)
 {
+	m_Filename = Filename;
+
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(Filename.c_str()))
 	{
@@ -42,6 +45,6 @@ void CAnimatedModelManager::Load(const std::string &Filename)
 }
 void CAnimatedModelManager::Reload()
 {
-	destroy();
-	Load(CAnimatedModelManager::m_Filename);
+	setDirty();
+	Load(m_Filename);
 }

@@ -1,7 +1,9 @@
 #include "Scene\SceneRendererCommand.h"
 
-CSceneRendererCommand::CSceneRendererCommand(CXMLTreeNode &TreeNode){
+CSceneRendererCommand::CSceneRendererCommand(CXMLTreeNode &TreeNode)
+{
 }
-CSceneRendererCommand::~CSceneRendererCommand(){
 
+CSceneRendererCommand::~CSceneRendererCommand()
+{
 }

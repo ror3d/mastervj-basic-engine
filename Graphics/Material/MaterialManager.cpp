@@ -1,8 +1,6 @@
-#include "MaterialManager.h"
-
-#include "Effect/EffectManager.h"
-
 #include "Material.h"
+#include "MaterialManager.h"
+#include "Effect/EffectManager.h"
 
 #include <Core/Engine/Engine.h>
 #include <Base/XML/XMLTreeNode.h>
@@ -45,6 +43,6 @@ void CMaterialManager::load(const std::string &Filename)
 
 void CMaterialManager::reload()
 {
-	destroy();
+	setDirty();
 	load(m_Filename);
 }

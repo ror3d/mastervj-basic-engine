@@ -13,7 +13,7 @@ class CLayerManager : public TMapManager<CRenderableObjectsManager>
 {
 private:
 	std::string	m_Filename;
-	CRenderableObjectsManager *m_DefaultLayer;
+	CRenderableObjectsManager * m_DefaultLayer;
 	CRenderableObjectsManager * GetLayer(CXMLTreeNode &Node);
 	CRenderableObjectsManager * AddLayer(CXMLTreeNode &TreeNode);
 public:

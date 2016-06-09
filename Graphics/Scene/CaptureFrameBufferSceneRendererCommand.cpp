@@ -14,15 +14,15 @@ CCaptureFrameBufferSceneRendererCommand::CCaptureFrameBufferSceneRendererCommand
 		if (stagedTextNode.GetName() == std::string("capture_texture"))
 		{
 			CCaptureFrameBufferTexture * text = new CCaptureFrameBufferTexture(stagedTextNode);
-			AddStageTexture(0, text);
-
 			CEngine::GetSingleton().getTextureManager()->add(text->getName(), text);
+			AddStageTexture(0, CEngine::GetSingleton().getTextureManager()->ref(text->getName()));
 		}
 	}
 }
 
 CCaptureFrameBufferSceneRendererCommand::~CCaptureFrameBufferSceneRendererCommand()
 {
+	/*
 	CTextureManager * textureManager = CEngine::GetSingleton().getTextureManager();
 
 	if (!textureManager->isEmpty())
@@ -34,12 +34,13 @@ CCaptureFrameBufferSceneRendererCommand::~CCaptureFrameBufferSceneRendererComman
 	}
 
 	m_StageTextures.clear();
+	*/
 }
 
 void CCaptureFrameBufferSceneRendererCommand::Execute(CContextManager &_context)
 {
 	for (auto stex : m_StageTextures)
 	{
-		dynamic_cast<CCaptureFrameBufferTexture*>(stex.m_Texture)->Capture(stex.m_StageId);
+		dynamic_cast<CCaptureFrameBufferTexture*>(stex->m_Texture.getRef())->Capture(stex->m_StageId);
 	}
 }

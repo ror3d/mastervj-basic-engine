@@ -7,6 +7,7 @@
 #include "Mesh/RenderableVertexs.h"
 #include <Graphics/Mesh/CookedMeshManager.h>
 #include <PhysX/PhysXManager.h>
+#include <Base/Utils/TMapManager.h>
 
 #include <Core/Engine/Engine.h>
 
@@ -164,7 +165,7 @@ bool CStaticMesh::MeshFile::Load( const std::string &FileName )
 			mesh.indexSize = l_IndexType;
 			mesh.nIndices = l_NumIndexsFile;
 
-			meshes.push_back( std::move(mesh) );
+			meshes.push_back(std::move(mesh));
 
 		}
 
@@ -196,7 +197,7 @@ bool CStaticMesh::Load()
 
 	for ( auto const &matName : meshFile.materials )
 	{
-		m_materials.push_back(CEngine::GetSingletonPtr()->getMaterialManager()->get( matName ));
+		m_materials.push_back(CEngine::GetSingletonPtr()->getMaterialManager()->ref(matName));
 	}
 
 	for ( auto const &mesh : meshFile.meshes )
@@ -247,13 +248,13 @@ bool CStaticMesh::Load()
 	return true;
 }
 
-void CStaticMesh::Render(CContextManager *_context) const
+void CStaticMesh::Render(CContextManager *_context)
 {
 	for (size_t i = 0; i<m_renderableVertexs.size(); ++i)
 	{
-		CMaterial *l_Material = m_materials[i];
+		auto l_Material = m_materials[i].getRef();
 		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
-	{
+		{
 			l_Material->apply();
 			m_renderableVertexs[i]->RenderIndexed(_context,
 				l_Material->getRenderableObjectTechique()->GetEffectTechnique());

@@ -16,9 +16,11 @@ private:
 	public:
 		CRenderableObjectTechnique m_RenderableObjectTechnique;
 		CRenderableObjectTechnique *m_OnRenderableObjectTechniqueManager;
+
 		CPoolRenderableObjectTechniqueElement(const std::string &Name,
-			CEffectTechnique *EffectTechnique, CRenderableObjectTechnique
-			*OnRenderableObjectTechniqueManager);
+											TMapManager<CEffectTechnique>::Ref EffectTechnique,
+											CRenderableObjectTechnique*OnRenderableObjectTechniqueManager);
+
 		~CPoolRenderableObjectTechniqueElement() { }
 	};
 	std::vector<CPoolRenderableObjectTechniqueElement *>

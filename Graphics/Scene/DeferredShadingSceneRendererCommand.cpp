@@ -16,7 +16,7 @@ CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLT
 	: CStagedTexturedSceneRendererCommand(TreeNode)
 {
 	auto mm = CEngine::GetSingleton().getMaterialManager();
-	m_Material = mm->get(TreeNode.GetPszProperty("material"));
+	m_Material = mm->ref(TreeNode.GetPszProperty("material"));
 
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++)
 	{
@@ -27,7 +27,7 @@ CDeferredShadingSceneRendererCommand::CDeferredShadingSceneRendererCommand(CXMLT
 		}
 		CTexture *tex = nullptr;
 		tex = CEngine::GetSingleton().getTextureManager()->GetTexture(texChild.GetPszProperty("file"));
-		AddStageTexture(texChild.GetIntProperty("stage_id"), tex);
+		AddStageTexture(texChild.GetIntProperty("stage_id"), CEngine::GetSingleton().getTextureManager()->ref(tex->getName()));
 	}
 
 	D3D11_BLEND_DESC l_AlphablendDesc;

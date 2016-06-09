@@ -17,7 +17,7 @@ CApplyFiltersSceneRendererCommand::CApplyFiltersSceneRendererCommand(CXMLTreeNod
 
 		if (texture.GetName() == std::string("texture"))
 		{
-			AddStageTexture(texture.GetIntProperty("stage_id"), CEngine::GetSingleton().getTextureManager()->get(texture.GetPszProperty("file")));
+			AddStageTexture(texture.GetIntProperty("stage_id"), CEngine::GetSingleton().getTextureManager()->ref(texture.GetPszProperty("file")));
 		}
 		else if (texture.GetName() == std::string("dynamic_texture"))
 		{

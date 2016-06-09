@@ -21,7 +21,7 @@ public:
 	virtual ~CTexture();
 	bool load(const std::string &Filename, bool linearFilter = true, bool wrap = true);
 	void Activate(unsigned int StageId);
-	bool Reload();
+	virtual bool Reload();
 	ID3D11SamplerState ** GetSamplerState(){ return &m_SamplerState;  }
 	ID3D11ShaderResourceView ** GetShaderResourceView(){ return &m_Texture;  }
 };

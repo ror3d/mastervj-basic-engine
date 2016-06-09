@@ -10,18 +10,17 @@ CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )
 	: CRenderableObject(treeNode)
 {
 	std::string nameCore = treeNode.GetPszProperty("core_name");
-	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(nameCore);
+	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->ref(nameCore);
 }
 
 CMeshInstance::CMeshInstance(const std::string &Name, const std::string &CoreName)
 {
 	setName(Name);
-	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(CoreName);
+	m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->ref(CoreName);
 }
 
 CMeshInstance::~CMeshInstance()
 {
-	m_StaticMesh = nullptr;
 }
 
 void CMeshInstance::Render(CContextManager *_context)

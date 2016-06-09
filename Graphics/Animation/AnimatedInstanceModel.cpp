@@ -13,14 +13,16 @@
 #include <cal3d/cal3d.h>
 #include <XML/XMLTreeNode.h>
 
+#include <Core/Engine/Engine.h>
+
 CAnimatedInstanceModel::CAnimatedInstanceModel(CXMLTreeNode& TreeNode)
 	: CRenderableObject(TreeNode)
 {
 	const char* coreName = TreeNode.GetPszProperty("core_name");
 	DEBUG_ASSERT(coreName);
-	auto core = CEngine::GetSingleton().getAnimatedModelManager()->get(coreName);
+	auto core = CEngine::GetSingleton().getAnimatedModelManager()->ref(coreName);
 	DEBUG_ASSERT(core);
-	Initialize(core);
+	Initialize(std::move(core));
 	BlendCycle(0, 1.0f, 0.0f);
 }
 
@@ -31,12 +33,11 @@ CAnimatedInstanceModel::~CAnimatedInstanceModel()
 	delete m_RenderableVertexs;
 }
 
-void CAnimatedInstanceModel::Initialize(CAnimatedCoreModel *AnimatedCoreModel)
+void CAnimatedInstanceModel::Initialize(TMapManager<CAnimatedCoreModel>::Ref AnimatedCoreModel)
 {
-	m_AnimatedCoreModel = AnimatedCoreModel;
+	m_AnimatedCoreModel = std::move(AnimatedCoreModel);
 	m_CalModel = new CalModel(m_AnimatedCoreModel->GetCoreModel());
 	m_CalHardwareModel = new CalHardwareModel(m_AnimatedCoreModel->GetCoreModel());
-	m_Materials = m_AnimatedCoreModel->GetMaterials();
 
 	LoadVertexBuffer();
 }
@@ -54,7 +55,7 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 		 l_HardwareMeshId < m_CalHardwareModel->getHardwareMeshCount();
 		 ++l_HardwareMeshId)
 	{
-		m_Materials[l_HardwareMeshId]->apply();
+		m_AnimatedCoreModel->GetMaterials().at(l_HardwareMeshId)->apply();
 		m_CalHardwareModel->selectHardwareMesh(l_HardwareMeshId);
 		Mat44f l_Transformations[MAXBONES];
 
@@ -72,7 +73,7 @@ void CAnimatedInstanceModel::Render(CContextManager *context)
 			   l_Transformations,
 			   MAXBONES*sizeof(float) * 4 * 4);
 
-		CEffectTechnique *l_EffectTechnique = m_Materials[l_HardwareMeshId]->getRenderableObjectTechique()->GetEffectTechnique();
+		CEffectTechnique *l_EffectTechnique = m_AnimatedCoreModel->GetMaterials().at(l_HardwareMeshId)->getRenderableObjectTechique()->GetEffectTechnique();
 
 		l_EffectTechnique->SetConstantBuffer(2, &CEffectManager::m_AnimatedModelEffectParameters.m_Bones);
 		m_RenderableVertexs->RenderIndexed(context,
@@ -164,3 +165,4 @@ bool CAnimatedInstanceModel::LoadVertexBuffer()
 	free(l_Faces);
 	return true;
 }
+

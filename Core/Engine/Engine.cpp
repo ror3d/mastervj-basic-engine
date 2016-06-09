@@ -57,7 +57,6 @@ CEngine::CEngine()
 }
 CEngine::~CEngine()
 {
-	CHECKED_DESTROY(layerManager);
 	CHECKED_DESTROY(componentManager);
 	CHECKED_DESTROY(scriptManager);
 	CHECKED_DESTROY(effectsManager);

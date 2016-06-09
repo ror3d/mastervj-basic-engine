@@ -36,12 +36,12 @@ void CStagedTexturedSceneRendererCommand::ActivateTextures()
 {
 	for (int i = 0; i < m_StageTextures.size(); i++)
 	{
-		m_StageTextures[i].m_Texture->Activate(m_StageTextures[i].m_StageId);
+		m_StageTextures[i]->m_Texture->Activate(m_StageTextures[i]->m_StageId);
 	}
 }
 
-void CStagedTexturedSceneRendererCommand::AddStageTexture(int StageId, CTexture *Texture)
+void CStagedTexturedSceneRendererCommand::AddStageTexture(int StageId, TMapManager<CTexture>::Ref Texture)
 {
-	m_StageTextures.push_back(CStageTexture(StageId, Texture));
+	m_StageTextures.push_back(new CStageTexture(StageId, std::move(Texture)));
 }
 

@@ -27,8 +27,8 @@ bool CRenderableObjectTechniqueManager::InsertRenderableObjectTechnique(CPoolRen
 
 	if (l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager == NULL)
 	{
-		CEffectTechnique *l_EffectTechnique = CEngine::GetSingleton().getEffectsManager()->get(TechniqueName);
-		l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = new CRenderableObjectTechnique(RenderableObjectTechniqueName, l_EffectTechnique);
+		auto l_EffectTechnique = CEngine::GetSingleton().getEffectsManager()->ref(TechniqueName);
+		l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager = new CRenderableObjectTechnique(RenderableObjectTechniqueName, std::move(l_EffectTechnique));
 		add(l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager->getName(), l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager);
 	}
 	PoolRenderableObjectTechniques->AddElement(RenderableObjectTechniqueName, TechniqueName, l_RenderableObjectTechniqueOnRRenderableObjectTechniqueManager);

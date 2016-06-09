@@ -3,6 +3,7 @@
 
 #include "Scene/SceneRendererCommand.h"
 #include "Graphics/Texture/DynamicTexture.h"
+#include <Base/Utils/TMapManager.h>
 #include <vector>
 
 class CStagedTexturedSceneRendererCommand : public CSceneRendererCommand
@@ -12,14 +13,14 @@ protected:
 	{
 	public:
 		int m_StageId;
-		CTexture *m_Texture;
-		CStageTexture(int StageId, CTexture *Texture)
+		TMapManager<CTexture>::Ref m_Texture;
+		CStageTexture(int StageId, TMapManager<CTexture>::Ref Texture)
 		{
 			m_StageId = StageId;
-			m_Texture = Texture;
+			m_Texture = std::move(Texture);
 		}
 	};
-	std::vector<CStageTexture> m_StageTextures;
+	std::vector<CStageTexture *> m_StageTextures;
 	std::vector<CDynamicTexture *> m_DynamicTextures;
 	std::vector<ID3D11RenderTargetView *> m_RenderTargetViews;
 public:
@@ -27,7 +28,7 @@ public:
 	virtual ~CStagedTexturedSceneRendererCommand();
 	void CreateRenderTargetViewVector();
 	void ActivateTextures();
-	void AddStageTexture(int StageId, CTexture *Texture);
+	void AddStageTexture(int StageId, TMapManager<CTexture>::Ref Texture);
 	virtual void Execute(CContextManager &context) = 0;
 };
 

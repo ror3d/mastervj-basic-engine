@@ -32,6 +32,10 @@ public:
 	CEffectPixelShader * GetPixelShader( const std::string &PixelShader);
 	CEffectGeometryShader * GetGeometryShader( const std::string &GeometryShader);
 
+	TMapManager<CEffectVertexShader>::Ref CEffectManager::GetVertexShaderRef(const std::string &VertexShader);
+	TMapManager<CEffectPixelShader>::Ref CEffectManager::GetPixelShaderRef(const std::string &PixelShader);
+	TMapManager<CEffectGeometryShader>::Ref CEffectManager::GetGeometryShaderRef(const std::string &GeometryShader);
+
 	void SetSceneConstants();
 	void SetLightConstants(unsigned int IdLight, CLight *Light);
 	void SetLightsConstants();

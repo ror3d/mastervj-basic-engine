@@ -144,3 +144,8 @@ bool CDynamicTexture::CreateSamplerState()
 	HRESULT l_HR = l_Device->CreateSamplerState(&l_SampDesc, GetSamplerState());
 	return !FAILED(l_HR);
 }
+
+bool CDynamicTexture::Reload()
+{
+	return false;
+}

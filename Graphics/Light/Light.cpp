@@ -18,7 +18,6 @@ CLight::CLight(const CXMLTreeNode &TreeNode)
 	, CActive(true)
 	, m_GenerateShadowMap(false)
 	, m_ShadowMap(nullptr)
-	, m_ShadowMaskTexture(nullptr)
 {
 	Vect3f pos(0.0f, 0.0f, 0.0f);
 	m_Position = TreeNode.GetVect3fProperty("pos", pos);

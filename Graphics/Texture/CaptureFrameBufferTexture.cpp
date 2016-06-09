@@ -97,3 +97,8 @@ bool CCaptureFrameBufferTexture::CreateSamplerState()
 	HRESULT l_HR = l_Device->CreateSamplerState(&l_SampDesc, GetSamplerState());
 	return !FAILED(l_HR);
 }
+
+bool CCaptureFrameBufferTexture::Reload()
+{
+	return false;
+}

@@ -2,7 +2,9 @@
 #define SCENE_RENDERER_COMMAND_MANAGER_H
 
 #include <vector>
+
 class CSceneRendererCommand;
+
 class CSceneRendererCommandManager
 {
 private:
