@@ -22,6 +22,8 @@ public:
   explicit CColor(float red, float green, float blue, float alpha = 1.0f)	:Vect4f(red, green, blue, alpha) {}
 	//inline   CColor (uint32 argb);
 
+  inline CColor rgb2hsl();
+
   // --------------------
   // Acceso a componentes
   // --------------------

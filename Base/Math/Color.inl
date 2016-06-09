@@ -1,4 +1,5 @@
 #include "MathUtils.h"
+#include <Windows.h>
 
 inline CColor& CColor::Clamp()
 {
@@ -131,4 +132,49 @@ inline CColor& CColor::operator *= (float escalar)
 	(Vect4f)(*this) *= escalar;
 
 	return (*this);
+}
+
+inline CColor CColor::rgb2hsl()
+{
+	Vect3f rgb;
+
+	float H;
+	float S;
+	float L;
+
+	float cmax = max(x, y, z);
+	float cmin = min(x, y, z);
+
+	float delta = cmax - cmin;
+
+	if (delta == 0)
+	{
+		H = 0;
+	}
+	else if (cmax == x)
+	{
+		float val = y - z < 0 ? 6 : 0;
+		H = fmodf(((y - z) / delta), 6) + val;
+	}
+	else if (cmax == y)
+	{
+		H = (z - x) / delta + 2;
+	}
+	else if (cmax == z)
+	{
+		H = (x - y) / delta + 4;
+	}
+
+	L = (cmax + cmin) / 2;
+
+	if (delta == 0)
+	{
+		S = 0;
+	}
+	else
+	{
+		S = delta / (1 - abs(2 * L - 1));
+	}
+
+	return CColor(H * 60 / 360, S, L, 1.0f);
 }

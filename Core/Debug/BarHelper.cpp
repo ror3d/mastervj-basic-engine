@@ -20,6 +20,7 @@
 #include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Renderable/RenderableObjectsManager.h>
 #include <Graphics/Renderable/RenderableObject.h>
+#include <Base\Math\Color.h>
 #include <vector>
 #include <tchar.h>
 
@@ -104,7 +105,7 @@ void CBarHelper::AddColor(CDebugHelper::SDebugBar &bar, std::string name, CColor
 	var.mode = CDebugHelper::READ_WRITE;
 	var.pColor = value;
 	var.params = params;
-
+	
 	bar.variables.push_back(var);
 }
 

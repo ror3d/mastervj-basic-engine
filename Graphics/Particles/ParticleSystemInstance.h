@@ -45,10 +45,6 @@ private:
 	std::uniform_real_distribution<float> m_unitDist;
 
 public:
-	template<typename T>
-	Vect3f rgb2hsl(T color);
-	CColor hsl2rgb(Vect3f Color_HSL);
-
 	CParticleSystemInstance(CXMLTreeNode& treeNode);
 
 	virtual ~CParticleSystemInstance();

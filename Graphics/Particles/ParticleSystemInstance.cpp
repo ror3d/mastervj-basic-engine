@@ -13,61 +13,7 @@
 
 #include <algorithm>
 
-
 std::random_device rnd;
-
-template<typename T>
-Vect3f rgb2hsl(T Color_RGB)
-{
-	float var_Min = min(Color_RGB.x, Color_RGB.y, Color_RGB.z);    //Min. value of RGB
-	float var_Max = max(Color_RGB.x, Color_RGB.y, Color_RGB.z);    //Max. value of RGB
-	float del_Max = var_Max - var_Min;             //Delta RGB value
-
-	float L = (var_Max + var_Min) / 2;
-
-	float H;
-	float S;
-
-	if (del_Max == 0)                     //This is a gray, no chroma...
-		{
-			H = 0;                                //HSL results from 0 to 1
-			S = 0;
-		}
-	else                                    //Chromatic data...
-	{
-		if (L < 0.5){
-			S = del_Max / (var_Max + var_Min);
-		}
-		else
-		{
-			S = del_Max / (2 - var_Max - var_Min);
-		}
-
-		float del_R = (((var_Max - Color_RGB.x) / 6) + (del_Max / 2)) / del_Max;
-		float del_G = (((var_Max - Color_RGB.y) / 6) + (del_Max / 2)) / del_Max;
-		float del_B = (((var_Max - Color_RGB.z) / 6) + (del_Max / 2)) / del_Max;
-
-		if (Color_RGB.x == var_Max)
-		{
-			H = del_B - del_G;
-		}
-
-		else if (Color_RGB.y == var_Max)
-		{
-			H = (1 / 3) + del_R - del_B;
-		}
-
-		else if (Color_RGB.z == var_Max)
-		{
-			H = (2 / 3) + del_G - del_R;
-		}
-
-		if (H < 0) H += 1;
-		if (H > 1) H -= 1;
-	}
-	return Vect3f(H, S, L);
-}
-
 
 float Hue_2_RGB(float v1, float v2, float vH)             //Function Hue_2_RGB
 {
@@ -81,39 +27,59 @@ float Hue_2_RGB(float v1, float v2, float vH)             //Function Hue_2_RGB
 
 CColor hsl2rgb(Vect3f Color_HSL)
 {
-	float R;
-	float G;
-	float B;
-	float var_2;
-	float var_1;
+	float H = Color_HSL.x * 360;
+	float S = Color_HSL.y;
+	float L = Color_HSL.z;
+	
+	Vect3f rgb;
 
-	if (Color_HSL.y == 0)                       //HSL from 0 to 1
+	float c = (1 - abs(2*L-1)) * S;
+	float x = c * (1 - abs(fmodf(H / 60, 2) - 1));
+	float m = L - c / 2;
+
+	if (H < 60)
 	{
-		R = Color_HSL.z;                      //RGB results from 0 to 255
-		G = Color_HSL.z;
-		B = Color_HSL.z;
+		rgb.x = c;
+		rgb.y = x;
+		rgb.z = 0;
 	}
-	else
+	else if (H < 120)
 	{
-		if (Color_HSL.z < 0.5)
-		{
-			var_2 = Color_HSL.z * (1 + Color_HSL.y);
-		}
-		else
-		{
-			var_2 = (Color_HSL.z + Color_HSL.y) - (Color_HSL.y * Color_HSL.z);
-		}
-
-		var_1 = 2 * Color_HSL.z - var_2;
-
-		R = Hue_2_RGB(var_1, var_2, Color_HSL.x + (1 / 3));
-		G = Hue_2_RGB(var_1, var_2, Color_HSL.y);
-		B = Hue_2_RGB(var_1, var_2, Color_HSL.z - (1 / 3));
+		rgb.x = x;
+		rgb.y = c;
+		rgb.z = 0;
 	}
+	else if (H < 180)
+	{
+		rgb.x = 0;
+		rgb.y = c;
+		rgb.z = x;
+	}
+	else if (H < 240)
+	{
+		rgb.x = 0;
+		rgb.y = x;
+		rgb.z = c;
+	}
+	else if (H < 300)
+	{
+		rgb.x = x;
+		rgb.y = 0;
+		rgb.z = c;
+	}
+	else if (H < 360)
+	{
+		rgb.x = c;
+		rgb.y = 0;
+		rgb.z = x;
+	}
+
 	CColor r;
-	r.SetRed(R);
-	r.SetGreen(G);
-	r.SetBlue(B);
+	r.x = rgb.x + m;
+	r.y = rgb.y + m;
+	r.z = rgb.z + m;
+	r.w = 1.0f;
+
 	return r;
 
 }
@@ -133,9 +99,9 @@ Vect3f getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, ra
 
 CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<CColor> &rng)
 {
-	Vect3f hsl1 = rgb2hsl(rng.first);
-	Vect3f hsl2 = rgb2hsl(rng.second);
-	Vect3f hslr = getRand(rnde, ud, make_range(hsl1, hsl2));
+	CColor hsl1 = rng.first.rgb2hsl();
+	CColor hsl2 = rng.second.rgb2hsl();
+	Vect3f hslr = getRand(rnde, ud, make_range(Vect3f(hsl1.x, hsl1.y, hsl1.z), Vect3f(hsl2.x, hsl2.y, hsl2.z)));
 	CColor r = hsl2rgb(hslr);
 	r.w = ud(rnde)*(rng.second.w - rng.first.w) + rng.second.w;
 	return r;
