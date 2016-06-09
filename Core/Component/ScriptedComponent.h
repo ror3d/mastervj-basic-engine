@@ -25,8 +25,8 @@ protected:
 	virtual void OnObjectInitialized();
 
 public:
-	CScriptedComponent(const std::string& name, CRenderableObject* Owner);
-	CScriptedComponent(CXMLTreeNode& node, CRenderableObject* Owner);
+	CScriptedComponent(const std::string& name, CElement* Owner);
+	CScriptedComponent(CXMLTreeNode& node, CElement* Owner);
 	virtual ~CScriptedComponent();
 	virtual void Update(float ElapsedTime);
 	virtual void FixedUpdate(float ElapsedTime);

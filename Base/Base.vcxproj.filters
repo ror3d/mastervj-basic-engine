@@ -89,6 +89,9 @@
     <ClInclude Include="Utils\Active.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\TMapContainer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Math\MathUtils.inl">

@@ -13,8 +13,8 @@ protected:
 	virtual void Init();
 
 public:
-	CFPSCameraComponent(CXMLTreeNode& node, CRenderableObject* Owner);
-	CFPSCameraComponent(CRenderableObject* Owner);
+	CFPSCameraComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
+	CFPSCameraComponent(const std::string& name, CElement* Owner);
 	virtual ~CFPSCameraComponent();
 
 	virtual void Update( float elapsedTime );

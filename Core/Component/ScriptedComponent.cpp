@@ -2,7 +2,8 @@
 
 #include <Core/Engine/Engine.h>
 #include <Base/Scripting/ScriptManager.h>
-#include <Graphics/Renderable/RenderableObject.h>
+#include <Base/XML/XMLTreeNode.h>
+#include "Scene/Element.h"
 
 #include <selene.h>
 
@@ -12,7 +13,7 @@
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 
 CScriptedComponent::CScriptedComponent(const std::string& name,
-									   CRenderableObject* Owner)
+									   CElement* Owner)
 	: CComponent(name, Owner)
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
@@ -20,7 +21,7 @@ CScriptedComponent::CScriptedComponent(const std::string& name,
 }
 
 CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
-									   CRenderableObject* Owner)
+									   CElement* Owner)
 	: CComponent(node, Owner)
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
@@ -97,7 +98,7 @@ void CScriptedComponent::SetComponent()
 
 void CScriptedComponent::Update(float ElapsedTime)
 {
-	if (!GetOwner()->GetVisible() && GetOwner()->getName() != "TriggerChangeZone")
+	if (!GetOwner()->GetEnabled())
 	{
 		return;
 	}
@@ -111,7 +112,7 @@ void CScriptedComponent::Update(float ElapsedTime)
 
 void CScriptedComponent::FixedUpdate(float ElapsedTime)
 {
-	if (!GetOwner()->GetVisible() && GetOwner()->getName() != "TriggerChangeZone")
+	if (!GetOwner()->GetEnabled())
 	{
 		return;
 	}
@@ -125,7 +126,7 @@ void CScriptedComponent::FixedUpdate(float ElapsedTime)
 
 void CScriptedComponent::Render(CContextManager&  _context)
 {
-	if ( ! GetOwner()->GetVisible() )
+	if ( ! GetOwner()->GetEnabled() )
 	{
 		return;
 	}
@@ -139,7 +140,7 @@ void CScriptedComponent::Render(CContextManager&  _context)
 
 void CScriptedComponent::RenderDebug(CContextManager&  _context)
 {
-	if ( ! GetOwner()->GetVisible() )
+	if ( ! GetOwner()->GetEnabled() )
 	{
 		return;
 	}

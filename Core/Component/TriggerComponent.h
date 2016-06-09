@@ -16,8 +16,8 @@ protected:
 	virtual void Init();
 
 public:
-	CTriggerComponent(CXMLTreeNode& node, CRenderableObject* Owner);
-	CTriggerComponent(CRenderableObject* Owner);
+	CTriggerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
+	CTriggerComponent(const std::string& name, CElement* Owner);
 	virtual ~CTriggerComponent();
 
 	virtual void FixedUpdate( float ElapsedTime );

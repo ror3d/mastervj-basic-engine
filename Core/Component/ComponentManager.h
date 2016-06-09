@@ -20,6 +20,7 @@ public:
 	void Render(CContextManager  &_context);
 	void RenderDebug(CContextManager  &_context);
 	bool AddComponent(CComponent *Component);
+	bool RemoveComponent(CComponent *Component);
 	void FirstInitialization();
 	void destroy();
 

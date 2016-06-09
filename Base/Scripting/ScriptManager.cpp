@@ -26,8 +26,10 @@
 #include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
-#include <Core\Component\TriggerComponent.h>
-#include <Core\Trigger\TriggerManager.h>
+#include <Core/Component/TriggerComponent.h>
+#include <Core/Scene/Scene.h>
+#include <Core/Scene/Element.h>
+#include <Core/Trigger/TriggerManager.h>
 
 namespace
 {
@@ -231,6 +233,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetYawPitchRoll", &C3DElement::SetYawPitchRoll,
 			"GetPrevPosition", &C3DElement::GetPrevPosition);
 
+	/*
 	(*m_state)["CRenderableObject"]
 		.SetClass<CRenderableObject>(
 			"GetName", &CRenderableObject::getName,
@@ -244,7 +247,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCamera", &CRenderableObject::GetCamera,
 			"GetCharacterController", &CRenderableObject::GetCharacterController,
 			"GetTriggerComponent", &CRenderableObject::GetTriggerComponent);
-
+			
 	(*m_state)["CAnimatedInstanceModel"]
 		.SetClass<CAnimatedInstanceModel, CXMLTreeNode&>(
 			"ClearCycle", &CAnimatedInstanceModel::ClearCycle,
@@ -252,20 +255,35 @@ void CScriptManager::RegisterLUAFunctions()
 			"ExecuteAction", &CAnimatedInstanceModel::ExecuteAction,
 			"IsCycleAnimationActive", &CAnimatedInstanceModel::IsCycleAnimationActive,
 			"IsActionAnimationActive", &CAnimatedInstanceModel::IsActionAnimationActive);
+			*/
+
+	(*m_state)["CElement"]
+		.SetClass<CElement>(
+			"GetName", &CElement::getName,
+			"SetPosition", &CElement::SetPosition,
+			"GetPosition", &CElement::GetPosition,
+			"SetYaw", &CElement::SetYaw,
+			"GetYaw", &CElement::GetYaw,
+			"SetEnabled", &CElement::SetEnabled,
+			"IsEnabled", &CElement::GetEnabled,
+			"GetCamera", &CElement::GetCamera,
+			"GetCharacterController", &CElement::GetCharacterController,
+			"GetTriggerComponent", &CElement::GetTriggerComponent);
+			
 
 	(*m_state)["CCharacterControllerComponent"]
-		.SetClass<CCharacterControllerComponent, CRenderableObject*>(
+		.SetClass<CCharacterControllerComponent, CElement*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move,
 			"SetPos", &CCharacterControllerComponent::SetPosition);
 
 	(*m_state)["CFPSCameraComponent"]
-		.SetClass<CFPSCameraComponent, CRenderableObject*>(
+		.SetClass<CFPSCameraComponent, CElement*>(
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera);
 
 
 	(*m_state)["TriggerComponent"]
-		.SetClass<CTriggerComponent, CRenderableObject*>(
+		.SetClass<CTriggerComponent, CElement*>(
 		"GetStateTrigger", &CTriggerComponent::GetStateTrigger,
 		"SetStateTrigger", &CTriggerComponent::SetStateTrigger,
 		"GetName", &CTriggerComponent::getName,

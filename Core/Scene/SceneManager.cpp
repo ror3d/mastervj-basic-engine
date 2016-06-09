@@ -9,16 +9,24 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 	WIN32_FIND_DATA ffd;
 
+	std::string globPath;
+
 	if ( scenesDirectory.find( '*' ) == scenesDirectory.npos )
 	{
 		if ( scenesDirectory.back() != '\\' && scenesDirectory.back() != '/' )
 		{
 			scenesDirectory += "\\";
 		}
-		scenesDirectory += "*.xml";
+		globPath = scenesDirectory;
+		globPath += "*.xml";
+	}
+	else
+	{
+		// We should NOT have a path with globs!
+		DEBUG_ASSERT(false);
 	}
 
-	hFind = FindFirstFileA( scenesDirectory.c_str(), &ffd );
+	hFind = FindFirstFileA( globPath.c_str(), &ffd );
 
 	DEBUG_ASSERT( INVALID_HANDLE_VALUE != hFind );
 	if ( hFind == INVALID_HANDLE_VALUE )
@@ -29,7 +37,10 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 	do {
 		if ( !( ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
 		{
-			std::string fname = ffd.cFileName;
+			std::string fname = scenesDirectory + ffd.cFileName;
+			CScene * scene = new CScene();
+			scene->Load(fname);
+			add(scene);
 		}
 	} while ( FindNextFile( hFind, &ffd ) != 0 );
 

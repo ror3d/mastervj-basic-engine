@@ -1,25 +1,30 @@
 #include "PhysxComponent.h"
 
-#include <Graphics/Renderable/RenderableObject.h>
+#include "Scene/Element.h"
+#include <Base/XML/XMLTreeNode.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
 #include <Graphics/Mesh/StaticMesh.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Engine/Engine.h>
 
-CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CRenderableObject* Owner, std::string nameCore)
+CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
-	setName(Owner->getName() + "_PhysxComponent");
+	setName(name);
 	
-	m_colType = node.GetPszProperty("collider_type");
+	m_colType = node.GetPszProperty("collider_type", "Sphere");
 	m_isStatic = node.GetBoolProperty("static");	
-	m_isKinematic = node.GetPszProperty("kinematic");
-	m_coreName = nameCore;	
+	m_isKinematic = node.GetBoolProperty("kinematic");
+	m_coreName = node.GetPszProperty("core_mesh", "");	
+	if (m_coreName == "")
+	{
+		m_colType = "Sphere";
+	}
 	m_isTrigger = node.GetBoolProperty("trigger", false);
 }
 
-CPhysxComponent::CPhysxComponent(CRenderableObject* Owner)
-	: CComponent(Owner->getName() + "_PhysxComponent", Owner)
+CPhysxComponent::CPhysxComponent(const std::string& name, CElement* Owner)
+	: CComponent(name, Owner)
 {
 }
 
@@ -70,7 +75,10 @@ void CPhysxComponent::Init()
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::Sphere;
 		desc.radius = 1;
-		//TODO: get radius
+		if (m_coreName != "")
+		{
+			//TODO: get radius
+		}
 	}
 	else if (m_colType == std::string("Plane"))
 	{

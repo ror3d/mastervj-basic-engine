@@ -1,13 +1,14 @@
 #include "TriggerComponent.h"
 
-#include <Graphics/Renderable/RenderableObject.h>
-#include <Core\Trigger\TriggerManager.h>
+#include "Scene/Element.h"
+#include <Base/XML/XMLTreeNode.h>
+#include <Core/Trigger/TriggerManager.h>
 #include <Core/Engine/Engine.h>
 
-CTriggerComponent::CTriggerComponent(CXMLTreeNode& node, CRenderableObject* Owner)
+CTriggerComponent::CTriggerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
-	setName(Owner->getName() + "_TriggerComponent");
+	setName(name);
 	m_EnterTrigger = false;
 	m_StayTrigger = false;
 	m_ExitTrigger = false;
@@ -16,8 +17,8 @@ CTriggerComponent::CTriggerComponent(CXMLTreeNode& node, CRenderableObject* Owne
 	CEngine::GetSingleton().getTriggerManager()->AddElement(this);
 }
 
-CTriggerComponent::CTriggerComponent(CRenderableObject* Owner)
-	: CComponent(Owner->getName() + "_TriggerComponent", Owner)
+CTriggerComponent::CTriggerComponent(const std::string& name, CElement* Owner)
+	: CComponent(name, Owner)
 {
 }
 

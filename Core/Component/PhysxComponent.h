@@ -19,8 +19,8 @@ protected:
 	virtual void Init();
 
 public:
-	CPhysxComponent(CXMLTreeNode& node, CRenderableObject* Owner, std::string nameCore);
-	CPhysxComponent(CRenderableObject* Owner);
+	CPhysxComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
+	CPhysxComponent(const std::string& name, CElement* Owner);
 	virtual ~CPhysxComponent();
 
 	virtual void FixedUpdate(float ElapsedTime);

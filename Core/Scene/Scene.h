@@ -4,5 +4,8 @@
 
 class CScene : public CNamed
 {
+public:
+	CScene();
 
+	void Load(const std::string& file);
 };

@@ -4,6 +4,7 @@
 #include <Graphics/Mesh/StaticMeshManager.h>
 #include <Core/Component/PhysxComponent.h>
 #include <PhysX/PhysXManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 
 CMeshInstance::CMeshInstance( CXMLTreeNode& treeNode )

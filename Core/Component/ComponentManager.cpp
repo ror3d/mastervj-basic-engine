@@ -54,6 +54,19 @@ bool CComponentManager::AddComponent(CComponent* Component)
 	return false;
 }
 
+bool CComponentManager::RemoveComponent(CComponent* Component)
+{
+	auto it = m_components.find(Component);
+
+	if (it != m_components.end())
+	{
+		m_components.erase(it);
+		return true;
+	}
+
+	return false;
+}
+
 void CComponentManager::FirstInitialization()
 {
 	if ( !m_initialized )
