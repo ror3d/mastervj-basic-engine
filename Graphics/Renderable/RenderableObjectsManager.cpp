@@ -7,6 +7,8 @@
 #include <Graphics/Effect/EffectManager.h>
 #include <Core/Engine/Engine.h>
 
+#include <Base/XML/XMLTreeNode.h>
+
 CRenderableObjectsManager::CRenderableObjectsManager()
 {
 }

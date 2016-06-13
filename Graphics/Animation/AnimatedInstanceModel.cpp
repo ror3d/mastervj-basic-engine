@@ -41,14 +41,12 @@ void CAnimatedInstanceModel::Initialize(CAnimatedCoreModel *AnimatedCoreModel)
 	LoadVertexBuffer();
 }
 
-void CAnimatedInstanceModel::Render(CContextManager *context)
+void CAnimatedInstanceModel::Render(CContextManager *context) const
 {
 	if ( !m_Visible )
 	{
 		return;
 	}
-
-	Mat44f l_Transform = GetTransform();
 
 	for (int l_HardwareMeshId = 0;
 		 l_HardwareMeshId < m_CalHardwareModel->getHardwareMeshCount();

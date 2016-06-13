@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics/Mesh/StaticMeshLoader.h>
 #include <Graphics/Mesh/CookedMeshManager.h>
 #include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Material/MaterialManager.h>
@@ -8,6 +9,7 @@
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Light/LightManager.h>
 #include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Animation/AnimatedMeshManager.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
@@ -53,6 +55,8 @@ CEngine::CEngine()
 	, triggerManager(nullptr)
 	, soundManager(nullptr)
 	, logicManager(nullptr)
+	, meshLoader(nullptr)
+	, animatedMeshManager(nullptr)
 {
 }
 CEngine::~CEngine()
@@ -81,6 +85,8 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(triggerManager);
 	CHECKED_DESTROY(soundManager);
 	CHECKED_DESTROY(logicManager);
+	CHECKED_DESTROY(meshLoader);
+	CHECKED_DESTROY(animatedMeshManager);
 
 } //Destruimos vars
 
@@ -110,4 +116,6 @@ void CEngine::Init()
 	triggerManager = new CTriggerManager();
 	soundManager = new CSoundManager();
 	logicManager = new CLogicManager();
+	meshLoader = new CStaticMeshLoader();
+	animatedMeshManager = new CAnimatedMeshManager();
 }

@@ -2,8 +2,7 @@
 
 #include "Scene/Element.h"
 #include <Base/XML/XMLTreeNode.h>
-#include <Graphics/Mesh/StaticMeshManager.h>
-#include <Graphics/Mesh/StaticMesh.h>
+#include <Graphics/Mesh/StaticMeshLoader.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Engine/Engine.h>
 
@@ -58,7 +57,6 @@ void CPhysxComponent::Init()
 		actorType = CPhysXManager::ActorType::Dynamic;
 	}
 
-	CStaticMesh * m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(m_coreName);
 
 	if (m_colType == std::string("Box"))
 	{
@@ -88,12 +86,12 @@ void CPhysxComponent::Init()
 	else if (m_colType == std::string("Triangle Mesh"))
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::TriangleMesh;
-		m_StaticMesh->FillColliderDescriptor(&desc);
+		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
 	}
 	else // m_colType == std::string("Convex Mesh") or unrecognized type
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
-		m_StaticMesh->FillColliderDescriptor(&desc);
+		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
 		actorType = CPhysXManager::ActorType::Static;
 	}
 	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), actorType, desc, m_isKinematic, m_isTrigger);

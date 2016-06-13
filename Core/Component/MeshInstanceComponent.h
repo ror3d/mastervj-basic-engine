@@ -1,12 +1,12 @@
 #pragma once
 #include "Component.h"
 
-class CStaticMesh;
+class CMesh;
 
 class CMeshInstanceComponent :
 	public CComponent
 {
-	CStaticMesh *m_StaticMesh;
+	CMesh *m_StaticMesh;
 public:
 	CMeshInstanceComponent(const std::string& name, CElement* Owner);
 	CMeshInstanceComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
@@ -15,7 +15,7 @@ public:
 	void Render(CContextManager&  _context);
 	void Destroy();
 
-	inline CStaticMesh * GetStaticMesh() const { return m_StaticMesh; }
+	inline CMesh * GetStaticMesh() const { return m_StaticMesh; }
 	void SetStaticMesh(const std::string& coreName);
 };
 

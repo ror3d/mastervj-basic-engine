@@ -26,6 +26,8 @@ class CCinematicManager;
 class CTriggerManager;
 class CSoundManager;
 class CLogicManager;
+class CStaticMeshLoader;
+class CAnimatedMeshManager;
 
 class CEngine : public CSingleton<CEngine>
 {
@@ -54,6 +56,8 @@ private:
 	CTriggerManager * triggerManager;
 	CSoundManager * soundManager;
 	CLogicManager * logicManager;
+	CStaticMeshLoader * meshLoader;
+	CAnimatedMeshManager * animatedMeshManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -86,4 +90,6 @@ public:
 	inline CTriggerManager * getTriggerManager() const { return triggerManager;  }
 	inline CSoundManager * getSoundManager() const { return soundManager; }
 	inline CLogicManager * getLogicManager() const { return logicManager;  }
+	inline CStaticMeshLoader * getMeshLoader() const { return meshLoader;  }
+	inline CAnimatedMeshManager * getAnimatedMeshManager() const { return animatedMeshManager; }
 };

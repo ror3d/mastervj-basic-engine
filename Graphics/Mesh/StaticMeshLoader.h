@@ -9,6 +9,8 @@
 #include "VertexTypes.h"
 
 class CMesh;
+class CPhysxColliderShapeDesc;
+class CXMLTreeNode;
 
 class CStaticMeshLoader
 {
@@ -68,15 +70,20 @@ private:
 	bool LoadMesh(const std::string& meshFileName);
 
 	template<typename T>
-	std::vector<Vect3f> getVect3fArrayInternal( const T* vertexes, unsigned int nVtx );
+	std::vector<Vect3f> GetVect3fArrayInternal( const T* vertexes, unsigned int nVtx );
+
+	std::vector<Vect3f> GetVect3fArray(const MeshFile::MeshData& mesh);
 
 public:
 
 	CStaticMeshLoader();
 	~CStaticMeshLoader();
 
-	std::vector<Vect3f> GetVect3fArray(const std::string& meshFileName);
-
 	CMesh* GetMesh(const std::string& meshFileName);
+	CMesh* GetMesh(CXMLTreeNode& node);
+
+	bool FillColliderDescriptor( const std::string& meshFileName, CPhysxColliderShapeDesc* shapeDesc );
+
+	void destroy();
 };
 

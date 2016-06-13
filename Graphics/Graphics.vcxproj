@@ -13,6 +13,9 @@
   <ItemGroup>
     <ClInclude Include="Animation\AnimatedCoreModel.h" />
     <ClInclude Include="Animation\AnimatedInstanceModel.h" />
+    <ClInclude Include="Animation\AnimatedMesh.h" />
+    <ClInclude Include="Animation\AnimatedMeshInstance.h" />
+    <ClInclude Include="Animation\AnimatedMeshManager.h" />
     <ClInclude Include="Animation\AnimatedModelManager.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraController.h" />
@@ -52,19 +55,23 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Mesh\CookedMeshmanager.h" />
+    <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Mesh\RenderableVertexs.h" />
     <ClInclude Include="Mesh\StaticMesh.h" />
+    <ClInclude Include="Mesh\StaticMeshLoader.h" />
     <ClInclude Include="Mesh\StaticMeshManager.h" />
     <ClInclude Include="Mesh\VertexTypes.h" />
     <ClInclude Include="Particles\ParticleSystemInstance.h" />
     <ClInclude Include="Particles\ParticleSystemManager.h" />
     <ClInclude Include="Renderable\MeshInstance.h" />
     <ClInclude Include="Renderable\PoolRenderableObjectTechnique.h" />
+    <ClInclude Include="Renderable\Renderable.h" />
     <ClInclude Include="Renderable\RenderableObject.h" />
     <ClInclude Include="Renderable\RenderableObjectsManager.h" />
     <ClInclude Include="Renderable\RenderableObjectTechnique.h" />
     <ClInclude Include="Renderable\RenderableObjectTechniqueManager.h" />
     <ClInclude Include="Renderer\3DElement.h" />
+    <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Scene\ApplyFiltersSceneRendererCommand.h" />
     <ClInclude Include="Scene\CaptureFrameBufferSceneRendererCommand.h" />
     <ClInclude Include="Scene\ClearSceneRendererCommand.h" />
@@ -97,6 +104,9 @@
   <ItemGroup>
     <ClCompile Include="Animation\AnimatedCoreModel.cpp" />
     <ClCompile Include="Animation\AnimatedInstanceModel.cpp" />
+    <ClCompile Include="Animation\AnimatedMesh.cpp" />
+    <ClCompile Include="Animation\AnimatedMeshInstance.cpp" />
+    <ClCompile Include="Animation\AnimatedMeshManager.cpp" />
     <ClCompile Include="Animation\AnimatedModelManager.cpp" />
     <ClCompile Include="Camera\CameraController.cpp" />
     <ClCompile Include="Camera\CameraInfo.cpp" />
@@ -131,7 +141,9 @@
     </ClCompile>
     <ClCompile Include="Material\MaterialParameter.cpp" />
     <ClCompile Include="Mesh\CookedMeshManager.cpp" />
+    <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Mesh\StaticMesh.cpp" />
+    <ClCompile Include="Mesh\StaticMeshLoader.cpp" />
     <ClCompile Include="Mesh\StaticMeshManager.cpp" />
     <ClCompile Include="Particles\ParticleSystemInstance.cpp" />
     <ClCompile Include="Particles\ParticleSystemManager.cpp" />
@@ -142,6 +154,7 @@
     <ClCompile Include="Renderable\RenderableObjectTechnique.cpp" />
     <ClCompile Include="Renderable\RenderableObjectTechniqueManager.cpp" />
     <ClCompile Include="Renderer\3DElement.cpp" />
+    <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Scene\ApplyFiltersSceneRendererCommand.cpp" />
     <ClCompile Include="Scene\CaptureFrameBufferSceneRendererCommand.cpp" />
     <ClCompile Include="Scene\ClearSceneRendererCommand.cpp" />

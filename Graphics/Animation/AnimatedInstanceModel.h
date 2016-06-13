@@ -31,7 +31,7 @@ public:
 	virtual ~CAnimatedInstanceModel();
 
 	void Initialize(CAnimatedCoreModel *AnimatedCoreModel);
-	void Render(CContextManager *context);
+	void Render(CContextManager *context) const;
 	void Update(float ElapsedTime);
 	void ExecuteAction(int Id, float DelayIn, float DelayOut, float
 					   WeightTarget = 1.0f, bool AutoLock = true);

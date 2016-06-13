@@ -25,9 +25,6 @@
     <Filter Include="Light">
       <UniqueIdentifier>{cbf936dc-86ac-4d24-8b3d-df5ea0aaaa29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Animation">
-      <UniqueIdentifier>{04abb94a-7fad-4083-a7b7-f4edae1ab932}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Renderable">
       <UniqueIdentifier>{392e1a9e-1a9d-4b79-aa9d-425a7fb1d20d}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,9 @@
     </Filter>
     <Filter Include="CinematicsAction">
       <UniqueIdentifier>{4b39dac3-15c1-4c01-8256-ca8fa68f6f82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{04abb94a-7fad-4083-a7b7-f4edae1ab932}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +283,25 @@
     <ClInclude Include="Mesh\RenderableVertexs.h">
       <Filter>Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\Mesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\StaticMeshLoader.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimatedMesh.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimatedMeshInstance.h" />
+    <ClInclude Include="Renderable\Renderable.h">
+      <Filter>Renderable</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimatedMeshManager.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -501,6 +520,22 @@
     </ClCompile>
     <ClCompile Include="Renderable\MeshInstance.cpp">
       <Filter>Renderable</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\Mesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\StaticMeshLoader.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimatedMesh.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimatedMeshInstance.cpp" />
+    <ClCompile Include="Animation\AnimatedMeshManager.cpp">
+      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

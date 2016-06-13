@@ -2,6 +2,7 @@
 #include "Renderable/MeshInstance.h"
 #include "Animation/AnimatedInstanceModel.h"
 #include "Renderable/RenderableObjectsManager.h"
+#include <Base/XML/XMLTreeNode.h>
 
 CLayerManager::CLayerManager(){
 

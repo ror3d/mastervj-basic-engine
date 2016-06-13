@@ -3,9 +3,9 @@
 
 #include <Utils/TMapManager.h>
 
-class CStaticMesh;
+class CMesh;
 
-class CStaticMeshManager : public TMapManager<CStaticMesh>
+class CStaticMeshManager : public TMapManager<CMesh>
 {
 protected:
 	std::string m_FileName;
@@ -14,7 +14,7 @@ public:
 	~ CStaticMeshManager ();
 	bool Load(const std::string &FileName);
 	bool Reload();
-	std::map<std::string, CStaticMesh*> GetResources(){ return m_resources;  }
+	std::map<std::string, CMesh*> GetResources(){ return m_resources;  }
 };
 
 #endif

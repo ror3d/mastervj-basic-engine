@@ -272,18 +272,18 @@ void CScriptManager::RegisterLUAFunctions()
 			
 
 	(*m_state)["CCharacterControllerComponent"]
-		.SetClass<CCharacterControllerComponent, CElement*>(
+		.SetClass<CCharacterControllerComponent, const std::string&, CElement*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move,
 			"SetPos", &CCharacterControllerComponent::SetPosition);
 
 	(*m_state)["CFPSCameraComponent"]
-		.SetClass<CFPSCameraComponent, CElement*>(
+		.SetClass<CFPSCameraComponent, const std::string&, CElement*>(
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera);
 
 
 	(*m_state)["TriggerComponent"]
-		.SetClass<CTriggerComponent, CElement*>(
+		.SetClass<CTriggerComponent, const std::string&, CElement*>(
 		"GetStateTrigger", &CTriggerComponent::GetStateTrigger,
 		"SetStateTrigger", &CTriggerComponent::SetStateTrigger,
 		"GetName", &CTriggerComponent::getName,

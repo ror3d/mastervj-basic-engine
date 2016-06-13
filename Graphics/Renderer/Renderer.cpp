@@ -1,5 +1,5 @@
 #include "Renderer.h"
-#include "Mesh/StaticMesh.h"
+#include "Mesh/Mesh.h"
 #include "Effect/EffectManager.h"
 
 
@@ -10,7 +10,7 @@ CRenderer::CRenderer()
 CRenderer::~CRenderer()
 {}
 
-void CRenderer::AddMeshToRender(const std::string& layer, CStaticMesh* mesh, const Mat44f& transf)
+void CRenderer::AddMeshToRender(const std::string& layer, CMesh* mesh, const Mat44f& transf)
 {
 	m_Layers[layer][mesh].push_back(transf);
 }

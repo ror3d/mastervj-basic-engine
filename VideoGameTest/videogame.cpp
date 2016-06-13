@@ -24,6 +24,7 @@
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Light/LightManager.h>
 #include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Animation/AnimatedMeshManager.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
@@ -234,9 +235,10 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getMaterialManager()->load("Data\\materials.xml");
 	engine.getCookedMeshManager()->SetCookedMeshPath("Cache\\Cooked\\");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
-	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
+	//engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
+	engine.getAnimatedMeshManager()->Load("Data\\animated_models.xml");
 	//engine.getParticleManager()->Load("Data\\particle_classes.xml");
-	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
+	//engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 	//engine.getTriggerManager()->Load("Data\\triggers.xml");

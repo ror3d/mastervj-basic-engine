@@ -2,7 +2,7 @@
 #include "Scene/Element.h"
 
 #include <Engine/Engine.h>
-#include <Graphics/Mesh/StaticMesh.h>
+#include <Graphics/Mesh/Mesh.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
 #include <Base/XML/XMLTreeNode.h>
 #include <Graphics/Effect/EffectManager.h>
@@ -37,6 +37,7 @@ CMeshInstanceComponent::~CMeshInstanceComponent()
 
 void CMeshInstanceComponent::Render(CContextManager&  _context)
 {
+	// TODO Change to use the Renderer
 	CEffectManager::m_SceneParameters.m_World = GetOwner()->GetTransform();
 	m_StaticMesh->Render( &_context );
 }

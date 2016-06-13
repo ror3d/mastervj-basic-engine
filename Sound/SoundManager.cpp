@@ -18,6 +18,8 @@
 #include <Graphics/Renderer/3DElement.h>
 #include "Core/Engine/Engine.h"
 
+#include <Base/XML/XMLTreeNode.h>
+
 #pragma comment(lib, "AkSoundEngineDLL.lib")
 //#pragma comment(lib, "AkSoundEngine.lib")
 //#pragma comment(lib, "AkMemoryMgr.lib")

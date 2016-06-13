@@ -7,16 +7,28 @@
 #include <Core/Engine/Engine.h>
 #include <Graphics/Material/MaterialManager.h>
 
+#include <Graphics/Mesh/CookedMeshManager.h>
+#include <PhysX/PhysXManager.h>
+#include <Base/XML/XMLTreeNode.h>
+
+#include <algorithm>
+
 CStaticMeshLoader::CStaticMeshLoader()
 {}
 
 
 CStaticMeshLoader::~CStaticMeshLoader()
 {
+	destroy();
+}
+
+void CStaticMeshLoader::destroy()
+{
 	for (auto &const meshFile : m_meshFiles)
 	{
 		delete meshFile.second;
 	}
+	m_meshFiles.clear();
 }
 
 bool CStaticMeshLoader::LoadMesh(const std::string& meshFileName)
@@ -31,8 +43,16 @@ bool CStaticMeshLoader::LoadMesh(const std::string& meshFileName)
 	return true;
 }
 
-std::vector<Vect3f> CStaticMeshLoader::GetVect3fArray(const std::string& meshFileName)
+CMesh* CStaticMeshLoader::GetMesh(CXMLTreeNode& node)
 {
+	std::string fName = node.GetPszProperty("filename", "", true);
+	std::string name = node.GetPszProperty("name", "", false);
+	CMesh* m = GetMesh(fName);
+	if (m)
+	{
+		m->setName(name);
+	}
+	return m;
 }
 
 CMesh* CStaticMeshLoader::GetMesh(const std::string& meshFileName)
@@ -109,6 +129,123 @@ CMesh* CStaticMeshLoader::GetMesh(const std::string& meshFileName)
 	m = new CMesh(vtxs, mats);
 
 	return m;
+}
+
+std::vector<Vect3f> CStaticMeshLoader::GetVect3fArray( const MeshFile::MeshData& mesh )
+{
+	unsigned int l_VertexType = mesh.vertexType;
+	if ( l_VertexType == MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType() )
+	{
+		return GetVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_TEXTURE_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
+	}
+	else if ( l_VertexType == MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::GetVertexType() )
+	{
+		return GetVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
+	}
+	else if ( l_VertexType == MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX::GetVertexType() )
+	{
+		return GetVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_TANGENT_BINORMAL_TEXTURE_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
+	}
+	else
+	{
+		return {};
+	}
+}
+
+template <typename T>
+std::vector<Vect3f> CStaticMeshLoader::GetVect3fArrayInternal( const T* vertexes, unsigned int nVtx )
+{
+	std::vector<Vect3f> ret;
+	for ( int i = 0; i < nVtx; ++i )
+	{
+		ret.push_back( vertexes[i].Position );
+	}
+	return ret;
+}
+
+bool CStaticMeshLoader::FillColliderDescriptor( const std::string& meshFileName, CPhysxColliderShapeDesc* shapeDesc )
+{
+	std::vector<uint8> * cooked = nullptr;
+
+	bool l_loaded = CEngine::GetSingleton().getCookedMeshManager()->Load(meshFileName, cooked);
+
+	if (!l_loaded)
+	{
+		MeshFile *meshFile;
+
+		auto it = m_meshFiles.find(meshFileName);
+		if (it == m_meshFiles.end())
+		{
+			if (!LoadMesh(meshFileName))
+			{
+				return false;
+			}
+			meshFile = m_meshFiles[meshFileName];
+		}
+		else
+		{
+			meshFile = it->second;
+		}
+
+		cooked = new std::vector<uint8>();
+
+		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
+		{
+			int numVertex = 0 ;
+			for (int i = 0; i < meshFile->meshes.size(); ++i)
+			{
+				numVertex += meshFile->meshes[i].nVertexes;
+			}
+			if (numVertex >= 1<<16)
+			{
+				DEBUG_ASSERT(!"MESH WITH MORE THAN 65000 vertexes");
+				shapeDesc->shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
+			}
+		}
+
+		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
+		{
+		std::vector<Vect3f> vertexes;
+			std::vector<unsigned short> indexes;
+
+			uint16 offset = 0;
+		for (int i = 0; i < meshFile->meshes.size(); ++i)
+		{
+			std::vector<Vect3f> meshVtxs = GetVect3fArray(meshFile->meshes[i]);
+				auto idxs = reinterpret_cast<unsigned short*>(meshFile->meshes[i].indices);
+				size_t sz = indexes.size();
+				indexes.resize(indexes.size() + meshFile->meshes[i].nIndices);
+				std::transform(idxs, idxs + meshFile->meshes[i].nIndices,
+					indexes.begin()+sz,
+					[offset](unsigned short v) { return v + offset; });
+			vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
+				offset = vertexes.size();
+		}
+
+			CEngine::GetSingleton().getPhysXManager()->cookTriangleMesh(vertexes, indexes, cooked, meshFile->meshes[0].indexSize);
+		}
+		else if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::ConvexMesh)
+		{
+			std::vector<Vect3f> vertexes;
+
+			for (int i = 0; i < meshFile->meshes.size(); ++i)
+		{
+				std::vector<Vect3f> meshVtxs = GetVect3fArray(meshFile->meshes[i]);
+				vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
+		}
+			CEngine::GetSingleton().getPhysXManager()->cookConvexMesh(vertexes, cooked);
+
+		}
+		else
+		{
+			DEBUG_ASSERT(!"Collider type is not Triangle or Convex");
+		}
+	}
+
+	CEngine::GetSingleton().getCookedMeshManager()->add(meshFileName, cooked);
+	shapeDesc->cookedMeshData = cooked;
+
+	return true;
 }
 
 bool CStaticMeshLoader::MeshFile::Load( const std::string &FileName )
