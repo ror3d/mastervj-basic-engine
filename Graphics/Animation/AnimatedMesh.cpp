@@ -29,7 +29,7 @@ CAnimatedMesh::CAnimatedMesh(CXMLTreeNode &node)
 				if (std::string(node.GetName()) == "skeleton")
 				{
 					fname = path + node.GetPszProperty("filename");
-					if (m_CalCoreModel->loadCoreSkeleton(fname))
+					if (!m_CalCoreModel->loadCoreSkeleton(fname))
 					{
 						DEBUG_ASSERT(!"Could not load skeleton!");
 						throw "Could not load skeleton!";
@@ -38,7 +38,7 @@ CAnimatedMesh::CAnimatedMesh(CXMLTreeNode &node)
 				else if (std::string(node.GetName()) == "mesh")
 				{
 					fname = path + node.GetPszProperty("filename");
-					if (m_CalCoreModel->loadCoreMesh(fname))
+					if (m_CalCoreModel->loadCoreMesh(fname) < 0)
 					{
 						DEBUG_ASSERT(!"Could not load mesh!");
 						throw "Could not load mesh!";
@@ -51,7 +51,7 @@ CAnimatedMesh::CAnimatedMesh(CXMLTreeNode &node)
 				else if (std::string(node.GetName()) == "animation")
 				{
 					std::string fname = path + node.GetPszProperty("filename");
-					if (m_CalCoreModel->loadCoreAnimation(fname))
+					if (m_CalCoreModel->loadCoreAnimation(fname) < 0)
 					{
 						DEBUG_ASSERT(!"Could not load animation!");
 						throw "Could not load animation!";

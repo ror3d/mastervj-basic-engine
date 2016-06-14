@@ -10,6 +10,7 @@
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Camera/Camera.h>
+#include <Graphics/Renderer/Renderer.h>
 #include <PhysX/PhysXManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
@@ -24,7 +25,7 @@
 #include <Core/Input/InputManager.h>
 #include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
-#include <Core\Trigger\TriggerManager.h>
+#include <Core/Trigger/TriggerManager.h>
 
 #include <Core/Component/ComponentManager.h>
 
@@ -99,5 +100,13 @@ void CApplication::Update(float _ElapsedTime)
 
 void CApplication::Render()
 {
+	auto renderer = CEngine::GetSingleton().getRenderer();
+
+	renderer->BeginRender();
+
+	CEngine::GetSingleton().getComponentManager()->Render(*m_ContextManager);
+
 	CEngine::GetSingleton().getSceneRendererCommandManager()->Execute(*m_ContextManager);
+
+	renderer->EndRender();
 }

@@ -109,6 +109,7 @@ void CLightManager::ExecuteShadowCreation(CContextManager &_context)
 
 	for (auto const &light : m_resources)
 	{
+		/* TODO(roc): reenable
 		if (light.second->getGenerateShadowMap() && light.second->isActive())
 		{
 			light.second->SetShadowMap(_context, cam); //Set matrices y renderTarget
@@ -124,7 +125,7 @@ void CLightManager::ExecuteShadowCreation(CContextManager &_context)
 				(*child)->Render(&_context);//Render de layers afectadas por la luz
 			}
 			//DUDA::::::DONDE SE USA m_ShadowMaskTexture???
-		}
+		}*/
 	}
 	_context.UnsetRenderTargets();//Una vez pintadas las sombras, quitamos target para render normal
 }

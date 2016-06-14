@@ -6,6 +6,7 @@
 #include <Graphics/Mesh/StaticMeshManager.h>
 #include <Base/XML/XMLTreeNode.h>
 #include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Renderer/Renderer.h>
 
 CMeshInstanceComponent::CMeshInstanceComponent(const std::string& name, CElement* Owner)
 	: CComponent(name, Owner)
@@ -24,7 +25,21 @@ CMeshInstanceComponent::CMeshInstanceComponent(const std::string& name, CXMLTree
 
 	std::string layers = node.GetPszProperty("layers", "default", false);
 
-	// Todo: separar layers i apuntar-se al render de cada un
+	// separar layers i apuntar-se al render de cada un
+	char prev = ' ';
+	for (char c : layers)
+	{
+		if (c != ' ' && prev == ' ')
+		{
+			m_layers.push_back("");
+		}
+
+		if (c != ' ')
+		{
+			m_layers.back() += c;
+		}
+		prev = c;
+	}
 }
 
 void CMeshInstanceComponent::SetStaticMesh(const std::string& coreName)
@@ -38,8 +53,12 @@ CMeshInstanceComponent::~CMeshInstanceComponent()
 void CMeshInstanceComponent::Render(CContextManager&  _context)
 {
 	// TODO Change to use the Renderer
-	CEffectManager::m_SceneParameters.m_World = GetOwner()->GetTransform();
-	m_StaticMesh->Render( &_context );
+	//CEffectManager::m_SceneParameters.m_World = GetOwner()->GetTransform();
+	//m_StaticMesh->Render( &_context );
+	for (auto &const layer : m_layers)
+	{
+		CEngine::GetSingleton().getRenderer()->AddRenderableToRender(layer, m_StaticMesh, GetOwner()->GetTransform());
+	}
 }
 
 void CMeshInstanceComponent::Destroy()

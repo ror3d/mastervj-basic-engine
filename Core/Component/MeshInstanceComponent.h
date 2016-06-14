@@ -7,6 +7,8 @@ class CMeshInstanceComponent :
 	public CComponent
 {
 	CMesh *m_StaticMesh;
+	std::vector<std::string> m_layers;
+
 public:
 	CMeshInstanceComponent(const std::string& name, CElement* Owner);
 	CMeshInstanceComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);

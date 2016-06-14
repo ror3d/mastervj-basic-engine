@@ -6,6 +6,7 @@ class CAnimatedInstanceComponent :
 	public CComponent
 {
 	CAnimatedMeshInstance *m_AnimatedMeshInstance;
+	std::vector<std::string> m_layers;
 public:
 	CAnimatedInstanceComponent(const std::string& name, CElement* Owner);
 	CAnimatedInstanceComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);

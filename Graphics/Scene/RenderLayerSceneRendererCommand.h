@@ -9,6 +9,7 @@ class CRenderLayerSceneRendererCommand : public CSceneRendererCommand
 {
 private:
 	CRenderableObjectsManager *m_Layer;
+	std::string m_layerName;
 public:
 	CRenderLayerSceneRendererCommand(CXMLTreeNode &TreeNode);
 	void Execute(CContextManager &_context);

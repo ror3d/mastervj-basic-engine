@@ -5,12 +5,12 @@
 #include <string>
 #include <Base/Math/Math.h>
 
-class CMesh;
+class IRenderable;
 class CContextManager;
 
 class CRenderer
 {
-	typedef std::map<CMesh*, std::vector<Mat44f>> Layer_t;
+	typedef std::map<IRenderable*, std::vector<Mat44f>> Layer_t;
 	typedef std::map<std::string, Layer_t> LayerMap_t;
 
 	LayerMap_t m_Layers;
@@ -23,8 +23,10 @@ public:
 
 	void EndRender();
 
-	void AddMeshToRender(const std::string& layer, CMesh* mesh, const Mat44f& transf);
+	void AddRenderableToRender(const std::string& layer, IRenderable* mesh, const Mat44f& transf);
 
 	void RenderLayer(const std::string& layer, CContextManager *context);
+
+	void destroy() {}
 };
 

@@ -28,6 +28,7 @@ class CSoundManager;
 class CLogicManager;
 class CStaticMeshLoader;
 class CAnimatedMeshManager;
+class CRenderer;
 
 class CEngine : public CSingleton<CEngine>
 {
@@ -58,6 +59,7 @@ private:
 	CLogicManager * logicManager;
 	CStaticMeshLoader * meshLoader;
 	CAnimatedMeshManager * animatedMeshManager;
+	CRenderer * renderer;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -92,4 +94,5 @@ public:
 	inline CLogicManager * getLogicManager() const { return logicManager;  }
 	inline CStaticMeshLoader * getMeshLoader() const { return meshLoader;  }
 	inline CAnimatedMeshManager * getAnimatedMeshManager() const { return animatedMeshManager; }
+	inline CRenderer * getRenderer() const { return renderer; }
 };
