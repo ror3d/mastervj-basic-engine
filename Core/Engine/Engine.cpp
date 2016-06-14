@@ -24,6 +24,7 @@
 #include <Sound/SoundManager.h>
 #include <Core/Logic/LogicManager.h>
 #include <Graphics/Renderer/Renderer.h>
+#include <Core/Scene/SceneManager.h>
 
 #ifndef CHECKED_DESTROY
 #define CHECKED_DESTROY(x) do{ if(x) { x->destroy(); delete x; x = nullptr; } } while(0)
@@ -53,6 +54,7 @@ CEngine::CEngine()
 	, meshLoader(nullptr)
 	, animatedMeshManager(nullptr)
 	, renderer(nullptr)
+	, sceneManager(nullptr)
 {
 }
 CEngine::~CEngine()
@@ -81,6 +83,7 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(meshLoader);
 	CHECKED_DESTROY(animatedMeshManager);
 	CHECKED_DESTROY(renderer);
+	CHECKED_DESTROY(sceneManager);
 
 } //Destruimos vars
 
@@ -110,4 +113,5 @@ void CEngine::Init()
 	meshLoader = new CStaticMeshLoader();
 	animatedMeshManager = new CAnimatedMeshManager();
 	renderer = new CRenderer();
+	sceneManager = new CSceneManager();
 }

@@ -2,6 +2,7 @@
 
 #include <Core/Engine/Engine.h>
 #include <Base/XML/XMLTreeNode.h>
+#include "Element.h"
 
 CScene::CScene()
 {
@@ -26,5 +27,8 @@ void CScene::Load(const std::string& file)
 		{
 			continue;
 		}
+
+		auto elem = new CElement(obj);
+		m_Elements.push_back(elem);
 	}
 }

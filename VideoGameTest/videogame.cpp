@@ -215,9 +215,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	// Añadir aquí el Init de la applicacioón
 
-	CSceneManager sceneManager;
-	sceneManager.Initialize( "Data\\Scenes\\" );
-
 	engine.Init();
 	engine.getPhysXManager()->InitPhysx();
 
@@ -238,6 +235,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	//engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
+	engine.getSceneManager()->Initialize("Data\\Scenes\\");
 	//engine.getTriggerManager()->Load("Data\\triggers.xml");
 	//engine.getSoundManager()->Init();
 	//engine.getSoundManager()->initBanks();
