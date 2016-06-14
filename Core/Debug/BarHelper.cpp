@@ -224,15 +224,15 @@ void CBarHelper::CreateParticleParametersBar(CParticleSystemClass * particle, CP
 	AddSeparator(bar);
 	AddRangeFloat(bar, "size", &particle->size, "min=0 max=5 step=0.1 precision=1");
 	AddSeparator(bar);
-	AddRangeVect3f(bar, "velocity", &particle->startVelocity, "min=-1 max=1 step=0.1 precision=1");
+	AddRangeVect3f(bar, "velocity", &particle->startVelocity, "min=-50 max=50 step=0.1 precision=1");
 	AddSeparator(bar);
-	AddRangeVect3f(bar, "acceleration", &particle->acceleration, "min=-1 max=1 step=0.1 precision=1");
+	AddRangeVect3f(bar, "acceleration", &particle->acceleration, "min=-50 max=50 step=0.1 precision=1");
 	AddSeparator(bar);
 	AddRangeFloat(bar, "angle", &particle->startAngle, "min=0 max=360 step=0.5 precision=1");
 	AddSeparator(bar);
-	AddRangeFloat(bar, "angle speed", &particle->angleSpeed, "min=-1 max=1 step=0.1 precision=1");
+	AddRangeFloat(bar, "angle speed", &particle->angleSpeed, "min=-50 max=50 step=0.1 precision=1");
 	AddSeparator(bar);
-	AddRangeFloat(bar, "angle acceleration", &particle->angleAcceleration, "min=-1 max=1 step=0.1 precision=1");
+	AddRangeFloat(bar, "angle acceleration", &particle->angleAcceleration, "min=-50 max=50 step=0.1 precision=1");
 	AddSeparator(bar);
 	AddRangeFloat(bar, "life", &particle->life, "min=1 max=5 step=1 precision=0");
 	AddSeparator(bar);
@@ -240,6 +240,7 @@ void CBarHelper::CreateParticleParametersBar(CParticleSystemClass * particle, CP
 	AddBoolParameter(bar, "hsl", &particle->color.first.HSL);
 	AddRangeColor(bar, "color", &particle->color, "min=0.0 max=1.0 step=0.01 precision=2");
 	AddSeparator(bar);
+
 
 	CDebugHelper::GetDebugHelper()->RegisterBar(bar);
 }
