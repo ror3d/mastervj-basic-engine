@@ -13,6 +13,7 @@ class CPhysxComponent;
 class CTriggerComponent;
 class CFPSCameraComponent;
 class CRenderableComponent;
+class CAnimatedInstanceComponent;
 
 class CElement : public CNamed
 {
@@ -54,6 +55,7 @@ public:
 
 	void SendMsg(const std::string message);
 
+	CAnimatedInstanceComponent* GetAnimatedInstanceComponent();
 	CCharacterControllerComponent* GetCharacterController();
 	CPhysxComponent * GetPhysxComponent();
 	CTriggerComponent * GetTriggerComponent();

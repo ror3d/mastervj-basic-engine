@@ -14,6 +14,7 @@
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/AnimatedInstanceComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Time/TimeManager.h>
@@ -264,8 +265,16 @@ void CScriptManager::RegisterLUAFunctions()
 			"IsEnabled", &CElement::GetEnabled,
 			"GetCamera", &CElement::GetCamera,
 			"GetCharacterController", &CElement::GetCharacterController,
+			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
 			"GetTriggerComponent", &CElement::GetTriggerComponent);
 			
+	(*m_state)["CAnimatedInstanceComponent"]
+		.SetClass<CAnimatedInstanceComponent, const std::string&, CElement*>(
+			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
+			"BlendCycle", &CAnimatedInstanceComponent::BlendCycle,
+			"ClearCycle", &CAnimatedInstanceComponent::ClearCycle,
+			"IsCycleAnimationActive", &CAnimatedInstanceComponent::IsCycleAnimationActive,
+			"IsActionAnimationActive", &CAnimatedInstanceComponent::IsActionAnimationActive);
 
 	(*m_state)["CCharacterControllerComponent"]
 		.SetClass<CCharacterControllerComponent, const std::string&, CElement*>(

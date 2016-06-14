@@ -14,6 +14,7 @@
 #include <Core/Component/MeshInstanceComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
 #include <Core/Component/ParticleEmitterComponent.h>
+#include <Core/Component/AnimatedInstanceComponent.h>
 
 CElement::CElement()
 	: m_Scale(1.0f, 1.0f, 1.0f)
@@ -188,6 +189,16 @@ CTriggerComponent * CElement::GetTriggerComponent()
 	if (comp)
 	{
 		return dynamic_cast<CTriggerComponent*>(comp);
+	}
+	return nullptr;
+}
+
+CAnimatedInstanceComponent * CElement::GetAnimatedInstanceComponent()
+{
+	auto comp = m_componentContainer.get(getName() + "_AnimatedInstance");
+	if (comp)
+	{
+		return dynamic_cast<CAnimatedInstanceComponent*>(comp);
 	}
 	return nullptr;
 }

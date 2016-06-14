@@ -8,6 +8,15 @@ CScene::CScene()
 {
 }
 
+CScene::~CScene()
+{
+	for (auto &const p : m_Elements)
+	{
+		delete p;
+	}
+	m_Elements.clear();
+}
+
 void CScene::Load(const std::string& file)
 {
 	CXMLTreeNode scene;
