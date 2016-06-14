@@ -3,11 +3,11 @@
 #include "CinematicObjectKeyFrame.h"
 
 #include "Core/Engine/Engine.h"
-#include "Renderable/RenderableObjectsManager.h"
-#include <Graphics/Layer/LayerManager.h>
+//#include "Renderable/RenderableObjectsManager.h"
+//#include <Graphics/Layer/LayerManager.h>
 #include <Core/Component/PhysxComponent.h>
 
-#include "Renderable/RenderableObject.h"
+//#include "Renderable/RenderableObject.h"
 
 #include <XML/XMLTreeNode.h>
 
@@ -26,8 +26,8 @@ CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 		m_Cycle = false;
 		//TODO: anim reverse
 	}
-	
-	m_RenderableObject = CEngine::GetSingleton().getLayerManager()->getDefaultLayer()->get(m_name);
+	//TODO(roc)
+//	m_RenderableObject = CEngine::GetSingleton().getLayerManager()->getDefaultLayer()->get(m_name);
 
 
 	float duration = 0;
@@ -89,12 +89,14 @@ void CCinematicObject::Update( float ElapsedTime )
 		t = ( getCurrentTime() - current->getKeyFrameTime() ) / ( next->getKeyFrameTime() - current->getKeyFrameTime() );
 	}
 
+	/* TODO(roc)
 	m_RenderableObject->SetPosition(mathUtils::Lerp(current->GetPosition(), next->GetPosition(), t));
 	Quatf q = current->GetQuat();
 	q.SLerp(t, next->GetQuat());
 	m_RenderableObject->SetQuat(q);
 	m_RenderableObject->SetScale( mathUtils::Lerp( current->GetScale(), next->GetScale(), t ) );
 	m_RenderableObject->Update(0);	
+	*/
 }
 
 

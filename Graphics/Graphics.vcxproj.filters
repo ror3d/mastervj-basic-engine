@@ -31,9 +31,6 @@
     <Filter Include="Mesh">
       <UniqueIdentifier>{2ed9f5ff-a653-44ab-b55b-ca92fc656898}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Layer">
-      <UniqueIdentifier>{ad4c5457-233c-4415-95db-8df8e16e5f6f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{e3e1ef91-2d26-4dd8-8610-9fc48e95c60c}</UniqueIdentifier>
     </Filter>
@@ -109,18 +106,6 @@
     <ClInclude Include="Light\LightManager.h">
       <Filter>Light</Filter>
     </ClInclude>
-    <ClInclude Include="Animation\AnimatedCoreModel.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation\AnimatedModelManager.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderable\RenderableObject.h">
-      <Filter>Renderable</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderable\RenderableObjectsManager.h">
-      <Filter>Renderable</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\3DElement.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -132,9 +117,6 @@
     </ClInclude>
     <ClInclude Include="Renderable\PoolRenderableObjectTechnique.h">
       <Filter>Renderable</Filter>
-    </ClInclude>
-    <ClInclude Include="Layer\LayerManager.h">
-      <Filter>Layer</Filter>
     </ClInclude>
     <ClInclude Include="Texture\CaptureFrameBufferTexture.h">
       <Filter>Texture</Filter>
@@ -256,9 +238,6 @@
     <ClInclude Include="Mesh\CookedMeshmanager.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Animation\AnimatedInstanceModel.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
     <ClInclude Include="Effect\EffectGeometryShader.h">
       <Filter>Effect</Filter>
     </ClInclude>
@@ -273,9 +252,6 @@
     </ClInclude>
     <ClInclude Include="Cinematics\CinematicManager.h">
       <Filter>Cinematic</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderable\MeshInstance.h">
-      <Filter>Renderable</Filter>
     </ClInclude>
     <ClInclude Include="Mesh\VertexTypes.h">
       <Filter>Mesh</Filter>
@@ -295,11 +271,13 @@
     <ClInclude Include="Animation\AnimatedMesh.h">
       <Filter>Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Animation\AnimatedMeshInstance.h" />
     <ClInclude Include="Renderable\Renderable.h">
       <Filter>Renderable</Filter>
     </ClInclude>
     <ClInclude Include="Animation\AnimatedMeshManager.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimatedMeshInstance.h">
       <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
@@ -356,12 +334,6 @@
     <ClCompile Include="Light\LightManager.cpp">
       <Filter>Light</Filter>
     </ClCompile>
-    <ClCompile Include="Renderable\RenderableObject.cpp">
-      <Filter>Renderable</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderable\RenderableObjectsManager.cpp">
-      <Filter>Renderable</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\3DElement.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -370,12 +342,6 @@
     </ClCompile>
     <ClCompile Include="Mesh\StaticMeshManager.cpp">
       <Filter>Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation\AnimatedCoreModel.cpp">
-      <Filter>Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation\AnimatedModelManager.cpp">
-      <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="Cinematics\CameraKey.cpp">
       <Filter>Cinematic</Filter>
@@ -397,9 +363,6 @@
     </ClCompile>
     <ClCompile Include="Texture\CaptureFrameBufferTexture.cpp">
       <Filter>Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Layer\LayerManager.cpp">
-      <Filter>Layer</Filter>
     </ClCompile>
     <ClCompile Include="Texture\DynamicTexture.cpp">
       <Filter>Texture</Filter>
@@ -500,9 +463,6 @@
     <ClCompile Include="Mesh\CookedMeshManager.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Animation\AnimatedInstanceModel.cpp">
-      <Filter>Animation</Filter>
-    </ClCompile>
     <ClCompile Include="Effect\EffectGeometryShader.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
@@ -518,9 +478,6 @@
     <ClCompile Include="Cinematics\CinematicManager.cpp">
       <Filter>Cinematic</Filter>
     </ClCompile>
-    <ClCompile Include="Renderable\MeshInstance.cpp">
-      <Filter>Renderable</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -533,8 +490,10 @@
     <ClCompile Include="Animation\AnimatedMesh.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
-    <ClCompile Include="Animation\AnimatedMeshInstance.cpp" />
     <ClCompile Include="Animation\AnimatedMeshManager.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimatedMeshInstance.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>

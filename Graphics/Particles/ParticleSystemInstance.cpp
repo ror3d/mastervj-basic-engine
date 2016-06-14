@@ -36,8 +36,7 @@ CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, ra
 }
 
 CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
-	: CRenderableObject(treeNode)
-	, m_activeParticles(0)
+	: m_activeParticles(0)
 	, m_toCreateParticles(0)
 	, m_randomEngine(rnd())
 	, m_unitDist(0, 1)
@@ -95,7 +94,8 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		ParticleData &p = m_particles[m_activeParticles];
 		m_activeParticles++;
 
-		p.pos = GetPosition();
+		// TODO(roc)
+		//p.pos = GetPosition();
 		p.vel = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startVelocity);
 		p.acc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->acceleration);
 		p.size = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->size);

@@ -3,12 +3,10 @@
 #include <Graphics/Mesh/StaticMeshManager.h>
 #include <Graphics/Mesh/StaticMeshLoader.h>
 #include <Graphics/Mesh/CookedMeshManager.h>
-#include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Light/LightManager.h>
-#include <Graphics/Animation/AnimatedModelManager.h>
 #include <Graphics/Animation/AnimatedMeshManager.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
@@ -16,7 +14,6 @@
 #include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
-#include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
@@ -35,18 +32,15 @@
 CEngine::CEngine()
 	: effectsManager(nullptr)
 	, materialManager(nullptr)
-	, layerManager(nullptr)
 	, staticMeshManager(nullptr)
 	, textureManager(nullptr)
 	, lightManager(nullptr)
 	, debugRender(nullptr)
-	, animatedModelManager(nullptr)
 	, renderableObjectTechniqueManager(nullptr)
 	, sceneRendererCommandManager(nullptr)
 	, cameraManager(nullptr)
 	, physXManager(nullptr)
 	, cookedMeshManager(nullptr)
-	, iaManager(nullptr)
 	, scriptManager(nullptr)
 	, timerManager(nullptr)
 	, componentManager(nullptr)
@@ -63,7 +57,6 @@ CEngine::CEngine()
 }
 CEngine::~CEngine()
 {
-	CHECKED_DESTROY(layerManager);
 	CHECKED_DESTROY(componentManager);
 	CHECKED_DESTROY(scriptManager);
 	CHECKED_DESTROY(effectsManager);
@@ -71,14 +64,12 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(materialManager);
 	CHECKED_DESTROY(staticMeshManager);
 	CHECKED_DESTROY(lightManager);
-	CHECKED_DESTROY(animatedModelManager);
 	CHECKED_DESTROY(renderableObjectTechniqueManager);
 	CHECKED_DESTROY(sceneRendererCommandManager);
 	CHECKED_DESTROY(physXManager);
 	CHECKED_DESTROY(cameraManager);
 	CHECKED_DESTROY(contextManager);
 	CHECKED_DESTROY(cookedMeshManager);
-	CHECKED_DESTROY(iaManager);
 	CHECKED_DESTROY(debugRender);
 	CHECKED_DESTROY(timerManager);
 	CHECKED_DESTROY(particleManager);
@@ -98,18 +89,15 @@ void CEngine::Init()
 	effectsManager = new CEffectManager();
 	textureManager = new CTextureManager();
 	materialManager = new CMaterialManager();
-	layerManager = new CLayerManager();
 	staticMeshManager = new CStaticMeshManager();
 	contextManager = new CContextManager();
 	debugRender = new CDebugRender();
 	lightManager = new CLightManager();
-	animatedModelManager = new CAnimatedModelManager();
 	renderableObjectTechniqueManager = new CRenderableObjectTechniqueManager();
 	sceneRendererCommandManager = new CSceneRendererCommandManager();
 	cameraManager = new CCameraManager(contextManager);
 	physXManager = CPhysXManager::CreatePhysXManager();
 	cookedMeshManager = new CCookedMeshManager();
-	iaManager = new CIAManager();
 	scriptManager = new CScriptManager();
 	timerManager = new CTimerManager();
 	componentManager = new CComponentManager();

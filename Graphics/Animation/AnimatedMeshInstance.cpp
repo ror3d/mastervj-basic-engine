@@ -1,6 +1,5 @@
 #include "AnimatedMeshInstance.h"
 #include "AnimatedMesh.h"
-#include "AnimatedCoreModel.h"
 
 #include "AnimatedMeshManager.h"
 

@@ -4,7 +4,6 @@
 #include "Context/ContextManager.h"
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Effect/EffectManager.h>
-#include <Graphics/Layer/LayerManager.h>
 #include <Base/XML/XMLTreeNode.h>
 
 #include "Camera/Camera.h"
@@ -39,7 +38,8 @@ CLight::CLight(const CXMLTreeNode &TreeNode)
 	for (int i = 0; i< light.GetNumChildren(); i++){
 		CXMLTreeNode layer = light(i);
 		if (layer.GetName() == std::string("layer")){
-			m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(layer.GetPszProperty("name")));
+			// TODO(roc)
+			//m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(layer.GetPszProperty("name")));
 		}
 	}
 }

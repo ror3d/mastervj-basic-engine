@@ -18,12 +18,10 @@
 
 #include <Graphics/Mesh/StaticMeshManager.h>
 #include <Graphics/Mesh/CookedMeshManager.h>
-#include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Light/LightManager.h>
-#include <Graphics/Animation/AnimatedModelManager.h>
 #include <Graphics/Animation/AnimatedMeshManager.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
@@ -31,7 +29,6 @@
 #include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
-#include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
@@ -249,7 +246,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	//C3DElement l_speaker = {};
 	//CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
 	//engine.getSoundManager()->PlayEvent()
-	engine.getIAManager()->Create();
 
 
 
@@ -305,7 +301,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 				m_PreviousTime = l_CurrentTime;
 
 				application.Update(l_ElapsedTime);
-				engine.getIAManager()->Update(l_ElapsedTime);
 				application.Render();
 				inputManager.EndFrame();
 			}

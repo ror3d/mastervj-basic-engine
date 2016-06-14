@@ -10,9 +10,6 @@
 #include "Core/Engine/Engine.h"
 #include "Core/Input/InputManager.h"
 #include "Graphics/Camera/FPSCameraController.h"
-#include <Graphics/Renderable/RenderableObject.h>
-#include <Graphics/Renderable/RenderableObjectsManager.h>
-#include <Graphics/Animation/AnimatedInstanceModel.h>
 #include <Core/Component/ComponentManager.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/ScriptedComponent.h>
@@ -22,7 +19,6 @@
 #include <Core/Time/TimeManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
-#include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>

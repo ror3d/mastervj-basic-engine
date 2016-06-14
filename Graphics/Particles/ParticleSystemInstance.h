@@ -1,7 +1,6 @@
 #ifndef PARTICLE_SYSTEM_INSTANCE_H
 #define PARTICLE_SYSTEM_INSTANCE_H
 
-#include "Renderable/RenderableObject.h"
 #include "Mesh/VertexTypes.h"
 
 #include <Base/Math/Math.h>
@@ -11,9 +10,11 @@
 
 class CParticleSystemClass;
 class CRenderableVertexs;
+class CXMLTreeNode;
+class CContextManager;
 
 
-class CParticleSystemInstance : public CRenderableObject
+class CParticleSystemInstance
 {
 public:
 	static const int MAX_PARTICLES_PER_EMITTER = 200;

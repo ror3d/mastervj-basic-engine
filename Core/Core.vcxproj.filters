@@ -19,12 +19,6 @@
     <ClCompile Include="Debug\DebugPerf.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="IA\IAInstance.cpp">
-      <Filter>IA</Filter>
-    </ClCompile>
-    <ClCompile Include="IA\IAManager.cpp">
-      <Filter>IA</Filter>
-    </ClCompile>
     <ClCompile Include="Component\ComponentManager.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -84,9 +78,6 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{55c8f47a-5678-4955-a640-097052f5e424}</UniqueIdentifier>
     </Filter>
-    <Filter Include="IA">
-      <UniqueIdentifier>{9771c5ca-a1ea-42db-a224-ca3baf886b2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Time">
       <UniqueIdentifier>{8270adc5-4da3-4b07-bf39-5e0dec98d80a}</UniqueIdentifier>
     </Filter>
@@ -121,12 +112,6 @@
     </ClInclude>
     <ClInclude Include="Debug\DebugPerf.h">
       <Filter>Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="IA\IAInstance.h">
-      <Filter>IA</Filter>
-    </ClInclude>
-    <ClInclude Include="IA\IAManager.h">
-      <Filter>IA</Filter>
     </ClInclude>
     <ClInclude Include="Component\ComponentManager.h">
       <Filter>Component</Filter>

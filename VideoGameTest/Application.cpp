@@ -4,8 +4,6 @@
 
 #include <Core/Engine/Engine.h>
 
-#include <Graphics/Layer/LayerManager.h>
-#include <Graphics/Animation/AnimatedModelManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Camera/CameraManager.h>
@@ -16,11 +14,7 @@
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
 
-
-
 #include <Graphics/Camera/FPSCameraController.h>
-#include "Animation/AnimatedInstanceModel.h"
-#include "Animation/AnimatedCoreModel.h"
 
 #include <Core/Input/InputManager.h>
 #include <Core/Input/InputManagerImplementation.h>
@@ -56,7 +50,7 @@ void CApplication::Update(float _ElapsedTime)
 	m_Timer += _ElapsedTime;
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
 
-	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
+//	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
 	//CCamera l_Camera = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
