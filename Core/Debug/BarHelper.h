@@ -11,11 +11,10 @@ public:
 	static void CreateParticleParametersBar(CParticleSystemClass * particle, CParticleSystemInstance * particleInstance);
 	static void AddFloatParameter(CDebugHelper::SDebugBar &bar, std::string name, float *value, std::string params);
 	static void AddIntParameter(CDebugHelper::SDebugBar &bar, std::string name, int *value, std::string params);
-	static void AddBoolParameter(CDebugHelper::SDebugBar &bar, std::string name, bool *value);
+	static void AddBoolParameter(CDebugHelper::SDebugBar &bar, std::string name, bool *value, CDebugHelper::Mode mode);
 	static void AddSeparator(CDebugHelper::SDebugBar &bar);
 	static void AddLabel(CDebugHelper::SDebugBar &bar, std::string name);
-	static void AddButtonTexture(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, CParticleSystemClass *value);
-	static void AddColor(CDebugHelper::SDebugBar &bar, std::string name, CColor *value, std::string params);
+	static void AddButtonParticle(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, CParticleSystemClass *value);
 	static void AddButtonFloat(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<float> *value);
 	static void AddButtonColor(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<CColor> *value);
 	static void AddButtonVect3f(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<Vect3f> *value);

@@ -297,3 +297,15 @@ void TW_CALL CBarCalls::DeleteParticle(void *part)
 
 	CBarHelper::ReloadBars();
 }
+
+void TW_CALL CBarCalls::ChangeColorSpace(void *part)
+{
+	CParticleSystemClass * particle = (CParticleSystemClass*)part;
+
+	particle->color.first.ToggleColorSpace();
+	particle->color.second.ToggleColorSpace();
+
+	CBarHelper::ReloadBars();
+
+	OpenParticleParameters(particle);
+}

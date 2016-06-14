@@ -12,52 +12,52 @@
 
 class CColor : public Vect4f
 {
-
 public:
-  // ------------
-  // Construcci??n
-  // ------------
-  explicit CColor()															:Vect4f(1.0f, 1.0f, 1.0f, 1.0f)  {}
-  explicit CColor (const Vect4f& vect)										:Vect4f(vect)                    {}
-  explicit CColor(float red, float green, float blue, float alpha = 1.0f)	:Vect4f(red, green, blue, alpha) {}
-	//inline   CColor (uint32 argb);
+	// ------------
+	// Construcción
+	// ------------
+	explicit CColor(bool hsl = false) : Vect4f(1.0f, 1.0f, 1.0f, 1.0f), HSL(hsl) {}
+	explicit CColor(const Vect4f& vect, bool hsl = false) : Vect4f(vect), HSL(hsl) {}
+	explicit CColor(float red, float green, float blue, float alpha = 1.0f, bool hsl = false) : Vect4f(red, green, blue, alpha), HSL(hsl) {}
 
-  inline CColor rgb2hsl();
-
+	inline void ToggleColorSpace();
+	inline CColor toHSL();
+	inline CColor toRGB();
+	bool HSL;
   // --------------------
   // Acceso a componentes
   // --------------------
 
-  inline float         GetRed         ()                   const { return x; }
-  inline void          SetRed         (float red)                { x = red; }
+	inline float GetRed() const { return x; }
+	inline void  SetRed(float red) { x = red; }
+				 
+	inline float GetGreen() const { return y; }
+	inline void  SetGreen(float green) { y = green; }
+				 
+	inline float GetBlue() const { return z; }
+	inline void  SetBlue(float blue) { z = blue; }
+				 
+	inline float GetAlpha() const { return w; }
+	inline void  SetAlpha(float alpha) { w = alpha; }
 
-  inline float         GetGreen       ()                   const { return y; }
-  inline void          SetGreen       (float green)              { y = green; }
+	inline const Vect4f& GetArgb () const { return *this; }
+	inline void SetArgb(const Vect4f& argb) { *this = (CColor)argb; }
 
-  inline float         GetBlue        ()                   const { return z; }
-  inline void          SetBlue        (float blue)               { z = blue; }
+	inline uint32_t GetUint32Abgr() const;
+	inline uint32_t GetUint32Argb() const;
 
-  inline float         GetAlpha       ()                   const { return w; }
-  inline void          SetAlpha       (float alpha)              { w = alpha; }
+	inline void SetUint32Argb(int32_t argb);
+	inline void SetUint32Abgr(int32_t argb);
 
-  inline const Vect4f& GetArgb        ()                   const { return *this; }
-  inline void          SetArgb(const Vect4f& argb)       { *this = (CColor)argb; }
+	inline CColor& Clamp();
 
-  inline uint32_t        GetUint32Abgr()										const;
-  inline uint32_t        GetUint32Argb()										const;
-
-  inline void          SetUint32Argb(int32_t argb);
-  inline void          SetUint32Abgr(int32_t argb);
-
-	inline CColor&			 Clamp();
-
-	inline CColor&			 Lerp(const CColor& other, float f);
+	inline CColor& Lerp(const CColor& other, float f);
 
 	// Operadores aritméticos   
-	inline        CColor  operator + (const CColor& otro)	const;
-	inline        CColor  operator - (const CColor& otro)	const;
-	inline        CColor  operator * (const CColor& otro)	const;
-	inline        CColor  operator * (float escalar)			const;
+	inline CColor operator + (const CColor& otro) const;
+	inline CColor operator - (const CColor& otro) const;
+	inline CColor operator * (const CColor& otro) const;
+	inline CColor operator * (float escalar) const;
 
 	// Operadores aritméticos de actualización   
 	inline CColor& operator += (const CColor& otro);

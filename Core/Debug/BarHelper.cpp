@@ -50,13 +50,13 @@ void CBarHelper::AddIntParameter(CDebugHelper::SDebugBar &bar, std::string name,
 	bar.variables.push_back(var);
 }
 
-void CBarHelper::AddBoolParameter(CDebugHelper::SDebugBar &bar, std::string name, bool *value)
+void CBarHelper::AddBoolParameter(CDebugHelper::SDebugBar &bar, std::string name, bool *value, CDebugHelper::Mode mode = CDebugHelper::READ_WRITE)
 {
 	CDebugHelper::SDebugVariable var = {};
 
 	var.name = name;
 	var.type = CDebugHelper::BOOL;
-	var.mode = CDebugHelper::READ_WRITE;
+	var.mode = mode;
 	var.pBool = value;
 
 	bar.variables.push_back(var);
@@ -84,28 +84,15 @@ void CBarHelper::AddLabel(CDebugHelper::SDebugBar &bar, std::string name)
 	bar.variables.push_back(var);
 }
 
-void CBarHelper::AddButtonTexture(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, CParticleSystemClass *value)
+void CBarHelper::AddButtonParticle(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, CParticleSystemClass *value)
 {
 	CDebugHelper::SDebugVariable var = {};
-
+	
 	var.name = name;
 	var.type = CDebugHelper::BUTTON;
 	var.callback = callback;
 	var.ptr = value;
 
-	bar.variables.push_back(var);
-}
-
-void CBarHelper::AddColor(CDebugHelper::SDebugBar &bar, std::string name, CColor *value, std::string params)
-{
-	CDebugHelper::SDebugVariable var = {};
-
-	var.name = name;
-	var.type = CDebugHelper::COLOR;
-	var.mode = CDebugHelper::READ_WRITE;
-	var.pColor = value;
-	var.params = params;
-	
 	bar.variables.push_back(var);
 }
 
@@ -152,11 +139,19 @@ void CBarHelper::AddRangeFloat(CDebugHelper::SDebugBar &bar, std::string name, r
 	AddFloatParameter(bar, "U " + name, &value->second, params);
 }
 
-void CBarHelper::AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColor> *value, std::string params = "")
+void CBarHelper::AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColor> *value, std::string params)
 {
 	AddButtonColor(bar, "E " + name, CBarCalls::EqualVarsColor, value);
-	AddColor(bar, "L " + name, &value->first, "colormode=hls");
-	AddColor(bar, "U " + name, &value->second, "colormode=hls");
+
+	AddFloatParameter(bar, "L " + name + " X", &value->first.x, params + " group='Lower " + name + "'");
+	AddFloatParameter(bar, "L " + name + " Y", &value->first.y, params + " group='Lower " + name + "'");
+	AddFloatParameter(bar, "L " + name + " Z", &value->first.z, params + " group='Lower " + name + "'");
+	AddFloatParameter(bar, "L " + name + " W", &value->first.w, params + " group='Lower " + name + "'");
+
+	AddFloatParameter(bar, "U " + name + " X", &value->second.x, params + " group='Upper " + name + "'");
+	AddFloatParameter(bar, "U " + name + " Y", &value->second.y, params + " group='Upper " + name + "'");
+	AddFloatParameter(bar, "U " + name + " Z", &value->second.z, params + " group='Upper " + name + "'");
+	AddFloatParameter(bar, "U " + name + " W", &value->second.w, params + " group='Upper " + name + "'");
 }
 
 void CBarHelper::AddRangeVect3f(CDebugHelper::SDebugBar &bar, std::string name, range<Vect3f> *value, std::string params = "")
@@ -215,7 +210,7 @@ void CBarHelper::CreateParticleParametersBar(CParticleSystemClass * particle, CP
 
 	bar.variables.push_back(var);
 
-	AddButtonTexture(bar, "Load texture", CBarCalls::LoadTexture, particleInstance->getParticleClass());
+	AddButtonParticle(bar, "Load texture", CBarCalls::LoadTexture, particleInstance->getParticleClass());
 	AddSeparator(bar);
 	AddFloatParameter(bar, "Emit rate", &particle->emitRate, "min=1 max=20 step=1 precision=0");
 	AddIntParameter(bar, "Num frames", &particle->numFrames, "min=1 max=30 step=1 precision=0");
@@ -241,7 +236,9 @@ void CBarHelper::CreateParticleParametersBar(CParticleSystemClass * particle, CP
 	AddSeparator(bar);
 	AddRangeFloat(bar, "life", &particle->life, "min=1 max=5 step=1 precision=0");
 	AddSeparator(bar);
-	AddRangeColor(bar, "color", &particle->color);
+	AddButtonParticle(bar, "toggle color space", CBarCalls::ChangeColorSpace, particle);
+	AddBoolParameter(bar, "hsl", &particle->color.first.HSL);
+	AddRangeColor(bar, "color", &particle->color, "min=0.0 max=1.0 step=0.01 precision=2");
 	AddSeparator(bar);
 
 	CDebugHelper::GetDebugHelper()->RegisterBar(bar);

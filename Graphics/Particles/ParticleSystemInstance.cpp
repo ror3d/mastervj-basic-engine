@@ -15,75 +15,6 @@
 
 std::random_device rnd;
 
-float Hue_2_RGB(float v1, float v2, float vH)             //Function Hue_2_RGB
-{
-	if (vH < 0) vH += 1;
-	if (vH > 1) vH -= 1;
-	if ((6 * vH) < 1) return (v1 + (v2 - v1) * 6 * vH);
-	if ((2 * vH) < 1) return (v2);
-	if ((3 * vH) < 2) return (v1 + (v2 - v1) * ((2 / 3) - vH) * 6);
-	return (v1);
-}
-
-CColor hsl2rgb(Vect3f Color_HSL)
-{
-	float H = Color_HSL.x * 360;
-	float S = Color_HSL.y;
-	float L = Color_HSL.z;
-	
-	Vect3f rgb;
-
-	float c = (1 - abs(2*L-1)) * S;
-	float x = c * (1 - abs(fmodf(H / 60, 2) - 1));
-	float m = L - c / 2;
-
-	if (H < 60)
-	{
-		rgb.x = c;
-		rgb.y = x;
-		rgb.z = 0;
-	}
-	else if (H < 120)
-	{
-		rgb.x = x;
-		rgb.y = c;
-		rgb.z = 0;
-	}
-	else if (H < 180)
-	{
-		rgb.x = 0;
-		rgb.y = c;
-		rgb.z = x;
-	}
-	else if (H < 240)
-	{
-		rgb.x = 0;
-		rgb.y = x;
-		rgb.z = c;
-	}
-	else if (H < 300)
-	{
-		rgb.x = x;
-		rgb.y = 0;
-		rgb.z = c;
-	}
-	else if (H < 360)
-	{
-		rgb.x = c;
-		rgb.y = 0;
-		rgb.z = x;
-	}
-
-	CColor r;
-	r.x = rgb.x + m;
-	r.y = rgb.y + m;
-	r.z = rgb.z + m;
-	r.w = 1.0f;
-
-	return r;
-
-}
-
 float getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<float> &rng)
 {
 	float r = ud(rnde);
@@ -99,11 +30,18 @@ Vect3f getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, ra
 
 CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<CColor> &rng)
 {
-	CColor hsl1 = rng.first.rgb2hsl();
-	CColor hsl2 = rng.second.rgb2hsl();
-	Vect3f hslr = getRand(rnde, ud, make_range(Vect3f(hsl1.x, hsl1.y, hsl1.z), Vect3f(hsl2.x, hsl2.y, hsl2.z)));
-	CColor r = hsl2rgb(hslr);
+	CColor c1 = rng.first;
+	CColor c2 = rng.second;
+	Vect3f hslr = getRand(rnde, ud, make_range(Vect3f(c1.x, c1.y, c1.z), Vect3f(c2.x, c2.y, c2.z)));
+
+	CColor r = CColor(hslr);
 	r.w = ud(rnde)*(rng.second.w - rng.first.w) + rng.second.w;
+
+	if (c1.HSL || c2.HSL)
+	{
+		r.ToggleColorSpace();
+	}
+
 	return r;
 }
 
@@ -177,7 +115,7 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		p.currentFrame = 0;
 		p.lifetime = 0;
 		p.totalLifetime = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->life);
-		p.color = getRand( m_randomEngine, m_unitDist, m_particleSystemClass->color );
+		p.color = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->color);
 	}
 
 	// Copy particles

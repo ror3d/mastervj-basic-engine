@@ -29,7 +29,7 @@ namespace
 	template<>
 	CColor getProp( const CXMLTreeNode& node, std::string prop, CColor defVal )
 	{
-		return CColor(node.GetVect4fProperty( prop.c_str(), Vect4f(defVal.x, defVal.y, defVal.z, defVal.w), false ));
+		return CColor(node.GetVect4fProperty(prop.c_str(), Vect4f(defVal.x, defVal.y, defVal.z, defVal.w), false), node.GetBoolProperty("hsl", false, false));
 	}
 
 	template<typename T>
@@ -68,8 +68,7 @@ CParticleSystemClass::CParticleSystemClass(const CXMLTreeNode& node)
 	numFrames = node.GetIntProperty("num_frames", 1, false);
 	timePerFrame = node.GetFloatProperty("time_per_frame", 0, false);
 	loopFrames = node.GetBoolProperty( "loop_frames", false, false );
-
-
+	
 	for ( int i = 0; i < node.GetNumChildren(); ++i )
 	{
 		CXMLTreeNode prop = node( i );
@@ -103,9 +102,9 @@ CParticleSystemClass::CParticleSystemClass(const CXMLTreeNode& node)
 		{
 			angleAcceleration = getRangeValue<float>( prop );
 		}
-		else if ( type == "color" )
+		else if (type == "color")
 		{
-			color = getRangeValue<CColor>( prop );
+			color = getRangeValue<CColor>(prop);
 		}
 		else if ( type == "life" )
 		{
@@ -219,21 +218,23 @@ void AddVect3fRangeValue(CXMLTreeNode &xml, std::string name, range<Vect3f> valu
 	xml.EndElement();
 }
 
-void AddColorRangeValue(CXMLTreeNode &xml, std::string name, range<CColor> value)
+void AddColorRangeValue(CXMLTreeNode &xml, std::string name, CParticleSystemClass* particle)
 {
-	if (value.first == value.second)
+	if (particle->color.first == particle->color.second)
 	{
 		xml.StartElement("value");
 		xml.WritePszProperty("name", name.c_str());
-		xml.WriteVect4fProperty("value", value.first);
+		xml.WriteVect4fProperty("value", particle->color.first);
 	}
 	else
 	{
 		xml.StartElement("range");
 		xml.WritePszProperty("name", name.c_str());
-		xml.WriteVect4fProperty("lower", value.first);
-		xml.WriteVect4fProperty("upper", value.second);
+		xml.WriteVect4fProperty("lower", particle->color.first);
+		xml.WriteVect4fProperty("upper", particle->color.second);
 	}
+
+	xml.WriteBoolProperty("hsl", particle->color.first.HSL);
 
 	xml.EndElement();
 }
@@ -270,7 +271,8 @@ void CParticleSystemManager::writeFile()
 			AddFloatRangeValue(NewXML, "angle", particle->startAngle);
 			AddFloatRangeValue(NewXML, "angle_speed", particle->angleSpeed);
 			AddFloatRangeValue(NewXML, "angle_acceleration", particle->angleAcceleration);
-			AddColorRangeValue(NewXML, "color", particle->color);
+			AddColorRangeValue(NewXML, "color", particle);
+
 			AddFloatRangeValue(NewXML, "life", particle->life);
 
 			NewXML.EndElement();
