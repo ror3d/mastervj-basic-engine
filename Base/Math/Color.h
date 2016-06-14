@@ -16,14 +16,10 @@ public:
 	// ------------
 	// Construcción
 	// ------------
-	explicit CColor(bool hsl = false) : Vect4f(1.0f, 1.0f, 1.0f, 1.0f), HSL(hsl) {}
-	explicit CColor(const Vect4f& vect, bool hsl = false) : Vect4f(vect), HSL(hsl) {}
-	explicit CColor(float red, float green, float blue, float alpha = 1.0f, bool hsl = false) : Vect4f(red, green, blue, alpha), HSL(hsl) {}
+	explicit CColor() : Vect4f(1.0f, 1.0f, 1.0f, 1.0f) {}
+	explicit CColor(const Vect4f& vect) : Vect4f(vect) {}
+	explicit CColor(float red, float green, float blue, float alpha = 1.0f) : Vect4f(red, green, blue, alpha) {}
 
-	inline void ToggleColorSpace();
-	inline CColor toHSL();
-	inline CColor toRGB();
-	bool HSL;
   // --------------------
   // Acceso a componentes
   // --------------------

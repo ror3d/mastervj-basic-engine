@@ -28,21 +28,16 @@ Vect3f getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, ra
 	return r + rng.first;
 }
 
-CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<CColor> &rng)
+CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<CColorSpace> &rng)
 {
-	CColor c1 = rng.first;
-	CColor c2 = rng.second;
+	CColorSpace c1 = rng.first;
+	CColorSpace c2 = rng.second;
 	Vect3f hslr = getRand(rnde, ud, make_range(Vect3f(c1.x, c1.y, c1.z), Vect3f(c2.x, c2.y, c2.z)));
 
-	CColor r = CColor(hslr);
+	CColorSpace r = CColorSpace(hslr, c1.HSL);
 	r.w = ud(rnde)*(rng.second.w - rng.first.w) + rng.second.w;
 
-	if (c1.HSL || c2.HSL)
-	{
-		r.ToggleColorSpace();
-	}
-
-	return r;
+	return r.toRGB();
 }
 
 CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)

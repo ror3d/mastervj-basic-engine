@@ -27,9 +27,9 @@ namespace
 	}
 
 	template<>
-	CColor getProp( const CXMLTreeNode& node, std::string prop, CColor defVal )
+	CColorSpace getProp(const CXMLTreeNode& node, std::string prop, CColorSpace defVal)
 	{
-		return CColor(node.GetVect4fProperty(prop.c_str(), Vect4f(defVal.x, defVal.y, defVal.z, defVal.w), false), node.GetBoolProperty("hsl", false, false));
+		return CColorSpace(node.GetVect4fProperty(prop.c_str(), Vect4f(defVal.x, defVal.y, defVal.z, defVal.w), false), node.GetBoolProperty("hsl", false, false));
 	}
 
 	template<typename T>
@@ -104,7 +104,7 @@ CParticleSystemClass::CParticleSystemClass(const CXMLTreeNode& node)
 		}
 		else if (type == "color")
 		{
-			color = getRangeValue<CColor>(prop);
+			color = getRangeValue<CColorSpace>(prop);
 		}
 		else if ( type == "life" )
 		{

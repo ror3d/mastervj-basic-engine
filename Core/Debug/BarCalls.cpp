@@ -195,7 +195,7 @@ void TW_CALL CBarCalls::EqualVarsFloat(void *rng)
 
 void TW_CALL CBarCalls::EqualVarsColor(void *rng)
 {
-	range<CColor>* rang = (range<CColor>*) rng;
+	range<CColorSpace>* rang = (range<CColorSpace>*) rng;
 
 	rang->second = rang->first;
 }

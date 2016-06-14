@@ -4,7 +4,7 @@
 #include <Base/Utils/TMapManager.h>
 #include <Base/Utils/Named.h>
 #include <Base/Math/Math.h>
-#include <Base/Math/Color.h>
+#include <Base/Math/ColorSpace.h>
 
 class CMaterial;
 class CXMLTreeNode;
@@ -55,7 +55,7 @@ public:
 	range<float> startAngle;
 	range<float> angleSpeed;
 	range<float> angleAcceleration;
-	range<CColor> color;
+	range<CColorSpace> color;
 };
 
 

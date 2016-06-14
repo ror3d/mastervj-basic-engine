@@ -108,7 +108,7 @@ void CBarHelper::AddButtonFloat(CDebugHelper::SDebugBar &bar, std::string name, 
 	bar.variables.push_back(var);
 }
 
-void CBarHelper::AddButtonColor(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<CColor> *value)
+void CBarHelper::AddButtonColor(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<CColorSpace> *value)
 {
 	CDebugHelper::SDebugVariable var = {};
 
@@ -139,7 +139,7 @@ void CBarHelper::AddRangeFloat(CDebugHelper::SDebugBar &bar, std::string name, r
 	AddFloatParameter(bar, "U " + name, &value->second, params);
 }
 
-void CBarHelper::AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColor> *value, std::string params)
+void CBarHelper::AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColorSpace> *value, std::string params)
 {
 	AddButtonColor(bar, "E " + name, CBarCalls::EqualVarsColor, value);
 
