@@ -4,6 +4,7 @@
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Context/ContextManager.h>
+#include <Base/XML/XMLTreeNode.h>
 #include "Material/Material.h"
 #include "Renderable/RenderableObjectTechnique.h"
 
@@ -15,6 +16,7 @@ CDrawQuadSceneRendererCommand::CDrawQuadSceneRendererCommand(CXMLTreeNode &TreeN
 		<texture stage_id="1" file="DepthMapTexture"/>
 	</render_draw_quad>*/
 	auto mm = CEngine::GetSingleton().getMaterialManager();
+	std::string nameMat = TreeNode.GetPszProperty("material");
 	m_Material = mm->get(TreeNode.GetPszProperty("material"));
 
 	for (int i = 0; i < TreeNode.GetNumChildren(); i++)

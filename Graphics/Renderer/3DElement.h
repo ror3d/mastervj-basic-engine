@@ -39,7 +39,8 @@ public:
 	const Mat44f & GetTransform();
 	bool GetVisible();
 	virtual void SetVisible(bool Visible);
-	virtual void Render(CContextManager *_context) = 0;
+	//virtual void Render(CContextManager *_context) = 0; //TODO
+	void Render(CContextManager *_context);
 	Quatf GetQuat() const { return m_quat; }
 	void SetQuat(const Quatf &q) {
 		m_quat = q;

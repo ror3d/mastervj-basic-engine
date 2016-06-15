@@ -1,6 +1,7 @@
 #include "DynamicTexture.h"
 #include "Engine/Engine.h"
 #include <Graphics/Context/ContextManager.h>
+#include <Base/XML/XMLTreeNode.h>
 #include <map>
 
 CDynamicTexture::CDynamicTexture(const std::string &Name, int Width, int Height, bool CreateDepthStencilBuffer, DXGI_FORMAT format)

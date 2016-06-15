@@ -30,6 +30,8 @@ public:
 	};
 
 private:
+	static CGUI* m_instance;
+
 	CContextManager *m_contextManager;
 
 	bool m_inGUI;
@@ -59,10 +61,15 @@ private:
 
 	std::map<std::string, CFont*> m_fonts;
 
+	CColor m_fontColor;
+
 	friend class CFont;
 public:
 	CGUI();
 	~CGUI();
+
+	static inline CGUI* GetInstance() { return m_instance; }
+	static void SetInstance(CGUI* gui) { m_instance = gui; }
 
 	void Init( const std::string& xml );
 
@@ -80,6 +87,8 @@ public:
 
 	void BeginFrame( const Rectf& r, Rectf::Alignment alignToParent = Rectf::Alignment::TOP_LEFT, Rectf::Alignment alignSelf = Rectf::Alignment::TOP_LEFT );
 	void EndFrame();
+
+	inline void SetFontColor(const CColor& color) { m_fontColor = color; }
 
 private:
 

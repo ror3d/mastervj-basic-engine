@@ -1,7 +1,7 @@
 #ifndef EFFECT_SHADER_H
 #define EFFECT_SHADER_H
 
-#include "Utils/Named.h"
+#include <Base/Utils/Named.h>
 #include <d3d11.h>
 #include <vector>
 

@@ -5,6 +5,7 @@
 #include "Core/Engine/Engine.h"
 #include "Renderable/RenderableObjectsManager.h"
 #include <Graphics/Layer/LayerManager.h>
+#include <Core/Component/PhysxComponent.h>
 
 #include "Renderable/RenderableObject.h"
 
@@ -13,19 +14,20 @@
 CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 	: m_CurrentKeyFrame(0)
 {
-	std::string rendObjName = treeNode.GetPszProperty( "resource" );
+	m_name = treeNode.GetPszProperty("resource");
 	std::string loopType = treeNode.GetPszProperty("loopType");
+	
 	if (loopType == std::string("Cycle"))
 	{
 		m_Cycle = true;
 	}
-	else if (loopType == std::string("One-Shoot") || loopType == std::string("Reverse"))
+	else if (loopType == std::string("One-Shot") || loopType == std::string("Reverse"))
 	{
 		m_Cycle = false;
 		//TODO: anim reverse
 	}
 	
-	m_RenderableObject = CEngine::GetSingleton().getLayerManager()->getDefaultLayer()->get(rendObjName);
+	m_RenderableObject = CEngine::GetSingleton().getLayerManager()->getDefaultLayer()->get(m_name);
 
 
 	float duration = 0;
@@ -92,7 +94,7 @@ void CCinematicObject::Update( float ElapsedTime )
 	q.SLerp(t, next->GetQuat());
 	m_RenderableObject->SetQuat(q);
 	m_RenderableObject->SetScale( mathUtils::Lerp( current->GetScale(), next->GetScale(), t ) );
-	m_RenderableObject->Update(0);
+	m_RenderableObject->Update(0);	
 }
 
 

@@ -13,9 +13,12 @@
 
 #include <Base/XML/XMLTreeNode.h>
 
+CGUI* CGUI::m_instance = nullptr;
+
 CGUI::CGUI()
 	: m_guiComponents( MAX_GUI_ELEMENTS )
 	, m_inGUI( false )
+	, m_fontColor(0, 0, 0, 1)
 {
 	m_guiComponentsVtxs = new CPointsListRenderableVertexs<GUI_VERTEX>(m_guiComponents.data(), MAX_GUI_ELEMENTS, MAX_GUI_ELEMENTS, true);
 }
@@ -296,7 +299,7 @@ void CGUI::Text(const std::string &fontName, const std::string &text, const Rect
 
 	auto font = m_fonts[fontName];
 
-	font->SetColor(CColor(0, 0, 0, 1));
+	font->SetColor(m_fontColor);
 	font->SetAlignment(alignSelf);
 	font->DrawString(text, getAligned(bounds, alignToParent, alignSelf), overflowX);
 }

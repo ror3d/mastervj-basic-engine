@@ -79,7 +79,7 @@ CInputManagerImplementation::CInputManagerImplementation(HWND hWnd)
 	if (m_Mouse != NULL)
 		m_Mouse->Acquire();
 	else
-		MessageBox(hWnd, "Problem with de mouse input!", "Mouse", MB_ICONERROR | MB_OK);
+		MessageBox(hWnd, "Problem with the mouse input!", "Mouse", MB_ICONERROR | MB_OK);
 }
 
 CInputManagerImplementation::~CInputManagerImplementation()
@@ -134,7 +134,7 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 
 	{
 		Action action = { "RUN", KEYBOARD, Action::WHILE_PRESSED };
-		action.keyboard.key = VK_SHIFT; 
+		action.keyboard.key = VK_SHIFT;
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
 		action.triggersAxis = true;
@@ -151,6 +151,27 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		action.triggersAxis = true;
 		action.axisName = "JUMPAxis";
 		action.axisValue = -1;
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "SWITCH_CAMERA", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = VK_TAB;
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "BACK", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = VK_F1;
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "DIVIDE", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = 'G';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
 		m_Actions.push_back(action);
 	}
 	{
@@ -514,10 +535,17 @@ void CInputManagerImplementation::BeginFrame()
 				break;
 
 			case Action::ON_RELEASE:
-				// TODO: añadir acciones de release
+				if (otherNeeds && !current && previous)
+				{
+					isActionActive = true;
+				}
 				break;
 			case Action::WHILE_RELEASED:
 				// TODO: añadir acciones de botón no pulsado
+				if (otherNeeds && !current)
+				{
+					isActionActive = true;
+				}
 				break;
 
 			default:

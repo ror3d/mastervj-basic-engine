@@ -1,4 +1,5 @@
 #include "Named.h"
+#include <XML/XMLTreeNode.h>
 
 
 CNamed::CNamed(const CXMLTreeNode &node)

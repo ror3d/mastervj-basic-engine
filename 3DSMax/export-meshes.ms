@@ -69,6 +69,7 @@ fn createStaticMeshesFile meshesToExport = (
 	
 	for i=1 to cores.count do
 	(
+		
 		-- Clone mesh and use the clone
 		if superclassof cores[i] != GeometryClass then
 		(
@@ -120,8 +121,32 @@ fn createRenderableObjectsFile instances = (
 		local Roll = GetRoll (instances[i].transform)
 		local core = getUserProp instances[i] "export_core_name"
 		local PhysxType = getUserProp instances[i] "physics_generate"
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" scale=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\" physxType=\"%\"/>\n"\
-					instances[i].name core Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll instances[i].visibility PhysxType to:file
+		local separatorEnd = ""
+		if PhysxType == "undefined" then
+		(
+			separatorEnd = "/"
+		)
+		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" scale=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"%>\n"\
+					instances[i].name core Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll instances[i].visibility separatorEnd to:file
+		
+		
+		if PhysxType != "undefined" then
+		(
+			local trigger = getUserProp instances[i] "is_trigger" 
+			local anim = getUserProp instances[i] "cinematics_export"
+			local kinematic = "false"
+			local static =  getUserProp instances[i] "physics_static"
+			if anim == "true" then
+			(
+				static = "false"
+				kinematic = "true"
+			)
+			format "\t\t<physx collider_type=\"%\" static=\"%\" kinematic=\"%\" trigger=\"%\" />\n"\
+					PhysxType static kinematic trigger to:file
+			format "\t</mesh_instance>\n" to:file
+		)	
+		
+		
 	)
 
 	format "</renderable_objects>\n" to:file 
@@ -139,11 +164,33 @@ fn createLogic instances = (
 	for i = 1 to instances.count do
 	(	
 		local l_logicType = getUserProp instances[i] "logic_type"
-		if l_logicType != undefined then
-		(						
-			local l_logicActivates = getUserProp instances[i] "logic_activates"		
-			format "\t<% name=\"%\" activates=\"%\"/>\n"\
-			l_logicType instances[i].name l_logicActivates to:file
+		if l_logicType != "" then
+		(				
+			
+			local l_logicActivates = getUserProp instances[i] "logic_activates"
+			if l_logicActivates != "" then 
+			(
+				format "\t<% name=\"%\" activates=\"%\"/>\n"\
+				l_logicType instances[i].name l_logicActivates to:file
+			)
+			else
+			(
+				if l_logicType == "SpawnPlayer" then
+				(
+					local Pos = TranslationToRH (instances[i].transform.translation)
+					local Yaw = GetYaw (instances[i].transform)
+					local Pitch = GetPitch (instances[i].transform)
+					local Roll = GetRoll (instances[i].transform)
+					format "\t<% name=\"%\"  pos=\"% % %\"  yaw=\"%\" pitch=\"%\" roll=\"%\" />\n"\
+					l_logicType instances[i].name  Pos[1] Pos[2] Pos[3] Yaw Pitch Roll to:file
+				)
+				else
+				(
+					format "\t<% name=\"%\" />\n"\
+					l_logicType instances[i].name to:file
+				)
+			)
+			
 		)		
 	)
 
@@ -162,16 +209,17 @@ fn createTriggersFile instances = (
 	(
 		if getUserProp instances[i] "is_trigger" == true then
 		(
+			local l_arr_boundingBox = nodeLocalBoundingBox instances[i]
+			local l_sizeBoundingBox = l_arr_boundingBox[2] - l_arr_boundingBox[1]
 			local Pos = TranslationToRH (instances[i].transform.translation)
 			local Sc = ScaleToRH instances[i].transform.scale
 			local Yaw = GetYaw (instances[i].transform)
 			local Pitch = GetPitch (instances[i].transform)
 			local Roll = GetRoll (instances[i].transform)
-			local l_trigger_type= getUserProp instances[i] "trigger_type"
 			local l_trigger_active_once = getUserProp instances[i] "trigger_active_once"
 			
-			format "\t<mesh_instance name=\"%\" typeTrigger=\"%\" ActivateTriggerOnce=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" />\n"\
-							instances[i].name l_trigger_type l_trigger_active_once  Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll  to:file
+			format "\t<mesh_instance name=\"%\" ActivateTriggerOnce=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" />\n"\
+							instances[i].name l_trigger_active_once  Pos[1] Pos[2] Pos[3] l_sizeBoundingBox[1] l_sizeBoundingBox[3] l_sizeBoundingBox[2] Yaw Pitch Roll  to:file
 	
 		)
 		

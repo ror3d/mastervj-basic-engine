@@ -52,6 +52,15 @@
     <ClCompile Include="Debug\BarCalls.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Logic\LogicManager.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\PhysxComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\TriggerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -74,6 +83,9 @@
     </Filter>
     <Filter Include="Trigger">
       <UniqueIdentifier>{18c408c5-fc47-463b-9dda-0a7086dee1fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logic">
+      <UniqueIdentifier>{d074963f-c794-4841-af71-8b7ae81fe27b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +142,15 @@
     </ClInclude>
     <ClInclude Include="Debug\BarHelper.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\LogicManager.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\PhysxComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\TriggerComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

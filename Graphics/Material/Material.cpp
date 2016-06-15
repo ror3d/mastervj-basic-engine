@@ -7,6 +7,7 @@
 #include "Graphics/Renderable/RenderableObjectTechnique.h"
 #include "Texture/Texture.h"
 #include "MaterialParameter.h"
+#include <Base/XML/XMLTreeNode.h>
 
 CMaterial::CMaterial(CXMLTreeNode &TreeNode)
 	: CNamed(TreeNode)

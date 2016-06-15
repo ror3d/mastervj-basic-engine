@@ -9,9 +9,14 @@
 class CContextManager;
 class CXMLTreeNode;
 class CRenderableObjectTechnique;
+
 class CComponent;
 class CCharacterControllerComponent;
+class CFPSCameraComponent;
+
 class CAnimatedInstanceModel;
+class CPhysxComponent;
+class CTriggerComponent;
 
 class CRenderableObject : public C3DElement, public CNamed
 {
@@ -32,6 +37,10 @@ public:
 	void SendMsg(const std::string message);
 
 	CCharacterControllerComponent* GetCharacterController();
+	CPhysxComponent * GetPhysxComponent();
+	CTriggerComponent * GetTriggerComponent();
+
+	CFPSCameraComponent* GetCamera();
 
 	virtual CAnimatedInstanceModel* AsAnimatedInstance() { return nullptr; }
 

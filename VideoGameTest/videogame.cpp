@@ -39,6 +39,9 @@
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Core/Trigger/TriggerManager.h>
+#include <Sound/SoundManager.h>
+#include <Graphics/Renderer/3DElement.h>
+#include <Core/Logic/LogicManager.h>
 #include "resource.h"
 
 
@@ -233,9 +236,16 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
-	engine.getTriggerManager()->Load("Data\\triggers.xml");
+	//engine.getTriggerManager()->Load("Data\\triggers.xml");
+	engine.getSoundManager()->Init();
+	engine.getSoundManager()->initBanks();
+	engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
 
+	C3DElement l_speaker = {};
+	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
+	//engine.getSoundManager()->PlayEvent()
 	engine.getIAManager()->Create();
+
 
 
 
@@ -252,6 +262,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		//engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
 
 		//engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
+		engine.getCinematicManager()->Load("Data\\Animations\\AscensorSimple.xml");
 
 
 

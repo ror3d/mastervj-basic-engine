@@ -76,3 +76,40 @@ void CCinematicManager::Play()
 		(*it)->Play();
 	}
 }
+
+void CCinematicManager::PlayByName(std::string nameToRun)
+{
+	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
+	{
+		if ((*it)->getName() == nameToRun)
+		{
+			(*it)->Play();
+			return;
+		}		
+	}
+}
+
+
+void CCinematicManager::PauseByName(std::string nameToRun)
+{
+	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
+	{
+		if ((*it)->getName() == nameToRun)
+		{
+			(*it)->Pause();
+			return;
+		}
+	}
+}
+
+void CCinematicManager::StopByName(std::string nameToRun)
+{
+	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
+	{
+		if ((*it)->getName() == nameToRun)
+		{
+			(*it)->Stop();
+			return;
+		}
+	}
+}

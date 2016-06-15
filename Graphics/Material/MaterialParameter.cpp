@@ -1,4 +1,5 @@
 #include "Material/MaterialParameter.h"
+#include <Base/XML/XMLTreeNode.h>
 
 CMaterialParameter::CMaterialParameter(CXMLTreeNode &TreeNode, CMaterialParameter::TMaterialType MaterialType) : CNamed("")
 	, m_MaterialType(MaterialType)

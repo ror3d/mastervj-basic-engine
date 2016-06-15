@@ -195,14 +195,25 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 	{
 		if ((pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
 			continue;
-
+		
 		size_t l_indexTrigger = (size_t)pairs[i].triggerActor->userData;
-		//size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
+		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
 
 		std::string l_triggerName = m_actors.name[l_indexTrigger];
 
-		CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
+	
+
+		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+		{
+			//OutputDebugStringA("Hola!\n");
+			CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
+		}
+		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+		{
+			CEngine::GetSingleton().getTriggerManager()->Deactivate(l_triggerName);
+		}
 	}
+	
 }
 
 
@@ -375,78 +386,7 @@ void CPhysXManager::createPlane(const std::string& name, const std::string& mate
 
 }
 
-physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size, bool trigger, CPhysxColliderShapeDesc::Shape figure)
-{
-	auto idx = m_actors.actor.size();
-
-	auto matIt = m_materials.find(material);
-	DEBUG_ASSERT(matIt != m_materials.end());
-
-	physx::PxMaterial* mat = matIt->second;
-	physx::PxShape* shape;
-
-	switch (figure)
-	{
-	case CPhysxColliderShapeDesc::Shape::Box:
-		shape = m_PhysX->createShape(physx::PxBoxGeometry(size.x / 2, size.y / 2, size.z / 2), *mat);
-		break;
-
-	case CPhysxColliderShapeDesc::Shape::Sphere:
-		shape = m_PhysX->createShape(physx::PxSphereGeometry(size.x/2), *mat);
-		break;
-
-	default:
-		throw std::logic_error("Not yet implemented");
-		break;
-	}
-
-	if (trigger)
-	{
-		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
-		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
-	}
-
-	physx::PxVec3 Vec = physx::PxVec3(position.x, position.y, position.z);
-	physx::PxQuat Quat = physx::PxQuat(orientation.x, orientation.y, orientation.z, orientation.w);
-	physx::PxTransform Transform = physx::PxTransform(Vec, Quat);
-	physx::PxRigidStatic* StaticBody = m_PhysX->createRigidStatic(Transform);
-
-	StaticBody->attachShape(*shape);
-
-	StaticBody->userData = reinterpret_cast<void*>(idx);
-	m_Scene->addActor(*StaticBody);
-	DEBUG_ASSERT(m_actors.actor.size() == m_actors.index.size());
-	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
-	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());
-	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
-
-	m_actors.index[name] = idx;
-	m_actors.name.push_back(name);
-
-	m_actors.position.push_back(position);
-	m_actors.rotation.push_back(orientation);
-	m_actors.actor.push_back(StaticBody);
-
-	return shape;
-}
-
-
-void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger)
-{
-	physx::PxShape* shape = createStatic(name, Material, position, orientation, size, trigger, CPhysxColliderShapeDesc::Shape::Box);
-
-	shape->release();
-}
-
-void CPhysXManager::createStaticSphere(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger)
-{
-	physx::PxShape* shape = createStatic(name, Material, position, orientation, size, trigger, CPhysxColliderShapeDesc::Shape::Sphere);
-
-	shape->release();
-}
-
-
-void CPhysXManager::createActor(const std::string& name, ActorType actorType, const CPhysxColliderShapeDesc& desc)
+void CPhysXManager::createActor(const std::string& name, ActorType actorType, const CPhysxColliderShapeDesc& desc, bool isKinematic, bool isTrigger)
 {
 	auto idx = m_actors.actor.size();
 
@@ -456,6 +396,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	physx::PxMaterial* mat = matIt->second;
 
 	physx::PxGeometry* geom = nullptr;
+	
 	switch (desc.shape)
 	{
 		case CPhysxColliderShapeDesc::Shape::Box:
@@ -492,7 +433,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 			break;
 	}
 
-	physx::PxTransform actorTransform = physx::PxTransform(physx::PxVec3(0, 0, 0), physx::PxQuat::createIdentity());
+	physx::PxTransform actorTransform = physx::PxTransform(v(desc.position), q(desc.orientation));
 
 	physx::PxRigidActor* body;
 	switch (actorType)
@@ -502,13 +443,24 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 			break;
 		case CPhysXManager::ActorType::Dynamic:
 			body = m_PhysX->createRigidDynamic(actorTransform);
+			if (isKinematic)
+			{
+				(static_cast<physx::PxRigidBody*>(body))->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+			}
 			break;
 	}
+
 
 	physx::PxShape* shape = body->createShape(*geom, *mat);
 	delete geom;
 
-	physx::PxTransform transform = physx::PxTransform(v(desc.position), q(desc.orientation));
+	if (isTrigger)
+	{
+		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
+		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
+	}
+
+	physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0, 0, 0), physx::PxQuat::createIdentity());
 
 	shape->setLocalPose(transform);
 
@@ -531,12 +483,25 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	m_actors.actor.push_back(body);
 }
 
+void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
+{
+	auto it = m_actors.index.find(name);
+	if (it != m_actors.index.end())
+	{
+		size_t id = it->second;
+		physx::PxRigidActor* rigid = static_cast<physx::PxRigidActor*>(m_actors.actor[id]);
+		rigid->setGlobalPose(physx::PxTransform(v(position), q(rotation)));
+	}
+}
+
 void CPhysXManager::createController(float height, float radius, float density, Vect3f pos, std::string name){
 	physx::PxMaterial* l_material = m_materials["controller_material"];
 	physx::PxCapsuleControllerDesc desc;
+	//Skin predefined contact offset 0.1f
+	desc.contactOffset = 0.01f;
 	desc.height = height;
 	desc.radius = radius;
-	desc.climbingMode = physx::PxCapsuleClimbingMode::eEASY;
+	desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
 	desc.slopeLimit = cosf(3.1415f / 6); //30º
 	desc.stepOffset = 0.5f;
 	desc.density = density;
@@ -553,8 +518,7 @@ void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
-	createPlane("ground", "ground", Vect4f(0, 1, 0, 0));
-
+	createPlane("ground", "ground", Vect4f(0, 1, 0,	40));
 }
 
 
@@ -569,6 +533,16 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
 	//physx::PxVec3 vel = actor->getLinearVelocity();
 	return v(cct->getFootPosition());
+}
+
+void CPhysXManager::setPosition(const Vect3f pos, const std::string &name)
+{
+	physx::PxController* cct = getCharControllers()[name];
+	physx::PxExtended x = pos.x;
+	physx::PxExtended y = pos.y;
+	physx::PxExtended z = pos.z;
+	physx::PxExtendedVec3 vecPos(x,y,z);
+	cct->setPosition(vecPos);
 }
 
 bool CPhysXManager::isCharacterControllerGrounded( const std::string &name )

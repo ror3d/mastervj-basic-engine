@@ -47,6 +47,7 @@
     <IntDir>$(SolutionDir)\bin\Intermediate\$(ProjectName)$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)\bin\$(ProjectName)\</OutDir>
     <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -62,13 +63,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)/Base;$(SolutionDir)/Core;$(SolutionDir)/Graphics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)/Base;$(SolutionDir)/Core;$(SolutionDir)/Graphics;$(WWISESDK)\include;$(WWISESDK)\samples\SoundEngine\Win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName).pdb</ProgramDatabaseFile>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty/PhysX/Lib/vc$(PlatformToolsetVersion)$(Platform)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty/PhysX/Lib/vc$(PlatformToolsetVersion)$(Platform)/;$(WWISESDK)\Win32_vc120\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>if exist $(SolutionDir)bin\lib\AntTweakBarDebug.dll  xcopy /y /f $(SolutionDir)bin\lib\AntTweakBarDebug.dll $(LocalDebuggerWorkingDirectory).
@@ -98,7 +99,7 @@ if exist $(SolutionDir)bin\lib\lua_d.dll  xcopy /y /f $(SolutionDir)bin\lib\lua_
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty/PhysX/Lib/vc$(PlatformToolsetVersion)$(Platform)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty/PhysX/Lib/vc$(PlatformToolsetVersion)$(Platform)/;$(WWISESDK)\Win32_vc120\$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>if exist $(SolutionDir)bin\lib\AntTweakBarDebug.dll  xcopy /y /f $(SolutionDir)bin\lib\AntTweakBarDebug.dll $(LocalDebuggerWorkingDirectory).

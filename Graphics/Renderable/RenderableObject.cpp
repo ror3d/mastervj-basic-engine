@@ -11,6 +11,8 @@
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/PhysxComponent.h>
+#include <Core\Component\TriggerComponent.h>
 
 CRenderableObject::CRenderableObject()
 	: CNamed("")
@@ -40,6 +42,14 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 		{
 			component = new CFPSCameraComponent(comp, this);
 		}
+		else if (type == "physx")
+		{
+			component = new CPhysxComponent(comp, this, treeNode.GetPszProperty("core_name"));
+		}
+		else if (type == "trigger")
+		{
+			component = new CTriggerComponent(comp, this);
+		}
 		else
 		{
 			OutputDebugString("Component type not recognized\n");
@@ -47,6 +57,10 @@ CRenderableObject::CRenderableObject(CXMLTreeNode& treeNode)
 		}
 		cmgr->AddComponent(component);
 		AddComponent(component->getName(), component);
+	}
+	for ( auto const& comp : m_componentContainer )
+	{
+		comp.second->ObjectInitialized();
 	}
 }
 
@@ -64,12 +78,42 @@ void CRenderableObject::SendMsg(const std::string msg)
 	}
 }
 
+CFPSCameraComponent* CRenderableObject::GetCamera()
+{
+	auto comp = m_componentContainer.get(getName() + "_Camera");
+	if (comp)
+	{
+		return dynamic_cast<CFPSCameraComponent*>(comp);
+	}
+	return nullptr;
+}
+
 CCharacterControllerComponent* CRenderableObject::GetCharacterController()
 {
 	auto comp = m_componentContainer.get(getName() + "_CharacterController");
 	if (comp)
 	{
 		return dynamic_cast<CCharacterControllerComponent*>(comp);
+	}
+	return nullptr;
+}
+
+CPhysxComponent * CRenderableObject::GetPhysxComponent()
+{
+	auto comp = m_componentContainer.get(getName() + "_PhysxComponent");
+	if (comp)
+	{
+		return dynamic_cast<CPhysxComponent*>(comp);
+	}
+	return nullptr;
+}
+
+CTriggerComponent * CRenderableObject::GetTriggerComponent()
+{
+	auto comp = m_componentContainer.get(getName() + "_TriggerComponent");
+	if (comp)
+	{
+		return dynamic_cast<CTriggerComponent*>(comp);
 	}
 	return nullptr;
 }

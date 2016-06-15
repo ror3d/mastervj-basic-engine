@@ -3,7 +3,7 @@
 
 #include "Component.h"
 
-#include <vector>
+#include <Base/Math/Math.h>
 
 class CFPSCameraComponent : public CComponent
 {
@@ -20,6 +20,8 @@ public:
 	virtual void Update( float elapsedTime );
 
 	virtual void Destroy();
+
+	void SetAsCurrentCamera();
 };
 
 #endif

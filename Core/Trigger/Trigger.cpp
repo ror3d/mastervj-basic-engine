@@ -2,6 +2,7 @@
 #include <XML/XMLTreeNode.h>
 #include <Core/Engine/Engine.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
+#include <Core/Logic/LogicManager.h>
 
 CTrigger::CTrigger(CXMLTreeNode Node) : CNamed(Node)
 	, m_activated(false)
@@ -31,7 +32,8 @@ void CTrigger::Activate(){
 
 void CTrigger::LaunchAction()
 {
-	if (m_action == "Launch Cinematic")
+	CEngine::GetSingleton().getLogicManager()->m_activedLogic->push_back(getName());
+	/*if (m_action == "Launch Cinematic")
 	{
 		CEngine::GetSingleton().getCinematicsActionManager()->LoadXML(m_nameAction);
 	}
@@ -39,6 +41,8 @@ void CTrigger::LaunchAction()
 	{
 
 		//TODO
-	}
+	}*/
 	
 }
+
+

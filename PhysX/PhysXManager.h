@@ -70,15 +70,13 @@ public:
 
 	void registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution);
 
-	void createActor(const std::string& name, ActorType type, const CPhysxColliderShapeDesc& desc);
+	void createActor(const std::string& name, ActorType type, const CPhysxColliderShapeDesc& desc, bool isKinematic, bool isTrigger);
+
+	void MoveActor(std::string name, Vect3f position, Quatf rotation);
+
+	void setPosition(Vect3f pos, const std::string &name);
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
-
-	physx::PxShape* CPhysXManager::createStatic(const std::string& name, const std::string& material, Vect3f position, Quatf orientation, Vect3f size, bool trigger, CPhysxColliderShapeDesc::Shape shape);
-
-	void CPhysXManager::createStaticBox(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger);
-
-	void CPhysXManager::createStaticSphere(const std::string name, Vect3f size, const std::string Material, Vect3f position, Quatf orientation, bool trigger);
 
 	void InitPhysx();
 

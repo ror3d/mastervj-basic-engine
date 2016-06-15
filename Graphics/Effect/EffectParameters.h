@@ -1,9 +1,9 @@
 #ifndef EFFECT_PARAMENTERS_H
 #define EFFECT_PARAMENTERS_H
 
-#include "Math\Matrix44.h"
+#include <Base/Math/Matrix44.h>
 
-#define MAXBONES 40
+#define MAXBONES 60
 #define MAX_LIGHTS_BY_SHADER 4
 #define MAX_OBJECT_RAW_PARAMETER 16
 

@@ -8,13 +8,13 @@
 CFPSCameraComponent::CFPSCameraComponent(CXMLTreeNode& node, CRenderableObject* Owner)
 	: CComponent(node, Owner)
 {
-	setName(Owner->getName() + "_FPSCamera");
+	setName(Owner->getName() + "_Camera");
 
 	m_CamOffset = node.GetVect3fProperty( "offset", Vect3f( 0, 0, 0 ), false );
 }
 
 CFPSCameraComponent::CFPSCameraComponent(CRenderableObject* Owner)
-	: CComponent(Owner->getName() + "_FPSCamera", Owner)
+	: CComponent(Owner->getName() + "_Camera", Owner)
 {
 }
 
@@ -30,7 +30,6 @@ void CFPSCameraComponent::Init()
 	cc->SetYaw( owner->GetYaw() );
 
 	CEngine::GetSingleton().getCameraManager()->add(getName(), cc);
-	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController( getName() );
 }
 
 void CFPSCameraComponent::Update(float elapsedTime)
@@ -49,3 +48,7 @@ void CFPSCameraComponent::Destroy()
 }
 
 
+void CFPSCameraComponent::SetAsCurrentCamera()
+{
+	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController( getName() );
+}

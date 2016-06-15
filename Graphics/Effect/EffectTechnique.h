@@ -2,7 +2,7 @@
 #define EFFECT_TECHNIQUE_H
 
 
-#include "Utils/Named.h"
+#include <Base/Utils/Named.h>
 class CEffectVertexShader;
 class CEffectPixelShader;
 class CEffectGeometryShader;

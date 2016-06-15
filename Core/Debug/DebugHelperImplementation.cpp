@@ -36,7 +36,7 @@ CDebugHelperImplementation::~CDebugHelperImplementation()
 void CDebugHelperImplementation::Log(const std::string& text) const
 {
 	// TODO: OPCIONAL esto va bién tenerlo escribiendo en un fichero
-	OutputDebugString(("LOG: " + text).c_str());
+	OutputDebugStringA(("LOG: " + text + "\n").c_str());
 }
 
 void CDebugHelperImplementation::Render()

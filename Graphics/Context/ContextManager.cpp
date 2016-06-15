@@ -4,7 +4,11 @@
 #include "Mesh/RenderableVertexs.h"
 #include <Math/Matrix44.h>
 
+#include <Core/Engine/Engine.h>
 #include <Graphics/Effect/EffectManager.h>
+#include <Graphics/Scene/SceneRendererCommandManager.h>
+
+
 
 #pragma comment(lib,"d3d11.lib")
 

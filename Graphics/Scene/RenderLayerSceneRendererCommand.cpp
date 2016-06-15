@@ -1,5 +1,6 @@
 #include "Scene/RenderLayerSceneRendererCommand.h"
 #include <Graphics/Layer/LayerManager.h>
+#include <Base/XML/XMLTreeNode.h>
 
 CRenderLayerSceneRendererCommand::CRenderLayerSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode)

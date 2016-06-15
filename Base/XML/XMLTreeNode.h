@@ -16,7 +16,7 @@
 #include "libxml/xmlwriter.h"
 #include <string>
 #include <vector>
-#include "Math/Vector4.h"
+#include <Base/Math/Vector4.h>
 
 //Class
 class CXMLTreeNode
@@ -51,6 +51,7 @@ public:
 
 	std::string						GetPszISOProperty	(const char* _pszKey, const char* _pszDefault=NULL,	bool warningDefault = true) const;
 	Vect2f							GetVect2fProperty  	(const char* _pszKey, const Vect2f& _Default, bool warningDefault = true) const;
+	Vect3f							GetVect3fPropertyFromString(std::string , const Vect3f& _Default, bool warningDefault = true) const;
 	Vect3f							GetVect3fProperty  	(const char* _pszKey, const Vect3f& _Default, bool warningDefault = true) const;
 	Vect4f							GetVect4fProperty  	(const char* _pszKey, const Vect4f& _Default, bool warningDefault = true) const;
 	Vect2i							GetVect2iProperty  	(const char* _pszKey, const Vect2i& _Default, bool warningDefault = true) const;
