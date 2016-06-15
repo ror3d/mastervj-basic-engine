@@ -62,6 +62,19 @@ void CBarHelper::AddBoolParameter(CDebugHelper::SDebugBar &bar, std::string name
 	bar.variables.push_back(var);
 }
 
+void CBarHelper::AddColorParameter(CDebugHelper::SDebugBar &bar, std::string name, CColorSpace *value, CDebugHelper::Mode mode = CDebugHelper::READ)
+{
+	CDebugHelper::SDebugVariable var = {};
+
+	var.name = name;
+	var.type = CDebugHelper::COLOR;
+	var.mode = mode;
+	var.pColor = value;
+	var.params = value->HSL ? "colormode=hls" : "";
+
+	bar.variables.push_back(var);
+}
+
 void CBarHelper::AddSeparator(CDebugHelper::SDebugBar &bar)
 {
 	CDebugHelper::SDebugVariable var = {};
@@ -239,6 +252,8 @@ void CBarHelper::CreateParticleParametersBar(CParticleSystemClass * particle, CP
 	AddButtonParticle(bar, "toggle color space", CBarCalls::ChangeColorSpace, particle);
 	AddBoolParameter(bar, "hsl", &particle->color.first.HSL);
 	AddRangeColor(bar, "color", &particle->color, "min=0.0 max=1.0 step=0.01 precision=2");
+	AddColorParameter(bar, "color appearance 1", &particle->color.first);
+	AddColorParameter(bar, "color appearance 2", &particle->color.second);
 	AddSeparator(bar);
 
 

@@ -12,6 +12,7 @@ public:
 	static void AddFloatParameter(CDebugHelper::SDebugBar &bar, std::string name, float *value, std::string params);
 	static void AddIntParameter(CDebugHelper::SDebugBar &bar, std::string name, int *value, std::string params);
 	static void AddBoolParameter(CDebugHelper::SDebugBar &bar, std::string name, bool *value, CDebugHelper::Mode mode);
+	static void AddColorParameter(CDebugHelper::SDebugBar &bar, std::string name, CColorSpace *value, CDebugHelper::Mode mode);
 	static void AddSeparator(CDebugHelper::SDebugBar &bar);
 	static void AddLabel(CDebugHelper::SDebugBar &bar, std::string name);
 	static void AddButtonParticle(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, CParticleSystemClass *value);
