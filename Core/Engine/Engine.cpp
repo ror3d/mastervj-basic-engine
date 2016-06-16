@@ -59,6 +59,7 @@ CEngine::CEngine()
 }
 CEngine::~CEngine()
 {
+	CHECKED_DESTROY(sceneManager);
 	CHECKED_DESTROY(componentManager);
 	CHECKED_DESTROY(scriptManager);
 	CHECKED_DESTROY(effectsManager);
@@ -83,7 +84,6 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(meshLoader);
 	CHECKED_DESTROY(animatedMeshManager);
 	CHECKED_DESTROY(renderer);
-	CHECKED_DESTROY(sceneManager);
 
 } //Destruimos vars
 

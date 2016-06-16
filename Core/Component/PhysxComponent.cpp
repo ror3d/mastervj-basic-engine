@@ -19,7 +19,7 @@ CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CE
 	{
 		m_colType = "Sphere";
 	}
-	m_isTrigger = node.GetBoolProperty("trigger", false);
+	//m_isTrigger = node.GetBoolProperty("trigger", false);
 }
 
 CPhysxComponent::CPhysxComponent(const std::string& name, CElement* Owner)
@@ -33,18 +33,15 @@ CPhysxComponent::~CPhysxComponent()
 
 void CPhysxComponent::Init()
 {
+	Init(GetOwner()->GetScale(), GetOwner()->GetPosition());
+}
+
+void CPhysxComponent::Init(Vect3f scale, Vect3f position)
+{
 	CPhysxColliderShapeDesc desc;
 	desc.material = std::string("StaticObjectMaterial");// TODO get from file
-	desc.size = GetOwner()->GetScale();
-	if (m_isTrigger)
-	{
-		Vect3f sizeS = desc.size;
-		sizeS.y *= 5.0f;
-		sizeS.x *= 1.2f;
-		sizeS.z *= 1.2f;
-		desc.size = sizeS;
-	}
-	desc.position = GetOwner()->GetPosition();
+	desc.size = scale;
+	desc.position = position;
 	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
 
 	CPhysXManager::ActorType actorType;
@@ -99,6 +96,7 @@ void CPhysxComponent::Init()
 
 void CPhysxComponent::Destroy()
 {
+	// TODO!
 	//CEngine::GetSingleton().getPhysXManager()->releaseCharacterController(getName());
 }
 
@@ -106,12 +104,12 @@ void CPhysxComponent::FixedUpdate(float ElapsedTime)
 {
 	if (!m_isStatic && m_isKinematic)
 	{
-		Move();
+		Move(GetOwner()->GetPosition());
 	}
 }
 
-void CPhysxComponent::Move()
+void CPhysxComponent::Move(Vect3f position)
 {
 	Quatf quat = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
-	CEngine::GetSingleton().getPhysXManager()->MoveActor(getName(), GetOwner()->GetPosition(), quat);
+	CEngine::GetSingleton().getPhysXManager()->MoveActor(getName(), position, quat);
 }

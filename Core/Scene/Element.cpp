@@ -5,7 +5,6 @@
 #include <Core/Engine/Engine.h>
 
 #include <Core/Component/ComponentManager.h>
-#include <Core/Component/Component.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/FPSCameraComponent.h>

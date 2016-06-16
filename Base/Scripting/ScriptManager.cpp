@@ -26,7 +26,6 @@
 #include <Core/Component/TriggerComponent.h>
 #include <Core/Scene/Scene.h>
 #include <Core/Scene/Element.h>
-#include <Core/Trigger/TriggerManager.h>
 
 namespace
 {
@@ -357,9 +356,6 @@ void CScriptManager::RegisterLUAFunctions()
 		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
 		"SetVolume", &CSoundManager::SetVolume);
-	(*m_state)["CTriggerManager"].SetObj(
-		*CEngine::GetSingleton().getTriggerManager(),
-		"GetTrigger", &CTriggerManager::get);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

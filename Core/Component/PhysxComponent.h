@@ -8,16 +8,16 @@
 class CPhysxComponent : public CComponent
 {
 	
-private: 
+protected:
 	std::string m_colType;
 	std::string m_coreName;
 	bool m_isStatic;
 	bool m_isKinematic;
 	bool m_isTrigger;
 
-protected:
 	virtual void Init();
 
+	void Init(Vect3f scale, Vect3f position);
 public:
 	CPhysxComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
 	CPhysxComponent(const std::string& name, CElement* Owner);
@@ -27,7 +27,7 @@ public:
 
 	virtual void Destroy();
 
-	void Move();
+	void Move(Vect3f position);
 
 	std::string GetColType(){ return m_colType; }
 	bool IsStatic(){ return m_isStatic;  }

@@ -4,10 +4,11 @@
 #include <Base/Utils/TMapContainer.h>
 #include <Base/Math/Math.h>
 
+#include <Core/Component/Component.h>
+
 #include <map>
 
 class CXMLTreeNode;
-class CComponent;
 class CCharacterControllerComponent;
 class CPhysxComponent;
 class CTriggerComponent;
@@ -55,6 +56,9 @@ public:
 
 	void SendMsg(const std::string message);
 
+	template<typename T>
+	void SendMsg(const std::string message, T arg1);
+
 	CAnimatedInstanceComponent* GetAnimatedInstanceComponent();
 	CCharacterControllerComponent* GetCharacterController();
 	CPhysxComponent * GetPhysxComponent();
@@ -65,3 +69,12 @@ private:
 	ComponentContainer_t m_componentContainer;
 };
 
+
+template<typename T>
+void CElement::SendMsg(const std::string msg, T arg1)
+{
+	for (auto &const c : m_componentContainer)
+	{
+		c.second->SendMsg(msg, arg1);
+	}
+}

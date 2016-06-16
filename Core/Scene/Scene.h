@@ -10,7 +10,7 @@ class CScene : public CNamed
 	std::vector<CElement*> m_Elements;
 public:
 	CScene();
-	~CScene();
+	virtual ~CScene();
 
 	void Load(const std::string& file);
 };

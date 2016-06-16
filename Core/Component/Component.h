@@ -49,6 +49,9 @@ public:
 
 	virtual void SendMsg(const std::string) {}
 
+	template<typename T>
+	virtual void SendMsg(const std::string, T) {}
+
 	virtual void Destroy() = 0;
 
 	CElement* GetOwner()

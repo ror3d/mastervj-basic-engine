@@ -45,6 +45,7 @@ void CFPSCameraComponent::Update(float elapsedTime)
 
 void CFPSCameraComponent::Destroy()
 {
+	delete CEngine::GetSingleton().getCameraManager()->get( getName() );
 	CEngine::GetSingleton().getCameraManager()->remove( getName() );
 }
 

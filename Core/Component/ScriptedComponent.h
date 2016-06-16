@@ -11,6 +11,8 @@ class CXMLTreeNode;
 class CScriptedComponent : public CComponent
 {
 private:
+	std::string m_scriptClass;
+
 	CScriptManager* m_scriptMgr;
 
 	unsigned m_componentStateId;

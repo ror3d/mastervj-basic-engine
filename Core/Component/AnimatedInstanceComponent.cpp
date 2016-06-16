@@ -47,6 +47,7 @@ CAnimatedInstanceComponent::CAnimatedInstanceComponent(const std::string& name, 
 
 CAnimatedInstanceComponent::~CAnimatedInstanceComponent()
 {
+	delete m_AnimatedMeshInstance;
 }
 
 void CAnimatedInstanceComponent::Update(float ElapsedTime)

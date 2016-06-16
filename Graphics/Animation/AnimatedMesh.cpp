@@ -70,6 +70,12 @@ CAnimatedMesh::CAnimatedMesh(CXMLTreeNode &node)
 CAnimatedMesh::~CAnimatedMesh()
 {
 	delete m_CalHardwareModel;
+	delete m_CalCoreModel;
+	for (auto &const m : m_materials)
+	{
+		delete m;
+	}
+	m_materials.clear();
 }
 
 bool CAnimatedMesh::LoadVertexBuffers()

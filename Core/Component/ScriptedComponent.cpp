@@ -18,6 +18,9 @@ CScriptedComponent::CScriptedComponent(const std::string& name,
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
 {
+	m_scriptClass = name;
+	std::string n = Owner->getName() + "_" + name;
+	setName(n);
 }
 
 CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
@@ -26,7 +29,10 @@ CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
 {
-	std::string name = node.GetPszProperty("class");
+	std::string name = node.GetPszProperty("class", "");
+	DEBUG_ASSERT(name != "");
+	m_scriptClass = name;
+	name = Owner->getName() + "_" + name;
 	setName(name);
 }
 
@@ -37,7 +43,7 @@ void CScriptedComponent::Init()
 {
 	m_scriptMgr->RunCode( "if (_componentStates == nil) then _componentStates = {}; end" );
 
-	std::string script = m_scriptMgr->GetScript(getName());
+	std::string script = m_scriptMgr->GetScript(m_scriptClass);
 	DEBUG_ASSERT(script != "");
 
 	sel::State* state = m_scriptMgr->getLuaState();
@@ -51,7 +57,7 @@ void CScriptedComponent::Init()
 
 
 	std::stringstream ss;
-	ss << getName() << " = _currentComponent;"
+	ss << m_scriptClass << " = _currentComponent;"
 		<< script
 		<< "_componentStates[" << m_componentStateId << "] = _currentComponent;";
 	for (auto const& prop : m_properties)
@@ -61,7 +67,7 @@ void CScriptedComponent::Init()
 		{
 			val = "\"" + val + "\"";
 		}
-		ss << getName() << "." << prop.name << " = " << val << ";";
+		ss << m_scriptClass << "." << prop.name << " = " << val << ";";
 	}
 	ss << "if (_currentComponent.OnCreate ~= nil) then _currentComponent:OnCreate(); end\n";
 	//OutputDebugStringA(ss.str().c_str());

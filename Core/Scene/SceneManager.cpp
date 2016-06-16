@@ -3,6 +3,13 @@
 
 #include <Windows.h>
 
+CSceneManager::CSceneManager()
+{
+}
+
+CSceneManager::~CSceneManager()
+{
+}
 
 void CSceneManager::Initialize( std::string scenesDirectory )
 {
@@ -40,7 +47,7 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 			std::string fname = scenesDirectory + ffd.cFileName;
 			CScene * scene = new CScene();
 			scene->Load(fname);
-			add(scene);
+			add(scene->getName(), scene);
 		}
 	} while ( FindNextFile( hFind, &ffd ) != 0 );
 
