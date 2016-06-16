@@ -225,7 +225,7 @@ void CBarHelper::CreateParticleParametersBar(CParticleSystemClass * particle, CP
 
 	AddButtonParticle(bar, "Load texture", CBarCalls::LoadTexture, particleInstance->getParticleClass());
 	AddSeparator(bar);
-	AddFloatParameter(bar, "Emit rate", &particle->emitRate, "min=1 max=20 step=1 precision=0");
+	AddFloatParameter(bar, "Emit rate", &particle->emitRate, "min=1 max=100 step=1 precision=0");
 	AddIntParameter(bar, "Num frames", &particle->numFrames, "min=1 max=30 step=1 precision=0");
 	AddFloatParameter(bar, "Time per frame", &particle->timePerFrame, "min=0 max=10 step=1 precision=0");
 	AddBoolParameter(bar, "LoopFrames", &particle->loopFrames);
