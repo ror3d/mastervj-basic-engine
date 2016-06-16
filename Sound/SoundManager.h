@@ -28,6 +28,7 @@ public:
 	virtual void Update(const CCamera *camera);
 	virtual bool Load(const std::string &soundbanks_filename, const std::string &speakers_filename);
 	virtual bool Reload();
+	virtual void CSoundManager::InitAll(const std::string &soundbanks_filename, const std::string &speakers_filename);
 
 	bool LoadSoundBank(const std::string &bank);
 	bool UnloadSoundBank(const std::string &bank);

@@ -568,3 +568,11 @@ void CSoundManager::Update(const CCamera *camera)
 
 }
 
+void CSoundManager::InitAll(const std::string &soundbanks_filename, const std::string &speakers_filename)
+{
+	bool init = Init();
+	bool initbanks = initBanks();
+	bool load = Load(soundbanks_filename, speakers_filename);
+
+}
+

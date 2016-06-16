@@ -236,9 +236,9 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 	//engine.getTriggerManager()->Load("Data\\triggers.xml");
-	engine.getSoundManager()->Init();
-	engine.getSoundManager()->initBanks();
-	engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
+	//engine.getSoundManager()->Init();
+	//engine.getSoundManager()->initBanks();
+	engine.getSoundManager()->InitAll("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
 
 	C3DElement l_speaker = {};
 	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
