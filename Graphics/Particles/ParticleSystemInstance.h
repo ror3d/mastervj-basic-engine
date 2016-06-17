@@ -3,6 +3,7 @@
 
 #include "Mesh/VertexTypes.h"
 
+#include "Renderable/Renderable.h"
 #include <Base/Math/Math.h>
 #include <Base/Math/Color.h>
 #include <vector>
@@ -14,7 +15,7 @@ class CXMLTreeNode;
 class CContextManager;
 
 
-class CParticleSystemInstance
+class CParticleSystemInstance : public IRenderable
 {
 public:
 	static const int MAX_PARTICLES_PER_EMITTER = 200;

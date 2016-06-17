@@ -11,6 +11,7 @@ public:
 	~CParticleEmitterComponent();
 
 	void Update(float ElapsedTime);
+	void Render(CContextManager&  _context);
 	void Destroy();
 };
 
