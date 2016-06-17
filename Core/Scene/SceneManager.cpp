@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Element.h"
 
 #include <Windows.h>
 
@@ -46,7 +47,7 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 		{
 			std::string fname = scenesDirectory + ffd.cFileName;
 			CScene * scene = new CScene();
-			scene->Load(fname);
+			scene->Load(fname, this);
 			add(scene->getName(), scene);
 		}
 	} while ( FindNextFile( hFind, &ffd ) != 0 );
@@ -60,5 +61,39 @@ void CSceneManager::EnableScene( const std::string& scene )
 
 void CSceneManager::DisableScene( const std::string& scene )
 {
+}
+
+void CSceneManager::AddObject( CElement * obj )
+{
+	auto it = m_Objects.find( obj->getName() );
+
+	DEBUG_ASSERT( it == m_Objects.end() );
+
+	m_Objects[obj->getName()] = obj;
+}
+
+void CSceneManager::DestroyObject( const std::string & id )
+{
+	auto it = m_Objects.find( id );
+
+	DEBUG_ASSERT( it != m_Objects.end() );
+
+	if ( it != m_Objects.end() )
+	{
+		delete it->second;
+		m_Objects.erase( it );
+	}
+}
+
+CElement * CSceneManager::GetObjectById( const std::string & id )
+{
+	auto it = m_Objects.find( id );
+
+	if ( it != m_Objects.end() )
+	{
+		return it->second;
+	}
+
+	return nullptr;
 }
 

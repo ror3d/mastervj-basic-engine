@@ -15,6 +15,8 @@
 #include <Core/Component/ParticleEmitterComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
 
+#include <Windows.h>
+
 CElement::CElement()
 	: m_Scale(1.0f, 1.0f, 1.0f)
 	, m_Enabled(true)
@@ -41,9 +43,7 @@ CElement::CElement(const CXMLTreeNode& node)
 	{
 		Vect4f f4 = node.GetVect4fProperty("rotationq", Vect4f(0, 0, 0, 1), true);
 		auto q = Quatf(f4.x, f4.y, f4.z, f4.w);
-		m_RotationYPR.x = atan2(2 * (q.x*q.y + q.z*q.w), 1 - 2 * (q.y*q.y + q.z*q.z));
-		m_RotationYPR.y = asin(2 * (q.x*q.z - q.w*q.y));
-		m_RotationYPR.z = atan2(2 * (q.x*q.w + q.y*q.z), 1 - 2 * (q.z*q.z + q.w*q.w));
+		SetQuat( q );
 	}
 	else
 	{
@@ -111,7 +111,7 @@ CElement::CElement(const CXMLTreeNode& node)
 		}
 		else
 		{
-			OutputDebugString("Component type not recognized\n");
+			OutputDebugStringA("Component type not recognized\n");
 			continue;
 		}
 		cmgr->AddComponent(component);
@@ -136,6 +136,13 @@ CElement::~CElement()
 		cmgr->RemoveComponent(comp.second);
 	}
 	m_componentContainer.destroy();
+}
+
+void CElement::SetQuat( Quatf q )
+{
+	m_RotationYPR.x = atan2(2 * (q.x*q.y + q.z*q.w), 1 - 2 * (q.y*q.y + q.z*q.z));
+	m_RotationYPR.y = asin(2 * (q.x*q.z - q.w*q.y));
+	m_RotationYPR.z = atan2(2 * (q.x*q.w + q.y*q.z), 1 - 2 * (q.z*q.z + q.w*q.w));
 }
 
 void CElement::AddComponent(std::string Name, CComponent* component)

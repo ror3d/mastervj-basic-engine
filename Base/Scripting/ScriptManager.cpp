@@ -146,7 +146,7 @@ void CScriptManager::RunScript(const std::string& name)
 {
 	auto it = m_loadedScripts.find(name);
 	DEBUG_ASSERT (it != m_loadedScripts.end());
-	
+
 	RunCode(it->second);
 }
 
@@ -239,29 +239,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetYawPitchRoll", &C3DElement::SetYawPitchRoll,
 			"GetPrevPosition", &C3DElement::GetPrevPosition);
 
-	/*
-	(*m_state)["CRenderableObject"]
-		.SetClass<CRenderableObject>(
-			"GetName", &CRenderableObject::getName,
-			"SetPosition", &CRenderableObject::SetPosition,
-			"GetPosition", &CRenderableObject::GetPosition,
-			"SetYaw", &CRenderableObject::SetYaw,
-			"GetYaw", &CRenderableObject::GetYaw,
-			"SetVisible", &CRenderableObject::SetVisible,
-			"IsVisible", &CRenderableObject::GetVisible,
-			"AsAnimatedInstance", &CRenderableObject::AsAnimatedInstance,
-			"GetCamera", &CRenderableObject::GetCamera,
-			"GetCharacterController", &CRenderableObject::GetCharacterController,
-			"GetTriggerComponent", &CRenderableObject::GetTriggerComponent);
-			
-	(*m_state)["CAnimatedInstanceModel"]
-		.SetClass<CAnimatedInstanceModel, CXMLTreeNode&>(
-			"ClearCycle", &CAnimatedInstanceModel::ClearCycle,
-			"BlendCycle", &CAnimatedInstanceModel::BlendCycle,
-			"ExecuteAction", &CAnimatedInstanceModel::ExecuteAction,
-			"IsCycleAnimationActive", &CAnimatedInstanceModel::IsCycleAnimationActive,
-			"IsActionAnimationActive", &CAnimatedInstanceModel::IsActionAnimationActive);
-			*/
+
 
 	(*m_state)["CElement"]
 		.SetClass<CElement>(
@@ -276,7 +254,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
 			"GetTrigger", &CElement::GetTriggerComponent);
-			
+
 	(*m_state)["CAnimatedInstanceComponent"]
 		.SetClass<CAnimatedInstanceComponent, const std::string&, CElement*>(
 			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
@@ -351,14 +329,13 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CCinematicsManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicManager(),
-		"Play", &CCinematicManager::Play,
-		"PlayByName", &CCinematicManager::PlayByName,
-		"StopByName", &CCinematicManager::StopByName,
-		"PauseByName", &CCinematicManager::PauseByName);
+		"Play", static_cast<void(CCinematicManager::*)(std::string)>(&CCinematicManager::Play),
+		"Stop", &CCinematicManager::Stop,
+		"Pause", &CCinematicManager::Pause);
 
 	(*m_state)["CSoundManager"].SetObj(
 		*CEngine::GetSingleton().getSoundManager(),
-		//"PlayEvent", &CSoundManager::PlayEvent, 
+		//"PlayEvent", &CSoundManager::PlayEvent,
 		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
 		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
