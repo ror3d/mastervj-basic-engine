@@ -45,6 +45,9 @@ private:
 	std::mt19937 m_randomEngine;
 	std::uniform_real_distribution<float> m_unitDist;
 
+	Vect3f m_position;
+	bool m_enabled;
+
 public:
 
 	CParticleSystemInstance(CXMLTreeNode& treeNode);
@@ -53,6 +56,10 @@ public:
 	virtual void Update(float ElapsedTime);
 	virtual void Render(CContextManager *_context);
 
+	inline void SetPosition(Vect3f pos) { m_position = pos; }
+	inline Vect3f GetPosition() const { return m_position; }
+	inline void SetEnabled(bool e) { m_enabled = e; }
+	inline bool IsEnabled() const { return m_enabled; }
 };
 
 #endif

@@ -20,10 +20,6 @@ void CParticleEmitterComponent::Update(float ElapsedTime)
 {
 }
 
-void CParticleEmitterComponent::Render(CContextManager&  _context)
-{
-}
-
 void CParticleEmitterComponent::Destroy()
 {
 }

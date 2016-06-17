@@ -40,6 +40,7 @@ CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
 	, m_toCreateParticles(0)
 	, m_randomEngine(rnd())
 	, m_unitDist(0, 1)
+	, m_enabled(true)
 {
 	std::string particleClass = treeNode.GetPszProperty("particle_class", "", true);
 	m_particleSystemClass = CEngine::GetSingleton().getParticleManager()->get(particleClass);
@@ -60,6 +61,11 @@ CParticleSystemInstance::~CParticleSystemInstance()
 
 void CParticleSystemInstance::Update(float ElapsedTime)
 {
+	if (!m_enabled)
+	{
+		return;
+	}
+
 	// Update existing particles
 	for (int i = 0; i < m_activeParticles; ++i)
 	{
@@ -94,8 +100,7 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		ParticleData &p = m_particles[m_activeParticles];
 		m_activeParticles++;
 
-		// TODO(roc)
-		//p.pos = GetPosition();
+		p.pos = GetPosition();
 		p.vel = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startVelocity);
 		p.acc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->acceleration);
 		p.size = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->size);
@@ -131,6 +136,10 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 
 void CParticleSystemInstance::Render(CContextManager *_context)
 {
+	if (!m_enabled)
+	{
+		return;
+	}
 	auto devCtx = _context->GetDeviceContext();
 	m_vertexs->UpdateVertices(devCtx, m_particleVtxs, m_activeParticles);
 
