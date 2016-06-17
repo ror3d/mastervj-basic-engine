@@ -1,4 +1,5 @@
 #include "ParticleEmitterComponent.h"
+#include "Scene/Element.h"
 
 
 CParticleEmitterComponent::CParticleEmitterComponent(const std::string& name, CElement* Owner)
@@ -16,9 +17,14 @@ CParticleEmitterComponent::CParticleEmitterComponent(const std::string& name, CX
 CParticleEmitterComponent::~CParticleEmitterComponent()
 {}
 
+void CParticleEmitterComponent::Init()
+{
+}
+
 void CParticleEmitterComponent::Update(float ElapsedTime)
 {
 }
+
 
 void CParticleEmitterComponent::Destroy()
 {

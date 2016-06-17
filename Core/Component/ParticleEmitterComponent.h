@@ -3,6 +3,8 @@
 class CParticleEmitterComponent :
 	public CComponent
 {
+protected:
+	virtual void Init();
 public:
 	CParticleEmitterComponent(const std::string& name, CElement* Owner);
 	CParticleEmitterComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
