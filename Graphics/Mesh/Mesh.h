@@ -15,6 +15,7 @@ class CXMLTreeNode;
 class CMesh : public CNamed, public IRenderable
 {
 protected:
+	std::string m_meshFileName;
 	std::vector<CRenderableVertexs*> m_renderableVertexs;
 	std::vector<CMaterial *> m_materials;
 	CMesh() {}
@@ -32,5 +33,8 @@ public:
 	void Render (CContextManager *_context);
 
 	void Destroy();
+
+	inline void setMeshFileName(const std::string& fname) { m_meshFileName = fname; }
+	inline std::string getMeshFileName() const { return m_meshFileName; }
 };
 

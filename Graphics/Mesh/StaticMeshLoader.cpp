@@ -8,6 +8,8 @@
 #include <Graphics/Material/MaterialManager.h>
 
 #include <Graphics/Mesh/CookedMeshManager.h>
+#include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics/Mesh/StaticMesh.h>
 #include <PhysX/PhysXManager.h>
 #include <Base/XML/XMLTreeNode.h>
 
@@ -128,6 +130,8 @@ CMesh* CStaticMeshLoader::GetMesh(const std::string& meshFileName)
 
 	m = new CMesh(vtxs, mats);
 
+	m->setMeshFileName(meshFileName);
+
 	return m;
 }
 
@@ -163,11 +167,14 @@ std::vector<Vect3f> CStaticMeshLoader::GetVect3fArrayInternal( const T* vertexes
 	return ret;
 }
 
-bool CStaticMeshLoader::FillColliderDescriptor( const std::string& meshFileName, CPhysxColliderShapeDesc* shapeDesc )
+bool CStaticMeshLoader::FillColliderDescriptor( const std::string& coreName, CPhysxColliderShapeDesc* shapeDesc )
 {
+	std::string meshFileName = CEngine::GetSingleton().getStaticMeshManager()->get(coreName)->getMeshFileName();
+	std::string cookedFileName = meshFileName
+		+ ((shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh) ? "_tri" : "_conv");
 	std::vector<uint8> * cooked = nullptr;
 
-	bool l_loaded = CEngine::GetSingleton().getCookedMeshManager()->Load(meshFileName, cooked);
+	bool l_loaded = CEngine::GetSingleton().getCookedMeshManager()->Load(cookedFileName, cooked);
 
 	if (!l_loaded)
 	{
@@ -187,8 +194,6 @@ bool CStaticMeshLoader::FillColliderDescriptor( const std::string& meshFileName,
 			meshFile = it->second;
 		}
 
-		cooked = new std::vector<uint8>();
-
 		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
 		{
 			int numVertex = 0 ;
@@ -200,27 +205,30 @@ bool CStaticMeshLoader::FillColliderDescriptor( const std::string& meshFileName,
 			{
 				DEBUG_ASSERT(!"MESH WITH MORE THAN 65000 vertexes");
 				shapeDesc->shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
+				return FillColliderDescriptor(meshFileName, shapeDesc);
 			}
 		}
 
+		cooked = new std::vector<uint8>();
+
 		if (shapeDesc->shape == CPhysxColliderShapeDesc::Shape::TriangleMesh)
 		{
-		std::vector<Vect3f> vertexes;
+			std::vector<Vect3f> vertexes;
 			std::vector<unsigned short> indexes;
 
 			uint16 offset = 0;
-		for (int i = 0; i < meshFile->meshes.size(); ++i)
-		{
-			std::vector<Vect3f> meshVtxs = GetVect3fArray(meshFile->meshes[i]);
-				auto idxs = reinterpret_cast<unsigned short*>(meshFile->meshes[i].indices);
-				size_t sz = indexes.size();
-				indexes.resize(indexes.size() + meshFile->meshes[i].nIndices);
-				std::transform(idxs, idxs + meshFile->meshes[i].nIndices,
-					indexes.begin()+sz,
-					[offset](unsigned short v) { return v + offset; });
-			vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
-				offset = vertexes.size();
-		}
+			for (int i = 0; i < meshFile->meshes.size(); ++i)
+			{
+				std::vector<Vect3f> meshVtxs = GetVect3fArray(meshFile->meshes[i]);
+					auto idxs = reinterpret_cast<unsigned short*>(meshFile->meshes[i].indices);
+					size_t sz = indexes.size();
+					indexes.resize(indexes.size() + meshFile->meshes[i].nIndices);
+					std::transform(idxs, idxs + meshFile->meshes[i].nIndices,
+						indexes.begin()+sz,
+						[offset](unsigned short v) { return v + offset; });
+				vertexes.insert(vertexes.end(), meshVtxs.begin(), meshVtxs.end());
+					offset = vertexes.size();
+			}
 
 			CEngine::GetSingleton().getPhysXManager()->cookTriangleMesh(vertexes, indexes, cooked, meshFile->meshes[0].indexSize);
 		}
@@ -242,7 +250,7 @@ bool CStaticMeshLoader::FillColliderDescriptor( const std::string& meshFileName,
 		}
 	}
 
-	CEngine::GetSingleton().getCookedMeshManager()->add(meshFileName, cooked);
+	CEngine::GetSingleton().getCookedMeshManager()->add(cookedFileName, cooked);
 	shapeDesc->cookedMeshData = cooked;
 
 	return true;

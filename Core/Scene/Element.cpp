@@ -86,9 +86,9 @@ CElement::CElement(const CXMLTreeNode& node)
 		{
 			component = new CFPSCameraComponent(getName() + "_Camera", comp, this);
 		}
-		else if (type == "physx")
+		else if (type == "collider")
 		{
-			component = new CPhysxComponent(getName() + "_Physx", comp, this);
+			component = new CPhysxComponent(getName() + "_Collider", comp, this);
 		}
 		else if (type == "trigger")
 		{

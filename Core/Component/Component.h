@@ -49,8 +49,7 @@ public:
 
 	virtual void SendMsg(const std::string) {}
 
-	template<typename T>
-	virtual void SendMsg(const std::string, T) {}
+	virtual void SendMsg(const std::string, CElement*) {}
 
 	virtual void Destroy() = 0;
 

@@ -31,8 +31,6 @@
     <ClCompile Include="Scene\Element.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
-    <ClCompile Include="Trigger\Trigger.cpp" />
-    <ClCompile Include="Trigger\TriggerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\AnimatedInstanceComponent.h" />
@@ -56,8 +54,6 @@
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Time\TimeManager.h" />
-    <ClInclude Include="Trigger\Trigger.h" />
-    <ClInclude Include="Trigger\TriggerManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0323B8D9-42B2-4768-9F73-6DDEAFA020E7}</ProjectGuid>

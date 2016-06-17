@@ -20,7 +20,6 @@
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
-#include <Core/Trigger/TriggerManager.h>
 #include <Sound/SoundManager.h>
 #include <Core/Logic/LogicManager.h>
 #include <Graphics/Renderer/Renderer.h>
@@ -48,7 +47,6 @@ CEngine::CEngine()
 	, cinematicsActionManager(nullptr)
 	, cinematicManager(nullptr)
 	, particleManager(nullptr)
-	, triggerManager(nullptr)
 	, soundManager(nullptr)
 	, logicManager(nullptr)
 	, meshLoader(nullptr)
@@ -78,7 +76,6 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(particleManager);
 	CHECKED_DESTROY(cinematicManager);
 	CHECKED_DESTROY(cinematicsActionManager);
-	CHECKED_DESTROY(triggerManager);
 	CHECKED_DESTROY(soundManager);
 	CHECKED_DESTROY(logicManager);
 	CHECKED_DESTROY(meshLoader);
@@ -107,7 +104,6 @@ void CEngine::Init()
 	particleManager = new CParticleSystemManager();
 	cinematicsActionManager = new CCinematicsActionManager();
 	cinematicManager = new CCinematicManager();
-	triggerManager = new CTriggerManager();
 	soundManager = new CSoundManager();
 	logicManager = new CLogicManager();
 	meshLoader = new CStaticMeshLoader();

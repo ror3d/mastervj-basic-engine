@@ -3,6 +3,7 @@
 
 #include "Component.h"
 
+#include <Base/Math/Math.h>
 #include <vector>
 
 class CPhysxComponent : public CComponent

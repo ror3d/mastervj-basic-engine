@@ -166,3 +166,16 @@ void CScriptedComponent::SendMsg(const std::string msg)
 	ss << "if (_currentComponent." << msg << " ~= nil) then _currentComponent:" << msg << "(); end";
 	m_scriptMgr->RunCode(ss.str());
 }
+
+void CScriptedComponent::SendMsg(const std::string msg, CElement* arg1)
+{
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		state["_currentComponent"][msg.c_str()](arg1);
+	}
+}

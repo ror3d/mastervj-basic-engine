@@ -36,6 +36,7 @@ public:
 	virtual void RenderDebug(CContextManager&  _context);
 
 	virtual void SendMsg(const std::string msg);
+	virtual void SendMsg(const std::string msg, CElement* arg1);
 
 	virtual void Destroy();
 };

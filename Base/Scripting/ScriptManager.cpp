@@ -156,6 +156,16 @@ void CScriptManager::RunCode(const std::string& code)
 	(*m_state)(code.c_str());
 }
 
+void CScriptManager::RunCodeIf(const std::string &condition, const std::string &code)
+{
+	LuaErrorCapturedStdout errorCapture;
+	(*m_state)(("_r = true == (" + condition + ");").c_str());
+	if ((*m_state)["r"])
+	{
+		(*m_state)(code.c_str());
+	}
+}
+
 void CScriptManager::RunFile(const std::string& fileName)
 {
 	LuaErrorCapturedStdout errorCapture;
@@ -265,7 +275,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCamera", &CElement::GetCamera,
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
-			"GetTriggerComponent", &CElement::GetTriggerComponent);
+			"GetTrigger", &CElement::GetTriggerComponent);
 			
 	(*m_state)["CAnimatedInstanceComponent"]
 		.SetClass<CAnimatedInstanceComponent, const std::string&, CElement*>(
@@ -286,12 +296,9 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera);
 
 
-	(*m_state)["TriggerComponent"]
+	(*m_state)["CTriggerComponent"]
 		.SetClass<CTriggerComponent, const std::string&, CElement*>(
-		"GetStateTrigger", &CTriggerComponent::GetStateTrigger,
-		"SetStateTrigger", &CTriggerComponent::SetStateTrigger,
-		"GetName", &CTriggerComponent::getName,
-		"GetTriggerLocalName", &CTriggerComponent::GetTriggerLocalName);
+		"GetName", &CTriggerComponent::getName);
 
 	(*m_state)["ICameraController"]
 		.SetClass<ICameraController>(

@@ -20,7 +20,6 @@ class CComponentManager;
 class CParticleSystemManager;
 class CCinematicsActionManager;
 class CCinematicManager;
-class CTriggerManager;
 class CSoundManager;
 class CLogicManager;
 class CStaticMeshLoader;
@@ -49,7 +48,6 @@ private:
 	CParticleSystemManager * particleManager;
 	CCinematicsActionManager * cinematicsActionManager;
 	CCinematicManager * cinematicManager;
-	CTriggerManager * triggerManager;
 	CSoundManager * soundManager;
 	CLogicManager * logicManager;
 	CStaticMeshLoader * meshLoader;
@@ -82,7 +80,6 @@ public:
 	inline CParticleSystemManager * getParticleManager() const { return particleManager; }
 	inline CCinematicsActionManager * getCinematicsActionManager() const { return cinematicsActionManager;  }
 	inline CCinematicManager * getCinematicManager() const { return cinematicManager;  }
-	inline CTriggerManager * getTriggerManager() const { return triggerManager;  }
 	inline CSoundManager * getSoundManager() const { return soundManager; }
 	inline CLogicManager * getLogicManager() const { return logicManager;  }
 	inline CStaticMeshLoader * getMeshLoader() const { return meshLoader;  }

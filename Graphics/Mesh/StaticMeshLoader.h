@@ -82,7 +82,7 @@ public:
 	CMesh* GetMesh(const std::string& meshFileName);
 	CMesh* GetMesh(CXMLTreeNode& node);
 
-	bool FillColliderDescriptor( const std::string& meshFileName, CPhysxColliderShapeDesc* shapeDesc );
+	bool FillColliderDescriptor( const std::string& coreName, CPhysxColliderShapeDesc* shapeDesc );
 
 	void destroy();
 };

@@ -8,12 +8,13 @@
 
 CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
+	, m_isTrigger(false)
 {
 	setName(name);
 	
 	m_colType = node.GetPszProperty("collider_type", "Sphere");
-	m_isStatic = node.GetBoolProperty("static");	
-	m_isKinematic = node.GetBoolProperty("kinematic");
+	m_isStatic = node.GetBoolProperty("static", false);	
+	m_isKinematic = node.GetBoolProperty("kinematic", false);
 	m_coreName = node.GetPszProperty("core_mesh", "");	
 	if (m_coreName == "")
 	{
@@ -24,6 +25,7 @@ CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CE
 
 CPhysxComponent::CPhysxComponent(const std::string& name, CElement* Owner)
 	: CComponent(name, Owner)
+	, m_isTrigger(false)
 {
 }
 
@@ -80,7 +82,7 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 		//TODO: Tratar como box con escala y 0.001?
 		desc.size.y = 0.001f;
 	}
-	else if (m_colType == std::string("Triangle Mesh"))
+	else if (m_colType == std::string("TriangleMesh"))
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::TriangleMesh;
 		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);

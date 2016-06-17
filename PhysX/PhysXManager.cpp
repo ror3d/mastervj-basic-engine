@@ -4,7 +4,6 @@
 #include <PxPhysicsAPI.h>
 
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
-#include <Core/Trigger/TriggerManager.h>
 
 #include <fstream>
 #include <iterator>

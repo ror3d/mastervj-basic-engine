@@ -36,7 +36,6 @@
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
-#include <Core/Trigger/TriggerManager.h>
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Core/Logic/LogicManager.h>
