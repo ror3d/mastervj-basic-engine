@@ -61,6 +61,9 @@
     <ClCompile Include="Component\ParticleEmitterComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Component\SpeakerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -147,6 +150,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\MeshInstanceComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SpeakerComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
