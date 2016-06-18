@@ -14,6 +14,7 @@ class CPhysxComponent;
 class CTriggerComponent;
 class CFPSCameraComponent;
 class CRenderableComponent;
+class CSpeakerComponent;
 class CAnimatedInstanceComponent;
 
 class CElement : public CNamed
@@ -65,6 +66,7 @@ public:
 	CPhysxComponent * GetPhysxComponent();
 	CTriggerComponent * GetTriggerComponent();
 	CFPSCameraComponent* GetCamera();
+	CSpeakerComponent* GetSpeaker();
 
 private:
 	ComponentContainer_t m_componentContainer;

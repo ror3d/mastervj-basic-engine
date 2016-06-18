@@ -11,11 +11,11 @@ CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CE
 	, m_isTrigger(false)
 {
 	setName(name);
-	
+
 	m_colType = node.GetPszProperty("collider_type", "Sphere");
-	m_isStatic = node.GetBoolProperty("static", false);	
+	m_isStatic = node.GetBoolProperty("static", false);
 	m_isKinematic = node.GetBoolProperty("kinematic", false);
-	m_coreName = node.GetPszProperty("core_mesh", "");	
+	m_coreName = node.GetPszProperty("core_mesh", "");
 	if (m_coreName == "")
 	{
 		m_colType = "Sphere";

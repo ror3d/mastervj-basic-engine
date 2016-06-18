@@ -14,6 +14,7 @@
 #include <Core/Component/AnimatedInstanceComponent.h>
 #include <Core/Component/ParticleEmitterComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
+#include <Core/Component/SpeakerComponent.h>
 
 #include <Windows.h>
 
@@ -96,6 +97,7 @@ CElement::CElement(const CXMLTreeNode& node)
 		}
 		else if (type == "speaker")
 		{
+			component = new CSpeakerComponent(getName() + "_Speaker", comp, this);
 		}
 		else if (type == "mesh_instance")
 		{
@@ -165,6 +167,16 @@ CFPSCameraComponent* CElement::GetCamera()
 	if (comp)
 	{
 		return dynamic_cast<CFPSCameraComponent*>(comp);
+	}
+	return nullptr;
+}
+
+CSpeakerComponent* CElement::GetSpeaker()
+{
+	auto comp = m_componentContainer.get(getName() + "_Speaker");
+	if (comp)
+	{
+		return dynamic_cast<CSpeakerComponent*>(comp);
 	}
 	return nullptr;
 }
