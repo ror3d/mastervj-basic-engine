@@ -15,6 +15,8 @@
 #include <Core/Component/ParticleEmitterComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
 
+#include <Windows.h>
+
 CElement::CElement()
 	: m_Scale(1.0f, 1.0f, 1.0f)
 	, m_Enabled(true)
