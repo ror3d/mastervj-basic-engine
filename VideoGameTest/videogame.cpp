@@ -233,6 +233,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 	engine.getSceneManager()->Initialize("Data\\Scenes\\");
+	engine.getSoundManager()->InitAll("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
 	//engine.getSoundManager()->Init();
 	//engine.getSoundManager()->initBanks();
 	//engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");

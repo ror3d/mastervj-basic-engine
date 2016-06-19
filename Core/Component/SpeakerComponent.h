@@ -2,6 +2,7 @@
 #define SPEAKER_COMPONENT_H
 
 #include "Component.h"
+#include <Graphics/Renderer/3DElement.h>
 
 class CSpeakerComponent : public CComponent
 {
@@ -21,6 +22,10 @@ public:
 
 	void Play( const std::string audioClipName, bool loop );
 	void Stop();
+
+	Vect3f l_Position;
+	Vect3f l_Orientation;
+	C3DElement l_speaker;
 };
 
 #endif

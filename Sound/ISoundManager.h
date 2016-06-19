@@ -45,6 +45,7 @@ public:
 	virtual void Update(const CCamera *Camera) = 0;
 	virtual bool Load(const std::string& SoundBanksFilename, const std::string& SpeakersFilename) = 0;
 	virtual bool Reload() = 0;
+	virtual void InitAll(const std::string &soundbanks_filename, const std::string &speakers_filename) = 0;
 	//std::string m_Path;
 
 	virtual bool LoadSoundBank(const std::string &bank) = 0;
