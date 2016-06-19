@@ -1,35 +1,29 @@
 #ifndef TRIGGER_COMPONENT_H
 #define TRIGGER_COMPONENT_H
 
-#include "Component.h"
+#include "PhysxComponent.h"
 
 #include <vector>
 
-class CTriggerComponent : public CComponent
+class CTriggerComponent : public CPhysxComponent
 {
-	std::string m_name;
-	bool m_EnterTrigger;
-	bool m_StayTrigger;
-	bool m_ExitTrigger;
+	Vect3f m_scale;
+	Vect3f m_offset;
+
+	std::vector<std::string> m_activeElements;
 
 protected:
 	virtual void Init();
 
 public:
-	CTriggerComponent(CXMLTreeNode& node, CRenderableObject* Owner);
-	CTriggerComponent(CRenderableObject* Owner);
+	CTriggerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
+	CTriggerComponent(const std::string& name, CElement* Owner);
 	virtual ~CTriggerComponent();
 
 	virtual void FixedUpdate( float ElapsedTime );
 
 	virtual void Destroy();
 
-	void Activate();
-
-	int GetStateTrigger(); //0 not activated, 1 enter, 2 stay, 3 exit
-	void SetStateTrigger(int num);
-
-	std::string GetTriggerLocalName(){ return m_name; }
 };
 
 #endif

@@ -180,8 +180,6 @@ void CEffectManager::SetLightConstants(unsigned int IdLight, CLight *Light)
 		m_LightParameters.m_UseShadowMap[IdLight] = 0;
 		m_LightParameters.m_UseShadowMask[IdLight] = 0;
 	}
-
-	m_SceneParameters.m_LightAmbient = CEngine::GetSingleton().getLightManager()->GetAmbientLight();
 }
 
 void CEffectManager::SetLightsConstants()
@@ -203,6 +201,8 @@ void CEffectManager::SetLightsConstants()
 	{
 		it.second->SetConstantBuffer(1, &m_LightParameters);
 	}
+
+	m_SceneParameters.m_LightAmbient = CEngine::GetSingleton().getLightManager()->GetAmbientLight();
 }
 
 void CEffectManager::SetMaterialsConstants(){

@@ -1,13 +1,14 @@
 #include "CharControllerComponent.h"
 
-#include <Graphics/Renderable/RenderableObject.h>
+#include "Scene/Element.h"
+#include <Base/XML/XMLTreeNode.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Engine/Engine.h>
 
-CCharacterControllerComponent::CCharacterControllerComponent(CXMLTreeNode& node, CRenderableObject* Owner)
+CCharacterControllerComponent::CCharacterControllerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
-	setName(Owner->getName() + "_CharacterController");
+	setName(name);
 
 	m_height = node.GetFloatProperty( "height", 1, false );
 	m_radius = node.GetFloatProperty( "radius", 0.5, false );
@@ -15,8 +16,8 @@ CCharacterControllerComponent::CCharacterControllerComponent(CXMLTreeNode& node,
 	m_offset = node.GetVect3fProperty( "offset", Vect3f(0, 0, 0), false );
 }
 
-CCharacterControllerComponent::CCharacterControllerComponent(CRenderableObject* Owner)
-	: CComponent(Owner->getName() + "_CharacterController", Owner)
+CCharacterControllerComponent::CCharacterControllerComponent(const std::string& name, CElement* Owner)
+	: CComponent(name, Owner)
 {
 }
 

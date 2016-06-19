@@ -179,6 +179,7 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		action.keyboard.key = 'F';
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
+		action.axisName = "FIXCAMERA";
 		m_Actions.push_back(action);
 	}
 	{

@@ -77,7 +77,7 @@ void CCameraKeyController::GetCurrentKey()
 }
 
 void CCameraKeyController::UpdateCameraValues(CCamera * cam) const
-{	
+{
 	if (m_Playing)
 	{
 		int nextKey = m_CurrentKey + 1;
@@ -120,7 +120,7 @@ void CCameraKeyController::Update( float ElapsedTime )
 	{
 		m_CurrentTime += ElapsedTime;
 		GetCurrentKey();
-	}	
+	}
 }
 
 

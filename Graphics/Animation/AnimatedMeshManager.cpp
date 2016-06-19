@@ -1,21 +1,21 @@
-#include "AnimatedModelManager.h"
+#include "AnimatedMeshManager.h"
 
-#include "AnimatedCoreModel.h"
+#include "AnimatedMesh.h"
 
 #include <XML/XMLTreeNode.h>
 
 #include "cal3d/loader.h"
 
-CAnimatedModelManager::CAnimatedModelManager()
+CAnimatedMeshManager::CAnimatedMeshManager()
 {
 	CalLoader::setLoadingMode(LOADER_ROTATE_X_AXIS);
 }
-CAnimatedModelManager::~CAnimatedModelManager()
+CAnimatedMeshManager::~CAnimatedMeshManager()
 {
 
 }
 
-void CAnimatedModelManager::Load(const std::string &Filename)
+void CAnimatedMeshManager::Load(const std::string &Filename)
 {
 	CXMLTreeNode l_XML;
 	if (l_XML.LoadFile(Filename.c_str()))
@@ -31,7 +31,7 @@ void CAnimatedModelManager::Load(const std::string &Filename)
 				{
 					CXMLTreeNode &animModel = animated_model;
 
-					auto inst = new CAnimatedCoreModel(animModel);
+					auto inst = new CAnimatedMesh(animModel);
 
 					add(inst->getName(), inst);
 				}
@@ -40,8 +40,8 @@ void CAnimatedModelManager::Load(const std::string &Filename)
 	}
 
 }
-void CAnimatedModelManager::Reload()
+void CAnimatedMeshManager::Reload()
 {
 	destroy();
-	Load(CAnimatedModelManager::m_Filename);
+	Load(CAnimatedMeshManager::m_Filename);
 }

@@ -13,11 +13,12 @@ public:
 	CCinematicManager();
 	~CCinematicManager();
 
+	void LoadFilesInDir( std::string dirPath );
 	void Load(std::string nameFile);
 	void Play();
-	void PlayByName(std::string nameToRun);
-	void PauseByName(std::string nameToRun);
-	void StopByName(std::string nameToRun);
+	void Play(std::string nameToRun);
+	void Pause(std::string nameToRun);
+	void Stop(std::string nameToRun);
 	void destroy();
 	void Update(float _elapsedTime);
 

@@ -11,45 +11,51 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\AnimatedInstanceComponent.cpp" />
     <ClCompile Include="Component\CharControllerComponent.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
     <ClCompile Include="Component\FPSCameraComponent.cpp" />
+    <ClCompile Include="Component\MeshInstanceComponent.cpp" />
+    <ClCompile Include="Component\ParticleEmitterComponent.cpp" />
     <ClCompile Include="Component\PhysxComponent.cpp" />
     <ClCompile Include="Component\ScriptedComponent.cpp" />
+    <ClCompile Include="Component\SpeakerComponent.cpp" />
     <ClCompile Include="Component\TriggerComponent.cpp" />
     <ClCompile Include="Debug\DebugHelper.cpp" />
     <ClCompile Include="Debug\DebugHelperImplementation.cpp" />
     <ClCompile Include="Debug\DebugPerf.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
-    <ClCompile Include="IA\IAInstance.cpp" />
-    <ClCompile Include="IA\IAManager.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\InputManagerImplementation.cpp" />
     <ClCompile Include="Logic\LogicManager.cpp" />
-    <ClCompile Include="Trigger\Trigger.cpp" />
-    <ClCompile Include="Trigger\TriggerManager.cpp" />
+    <ClCompile Include="Scene\Element.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\AnimatedInstanceComponent.h" />
     <ClInclude Include="Component\CharControllerComponent.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Component\FPSCameraComponent.h" />
+    <ClInclude Include="Component\MeshInstanceComponent.h" />
+    <ClInclude Include="Component\ParticleEmitterComponent.h" />
     <ClInclude Include="Component\PhysxComponent.h" />
     <ClInclude Include="Component\ScriptedComponent.h" />
+    <ClInclude Include="Component\SpeakerComponent.h" />
     <ClInclude Include="Component\TriggerComponent.h" />
     <ClInclude Include="Debug\DebugHelper.h" />
     <ClInclude Include="Debug\DebugHelperImplementation.h" />
     <ClInclude Include="Debug\DebugPerf.h" />
     <ClInclude Include="Engine\Engine.h" />
-    <ClInclude Include="IA\IAInstance.h" />
-    <ClInclude Include="IA\IAManager.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputManagerImplementation.h" />
     <ClInclude Include="Logic\LogicManager.h" />
+    <ClInclude Include="Scene\Element.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Time\TimeManager.h" />
-    <ClInclude Include="Trigger\Trigger.h" />
-    <ClInclude Include="Trigger\TriggerManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0323B8D9-42B2-4768-9F73-6DDEAFA020E7}</ProjectGuid>

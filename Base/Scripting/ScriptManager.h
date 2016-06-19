@@ -19,6 +19,7 @@ public:
 	void destroy() {}
 
 	void RunCode(const std::string &Code);
+	void RunCodeIf(const std::string &condition, const std::string &Code);
 
 	void RunFile(const std::string &FileName);
 	void Load(const std::string &XMLFile);

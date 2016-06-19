@@ -4,7 +4,6 @@
 #include <PxPhysicsAPI.h>
 
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
-#include <Core/Trigger/TriggerManager.h>
 
 #include <fstream>
 #include <iterator>
@@ -200,17 +199,20 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
 
 		std::string l_triggerName = m_actors.name[l_indexTrigger];
+		std::string l_actorName = m_actors.name[l_indexActor];
 
 	
 
 		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 		{
 			//OutputDebugStringA("Hola!\n");
-			CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
+			//CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
+			m_TriggerCollisions[l_triggerName].emplace(l_actorName);
 		}
 		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
 		{
-			CEngine::GetSingleton().getTriggerManager()->Deactivate(l_triggerName);
+			//CEngine::GetSingleton().getTriggerManager()->Deactivate(l_triggerName);
+			m_TriggerCollisions[l_triggerName].erase(l_actorName);
 		}
 	}
 	
@@ -481,6 +483,11 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	m_actors.position.push_back(desc.position);
 	m_actors.rotation.push_back(desc.orientation);
 	m_actors.actor.push_back(body);
+
+	if (isTrigger)
+	{
+		m_TriggerCollisions[name] = std::set<std::string>();
+	}
 }
 
 void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
@@ -518,7 +525,7 @@ void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
-	createPlane("ground", "ground", Vect4f(0, 1, 0,	40));
+	createPlane("ground", "ground", Vect4f(0, 1, 0,	0));
 }
 
 

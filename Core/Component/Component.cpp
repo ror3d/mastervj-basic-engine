@@ -5,12 +5,15 @@
 #include <Core/Engine/Engine.h>
 #include <Core/Component/ComponentManager.h>
 
-CComponent::CComponent(CXMLTreeNode& node, CRenderableObject* Owner)
+CComponent::CComponent(CXMLTreeNode& node, CElement* Owner)
 	: CNamed(node)
 	, m_Owner(Owner)
 	, m_Initiaized(false)
 {
 	DEBUG_ASSERT( Owner != nullptr );
+
+	m_Enabled = node.GetBoolProperty("enabled", true, false);
+
 	for (int i = 0; i < node.GetNumChildren(); ++i)
 	{
 		auto prop = node(i);
@@ -26,7 +29,7 @@ CComponent::CComponent(CXMLTreeNode& node, CRenderableObject* Owner)
 	}
 }
 
-CComponent::CComponent( const std::string& Name, CRenderableObject* Owner )
+CComponent::CComponent( const std::string& Name, CElement* Owner )
 	: CNamed(Name)
 	, m_Owner(Owner)
 	, m_Initiaized(false)
