@@ -6,15 +6,16 @@
 #include <Sound/SoundManager.h>
 
 //const C3DElement* _speaker;
-CSoundManager SoundManager;
 
 
 CSpeakerComponent::CSpeakerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
 	setName(name);
-	l_Position = node.GetVect3fProperty("position", Vect3f(0.0f, 0.0f, 0.0f));
-	l_Orientation = node.GetVect3fProperty("orientation", Vect3f(0.0f, 0.0f, 0.0f));
+	l_Position = Owner->GetPosition();
+	l_Orientation.x = Owner->GetYaw();
+	l_Orientation.y = Owner->GetPitch();
+	l_Orientation.z = Owner->GetRoll();
 }
 
 CSpeakerComponent::CSpeakerComponent(const std::string& name, CElement* Owner)
@@ -29,12 +30,14 @@ CSpeakerComponent::~CSpeakerComponent()
 void CSpeakerComponent::Init()
 {
 	// TODO: Crear estructures necessàries en el manager d'audio utilitzant getName com a identificador
+	//SoundManager.Init();
 	std::string name = getName();
-	SoundManager.LoadSpeakers(name, l_Position, l_Orientation);
+	CEngine::GetSingleton().getSoundManager()->LoadSpeakers(name, l_Position, l_Orientation);
 	l_speaker = {};
 	l_speaker.SetPosition(l_Position);
 	l_speaker.SetYawPitchRoll(l_Orientation.x, l_Orientation.y, l_Orientation.z);
-	SoundManager.RegisterSpeaker(&l_speaker);
+	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
+	Play((std::string)"Play", true);
 
 }
 
@@ -42,19 +45,21 @@ void CSpeakerComponent::Init()
 void CSpeakerComponent::Destroy()
 {
 	// TODO: Eliminar estructures que calgui del manager d'audio
-	SoundManager.UnregisterSpeaker(&l_speaker);
+	CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&l_speaker);
 }
 
 void CSpeakerComponent::Play( const std::string EventName, bool loop )
 {
 	// TODO: Reproduir one-shot o bucle depenent de loop
-	SoundManager.PlayEvent(EventName, &l_speaker);
+	C3DElement nspeaker = {};
+	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&nspeaker);
+	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &nspeaker);
 }
 
 void CSpeakerComponent::Stop()
 {
 	// Parar reproducció d'audios iniciats per aquest component
-	SoundManager.PlayEvent((std::string)"Stop", &l_speaker);
+	CEngine::GetSingleton().getSoundManager()->PlayEvent((std::string)"Stop", &l_speaker);
 }
 
 void CSpeakerComponent::Update(float ElapsedTime)
@@ -65,7 +70,7 @@ void CSpeakerComponent::Update(float ElapsedTime)
 	Vect3f newOrientation = GetOwner()->GetRotation();
 	if ((newPosition != l_Position) || (newOrientation != l_Orientation))
 	{
-		SoundManager.UnregisterSpeaker(&l_speaker);
+		CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&l_speaker);
 
 		if (newPosition != l_Position)
 		{
@@ -75,7 +80,7 @@ void CSpeakerComponent::Update(float ElapsedTime)
 		{
 			l_speaker.SetYawPitchRoll(l_Orientation.x, l_Orientation.y, l_Orientation.z);
 		}
-		SoundManager.RegisterSpeaker(&l_speaker);
+		CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
 	}
 
 }
