@@ -228,9 +228,9 @@ fn createVertexesForFace obj IdFace matDesc = (
 	local Normal3=(normalize (UABGetVertexNormal obj IdxsFace[3] SmoothValue FaceNormal))*CurrentNrmInvMat
 	
 	
-	local v1 = vertex pos: (ChangeCoordsBase (Vtx1*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal1)
-	local v2 = vertex pos: (ChangeCoordsBase (Vtx2*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal2)
-	local v3 = vertex pos: (ChangeCoordsBase (Vtx3*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal3)
+	local v1 = vertex pos: (ChangeCoordsBase (Vtx1*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal1) uv: (point3 0 0 0) uv2: (point3 0 0 0) binormal: [1,0,0] tangencial: [0,0,1]
+	local v2 = vertex pos: (ChangeCoordsBase (Vtx2*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal2) uv: (point3 0 0 0) uv2: (point3 0 0 0) binormal: [1,0,0] tangencial: [0,0,1]
+	local v3 = vertex pos: (ChangeCoordsBase (Vtx3*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal3) uv: (point3 0 0 0) uv2: (point3 0 0 0) binormal: [1,0,0] tangencial: [0,0,1]
 	
 	if matDesc.texture then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
 	(
@@ -384,6 +384,7 @@ fn createMesh obj = (
 		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
 		(
+			format "idFace %\n" idFace
 			local faceMatId = getRealFaceMatID obj IdFace
 			if faceMatId == usedMaterials[i] then
 			(
@@ -396,6 +397,21 @@ fn createMesh obj = (
 			)
 		)
 		tok s:"gather all vertices for this material"
+		
+		if vtxs.count > 65535 then
+		(
+			format "\n$$$$ Object % has too many vertices: %. Maximum 65535.\n\n" obj.name vtxs.count
+			messageBox ("Object "+obj.name+" has too many vertices: " + (vtxs.count as string) + ". Maximum 65535.") title: "Error!"
+			MyCloseFile()
+			return Ok
+		)
+		if idxs.count > 65535 then
+		(
+			format "\n$$$$ Object % has too many faces: %. Maximum 65535.\n\n" obj.name vtxs.count
+			messageBox ("Object "+obj.name+" has too many faces: " + (vtxs.count as string) + ". Maximum 65535.") title: "Error!"
+			MyCloseFile()
+			return Ok
+		)
 		
 		writeshort file vtxs.count
 		

@@ -1,5 +1,6 @@
 fileIn "exporter.ms"
 fileIn "uab-property-manager.ms"
+fileIn "export-scene-editor.ms"
 
 utility UABUtility "UAB Utility" width:160 height:552
 (
