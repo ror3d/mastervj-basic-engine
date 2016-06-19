@@ -105,129 +105,7 @@ fn createStaticMeshesFile meshesToExport = (
 	
 	MyCloseFile()
 )
-	
-fn createRenderableObjectsFile instances = (
-	MyCreateFile "renderable_objects.xml"
-	
-	WriteXMLPrologToFile()
-	format "<renderable_objects>\n" to:file
-	
-	for i = 1 to instances.count do
-	(
-		local Pos = TranslationToRH (instances[i].transform.translation)
-		local Sc = ScaleToRH instances[i].transform.scale
-		local Yaw = GetYaw (instances[i].transform)
-		local Pitch = GetPitch (instances[i].transform)
-		local Roll = GetRoll (instances[i].transform)
-		local core = getUserProp instances[i] "export_core_name"
-		local PhysxType = getUserProp instances[i] "physics_generate"
-		local separatorEnd = ""
-		if PhysxType == "undefined" then
-		(
-			separatorEnd = "/"
-		)
-		format "\t<mesh_instance name=\"%\" core_name=\"%\" pos=\"% % %\" scale=\"% % %\" yaw=\"%\" pitch=\"%\" roll=\"%\" visible=\"%\"%>\n"\
-					instances[i].name core Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll instances[i].visibility separatorEnd to:file
-		
-		
-		if PhysxType != "undefined" then
-		(
-			local trigger = getUserProp instances[i] "is_trigger" 
-			local anim = getUserProp instances[i] "cinematics_export"
-			local kinematic = "false"
-			local static =  getUserProp instances[i] "physics_static"
-			if anim == "true" then
-			(
-				static = "false"
-				kinematic = "true"
-			)
-			format "\t\t<physx collider_type=\"%\" static=\"%\" kinematic=\"%\" trigger=\"%\" />\n"\
-					PhysxType static kinematic trigger to:file
-			format "\t</mesh_instance>\n" to:file
-		)	
-		
-		
-	)
 
-	format "</renderable_objects>\n" to:file 
-	format "____CreatedRenderableObjects____\n"
-	
-	MyCloseFile()
-)
-
-fn createLogic instances = (
-	MyCreateFile "logic.xml"
-	
-	WriteXMLPrologToFile()
-	format "<logic>\n" to:file
-	
-	for i = 1 to instances.count do
-	(	
-		local l_logicType = getUserProp instances[i] "logic_type"
-		if l_logicType != "" then
-		(				
-			
-			local l_logicActivates = getUserProp instances[i] "logic_activates"
-			if l_logicActivates != "" then 
-			(
-				format "\t<% name=\"%\" activates=\"%\"/>\n"\
-				l_logicType instances[i].name l_logicActivates to:file
-			)
-			else
-			(
-				if l_logicType == "SpawnPlayer" then
-				(
-					local Pos = TranslationToRH (instances[i].transform.translation)
-					local Yaw = GetYaw (instances[i].transform)
-					local Pitch = GetPitch (instances[i].transform)
-					local Roll = GetRoll (instances[i].transform)
-					format "\t<% name=\"%\"  pos=\"% % %\"  yaw=\"%\" pitch=\"%\" roll=\"%\" />\n"\
-					l_logicType instances[i].name  Pos[1] Pos[2] Pos[3] Yaw Pitch Roll to:file
-				)
-				else
-				(
-					format "\t<% name=\"%\" />\n"\
-					l_logicType instances[i].name to:file
-				)
-			)
-			
-		)		
-	)
-
-	format "</logic>\n" to:file 
-	format "____CreatedLogic____\n"
-	
-	MyCloseFile()
-)
-
-fn createTriggersFile instances = (
-	MyCreateFile "Triggers.xml"
-	WriteXMLPrologToFile()
-	format "<triggers>\n" to:file
-	
-	for i = 1 to instances.count do
-	(
-		if getUserProp instances[i] "is_trigger" == true then
-		(
-			local l_arr_boundingBox = nodeLocalBoundingBox instances[i]
-			local l_sizeBoundingBox = l_arr_boundingBox[2] - l_arr_boundingBox[1]
-			local Pos = TranslationToRH (instances[i].transform.translation)
-			local Sc = ScaleToRH instances[i].transform.scale
-			local Yaw = GetYaw (instances[i].transform)
-			local Pitch = GetPitch (instances[i].transform)
-			local Roll = GetRoll (instances[i].transform)
-			local l_trigger_active_once = getUserProp instances[i] "trigger_active_once"
-			
-			format "\t<mesh_instance name=\"%\" ActivateTriggerOnce=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" />\n"\
-							instances[i].name l_trigger_active_once  Pos[1] Pos[2] Pos[3] l_sizeBoundingBox[1] l_sizeBoundingBox[3] l_sizeBoundingBox[2] Yaw Pitch Roll  to:file
-	
-		)
-		
-	)
-	format "</triggers>\n" to:file 
-	format "____CreatedTriggers____\n"
-	MyCloseFile()
-)
 
 ---------------------------------------------------------------------
 -- NORMALS
@@ -350,9 +228,9 @@ fn createVertexesForFace obj IdFace matDesc = (
 	local Normal3=(normalize (UABGetVertexNormal obj IdxsFace[3] SmoothValue FaceNormal))*CurrentNrmInvMat
 	
 	
-	local v1 = vertex pos: (ChangeCoordsBase (Vtx1*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal1)
-	local v2 = vertex pos: (ChangeCoordsBase (Vtx2*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal2)
-	local v3 = vertex pos: (ChangeCoordsBase (Vtx3*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal3)
+	local v1 = vertex pos: (ChangeCoordsBase (Vtx1*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal1) uv: (point3 0 0 0) uv2: (point3 0 0 0) binormal: [1,0,0] tangencial: [0,0,1]
+	local v2 = vertex pos: (ChangeCoordsBase (Vtx2*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal2) uv: (point3 0 0 0) uv2: (point3 0 0 0) binormal: [1,0,0] tangencial: [0,0,1]
+	local v3 = vertex pos: (ChangeCoordsBase (Vtx3*CurrentObjInvMat) ) normal: (ChangeCoordsBase Normal3) uv: (point3 0 0 0) uv2: (point3 0 0 0) binormal: [1,0,0] tangencial: [0,0,1]
 	
 	if matDesc.texture then -- map[0] is the color, map[1] is the default texture, so at least 1 map (color) is always there
 	(
@@ -506,6 +384,7 @@ fn createMesh obj = (
 		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
 		(
+			format "idFace %\n" idFace
 			local faceMatId = getRealFaceMatID obj IdFace
 			if faceMatId == usedMaterials[i] then
 			(
@@ -518,6 +397,21 @@ fn createMesh obj = (
 			)
 		)
 		tok s:"gather all vertices for this material"
+		
+		if vtxs.count > 65535 then
+		(
+			format "\n$$$$ Object % has too many vertices: %. Maximum 65535.\n\n" obj.name vtxs.count
+			messageBox ("Object "+obj.name+" has too many vertices: " + (vtxs.count as string) + ". Maximum 65535.") title: "Error!"
+			MyCloseFile()
+			return Ok
+		)
+		if idxs.count > 65535 then
+		(
+			format "\n$$$$ Object % has too many faces: %. Maximum 65535.\n\n" obj.name vtxs.count
+			messageBox ("Object "+obj.name+" has too many faces: " + (vtxs.count as string) + ". Maximum 65535.") title: "Error!"
+			MyCloseFile()
+			return Ok
+		)
 		
 		writeshort file vtxs.count
 		

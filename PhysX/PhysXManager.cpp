@@ -194,14 +194,14 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 	{
 		if ((pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
 			continue;
-		
+
 		size_t l_indexTrigger = (size_t)pairs[i].triggerActor->userData;
 		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
 
 		std::string l_triggerName = m_actors.name[l_indexTrigger];
 		std::string l_actorName = m_actors.name[l_indexActor];
 
-	
+
 
 		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 		{
@@ -215,7 +215,7 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 			m_TriggerCollisions[l_triggerName].erase(l_actorName);
 		}
 	}
-	
+
 }
 
 
@@ -398,7 +398,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	physx::PxMaterial* mat = matIt->second;
 
 	physx::PxGeometry* geom = nullptr;
-	
+
 	switch (desc.shape)
 	{
 		case CPhysxColliderShapeDesc::Shape::Box:
@@ -561,12 +561,27 @@ bool CPhysXManager::isCharacterControllerGrounded( const std::string &name )
 	return state.touchedActor != nullptr;
 }
 
+void CPhysXManager::resizeCharacterController( const std::string & name, float height, float radius )
+{
+	auto it = m_CharacterControllers.find( name );
+	DEBUG_ASSERT( it != m_CharacterControllers.end() );
+	if ( it == m_CharacterControllers.end() )
+	{
+		return;
+	}
+	physx::PxCapsuleController* cc = (physx::PxCapsuleController*)(it->second);
+	auto pos = cc->getFootPosition();
+	cc->resize( height );
+	cc->setRadius( radius );
+	cc->setFootPosition( pos );
+}
+
 void CPhysXManager::releaseCharacterController( const std::string &name )
 {
 	auto it = m_CharacterControllers.find( name );
+	DEBUG_ASSERT( it != m_CharacterControllers.end() );
 	if ( it == m_CharacterControllers.end() )
 	{
-		DEBUG_ASSERT( it == m_CharacterControllers.end() );
 		return;
 	}
 	physx::PxController *cct = it->second;

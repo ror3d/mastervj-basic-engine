@@ -97,6 +97,8 @@ public:
 
 	bool isCharacterControllerGrounded(const std::string &name);
 
+	void resizeCharacterController( const std::string &name, float height, float radius );
+
 	void releaseCharacterController(const std::string &name);
 
 	void releaseCharacterControllers();
