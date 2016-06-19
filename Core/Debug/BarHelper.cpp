@@ -142,39 +142,32 @@ void CBarHelper::AddButtonVect3f(CDebugHelper::SDebugBar &bar, std::string name,
 	bar.variables.push_back(var);
 }
 
-void CBarHelper::AddRangeFloat(CDebugHelper::SDebugBar &bar, std::string name, range<float> *value, std::string params)
+void CBarHelper::AddRangeFloat(CDebugHelper::SDebugBar &bar, std::string name, range<float> *value)
 {
 	AddButtonFloat(bar, "E " + name, CBarCalls::EqualVarsFloat, value);
-	AddFloatParameter(bar, "L " + name, &value->first, params);
-	AddFloatParameter(bar, "U " + name, &value->second, params);
+	AddFloatParameter(bar, "L " + name, &value->first, value->params);
+	AddFloatParameter(bar, "U " + name, &value->second, value->params);
 }
 
-void CBarHelper::AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColorSpace> *value, std::string params)
+void CBarHelper::AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColorSpace> *value)
 {
 	AddButtonColor(bar, "E " + name, CBarCalls::EqualVarsColor, value);
 
-	AddFloatParameter(bar, "L " + name + " X", &value->first.x, params + " group='Lower " + name + "'");
-	AddFloatParameter(bar, "L " + name + " Y", &value->first.y, params + " group='Lower " + name + "'");
-	AddFloatParameter(bar, "L " + name + " Z", &value->first.z, params + " group='Lower " + name + "'");
-	AddFloatParameter(bar, "L " + name + " W", &value->first.w, params + " group='Lower " + name + "'");
-
-	AddFloatParameter(bar, "U " + name + " X", &value->second.x, params + " group='Upper " + name + "'");
-	AddFloatParameter(bar, "U " + name + " Y", &value->second.y, params + " group='Upper " + name + "'");
-	AddFloatParameter(bar, "U " + name + " Z", &value->second.z, params + " group='Upper " + name + "'");
-	AddFloatParameter(bar, "U " + name + " W", &value->second.w, params + " group='Upper " + name + "'");
+	AddColorParameter(bar, "color L", &value->first, CDebugHelper::Mode::READ_WRITE);
+	AddColorParameter(bar, "color U", &value->second, CDebugHelper::Mode::READ_WRITE);
 }
 
-void CBarHelper::AddRangeVect3f(CDebugHelper::SDebugBar &bar, std::string name, range<Vect3f> *value, std::string params = "")
+void CBarHelper::AddRangeVect3f(CDebugHelper::SDebugBar &bar, std::string name, range<Vect3f> *value)
 {
 	AddButtonVect3f(bar, "E " + name, CBarCalls::EqualVarsVect3f, value);
 
-	AddFloatParameter(bar, "L " + name + " X", &value->first.x, params + " group='Lower " + name + "'");
-	AddFloatParameter(bar, "L " + name + " Y", &value->first.y, params + " group='Lower " + name + "'");
-	AddFloatParameter(bar, "L " + name + " Z", &value->first.z, params + " group='Lower " + name + "'");
+	AddFloatParameter(bar, "L " + name + " X", &value->first.x, value->params + " group='Lower " + name + "'");
+	AddFloatParameter(bar, "L " + name + " Y", &value->first.y, value->params + " group='Lower " + name + "'");
+	AddFloatParameter(bar, "L " + name + " Z", &value->first.z, value->params + " group='Lower " + name + "'");
 
-	AddFloatParameter(bar, "U " + name + " X", &value->second.x, params + " group='Upper " + name + "'");
-	AddFloatParameter(bar, "U " + name + " Y", &value->second.y, params + " group='Upper " + name + "'");
-	AddFloatParameter(bar, "U " + name + " Z", &value->second.z, params + " group='Upper " + name + "'");
+	AddFloatParameter(bar, "U " + name + " X", &value->second.x, value->params + " group='Upper " + name + "'");
+	AddFloatParameter(bar, "U " + name + " Y", &value->second.y, value->params + " group='Upper " + name + "'");
+	AddFloatParameter(bar, "U " + name + " Z", &value->second.z, value->params + " group='Upper " + name + "'");
 }
 
 void CBarHelper::AddCloseBar(CDebugHelper::SDebugBar &bar)
@@ -223,8 +216,7 @@ void CBarHelper::CreateParticleParametersBar(CParticleSystemClass * particle, CP
 	AddButtonParticle(bar, "Load texture", CBarCalls::LoadTexture, particleInstance->getParticleClass());
 	AddSeparator(bar);
 	AddFloatParameter(bar, "Emit rate", &particle->emitRate, "min=1 max=100 step=1 precision=0");
-	AddIntParameter(bar, "Num frames", &particle->numFrames, "min=1 max=30 step=1 precision=0");
-	AddFloatParameter(bar, "Time per frame", &particle->timePerFrame, "min=0 max=10 step=1 precision=0");
+	AddIntParameter(bar, "Num frames", &particle->numFrames, "min=1 max=120 step=1 precision=0");
 	AddBoolParameter(bar, "LoopFrames", &particle->loopFrames);
 	AddSeparator(bar);
 	AddFloatParameter(bar, "Sprite X", &((CTemplatedMaterialParameter<Vect2f>*)params->at(0))->getValue()->x, params->at(0)->getParamValues() + " group='Sprite size'");
@@ -232,25 +224,22 @@ void CBarHelper::CreateParticleParametersBar(CParticleSystemClass * particle, CP
 	AddFloatParameter(bar, "Lerp sprite", ((CTemplatedMaterialParameter<float>*)params->at(1))->getValue(), params->at(1)->getParamValues());
 	AddFloatParameter(bar, "Ratio Y", ((CTemplatedMaterialParameter<float>*)params->at(2))->getValue(), params->at(2)->getParamValues());
 	AddSeparator(bar);
-	AddRangeFloat(bar, "size", &particle->size, "min=0 max=5 step=0.1 precision=1");
+	AddRangeFloat(bar, "size", &particle->size);
 	AddSeparator(bar);
-	AddRangeVect3f(bar, "velocity", &particle->startVelocity, "min=-50 max=50 step=0.1 precision=1");
+	AddRangeVect3f(bar, "velocity", &particle->startVelocity);
 	AddSeparator(bar);
-	AddRangeVect3f(bar, "acceleration", &particle->acceleration, "min=-50 max=50 step=0.1 precision=1");
+	AddRangeVect3f(bar, "acceleration", &particle->acceleration);
 	AddSeparator(bar);
-	AddRangeFloat(bar, "angle", &particle->startAngle, "min=0 max=360 step=0.5 precision=1");
+	AddRangeFloat(bar, "angle", &particle->startAngle);
 	AddSeparator(bar);
-	AddRangeFloat(bar, "angle speed", &particle->angleSpeed, "min=-50 max=50 step=0.1 precision=1");
+	AddRangeFloat(bar, "angle speed", &particle->angleSpeed);
 	AddSeparator(bar);
-	AddRangeFloat(bar, "angle acceleration", &particle->angleAcceleration, "min=-50 max=50 step=0.1 precision=1");
+	AddRangeFloat(bar, "angle acceleration", &particle->angleAcceleration);
 	AddSeparator(bar);
-	AddRangeFloat(bar, "life", &particle->life, "min=1 max=5 step=1 precision=0");
+	AddRangeFloat(bar, "life", &particle->life);
 	AddSeparator(bar);
-	AddButtonParticle(bar, "toggle color space", CBarCalls::ChangeColorSpace, particle);
-	AddBoolParameter(bar, "hsl", &particle->color.first.HSL);
-	AddRangeColor(bar, "color", &particle->color, "min=0.0 max=1.0 step=0.01 precision=2");
-	AddColorParameter(bar, "color appearance 1", &particle->color.first);
-	AddColorParameter(bar, "color appearance 2", &particle->color.second);
+	AddBoolParameter(bar, "interpolation", &particle->colorInterpolation);
+	AddRangeColor(bar, "color", &particle->color);
 	AddSeparator(bar);
 
 

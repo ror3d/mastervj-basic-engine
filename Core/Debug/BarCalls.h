@@ -20,7 +20,7 @@ public:
 	static void TW_CALL SaveToFile(void *_app);
 	static void TW_CALL LoadTexture(void *part);
 	static void TW_CALL DeleteParticle(void *part);
-	static void TW_CALL ChangeColorSpace(void *part);
+	static void TW_CALL ToggleColorInterpolation(void *part);
 };
 
 #endif

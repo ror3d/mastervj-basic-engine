@@ -19,9 +19,9 @@ public:
 	static void AddButtonFloat(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<float> *value);
 	static void AddButtonColor(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<CColorSpace> *value);
 	static void AddButtonVect3f(CDebugHelper::SDebugBar &bar, std::string name, CDebugHelper::Callback callback, range<Vect3f> *value);
-	static void AddRangeFloat(CDebugHelper::SDebugBar &bar, std::string name, range<float> *value, std::string params);
-	static void AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColorSpace> *value, std::string params);
-	static void AddRangeVect3f(CDebugHelper::SDebugBar &bar, std::string name, range<Vect3f> *value, std::string params);
+	static void AddRangeFloat(CDebugHelper::SDebugBar &bar, std::string name, range<float> *value);
+	static void AddRangeColor(CDebugHelper::SDebugBar &bar, std::string name, range<CColorSpace> *value);
+	static void AddRangeVect3f(CDebugHelper::SDebugBar &bar, std::string name, range<Vect3f> *value);
 	static void AddCloseBar(CDebugHelper::SDebugBar &bar);
 	static void CreateMainBar();
 	static void ReloadBars();

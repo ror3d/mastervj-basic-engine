@@ -15,22 +15,23 @@ class range
 public:
 	T first;
 	T second;
+	std::string params;
 
-	range() : first(), second() {}
-	range(const T &v) : first(v), second(v) {}
-	range(const T &f, const T &s) : first(f), second(s) {}
-	range(const range<T> &r) : first(r.first), second(r.second) {}
+	range() : first(), second(), params("") {}
+	range(const T &v, const std::string params) : first(v), second(v), params(params) {}
+	range(const T &f, const T &s, const std::string params) : first(f), second(s), params(params) {}
+	range(const range<T> &r) : first(r.first), second(r.second), params(r.params) {}
 };
 
 template<typename T>
-range<T> make_range(const T& v)
+range<T> make_range(const T& v, const std::string params = "")
 {
-	return range<T>(v, v);
+	return range<T>(v, v, params);
 }
 template<typename T>
-range<T> make_range(const T& f, const T& s)
+range<T> make_range(const T& f, const T& s, const std::string params = "")
 {
-	return range<T>(f, s);
+	return range<T>(f, s, params);
 }
 
 class CParticleSystemClass : public CNamed
@@ -44,8 +45,8 @@ public:
 	CMaterial *material;
 
 	int numFrames;
-	float timePerFrame;
 	bool loopFrames;
+	bool colorInterpolation;
 
 	float emitRate;
 	range<float> size;

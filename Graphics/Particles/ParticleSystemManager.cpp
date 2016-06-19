@@ -36,16 +36,17 @@ namespace
 	range<T> getRangeValue( const CXMLTreeNode& node )
 	{
 		std::string n = node.GetName();
+		std::string params = node.GetPszProperty("params", "", false);
 		if ( n == "range" )
 		{
 			T lower = getProp<T>( node, "lower", T() );
 			T upper = getProp<T>( node, "upper", T() );
-			return make_range( lower, upper );
+			return make_range( lower, upper, params);
 		}
 		else if ( n == "value" )
 		{
 			T val = getProp<T>( node, "value", T() );
-			return make_range( val );
+			return make_range( val, params );
 		}
 		else
 		{
@@ -66,8 +67,8 @@ CParticleSystemClass::CParticleSystemClass(const CXMLTreeNode& node)
 	DEBUG_ASSERT( emitRate > 0 );
 
 	numFrames = node.GetIntProperty("num_frames", 1, false);
-	timePerFrame = node.GetFloatProperty("time_per_frame", 0, false);
 	loopFrames = node.GetBoolProperty( "loop_frames", false, false );
+	colorInterpolation = node.GetBoolProperty("color_interpolation", false, false);
 	
 	for ( int i = 0; i < node.GetNumChildren(); ++i )
 	{
@@ -118,9 +119,9 @@ CParticleSystemClass::CParticleSystemClass(const CParticleSystemClass& original)
 	: CNamed(original.getName())
 	, material(original.material)
 	, numFrames(original.numFrames)
-	, timePerFrame(original.timePerFrame)
 	, loopFrames(original.loopFrames)
 	, emitRate(original.emitRate)
+	, colorInterpolation(original.colorInterpolation)
 	, size(original.size)
 	, life(original.life)
 	, startVelocity(original.startVelocity)
@@ -196,6 +197,8 @@ void AddFloatRangeValue(CXMLTreeNode &xml, std::string name, range<float> value)
 		xml.WriteFloatProperty("upper", value.second);
 	}
 
+	xml.WritePszProperty("params", value.params.c_str());
+
 	xml.EndElement();
 }
 
@@ -215,6 +218,8 @@ void AddVect3fRangeValue(CXMLTreeNode &xml, std::string name, range<Vect3f> valu
 		xml.WriteVect3fProperty("upper", value.second);
 	}
 
+	xml.WritePszProperty("params", value.params.c_str());
+
 	xml.EndElement();
 }
 
@@ -233,8 +238,6 @@ void AddColorRangeValue(CXMLTreeNode &xml, std::string name, CParticleSystemClas
 		xml.WriteVect4fProperty("lower", particle->color.first);
 		xml.WriteVect4fProperty("upper", particle->color.second);
 	}
-
-	xml.WriteBoolProperty("hsl", particle->color.first.HSL);
 
 	xml.EndElement();
 }
@@ -262,7 +265,6 @@ void CParticleSystemManager::writeFile()
 			NewXML.WritePszProperty("material", particle->material->getName().c_str());
 			NewXML.WriteFloatProperty("emit_rate", particle->emitRate);
 			NewXML.WriteIntProperty("num_frames", particle->numFrames);
-			NewXML.WriteFloatProperty("time_per_frame", particle->timePerFrame);
 			NewXML.WriteBoolProperty("loop_frames", particle->loopFrames);
 
 			AddFloatRangeValue(NewXML, "size", particle->size);
