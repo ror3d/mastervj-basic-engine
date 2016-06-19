@@ -17,9 +17,8 @@
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
-#include <Graphics/Layer/LayerManager.h>
-#include <Graphics/Renderable/RenderableObjectsManager.h>
-#include <Graphics/Renderable/RenderableObject.h>
+#include <Core/Component/ComponentManager.h>
+#include <Core/Component/ParticleEmitterComponent.h>
 #include <vector>
 #include <tchar.h>
 
@@ -27,6 +26,7 @@
 #define IDC_EDIT1 1001
 
 std::string INPUT_TEXT;
+std::string PARTICLE_EMITTER_NAME = "particle_ParticleEmitter";
 
 INT_PTR CALLBACK CBarCalls::DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -97,7 +97,7 @@ INT_PTR CALLBACK CBarCalls::DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
 
 void CBarCalls::OpenParticleDialog(CParticleSystemClass * particle)
 {
-	CParticleSystemInstance* particleInstance = (CParticleSystemInstance*)CEngine::GetSingleton().getLayerManager()->get("particles")->get("particle");
+	CParticleSystemInstance* particleInstance = ((CParticleEmitterComponent*)CEngine::GetSingleton().getComponentManager()->get(PARTICLE_EMITTER_NAME))->GetParticleSystemInstance();
 	INT_PTR status = DialogBox(NULL, MAKEINTRESOURCE(IDD_DIALOG1), NULL, DlgProc);
 
 	if (status == 1 && INPUT_TEXT != "")
@@ -130,7 +130,7 @@ void TW_CALL CBarCalls::RemoveBar(void* bar)
 
 void TW_CALL CBarCalls::OpenParticleParameters(void *part)
 {
-	CParticleSystemInstance* particleInstance = (CParticleSystemInstance*)CEngine::GetSingleton().getLayerManager()->get("particles")->get("particle");
+	CParticleSystemInstance* particleInstance = ((CParticleEmitterComponent*)CEngine::GetSingleton().getComponentManager()->get(PARTICLE_EMITTER_NAME))->GetParticleSystemInstance();
 	CParticleSystemClass * particle = (CParticleSystemClass *)part;
 
 	if (particle->getName() == "new_particle")
@@ -145,7 +145,7 @@ void TW_CALL CBarCalls::OpenParticleParameters(void *part)
 
 void TW_CALL CBarCalls::CloneParticle(void * part)
 {
-	CParticleSystemInstance* particleInstance = (CParticleSystemInstance*)CEngine::GetSingleton().getLayerManager()->get("particles")->get("particle");
+	CParticleSystemInstance* particleInstance = ((CParticleEmitterComponent*)CEngine::GetSingleton().getComponentManager()->get(PARTICLE_EMITTER_NAME))->GetParticleSystemInstance();
 	CParticleSystemClass * particle = (CParticleSystemClass *)part;
 
 	OpenParticleDialog(particle);
@@ -182,7 +182,6 @@ void TW_CALL CBarCalls::ReloadParticles(void* _app)
 	CEngine::GetSingleton().getMaterialManager()->reload();
 	CEngine::GetSingleton().getStaticMeshManager()->Reload();
 	CEngine::GetSingleton().getParticleManager()->reload();
-	CEngine::GetSingleton().getLayerManager()->Reload();
 	CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 }
 
@@ -286,7 +285,7 @@ void TW_CALL CBarCalls::DeleteParticle(void *part)
 {
 	CParticleSystemClass * particle = (CParticleSystemClass*)part;
 
-	CParticleSystemInstance* particleInstance = (CParticleSystemInstance*)CEngine::GetSingleton().getLayerManager()->get("particles")->get("particle");
+	CParticleSystemInstance* particleInstance = ((CParticleEmitterComponent*)CEngine::GetSingleton().getComponentManager()->get(PARTICLE_EMITTER_NAME))->GetParticleSystemInstance();
 	particleInstance->setParticleClass(CEngine::GetSingleton().getParticleManager()->get("new_particle"));
 
 	std::vector<std::string>* nameVector = new std::vector<std::string>();

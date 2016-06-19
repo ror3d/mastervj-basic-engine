@@ -47,7 +47,7 @@ CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
 	, m_unitDist(0, 1)
 	, m_enabled(true)
 {
-	std::string particleClass = treeNode.GetPszProperty("particle_class", "", true);
+	std::string particleClass = treeNode.GetPszProperty("class", "", true);
 	m_particleSystemClass = CEngine::GetSingleton().getParticleManager()->get(particleClass);
 	DEBUG_ASSERT(m_particleSystemClass);
 

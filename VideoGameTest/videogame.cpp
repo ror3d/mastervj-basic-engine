@@ -230,7 +230,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	//engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
 	engine.getAnimatedMeshManager()->Load("Data\\animated_models.xml");
-	//engine.getParticleManager()->Load("Data\\particle_classes.xml");
+	engine.getParticleManager()->Load("Data\\particle_classes.xml");
 	//engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");

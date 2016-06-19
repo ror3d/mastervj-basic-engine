@@ -61,6 +61,12 @@
     <ClCompile Include="Component\ParticleEmitterComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\BarCalls.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\BarHelper.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -148,6 +154,12 @@
     </ClInclude>
     <ClInclude Include="Component\MeshInstanceComponent.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\BarCalls.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\BarHelper.h">
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

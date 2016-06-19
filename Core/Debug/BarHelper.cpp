@@ -17,9 +17,6 @@
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
-#include <Graphics/Layer/LayerManager.h>
-#include <Graphics/Renderable/RenderableObjectsManager.h>
-#include <Graphics/Renderable/RenderableObject.h>
 #include <Base\Math\Color.h>
 #include <vector>
 #include <tchar.h>
