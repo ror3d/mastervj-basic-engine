@@ -261,7 +261,9 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CFPSCameraComponent"]
 		.SetClass<CFPSCameraComponent, CRenderableObject*>(
-			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera);
+			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
+			"SetFollowCharacter", &CFPSCameraComponent::SetFollowCharacter,
+			"GetYaw", &CFPSCameraComponent::GetYaw);
 
 
 	(*m_state)["TriggerComponent"]
