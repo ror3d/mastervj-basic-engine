@@ -266,6 +266,7 @@ void CParticleSystemManager::writeFile()
 			NewXML.WriteFloatProperty("emit_rate", particle->emitRate);
 			NewXML.WriteIntProperty("num_frames", particle->numFrames);
 			NewXML.WriteBoolProperty("loop_frames", particle->loopFrames);
+			NewXML.WriteBoolProperty("color_interpolation", particle->colorInterpolation);
 
 			AddFloatRangeValue(NewXML, "size", particle->size);
 			AddVect3fRangeValue(NewXML, "velocity", particle->startVelocity);
