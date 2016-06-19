@@ -56,6 +56,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	checkbox autoload_ckb "Load automatically when selection changes" pos:[312,680] width:232 height:16
 	checkbox export_light_ckb "Export As Light" pos:[24,568] width:176 height:16
 	checkbox export_cinem_ckb "Export Transform Anim." pos:[232,568] width:152 height:16
+	local CinematicsLoopTypes = #("Cycle", "Reverse", "One-Shot")
 	radiobuttons cinematic_type_radio "" pos:[248,592] width:68 height:48 enabled:false labels:#("Cycle", "Reverse", "One-Shot") columns:1
 	checkbox export_particle_ckb "Export Emitter" pos:[448,344] width:152 height:16
 	label lbl43 "Emitter Class" pos:[464,368] width:112 height:16
@@ -290,11 +291,18 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		)
 	)
 	
-	fn LoadRadioProp radio propName = (
+	fn LoadRadioProp radio arr propName = (
 		local val = getUserProp m_ObjSelected propName
 		if val != undefined then
 		(
-			--radio.state = findItem radio.labels val
+			for i = 1 to arr.count do
+			(
+				if arr[i] == val then
+				(
+					radio.state = i
+					exit
+				)
+			)
 		)
 		else
 		(
@@ -302,10 +310,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		)
 	)
 	
-	fn SaveRadioProp obj radio propName = (
+	fn SaveRadioProp obj radio arr propName = (
 		if radio.state != 0 then
 		(
-			setUserProp obj propName radio.labels[radio.state]
+			setUserProp obj propName arr[radio.state]
 		)
 		else
 		(
@@ -405,7 +413,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		LoadCkbProp export_light_ckb "ExportAsLight"
 		
 		LoadCkbProp export_cinem_ckb "ExportTAnimation"
-		LoadRadioProp cinematic_type_radio "TAnimationType"
+		LoadRadioProp cinematic_type_radio CinematicsLoopTypes "TAnimationType"
 		
 		UpdateEnabledProps()
 	)
@@ -475,7 +483,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		SaveCkbProp Obj export_light_ckb "ExportAsLight"
 		
 		SaveCkbProp Obj export_cinem_ckb "ExportTAnimation"
-		SaveRadioProp Obj cinematic_type_radio "TAnimationType"
+		SaveRadioProp Obj cinematic_type_radio CinematicsLoopTypes "TAnimationType"
 		
 		if exportMeshCore then (
 			setUserProp Obj "export_mesh_instance" true

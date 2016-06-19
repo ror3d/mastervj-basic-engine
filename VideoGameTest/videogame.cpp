@@ -256,6 +256,9 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		engine.getComponentManager()->FirstInitialization();
 
+		engine.getCinematicManager()->Load("Data\\Animations\\Stadium_Cinematics.xml");
+		engine.getCinematicManager()->Play();
+
 
 
 		CDebugHelperImplementation debugHelper(context.GetDevice());

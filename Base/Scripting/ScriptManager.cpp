@@ -146,7 +146,7 @@ void CScriptManager::RunScript(const std::string& name)
 {
 	auto it = m_loadedScripts.find(name);
 	DEBUG_ASSERT (it != m_loadedScripts.end());
-
+	
 	RunCode(it->second);
 }
 
@@ -272,7 +272,9 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CFPSCameraComponent"]
 		.SetClass<CFPSCameraComponent, const std::string&, CElement*>(
-			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera);
+			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
+			"SetFollowCharacter", &CFPSCameraComponent::SetFollowCharacter,
+			"GetYaw", &CFPSCameraComponent::GetYaw);
 
 
 	(*m_state)["CTriggerComponent"]
@@ -336,7 +338,7 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CSoundManager"].SetObj(
 		*CEngine::GetSingleton().getSoundManager(),
-		//"PlayEvent", &CSoundManager::PlayEvent,
+		//"PlayEvent", &CSoundManager::PlayEvent, 
 		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
 		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,

@@ -16,8 +16,9 @@ CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CE
 	m_isStatic = node.GetBoolProperty("static", false);
 	m_isKinematic = node.GetBoolProperty("kinematic", false);
 	m_coreName = node.GetPszProperty("core_mesh", "");
-	if (m_coreName == "")
+	if (m_coreName == "" && (m_colType == "ConvexMesh" || m_colType == "TriangleMesh"))
 	{
+		DEBUG_ASSERT( !"Collider type requires core_mesh!" );
 		m_colType = "Sphere";
 	}
 	//m_isTrigger = node.GetBoolProperty("trigger", false);
@@ -45,6 +46,7 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 	desc.size = scale;
 	desc.position = position;
 	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
+	desc.density = 1;
 
 	CPhysXManager::ActorType actorType;
 	if (m_isStatic)
@@ -92,7 +94,6 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
 		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
-		actorType = CPhysXManager::ActorType::Static;
 	}
 	else
 	{
