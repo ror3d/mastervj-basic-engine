@@ -12,6 +12,9 @@
 
 #pragma comment(lib,"d3d11.lib")
 
+#include <Core/Engine/Engine.h>
+#include <Scene/SceneRendererCommandManager.h>
+
 
 CContextManager::CContextManager()
 	: m_D3DDevice(nullptr)

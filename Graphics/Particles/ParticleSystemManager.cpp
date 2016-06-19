@@ -3,6 +3,8 @@
 #include <Base/XML/XMLTreeNode.h>
 #include <Core/Engine/Engine.h>
 #include <Graphics/Material/MaterialManager.h>
+#include <Graphics/Material/Material.h>
+#include <Windows.h>
 
 namespace
 {
@@ -25,9 +27,9 @@ namespace
 	}
 
 	template<>
-	CColor getProp( const CXMLTreeNode& node, std::string prop, CColor defVal )
+	CColorSpace getProp(const CXMLTreeNode& node, std::string prop, CColorSpace defVal)
 	{
-		return CColor(node.GetVect4fProperty( prop.c_str(), Vect4f(defVal.x, defVal.y, defVal.z, defVal.w), false ));
+		return CColorSpace(node.GetVect4fProperty(prop.c_str(), Vect4f(defVal.x, defVal.y, defVal.z, defVal.w), false), node.GetBoolProperty("hsl", false, false));
 	}
 
 	template<typename T>
@@ -64,10 +66,9 @@ CParticleSystemClass::CParticleSystemClass(const CXMLTreeNode& node)
 	DEBUG_ASSERT( emitRate > 0 );
 
 	numFrames = node.GetIntProperty("num_frames", 1, false);
-	timePerFrame = node.GetFloatProperty("time_per_frame", 0, false);
 	loopFrames = node.GetBoolProperty( "loop_frames", false, false );
-
-
+	colorInterpolation = node.GetBoolProperty("color_interpolation", false, false);
+	
 	for ( int i = 0; i < node.GetNumChildren(); ++i )
 	{
 		CXMLTreeNode prop = node( i );
@@ -101,15 +102,20 @@ CParticleSystemClass::CParticleSystemClass(const CXMLTreeNode& node)
 		{
 			angleAcceleration = getRangeValue<float>( prop );
 		}
-		else if ( type == "color" )
+		else if (type == "color")
 		{
-			color = getRangeValue<CColor>( prop );
+			color = getRangeValue<CColorSpace>(prop);
 		}
 		else if ( type == "life" )
 		{
 			life = getRangeValue<float>( prop );
 		}
 	}
+}
+
+CParticleSystemClass::~CParticleSystemClass()
+{
+
 }
 
 void CParticleSystemManager::Load(const std::string &Filename)
@@ -144,6 +150,9 @@ void CParticleSystemManager::Load(const std::string &Filename)
 
 }
 
+CParticleSystemManager::~CParticleSystemManager()
+{
+}
 
 void CParticleSystemManager::reload()
 {

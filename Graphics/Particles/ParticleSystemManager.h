@@ -4,7 +4,7 @@
 #include <Base/Utils/TMapManager.h>
 #include <Base/Utils/Named.h>
 #include <Base/Math/Math.h>
-#include <Base/Math/Color.h>
+#include <Base/Math/ColorSpace.h>
 
 class CMaterial;
 class CXMLTreeNode;
@@ -19,6 +19,7 @@ public:
 	range() : first(), second() {}
 	range(const T &v) : first(v), second(v) {}
 	range(const T &f, const T &s) : first(f), second(s) {}
+	range(const range<T> &r) : first(r.first), second(r.second) {}
 };
 
 template<typename T>
@@ -37,12 +38,13 @@ class CParticleSystemClass : public CNamed
 public:
 	CParticleSystemClass(const std::string& name) : CNamed(name) {}
 	CParticleSystemClass(const CXMLTreeNode& node);
+	~CParticleSystemClass();
 
 	CMaterial *material;
 
 	int numFrames;
-	float timePerFrame;
 	bool loopFrames;
+	bool colorInterpolation;
 
 	float emitRate;
 	range<float> size;
@@ -52,7 +54,7 @@ public:
 	range<float> startAngle;
 	range<float> angleSpeed;
 	range<float> angleAcceleration;
-	range<CColor> color;
+	range<CColorSpace> color;
 };
 
 
@@ -61,10 +63,13 @@ class CParticleSystemManager : public TMapManager<CParticleSystemClass>
 	std::string m_Filename;
 
 public:
+	~CParticleSystemManager();
 
 	void Load(const std::string &Filename);
 
-	void reload();
+	void reload();	
+
+	std::map<std::string, CParticleSystemClass*> * getMap() { return &m_resources; }
 };
 
 
