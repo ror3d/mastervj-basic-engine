@@ -53,8 +53,8 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
 	//CCamera l_Camera = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
-	//CCamera l_Camera = { };
-	//CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
+	CCamera l_Camera = { };
+	CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
 	
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))

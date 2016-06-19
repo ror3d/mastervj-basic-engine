@@ -52,8 +52,10 @@ void CSpeakerComponent::Play( const std::string EventName, bool loop )
 {
 	// TODO: Reproduir one-shot o bucle depenent de loop
 	C3DElement nspeaker = {};
-	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&nspeaker);
-	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &nspeaker);
+	/*CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&nspeaker);
+	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &nspeaker);*/
+	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &l_speaker);
+
 }
 
 void CSpeakerComponent::Stop()
