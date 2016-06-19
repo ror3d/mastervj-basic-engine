@@ -8,7 +8,7 @@
 
 class CPhysxComponent : public CComponent
 {
-	
+
 protected:
 	std::string m_colType;
 	std::string m_coreName;

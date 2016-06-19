@@ -61,6 +61,9 @@
     <ClCompile Include="Component\ParticleEmitterComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Component\SpeakerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
     <ClCompile Include="Debug\BarCalls.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Debug\BarHelper.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SpeakerComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

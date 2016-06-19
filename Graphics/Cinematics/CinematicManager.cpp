@@ -6,6 +6,8 @@
 #include "Cinematics/CameraKeyController.h"
 #include <Graphics/Camera/CameraManager.h>
 
+#include <Windows.h>
+
 CCinematicManager::CCinematicManager()
 {
 }
@@ -22,6 +24,48 @@ void CCinematicManager::destroy()
 		delete *it;
 	}
 	m_cinematicsObjects.clear();
+}
+
+void CCinematicManager::LoadFilesInDir( std::string dirPath )
+{
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+	WIN32_FIND_DATA ffd;
+
+	std::string globPath;
+
+	if ( dirPath.find( '*' ) == dirPath.npos )
+	{
+		if ( dirPath.back() != '\\' && dirPath.back() != '/' )
+		{
+			dirPath += "\\";
+		}
+		globPath = dirPath;
+		globPath += "*.xml";
+	}
+	else
+	{
+		// We should NOT have a path with globs!
+		DEBUG_ASSERT( false );
+	}
+
+	hFind = FindFirstFileA( globPath.c_str(), &ffd );
+
+	DEBUG_ASSERT( INVALID_HANDLE_VALUE != hFind );
+	if ( hFind == INVALID_HANDLE_VALUE )
+	{
+		return;
+	}
+
+	do
+	{
+		if ( !( ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
+		{
+			std::string fname = dirPath + ffd.cFileName;
+			Load( fname );
+		}
+	} while ( FindNextFile( hFind, &ffd ) != 0 );
+
+	FindClose( hFind );
 }
 
 void CCinematicManager::Load(std::string nameFile)
@@ -77,7 +121,7 @@ void CCinematicManager::Play()
 	}
 }
 
-void CCinematicManager::PlayByName(std::string nameToRun)
+void CCinematicManager::Play(std::string nameToRun)
 {
 	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
 	{
@@ -85,12 +129,12 @@ void CCinematicManager::PlayByName(std::string nameToRun)
 		{
 			(*it)->Play();
 			return;
-		}		
+		}
 	}
 }
 
 
-void CCinematicManager::PauseByName(std::string nameToRun)
+void CCinematicManager::Pause(std::string nameToRun)
 {
 	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
 	{
@@ -102,7 +146,7 @@ void CCinematicManager::PauseByName(std::string nameToRun)
 	}
 }
 
-void CCinematicManager::StopByName(std::string nameToRun)
+void CCinematicManager::Stop(std::string nameToRun)
 {
 	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
 	{

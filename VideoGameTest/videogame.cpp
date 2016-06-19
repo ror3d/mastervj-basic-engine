@@ -228,14 +228,12 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getMaterialManager()->load("Data\\materials.xml");
 	engine.getCookedMeshManager()->SetCookedMeshPath("Cache\\Cooked\\");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
-	//engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
 	engine.getAnimatedMeshManager()->Load("Data\\animated_models.xml");
 	engine.getParticleManager()->Load("Data\\particle_classes.xml");
 	//engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 	engine.getSceneManager()->Initialize("Data\\Scenes\\");
-	//engine.getTriggerManager()->Load("Data\\triggers.xml");
 	//engine.getSoundManager()->Init();
 	//engine.getSoundManager()->initBanks();
 	//engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
@@ -253,14 +251,11 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CInputManager::SetCurrentInputManager(&inputManager);
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
+		engine.getCinematicManager()->LoadFilesInDir("Data\\Animations\\");
+
 		engine.getScriptManager()->Initialize("Data\\scripting.xml");
 
 		engine.getComponentManager()->FirstInitialization();
-
-		//engine.getCharacterControllerManager()->Create("main", "__fps", "models", "main");
-
-		//engine.getCinematicManager()->Load("Data\\Animations\\castle.xml");
-		engine.getCinematicManager()->Load("Data\\Animations\\AscensorSimple.xml");
 
 
 

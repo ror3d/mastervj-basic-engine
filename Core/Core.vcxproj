@@ -20,6 +20,7 @@
     <ClCompile Include="Component\ParticleEmitterComponent.cpp" />
     <ClCompile Include="Component\PhysxComponent.cpp" />
     <ClCompile Include="Component\ScriptedComponent.cpp" />
+    <ClCompile Include="Component\SpeakerComponent.cpp" />
     <ClCompile Include="Component\TriggerComponent.cpp" />
     <ClCompile Include="Debug\BarCalls.cpp" />
     <ClCompile Include="Debug\BarHelper.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Component\ParticleEmitterComponent.h" />
     <ClInclude Include="Component\PhysxComponent.h" />
     <ClInclude Include="Component\ScriptedComponent.h" />
+    <ClInclude Include="Component\SpeakerComponent.h" />
     <ClInclude Include="Component\TriggerComponent.h" />
     <ClInclude Include="Debug\BarCalls.h" />
     <ClInclude Include="Debug\BarHelper.h" />

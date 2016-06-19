@@ -11,11 +11,11 @@ CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CE
 	, m_isTrigger(false)
 {
 	setName(name);
-	
+
 	m_colType = node.GetPszProperty("collider_type", "Sphere");
-	m_isStatic = node.GetBoolProperty("static", false);	
+	m_isStatic = node.GetBoolProperty("static", false);
 	m_isKinematic = node.GetBoolProperty("kinematic", false);
-	m_coreName = node.GetPszProperty("core_mesh", "");	
+	m_coreName = node.GetPszProperty("core_mesh", "");
 	if (m_coreName == "")
 	{
 		m_colType = "Sphere";
@@ -80,6 +80,7 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 	else if (m_colType == std::string("Plane"))
 	{
 		//TODO: Tratar como box con escala y 0.001?
+		desc.shape = CPhysxColliderShapeDesc::Shape::Box;
 		desc.size.y = 0.001f;
 	}
 	else if (m_colType == std::string("TriangleMesh"))
@@ -87,11 +88,15 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 		desc.shape = CPhysxColliderShapeDesc::Shape::TriangleMesh;
 		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
 	}
-	else // m_colType == std::string("Convex Mesh") or unrecognized type
+	else if(m_colType == std::string("ConvexMesh"))
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
 		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
 		actorType = CPhysXManager::ActorType::Static;
+	}
+	else
+	{
+		DEBUG_ASSERT( !"Type not recognized!" );
 	}
 	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), actorType, desc, m_isKinematic, m_isTrigger);
 }

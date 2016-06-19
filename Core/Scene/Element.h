@@ -14,6 +14,7 @@ class CPhysxComponent;
 class CTriggerComponent;
 class CFPSCameraComponent;
 class CRenderableComponent;
+class CSpeakerComponent;
 class CAnimatedInstanceComponent;
 
 class CElement : public CNamed
@@ -39,6 +40,7 @@ public:
 	inline void SetYaw(float Yaw) { m_RotationYPR.x = Yaw; m_TransformChanged = true; }
 	inline void SetPitch(float Pitch) { m_RotationYPR.y = Pitch; m_TransformChanged = true; }
 	inline void SetRoll(float Roll) { m_RotationYPR.z = Roll; m_TransformChanged = true; }
+	void SetQuat( Quatf quat );
 	inline void SetYawPitchRoll(float Yaw, float Pitch, float Roll) { m_RotationYPR = Vect3f(Yaw, Pitch, Roll); m_TransformChanged = true; }
 	inline float GetYaw() const { return m_RotationYPR.x; }
 	inline float GetPitch() const { return m_RotationYPR.y; }
@@ -64,6 +66,7 @@ public:
 	CPhysxComponent * GetPhysxComponent();
 	CTriggerComponent * GetTriggerComponent();
 	CFPSCameraComponent* GetCamera();
+	CSpeakerComponent* GetSpeaker();
 
 private:
 	ComponentContainer_t m_componentContainer;

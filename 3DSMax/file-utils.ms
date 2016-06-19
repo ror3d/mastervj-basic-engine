@@ -8,6 +8,7 @@ global DataPath = "Data\\"
 global MeshSubPath = "Meshes\\"
 global TextureSubPath = "Textures\\"
 global AnimationSubPath = "Animations\\"
+global SceneSubPath = "Scenes\\"
 
 fn getDataPath p = (
 	return DataPath + p
@@ -23,6 +24,10 @@ fn getTexturePath p = (
 
 fn getAnimationPath p = (
 	return getDataPath (AnimationSubPath + p)
+)
+
+fn getScenePath p = (
+	return getDataPath (SceneSubPath + p)
 )
 
 fn setAbsolutePath p = (
@@ -49,9 +54,12 @@ fn getAbsMeshPath p = (
 	return absPath + (getMeshPath p)
 )
 
-
 fn getAbsAnimationPath p = (
 	return absPath + (getAnimationPath p)
+)
+
+fn getAbsScenePath p = (
+	return absPath + (getScenePath p)
 )
 
 fn createDirs = (
@@ -70,6 +78,10 @@ fn createDirs = (
 	if not doesFileExist (getAbsAnimationPath("")) then
 	(
 		makeDir (getAbsAnimationPath(""))
+	)
+	if not doesFileExist (getAbsScenePath("")) then
+	(
+		makeDir (getAbsScenePath(""))
 	)
 )
 

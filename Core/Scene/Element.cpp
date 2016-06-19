@@ -14,6 +14,9 @@
 #include <Core/Component/AnimatedInstanceComponent.h>
 #include <Core/Component/ParticleEmitterComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
+#include <Core/Component/SpeakerComponent.h>
+
+#include <Windows.h>
 
 #include <Windows.h>
 
@@ -43,9 +46,7 @@ CElement::CElement(const CXMLTreeNode& node)
 	{
 		Vect4f f4 = node.GetVect4fProperty("rotationq", Vect4f(0, 0, 0, 1), true);
 		auto q = Quatf(f4.x, f4.y, f4.z, f4.w);
-		m_RotationYPR.x = atan2(2 * (q.x*q.y + q.z*q.w), 1 - 2 * (q.y*q.y + q.z*q.z));
-		m_RotationYPR.y = asin(2 * (q.x*q.z - q.w*q.y));
-		m_RotationYPR.z = atan2(2 * (q.x*q.w + q.y*q.z), 1 - 2 * (q.z*q.z + q.w*q.w));
+		SetQuat( q );
 	}
 	else
 	{
@@ -98,6 +99,7 @@ CElement::CElement(const CXMLTreeNode& node)
 		}
 		else if (type == "speaker")
 		{
+			component = new CSpeakerComponent(getName() + "_Speaker", comp, this);
 		}
 		else if (type == "mesh_instance")
 		{
@@ -113,7 +115,7 @@ CElement::CElement(const CXMLTreeNode& node)
 		}
 		else
 		{
-			OutputDebugString("Component type not recognized\n");
+			OutputDebugStringA("Component type not recognized\n");
 			continue;
 		}
 		cmgr->AddComponent(component);
@@ -140,6 +142,21 @@ CElement::~CElement()
 	m_componentContainer.destroy();
 }
 
+void CElement::SetQuat( Quatf q )
+{
+	float p0 = q.w;
+	float p1 = q.y;
+	float p2 = q.z;
+	float p3 = q.x;
+	float e = 1;
+	m_RotationYPR.x = atan2(2 * (p0*p1 + e*p2*p3), 1 - 2 * (p1*p1 + p2*p2));
+	m_RotationYPR.y = asin(2 * (p0*p2 - e*p1*p3));
+	m_RotationYPR.z = atan2(2 * (p0*p3 + e*p1*p2), 1 - 2 * (p2*p2 + p3*p3));
+	//m_RotationYPR.x = atan2( 2.0*( q.y*q.z + q.w*q.x ), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z );
+	//m_RotationYPR.y = asin( -2.0*( q.x*q.z - q.w*q.y ) );
+	//m_RotationYPR.z = atan2( 2.0*( q.x*q.y + q.w*q.z ), q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z );
+}
+
 void CElement::AddComponent(std::string Name, CComponent* component)
 {
 	m_componentContainer.add(Name, component);
@@ -160,6 +177,16 @@ CFPSCameraComponent* CElement::GetCamera()
 	if (comp)
 	{
 		return dynamic_cast<CFPSCameraComponent*>(comp);
+	}
+	return nullptr;
+}
+
+CSpeakerComponent* CElement::GetSpeaker()
+{
+	auto comp = m_componentContainer.get(getName() + "_Speaker");
+	if (comp)
+	{
+		return dynamic_cast<CSpeakerComponent*>(comp);
 	}
 	return nullptr;
 }
