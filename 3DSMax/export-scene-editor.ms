@@ -294,7 +294,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		local val = getUserProp m_ObjSelected propName
 		if val != undefined then
 		(
-			radio.state = findItem radio.labels val
+			--radio.state = findItem radio.labels val
 		)
 		else
 		(
@@ -627,4 +627,4 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	)
 )
 
-CreateDialog ExportSceneEditor
+--CreateDialog ExportSceneEditor
