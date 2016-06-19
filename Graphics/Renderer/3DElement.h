@@ -2,8 +2,8 @@
 #define C3D_ELEMENT_H
 
 #include <Base/Math/Math.h>
-#include <Base/XML/XMLTreeNode.h>
 
+class CXMLTreeNode;
 class CContextManager;
 
 class C3DElement

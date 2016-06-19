@@ -4,27 +4,21 @@
 
 #include <Core/Engine/Engine.h>
 
-#include <Graphics/Layer/LayerManager.h>
-#include <Graphics/Animation/AnimatedModelManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Camera/Camera.h>
+#include <Graphics/Renderer/Renderer.h>
 #include <PhysX/PhysXManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
 
-
-
 #include <Graphics/Camera/FPSCameraController.h>
-#include "Animation/AnimatedInstanceModel.h"
-#include "Animation/AnimatedCoreModel.h"
 
 #include <Core/Input/InputManager.h>
 #include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
-#include <Core\Trigger\TriggerManager.h>
 
 #include <Core/Component/ComponentManager.h>
 
@@ -55,12 +49,12 @@ void CApplication::Update(float _ElapsedTime)
 	m_Timer += _ElapsedTime;
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
 
-	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
+//	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
 	//CCamera l_Camera = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
-	CCamera l_Camera = { };
-	CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
+	//CCamera l_Camera = { };
+	//CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
 	
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
@@ -99,5 +93,13 @@ void CApplication::Update(float _ElapsedTime)
 
 void CApplication::Render()
 {
+	auto renderer = CEngine::GetSingleton().getRenderer();
+
+	renderer->BeginRender();
+
+	CEngine::GetSingleton().getComponentManager()->Render(*m_ContextManager);
+
 	CEngine::GetSingleton().getSceneRendererCommandManager()->Execute(*m_ContextManager);
+
+	renderer->EndRender();
 }

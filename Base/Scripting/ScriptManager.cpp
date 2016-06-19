@@ -10,24 +10,22 @@
 #include "Core/Engine/Engine.h"
 #include "Core/Input/InputManager.h"
 #include "Graphics/Camera/FPSCameraController.h"
-#include <Graphics/Renderable/RenderableObject.h>
-#include <Graphics/Renderable/RenderableObjectsManager.h>
-#include <Graphics/Animation/AnimatedInstanceModel.h>
 #include <Core/Component/ComponentManager.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/AnimatedInstanceComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
-#include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
-#include <Core\Component\TriggerComponent.h>
-#include <Core\Trigger\TriggerManager.h>
+#include <Core/Component/TriggerComponent.h>
+#include <Core/Scene/Scene.h>
+#include <Core/Scene/Element.h>
 
 namespace
 {
@@ -158,6 +156,16 @@ void CScriptManager::RunCode(const std::string& code)
 	(*m_state)(code.c_str());
 }
 
+void CScriptManager::RunCodeIf(const std::string &condition, const std::string &code)
+{
+	LuaErrorCapturedStdout errorCapture;
+	(*m_state)(("_r = true == (" + condition + ");").c_str());
+	if ((*m_state)["r"])
+	{
+		(*m_state)(code.c_str());
+	}
+}
+
 void CScriptManager::RunFile(const std::string& fileName)
 {
 	LuaErrorCapturedStdout errorCapture;
@@ -231,6 +239,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetYawPitchRoll", &C3DElement::SetYawPitchRoll,
 			"GetPrevPosition", &C3DElement::GetPrevPosition);
 
+	/*
 	(*m_state)["CRenderableObject"]
 		.SetClass<CRenderableObject>(
 			"GetName", &CRenderableObject::getName,
@@ -244,7 +253,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCamera", &CRenderableObject::GetCamera,
 			"GetCharacterController", &CRenderableObject::GetCharacterController,
 			"GetTriggerComponent", &CRenderableObject::GetTriggerComponent);
-
+			
 	(*m_state)["CAnimatedInstanceModel"]
 		.SetClass<CAnimatedInstanceModel, CXMLTreeNode&>(
 			"ClearCycle", &CAnimatedInstanceModel::ClearCycle,
@@ -252,24 +261,44 @@ void CScriptManager::RegisterLUAFunctions()
 			"ExecuteAction", &CAnimatedInstanceModel::ExecuteAction,
 			"IsCycleAnimationActive", &CAnimatedInstanceModel::IsCycleAnimationActive,
 			"IsActionAnimationActive", &CAnimatedInstanceModel::IsActionAnimationActive);
+			*/
+
+	(*m_state)["CElement"]
+		.SetClass<CElement>(
+			"GetName", &CElement::getName,
+			"SetPosition", &CElement::SetPosition,
+			"GetPosition", &CElement::GetPosition,
+			"SetYaw", &CElement::SetYaw,
+			"GetYaw", &CElement::GetYaw,
+			"SetEnabled", &CElement::SetEnabled,
+			"IsEnabled", &CElement::GetEnabled,
+			"GetCamera", &CElement::GetCamera,
+			"GetCharacterController", &CElement::GetCharacterController,
+			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
+			"GetTrigger", &CElement::GetTriggerComponent);
+			
+	(*m_state)["CAnimatedInstanceComponent"]
+		.SetClass<CAnimatedInstanceComponent, const std::string&, CElement*>(
+			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
+			"BlendCycle", &CAnimatedInstanceComponent::BlendCycle,
+			"ClearCycle", &CAnimatedInstanceComponent::ClearCycle,
+			"IsCycleAnimationActive", &CAnimatedInstanceComponent::IsCycleAnimationActive,
+			"IsActionAnimationActive", &CAnimatedInstanceComponent::IsActionAnimationActive);
 
 	(*m_state)["CCharacterControllerComponent"]
-		.SetClass<CCharacterControllerComponent, CRenderableObject*>(
+		.SetClass<CCharacterControllerComponent, const std::string&, CElement*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move,
 			"SetPos", &CCharacterControllerComponent::SetPosition);
 
 	(*m_state)["CFPSCameraComponent"]
-		.SetClass<CFPSCameraComponent, CRenderableObject*>(
+		.SetClass<CFPSCameraComponent, const std::string&, CElement*>(
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera);
 
 
-	(*m_state)["TriggerComponent"]
-		.SetClass<CTriggerComponent, CRenderableObject*>(
-		"GetStateTrigger", &CTriggerComponent::GetStateTrigger,
-		"SetStateTrigger", &CTriggerComponent::SetStateTrigger,
-		"GetName", &CTriggerComponent::getName,
-		"GetTriggerLocalName", &CTriggerComponent::GetTriggerLocalName);
+	(*m_state)["CTriggerComponent"]
+		.SetClass<CTriggerComponent, const std::string&, CElement*>(
+		"GetName", &CTriggerComponent::getName);
 
 	(*m_state)["ICameraController"]
 		.SetClass<ICameraController>(
@@ -334,9 +363,6 @@ void CScriptManager::RegisterLUAFunctions()
 		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
 		"SetVolume", &CSoundManager::SetVolume);
-	(*m_state)["CTriggerManager"].SetObj(
-		*CEngine::GetSingleton().getTriggerManager(),
-		"GetTrigger", &CTriggerManager::get);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

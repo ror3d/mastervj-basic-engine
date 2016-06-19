@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <set>
 #include <Base/Math/Math.h>
 
 #define USE_PHYSX_DEBUG 1
@@ -102,7 +103,12 @@ public:
 
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
+
+	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
+
 	void destroy() {}
+
+protected:
 
 	struct {
 		std::map<std::string, size_t> index;
@@ -112,7 +118,8 @@ public:
 		std::vector<physx::PxActor*> actor;
 	} m_actors;
 
-protected:
+	std::map<std::string, std::set<std::string>> m_TriggerCollisions;
+
 
 	physx::PxFoundation					*m_Foundation;
 	physx::PxPhysics					*m_PhysX;

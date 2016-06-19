@@ -41,11 +41,11 @@ CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, ra
 }
 
 CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
-	: CRenderableObject(treeNode)
-	, m_activeParticles(0)
+	: m_activeParticles(0)
 	, m_toCreateParticles(0)
 	, m_randomEngine(rnd())
 	, m_unitDist(0, 1)
+	, m_enabled(true)
 {
 	std::string particleClass = treeNode.GetPszProperty("particle_class", "", true);
 	m_particleSystemClass = CEngine::GetSingleton().getParticleManager()->get(particleClass);
@@ -66,6 +66,11 @@ CParticleSystemInstance::~CParticleSystemInstance()
 
 void CParticleSystemInstance::Update(float ElapsedTime)
 {
+	if (!m_enabled)
+	{
+		return;
+	}
+
 	// Update existing particles
 	for (int i = 0; i < m_activeParticles; ++i)
 	{
@@ -136,6 +141,10 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 
 void CParticleSystemInstance::Render(CContextManager *_context)
 {
+	if (!m_enabled)
+	{
+		return;
+	}
 	auto devCtx = _context->GetDeviceContext();
 	m_vertexs->UpdateVertices(devCtx, m_particleVtxs, m_activeParticles);
 

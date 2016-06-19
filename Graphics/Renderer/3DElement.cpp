@@ -1,6 +1,8 @@
 #include "3DElement.h"
 #include <Engine/Engine.h>
 
+#include <Base/XML/XMLTreeNode.h>
+
 
 C3DElement::C3DElement()
 	: m_Position(0.0f, 0.0f, 0.0f)

@@ -89,8 +89,8 @@
     <ClInclude Include="Utils\Active.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Math\ColorSpace.h">
-      <Filter>Math</Filter>
+    <ClInclude Include="Utils\TMapContainer.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +116,6 @@
       <Filter>Math</Filter>
     </None>
     <None Include="Math\Color.inl">
-      <Filter>Math</Filter>
-    </None>
-    <None Include="Math\ColorSpace.inl">
       <Filter>Math</Filter>
     </None>
   </ItemGroup>

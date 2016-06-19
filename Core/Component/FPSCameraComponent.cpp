@@ -1,20 +1,21 @@
 #include "FPSCameraComponent.h"
 
-#include <Graphics/Renderable/RenderableObject.h>
+#include "Scene/Element.h"
+#include <Base/XML/XMLTreeNode.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Camera/FPSCameraController.h>
 #include <Core/Engine/Engine.h>
 
-CFPSCameraComponent::CFPSCameraComponent(CXMLTreeNode& node, CRenderableObject* Owner)
+CFPSCameraComponent::CFPSCameraComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
-	setName(Owner->getName() + "_Camera");
+	setName(name);
 
 	m_CamOffset = node.GetVect3fProperty( "offset", Vect3f( 0, 0, 0 ), false );
 }
 
-CFPSCameraComponent::CFPSCameraComponent(CRenderableObject* Owner)
-	: CComponent(Owner->getName() + "_Camera", Owner)
+CFPSCameraComponent::CFPSCameraComponent(const std::string& name, CElement* Owner)
+	: CComponent(name, Owner)
 {
 }
 
@@ -23,7 +24,7 @@ CFPSCameraComponent::~CFPSCameraComponent()
 
 void CFPSCameraComponent::Init()
 {
-	CRenderableObject *owner = GetOwner();
+	CElement *owner = GetOwner();
 	CFPSCameraController* cc = new CFPSCameraController();
 
 	cc->SetPosition( owner->GetPosition() );
@@ -34,7 +35,7 @@ void CFPSCameraComponent::Init()
 
 void CFPSCameraComponent::Update(float elapsedTime)
 {
-	CRenderableObject *owner = GetOwner();
+	CElement *owner = GetOwner();
 	CFPSCameraController* cc = dynamic_cast<CFPSCameraController*>(CEngine::GetSingleton().getCameraManager()->get( getName() ));
 	DEBUG_ASSERT( cc != nullptr );
 
@@ -44,6 +45,7 @@ void CFPSCameraComponent::Update(float elapsedTime)
 
 void CFPSCameraComponent::Destroy()
 {
+	delete CEngine::GetSingleton().getCameraManager()->get( getName() );
 	CEngine::GetSingleton().getCameraManager()->remove( getName() );
 }
 

@@ -35,6 +35,7 @@
     <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="Scripting\ScriptManager.h" />
     <ClInclude Include="Utils\Active.h" />
+    <ClInclude Include="Utils\TMapContainer.h" />
     <ClInclude Include="Utils\TMapManager.h" />
     <ClInclude Include="Utils\Named.h" />
     <ClInclude Include="Utils\SingletonPattern.h" />

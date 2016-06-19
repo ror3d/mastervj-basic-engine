@@ -18,19 +18,17 @@
 
 #include <Graphics/Mesh/StaticMeshManager.h>
 #include <Graphics/Mesh/CookedMeshManager.h>
-#include <Graphics/Layer/LayerManager.h>
 #include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Light/LightManager.h>
-#include <Graphics/Animation/AnimatedModelManager.h>
+#include <Graphics/Animation/AnimatedMeshManager.h>
 #include <Graphics/Context/ContextManager.h>
 #include <Graphics/Renderable/RenderableObjectTechniqueManager.h>
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 #include <Graphics/Debug/DebugRender.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <PhysX/PhysXManager.h>
-#include <Core/IA/IAManager.h>
 #include <Base/Scripting/ScriptManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
@@ -38,11 +36,10 @@
 #include <Graphics/Particles/ParticleSystemManager.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
-#include <Core/Trigger/TriggerManager.h>
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Core/Logic/LogicManager.h>
-#include "resource.h"
+#include <Core/Scene/SceneManager.h>
 
 
 #include <AntTweakBar.h>
@@ -195,7 +192,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdLine, int _nCmdShow)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(77928);
+	//_CrtSetBreakAlloc(143430);
 
 	new CEngine();
 	CEngine& engine = CEngine::GetSingleton();
@@ -231,20 +228,21 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getMaterialManager()->load("Data\\materials.xml");
 	engine.getCookedMeshManager()->SetCookedMeshPath("Cache\\Cooked\\");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
-	engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
-	engine.getParticleManager()->Load("Data\\particle_classes.xml");
-	engine.getLayerManager()->Load("Data\\renderable_objects.xml");
+	//engine.getAnimatedModelManager()->Load("Data\\animated_models.xml");
+	engine.getAnimatedMeshManager()->Load("Data\\animated_models.xml");
+	//engine.getParticleManager()->Load("Data\\particle_classes.xml");
+	//engine.getLayerManager()->Load("Data\\renderable_objects.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
+	engine.getSceneManager()->Initialize("Data\\Scenes\\");
 	//engine.getTriggerManager()->Load("Data\\triggers.xml");
-	engine.getSoundManager()->Init();
-	engine.getSoundManager()->initBanks();
-	engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
+	//engine.getSoundManager()->Init();
+	//engine.getSoundManager()->initBanks();
+	//engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
 
-	C3DElement l_speaker = {};
-	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
+	//C3DElement l_speaker = {};
+	//CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
 	//engine.getSoundManager()->PlayEvent()
-	engine.getIAManager()->Create();
 
 
 
@@ -300,7 +298,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 				m_PreviousTime = l_CurrentTime;
 
 				application.Update(l_ElapsedTime);
-				engine.getIAManager()->Update(l_ElapsedTime);
 				application.Render();
 				inputManager.EndFrame();
 			}

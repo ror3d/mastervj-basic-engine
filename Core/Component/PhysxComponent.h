@@ -3,31 +3,32 @@
 
 #include "Component.h"
 
+#include <Base/Math/Math.h>
 #include <vector>
 
 class CPhysxComponent : public CComponent
 {
 	
-private: 
+protected:
 	std::string m_colType;
 	std::string m_coreName;
 	bool m_isStatic;
 	bool m_isKinematic;
 	bool m_isTrigger;
 
-protected:
 	virtual void Init();
 
+	void Init(Vect3f scale, Vect3f position);
 public:
-	CPhysxComponent(CXMLTreeNode& node, CRenderableObject* Owner, std::string nameCore);
-	CPhysxComponent(CRenderableObject* Owner);
+	CPhysxComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
+	CPhysxComponent(const std::string& name, CElement* Owner);
 	virtual ~CPhysxComponent();
 
 	virtual void FixedUpdate(float ElapsedTime);
 
 	virtual void Destroy();
 
-	void Move();
+	void Move(Vect3f position);
 
 	std::string GetColType(){ return m_colType; }
 	bool IsStatic(){ return m_isStatic;  }

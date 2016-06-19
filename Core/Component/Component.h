@@ -4,7 +4,7 @@
 #include "Utils/Named.h"
 #include <vector>
 
-class CRenderableObject;
+class CElement;
 class CContextManager;
 class CXMLTreeNode;
 
@@ -18,7 +18,7 @@ public:
 		std::string value;
 	};
 private:
-	CRenderableObject* m_Owner;
+	CElement* m_Owner;
 
 	bool m_Initiaized;
 
@@ -32,9 +32,9 @@ protected:
 	virtual void OnObjectInitialized() {};
 
 public:
-	CComponent(CXMLTreeNode& node, CRenderableObject* Owner);
+	CComponent(CXMLTreeNode& node, CElement* Owner);
 
-	CComponent( const std::string& Name, CRenderableObject* Owner );
+	CComponent( const std::string& Name, CElement* Owner );
 
 	virtual ~CComponent() {}
 
@@ -49,9 +49,11 @@ public:
 
 	virtual void SendMsg(const std::string) {}
 
+	virtual void SendMsg(const std::string, CElement*) {}
+
 	virtual void Destroy() = 0;
 
-	CRenderableObject* GetOwner()
+	CElement* GetOwner()
 	{
 		return m_Owner;
 	}

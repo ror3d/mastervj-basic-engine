@@ -2,7 +2,8 @@
 
 #include <Core/Engine/Engine.h>
 #include <Base/Scripting/ScriptManager.h>
-#include <Graphics/Renderable/RenderableObject.h>
+#include <Base/XML/XMLTreeNode.h>
+#include "Scene/Element.h"
 
 #include <selene.h>
 
@@ -12,20 +13,26 @@
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 
 CScriptedComponent::CScriptedComponent(const std::string& name,
-									   CRenderableObject* Owner)
+									   CElement* Owner)
 	: CComponent(name, Owner)
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
 {
+	m_scriptClass = name;
+	std::string n = Owner->getName() + "_" + name;
+	setName(n);
 }
 
 CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
-									   CRenderableObject* Owner)
+									   CElement* Owner)
 	: CComponent(node, Owner)
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
 {
-	std::string name = node.GetPszProperty("class");
+	std::string name = node.GetPszProperty("class", "");
+	DEBUG_ASSERT(name != "");
+	m_scriptClass = name;
+	name = Owner->getName() + "_" + name;
 	setName(name);
 }
 
@@ -36,7 +43,7 @@ void CScriptedComponent::Init()
 {
 	m_scriptMgr->RunCode( "if (_componentStates == nil) then _componentStates = {}; end" );
 
-	std::string script = m_scriptMgr->GetScript(getName());
+	std::string script = m_scriptMgr->GetScript(m_scriptClass);
 	DEBUG_ASSERT(script != "");
 
 	sel::State* state = m_scriptMgr->getLuaState();
@@ -50,7 +57,7 @@ void CScriptedComponent::Init()
 
 
 	std::stringstream ss;
-	ss << getName() << " = _currentComponent;"
+	ss << m_scriptClass << " = _currentComponent;"
 		<< script
 		<< "_componentStates[" << m_componentStateId << "] = _currentComponent;";
 	for (auto const& prop : m_properties)
@@ -60,7 +67,7 @@ void CScriptedComponent::Init()
 		{
 			val = "\"" + val + "\"";
 		}
-		ss << getName() << "." << prop.name << " = " << val << ";";
+		ss << m_scriptClass << "." << prop.name << " = " << val << ";";
 	}
 	ss << "if (_currentComponent.OnCreate ~= nil) then _currentComponent:OnCreate(); end\n";
 	//OutputDebugStringA(ss.str().c_str());
@@ -97,7 +104,7 @@ void CScriptedComponent::SetComponent()
 
 void CScriptedComponent::Update(float ElapsedTime)
 {
-	if (!GetOwner()->GetVisible() && GetOwner()->getName() != "TriggerChangeZone")
+	if (!GetOwner()->GetEnabled())
 	{
 		return;
 	}
@@ -111,7 +118,7 @@ void CScriptedComponent::Update(float ElapsedTime)
 
 void CScriptedComponent::FixedUpdate(float ElapsedTime)
 {
-	if (!GetOwner()->GetVisible() && GetOwner()->getName() != "TriggerChangeZone")
+	if (!GetOwner()->GetEnabled())
 	{
 		return;
 	}
@@ -125,7 +132,7 @@ void CScriptedComponent::FixedUpdate(float ElapsedTime)
 
 void CScriptedComponent::Render(CContextManager&  _context)
 {
-	if ( ! GetOwner()->GetVisible() )
+	if ( ! GetOwner()->GetEnabled() )
 	{
 		return;
 	}
@@ -139,7 +146,7 @@ void CScriptedComponent::Render(CContextManager&  _context)
 
 void CScriptedComponent::RenderDebug(CContextManager&  _context)
 {
-	if ( ! GetOwner()->GetVisible() )
+	if ( ! GetOwner()->GetEnabled() )
 	{
 		return;
 	}
@@ -158,4 +165,17 @@ void CScriptedComponent::SendMsg(const std::string msg)
 	std::stringstream ss;
 	ss << "if (_currentComponent." << msg << " ~= nil) then _currentComponent:" << msg << "(); end";
 	m_scriptMgr->RunCode(ss.str());
+}
+
+void CScriptedComponent::SendMsg(const std::string msg, CElement* arg1)
+{
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		state["_currentComponent"][msg.c_str()](arg1);
+	}
 }

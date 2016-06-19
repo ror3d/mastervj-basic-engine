@@ -1,9 +1,9 @@
 #ifndef PARTICLE_SYSTEM_INSTANCE_H
 #define PARTICLE_SYSTEM_INSTANCE_H
 
-#include "Renderable/RenderableObject.h"
 #include "Mesh/VertexTypes.h"
 
+#include "Renderable/Renderable.h"
 #include <Base/Math/Math.h>
 #include <Base/Math/Color.h>
 #include <vector>
@@ -11,9 +11,11 @@
 
 class CParticleSystemClass;
 class CRenderableVertexs;
+class CXMLTreeNode;
+class CContextManager;
 
 
-class CParticleSystemInstance : public CRenderableObject
+class CParticleSystemInstance : public IRenderable
 {
 public:
 	static const int MAX_PARTICLES_PER_EMITTER = 200;
@@ -44,6 +46,9 @@ private:
 	std::mt19937 m_randomEngine;
 	std::uniform_real_distribution<float> m_unitDist;
 
+	Vect3f m_position;
+	bool m_enabled;
+
 public:
 	CParticleSystemInstance(CXMLTreeNode& treeNode);
 
@@ -56,6 +61,10 @@ public:
 		m_particleSystemClass = particleClass;
 	}
 
+	inline void SetPosition(Vect3f pos) { m_position = pos; }
+	inline Vect3f GetPosition() const { return m_position; }
+	inline void SetEnabled(bool e) { m_enabled = e; }
+	inline bool IsEnabled() const { return m_enabled; }
 };
 
 #endif
