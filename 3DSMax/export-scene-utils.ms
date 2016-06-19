@@ -5,14 +5,23 @@
 ----------------------------------------------------------------------------
 global g_allCores;
 global g_allInstances;
+global g_allGameObjects;
 fn CollectCoresAndInstances = (
 	g_allCores = #()
 	g_allInstances = #()
+	g_allGameObjects = #()
 	for i = 1 to $*.count do
 	(
 		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
 		(
-			local core = getUserProp $*[i] "render_export_rend_obj"
+			local gameObject = getUserProp $*[i] "ExportGameObject"
+			
+			if gameObject != undefined then
+			(
+				append g_allGameObjects $*[i]
+			)
+			
+			local core = getUserProp $*[i] "export_mesh_instance"
 			if core != undefined then
 			(
 				append g_allInstances $*[i]
@@ -46,6 +55,10 @@ fn GetInstances = (
 	return g_allInstances
 )
 
+fn GetGameObjects = (
+	return g_allGameObjects
+)
+
 
 fn deleteUserProp node prop = if getUserProp node prop != undefined do
 (
@@ -63,7 +76,7 @@ fn GetAnimatedInstances = (
 	local ret = #()
 	for i = 1 to $*.count do
 	(
-		local l_ExportCinematics = getUserProp $*[i] "cinematics_export"
+		local l_ExportCinematics = getUserProp $*[i] "ExportTAnimation"
 		if l_ExportCinematics != undefined and l_ExportCinematics then
 		(
 			append ret $*[i]
@@ -77,10 +90,13 @@ fn GetLights = (
 	for i =1 to $*.count do
 	(
 		-- TODO: check userProp to export light
-		if SuperclassOf $*[i] == light then
-		(
-			append light_obj $*[i]
-			-- format "\t<light =\"%\"/>" $*[i]
+		local export = getUserProp $*[i] "ExportAsLight"
+		if export != undefined then (
+			if SuperclassOf $*[i] == light then
+			(
+				append light_obj $*[i]
+				-- format "\t<light =\"%\"/>" $*[i]
+			)
 		)
 	)
 	-- format "<light_obj =\"%\"/>" light_obj
@@ -124,6 +140,14 @@ fn TranslationToRH translation =
 fn ScaleToRH sc =
 (
 	return point3 sc[1] sc[3] sc[2]
+)
+
+fn TrueFalse val = (
+	if val then (
+		return "true"
+	) else (
+		return "false"
+	)
 )
 
 global g_tick

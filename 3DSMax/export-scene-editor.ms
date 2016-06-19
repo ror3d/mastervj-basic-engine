@@ -9,29 +9,25 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	checkbox export_rend_ckb "Export Renderable" pos:[32,96] width:112 height:16
 	checkbox static_mesh_ckb "Static Mesh" pos:[48,192] width:120 height:16 enabled:false
 	checkbox skinned_mesh_ckb "Skinned Mesh" pos:[48,216] width:120 height:16 enabled:false
-	MultiListBox layer_select "Layers" pos:[40,112] width:168 height:4 enabled:false items:#("solid", "models")
+	multiListBox layer_select "Layers" pos:[40,112] width:168 height:4 enabled:false items:#("solid", "models")
 	edittext skinned_mesh_core_txt "" pos:[72,256] width:136 height:16 enabled:false
 	label lbl3 "Model Name" pos:[72,240] width:104 height:16
-	GroupBox grp3 "Collider" pos:[232,80] width:200 height:216
+	GroupBox grp3 "Collider" pos:[232,80] width:200 height:136
 	checkbox export_collider_ckb "Export Collider" pos:[240,96] width:152 height:16
 	dropdownList collider_type_select "Collider Type" pos:[248,152] width:152 height:40 enabled:false items:#("Triangle Mesh", "Convex Mesh", "Bounding Box", "Bounding Sphere")
 	checkbox collider_static_ckb "Static" pos:[256,112] width:144 height:16 enabled:false
 	checkbox collider_kinem_ckb "Kinematic" pos:[256,128] width:144 height:16 enabled:false
-	radiobuttons collider_mesh_src_radio "" pos:[264,200] width:96 height:32 enabled:false labels:#("Use Own Mesh", "Specify Mesh") default:1 columns:1
-	edittext collider_mesh_txt "" pos:[272,235] width:136 height:16 enabled:false
-	GroupBox grp4 "Trigger" pos:[440,80] width:200 height:240
+	GroupBox grp4 "Trigger" pos:[440,80] width:200 height:192
 	dropdownList trigger_type_select "Collider Type" pos:[464,136] width:152 height:40 enabled:false items:#("Bounding Box", "Bounding Sphere", "Triangle Mesh", "Convex Mesh")
 	checkbox trigger_static_ckb "Static" pos:[464,112] width:144 height:16 enabled:false
-	radiobuttons trigger_mesh_src_radio "" pos:[472,176] width:96 height:32 enabled:false labels:#("Use Own Mesh", "Specify Mesh") columns:1
-	edittext trigger_mesh_txt "" pos:[480,211] width:136 height:16 enabled:false
-	label lbl12 "Scale" pos:[456,240] width:80 height:16
-	edittext trigger_scale_x_txt "x" pos:[464,256] width:48 height:16 enabled:false
-	edittext trigger_scale_y_txt "y" pos:[520,256] width:48 height:16 enabled:false
-	edittext trigger_scale_z_txt "z" pos:[576,256] width:48 height:16 enabled:false
-	label lbl13 "Offset" pos:[456,280] width:80 height:16
-	edittext trigger_offset_x_txt "x" pos:[464,296] width:48 height:16 enabled:false
-	edittext trigger_offset_y_txt "y" pos:[520,296] width:48 height:16 enabled:false
-	edittext trigger_offset_z_txt "z" pos:[576,296] width:48 height:16 enabled:false
+	label lbl12 "Scale" pos:[456,184] width:80 height:16
+	edittext trigger_scale_x_txt "x" pos:[464,200] width:48 height:16 enabled:false
+	edittext trigger_scale_y_txt "y" pos:[520,200] width:48 height:16 enabled:false
+	edittext trigger_scale_z_txt "z" pos:[576,200] width:48 height:16 enabled:false
+	label lbl13 "Offset" pos:[456,224] width:80 height:16
+	edittext trigger_offset_x_txt "x" pos:[464,240] width:48 height:16 enabled:false
+	edittext trigger_offset_y_txt "y" pos:[520,240] width:48 height:16 enabled:false
+	edittext trigger_offset_z_txt "z" pos:[576,240] width:48 height:16 enabled:false
 	GroupBox grp21 "Scripts" pos:[24,304] width:200 height:216
 	GroupBox grp22 "Camera" pos:[232,304] width:200 height:80
 	GroupBox grp23 "Character Controller" pos:[232,392] width:200 height:128
@@ -121,13 +117,9 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		collider_type_select.enabled = eColl
 		collider_static_ckb.enabled = eColl
 		collider_kinem_ckb.enabled = eColl
-		collider_mesh_src_radio.enabled = eColl
-		collider_mesh_txt.enabled = eColl -- and collider_mesh_src_radio.enabled and collider_mesh_src_radio.state[0] == 2
 		
 		trigger_type_select.enabled = eTrig
 		trigger_static_ckb.enabled = eTrig
-		trigger_mesh_src_radio.enabled = eTrig
-		trigger_mesh_txt.enabled = eTrig
 		trigger_scale_x_txt.enabled = eTrig
 		trigger_scale_y_txt.enabled = eTrig
 		trigger_scale_z_txt.enabled = eTrig
@@ -165,14 +157,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		collider_type_select.selection = 1
 		collider_static_ckb.checked = false
 		collider_kinem_ckb.checked = false
-		collider_mesh_src_radio
-		collider_mesh_txt.text = ""
 		
 		export_trigger_ckb.checked = false
 		trigger_type_select.selection = 1
 		trigger_static_ckb.checked = false
-		trigger_mesh_src_radio.state = 1
-		trigger_mesh_txt.text = ""
 
 		trigger_scale_x_txt.text = "1"
 		trigger_scale_y_txt.text = "1"
@@ -238,7 +226,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		local val = getUserProp m_ObjSelected propName
 		if val != undefined then
 		(
-			txt.text = val
+			txt.text = val as string
 		)
 		else
 		(
@@ -255,6 +243,32 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		(
 			deleteUserProp obj propName
 		)
+	)
+	
+	fn LoadVec3DProp txt1 txt2 txt3 propName = (
+		local val = getUserProp m_ObjSelected propName
+		if val != undefined and val != "" then (
+			local vals = filterString val " "
+			txt1.text = vals[1]
+			txt2.text = vals[2]
+			txt3.text = vals[3]
+		)
+	)
+	
+	fn SaveVec3DProp obj txt1 txt2 txt3 propName = (
+		local v1 = "0"
+		local v2 = "0"
+		local v3 = "0"
+		if txt1.text != "" then (
+			v1 = (txt1.text as float) as string
+		)
+		if txt2.text != "" then (
+			v2 = (txt2.text as float) as string
+		)
+		if txt2.text != "" then (
+			v3 = (txt3.text as float) as string
+		)
+		setUserProp obj propName (v1 + " " + v2 + " " + v3)
 	)
 	
 	fn LoadDDLProp ddl propName = (
@@ -317,8 +331,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		LoadCkbProp export_cbx "ExportGameObject"
 		
 		LoadCkbProp export_rend_ckb "ExportRendererC"
-		LoadCkbProp static_mesh_ckb "RendererStaticMesh"
-		skinned_mesh_ckb.checked = not static_mesh_ckb.checked
+		LoadCkbProp skinned_mesh_ckb "RendererSkinnedMesh"
+		static_mesh_ckb.checked = not skinned_mesh_ckb.checked
 		
 		local rLayer = getUserProp m_ObjSelected "RendererLayer"
 		if rLayer != undefined then (
@@ -336,6 +350,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			layer_select.selection = #{}
 		)
 		
+		skinned_mesh_core_txt.enabled = skinned_mesh_ckb.checked
 		LoadTxtProp skinned_mesh_core_txt "SkinnedMeshCore"
 		
 		
@@ -343,33 +358,32 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		LoadDDLProp collider_type_select "ColliderCType"
 		LoadCkbProp collider_static_ckb "ColliderCStatic"
 		LoadCkbProp collider_kinem_ckb "ColliderCKinematic"
-		LoadRadioProp collider_mesh_src_radio "ColliderCMeshSource"
-		LoadTxtProp collider_mesh_txt "ColliderCMeshSrcName"
 		
 		
 		LoadCkbProp export_trigger_ckb "ExportTriggerC"
 		LoadDDLProp trigger_type_select "TriggerCType"
 		LoadCkbProp trigger_static_ckb "TriggerCStatic"
-		LoadRadioProp trigger_mesh_src_radio "TriggerCMeshSource"
-		LoadTxtProp trigger_mesh_txt "TriggerCMeshSrcName"
-		
-		LoadTxtProp trigger_scale_x_txt  "TriggerCScaleX"
-		LoadTxtProp trigger_scale_y_txt  "TriggerCScaleY"
-		LoadTxtProp trigger_scale_z_txt  "TriggerCScaleZ"
-		LoadTxtProp trigger_offset_x_txt "TriggerCOffsetX"
-		LoadTxtProp trigger_offset_y_txt "TriggerCOffsetY"
-		LoadTxtProp trigger_offset_z_txt "TriggerCOffsetZ"
+		LoadVec3DProp trigger_scale_x_txt trigger_scale_y_txt trigger_scale_z_txt "TriggerCScale"
+		LoadVec3DProp trigger_offset_x_txt trigger_offset_y_txt trigger_offset_z_txt "TriggerCOffset"
+		--LoadTxtProp trigger_scale_x_txt  "TriggerCScaleX"
+		--LoadTxtProp trigger_scale_y_txt  "TriggerCScaleY"
+		--LoadTxtProp trigger_scale_z_txt  "TriggerCScaleZ"
+		--LoadTxtProp trigger_offset_x_txt "TriggerCOffsetX"
+		--LoadTxtProp trigger_offset_y_txt "TriggerCOffsetY"
+		--LoadTxtProp trigger_offset_z_txt "TriggerCOffsetZ"
 		
 		
 		LoadCkbProp export_camera_ckb "ExportCameraC"
-		LoadTxtProp cam_offset_x_txt "CameraCOffsetX"
-		LoadTxtProp cam_offset_y_txt "CameraCOffsetY"
-		LoadTxtProp cam_offset_z_txt "CameraCOffsetZ"
+		LoadVec3DProp cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
+		--LoadTxtProp cam_offset_x_txt "CameraCOffsetX"
+		--LoadTxtProp cam_offset_y_txt "CameraCOffsetY"
+		--LoadTxtProp cam_offset_z_txt "CameraCOffsetZ"
 		
 		LoadCkbProp export_cc_ckb "ExportCharContrC"
-		LoadTxtProp cc_offset_x_txt "CharContrCOffsetX"
-		LoadTxtProp cc_offset_y_txt "CharContrCOffsetY"
-		LoadTxtProp cc_offset_z_txt "CharContrCOffsetZ"
+		LoadVec3DProp cc_offset_x_txt cc_offset_y_txt cc_offset_z_txt "CharContrCOffset"
+		--LoadTxtProp cc_offset_x_txt "CharContrCOffsetX"
+		--LoadTxtProp cc_offset_y_txt "CharContrCOffsetY"
+		--LoadTxtProp cc_offset_z_txt "CharContrCOffsetZ"
 		LoadTxtProp cc_radius_txt "CharContrCRadius"
 		LoadTxtProp cc_height_txt "CharContrCHeight"
 		
@@ -398,10 +412,12 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	
 	function SaveObjectProps Obj =
 	(
+		local exportMeshCore = false
+		
 		SaveCkbProp Obj export_cbx "ExportGameObject"
 		
 		SaveCkbProp Obj export_rend_ckb "ExportRendererC"
-		SaveCkbProp Obj static_mesh_ckb "RendererStaticMesh"
+		SaveCkbProp Obj skinned_mesh_ckb "RendererSkinnedMesh"
 		local layers = ""
 		for i = 1 to layer_select.items.count do (
 			if layer_select.selection[i] then (
@@ -412,46 +428,44 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			layers = substring layers 1 (layers.count-1)
 			setUserProp Obj "RendererLayer" layers
 		) else (
-			deleteUserProp obj "RendererLayer"
+			deleteUserProp Obj "RendererLayer"
 		)
 		SaveTxtProp Obj skinned_mesh_core_txt "SkinnedMeshCore"
+		
+		exportMeshCore = exportMeshCore or (export_rend_ckb.checked and static_mesh_ckb.checked)
+		
 		
 		SaveCkbProp Obj export_collider_ckb "ExportColliderC"
 		SaveDDLProp Obj collider_type_select "ColliderCType"
 		SaveCkbProp Obj collider_static_ckb "ColliderCStatic"
 		SaveCkbProp Obj collider_kinem_ckb "ColliderCKinematic"
-		SaveRadioProp Obj collider_mesh_src_radio "ColliderCMeshSource"
-		SaveTxtProp Obj collider_mesh_txt "ColliderCMeshSrcName"
+		
+		exportMeshCore = exportMeshCore or (export_collider_ckb.checked and (collider_type_select.selected == "Triangle Mesh" or collider_type_select.selected == "Convex Mesh"))
 		
 		
 		SaveCkbProp Obj export_trigger_ckb "ExportTriggerC"
 		SaveDDLProp Obj trigger_type_select "TriggerCType"
 		SaveCkbProp Obj trigger_static_ckb "TriggerCStatic"
-		SaveRadioProp Obj trigger_mesh_src_radio "TriggerCMeshSource"
-		SaveTxtProp Obj trigger_mesh_txt "TriggerCMeshSrcName"
 		
-		SaveTxtProp Obj trigger_scale_x_txt  "TriggerCScaleX"
-		SaveTxtProp Obj trigger_scale_y_txt  "TriggerCScaleY"
-		SaveTxtProp Obj trigger_scale_z_txt  "TriggerCScaleZ"
-		SaveTxtProp Obj trigger_offset_x_txt "TriggerCOffsetX"
-		SaveTxtProp Obj trigger_offset_y_txt "TriggerCOffsetY"
-		SaveTxtProp Obj trigger_offset_z_txt "TriggerCOffsetZ"
+		exportMeshCore = exportMeshCore or (export_trigger_ckb.checked and (trigger_type_select.selected == "Triangle Mesh" or trigger_type_select.selected == "Convex Mesh"))
+		
+		SaveVec3DProp Obj trigger_scale_x_txt trigger_scale_y_txt trigger_scale_z_txt "TriggerCScale"
+		SaveVec3DProp Obj trigger_offset_x_txt trigger_offset_y_txt trigger_offset_z_txt "TriggerCOffset"
 		
 		
 		SaveCkbProp Obj export_camera_ckb "ExportCameraC"
-		SaveTxtProp Obj cam_offset_x_txt "CameraCOffsetX"
-		SaveTxtProp Obj cam_offset_y_txt "CameraCOffsetY"
-		SaveTxtProp Obj cam_offset_z_txt "CameraCOffsetZ"
+		SaveVec3DProp Obj cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
+
 		
 		SaveCkbProp Obj export_cc_ckb "ExportCharContrC"
-		SaveTxtProp Obj cc_offset_x_txt "CharContrCOffsetX"
-		SaveTxtProp Obj cc_offset_y_txt "CharContrCOffsetY"
-		SaveTxtProp Obj cc_offset_z_txt "CharContrCOffsetZ"
+		SaveVec3DProp Obj cc_offset_x_txt cc_offset_y_txt cc_offset_z_txt "CharContrCOffset"
 		SaveTxtProp Obj cc_radius_txt "CharContrCRadius"
 		SaveTxtProp Obj cc_height_txt "CharContrCHeight"
 		
+		
 		SaveCkbProp Obj export_speaker_ckb "ExportSpeakerC"
 		setUserProp Obj "SpeakerCVolume" speaker_volume_txt.value
+		
 		
 		SaveCkbProp Obj export_particle_ckb "ExportParticleSC"
 		SaveTxtProp Obj emitter_class_txt "ParticleSCClass"
@@ -462,6 +476,12 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		SaveCkbProp Obj export_cinem_ckb "ExportTAnimation"
 		SaveRadioProp Obj cinematic_type_radio "TAnimationType"
+		
+		if exportMeshCore then (
+			setUserProp Obj "export_mesh_instance" true
+		) else (
+			deleteUserProp Obj "export_mesh_instance"
+		)
 	)
 	
 	fn selectedObjectChanged =
@@ -472,6 +492,13 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		)
 	)
 
+	
+	
+	
+	
+	
+	
+	button reset_btn "Reset" pos:[576,680] width:80 height:40
 	on ExportSceneEditor open do
 	(
 		callbacks.addScript #selectionSetChanged "ExportSceneEditor.selectedObjectChanged()" id:#UABSceneProperties
@@ -482,7 +509,48 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	(
 		callbacks.removeScripts #selectionSetChanged id:#UABSceneProperties
 	)
-	
+	on export_cbx changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on export_rend_ckb changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on static_mesh_ckb changed state do
+	(
+		skinned_mesh_ckb.checked = not state
+		skinned_mesh_core_txt.enabled = skinned_mesh_ckb.checked
+	)
+	on skinned_mesh_ckb changed state do
+	(
+		static_mesh_ckb.checked = not state
+		skinned_mesh_core_txt.enabled = skinned_mesh_ckb.checked
+	)
+	on export_collider_ckb changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on export_trigger_ckb changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on export_camera_ckb changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on export_cc_ckb changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on scripts_combo changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on scripts_edit_btn changed state do
+	(
+		UpdateEnabledProps()
+	)
 	on get_btn pressed do
 	(
 		if $ == undefined then
@@ -498,7 +566,6 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			LoadObjectProps()
 		)
 	)
-	
 	on set_btn pressed do
 	(	
 		if $ == undefined then
@@ -533,48 +600,6 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		)
 		
 	)
-	on autoloadCkbx changed state do
-	(
-		if state then
-		(
-			selectedObjectChanged()
-		)
-	)
-	
-	
-	
-	on export_cbx changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on export_rend_ckb changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on export_collider_ckb changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on export_trigger_ckb changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on export_camera_ckb changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on export_cc_ckb changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on scripts_combo changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on scripts_edit_btn changed state do
-	(
-		UpdateEnabledProps()
-	)
 	on export_light_ckb changed state do
 	(
 		UpdateEnabledProps()
@@ -595,14 +620,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	(
 		UpdateEnabledProps()
 	)
-	
-	on static_mesh_ckb changed state do
-	(
-		skinned_mesh_ckb.checked = not state
-	)
-	on skinned_mesh_ckb changed state do
-	(
-		static_mesh_ckb.checked = not state
+	on reset_btn pressed do
+	(	
+		ResetProps()
+		UpdateEnabledProps()
 	)
 )
 
