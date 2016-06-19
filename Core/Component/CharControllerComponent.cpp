@@ -54,3 +54,13 @@ void CCharacterControllerComponent::SetPosition(const Vect3f& pos)
 	CEngine::GetSingleton().getPhysXManager()->setPosition(pos, getName());
 }
 
+void CCharacterControllerComponent::Resize( float height, float radius )
+{
+	CEngine::GetSingleton().getPhysXManager()->resizeCharacterController(getName(), height, radius);
+	float center = m_height / 2 + m_radius;
+	float nCenter = height / 2 + radius;
+	m_offset.y += ( nCenter - center );
+	m_height = height;
+	m_radius = radius;
+}
+

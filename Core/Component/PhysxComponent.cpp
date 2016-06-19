@@ -80,6 +80,7 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 	else if (m_colType == std::string("Plane"))
 	{
 		//TODO: Tratar como box con escala y 0.001?
+		desc.shape = CPhysxColliderShapeDesc::Shape::Box;
 		desc.size.y = 0.001f;
 	}
 	else if (m_colType == std::string("TriangleMesh"))
@@ -87,11 +88,15 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 		desc.shape = CPhysxColliderShapeDesc::Shape::TriangleMesh;
 		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
 	}
-	else // m_colType == std::string("Convex Mesh") or unrecognized type
+	else if(m_colType == std::string("ConvexMesh"))
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
 		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
 		actorType = CPhysXManager::ActorType::Static;
+	}
+	else
+	{
+		DEBUG_ASSERT( !"Type not recognized!" );
 	}
 	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), actorType, desc, m_isKinematic, m_isTrigger);
 }

@@ -29,6 +29,8 @@ public:
 	void Move(const Vect3f& velocity, const Vect3f& up, float elapsedTime);
 
 	void SetPosition(const Vect3f& pos);
+
+	void Resize( float height, float radius );
 };
 
 #endif
