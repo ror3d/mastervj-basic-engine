@@ -18,6 +18,8 @@
 
 #include <Windows.h>
 
+#include <Windows.h>
+
 CElement::CElement()
 	: m_Scale(1.0f, 1.0f, 1.0f)
 	, m_Enabled(true)
