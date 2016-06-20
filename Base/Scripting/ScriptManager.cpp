@@ -20,6 +20,7 @@
 #include <Core/Time/TimeManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+#include <Graphics/Mesh/StaticMeshManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
@@ -350,6 +351,10 @@ void CScriptManager::RegisterLUAFunctions()
 		"LoadScene", &CSceneManager::LoadScene,
 		"UnloadScene", &CSceneManager::UnloadScene,
 		"GetObjectById", &CSceneManager::GetObjectById);
+
+	(*m_state)["CStaticMeshManager"].SetObj(
+		*CEngine::GetSingleton().getStaticMeshManager(),
+		"LoadMeshesFile", &CStaticMeshManager::Load);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{
