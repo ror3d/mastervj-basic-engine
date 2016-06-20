@@ -18,10 +18,10 @@ CStaticMeshManager::~ CStaticMeshManager ()
 
 bool CStaticMeshManager::Load(const std::string &FileName)
 {
-	 m_FileName = FileName;
-	 CXMLTreeNode l_StaticMesh;
+	m_FileName = FileName;
+	CXMLTreeNode l_StaticMesh;
 
-	 l_StaticMesh.LoadFile(FileName.c_str());
+	l_StaticMesh.LoadFile(FileName.c_str());
 
 	if( !l_StaticMesh.Exists() )
 	{
