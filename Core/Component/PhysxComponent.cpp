@@ -104,8 +104,7 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 
 void CPhysxComponent::Destroy()
 {
-	// TODO!
-	//CEngine::GetSingleton().getPhysXManager()->releaseCharacterController(getName());
+	CEngine::GetSingleton().getPhysXManager()->destroyActor(getName());
 }
 
 void CPhysxComponent::FixedUpdate(float ElapsedTime)

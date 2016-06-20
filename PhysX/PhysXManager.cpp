@@ -490,6 +490,37 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	}
 }
 
+void CPhysXManager::destroyActor(const std::string& name)
+{
+	auto it = m_actors.index.find(name);
+	DEBUG_ASSERT(it != m_actors.index.end());
+	if (it == m_actors.index.end())
+	{
+		return;
+	}
+
+	uint64 idx = it->second;
+
+	m_actors.index.erase(it);
+	m_actors.actor[idx]->release();
+
+	if (idx < m_actors.index.size())
+	{
+		m_actors.name[idx] = m_actors.name.back();
+		m_actors.position[idx] = m_actors.position.back();
+		m_actors.rotation[idx] = m_actors.rotation.back();
+		m_actors.actor[idx] = m_actors.actor.back();
+		m_actors.index[m_actors.name[idx]] = idx;
+	}
+
+	m_actors.name.pop_back();
+	m_actors.position.pop_back();
+	m_actors.rotation.pop_back();
+	m_actors.actor.pop_back();
+
+	m_TriggerCollisions.erase(name);
+}
+
 void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
 {
 	auto it = m_actors.index.find(name);

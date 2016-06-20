@@ -69,9 +69,15 @@ public:
 	static CPhysXManager* CreatePhysXManager();
 	virtual ~CPhysXManager();
 
+	void InitPhysx();
+
+	void update(float dt);
+
 	void registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution);
 
 	void createActor(const std::string& name, ActorType type, const CPhysxColliderShapeDesc& desc, bool isKinematic, bool isTrigger);
+
+	void destroyActor(const std::string& name);
 
 	void MoveActor(std::string name, Vect3f position, Quatf rotation);
 
@@ -79,19 +85,7 @@ public:
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 
-	void InitPhysx();
-
 	void createController(float height, float radius, float density, Vect3f pos, std::string name);
-
-	void update(float dt);
-
-	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
-
-	bool cookTriangleMesh(const std::vector<Vect3f>& vec, const std::vector<unsigned short>& ind, std::vector<uint8> * outCookedData, unsigned short indexSize);
-
-	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
-
-	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
 	Vect3f moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name);
 
@@ -107,6 +101,16 @@ public:
 
 
 	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
+
+
+	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
+
+	bool cookTriangleMesh(const std::vector<Vect3f>& vec, const std::vector<unsigned short>& ind, std::vector<uint8> * outCookedData, unsigned short indexSize);
+
+	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
+
+	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
+
 
 	void destroy() {}
 

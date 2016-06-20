@@ -14,8 +14,8 @@ public:
 
 	void Initialize( std::string scenesDirectory );
 
-	void EnableScene( const std::string& scene );
-	void DisableScene( const std::string& scene );
+	void LoadScene( const std::string& sceneName );
+	void UnloadScene( const std::string& sceneName );
 
 
 	void AddObject( CElement* obj );

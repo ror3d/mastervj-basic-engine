@@ -46,8 +46,7 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 		if ( !( ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
 		{
 			std::string fname = scenesDirectory + ffd.cFileName;
-			CScene * scene = new CScene();
-			scene->Load(fname, this);
+			CScene * scene = new CScene(fname, this);
 			add(scene->getName(), scene);
 		}
 	} while ( FindNextFile( hFind, &ffd ) != 0 );
@@ -55,12 +54,22 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 	FindClose( hFind );
 }
 
-void CSceneManager::EnableScene( const std::string& scene )
+void CSceneManager::LoadScene( const std::string& scene )
 {
+	auto sc = get(scene);
+	if (sc)
+	{
+		sc->Load();
+	}
 }
 
-void CSceneManager::DisableScene( const std::string& scene )
+void CSceneManager::UnloadScene( const std::string& scene )
 {
+	auto sc = get(scene);
+	if (sc)
+	{
+		sc->Unload();
+	}
 }
 
 void CSceneManager::AddObject( CElement * obj )

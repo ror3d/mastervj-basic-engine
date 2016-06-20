@@ -25,6 +25,7 @@
 #include <GUI/GUI.h>
 #include <Core/Component/TriggerComponent.h>
 #include <Core/Scene/Scene.h>
+#include <Core/Scene/SceneManager.h>
 #include <Core/Scene/Element.h>
 
 namespace
@@ -126,7 +127,7 @@ void CScriptManager::Initialize(const std::string& file)
 					if (rol)
 					{
 						toRunOnLoad.push_back(name);
-				}
+					}
 				}
 			}
 		}
@@ -139,7 +140,7 @@ void CScriptManager::Initialize(const std::string& file)
 	for (auto &const name : toRunOnLoad)
 	{
 		RunScript(name);
-}
+	}
 }
 
 void CScriptManager::RunScript(const std::string& name)
@@ -197,9 +198,7 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
-		"RunCode", &CScriptManager::RunCode,
-		"RunFile", &CScriptManager::RunFile,
-		"Load", &CScriptManager::Load);
+		"RunScript", &CScriptManager::RunScript);
 
 	//Global
 	(*m_state)["CXMLTreeNode"]
@@ -343,6 +342,13 @@ void CScriptManager::RegisterLUAFunctions()
 		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
 		"SetVolume", &CSoundManager::SetVolume);
+
+	(*m_state)["CSceneManager"].SetObj(
+		*CEngine::GetSingleton().getSceneManager(),
+		"AddObject", &CSceneManager::AddObject,
+		"DestroyObject", &CSceneManager::DestroyObject,
+		"LoadScene", &CSceneManager::LoadScene,
+		"UnloadScene", &CSceneManager::UnloadScene);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{
