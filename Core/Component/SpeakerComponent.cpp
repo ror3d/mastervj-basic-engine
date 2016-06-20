@@ -16,6 +16,7 @@ CSpeakerComponent::CSpeakerComponent(const std::string& name, CXMLTreeNode& node
 	l_Orientation.x = Owner->GetYaw();
 	l_Orientation.y = Owner->GetPitch();
 	l_Orientation.z = Owner->GetRoll();
+	volume = node.GetFloatProperty("volume", 50.0f, false);
 }
 
 CSpeakerComponent::CSpeakerComponent(const std::string& name, CElement* Owner)
@@ -37,7 +38,8 @@ void CSpeakerComponent::Init()
 	l_speaker.SetPosition(l_Position);
 	l_speaker.SetYawPitchRoll(l_Orientation.x, l_Orientation.y, l_Orientation.z);
 	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
-	//Play((std::string)"Play", true);
+	CEngine::GetSingleton().getSoundManager()->SetVolume("Volume", volume);
+	Play((std::string)"Play", true);
 
 }
 

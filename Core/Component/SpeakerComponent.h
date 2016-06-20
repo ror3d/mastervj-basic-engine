@@ -25,6 +25,7 @@ public:
 
 	Vect3f l_Position;
 	Vect3f l_Orientation;
+	float volume;
 	C3DElement l_speaker;
 };
 
