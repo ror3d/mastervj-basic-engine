@@ -29,7 +29,7 @@ CSpeakerComponent::~CSpeakerComponent()
 
 void CSpeakerComponent::Init()
 {
-	// TODO: Crear estructures necessàries en el manager d'audio utilitzant getName com a identificador
+	//Crear estructures necessàries en el manager d'audio utilitzant getName com a identificador
 	//SoundManager.Init();
 	std::string name = getName();
 	CEngine::GetSingleton().getSoundManager()->LoadSpeakers(name, l_Position, l_Orientation);
@@ -37,14 +37,14 @@ void CSpeakerComponent::Init()
 	l_speaker.SetPosition(l_Position);
 	l_speaker.SetYawPitchRoll(l_Orientation.x, l_Orientation.y, l_Orientation.z);
 	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
-	Play((std::string)"Play", true);
+	//Play((std::string)"Play", true);
 
 }
 
 
 void CSpeakerComponent::Destroy()
 {
-	// TODO: Eliminar estructures que calgui del manager d'audio
+	// Eliminar estructures que calgui del manager d'audio
 	CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&l_speaker);
 }
 
@@ -52,8 +52,6 @@ void CSpeakerComponent::Play( const std::string EventName, bool loop )
 {
 	// TODO: Reproduir one-shot o bucle depenent de loop
 	C3DElement nspeaker = {};
-	/*CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&nspeaker);
-	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &nspeaker);*/
 	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &l_speaker);
 
 }
@@ -76,10 +74,12 @@ void CSpeakerComponent::Update(float ElapsedTime)
 
 		if (newPosition != l_Position)
 		{
-			l_speaker.SetPosition(newPosition);
+			l_Position = newPosition;
+			l_speaker.SetPosition(l_Position);
 		}
 		if (newOrientation != l_Orientation)
 		{
+			l_Orientation = newOrientation;
 			l_speaker.SetYawPitchRoll(l_Orientation.x, l_Orientation.y, l_Orientation.z);
 		}
 		CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
