@@ -40,7 +40,10 @@ void CFPSCameraComponent::Update(float elapsedTime)
 	DEBUG_ASSERT( cc != nullptr );
 
 	cc->SetTargetPosition( owner->GetPosition() + m_CamOffset );
-	owner->SetYaw( cc->GetYaw() );
+	if (m_followRenderableObject)
+	{
+		owner->SetYaw(cc->GetYaw() + m_characterRotationOverride);
+	}
 }
 
 void CFPSCameraComponent::Destroy()
@@ -53,4 +56,16 @@ void CFPSCameraComponent::Destroy()
 void CFPSCameraComponent::SetAsCurrentCamera()
 {
 	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController( getName() );
+}
+
+void CFPSCameraComponent::SetFollowCharacter(bool follow, float overrideRot)
+{
+	m_followRenderableObject = follow;
+	m_characterRotationOverride = overrideRot;
+}
+
+float CFPSCameraComponent::GetYaw(){
+	CFPSCameraController* cc = dynamic_cast<CFPSCameraController*>(CEngine::GetSingleton().getCameraManager()->get(getName()));
+	DEBUG_ASSERT(cc != nullptr);
+	return cc->GetYaw();
 }

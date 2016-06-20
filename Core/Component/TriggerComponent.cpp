@@ -11,6 +11,8 @@ CTriggerComponent::CTriggerComponent(const std::string& name, CXMLTreeNode& node
 {
 	m_isTrigger = true;
 	m_isKinematic = false;
+	m_scale = node.GetVect3fProperty( "scale", Vect3f( 1, 1, 1 ), false );
+	m_offset = node.GetVect3fProperty( "offset", Vect3f( 0, 0, 0 ), false );
 }
 
 CTriggerComponent::CTriggerComponent(const std::string& name, CElement* Owner)

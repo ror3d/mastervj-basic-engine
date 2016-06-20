@@ -50,12 +50,16 @@ private:
 	bool m_enabled;
 
 public:
-
 	CParticleSystemInstance(CXMLTreeNode& treeNode);
 
 	virtual ~CParticleSystemInstance();
 	virtual void Update(float ElapsedTime);
 	virtual void Render(CContextManager *_context);
+	virtual CParticleSystemClass* getParticleClass() { return m_particleSystemClass; }
+	virtual void setParticleClass(CParticleSystemClass* particleClass)
+	{
+		m_particleSystemClass = particleClass;
+	}
 
 	inline void SetPosition(Vect3f pos) { m_position = pos; }
 	inline Vect3f GetPosition() const { return m_position; }

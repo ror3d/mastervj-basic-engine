@@ -109,7 +109,7 @@ void CScriptedComponent::Update(float ElapsedTime)
 		return;
 	}
 
- 	SetComponent();
+	SetComponent();
 
 	std::stringstream ss;
 	ss << "if (_currentComponent.OnUpdate ~= nil) then _currentComponent:OnUpdate(" << ElapsedTime << "); end";
