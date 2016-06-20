@@ -64,3 +64,12 @@ void CCharacterControllerComponent::Resize( float height, float radius )
 	m_radius = radius;
 }
 
+float CCharacterControllerComponent::GetHeight()
+{
+	return m_height;
+}
+
+float CCharacterControllerComponent::GetRadius()
+{
+	return m_radius;
+}

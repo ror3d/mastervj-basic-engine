@@ -57,6 +57,11 @@ void CAnimatedInstanceComponent::Update(float ElapsedTime)
 
 void CAnimatedInstanceComponent::Render(CContextManager&  _context)
 {
+	if (!GetOwner()->GetEnabled())
+	{
+		return;
+	}
+
 	//CEffectManager::m_SceneParameters.m_World = GetOwner()->GetTransform();
 	//m_AnimatedMeshInstance->Render( &_context );
 	for (auto &const layer : m_layers)

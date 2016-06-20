@@ -247,6 +247,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetPosition", &CElement::GetPosition,
 			"SetYaw", &CElement::SetYaw,
 			"GetYaw", &CElement::GetYaw,
+			"GetScale", &CElement::GetScale,
+			"SetScale", &CElement::SetScale,
 			"SetEnabled", &CElement::SetEnabled,
 			"IsEnabled", &CElement::GetEnabled,
 			"GetCamera", &CElement::GetCamera,
@@ -267,7 +269,9 @@ void CScriptManager::RegisterLUAFunctions()
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move,
 			"SetPos", &CCharacterControllerComponent::SetPosition,
-			"Resize", &CCharacterControllerComponent::Resize);
+			"Resize", &CCharacterControllerComponent::Resize,
+			"GetHeight", &CCharacterControllerComponent::GetHeight,
+			"GetRadius", &CCharacterControllerComponent::GetRadius);
 
 	(*m_state)["CFPSCameraComponent"]
 		.SetClass<CFPSCameraComponent, const std::string&, CElement*>(
