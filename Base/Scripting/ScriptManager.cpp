@@ -348,7 +348,8 @@ void CScriptManager::RegisterLUAFunctions()
 		"AddObject", &CSceneManager::AddObject,
 		"DestroyObject", &CSceneManager::DestroyObject,
 		"LoadScene", &CSceneManager::LoadScene,
-		"UnloadScene", &CSceneManager::UnloadScene);
+		"UnloadScene", &CSceneManager::UnloadScene,
+		"GetObjectById", &CSceneManager::GetObjectById);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{
