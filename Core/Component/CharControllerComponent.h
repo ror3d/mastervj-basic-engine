@@ -31,6 +31,9 @@ public:
 	void SetPosition(const Vect3f& pos);
 
 	void Resize( float height, float radius );
+
+	float GetHeight();
+	float GetRadius();
 };
 
 #endif
