@@ -139,11 +139,13 @@ protected:
 	physx::PxCooking					*m_Cooking; // OPTIMIZE OUT
 	physx::PxControllerManager			*m_ControllerManager;
 
+	std::map<size_t, std::string> m_CharacterControllerIdxs;
 private:
 	float m_elapsedTime;
 
 	std::map<std::string, physx::PxMaterial*> m_materials;
 	std::map<std::string, physx::PxController*> m_CharacterControllers;
+	size_t m_CharacterControllerLastIdx;
 
 
 };

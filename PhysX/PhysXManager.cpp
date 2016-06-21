@@ -56,6 +56,9 @@
 #endif
 #define CHECKED_RELEASE(x) if(x!=nullptr) { x->release(); x=nullptr; }
 
+
+#define CONTROLLER_FLAG (1<<30)
+
 inline physx::PxVec3 v(const Vect3f& v)
 { return physx::PxVec3(v.x, v.y, v.z); }
 inline Vect3f v(const physx::PxVec3& v)
@@ -199,7 +202,16 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
 
 		std::string l_triggerName = m_actors.name[l_indexTrigger];
-		std::string l_actorName = m_actors.name[l_indexActor];
+
+		std::string l_actorName;
+		if ( l_indexActor & CONTROLLER_FLAG )
+		{
+			l_actorName = m_CharacterControllerIdxs[l_indexActor^CONTROLLER_FLAG];
+		}
+		else
+		{
+			l_actorName = m_actors.name[l_indexActor];
+		}
 
 
 
@@ -244,6 +256,7 @@ CPhysXManager::CPhysXManager()
 	, m_Scene(nullptr)
 	, m_Cooking(nullptr)
 	, m_ControllerManager(nullptr)
+	, m_CharacterControllerLastIdx(0)
 {
 }
 
@@ -546,10 +559,11 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.reportCallback = NULL; //TODO
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + height*0.5f + radius + desc.contactOffset, pos.z);
 	desc.material = l_material;
-	int index = m_CharacterControllers.size();
-	desc.userData = (void*) index;
+	size_t index = ++m_CharacterControllerLastIdx;
 	physx::PxController* cct = m_ControllerManager->createController(desc);
+	cct->getActor()->userData = (void*) (index | CONTROLLER_FLAG);
 	m_CharacterControllers[name] = cct;
+	m_CharacterControllerIdxs[index] = name;
 }
 
 void CPhysXManager::InitPhysx(){
@@ -643,6 +657,10 @@ void CPhysXManager::update(float dt)
 		for (physx::PxU32 i = 0; i < nActiveTransf; ++i)
 		{
 			size_t idx = reinterpret_cast<size_t>(activeTransf[i].userData);
+			if ( idx & CONTROLLER_FLAG )
+			{
+				continue;
+			}
 			m_actors.position[idx] = v(activeTransf[i].actor2World.p);
 			m_actors.rotation[idx] = q(activeTransf[i].actor2World.q);
 		}

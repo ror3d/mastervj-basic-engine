@@ -10,6 +10,8 @@
 #include <sstream>
 #include <fstream>
 
+#include <Base/Scripting/LuaErrorCapture.h>
+
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 
 CScriptedComponent::CScriptedComponent(const std::string& name,
@@ -158,7 +160,7 @@ void CScriptedComponent::RenderDebug(CContextManager&  _context)
 	m_scriptMgr->RunCode(ss.str());
 }
 
-void CScriptedComponent::SendMsg(const std::string msg)
+void CScriptedComponent::SendMsg(const std::string& msg)
 {
 	SetComponent();
 
@@ -167,8 +169,9 @@ void CScriptedComponent::SendMsg(const std::string msg)
 	m_scriptMgr->RunCode(ss.str());
 }
 
-void CScriptedComponent::SendMsg(const std::string msg, CElement* arg1)
+void CScriptedComponent::SendMsg(const std::string& msg, const std::string& arg1)
 {
+	LuaErrorCapturedStdout errorCapture;
 	SetComponent();
 
 	sel::State &state = *m_scriptMgr->getLuaState();
@@ -176,6 +179,47 @@ void CScriptedComponent::SendMsg(const std::string msg, CElement* arg1)
 	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
 	if (state["_r"])
 	{
-		state["_currentComponent"][msg.c_str()](arg1);
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(\"" + arg1 + "\");").c_str() );
+	}
+}
+
+void CScriptedComponent::SendMsg(const std::string& msg, int arg1)
+{
+	LuaErrorCapturedStdout errorCapture;
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(" + std::to_string(arg1) + ");").c_str() );
+	}
+}
+
+class CElemHolder
+{
+public:
+	CElemHolder( CElement* elem ) : Element( elem ) {}
+	CElement* Element;
+	CElement* GetElement() { return Element; }
+};
+
+void CScriptedComponent::SendMsg(const std::string& msg, CElement* arg1)
+{
+	LuaErrorCapturedStdout errorCapture;
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		CElemHolder elemHolder( arg1 );
+		state["_elemHolder"].SetObj( elemHolder, "GetElement", &CElemHolder::GetElement );
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(_elemHolder:GetElement());").c_str() );
 	}
 }

@@ -263,3 +263,22 @@ const Mat44f & CElement::GetTransform()
 	return m_TransformMatrix;
 }
 
+template<typename T>
+void CElement::SendMessage_t(const std::string msg, T arg1)
+{
+	for (auto &const c : m_componentContainer)
+	{
+		c.second->SendMsg(msg, arg1);
+	}
+}
+
+void CElement::SendMsg( const std::string& message, CElement* arg1 )
+{
+	SendMessage_t( message, arg1 );
+}
+
+void CElement::SendMsg( const std::string& message, int arg1 )
+{
+	SendMessage_t( message, arg1 );
+}
+

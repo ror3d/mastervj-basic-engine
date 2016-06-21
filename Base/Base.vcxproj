@@ -33,6 +33,7 @@
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
+    <ClInclude Include="Scripting\LuaErrorCapture.h" />
     <ClInclude Include="Scripting\ScriptManager.h" />
     <ClInclude Include="Utils\Active.h" />
     <ClInclude Include="Utils\TMapContainer.h" />

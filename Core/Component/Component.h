@@ -47,9 +47,13 @@ public:
 	virtual void Render(CContextManager&  _context) {}
 	virtual void RenderDebug(CContextManager&  _context) {}
 
-	virtual void SendMsg(const std::string) {}
+	virtual void SendMsg(const std::string&) {}
 
-	virtual void SendMsg(const std::string, CElement*) {}
+	virtual void SendMsg(const std::string&, const std::string&) {}
+
+	virtual void SendMsg(const std::string&, int) {}
+
+	virtual void SendMsg(const std::string&, CElement*) {}
 
 	virtual void Destroy() = 0;
 

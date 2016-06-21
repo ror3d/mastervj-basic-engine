@@ -32,7 +32,7 @@ void CTriggerComponent::Destroy()
 
 void CTriggerComponent::Init()
 {
-	CPhysxComponent::Init(GetOwner()->GetScale()*m_scale, GetOwner()->GetPosition() + m_offset);
+	CPhysxComponent::Init(GetOwner()->GetScale().MulElems(m_scale), GetOwner()->GetPosition() + m_offset);
 }
 
 
@@ -85,6 +85,7 @@ void CTriggerComponent::FixedUpdate(float ElapsedTime)
 	{
 		auto otherOwner = cm->get(e)->GetOwner();
 		own->SendMsg("OnTriggerEnter", otherOwner);
+		m_activeElements.push_back( e );
 	}
 }
 

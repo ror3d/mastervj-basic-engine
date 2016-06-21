@@ -2,8 +2,6 @@
 
 #include <selene.h>
 
-#include <fstream>
-#include <sstream>
 
 #include <Base/XML/XMLTreeNode.h>
 
@@ -29,6 +27,8 @@
 #include <Core/Scene/SceneManager.h>
 #include <Core/Scene/Element.h>
 
+#include "LuaErrorCapture.h"
+
 namespace
 {
 	void StopScriptErrors(int sd, std::string message, std::exception_ptr ex)
@@ -43,33 +43,6 @@ namespace
 		}
 	}
 }
-
-/*
- * This class captures errors printed by lua to redirect them as we wish.
- */
-class LuaErrorCapturedStdout
-{
-public:
-	LuaErrorCapturedStdout()
-	{
-		_old = std::cout.rdbuf(_out.rdbuf());
-	}
-
-	~LuaErrorCapturedStdout()
-	{
-		std::cout.rdbuf(_old);
-		OutputDebugStringA(_out.str().c_str());
-	}
-
-	std::string Content() const
-	{
-		return _out.str();
-	}
-
-private:
-	std::stringstream _out;
-	std::streambuf* _old;
-};
 
 CScriptManager::CScriptManager()
 	: m_state(nullptr)
@@ -148,7 +121,7 @@ void CScriptManager::RunScript(const std::string& name)
 {
 	auto it = m_loadedScripts.find(name);
 	DEBUG_ASSERT (it != m_loadedScripts.end());
-	
+
 	RunCode(it->second);
 }
 
@@ -253,6 +226,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCamera", &CElement::GetCamera,
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
+			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
 			"GetTrigger", &CElement::GetTriggerComponent);
 
 	(*m_state)["CAnimatedInstanceComponent"]
@@ -338,7 +312,7 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CSoundManager"].SetObj(
 		*CEngine::GetSingleton().getSoundManager(),
-		//"PlayEvent", &CSoundManager::PlayEvent, 
+		//"PlayEvent", &CSoundManager::PlayEvent,
 		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
 		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
