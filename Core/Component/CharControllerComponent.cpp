@@ -59,7 +59,6 @@ void CCharacterControllerComponent::Resize( float height, float radius )
 	CEngine::GetSingleton().getPhysXManager()->resizeCharacterController(getName(), height, radius);
 	float center = m_height / 2 + m_radius;
 	float nCenter = height / 2 + radius;
-	m_offset.y += ( center - nCenter );
 	m_height = height;
 	m_radius = radius;
 }

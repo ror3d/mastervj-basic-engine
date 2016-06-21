@@ -243,7 +243,7 @@ void CScriptManager::RegisterLUAFunctions()
 		.SetClass<CCharacterControllerComponent, const std::string&, CElement*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move,
-			"SetPos", &CCharacterControllerComponent::SetPosition,
+			"SetPosition", &CCharacterControllerComponent::SetPosition,
 			"Resize", &CCharacterControllerComponent::Resize,
 			"GetHeight", &CCharacterControllerComponent::GetHeight,
 			"GetRadius", &CCharacterControllerComponent::GetRadius);
