@@ -56,20 +56,12 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 
 void CSceneManager::LoadScene( const std::string& scene )
 {
-	auto sc = get(scene);
-	if (sc)
-	{
-		sc->Load();
-	}
+	m_ScenesToLoad.push_back(scene);
 }
 
 void CSceneManager::UnloadScene( const std::string& scene )
 {
-	auto sc = get(scene);
-	if (sc)
-	{
-		sc->Unload();
-	}
+	m_ScenesToUnload.push_back(scene);
 }
 
 void CSceneManager::AddObject( CElement * obj )
@@ -104,5 +96,30 @@ CElement * CSceneManager::GetObjectById( const std::string & id )
 	}
 
 	return nullptr;
+}
+
+void CSceneManager::Update()
+{
+	for (auto &const scene : m_ScenesToLoad)
+	{
+		auto sc = get(scene);
+		if (sc)
+		{
+			sc->Load();
+		}
+	}
+
+	m_ScenesToLoad.clear();
+
+	for (auto &const scene : m_ScenesToUnload)
+	{
+		auto sc = get(scene);
+		if (sc)
+		{
+			sc->Unload();
+		}
+	}
+
+	m_ScenesToLoad.clear();
 }
 
