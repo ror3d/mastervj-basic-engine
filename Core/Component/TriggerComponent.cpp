@@ -28,6 +28,7 @@ CTriggerComponent::~CTriggerComponent()
 
 void CTriggerComponent::Destroy()
 {
+	CPhysxComponent::Destroy();
 }
 
 void CTriggerComponent::Init()
