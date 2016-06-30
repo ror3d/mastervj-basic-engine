@@ -20,7 +20,7 @@ public:
 private:
 	CElement* m_Owner;
 
-	bool m_Initiaized;
+	bool m_Initialized;
 
 	bool m_Enabled;
 

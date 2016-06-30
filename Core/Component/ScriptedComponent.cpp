@@ -34,7 +34,7 @@ CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
 	std::string name = node.GetPszProperty("class", "");
 	DEBUG_ASSERT(name != "");
 	m_scriptClass = name;
-	name = Owner->getName() + "_" + name;
+	name = Owner->getName() + "_" + name + "_Script";
 	setName(name);
 }
 

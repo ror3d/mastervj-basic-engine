@@ -8,7 +8,7 @@
 CComponent::CComponent(CXMLTreeNode& node, CElement* Owner)
 	: CNamed(node)
 	, m_Owner(Owner)
-	, m_Initiaized(false)
+	, m_Initialized(false)
 {
 	DEBUG_ASSERT( Owner != nullptr );
 
@@ -32,7 +32,7 @@ CComponent::CComponent(CXMLTreeNode& node, CElement* Owner)
 CComponent::CComponent( const std::string& Name, CElement* Owner )
 	: CNamed(Name)
 	, m_Owner(Owner)
-	, m_Initiaized(false)
+	, m_Initialized(false)
 {
 }
 
@@ -41,13 +41,13 @@ void CComponent::Initialize()
 	if ( CEngine::GetSingleton().getComponentManager()->IsInitialized() )
 	{
 		Init();
-		m_Initiaized = true;
+		m_Initialized = true;
 	}
 }
 
 void CComponent::ObjectInitialized()
 {
-	if ( m_Initiaized )
+	if ( m_Initialized )
 	{
 		OnObjectInitialized();
 	}
