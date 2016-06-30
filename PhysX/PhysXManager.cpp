@@ -341,10 +341,8 @@ bool CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>&
 		size_t length = f.tellg();
 		f.seekg( 0, f.beg );
 
-		uint8 *data = new uint8[length];
-		f.read( data, length );
-		std::copy( data, data+length, std::back_inserter( outCookedData ) );
-		delete[] data;
+		outCookedData.resize( length );
+		f.read( &outCookedData[0], length );
 
 		return true;
 	}

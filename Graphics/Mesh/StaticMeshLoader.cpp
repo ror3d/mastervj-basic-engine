@@ -248,9 +248,10 @@ bool CStaticMeshLoader::FillColliderDescriptor( const std::string& coreName, CPh
 		{
 			DEBUG_ASSERT(!"Collider type is not Triangle or Convex");
 		}
+
+		CEngine::GetSingleton().getCookedMeshManager()->add(cookedFileName, cooked);
 	}
 
-	CEngine::GetSingleton().getCookedMeshManager()->add(cookedFileName, cooked);
 	shapeDesc->cookedMeshData = cooked;
 
 	return true;
