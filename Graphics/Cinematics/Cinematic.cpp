@@ -4,7 +4,7 @@
 #include <XML/XMLTreeNode.h>
 
 CCinematic::CCinematic( CXMLTreeNode &treeNode )
-	: CRenderableObject(treeNode)
+	//: CRenderableObject(treeNode)
 {
 	m_Duration = treeNode.GetFloatProperty( "duration" );
 	for (int i = 0; i < treeNode.GetNumChildren(); ++i)

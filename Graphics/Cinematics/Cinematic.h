@@ -2,12 +2,14 @@
 
 #include <vector>
 #include "CinematicPlayer.h"
-#include "Renderable/RenderableObject.h"
+//#include "Renderable/RenderableObject.h"
 
 class CCinematicObject;
 class CRenderManager;
+class CContextManager;
+class CXMLTreeNode;
 
-class CCinematic : public CRenderableObject, public CCinematicPlayer
+class CCinematic : /*public CRenderableObject,*/ public CCinematicPlayer
 {
 protected:
 	std::vector<CCinematicObject *> m_CinematicObjects;

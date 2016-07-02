@@ -31,3 +31,4 @@ public:
 	TwType m_PosRotType;
 };
 
+

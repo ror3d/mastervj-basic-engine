@@ -11,6 +11,8 @@ class CXMLTreeNode;
 class CScriptedComponent : public CComponent
 {
 private:
+	std::string m_scriptClass;
+
 	CScriptManager* m_scriptMgr;
 
 	unsigned m_componentStateId;
@@ -25,15 +27,18 @@ protected:
 	virtual void OnObjectInitialized();
 
 public:
-	CScriptedComponent(const std::string& name, CRenderableObject* Owner);
-	CScriptedComponent(CXMLTreeNode& node, CRenderableObject* Owner);
+	CScriptedComponent(const std::string& name, CElement* Owner);
+	CScriptedComponent(CXMLTreeNode& node, CElement* Owner);
 	virtual ~CScriptedComponent();
 	virtual void Update(float ElapsedTime);
 	virtual void FixedUpdate(float ElapsedTime);
 	virtual void Render(CContextManager&  _context);
 	virtual void RenderDebug(CContextManager&  _context);
 
-	virtual void SendMsg(const std::string msg);
+	virtual void SendMsg(const std::string &msg);
+	virtual void SendMsg(const std::string &msg, int arg1);
+	virtual void SendMsg(const std::string &msg, const std::string &arg1);
+	virtual void SendMsg(const std::string &msg, CElement* arg1);
 
 	virtual void Destroy();
 };

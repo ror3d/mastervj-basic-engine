@@ -19,12 +19,6 @@
     <ClCompile Include="Debug\DebugPerf.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="IA\IAInstance.cpp">
-      <Filter>IA</Filter>
-    </ClCompile>
-    <ClCompile Include="IA\IAManager.cpp">
-      <Filter>IA</Filter>
-    </ClCompile>
     <ClCompile Include="Component\ComponentManager.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -36,12 +30,6 @@
     </ClCompile>
     <ClCompile Include="Component\Component.cpp">
       <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Trigger\Trigger.cpp">
-      <Filter>Trigger</Filter>
-    </ClCompile>
-    <ClCompile Include="Trigger\TriggerManager.cpp">
-      <Filter>Trigger</Filter>
     </ClCompile>
     <ClCompile Include="Component\FPSCameraComponent.cpp">
       <Filter>Component</Filter>
@@ -55,6 +43,27 @@
     <ClCompile Include="Component\TriggerComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Element.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\AnimatedInstanceComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\MeshInstanceComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ParticleEmitterComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SpeakerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -66,20 +75,17 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{55c8f47a-5678-4955-a640-097052f5e424}</UniqueIdentifier>
     </Filter>
-    <Filter Include="IA">
-      <UniqueIdentifier>{9771c5ca-a1ea-42db-a224-ca3baf886b2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Time">
       <UniqueIdentifier>{8270adc5-4da3-4b07-bf39-5e0dec98d80a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{43e42ad3-3873-43a7-8eca-cc8531863f51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Trigger">
-      <UniqueIdentifier>{18c408c5-fc47-463b-9dda-0a7086dee1fe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Logic">
       <UniqueIdentifier>{99150795-34cb-4ebb-94fd-fc13a44b550b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{29af88a6-96a6-4b8a-bccb-bf65468cf9a2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -101,12 +107,6 @@
     <ClInclude Include="Debug\DebugPerf.h">
       <Filter>Debug</Filter>
     </ClInclude>
-    <ClInclude Include="IA\IAInstance.h">
-      <Filter>IA</Filter>
-    </ClInclude>
-    <ClInclude Include="IA\IAManager.h">
-      <Filter>IA</Filter>
-    </ClInclude>
     <ClInclude Include="Component\ComponentManager.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -122,12 +122,6 @@
     <ClInclude Include="Time\TimeManager.h">
       <Filter>Time</Filter>
     </ClInclude>
-    <ClInclude Include="Trigger\Trigger.h">
-      <Filter>Trigger</Filter>
-    </ClInclude>
-    <ClInclude Include="Trigger\TriggerManager.h">
-      <Filter>Trigger</Filter>
-    </ClInclude>
     <ClInclude Include="Logic\LogicManager.h">
       <Filter>Logic</Filter>
     </ClInclude>
@@ -138,6 +132,27 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\TriggerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Element.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ParticleEmitterComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\AnimatedInstanceComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\MeshInstanceComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SpeakerComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>

@@ -369,3 +369,4 @@ void CDebugHelperImplementation::CreateMainBar(){
 
 	CDebugHelper::GetDebugHelper()->RegisterBar(mainBar);
 }
+

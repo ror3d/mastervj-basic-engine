@@ -26,6 +26,13 @@ CGUI::CGUI()
 CGUI::~CGUI()
 {
 	delete m_guiComponentsVtxs;
+
+	for (auto &const f : m_fonts)
+	{
+		delete f.second;
+	}
+	m_fonts.clear();
+
 	// TODO: Cleanup all the maps
 }
 

@@ -1,9 +1,10 @@
 #include "StaticMeshManager.h"
-#include "StaticMesh.h"
+#include "Mesh.h"
 #include <XML/XMLTreeNode.h>
 
 #include <Core/Engine/Engine.h>
-#include <Graphics/Material/MaterialManager.h>
+#include "Material/MaterialManager.h"
+#include "Mesh/StaticMeshLoader.h"
 
 
 CStaticMeshManager::CStaticMeshManager()
@@ -17,10 +18,10 @@ CStaticMeshManager::~ CStaticMeshManager ()
 
 bool CStaticMeshManager::Load(const std::string &FileName)
 {
-	 m_FileName = FileName;
-	 CXMLTreeNode l_StaticMesh;
+	m_FileName = FileName;
+	CXMLTreeNode l_StaticMesh;
 
-	 l_StaticMesh.LoadFile(FileName.c_str());
+	l_StaticMesh.LoadFile(FileName.c_str());
 
 	if( !l_StaticMesh.Exists() )
 	{
@@ -28,6 +29,7 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 	}
 	else
 	{
+		CStaticMeshLoader* ml = CEngine::GetSingleton().getMeshLoader();
 		CMaterialManager* mm = CEngine::GetSingleton().getMaterialManager();
 
 		for (int i = 0; i < l_StaticMesh.GetNumChildren(); ++i){
@@ -35,9 +37,9 @@ bool CStaticMeshManager::Load(const std::string &FileName)
 
 			if (l_Mesh.GetName() == std::string("static_mesh"))
 			{
-				CStaticMesh* l_static_mesh = new CStaticMesh(l_Mesh);
+				CMesh* l_static_mesh = ml->GetMesh(l_Mesh);
 
-				if(l_static_mesh->Load())
+				if(l_static_mesh)
 				{
 					int nmat = 0;
 					for (int j = 0; j < l_Mesh.GetNumChildren(); ++j)

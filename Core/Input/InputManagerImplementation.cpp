@@ -168,8 +168,29 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		m_Actions.push_back(action);
 	}
 	{
-		Action action = { "DIVIDE", KEYBOARD, Action::ON_PRESS };
-		action.keyboard.key = 'G';
+		Action action = { "DIVIDE_3_QUARTERS", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = '1';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "DIVIDE_1_HALF", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = '2';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "DIVIDE_1_QUARTER", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = '3';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "REUNITE", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = '4';
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
 		m_Actions.push_back(action);
@@ -179,6 +200,7 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		action.keyboard.key = 'F';
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
+		action.axisName = "FIXCAMERA";
 		m_Actions.push_back(action);
 	}
 	{

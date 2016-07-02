@@ -22,6 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Math\Color.h" />
+    <ClInclude Include="Math\ColorSpace.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Math\MathTypes.h" />
     <ClInclude Include="Math\MathUtils.h" />
@@ -32,8 +33,10 @@
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
+    <ClInclude Include="Scripting\LuaErrorCapture.h" />
     <ClInclude Include="Scripting\ScriptManager.h" />
     <ClInclude Include="Utils\Active.h" />
+    <ClInclude Include="Utils\TMapContainer.h" />
     <ClInclude Include="Utils\TMapManager.h" />
     <ClInclude Include="Utils\Named.h" />
     <ClInclude Include="Utils\SingletonPattern.h" />
@@ -43,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Math\Color.inl" />
+    <None Include="Math\ColorSpace.inl" />
     <None Include="Math\MathUtils.inl" />
     <None Include="Math\Matrix33.inl" />
     <None Include="Math\Matrix34.inl" />

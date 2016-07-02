@@ -28,21 +28,27 @@ Vect3f getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, ra
 	return r + rng.first;
 }
 
-CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<CColor> &rng)
+CColor getRand(std::mt19937 &rnde, std::uniform_real_distribution<float> &ud, range<CColorSpace> &rng)
 {
-	CColor s = ( rng.second - rng.first );
-	CColor r(ud(rnde)*s.x, ud(rnde)*s.y, ud(rnde)*s.z, ud(rnde)*s.w);
-	return r + rng.first;
+	CColor c1 = rng.first.toHSL();
+	CColor c2 = rng.second.toHSL();
+
+	Vect3f hslr = getRand(rnde, ud, make_range(Vect3f(c1.x, c1.y, c1.z), Vect3f(c2.x, c2.y, c2.z)));
+
+	CColorSpace r = CColorSpace(hslr, true);
+	r.w = ud(rnde)*(rng.second.w - rng.first.w) + rng.second.w;
+
+	return r.toRGB();
 }
 
 CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
-	: CRenderableObject(treeNode)
-	, m_activeParticles(0)
+	: m_activeParticles(0)
 	, m_toCreateParticles(0)
 	, m_randomEngine(rnd())
 	, m_unitDist(0, 1)
+	, m_enabled(true)
 {
-	std::string particleClass = treeNode.GetPszProperty("particle_class", "", true);
+	std::string particleClass = treeNode.GetPszProperty("class", "", true);
 	m_particleSystemClass = CEngine::GetSingleton().getParticleManager()->get(particleClass);
 	DEBUG_ASSERT(m_particleSystemClass);
 
@@ -61,6 +67,11 @@ CParticleSystemInstance::~CParticleSystemInstance()
 
 void CParticleSystemInstance::Update(float ElapsedTime)
 {
+	if (!m_enabled)
+	{
+		return;
+	}
+
 	// Update existing particles
 	for (int i = 0; i < m_activeParticles; ++i)
 	{
@@ -78,11 +89,25 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		p.angularSpeed += p.angularAcc * ElapsedTime;
 		p.angle += p.angularSpeed * ElapsedTime;
 
-		if (m_particleSystemClass->timePerFrame > 0 && m_particleSystemClass->timePerFrame > 0)
+		if (m_particleSystemClass->numFrames > 0)
 		{
-			p.currentFrame = p.lifetime / m_particleSystemClass->timePerFrame;
-		}
+			p.currentFrame = p.lifetime * m_particleSystemClass->numFrames;
+			
+			if (m_particleSystemClass->colorInterpolation)
+			{
+				CColor c1 = m_particleSystemClass->color.first.toHSL();
+				CColor c2 = m_particleSystemClass->color.second.toHSL();
 
+				float dist = c2.z - c1.z;
+				float increment = dist * p.currentFrame / m_particleSystemClass->numFrames;
+
+				CColorSpace newColor = CColorSpace(c1.x, c1.y, c1.z + increment);
+
+				newColor.HSL = true;
+
+				p.color = newColor.toRGB();
+			}
+		}
 	}
 
 	m_toCreateParticles += m_particleSystemClass->emitRate * ElapsedTime;
@@ -105,7 +130,15 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		p.currentFrame = 0;
 		p.lifetime = 0;
 		p.totalLifetime = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->life);
-		p.color = getRand( m_randomEngine, m_unitDist, m_particleSystemClass->color );
+		
+		if (m_particleSystemClass->colorInterpolation)
+		{
+			p.color = m_particleSystemClass->color.first;
+		}
+		else
+		{
+			p.color = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->color);
+		}
 	}
 
 	// Copy particles
@@ -131,6 +164,10 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 
 void CParticleSystemInstance::Render(CContextManager *_context)
 {
+	if (!m_enabled)
+	{
+		return;
+	}
 	auto devCtx = _context->GetDeviceContext();
 	m_vertexs->UpdateVertices(devCtx, m_particleVtxs, m_activeParticles);
 

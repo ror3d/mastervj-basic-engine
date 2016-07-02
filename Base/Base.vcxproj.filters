@@ -89,6 +89,13 @@
     <ClInclude Include="Utils\Active.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\TMapContainer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\ColorSpace.h" />
+    <ClInclude Include="Scripting\LuaErrorCapture.h">
+      <Filter>Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Math\MathUtils.inl">
@@ -115,5 +122,6 @@
     <None Include="Math\Color.inl">
       <Filter>Math</Filter>
     </None>
+    <None Include="Math\ColorSpace.inl" />
   </ItemGroup>
 </Project>

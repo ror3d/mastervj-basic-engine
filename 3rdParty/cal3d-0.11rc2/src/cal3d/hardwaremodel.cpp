@@ -47,9 +47,9 @@ CalHardwareModel::CalHardwareModel(CalCoreModel* pCoreModel)
   for( i = 0 ; i < 8 ; i++)
     m_pTextureCoordBuffer[i]=NULL;
   m_textureCoordNum=0;
-  
+
   for( i = 0 ; i < 8 ; i++)
-    m_pTangentSpaceBuffer [i]=NULL; 
+    m_pTangentSpaceBuffer [i]=NULL;
 
   m_totalFaceCount=0;
   m_totalVertexCount=0;
@@ -149,8 +149,8 @@ void CalHardwareModel::setTextureCoordNum(int textureCoordNum)
 {
   if( 0<= textureCoordNum && textureCoordNum < 8)
   {
-    m_textureCoordNum=textureCoordNum;       
-  }      
+    m_textureCoordNum=textureCoordNum;
+  }
 }
 
  /*****************************************************************************/
@@ -170,8 +170,8 @@ void CalHardwareModel::setTextureCoordBuffer(int mapId, char * pTextureCoordBuff
   if( 0 <= mapId && mapId < 8)
   {
     m_pTextureCoordBuffer[mapId] = pTextureCoordBuffer;
-    m_textureCoordStride[mapId] = stride;   
-  } 
+    m_textureCoordStride[mapId] = stride;
+  }
 }
 
  /*****************************************************************************/
@@ -190,8 +190,8 @@ void CalHardwareModel::setTangentSpaceBuffer(int mapId, char * pTangentSpaceBuff
   if( 0 <= mapId && mapId < 8)
   {
     m_pTangentSpaceBuffer[mapId] = pTangentSpaceBuffer;
-    m_tangentSpaceStride[mapId] = stride;   
-  } 
+    m_tangentSpaceStride[mapId] = stride;
+  }
 }
 
  /*****************************************************************************/
@@ -237,7 +237,7 @@ std::vector<CalHardwareModel::CalHardwareMesh> & CalHardwareModel::getVectorHard
 
 void CalHardwareModel::getAmbientColor(unsigned char *pColorBuffer)
 {
-    if( m_selectedHardwareMesh >= 0 && m_selectedHardwareMesh < int(m_vectorHardwareMesh.size()) 
+    if( m_selectedHardwareMesh >= 0 && m_selectedHardwareMesh < int(m_vectorHardwareMesh.size())
     && m_vectorHardwareMesh[m_selectedHardwareMesh].pCoreMaterial!=0)
   {
     CalCoreMaterial::Color& color = m_vectorHardwareMesh[m_selectedHardwareMesh].pCoreMaterial->getAmbientColor();
@@ -251,8 +251,8 @@ void CalHardwareModel::getAmbientColor(unsigned char *pColorBuffer)
     pColorBuffer[0] = 0;
     pColorBuffer[1] = 0;
     pColorBuffer[2] = 0;
-    pColorBuffer[3] = 0;    
-  } 
+    pColorBuffer[3] = 0;
+  }
 }
 
  /*****************************************************************************/
@@ -282,10 +282,10 @@ void CalHardwareModel::getDiffuseColor(unsigned char *pColorBuffer)
     pColorBuffer[0] = 0;
     pColorBuffer[1] = 0;
     pColorBuffer[2] = 0;
-    pColorBuffer[3] = 0;    
-  } 
+    pColorBuffer[3] = 0;
+  }
 }
- 
+
 /*****************************************************************************/
 /** Provides access to the specular color.
   *
@@ -312,8 +312,8 @@ void CalHardwareModel::getSpecularColor(unsigned char *pColorBuffer)
     pColorBuffer[0] = 0;
     pColorBuffer[1] = 0;
     pColorBuffer[2] = 0;
-    pColorBuffer[3] = 0;    
-  } 
+    pColorBuffer[3] = 0;
+  }
 }
 
 /*****************************************************************************/
@@ -336,7 +336,7 @@ float CalHardwareModel::getShininess()
   else
   {
     return 50.0f;
-  } 
+  }
 }
 
  /*****************************************************************************/
@@ -403,7 +403,7 @@ int CalHardwareModel::getFaceCount()
   {
     return m_vectorHardwareMesh[m_selectedHardwareMesh].faceCount;
   }
-  return 0;   
+  return 0;
 }
 
 /*****************************************************************************/
@@ -420,7 +420,7 @@ int CalHardwareModel::getVertexCount()
   {
     return m_vectorHardwareMesh[m_selectedHardwareMesh].vertexCount;
   }
-  return 0;   
+  return 0;
 }
 
 /*****************************************************************************/
@@ -438,7 +438,7 @@ int CalHardwareModel::getBoneCount()
   {
     return m_vectorHardwareMesh[m_selectedHardwareMesh].m_vectorBonesIndices.size();
   }
-  return 0;   
+  return 0;
 }
 
 /*****************************************************************************/
@@ -456,7 +456,7 @@ int CalHardwareModel::getBaseVertexIndex()
   {
     return m_vectorHardwareMesh[m_selectedHardwareMesh].baseVertexIndex;
   }
-  return 0;   
+  return 0;
 }
 
 /*****************************************************************************/
@@ -474,7 +474,7 @@ int CalHardwareModel::getStartIndex()
   {
     return m_vectorHardwareMesh[m_selectedHardwareMesh].startIndex;
   }
-  return 0;   
+  return 0;
 }
 
 
@@ -494,12 +494,12 @@ int CalHardwareModel::getStartIndex()
 
 bool CalHardwareModel::selectHardwareMesh(size_t meshId)
 {
-  if( meshId < m_vectorHardwareMesh.size()) 
+  if( meshId < m_vectorHardwareMesh.size())
   {
-    m_selectedHardwareMesh=meshId;    
+    m_selectedHardwareMesh=meshId;
     return true;
   }
-  return false;   
+  return false;
 }
 
 /*****************************************************************************/
@@ -550,18 +550,18 @@ Cal::UserData CalHardwareModel::getMapUserData(int mapId)
   {
     if(m_vectorHardwareMesh[m_selectedHardwareMesh].pCoreMaterial==0)
       return 0;
-    
+
     // get the map vector
         std::vector<CalCoreMaterial::Map>& vectorMap = m_vectorHardwareMesh[m_selectedHardwareMesh].pCoreMaterial->getVectorMap();
-    
-    
+
+
         // check if the map id is valid
         if((mapId < 0) || (mapId >= (int)vectorMap.size()))
         {
       CalError::setLastError(CalError::INVALID_HANDLE, __FILE__, __LINE__);
       return 0;
         }
-        
+
         return vectorMap[mapId].userData;
   }
   return 0;
@@ -589,7 +589,7 @@ bool CalHardwareModel::load(int baseVertexIndex, int startIndex,int maxBonesPerM
   if(m_pVertexBuffer==NULL ||  m_pNormalBuffer ==NULL|| m_pWeightBuffer ==NULL || m_pMatrixIndexBuffer ==NULL)
   {
     CalError::setLastError(CalError::INVALID_HANDLE, __FILE__, __LINE__);
-    return false;   
+    return false;
   }
 
   int mapId;
@@ -598,14 +598,14 @@ bool CalHardwareModel::load(int baseVertexIndex, int startIndex,int maxBonesPerM
     if(m_pTextureCoordBuffer[mapId]==NULL)
     {
       CalError::setLastError(CalError::INVALID_HANDLE, __FILE__, __LINE__);
-      return false;         
-    }  
-  } 
-  
+      return false;
+    }
+  }
+
   m_vectorVertexIndiceUsed.resize(50000);
   int vertexCount=baseVertexIndex;
   int faceIndexCount = startIndex;
-        
+
         // unused.
   //CalCoreSkeleton * pCoreSkeleton = m_pCoreModel->getCoreSkeleton();
   //std::vector< CalCoreBone *>& vectorBone = pCoreSkeleton->getVectorCoreBone();
@@ -616,7 +616,7 @@ bool CalHardwareModel::load(int baseVertexIndex, int startIndex,int maxBonesPerM
     for(int coreMeshId = 0; coreMeshId < m_pCoreModel->getCoreMeshCount(); coreMeshId++)
       m_coreMeshIds.push_back(coreMeshId);
   }
-    
+
   for(std::vector<int>::iterator meshIdIt = m_coreMeshIds.begin();meshIdIt != m_coreMeshIds.end(); meshIdIt++)
   {
     int meshId = *meshIdIt;
@@ -624,29 +624,29 @@ bool CalHardwareModel::load(int baseVertexIndex, int startIndex,int maxBonesPerM
     int submeshCount= pCoreMesh->getCoreSubmeshCount();
     int submeshId;
     for(submeshId = 0 ;submeshId < submeshCount ; submeshId++)
-    {     
+    {
       CalCoreSubmesh *pCoreSubmesh = pCoreMesh->getCoreSubmesh(submeshId);
-      
+
       std::vector<CalCoreSubmesh::Vertex>& vectorVertex = pCoreSubmesh->getVectorVertex();
       std::vector<CalCoreSubmesh::Face>& vectorFace = pCoreSubmesh->getVectorFace();
                         // unused.
       //std::vector< std::vector<CalCoreSubmesh::TextureCoordinate> >& vectorTex = pCoreSubmesh->getVectorVectorTextureCoordinate();
-      
+
       CalHardwareMesh hardwareMesh;
 
       hardwareMesh.meshId = meshId;
       hardwareMesh.submeshId = submeshId;
-      
-      hardwareMesh.baseVertexIndex=vertexCount;     
+
+      hardwareMesh.baseVertexIndex=vertexCount;
       hardwareMesh.startIndex=faceIndexCount;
-      hardwareMesh.m_vectorBonesIndices.clear();          
-      
+      hardwareMesh.m_vectorBonesIndices.clear();
+
       hardwareMesh.vertexCount=0;
-      hardwareMesh.faceCount=0;     
-      
+      hardwareMesh.faceCount=0;
+
       int startIndex=hardwareMesh.startIndex;
-      
-      int faceId;     
+
+      int faceId;
       for( faceId =0 ;faceId<pCoreSubmesh->getFaceCount();faceId++)
       {
         if(canAddFace(hardwareMesh,vectorFace[faceId],vectorVertex,maxBonesPerMesh))
@@ -661,35 +661,36 @@ bool CalHardwareModel::load(int baseVertexIndex, int startIndex,int maxBonesPerM
           vertexCount+=hardwareMesh.vertexCount;
           faceIndexCount+=hardwareMesh.faceCount*3;
           hardwareMesh.pCoreMaterial= m_pCoreModel->getCoreMaterial(pCoreSubmesh->getCoreMaterialThreadId());
-          
+
           m_vectorHardwareMesh.push_back(hardwareMesh);
-          
+
           hardwareMesh.baseVertexIndex=vertexCount;
           hardwareMesh.startIndex=faceIndexCount;
-          
+
           hardwareMesh.m_vectorBonesIndices.clear();
-          hardwareMesh.vertexCount=0; 
+          hardwareMesh.vertexCount=0;
           hardwareMesh.faceCount=0;
-          
+
           startIndex=hardwareMesh.startIndex;
-          
+
           m_pIndexBuffer[startIndex+hardwareMesh.faceCount*3]=   addVertex(hardwareMesh,vectorFace[faceId].vertexId[0],pCoreSubmesh,maxBonesPerMesh);
           m_pIndexBuffer[startIndex+hardwareMesh.faceCount*3+1]= addVertex(hardwareMesh,vectorFace[faceId].vertexId[1],pCoreSubmesh,maxBonesPerMesh);
           m_pIndexBuffer[startIndex+hardwareMesh.faceCount*3+2]= addVertex(hardwareMesh,vectorFace[faceId].vertexId[2],pCoreSubmesh,maxBonesPerMesh);
-          hardwareMesh.faceCount++;         
+          hardwareMesh.faceCount++;
         }
       }
-      
+
       vertexCount+=hardwareMesh.vertexCount;
       faceIndexCount+=hardwareMesh.faceCount*3;
       hardwareMesh.pCoreMaterial= m_pCoreModel->getCoreMaterial(pCoreSubmesh->getCoreMaterialThreadId());
-      
+
       m_vectorHardwareMesh.push_back(hardwareMesh);
-      
+
     }
   }
-  
+
     m_vectorVertexIndiceUsed.clear();
+	m_vectorVertexIndiceUsedMap.clear();
 
 
   m_totalFaceCount=0;
@@ -701,35 +702,35 @@ bool CalHardwareModel::load(int baseVertexIndex, int startIndex,int maxBonesPerM
     m_totalVertexCount+=m_vectorHardwareMesh[hardwareMeshId].vertexCount;
   }
 
-    
+
     return true;
-}  
+}
 
 
 
 bool CalHardwareModel::canAddFace(CalHardwareMesh &hardwareMesh, CalCoreSubmesh::Face & face,std::vector<CalCoreSubmesh::Vertex>& vectorVertex, int maxBonesPerMesh)
 {
   size_t boneCount=hardwareMesh.m_vectorBonesIndices.size();
-  
+
   for(unsigned faceIndex=0;faceIndex<3;faceIndex++)
   {
     for(size_t influenceIndex=0;influenceIndex< vectorVertex[face.vertexId[faceIndex]].vectorInfluence.size();influenceIndex++)
     {
       unsigned boneIndex=0;
-      while(boneIndex< hardwareMesh.m_vectorBonesIndices.size() 
+      while(boneIndex< hardwareMesh.m_vectorBonesIndices.size()
         && hardwareMesh.m_vectorBonesIndices[boneIndex]!=vectorVertex[face.vertexId[faceIndex]].vectorInfluence[influenceIndex].boneId)
         boneIndex++;
-      
+
       if(boneIndex==hardwareMesh.m_vectorBonesIndices.size())
         boneCount++;
     }
   }
-  
+
   /// @todo Change maxBonesPerMesh to a size_t?
         if(int(boneCount)>maxBonesPerMesh)
     return false;
-  
-  return true;  
+
+  return true;
 }
 
 
@@ -737,20 +738,23 @@ bool CalHardwareModel::canAddFace(CalHardwareMesh &hardwareMesh, CalCoreSubmesh:
 int CalHardwareModel::addVertex(CalHardwareMesh &hardwareMesh, int indice, CalCoreSubmesh *pCoreSubmesh, int maxBonesPerMesh)
 {
   int i=0;
-  
-  while(i< hardwareMesh.vertexCount && m_vectorVertexIndiceUsed[i]!=indice)
+
+  /*while(i< hardwareMesh.vertexCount && m_vectorVertexIndiceUsed[i]!=indice)
     i++;
-  
+
   if(i != hardwareMesh.vertexCount)
     return i;
+	*/
+  if ( m_vectorVertexIndiceUsedMap.find( indice ) != m_vectorVertexIndiceUsedMap.end() )
+	  return m_vectorVertexIndiceUsedMap[indice];
 
-  
   std::vector<CalCoreSubmesh::Vertex>& vectorVertex = pCoreSubmesh->getVectorVertex();
   std::vector< std::vector<CalCoreSubmesh::TextureCoordinate> >& vectorvectorTextureCoordinate = pCoreSubmesh->getVectorVectorTextureCoordinate();
   std::vector< std::vector<CalCoreSubmesh::TangentSpace> >& vectorvectorTangentSpace = pCoreSubmesh->getVectorVectorTangentSpace();
 
   m_vectorVertexIndiceUsed[hardwareMesh.vertexCount]=indice;
-  
+  m_vectorVertexIndiceUsedMap[hardwareMesh.vertexCount] = indice;
+
   memcpy(&m_pVertexBuffer[(hardwareMesh.baseVertexIndex+i)*m_vertexStride],&vectorVertex[indice].position,sizeof(CalVector));
 
   memcpy(&m_pNormalBuffer[(hardwareMesh.baseVertexIndex+i)*m_normalStride],&vectorVertex[indice].normal,sizeof(CalVector));
@@ -763,7 +767,7 @@ int CalHardwareModel::addVertex(CalHardwareMesh &hardwareMesh, int indice, CalCo
       memcpy(&m_pTextureCoordBuffer[mapId][(hardwareMesh.baseVertexIndex+i)*m_textureCoordStride[mapId]],&vectorvectorTextureCoordinate[mapId][indice],sizeof(CalCoreSubmesh::TextureCoordinate));
     else
       memset(&m_pTextureCoordBuffer[mapId][(hardwareMesh.baseVertexIndex+i)*m_textureCoordStride[mapId]],0,sizeof(CalCoreSubmesh::TextureCoordinate));
-    
+
   }
 
   for(mapId = 0; mapId < 8 ; mapId++)
@@ -776,21 +780,21 @@ int CalHardwareModel::addVertex(CalHardwareMesh &hardwareMesh, int indice, CalCo
         memset(&m_pTangentSpaceBuffer[mapId][(hardwareMesh.baseVertexIndex+i)*m_tangentSpaceStride[mapId]],0,sizeof(CalCoreSubmesh::TangentSpace));
     }
   }
-  
+
   for(size_t l=0 ; l<4 ; l++)
   {
     if(l < vectorVertex[indice].vectorInfluence.size())
-    { 
+    {
       int BoneId = vectorVertex[indice].vectorInfluence[l].boneId;
 
       float newBoneId = (float)addBoneIndice(hardwareMesh,BoneId,maxBonesPerMesh);
-    
-      memcpy(&m_pWeightBuffer[(hardwareMesh.baseVertexIndex+i)*m_weightStride+l * sizeof(float) ], &vectorVertex[indice].vectorInfluence[l].weight ,sizeof(float));     
-      memcpy(&m_pMatrixIndexBuffer[(hardwareMesh.baseVertexIndex+i)*m_matrixIndexStride+l * sizeof(float) ], &newBoneId ,sizeof(float));      
+
+      memcpy(&m_pWeightBuffer[(hardwareMesh.baseVertexIndex+i)*m_weightStride+l * sizeof(float) ], &vectorVertex[indice].vectorInfluence[l].weight ,sizeof(float));
+      memcpy(&m_pMatrixIndexBuffer[(hardwareMesh.baseVertexIndex+i)*m_matrixIndexStride+l * sizeof(float) ], &newBoneId ,sizeof(float));
     }
     else
     {
-      memset(&m_pWeightBuffer[(hardwareMesh.baseVertexIndex+i)*m_weightStride+l * sizeof(float) ], 0 ,sizeof(float));     
+      memset(&m_pWeightBuffer[(hardwareMesh.baseVertexIndex+i)*m_weightStride+l * sizeof(float) ], 0 ,sizeof(float));
       memset(&m_pMatrixIndexBuffer[(hardwareMesh.baseVertexIndex+i)*m_matrixIndexStride+l * sizeof(float) ], 0 ,sizeof(float));
     }
   }
@@ -801,7 +805,7 @@ int CalHardwareModel::addVertex(CalHardwareMesh &hardwareMesh, int indice, CalCo
 
 
 int CalHardwareModel::addBoneIndice(CalHardwareMesh &hardwareMesh, int Indice, int maxBonesPerMesh)
-{ 
+{
   size_t i=0;
   while(i< hardwareMesh.m_vectorBonesIndices.size()  && hardwareMesh.m_vectorBonesIndices[i]!=Indice)
     i++;
@@ -815,7 +819,7 @@ int CalHardwareModel::addBoneIndice(CalHardwareMesh &hardwareMesh, int Indice, i
     hardwareMesh.m_vectorBonesIndices.push_back(Indice);
     return i;
   }
-  else 
+  else
   {
     return -1;
   }

@@ -48,6 +48,21 @@ bool CComponentManager::AddComponent(CComponent* Component)
 	if (it == m_components.end())
 	{
 		m_components.emplace(Component);
+		m_componentsMap[Component->getName()] = Component;
+		return true;
+	}
+
+	return false;
+}
+
+bool CComponentManager::RemoveComponent(CComponent* Component)
+{
+	auto it = m_components.find(Component);
+
+	if (it != m_components.end())
+	{
+		m_componentsMap.erase(Component->getName());
+		m_components.erase(it);
 		return true;
 	}
 
@@ -78,4 +93,17 @@ void CComponentManager::destroy()
 	{
 		(*it)->Destroy();
 	}
+	m_components.clear();
+	m_componentsMap.clear();
+}
+
+
+CComponent* CComponentManager::get(const std::string& componentName) const
+{
+	auto it = m_componentsMap.find(componentName);
+	if (it == m_componentsMap.end())
+	{
+		return nullptr;
+	}
+	return it->second;
 }

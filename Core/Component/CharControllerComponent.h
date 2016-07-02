@@ -16,8 +16,8 @@ protected:
 	virtual void Init();
 
 public:
-	CCharacterControllerComponent(CXMLTreeNode& node, CRenderableObject* Owner);
-	CCharacterControllerComponent(CRenderableObject* Owner);
+	CCharacterControllerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
+	CCharacterControllerComponent(const std::string& name, CElement* Owner);
 	virtual ~CCharacterControllerComponent();
 
 	virtual void FixedUpdate( float ElapsedTime );
@@ -29,6 +29,11 @@ public:
 	void Move(const Vect3f& velocity, const Vect3f& up, float elapsedTime);
 
 	void SetPosition(const Vect3f& pos);
+
+	void Resize( float height, float radius );
+
+	float GetHeight();
+	float GetRadius();
 };
 
 #endif

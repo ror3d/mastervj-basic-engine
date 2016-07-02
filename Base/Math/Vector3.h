@@ -83,6 +83,7 @@ public:
   // Producto escalar (*) y producto vectorial (^)
   inline T          operator * (const Vector3<T>& otro) const;
   inline Vector3<T> operator ^ (const Vector3<T>& otro) const;
+  inline Vector3<T> MulElems   ( const Vector3<T>& otro ) const;
 
 
   // Operadores y funciones de comparacion

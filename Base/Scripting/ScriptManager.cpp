@@ -2,32 +2,32 @@
 
 #include <selene.h>
 
-#include <fstream>
-#include <sstream>
 
 #include <Base/XML/XMLTreeNode.h>
 
 #include "Core/Engine/Engine.h"
 #include "Core/Input/InputManager.h"
 #include "Graphics/Camera/FPSCameraController.h"
-#include <Graphics/Renderable/RenderableObject.h>
-#include <Graphics/Renderable/RenderableObjectsManager.h>
-#include <Graphics/Animation/AnimatedInstanceModel.h>
 #include <Core/Component/ComponentManager.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/AnimatedInstanceComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
-#include <Graphics/Layer/LayerManager.h>
+#include <Graphics/Mesh/StaticMeshManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
-#include <Core\Component\TriggerComponent.h>
-#include <Core\Trigger\TriggerManager.h>
+#include <Core/Component/TriggerComponent.h>
+#include <Core/Scene/Scene.h>
+#include <Core/Scene/SceneManager.h>
+#include <Core/Scene/Element.h>
+
+#include "LuaErrorCapture.h"
 
 namespace
 {
@@ -43,33 +43,6 @@ namespace
 		}
 	}
 }
-
-/*
- * This class captures errors printed by lua to redirect them as we wish.
- */
-class LuaErrorCapturedStdout
-{
-public:
-	LuaErrorCapturedStdout()
-	{
-		_old = std::cout.rdbuf(_out.rdbuf());
-	}
-
-	~LuaErrorCapturedStdout()
-	{
-		std::cout.rdbuf(_old);
-		OutputDebugStringA(_out.str().c_str());
-	}
-
-	std::string Content() const
-	{
-		return _out.str();
-	}
-
-private:
-	std::stringstream _out;
-	std::streambuf* _old;
-};
 
 CScriptManager::CScriptManager()
 	: m_state(nullptr)
@@ -128,7 +101,7 @@ void CScriptManager::Initialize(const std::string& file)
 					if (rol)
 					{
 						toRunOnLoad.push_back(name);
-				}
+					}
 				}
 			}
 		}
@@ -141,14 +114,14 @@ void CScriptManager::Initialize(const std::string& file)
 	for (auto &const name : toRunOnLoad)
 	{
 		RunScript(name);
-}
+	}
 }
 
 void CScriptManager::RunScript(const std::string& name)
 {
 	auto it = m_loadedScripts.find(name);
 	DEBUG_ASSERT (it != m_loadedScripts.end());
-	
+
 	RunCode(it->second);
 }
 
@@ -156,6 +129,16 @@ void CScriptManager::RunCode(const std::string& code)
 {
 	LuaErrorCapturedStdout errorCapture;
 	(*m_state)(code.c_str());
+}
+
+void CScriptManager::RunCodeIf(const std::string &condition, const std::string &code)
+{
+	LuaErrorCapturedStdout errorCapture;
+	(*m_state)(("_r = true == (" + condition + ");").c_str());
+	if ((*m_state)["r"])
+	{
+		(*m_state)(code.c_str());
+	}
 }
 
 void CScriptManager::RunFile(const std::string& fileName)
@@ -189,9 +172,7 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
-		"RunCode", &CScriptManager::RunCode,
-		"RunFile", &CScriptManager::RunFile,
-		"Load", &CScriptManager::Load);
+		"RunScript", &CScriptManager::RunScript);
 
 	//Global
 	(*m_state)["CXMLTreeNode"]
@@ -231,45 +212,52 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetYawPitchRoll", &C3DElement::SetYawPitchRoll,
 			"GetPrevPosition", &C3DElement::GetPrevPosition);
 
-	(*m_state)["CRenderableObject"]
-		.SetClass<CRenderableObject>(
-			"GetName", &CRenderableObject::getName,
-			"SetPosition", &CRenderableObject::SetPosition,
-			"GetPosition", &CRenderableObject::GetPosition,
-			"SetYaw", &CRenderableObject::SetYaw,
-			"GetYaw", &CRenderableObject::GetYaw,
-			"SetVisible", &CRenderableObject::SetVisible,
-			"IsVisible", &CRenderableObject::GetVisible,
-			"AsAnimatedInstance", &CRenderableObject::AsAnimatedInstance,
-			"GetCamera", &CRenderableObject::GetCamera,
-			"GetCharacterController", &CRenderableObject::GetCharacterController,
-			"GetTriggerComponent", &CRenderableObject::GetTriggerComponent);
 
-	(*m_state)["CAnimatedInstanceModel"]
-		.SetClass<CAnimatedInstanceModel, CXMLTreeNode&>(
-			"ClearCycle", &CAnimatedInstanceModel::ClearCycle,
-			"BlendCycle", &CAnimatedInstanceModel::BlendCycle,
-			"ExecuteAction", &CAnimatedInstanceModel::ExecuteAction,
-			"IsCycleAnimationActive", &CAnimatedInstanceModel::IsCycleAnimationActive,
-			"IsActionAnimationActive", &CAnimatedInstanceModel::IsActionAnimationActive);
+
+	(*m_state)["CElement"]
+		.SetClass<CElement>(
+			"GetName", &CElement::getName,
+			"SetPosition", &CElement::SetPosition,
+			"GetPosition", &CElement::GetPosition,
+			"SetYaw", &CElement::SetYaw,
+			"GetYaw", &CElement::GetYaw,
+			"GetScale", &CElement::GetScale,
+			"SetScale", &CElement::SetScale,
+			"SetEnabled", &CElement::SetEnabled,
+			"IsEnabled", &CElement::GetEnabled,
+			"GetCamera", &CElement::GetCamera,
+			"GetCharacterController", &CElement::GetCharacterController,
+			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
+			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
+			"GetTrigger", &CElement::GetTriggerComponent);
+
+	(*m_state)["CAnimatedInstanceComponent"]
+		.SetClass<CAnimatedInstanceComponent, const std::string&, CElement*>(
+			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
+			"BlendCycle", &CAnimatedInstanceComponent::BlendCycle,
+			"ClearCycle", &CAnimatedInstanceComponent::ClearCycle,
+			"IsCycleAnimationActive", &CAnimatedInstanceComponent::IsCycleAnimationActive,
+			"IsActionAnimationActive", &CAnimatedInstanceComponent::IsActionAnimationActive);
 
 	(*m_state)["CCharacterControllerComponent"]
-		.SetClass<CCharacterControllerComponent, CRenderableObject*>(
+		.SetClass<CCharacterControllerComponent, const std::string&, CElement*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move,
-			"SetPos", &CCharacterControllerComponent::SetPosition);
+			"SetPosition", &CCharacterControllerComponent::SetPosition,
+			"Resize", &CCharacterControllerComponent::Resize,
+			"GetHeight", &CCharacterControllerComponent::GetHeight,
+			"GetRadius", &CCharacterControllerComponent::GetRadius);
 
 	(*m_state)["CFPSCameraComponent"]
-		.SetClass<CFPSCameraComponent, CRenderableObject*>(
-			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera);
+		.SetClass<CFPSCameraComponent, const std::string&, CElement*>(
+			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
+			"SetFollowCharacter", &CFPSCameraComponent::SetFollowCharacter,
+			"GetYaw", &CFPSCameraComponent::GetYaw);
 
 
-	(*m_state)["TriggerComponent"]
-		.SetClass<CTriggerComponent, CRenderableObject*>(
-		"GetStateTrigger", &CTriggerComponent::GetStateTrigger,
-		"SetStateTrigger", &CTriggerComponent::SetStateTrigger,
-		"GetName", &CTriggerComponent::getName,
-		"GetTriggerLocalName", &CTriggerComponent::GetTriggerLocalName);
+	(*m_state)["CTriggerComponent"]
+		.SetClass<CTriggerComponent, const std::string&, CElement*>(
+		"GetName", &CTriggerComponent::getName);
 
 	(*m_state)["ICameraController"]
 		.SetClass<ICameraController>(
@@ -322,21 +310,29 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CCinematicsManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicManager(),
-		"Play", &CCinematicManager::Play,
-		"PlayByName", &CCinematicManager::PlayByName,
-		"StopByName", &CCinematicManager::StopByName,
-		"PauseByName", &CCinematicManager::PauseByName);
+		"Play", static_cast<void(CCinematicManager::*)(std::string)>(&CCinematicManager::Play),
+		"Stop", &CCinematicManager::Stop,
+		"Pause", &CCinematicManager::Pause);
 
 	(*m_state)["CSoundManager"].SetObj(
 		*CEngine::GetSingleton().getSoundManager(),
-		//"PlayEvent", &CSoundManager::PlayEvent, 
+		//"PlayEvent", &CSoundManager::PlayEvent,
 		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
 		"LaunchSoundEventXMLSpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
 		"SetVolume", &CSoundManager::SetVolume);
-	(*m_state)["CTriggerManager"].SetObj(
-		*CEngine::GetSingleton().getTriggerManager(),
-		"GetTrigger", &CTriggerManager::get);
+
+	(*m_state)["CSceneManager"].SetObj(
+		*CEngine::GetSingleton().getSceneManager(),
+		"AddObject", &CSceneManager::AddObject,
+		"DestroyObject", &CSceneManager::DestroyObject,
+		"LoadScene", &CSceneManager::LoadScene,
+		"UnloadScene", &CSceneManager::UnloadScene,
+		"GetObjectById", &CSceneManager::GetObjectById);
+
+	(*m_state)["CStaticMeshManager"].SetObj(
+		*CEngine::GetSingleton().getStaticMeshManager(),
+		"LoadMeshesFile", &CStaticMeshManager::Load);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

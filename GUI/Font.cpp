@@ -138,6 +138,7 @@ CFont::CFont(CXMLTreeNode& fontNode, CGUI* gui)
 
 CFont::~CFont()
 {
+	delete m_glyphsVtxs;
 }
 
 void CFont::SetColor( const CColor & color )

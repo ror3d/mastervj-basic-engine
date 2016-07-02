@@ -253,7 +253,7 @@ void CStaticMesh::Render(CContextManager *_context) const
 	{
 		CMaterial *l_Material = m_materials[i];
 		if (l_Material != NULL && l_Material->getRenderableObjectTechique() != NULL)
-	{
+		{
 			l_Material->apply();
 			m_renderableVertexs[i]->RenderIndexed(_context,
 				l_Material->getRenderableObjectTechique()->GetEffectTechnique());

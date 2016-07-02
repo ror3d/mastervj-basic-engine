@@ -1,25 +1,32 @@
 #include "PhysxComponent.h"
 
-#include <Graphics/Renderable/RenderableObject.h>
-#include <Graphics/Mesh/StaticMeshManager.h>
-#include <Graphics/Mesh/StaticMesh.h>
+#include "Scene/Element.h"
+#include <Base/XML/XMLTreeNode.h>
+#include <Graphics/Mesh/StaticMeshLoader.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Engine/Engine.h>
 
-CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CRenderableObject* Owner, std::string nameCore)
+CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
+	, m_isTrigger(false)
 {
-	setName(Owner->getName() + "_PhysxComponent");
-	
-	m_colType = node.GetPszProperty("collider_type");
-	m_isStatic = node.GetBoolProperty("static");	
-	m_isKinematic = node.GetPszProperty("kinematic");
-	m_coreName = nameCore;	
-	m_isTrigger = node.GetBoolProperty("trigger", false);
+	setName(name);
+
+	m_colType = node.GetPszProperty("collider_type", "Sphere");
+	m_isStatic = node.GetBoolProperty("static", false);
+	m_isKinematic = node.GetBoolProperty("kinematic", false);
+	m_coreName = node.GetPszProperty("core_mesh", "");
+	if (m_coreName == "" && (m_colType == "ConvexMesh" || m_colType == "TriangleMesh"))
+	{
+		DEBUG_ASSERT( !"Collider type requires core_mesh!" );
+		m_colType = "Sphere";
+	}
+	//m_isTrigger = node.GetBoolProperty("trigger", false);
 }
 
-CPhysxComponent::CPhysxComponent(CRenderableObject* Owner)
-	: CComponent(Owner->getName() + "_PhysxComponent", Owner)
+CPhysxComponent::CPhysxComponent(const std::string& name, CElement* Owner)
+	: CComponent(name, Owner)
+	, m_isTrigger(false)
 {
 }
 
@@ -29,19 +36,17 @@ CPhysxComponent::~CPhysxComponent()
 
 void CPhysxComponent::Init()
 {
+	Init(GetOwner()->GetScale(), GetOwner()->GetPosition());
+}
+
+void CPhysxComponent::Init(Vect3f scale, Vect3f position)
+{
 	CPhysxColliderShapeDesc desc;
 	desc.material = std::string("StaticObjectMaterial");// TODO get from file
-	desc.size = GetOwner()->GetScale();
-	if (m_isTrigger)
-	{
-		Vect3f sizeS = desc.size;
-		sizeS.y *= 5.0f;
-		sizeS.x *= 1.2f;
-		sizeS.z *= 1.2f;
-		desc.size = sizeS;
-	}
-	desc.position = GetOwner()->GetPosition();
+	desc.size = scale;
+	desc.position = position;
 	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
+	desc.density = 1;
 
 	CPhysXManager::ActorType actorType;
 	if (m_isStatic)
@@ -53,7 +58,6 @@ void CPhysxComponent::Init()
 		actorType = CPhysXManager::ActorType::Dynamic;
 	}
 
-	CStaticMesh * m_StaticMesh = CEngine::GetSingleton().getStaticMeshManager()->get(m_coreName);
 
 	if (m_colType == std::string("Box"))
 	{
@@ -70,42 +74,49 @@ void CPhysxComponent::Init()
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::Sphere;
 		desc.radius = 1;
-		//TODO: get radius
+		if (m_coreName != "")
+		{
+			//TODO: get radius
+		}
 	}
 	else if (m_colType == std::string("Plane"))
 	{
 		//TODO: Tratar como box con escala y 0.001?
+		desc.shape = CPhysxColliderShapeDesc::Shape::Box;
 		desc.size.y = 0.001f;
 	}
-	else if (m_colType == std::string("Triangle Mesh"))
+	else if (m_colType == std::string("TriangleMesh"))
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::TriangleMesh;
-		m_StaticMesh->FillColliderDescriptor(&desc);
+		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
 	}
-	else // m_colType == std::string("Convex Mesh") or unrecognized type
+	else if(m_colType == std::string("ConvexMesh"))
 	{
 		desc.shape = CPhysxColliderShapeDesc::Shape::ConvexMesh;
-		m_StaticMesh->FillColliderDescriptor(&desc);
-		actorType = CPhysXManager::ActorType::Static;
+		bool success = CEngine::GetSingleton().getMeshLoader()->FillColliderDescriptor(m_coreName, &desc);
+	}
+	else
+	{
+		DEBUG_ASSERT( !"Type not recognized!" );
 	}
 	CEngine::GetSingleton().getPhysXManager()->createActor(getName(), actorType, desc, m_isKinematic, m_isTrigger);
 }
 
 void CPhysxComponent::Destroy()
 {
-	//CEngine::GetSingleton().getPhysXManager()->releaseCharacterController(getName());
+	CEngine::GetSingleton().getPhysXManager()->destroyActor(getName());
 }
 
 void CPhysxComponent::FixedUpdate(float ElapsedTime)
 {
 	if (!m_isStatic && m_isKinematic)
 	{
-		Move();
+		Move(GetOwner()->GetPosition());
 	}
 }
 
-void CPhysxComponent::Move()
+void CPhysxComponent::Move(Vect3f position)
 {
 	Quatf quat = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
-	CEngine::GetSingleton().getPhysXManager()->MoveActor(getName(), GetOwner()->GetPosition(), quat);
+	CEngine::GetSingleton().getPhysXManager()->MoveActor(getName(), position, quat);
 }

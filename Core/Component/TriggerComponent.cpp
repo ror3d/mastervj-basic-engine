@@ -1,83 +1,92 @@
 #include "TriggerComponent.h"
 
-#include <Graphics/Renderable/RenderableObject.h>
-#include <Core\Trigger\TriggerManager.h>
+#include "Scene/Element.h"
+#include <Base/XML/XMLTreeNode.h>
 #include <Core/Engine/Engine.h>
+#include <PhysX/PhysXManager.h>
+#include "ComponentManager.h"
 
-CTriggerComponent::CTriggerComponent(CXMLTreeNode& node, CRenderableObject* Owner)
-	: CComponent(node, Owner)
+CTriggerComponent::CTriggerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
+	: CPhysxComponent(name, node, Owner)
 {
-	setName(Owner->getName() + "_TriggerComponent");
-	m_EnterTrigger = false;
-	m_StayTrigger = false;
-	m_ExitTrigger = false;
-	m_name = node.GetPszProperty("name", "nullname");
-
-	CEngine::GetSingleton().getTriggerManager()->AddElement(this);
+	m_isTrigger = true;
+	m_isKinematic = false;
+	m_scale = node.GetVect3fProperty( "scale", Vect3f( 1, 1, 1 ), false );
+	m_offset = node.GetVect3fProperty( "offset", Vect3f( 0, 0, 0 ), false );
 }
 
-CTriggerComponent::CTriggerComponent(CRenderableObject* Owner)
-	: CComponent(Owner->getName() + "_TriggerComponent", Owner)
+CTriggerComponent::CTriggerComponent(const std::string& name, CElement* Owner)
+	: CPhysxComponent(name, Owner)
 {
+	m_isTrigger = true;
+	m_isKinematic = false;
 }
 
 CTriggerComponent::~CTriggerComponent()
-{}
-
-void CTriggerComponent::Init()
 {
-	
 }
 
 void CTriggerComponent::Destroy()
 {
+	CPhysxComponent::Destroy();
+}
+
+void CTriggerComponent::Init()
+{
+	CPhysxComponent::Init(GetOwner()->GetScale().MulElems(m_scale), GetOwner()->GetPosition() + m_offset);
 }
 
 
 void CTriggerComponent::FixedUpdate(float ElapsedTime)
 {
-}
-
-void CTriggerComponent::Activate()
-{
-	/*for (auto it = m_properties.begin(); it < m_properties.end(); it++)
+	if (!m_isStatic)
 	{
-		if (it->name == getName())
+		Move(GetOwner()->GetPosition() + m_offset);
+	}
+
+	auto elems = CEngine::GetSingleton().getPhysXManager()->getTriggerCollisions(getName());
+
+	auto newElems = elems;
+
+	std::vector<std::string> left;
+	std::vector<std::string> active;
+
+	for (auto &const e : m_activeElements)
+	{
+		newElems.erase(e);
+		if (elems.find(e) == elems.end())
 		{
-			it->value = true;
-			break;
+			left.push_back(e);
 		}
-	}*/
-	
-}
-
-int CTriggerComponent::GetStateTrigger()
-{
-	if (m_EnterTrigger)
-		return 1;
-	else if (m_StayTrigger)
-		return 2;
-	else if (m_ExitTrigger)
-		return 3;
-	else
-		return 0;
-}
-
-void CTriggerComponent::SetStateTrigger(int num){
-	m_EnterTrigger = false;
-	m_StayTrigger = false;
-	m_ExitTrigger = false;
-
-	if (num == 1)
-	{
-		m_EnterTrigger = true;
+		else
+		{
+			active.push_back(e);
+		}
 	}
-	else if (num == 2)
+
+	m_activeElements.swap(active);
+
+
+	auto cm = CEngine::GetSingleton().getComponentManager();
+
+	auto own = GetOwner();
+	for (auto &const e : left)
 	{
-		m_StayTrigger = true;
+		auto otherOwner = cm->get(e)->GetOwner();
+		own->SendMsg("OnTriggerLeave", otherOwner);
 	}
-	else if (num == 3)
+
+	for (auto &const e : m_activeElements)
 	{
-		m_ExitTrigger = true;
+		auto otherOwner = cm->get(e)->GetOwner();
+		own->SendMsg("OnTriggerStay", otherOwner);
+	}
+
+	for (auto &const e : newElems)
+	{
+		auto otherOwner = cm->get(e)->GetOwner();
+		own->SendMsg("OnTriggerEnter", otherOwner);
+		m_activeElements.push_back( e );
 	}
 }
+

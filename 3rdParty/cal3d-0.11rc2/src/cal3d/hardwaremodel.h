@@ -15,6 +15,8 @@
 #include "cal3d/global.h"
 #include "cal3d/coresubmesh.h"
 
+#include <unordered_map>
+
 
 class CalCoreModel;
 class CalSkeleton;
@@ -87,6 +89,7 @@ private:
   
   std::vector<CalHardwareMesh> m_vectorHardwareMesh;
   std::vector<CalIndex> m_vectorVertexIndiceUsed;
+  std::unordered_map<CalIndex, int> m_vectorVertexIndiceUsedMap;
   int m_selectedHardwareMesh;
   std::vector<int> m_coreMeshIds;
   CalCoreModel *m_pCoreModel;

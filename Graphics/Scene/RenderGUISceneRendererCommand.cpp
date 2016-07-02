@@ -16,6 +16,11 @@ CRenderGUISceneRendererCommand::CRenderGUISceneRendererCommand(CXMLTreeNode &Tre
 	m_GUI->Init("Data\\gui_elements.xml");
 }
 
+CRenderGUISceneRendererCommand::~CRenderGUISceneRendererCommand()
+{
+	delete m_GUI;
+}
+
 void CRenderGUISceneRendererCommand::Execute(CContextManager &_context)
 {
 	CGUI::SetInstance(m_GUI);

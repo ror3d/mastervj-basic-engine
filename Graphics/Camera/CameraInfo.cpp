@@ -5,9 +5,10 @@
 #include <Math/Math.h>
 
 #include <sstream>
+#include <Math/MathUtils.h>
 
 CCameraInfo::CCameraInfo()
-	: m_FOV(1.047198f) // 60deg
+	: m_FOV(mathUtils::Deg2Rad(70.0f))
 	, m_AspectRatio(1.0f)
 	, m_ZNear(0.1f)
 	, m_ZFar(1000.0f)

@@ -4,7 +4,6 @@
 #include <PxPhysicsAPI.h>
 
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
-#include <Core/Trigger/TriggerManager.h>
 
 #include <fstream>
 #include <iterator>
@@ -56,6 +55,9 @@
 #undef CHECKED_RELEASE
 #endif
 #define CHECKED_RELEASE(x) if(x!=nullptr) { x->release(); x=nullptr; }
+
+
+#define CONTROLLER_FLAG (1<<30)
 
 inline physx::PxVec3 v(const Vect3f& v)
 { return physx::PxVec3(v.x, v.y, v.z); }
@@ -195,25 +197,37 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 	{
 		if ((pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
 			continue;
-		
+
 		size_t l_indexTrigger = (size_t)pairs[i].triggerActor->userData;
 		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
 
 		std::string l_triggerName = m_actors.name[l_indexTrigger];
 
-	
+		std::string l_actorName;
+		if ( l_indexActor & CONTROLLER_FLAG )
+		{
+			l_actorName = m_CharacterControllerIdxs[l_indexActor^CONTROLLER_FLAG];
+		}
+		else
+		{
+			l_actorName = m_actors.name[l_indexActor];
+		}
+
+
 
 		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 		{
 			//OutputDebugStringA("Hola!\n");
-			CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
+			//CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
+			m_TriggerCollisions[l_triggerName].emplace(l_actorName);
 		}
 		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
 		{
-			CEngine::GetSingleton().getTriggerManager()->Deactivate(l_triggerName);
+			//CEngine::GetSingleton().getTriggerManager()->Deactivate(l_triggerName);
+			m_TriggerCollisions[l_triggerName].erase(l_actorName);
 		}
 	}
-	
+
 }
 
 
@@ -242,6 +256,7 @@ CPhysXManager::CPhysXManager()
 	, m_Scene(nullptr)
 	, m_Cooking(nullptr)
 	, m_ControllerManager(nullptr)
+	, m_CharacterControllerLastIdx(0)
 {
 }
 
@@ -326,10 +341,8 @@ bool CPhysXManager::loadCookedMesh(const std::string& fname, std::vector<uint8>&
 		size_t length = f.tellg();
 		f.seekg( 0, f.beg );
 
-		uint8 *data = new uint8[length];
-		f.read( data, length );
-		std::copy( data, data+length, std::back_inserter( outCookedData ) );
-		delete[] data;
+		outCookedData.resize( length );
+		f.read( &outCookedData[0], length );
 
 		return true;
 	}
@@ -396,7 +409,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	physx::PxMaterial* mat = matIt->second;
 
 	physx::PxGeometry* geom = nullptr;
-	
+
 	switch (desc.shape)
 	{
 		case CPhysxColliderShapeDesc::Shape::Box:
@@ -481,6 +494,42 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	m_actors.position.push_back(desc.position);
 	m_actors.rotation.push_back(desc.orientation);
 	m_actors.actor.push_back(body);
+
+	if (isTrigger)
+	{
+		m_TriggerCollisions[name] = std::set<std::string>();
+	}
+}
+
+void CPhysXManager::destroyActor(const std::string& name)
+{
+	auto it = m_actors.index.find(name);
+	DEBUG_ASSERT(it != m_actors.index.end());
+	if (it == m_actors.index.end())
+	{
+		return;
+	}
+
+	uint64 idx = it->second;
+
+	m_actors.index.erase(it);
+	m_actors.actor[idx]->release();
+
+	if (idx < m_actors.index.size())
+	{
+		m_actors.name[idx] = m_actors.name.back();
+		m_actors.position[idx] = m_actors.position.back();
+		m_actors.rotation[idx] = m_actors.rotation.back();
+		m_actors.actor[idx] = m_actors.actor.back();
+		m_actors.index[m_actors.name[idx]] = idx;
+	}
+
+	m_actors.name.pop_back();
+	m_actors.position.pop_back();
+	m_actors.rotation.pop_back();
+	m_actors.actor.pop_back();
+
+	m_TriggerCollisions.erase(name);
 }
 
 void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
@@ -508,17 +557,18 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.reportCallback = NULL; //TODO
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + height*0.5f + radius + desc.contactOffset, pos.z);
 	desc.material = l_material;
-	int index = m_CharacterControllers.size();
-	desc.userData = (void*) index;
+	size_t index = ++m_CharacterControllerLastIdx;
 	physx::PxController* cct = m_ControllerManager->createController(desc);
+	cct->getActor()->userData = (void*) (index | CONTROLLER_FLAG);
 	m_CharacterControllers[name] = cct;
+	m_CharacterControllerIdxs[index] = name;
 }
 
 void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
 	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
 	registerMaterial("controller_material", 10, 2, 0.5);
-	createPlane("ground", "ground", Vect4f(0, 1, 0,	40));
+	//createPlane("ground", "ground", Vect4f(0, 1, 0,	0));
 }
 
 
@@ -554,12 +604,27 @@ bool CPhysXManager::isCharacterControllerGrounded( const std::string &name )
 	return state.touchedActor != nullptr;
 }
 
+void CPhysXManager::resizeCharacterController( const std::string & name, float height, float radius )
+{
+	auto it = m_CharacterControllers.find( name );
+	DEBUG_ASSERT( it != m_CharacterControllers.end() );
+	if ( it == m_CharacterControllers.end() )
+	{
+		return;
+	}
+	physx::PxCapsuleController* cc = (physx::PxCapsuleController*)(it->second);
+	auto pos = cc->getFootPosition();
+	cc->resize( height );
+	cc->setRadius( radius );
+	cc->setFootPosition( pos );
+}
+
 void CPhysXManager::releaseCharacterController( const std::string &name )
 {
 	auto it = m_CharacterControllers.find( name );
+	DEBUG_ASSERT( it != m_CharacterControllers.end() );
 	if ( it == m_CharacterControllers.end() )
 	{
-		DEBUG_ASSERT( it == m_CharacterControllers.end() );
 		return;
 	}
 	physx::PxController *cct = it->second;
@@ -590,6 +655,10 @@ void CPhysXManager::update(float dt)
 		for (physx::PxU32 i = 0; i < nActiveTransf; ++i)
 		{
 			size_t idx = reinterpret_cast<size_t>(activeTransf[i].userData);
+			if ( idx & CONTROLLER_FLAG )
+			{
+				continue;
+			}
 			m_actors.position[idx] = v(activeTransf[i].actor2World.p);
 			m_actors.rotation[idx] = q(activeTransf[i].actor2World.q);
 		}

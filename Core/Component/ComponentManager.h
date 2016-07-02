@@ -3,6 +3,8 @@
 
 #include "Component.h"
 #include <set>
+#include <map>
+#include <string>
 #include <Base/Utils/TMapManager.h>
 
 class CContextManager;
@@ -10,6 +12,7 @@ class CContextManager;
 class CComponentManager
 {
 private:
+	std::map<std::string, CComponent*> m_componentsMap;
 	std::set<CComponent*> m_components;
 	bool m_initialized;
 public:
@@ -20,7 +23,9 @@ public:
 	void Render(CContextManager  &_context);
 	void RenderDebug(CContextManager  &_context);
 	bool AddComponent(CComponent *Component);
+	bool RemoveComponent(CComponent *Component);
 	void FirstInitialization();
+	CComponent* get(const std::string& componentName) const;
 	void destroy();
 
 	inline bool IsInitialized() const { return m_initialized; }
