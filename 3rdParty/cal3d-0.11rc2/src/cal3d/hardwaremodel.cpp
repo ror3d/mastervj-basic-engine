@@ -738,15 +738,18 @@ bool CalHardwareModel::canAddFace(CalHardwareMesh &hardwareMesh, CalCoreSubmesh:
 int CalHardwareModel::addVertex(CalHardwareMesh &hardwareMesh, int indice, CalCoreSubmesh *pCoreSubmesh, int maxBonesPerMesh)
 {
   int i=0;
-
-  /*while(i< hardwareMesh.vertexCount && m_vectorVertexIndiceUsed[i]!=indice)
+  i = hardwareMesh.vertexCount;
+  /*
+  while(i< hardwareMesh.vertexCount && m_vectorVertexIndiceUsed[i]!=indice)
     i++;
 
   if(i != hardwareMesh.vertexCount)
     return i;
-	*/
+  //*/
   if ( m_vectorVertexIndiceUsedMap.find( indice ) != m_vectorVertexIndiceUsedMap.end() )
+  {
 	  return m_vectorVertexIndiceUsedMap[indice];
+  }
 
   std::vector<CalCoreSubmesh::Vertex>& vectorVertex = pCoreSubmesh->getVectorVertex();
   std::vector< std::vector<CalCoreSubmesh::TextureCoordinate> >& vectorvectorTextureCoordinate = pCoreSubmesh->getVectorVectorTextureCoordinate();
