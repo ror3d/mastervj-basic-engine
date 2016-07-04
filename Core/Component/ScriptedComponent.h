@@ -27,9 +27,10 @@ protected:
 	virtual void OnObjectInitialized();
 
 public:
-	CScriptedComponent(const std::string& name, CElement* Owner);
+	CScriptedComponent(const CScriptedComponent& base, CElement* Owner);
 	CScriptedComponent(CXMLTreeNode& node, CElement* Owner);
 	virtual ~CScriptedComponent();
+
 	virtual void Update(float ElapsedTime);
 	virtual void FixedUpdate(float ElapsedTime);
 	virtual void Render(CContextManager&  _context);
@@ -41,6 +42,11 @@ public:
 	virtual void SendMsg(const std::string &msg, CElement* arg1);
 
 	virtual void Destroy();
+
+	static const std::string COMPONENT_TYPE;
+	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
+
+	virtual CComponent* Clone(CElement* Owner) const { return new CScriptedComponent( *this, Owner ); }
 };
 
 #endif

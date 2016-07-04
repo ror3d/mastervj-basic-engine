@@ -10,8 +10,8 @@ class CMeshInstanceComponent :
 	std::vector<std::string> m_layers;
 
 public:
-	CMeshInstanceComponent(const std::string& name, CElement* Owner);
-	CMeshInstanceComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
+	CMeshInstanceComponent(CXMLTreeNode& node, CElement* Owner);
+	CMeshInstanceComponent(const CMeshInstanceComponent& base, CElement* Owner);
 	~CMeshInstanceComponent();
 
 	void Render(CContextManager&  _context);
@@ -19,5 +19,10 @@ public:
 
 	inline CMesh * GetStaticMesh() const { return m_StaticMesh; }
 	void SetStaticMesh(const std::string& coreName);
+
+	static const std::string COMPONENT_TYPE;
+	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
+
+	virtual CComponent* Clone(CElement* Owner) const { return new CMeshInstanceComponent( *this, Owner ); }
 };
 

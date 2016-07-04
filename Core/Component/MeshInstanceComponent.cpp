@@ -8,15 +8,21 @@
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Renderer/Renderer.h>
 
-CMeshInstanceComponent::CMeshInstanceComponent(const std::string& name, CElement* Owner)
-	: CComponent(name, Owner)
+const std::string CMeshInstanceComponent::COMPONENT_TYPE = "MeshInstance";
+
+CMeshInstanceComponent::CMeshInstanceComponent(const CMeshInstanceComponent& base, CElement* Owner)
+	: CComponent(base, Owner)
 {
+	SetNameFromParentName( Owner->getName() );
+
+	m_StaticMesh = base.m_StaticMesh;
+	m_layers = base.m_layers;
 }
 
-CMeshInstanceComponent::CMeshInstanceComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
+CMeshInstanceComponent::CMeshInstanceComponent(CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
-	setName(name);
+	SetNameFromParentName( Owner->getName() );
 
 	SetEnabled(node.GetBoolProperty("visible", true, false));
 

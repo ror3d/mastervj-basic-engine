@@ -7,21 +7,31 @@
 
 //const C3DElement* _speaker;
 
+const std::string CSpeakerComponent::COMPONENT_TYPE = "Speaker";
 
-CSpeakerComponent::CSpeakerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
+
+CSpeakerComponent::CSpeakerComponent(CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
-	setName(name);
-	l_Position = Owner->GetPosition();
-	l_Orientation.x = Owner->GetYaw();
-	l_Orientation.y = Owner->GetPitch();
-	l_Orientation.z = Owner->GetRoll();
-	volume = node.GetFloatProperty("volume", 50.0f, false);
+	SetNameFromParentName( Owner->getName() );
+
+	m_Position = Owner->GetPosition();
+	m_Orientation.x = Owner->GetYaw();
+	m_Orientation.y = Owner->GetPitch();
+	m_Orientation.z = Owner->GetRoll();
+	m_Volume = node.GetFloatProperty("volume", 50.0f, false);
 }
 
-CSpeakerComponent::CSpeakerComponent(const std::string& name, CElement* Owner)
-	: CComponent(name, Owner)
+CSpeakerComponent::CSpeakerComponent(const CSpeakerComponent& base, CElement* Owner)
+	: CComponent(base, Owner)
 {
+	SetNameFromParentName( Owner->getName() );
+
+	m_Position = Owner->GetPosition();
+	m_Orientation.x = Owner->GetYaw();
+	m_Orientation.y = Owner->GetPitch();
+	m_Orientation.z = Owner->GetRoll();
+	m_Volume = base.m_Volume;
 }
 
 CSpeakerComponent::~CSpeakerComponent()
@@ -33,12 +43,12 @@ void CSpeakerComponent::Init()
 	//Crear estructures necessàries en el manager d'audio utilitzant getName com a identificador
 	//SoundManager.Init();
 	std::string name = getName();
-	CEngine::GetSingleton().getSoundManager()->LoadSpeakers(name, l_Position, l_Orientation);
-	l_speaker = {};
-	l_speaker.SetPosition(l_Position);
-	l_speaker.SetYawPitchRoll(l_Orientation.x, l_Orientation.y, l_Orientation.z);
-	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
-	CEngine::GetSingleton().getSoundManager()->SetVolume("Volume", volume);
+	CEngine::GetSingleton().getSoundManager()->LoadSpeakers(name, m_Position, m_Orientation);
+	m_Speaker = {};
+	m_Speaker.SetPosition(m_Position);
+	m_Speaker.SetYawPitchRoll(m_Orientation.x, m_Orientation.y, m_Orientation.z);
+	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&m_Speaker);
+	CEngine::GetSingleton().getSoundManager()->SetVolume("Volume", m_Volume);
 	Play((std::string)"Play", true);
 
 }
@@ -47,44 +57,44 @@ void CSpeakerComponent::Init()
 void CSpeakerComponent::Destroy()
 {
 	// Eliminar estructures que calgui del manager d'audio
-	CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&l_speaker);
+	CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&m_Speaker);
 }
 
 void CSpeakerComponent::Play( const std::string EventName, bool loop )
 {
 	// TODO: Reproduir one-shot o bucle depenent de loop
 	C3DElement nspeaker = {};
-	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &l_speaker);
+	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &m_Speaker);
 
 }
 
 void CSpeakerComponent::Stop()
 {
 	// Parar reproducció d'audios iniciats per aquest component
-	CEngine::GetSingleton().getSoundManager()->PlayEvent((std::string)"Stop", &l_speaker);
+	CEngine::GetSingleton().getSoundManager()->PlayEvent((std::string)"Stop", &m_Speaker);
 }
 
 void CSpeakerComponent::Update(float ElapsedTime)
 {
 	// TODO: Actualitzar posició i rotació del speaker en el manager d'audio a partir del GetOwner()->GetPosition() i GetOwner()->GetDirection()
-	
+
 	Vect3f newPosition = GetOwner()->GetPosition();
 	Vect3f newOrientation = GetOwner()->GetRotation();
-	if ((newPosition != l_Position) || (newOrientation != l_Orientation))
+	if ((newPosition != m_Position) || (newOrientation != m_Orientation))
 	{
-		CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&l_speaker);
+		CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&m_Speaker);
 
-		if (newPosition != l_Position)
+		if (newPosition != m_Position)
 		{
-			l_Position = newPosition;
-			l_speaker.SetPosition(l_Position);
+			m_Position = newPosition;
+			m_Speaker.SetPosition(m_Position);
 		}
-		if (newOrientation != l_Orientation)
+		if (newOrientation != m_Orientation)
 		{
-			l_Orientation = newOrientation;
-			l_speaker.SetYawPitchRoll(l_Orientation.x, l_Orientation.y, l_Orientation.z);
+			m_Orientation = newOrientation;
+			m_Speaker.SetYawPitchRoll(m_Orientation.x, m_Orientation.y, m_Orientation.z);
 		}
-		CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
+		CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&m_Speaker);
 	}
 
 }

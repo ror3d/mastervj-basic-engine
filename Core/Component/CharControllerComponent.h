@@ -16,8 +16,8 @@ protected:
 	virtual void Init();
 
 public:
-	CCharacterControllerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
-	CCharacterControllerComponent(const std::string& name, CElement* Owner);
+	CCharacterControllerComponent(CXMLTreeNode& node, CElement* Owner);
+	CCharacterControllerComponent(const CCharacterControllerComponent& base, CElement* Owner);
 	virtual ~CCharacterControllerComponent();
 
 	virtual void FixedUpdate( float ElapsedTime );
@@ -34,6 +34,11 @@ public:
 
 	float GetHeight();
 	float GetRadius();
+
+	static const std::string COMPONENT_TYPE;
+	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
+
+	virtual CComponent* Clone(CElement* Owner) const { return new CCharacterControllerComponent( *this, Owner ); }
 };
 
 #endif

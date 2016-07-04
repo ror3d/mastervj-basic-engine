@@ -12,17 +12,19 @@
 
 #include <Base/Scripting/LuaErrorCapture.h>
 
+const std::string CScriptedComponent::COMPONENT_TYPE = "Script";
+
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 
-CScriptedComponent::CScriptedComponent(const std::string& name,
+CScriptedComponent::CScriptedComponent(const CScriptedComponent& base,
 									   CElement* Owner)
-	: CComponent(name, Owner)
+	: CComponent(base, Owner)
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
 {
-	m_scriptClass = name;
-	std::string n = Owner->getName() + "_" + name;
-	setName(n);
+	m_scriptClass = base.m_scriptClass;
+	std::string n = Owner->getName() + "_" + m_scriptClass;
+	SetNameFromParentName(n);
 }
 
 CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
@@ -34,8 +36,8 @@ CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
 	std::string name = node.GetPszProperty("class", "");
 	DEBUG_ASSERT(name != "");
 	m_scriptClass = name;
-	name = Owner->getName() + "_" + name + "_Script";
-	setName(name);
+	name = Owner->getName() + "_" + name;
+	SetNameFromParentName(name);
 }
 
 CScriptedComponent::~CScriptedComponent()

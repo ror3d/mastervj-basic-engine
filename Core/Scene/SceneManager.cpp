@@ -86,6 +86,32 @@ void CSceneManager::DestroyObject( const std::string & id )
 	}
 }
 
+void CSceneManager::AddObjectToScene( const std::string& sceneName, CElement* obj )
+{
+	CScene* scene = get( sceneName );
+
+	DEBUG_ASSERT( scene != nullptr );
+
+	if ( scene != nullptr )
+	{
+		AddObject( obj );
+		scene->AddObject( obj->getName() );
+	}
+}
+
+void CSceneManager::DestroyObjectFromScene( const std::string & sceneName, const std::string & objName )
+{
+	CScene* scene = get( sceneName );
+
+	DEBUG_ASSERT( scene != nullptr );
+
+	if ( scene != nullptr )
+	{
+		scene->RemoveObject( objName );
+		DestroyObject( objName );
+	}
+}
+
 CElement * CSceneManager::GetObjectById( const std::string & id )
 {
 	auto it = m_Objects.find( id );

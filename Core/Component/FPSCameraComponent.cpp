@@ -6,17 +6,22 @@
 #include <Graphics/Camera/FPSCameraController.h>
 #include <Core/Engine/Engine.h>
 
-CFPSCameraComponent::CFPSCameraComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
+const std::string CFPSCameraComponent::COMPONENT_TYPE = "Camera";
+
+CFPSCameraComponent::CFPSCameraComponent(CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
-	setName(name);
+	SetNameFromParentName( Owner->getName() );
 
 	m_CamOffset = node.GetVect3fProperty( "offset", Vect3f( 0, 0, 0 ), false );
 }
 
-CFPSCameraComponent::CFPSCameraComponent(const std::string& name, CElement* Owner)
-	: CComponent(name, Owner)
+CFPSCameraComponent::CFPSCameraComponent(const CFPSCameraComponent& base, CElement* Owner)
+	: CComponent(base, Owner)
 {
+	SetNameFromParentName( Owner->getName() );
+
+	m_CamOffset = base.m_CamOffset;
 }
 
 CFPSCameraComponent::~CFPSCameraComponent()

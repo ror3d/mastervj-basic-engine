@@ -229,10 +229,12 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
 			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
-			"GetTrigger", &CElement::GetTriggerComponent);
+			"GetTrigger", &CElement::GetTriggerComponent,
+			"Clone", &CElement::Clone);
+
 
 	(*m_state)["CAnimatedInstanceComponent"]
-		.SetClass<CAnimatedInstanceComponent, const std::string&, CElement*>(
+		.SetClass<CAnimatedInstanceComponent, const CAnimatedInstanceComponent&, CElement*>(
 			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
 			"BlendCycle", &CAnimatedInstanceComponent::BlendCycle,
 			"ClearCycle", &CAnimatedInstanceComponent::ClearCycle,
@@ -240,7 +242,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"IsActionAnimationActive", &CAnimatedInstanceComponent::IsActionAnimationActive);
 
 	(*m_state)["CCharacterControllerComponent"]
-		.SetClass<CCharacterControllerComponent, const std::string&, CElement*>(
+		.SetClass<CCharacterControllerComponent, const CCharacterControllerComponent&, CElement*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move,
 			"SetPosition", &CCharacterControllerComponent::SetPosition,
@@ -249,14 +251,14 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetRadius", &CCharacterControllerComponent::GetRadius);
 
 	(*m_state)["CFPSCameraComponent"]
-		.SetClass<CFPSCameraComponent, const std::string&, CElement*>(
+		.SetClass<CFPSCameraComponent, const CFPSCameraComponent&, CElement*>(
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
 			"SetFollowCharacter", &CFPSCameraComponent::SetFollowCharacter,
 			"GetYaw", &CFPSCameraComponent::GetYaw);
 
 
 	(*m_state)["CTriggerComponent"]
-		.SetClass<CTriggerComponent, const std::string&, CElement*>(
+		.SetClass<CTriggerComponent, const CTriggerComponent&, CElement*>(
 		"GetName", &CTriggerComponent::getName);
 
 	(*m_state)["ICameraController"]
@@ -324,8 +326,8 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CSceneManager"].SetObj(
 		*CEngine::GetSingleton().getSceneManager(),
-		"AddObject", &CSceneManager::AddObject,
-		"DestroyObject", &CSceneManager::DestroyObject,
+		"AddObjectToScene", &CSceneManager::AddObjectToScene,
+		"DestroyObjectFromScene", &CSceneManager::DestroyObjectFromScene,
 		"LoadScene", &CSceneManager::LoadScene,
 		"UnloadScene", &CSceneManager::UnloadScene,
 		"GetObjectById", &CSceneManager::GetObjectById);

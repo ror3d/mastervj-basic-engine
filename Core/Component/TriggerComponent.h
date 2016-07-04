@@ -16,14 +16,18 @@ protected:
 	virtual void Init();
 
 public:
-	CTriggerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
-	CTriggerComponent(const std::string& name, CElement* Owner);
+	CTriggerComponent(CXMLTreeNode& node, CElement* Owner);
+	CTriggerComponent(const CTriggerComponent& base, CElement* Owner);
 	virtual ~CTriggerComponent();
 
 	virtual void FixedUpdate( float ElapsedTime );
 
 	virtual void Destroy();
 
+	static const std::string COMPONENT_TYPE;
+	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
+
+	virtual CComponent* Clone(CElement* Owner) const { return new CTriggerComponent( *this, Owner ); }
 };
 
 #endif

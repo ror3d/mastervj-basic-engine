@@ -6,20 +6,28 @@
 #include <PhysX/PhysXManager.h>
 #include "ComponentManager.h"
 
-CTriggerComponent::CTriggerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
-	: CPhysxComponent(name, node, Owner)
+const std::string CTriggerComponent::COMPONENT_TYPE = "Trigger";
+
+CTriggerComponent::CTriggerComponent(CXMLTreeNode& node, CElement* Owner)
+	: CPhysxComponent(node, Owner)
 {
+	SetNameFromParentName( Owner->getName() );
+
 	m_isTrigger = true;
 	m_isKinematic = false;
 	m_scale = node.GetVect3fProperty( "scale", Vect3f( 1, 1, 1 ), false );
 	m_offset = node.GetVect3fProperty( "offset", Vect3f( 0, 0, 0 ), false );
 }
 
-CTriggerComponent::CTriggerComponent(const std::string& name, CElement* Owner)
-	: CPhysxComponent(name, Owner)
+CTriggerComponent::CTriggerComponent(const CTriggerComponent& base, CElement* Owner)
+	: CPhysxComponent(base, Owner)
 {
+	SetNameFromParentName( Owner->getName() );
+
 	m_isTrigger = true;
 	m_isKinematic = false;
+	m_scale = base.m_scale;
+	m_offset = base.m_offset;
 }
 
 CTriggerComponent::~CTriggerComponent()

@@ -51,6 +51,7 @@ private:
 
 public:
 	CParticleSystemInstance(CXMLTreeNode& treeNode);
+	CParticleSystemInstance(const CParticleSystemInstance& base);
 
 	virtual ~CParticleSystemInstance();
 	virtual void Update(float ElapsedTime);

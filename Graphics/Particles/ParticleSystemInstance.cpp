@@ -56,6 +56,19 @@ CParticleSystemInstance::CParticleSystemInstance(CXMLTreeNode& treeNode)
 	m_vertexs = new CPointsListRenderableVertexs<PARTICLE_VERTEX>(m_particleVtxs, MAX_PARTICLES_PER_EMITTER, MAX_PARTICLES_PER_EMITTER, true);
 }
 
+CParticleSystemInstance::CParticleSystemInstance( const CParticleSystemInstance & base )
+	: m_activeParticles(0)
+	, m_toCreateParticles(0)
+	, m_randomEngine(rnd())
+	, m_unitDist(0, 1)
+	, m_enabled(base.m_enabled)
+	, m_particleSystemClass(base.m_particleSystemClass)
+	, m_particles(base.m_particles)
+	, m_vertexs(base.m_vertexs)
+{
+}
+
+
 CParticleSystemInstance::~CParticleSystemInstance()
 {
 	if (m_vertexs)

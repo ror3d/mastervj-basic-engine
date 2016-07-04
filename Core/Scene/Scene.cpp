@@ -72,3 +72,21 @@ void CScene::Unload()
 
 	m_isLoaded = false;
 }
+
+void CScene::AddObject( const std::string & objName )
+{
+	m_Elements.push_back( objName );
+}
+
+void CScene::RemoveObject( const std::string & objName )
+{
+	for ( size_t i = 0; i < m_Elements.size(); ++i)
+	{
+		if ( m_Elements[i] == objName )
+		{
+			m_Elements[i] = m_Elements.back();
+			m_Elements.pop_back();
+			break;
+		}
+	}
+}

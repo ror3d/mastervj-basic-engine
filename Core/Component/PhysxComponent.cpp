@@ -6,11 +6,13 @@
 #include <PhysX/PhysXManager.h>
 #include <Core/Engine/Engine.h>
 
-CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
+const std::string CPhysxComponent::COMPONENT_TYPE = "Collider";
+
+CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 	, m_isTrigger(false)
 {
-	setName(name);
+	SetNameFromParentName( Owner->getName() );
 
 	m_colType = node.GetPszProperty("collider_type", "Sphere");
 	m_isStatic = node.GetBoolProperty("static", false);
@@ -24,10 +26,16 @@ CPhysxComponent::CPhysxComponent(const std::string& name, CXMLTreeNode& node, CE
 	//m_isTrigger = node.GetBoolProperty("trigger", false);
 }
 
-CPhysxComponent::CPhysxComponent(const std::string& name, CElement* Owner)
-	: CComponent(name, Owner)
+CPhysxComponent::CPhysxComponent(const CPhysxComponent& base, CElement* Owner)
+	: CComponent(base, Owner)
 	, m_isTrigger(false)
 {
+	SetNameFromParentName( Owner->getName() );
+
+	m_colType = base.m_colType;
+	m_isStatic = base.m_isStatic;
+	m_isKinematic = base.m_isKinematic;
+	m_coreName = base.m_coreName;
 }
 
 CPhysxComponent::~CPhysxComponent()

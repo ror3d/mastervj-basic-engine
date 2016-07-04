@@ -23,8 +23,15 @@ public:
 	void UnloadScene( const std::string& sceneName );
 
 
+	void AddObjectToScene( const std::string& sceneName, CElement* obj );
+	void DestroyObjectFromScene( const std::string& sceneName, const std::string& objectName );
+
+	CElement* GetObjectById( const std::string& id );
+
+private:
+	friend class CScene;
+
 	void AddObject( CElement* obj );
 	void DestroyObject(const std::string& id);
 
-	CElement* GetObjectById( const std::string& id );
 };

@@ -17,6 +17,9 @@ public:
 		std::string type;
 		std::string value;
 	};
+
+	virtual std::string GetComponentType() = 0;
+
 private:
 	CElement* m_Owner;
 
@@ -34,7 +37,7 @@ protected:
 public:
 	CComponent(CXMLTreeNode& node, CElement* Owner);
 
-	CComponent( const std::string& Name, CElement* Owner );
+	CComponent( const CComponent& base, CElement* Owner );
 
 	virtual ~CComponent() {}
 
@@ -57,6 +60,8 @@ public:
 
 	virtual void Destroy() = 0;
 
+	virtual void SetNameFromParentName( const std::string& parentName );
+
 	CElement* GetOwner()
 	{
 		return m_Owner;
@@ -64,6 +69,8 @@ public:
 
 	inline void SetEnabled(bool en) { m_Enabled = en; }
 	inline bool GetEnabled() const { return m_Enabled; }
+
+	virtual CComponent* Clone(CElement* Owner) const = 0;
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include <Core/Engine/Engine.h>
 #include <Core/Component/ComponentManager.h>
 
+#include "Scene/Element.h"
+
 CComponent::CComponent(CXMLTreeNode& node, CElement* Owner)
 	: CNamed(node)
 	, m_Owner(Owner)
@@ -29,11 +31,15 @@ CComponent::CComponent(CXMLTreeNode& node, CElement* Owner)
 	}
 }
 
-CComponent::CComponent( const std::string& Name, CElement* Owner )
-	: CNamed(Name)
-	, m_Owner(Owner)
+CComponent::CComponent( const CComponent& base, CElement* Owner )
+	: m_Owner(Owner)
 	, m_Initialized(false)
 {
+	DEBUG_ASSERT( Owner != nullptr );
+
+	m_Enabled = base.m_Enabled;
+
+	m_properties = base.m_properties;
 }
 
 void CComponent::Initialize()
@@ -51,4 +57,9 @@ void CComponent::ObjectInitialized()
 	{
 		OnObjectInitialized();
 	}
+}
+
+void CComponent::SetNameFromParentName( const std::string & name )
+{
+	CNamed::setName( name + "_" + this->GetComponentType() );
 }

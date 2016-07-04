@@ -17,4 +17,7 @@ public:
 
 	void Load();
 	void Unload();
+
+	void AddObject( const std::string& objName );
+	void RemoveObject( const std::string& objName );
 };
