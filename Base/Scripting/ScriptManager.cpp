@@ -229,6 +229,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
 			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
+			"SendMessageFloat", static_cast<void(CElement::*)(const std::string&, float)>(&CElement::SendMsg),
 			"GetTrigger", &CElement::GetTriggerComponent,
 			"Clone", &CElement::Clone);
 

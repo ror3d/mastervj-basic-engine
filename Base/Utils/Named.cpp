@@ -23,7 +23,7 @@ void CNamed::setName(const std::string &name)
 	m_name = name;
 }
 
-const std::string &CNamed::getName() const
+std::string CNamed::getName() const
 {
 	return m_name;
 }

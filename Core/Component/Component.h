@@ -56,6 +56,8 @@ public:
 
 	virtual void SendMsg(const std::string&, int) {}
 
+	virtual void SendMsg(const std::string&, float) {}
+
 	virtual void SendMsg(const std::string&, CElement*) {}
 
 	virtual void Destroy() = 0;

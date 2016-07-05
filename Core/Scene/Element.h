@@ -60,6 +60,7 @@ public:
 
 	void SendMsg( const std::string& message, CElement* arg1 );
 	void SendMsg( const std::string& message, int arg1 );
+	void SendMsg( const std::string& message, float arg1 );
 
 	CElement* Clone( const std::string& newName );
 

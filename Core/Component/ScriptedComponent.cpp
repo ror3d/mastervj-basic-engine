@@ -186,6 +186,21 @@ void CScriptedComponent::SendMsg(const std::string& msg, const std::string& arg1
 	}
 }
 
+void CScriptedComponent::SendMsg(const std::string& msg, float arg1)
+{
+	LuaErrorCapturedStdout errorCapture;
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(" + std::to_string(arg1) + ");").c_str() );
+	}
+}
+
 void CScriptedComponent::SendMsg(const std::string& msg, int arg1)
 {
 	LuaErrorCapturedStdout errorCapture;
