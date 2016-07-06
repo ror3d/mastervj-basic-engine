@@ -10,7 +10,6 @@ protected:
 	ID3D11Texture2D *m_DataTexture;
 	void Init(unsigned int Width, unsigned int Height);
 	void Unload();
-	bool CreateSamplerState();
 	UINT m_Width;
 	UINT m_Height;
 public:

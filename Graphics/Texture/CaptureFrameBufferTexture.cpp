@@ -1,6 +1,7 @@
 #include "CaptureFrameBufferTexture.h"
-#include "Context\ContextManager.h"
-#include "Engine\Engine.h"
+#include "Context/ContextManager.h"
+#include "Engine/Engine.h"
+#include "TextureManager.h"
 #include <Base/XML/XMLTreeNode.h>
 
 
@@ -59,7 +60,8 @@ void CCaptureFrameBufferTexture::Init(unsigned int Width, unsigned int Height)
 	l_HR = l_Device->CreateShaderResourceView(m_DataTexture, &DescRV, GetShaderResourceView());
 	if (FAILED(l_HR))
 		return;
-	CreateSamplerState();
+
+	SetSamplerState( CEngine::GetSingleton().getTextureManager()->GetSamplerState( CTextureManager::SamplerStateType::LinearFilter_ClampEdges ) );
 }
 
 CCaptureFrameBufferTexture::~CCaptureFrameBufferTexture()
@@ -82,18 +84,3 @@ bool CCaptureFrameBufferTexture::Capture(unsigned int StageId)
 	return true;
 }
 
-bool CCaptureFrameBufferTexture::CreateSamplerState()
-{
-	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
-	D3D11_SAMPLER_DESC l_SampDesc;
-	ZeroMemory(&l_SampDesc, sizeof(l_SampDesc));
-	l_SampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	l_SampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	l_SampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	l_SampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	l_SampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	l_SampDesc.MinLOD = 0;
-	l_SampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	HRESULT l_HR = l_Device->CreateSamplerState(&l_SampDesc, GetSamplerState());
-	return !FAILED(l_HR);
-}

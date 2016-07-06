@@ -1,5 +1,6 @@
 #include "DynamicTexture.h"
 #include "Engine/Engine.h"
+#include "TextureManager.h"
 #include <Graphics/Context/ContextManager.h>
 #include <Base/XML/XMLTreeNode.h>
 #include <map>
@@ -127,21 +128,6 @@ void CDynamicTexture::Init()
 		l_HR = l_Device->CreateDepthStencilView(m_DepthStencilBuffer, &l_DepthStencilViewDescription, &m_DepthStencilView);
 		DEBUG_ASSERT(!FAILED(l_HR));
 	}
-	CreateSamplerState();
-}
 
-bool CDynamicTexture::CreateSamplerState()
-{
-	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
-	D3D11_SAMPLER_DESC l_SampDesc;
-	ZeroMemory(&l_SampDesc, sizeof(l_SampDesc));
-	l_SampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	l_SampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	l_SampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	l_SampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	l_SampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	l_SampDesc.MinLOD = 0;
-	l_SampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	HRESULT l_HR = l_Device->CreateSamplerState(&l_SampDesc, GetSamplerState());
-	return !FAILED(l_HR);
+	SetSamplerState( CEngine::GetSingleton().getTextureManager()->GetSamplerState( CTextureManager::SamplerStateType::LinearFilter_ClampEdges ) );
 }

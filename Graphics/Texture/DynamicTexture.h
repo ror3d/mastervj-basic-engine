@@ -22,7 +22,6 @@ protected:
 
 	void Unload();
 	void Init();
-	virtual bool CreateSamplerState();
 
 public:
 	CDynamicTexture(const CXMLTreeNode &TreeNode);

@@ -32,32 +32,32 @@ bool CTexture::LoadFile(bool linearFilter /*= true*/, bool wrap /*= true*/)
 	ID3D11Device *l_Device = CEngine::GetSingleton().getContextManager()->GetDevice();
 	HRESULT l_HR = D3DX11CreateShaderResourceViewFromFile(l_Device,
 		getName().c_str(), NULL, NULL, &m_Texture, NULL);
-	D3D11_SAMPLER_DESC l_SampDesc;
-	ZeroMemory(&l_SampDesc, sizeof(l_SampDesc));
-	if (linearFilter)
+
+	CTextureManager::SamplerStateType type;
+	if ( linearFilter )
 	{
-		l_SampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		if ( wrap )
+		{
+			type = CTextureManager::SamplerStateType::LinearFilter_WrapEdges;
+		}
+		else
+		{
+			type = CTextureManager::SamplerStateType::LinearFilter_ClampEdges;
+		}
 	}
 	else
 	{
-		l_SampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+		if ( wrap )
+		{
+			type = CTextureManager::SamplerStateType::NoFilter_WrapEdges;
+		}
+		else
+		{
+			type = CTextureManager::SamplerStateType::NoFilter_ClampEdges;
+		}
 	}
-	if (wrap)
-	{
-		l_SampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-		l_SampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		l_SampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	}
-	else
-	{
-		l_SampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-		l_SampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-		l_SampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	}
-	l_SampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	l_SampDesc.MinLOD = 0;
-	l_SampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	l_HR = l_Device->CreateSamplerState(&l_SampDesc, &m_SamplerState);
+	m_SamplerState = CEngine::GetSingleton().getTextureManager()->GetSamplerState(type);
+
 	return SUCCEEDED(l_HR);
 }
 
@@ -67,11 +67,6 @@ void CTexture::Unload()
 	{
 		m_Texture->Release();
 		m_Texture = NULL;
-	}
-	if (m_SamplerState != NULL)
-	{
-		m_SamplerState->Release();
-		m_SamplerState = NULL;
 	}
 }
 

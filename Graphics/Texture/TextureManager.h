@@ -6,10 +6,24 @@
 
 class CTextureManager : public TMapManager<CTexture>
 {
+public:
+	enum class SamplerStateType
+	{
+		LinearFilter_WrapEdges,
+		NoFilter_WrapEdges,
+		LinearFilter_ClampEdges,
+		NoFilter_ClampEdges
+	};
+
+private:
 	std::map<int, CTexture*> m_activeTextures;
+	std::map<SamplerStateType, ID3D11SamplerState*> m_samplerStates;
+
 public:
 	CTextureManager();
 	virtual ~CTextureManager();
+
+	void Init();
 
 	CTexture * GetTexture(const std::string &Filename);
 	void Reload();
@@ -18,6 +32,12 @@ public:
 	CTexture* GetTextureAtStage(int stage) { return m_activeTextures[stage]; }
 	void DeactivateTextures();
 	bool isEmpty() { return (m_resources.size() == 0); }
+
+
+	ID3D11SamplerState * GetSamplerState( SamplerStateType type ) { return m_samplerStates[type]; }
+
+private:
+	void CreateSamplerState( SamplerStateType type, bool linearFilter, bool wrapEdges );
 };
 
 #endif

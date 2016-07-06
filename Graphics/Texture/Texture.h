@@ -22,7 +22,7 @@ public:
 	bool load(const std::string &Filename, bool linearFilter = true, bool wrap = true);
 	void Activate(unsigned int StageId);
 	bool Reload();
-	ID3D11SamplerState ** GetSamplerState(){ return &m_SamplerState;  }
+	void SetSamplerState(ID3D11SamplerState *ss){ m_SamplerState = ss; }
 	ID3D11ShaderResourceView ** GetShaderResourceView(){ return &m_Texture;  }
 };
 
