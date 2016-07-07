@@ -19,10 +19,40 @@ void CComponentManager::FixedUpdate(float ElapsedTime)
 	}
 }
 
-void CComponentManager::Update(float ElapsedTime)
+void CComponentManager::Update( float ElapsedTime )
 {
+	for ( auto &const ca : m_componentsToAdd )
+	{
+		auto it = m_components.find( ca );
+
+		if ( it == m_components.end() )
+		{
+			m_components.emplace( ca );
+			m_componentsMap[ca->getName()] = ca;
+		}
+	}
+	m_componentsToAdd.clear();
+
+	for ( auto &const cr : m_componentsToRemove )
+	{
+		auto it = m_components.find(cr);
+
+		if (it != m_components.end())
+		{
+			m_componentsMap.erase(cr->getName());
+			m_components.erase(it);
+			delete cr;
+		}
+	}
+	m_componentsToRemove.clear();
+
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
+		if ( std::find( m_componentsToRemove.begin(), m_componentsToRemove.end(), *it ) != m_componentsToRemove.end() )
+		{
+			continue;
+		}
+
 		(*it)->Update(ElapsedTime);
 	}
 }
@@ -47,8 +77,7 @@ bool CComponentManager::AddComponent(CComponent* Component)
 
 	if (it == m_components.end())
 	{
-		m_components.emplace(Component);
-		m_componentsMap[Component->getName()] = Component;
+		m_componentsToAdd.push_back( Component );
 		return true;
 	}
 
@@ -61,8 +90,7 @@ bool CComponentManager::RemoveComponent(CComponent* Component)
 
 	if (it != m_components.end())
 	{
-		m_componentsMap.erase(Component->getName());
-		m_components.erase(it);
+		m_componentsToRemove.push_back( Component );
 		return true;
 	}
 
@@ -89,12 +117,32 @@ void CComponentManager::FirstInitialization()
 
 void CComponentManager::destroy()
 {
+	for ( auto &const cr : m_componentsToRemove )
+	{
+		auto it = m_components.find(cr);
+
+		if (it != m_components.end())
+		{
+			m_componentsMap.erase(cr->getName());
+			m_components.erase(it);
+			delete cr;
+		}
+	}
+	m_componentsToRemove.clear();
+
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
 		(*it)->Destroy();
+		delete *it;
 	}
 	m_components.clear();
 	m_componentsMap.clear();
+
+	for ( auto &const ca : m_componentsToAdd )
+	{
+		delete ca;
+	}
+	m_componentsToAdd.clear();
 }
 
 

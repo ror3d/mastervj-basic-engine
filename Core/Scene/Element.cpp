@@ -130,6 +130,7 @@ CElement::CElement(const CXMLTreeNode& node)
 
 CElement::~CElement()
 {
+	std::vector<std::string> toRemove;
 	auto cmgr = CEngine::GetSingleton().getComponentManager();
 	for (auto &const comp : m_componentContainer)
 	{
@@ -139,7 +140,7 @@ CElement::~CElement()
 	{
 		cmgr->RemoveComponent(comp.second);
 	}
-	m_componentContainer.destroy();
+	m_componentContainer.clear();
 }
 
 void CElement::SetQuat( Quatf q )

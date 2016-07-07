@@ -4,6 +4,7 @@
 #include "Component.h"
 #include <set>
 #include <map>
+#include <vector>
 #include <string>
 #include <Base/Utils/TMapManager.h>
 
@@ -14,6 +15,8 @@ class CComponentManager
 private:
 	std::map<std::string, CComponent*> m_componentsMap;
 	std::set<CComponent*> m_components;
+	std::vector<CComponent*> m_componentsToAdd;
+	std::vector<CComponent*> m_componentsToRemove;
 	bool m_initialized;
 public:
 	CComponentManager();
