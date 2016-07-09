@@ -24,6 +24,7 @@ public:
 	CPhysxComponent(const CPhysxComponent& base, CElement* Owner);
 	virtual ~CPhysxComponent();
 
+	virtual void PhysxUpdate();
 	virtual void FixedUpdate(float ElapsedTime);
 
 	virtual void Destroy();

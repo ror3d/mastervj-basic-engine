@@ -115,6 +115,12 @@ void CPhysxComponent::Destroy()
 	CEngine::GetSingleton().getPhysXManager()->destroyActor(getName());
 }
 
+void CPhysxComponent::PhysxUpdate()
+{
+	GetOwner()->SetPosition(CEngine::GetSingleton().getPhysXManager()->getActorPosition(getName()));
+	GetOwner()->SetQuat(CEngine::GetSingleton().getPhysXManager()->getActorRotation(getName()));
+}
+
 void CPhysxComponent::FixedUpdate(float ElapsedTime)
 {
 	if (!m_isStatic && m_isKinematic)

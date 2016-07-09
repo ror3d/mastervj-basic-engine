@@ -115,7 +115,7 @@ CElement::CElement(const CXMLTreeNode& node)
 		}
 		else
 		{
-			OutputDebugStringA("Component type not recognized\n");
+			OutputDebugStringA(("Component " + type + " type not recognized\n").c_str());
 			continue;
 		}
 		cmgr->AddComponent(component);

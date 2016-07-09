@@ -97,6 +97,9 @@ public:
 
 	void releaseCharacterControllers();
 
+	Vect3f getActorPosition( const std::string& name );
+	Quatf getActorRotation( const std::string& name );
+
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
 

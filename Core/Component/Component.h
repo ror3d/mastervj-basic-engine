@@ -45,6 +45,7 @@ public:
 
 	void ObjectInitialized();
 
+	virtual void PhysxUpdate() {}
 	virtual void Update( float ElapsedTime ) {}
 	virtual void FixedUpdate( float ElapsedTime ) {}
 	virtual void Render(CContextManager&  _context) {}

@@ -21,6 +21,7 @@ private:
 public:
 	CComponentManager();
 	virtual ~CComponentManager();
+	void PhysxUpdate();
 	void Update(float ElapsedTime);
 	void FixedUpdate(float ElapsedTime);
 	void Render(CContextManager  &_context);
@@ -32,6 +33,9 @@ public:
 	void destroy();
 
 	inline bool IsInitialized() const { return m_initialized; }
+
+private:
+	void DestroyRemovedComponents();
 };
 
 #endif

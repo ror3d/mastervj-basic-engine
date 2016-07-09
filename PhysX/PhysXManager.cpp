@@ -201,15 +201,28 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 		size_t l_indexTrigger = (size_t)pairs[i].triggerActor->userData;
 		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
 
+		if ( m_actors.name.size() <= l_indexTrigger )
+		{
+			continue;
+		}
+
 		std::string l_triggerName = m_actors.name[l_indexTrigger];
 
 		std::string l_actorName;
 		if ( l_indexActor & CONTROLLER_FLAG )
 		{
+			if ( m_CharacterControllerIdxs.find(l_indexActor^CONTROLLER_FLAG) == m_CharacterControllerIdxs.end() )
+			{
+				continue;
+			}
 			l_actorName = m_CharacterControllerIdxs[l_indexActor^CONTROLLER_FLAG];
 		}
 		else
 		{
+			if ( m_actors.name.size() <= l_indexActor )
+			{
+				continue;
+			}
 			l_actorName = m_actors.name[l_indexActor];
 		}
 
@@ -665,3 +678,24 @@ void CPhysXManager::update(float dt)
 	}
 }
 
+Vect3f CPhysXManager::getActorPosition( const std::string & name )
+{
+	auto it = m_actors.index.find( name );
+	if ( it == m_actors.index.end() )
+	{
+		return Vect3f();
+	}
+
+	return m_actors.position[it->second];
+}
+
+Quatf CPhysXManager::getActorRotation( const std::string & name )
+{
+	auto it = m_actors.index.find( name );
+	if ( it == m_actors.index.end() )
+	{
+		return Quatf();
+	}
+
+	return m_actors.rotation[it->second];
+}
