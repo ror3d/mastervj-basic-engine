@@ -20,6 +20,7 @@ public:
 	CTriggerComponent(const CTriggerComponent& base, CElement* Owner);
 	virtual ~CTriggerComponent();
 
+	virtual void PhysxUpdate();
 	virtual void FixedUpdate( float ElapsedTime );
 
 	virtual void Destroy();

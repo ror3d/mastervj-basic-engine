@@ -45,6 +45,10 @@ void CTriggerComponent::Init()
 }
 
 
+void CTriggerComponent::PhysxUpdate()
+{
+}
+
 void CTriggerComponent::FixedUpdate(float ElapsedTime)
 {
 	if (!m_isStatic)
