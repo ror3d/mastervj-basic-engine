@@ -50,6 +50,8 @@ void CScriptedComponent::Init()
 	std::string script = m_scriptMgr->GetScript(m_scriptClass);
 	DEBUG_ASSERT(script != "");
 
+	m_scriptMgr->AddScriptReferenceComponent( m_scriptClass, getName() );
+
 	sel::State* state = m_scriptMgr->getLuaState();
 
 	(*state)["_currentComponent"]
@@ -95,6 +97,13 @@ void CScriptedComponent::Destroy()
 		<< "_currentComponent = nil;"
 		<< "_componentStates[" << m_componentStateId << "] = nil;";
 	m_scriptMgr->RunCode(ss.str());
+
+	m_scriptMgr->RemoveScriptReferenceComponent( m_scriptClass, getName() );
+}
+
+void CScriptedComponent::Reload()
+{
+	OutputDebugStringA( ( "Reloading Component " + getName() +"\n" ).c_str() );
 }
 
 

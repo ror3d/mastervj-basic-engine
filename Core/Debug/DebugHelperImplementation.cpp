@@ -171,13 +171,14 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 	m_Bars[bar.name] = twBar;
 }
 
-void CDebugHelperImplementation::RemoveBar(std::string bar){
+void CDebugHelperImplementation::RemoveBar(const std::string &bar){
 	std::unordered_map<std::string, TwBar*>::iterator it = m_Bars.find(bar);
 	int status = 0;
 	if (it != m_Bars.end())
 	{
 		status = TwDeleteBar(it->second);
-		assert(status);
+		DEBUG_ASSERT(status);
+		m_Bars.erase( it );
 	}
 }
 
@@ -185,9 +186,10 @@ void TW_CALL RemoveBar(void* ba)
 {
 	//TODO receive string correctly
 	//probar a pasar vector con string en [0]
-	std::vector<std::string> * barnames = (std::vector<std::string> *) ba;
-	std::string nameToRemove = barnames->at(0);
-	CDebugHelper::GetDebugHelper()->RemoveBar(nameToRemove);
+	std::string * barnamep = reinterpret_cast<std::string*> (ba);
+	std::string barname = *barnamep;
+	delete barnamep;
+	CDebugHelper::GetDebugHelper()->RemoveBar(barname);
 }
 
 void TW_CALL SwitchCameraCallback(void* _app)
@@ -210,8 +212,61 @@ void TW_CALL ReloadSceneCommands(void* _app)
 	CEngine::GetSingleton().getSceneRendererCommandManager()->Reload();
 }
 
-void TW_CALL ReloadLua(void* _app){
-	CEngine::GetSingleton().getScriptManager()->Initialize("Data\\scripting.xml");
+
+namespace
+{
+	std::vector<std::string> s_luaScripts;
+}
+
+void TW_CALL ReloadLuaScript( void* voidLuaScriptId )
+{
+	auto scriptName = s_luaScripts[(size_t)voidLuaScriptId];
+	CEngine::GetSingleton().getScriptManager()->ReloadScript(scriptName);
+
+	CDebugHelper::GetDebugHelper()->RemoveBar("Lua Script: " + scriptName);
+}
+
+void TW_CALL OpenLuaScript( void* voidLuaScriptId )
+{
+	std::string scriptName = s_luaScripts[(size_t)voidLuaScriptId];
+
+	CDebugHelper::SDebugBar luaBarParams;
+	luaBarParams.name = "Lua Script: " + scriptName;
+
+	{
+		CDebugHelper::SDebugVariable var = {};
+		var.name = "Reload";
+
+		var.type = CDebugHelper::BUTTON;
+		var.callback = ReloadLuaScript;
+
+		var.data = voidLuaScriptId;
+
+		luaBarParams.variables.push_back(var);
+	}
+	CDebugHelper::GetDebugHelper()->RegisterBar(luaBarParams);
+}
+
+void TW_CALL OpenLuaBar(void* _app)
+{
+	CDebugHelper::SDebugBar luaBarParams;
+	luaBarParams.name = "Lua Scripts";
+	auto scripts = CEngine::GetSingleton().getScriptManager()->GetLoadedScriptNames();
+	s_luaScripts.clear();
+	for (auto &const script : scripts)
+	{
+		s_luaScripts.push_back( script );
+
+		CDebugHelper::SDebugVariable var = {};
+		var.name = script;
+
+		var.type = CDebugHelper::BUTTON;
+		var.callback = OpenLuaScript;
+		var.data = (void*)(s_luaScripts.size() - 1);
+
+		luaBarParams.variables.push_back(var);
+	}
+	CDebugHelper::GetDebugHelper()->RegisterBar(luaBarParams);
 }
 
 void TW_CALL OpenMaterialParams(void *material)
@@ -221,7 +276,7 @@ void TW_CALL OpenMaterialParams(void *material)
 
 	CDebugHelper::SDebugBar barMaterialParams;
 	barMaterialParams.name = mat->getName()+ " Parameters";
-	for (auto it = paramsMaterial->begin(); it != paramsMaterial->end(); ++it)
+	for (auto &const it = paramsMaterial->begin(); it != paramsMaterial->end(); ++it)
 	{
 		CDebugHelper::SDebugVariable var = {};
 		var.name = (*it)->getName();
@@ -247,8 +302,7 @@ void TW_CALL OpenMaterialsBar(void *materialsMap)
 		var.name = "...";
 		var.type = CDebugHelper::BUTTON;
 		var.callback = RemoveBar;
-		std::vector<std::string> * name = new std::vector<std::string>();
-		name->push_back(barMaterials.name);
+		std::string * name = new std::string(barMaterials.name);
 		var.ptr = name;
 
 		barMaterials.variables.push_back(var);
@@ -344,7 +398,7 @@ void CDebugHelperImplementation::CreateMainBar(){
 			CDebugHelper::SDebugVariable var = {};
 			var.name = "  - LUA";
 			var.type = CDebugHelper::BUTTON;
-			var.callback = ReloadLua;
+			var.callback = OpenLuaBar;
 			var.data = this;
 
 			mainBar.variables.push_back(var);

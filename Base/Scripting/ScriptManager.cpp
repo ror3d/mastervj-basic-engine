@@ -82,27 +82,21 @@ void CScriptManager::Initialize(const std::string& file)
 		std::string name = script.GetPszProperty("name", "", false);
 		std::string file = script.GetPszProperty("file", "", false);
 		bool rol = script.GetIntProperty("runonload", 0, false);
-		if (file != "" && m_loadedScripts.find(name) == m_loadedScripts.end())
+
+		DEBUG_ASSERT(name != "");
+
+		if (file != "" && name != "" && m_loadedScripts.find(name) == m_loadedScripts.end())
 		{
-			std::ifstream t(file);
-			if (t)
+			m_scriptFiles[name] = file;
+
+			if ( !ReloadScript( name ) )
 			{
-				t.seekg(0, std::ios::end);
-				size_t size = t.tellg();
-				std::string buffer(size, ' ');
-				t.seekg(0);
-				t.read(&buffer[0], size);
+				continue;
+			}
 
-				DEBUG_ASSERT(name != "");
-
-				if ( name != "" )
-				{
-					m_loadedScripts[name] = buffer;
-					if (rol)
-					{
-						toRunOnLoad.push_back(name);
-					}
-				}
+			if (rol)
+			{
+				toRunOnLoad.push_back(name);
 			}
 		}
 	}
@@ -117,12 +111,50 @@ void CScriptManager::Initialize(const std::string& file)
 	}
 }
 
+void CScriptManager::destroy()
+{
+}
+
 void CScriptManager::RunScript(const std::string& name)
 {
 	auto it = m_loadedScripts.find(name);
 	DEBUG_ASSERT (it != m_loadedScripts.end());
 
 	RunCode(it->second);
+}
+
+bool CScriptManager::ReloadScript( const std::string & name )
+{
+	if ( m_scriptFiles.find( name ) == m_scriptFiles.end() )
+	{
+		return false;
+	}
+	std::ifstream t(m_scriptFiles[name]);
+	if ( !t )
+	{
+		return false;
+	}
+
+	t.seekg(0, std::ios::end);
+	size_t size = t.tellg();
+	std::string buffer(size, ' ');
+	t.seekg(0);
+	t.read(&buffer[0], size);
+
+	m_loadedScripts[name] = buffer;
+
+	auto cm = CEngine::GetSingleton().getComponentManager();
+	for ( auto &const cName : m_scriptReferences[name] )
+	{
+		CComponent* c = cm->get( cName );
+		CScriptedComponent* cs = dynamic_cast<CScriptedComponent*>( c );
+		if ( cs )
+		{
+			cs->Reload();
+		}
+	}
+
+	return true;
 }
 
 void CScriptManager::RunCode(const std::string& code)

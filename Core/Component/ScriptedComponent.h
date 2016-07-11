@@ -48,6 +48,8 @@ public:
 	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
 
 	virtual CComponent* Clone(CElement* Owner) const { return new CScriptedComponent( *this, Owner ); }
+
+	void Reload();
 };
 
 #endif
