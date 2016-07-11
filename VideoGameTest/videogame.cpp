@@ -38,7 +38,6 @@
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
-#include <Core/Logic/LogicManager.h>
 #include <Core/Scene/SceneManager.h>
 
 

@@ -34,9 +34,6 @@
     <ClCompile Include="Component\FPSCameraComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Logic\LogicManager.cpp">
-      <Filter>Logic</Filter>
-    </ClCompile>
     <ClCompile Include="Component\PhysxComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -81,9 +78,6 @@
     <Filter Include="Component">
       <UniqueIdentifier>{43e42ad3-3873-43a7-8eca-cc8531863f51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Logic">
-      <UniqueIdentifier>{99150795-34cb-4ebb-94fd-fc13a44b550b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{29af88a6-96a6-4b8a-bccb-bf65468cf9a2}</UniqueIdentifier>
     </Filter>
@@ -121,9 +115,6 @@
     </ClInclude>
     <ClInclude Include="Time\TimeManager.h">
       <Filter>Time</Filter>
-    </ClInclude>
-    <ClInclude Include="Logic\LogicManager.h">
-      <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="Component\FPSCameraComponent.h">
       <Filter>Component</Filter>
