@@ -256,8 +256,10 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 
 
+#ifdef _DEBUG
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
+#endif
 
 		CApplication application(&context);
 
