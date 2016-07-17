@@ -478,6 +478,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 
 
 	physx::PxShape* shape = body->createShape(*geom, *mat);
+	DEBUG_ASSERT( shape != nullptr );
 	delete geom;
 
 	if (isTrigger)
@@ -535,6 +536,7 @@ void CPhysXManager::destroyActor(const std::string& name)
 		m_actors.rotation[idx] = m_actors.rotation.back();
 		m_actors.actor[idx] = m_actors.actor.back();
 		m_actors.index[m_actors.name[idx]] = idx;
+		m_actors.actor[idx]->userData = reinterpret_cast<void*>( idx );
 	}
 
 	m_actors.name.pop_back();
