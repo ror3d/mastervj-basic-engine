@@ -130,6 +130,10 @@ void CDebugHelperImplementation::RegisterBar(const SDebugBar& bar)
 				type = m_PosRotType;
 				break;
 
+			case ROTATION:
+				type = TW_TYPE_QUAT4F;
+				break;
+
 			case NONE:
 				type = TW_TYPE_UNDEF;
 				break;
