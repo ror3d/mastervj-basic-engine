@@ -117,20 +117,26 @@ void CPhysxComponent::Destroy()
 
 void CPhysxComponent::PhysxUpdate()
 {
-	GetOwner()->SetPosition(CEngine::GetSingleton().getPhysXManager()->getActorPosition(getName()));
-	GetOwner()->SetQuat(CEngine::GetSingleton().getPhysXManager()->getActorRotation(getName()));
+	if ( !m_isStatic )
+	{
+		if ( m_isKinematic )
+		{
+			Move( GetOwner()->GetPosition() );
+		}
+		else
+		{
+			GetOwner()->SetPosition( CEngine::GetSingleton().getPhysXManager()->getActorPosition( getName() ) );
+			GetOwner()->SetQuat( CEngine::GetSingleton().getPhysXManager()->getActorRotation( getName() ) );
+		}
+	}
 }
 
 void CPhysxComponent::FixedUpdate(float ElapsedTime)
 {
-	if (!m_isStatic && m_isKinematic)
-	{
-		Move(GetOwner()->GetPosition());
-	}
 }
 
 void CPhysxComponent::Move(Vect3f position)
 {
-	Quatf quat = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
+	Quatf quat = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), -GetOwner()->GetRoll(), -GetOwner()->GetPitch()));
 	CEngine::GetSingleton().getPhysXManager()->MoveActor(getName(), position, quat);
 }

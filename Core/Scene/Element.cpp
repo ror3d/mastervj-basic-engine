@@ -150,9 +150,10 @@ void CElement::SetQuat( Quatf q )
 	float p2 = q.z;
 	float p3 = q.x;
 	float e = 1;
-	m_RotationYPR.x = atan2(2 * (p0*p1 + e*p2*p3), 1 - 2 * (p1*p1 + p2*p2));
-	m_RotationYPR.y = asin(2 * (p0*p2 - e*p1*p3));
-	m_RotationYPR.z = atan2(2 * (p0*p3 + e*p1*p2), 1 - 2 * (p2*p2 + p3*p3));
+	m_RotationYPR.x = -atan2(2 * (p0*p1 + e*p2*p3), 1 - 2 * (p1*p1 + p2*p2));
+	m_RotationYPR.y = -asin(2 * (p0*p2 - e*p1*p3));
+	m_RotationYPR.z = -atan2(2 * (p0*p3 + e*p1*p2), 1 - 2 * (p2*p2 + p3*p3));
+	m_TransformChanged = true;
 	//m_RotationYPR.x = atan2( 2.0*( q.y*q.z + q.w*q.x ), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z );
 	//m_RotationYPR.y = asin( -2.0*( q.x*q.z - q.w*q.y ) );
 	//m_RotationYPR.z = atan2( 2.0*( q.x*q.y + q.w*q.z ), q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z );
