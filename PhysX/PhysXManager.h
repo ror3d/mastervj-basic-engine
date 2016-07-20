@@ -52,6 +52,7 @@ struct CPhysxColliderShapeDesc {
 	Vect3f position;
 	Quatf orientation;
 	std::string material;
+	float mass;
 	float density;
 	std::vector<uint8> *cookedMeshData;
 };
@@ -103,7 +104,9 @@ public:
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
 
-	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
+	std::set<std::string> getTriggerCollisions( const std::string& triggerName ) { auto ret = std::move( m_TriggerCollisions[triggerName] ); return ret; }
+
+	std::set<std::string> getActorCollisions( const std::string& actorName ) { auto ret = std::move( m_ActorCollisions[actorName] ); return ret; }
 
 
 	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
@@ -128,6 +131,7 @@ protected:
 	} m_actors;
 
 	std::map<std::string, std::set<std::string>> m_TriggerCollisions;
+	std::map<std::string, std::set<std::string>> m_ActorCollisions;
 
 
 	physx::PxFoundation					*m_Foundation;

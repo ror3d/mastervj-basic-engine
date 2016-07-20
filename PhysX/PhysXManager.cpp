@@ -247,6 +247,18 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 // PxUserControllerHitReport
 void CPhysXManagerImplementation::onShapeHit(const physx::PxControllerShapeHit &hit)
 {
+	size_t l_indexCtrllr = (size_t)hit.controller->getUserData();
+	size_t l_indexActor = (size_t)hit.actor->userData;
+
+
+	DEBUG_ASSERT( ( l_indexCtrllr & CONTROLLER_FLAG ) );
+	DEBUG_ASSERT( !( l_indexActor & CONTROLLER_FLAG ) );
+
+	std::string l_ctrllrName = m_CharacterControllerIdxs[l_indexCtrllr^CONTROLLER_FLAG];
+	std::string l_actorName = m_actors.name[l_indexActor];
+
+	m_ActorCollisions[l_ctrllrName].emplace( l_actorName );
+	m_ActorCollisions[l_actorName].emplace( l_ctrllrName );
 }
 
 void CPhysXManagerImplementation::onControllerHit(const physx::PxControllersHit &hit)
@@ -589,8 +601,8 @@ void CPhysXManager::createController(float height, float radius, float density, 
 
 void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
-	registerMaterial("StaticObjectMaterial", 1, 0.9, 0.8);
-	registerMaterial("controller_material", 10, 2, 0.5);
+	registerMaterial("StaticObjectMaterial", 0.1, 0.08, 0.1);
+	registerMaterial("controller_material", 10, 8, 0.1);
 	//createPlane("ground", "ground", Vect4f(0, 1, 0,	0));
 }
 
