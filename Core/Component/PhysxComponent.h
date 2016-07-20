@@ -15,6 +15,7 @@ protected:
 	bool m_isStatic;
 	bool m_isKinematic;
 	bool m_isTrigger;
+	float m_mass;
 
 	virtual void Init();
 

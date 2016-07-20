@@ -494,7 +494,14 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	body->userData = reinterpret_cast<void*>(idx);
 	if (actorType == ActorType::Dynamic)
 	{
-		physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidBody*>(body), desc.density);
+		if ( desc.mass > 0 )
+		{
+			physx::PxRigidBodyExt::setMassAndUpdateInertia( *static_cast<physx::PxRigidBody*>( body ), desc.mass );
+		}
+		else
+		{
+			physx::PxRigidBodyExt::updateMassAndInertia( *static_cast<physx::PxRigidBody*>( body ), desc.density );
+		}
 	}
 	m_Scene->addActor(*body);
 
@@ -567,13 +574,14 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.radius = radius;
 	desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
 	desc.slopeLimit = cosf(3.1415f / 6); //30º
-	desc.stepOffset = 0.5f;
+	desc.stepOffset = 0.1f * height;
 	desc.density = density;
-	desc.reportCallback = NULL; //TODO
+	desc.reportCallback = dynamic_cast<CPhysXManagerImplementation*>(this);
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + height*0.5f + radius + desc.contactOffset, pos.z);
 	desc.material = l_material;
 	size_t index = ++m_CharacterControllerLastIdx;
 	physx::PxController* cct = m_ControllerManager->createController(desc);
+	cct->setUserData( (void*)( index | CONTROLLER_FLAG ) );
 	cct->getActor()->userData = (void*) (index | CONTROLLER_FLAG);
 	m_CharacterControllers[name] = cct;
 	m_CharacterControllerIdxs[index] = name;

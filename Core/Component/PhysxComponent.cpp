@@ -1,6 +1,7 @@
 #include "PhysxComponent.h"
 
 #include "Scene/Element.h"
+#include "ComponentManager.h"
 #include <Base/XML/XMLTreeNode.h>
 #include <Graphics/Mesh/StaticMeshLoader.h>
 #include <PhysX/PhysXManager.h>
@@ -18,6 +19,7 @@ CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CElement* Owner)
 	m_isStatic = node.GetBoolProperty("static", false);
 	m_isKinematic = node.GetBoolProperty("kinematic", false);
 	m_coreName = node.GetPszProperty("core_mesh", "");
+	m_mass = node.GetFloatProperty("mass", -1.0);
 	if (m_coreName == "" && (m_colType == "ConvexMesh" || m_colType == "TriangleMesh"))
 	{
 		DEBUG_ASSERT( !"Collider type requires core_mesh!" );
@@ -36,6 +38,7 @@ CPhysxComponent::CPhysxComponent(const CPhysxComponent& base, CElement* Owner)
 	m_isStatic = base.m_isStatic;
 	m_isKinematic = base.m_isKinematic;
 	m_coreName = base.m_coreName;
+	m_mass = base.m_mass;
 }
 
 CPhysxComponent::~CPhysxComponent()
@@ -50,10 +53,11 @@ void CPhysxComponent::Init()
 void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 {
 	CPhysxColliderShapeDesc desc;
-	desc.material = std::string("StaticObjectMaterial");// TODO get from file
+	desc.material = "StaticObjectMaterial";// TODO get from file
 	desc.size = scale;
 	desc.position = position;
 	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
+	desc.mass = m_mass;
 	desc.density = 1;
 
 	CPhysXManager::ActorType actorType;
@@ -133,6 +137,14 @@ void CPhysxComponent::PhysxUpdate()
 
 void CPhysxComponent::FixedUpdate(float ElapsedTime)
 {
+	auto collisions = CEngine::GetSingleton().getPhysXManager()->getActorCollisions( getName() );
+	auto own = GetOwner();
+	auto cm = CEngine::GetSingleton().getComponentManager();
+	for ( auto &const col : collisions )
+	{
+		auto otherOwner = cm->get(col)->GetOwner();
+		own->SendMsg("OnCollision", otherOwner);
+	}
 }
 
 void CPhysxComponent::Move(Vect3f position)
