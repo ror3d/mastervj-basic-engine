@@ -1,4 +1,231 @@
 global ExportSceneEditor
+
+struct script_t (name, props)
+struct script_property_t (name, type, val)
+struct script_property_array_val_t (type, val)
+
+global g_Scripts = #()
+global g_CurrentScript = 0
+
+rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
+(
+	local property_value_types = #("string", "number", "boolean", "array")
+	local array_value_types = #("string", "number", "boolean")
+	
+	button save_btn "Save" pos:[101,256] width:96 height:32
+	button cancel_btn "Cancel" pos:[213,256] width:96 height:32
+	radiobuttons type_radio "Type" pos:[184,24] width:61 height:78 enabled:true labels:#("string", "number", "boolean", "array") columns:1
+	GroupBox grp14 "Scalar Value" pos:[256,24] width:168 height:40
+	edittext scalar_value_txt "" pos:[264,40] width:152 height:16
+	GroupBox grp15 "Array Value" pos:[256,72] width:168 height:176
+	listbox array_values_list "" pos:[264,136] width:152 height:7
+	edittext array_value_value_txt "" pos:[344,88] width:72 height:16
+	dropdownList array_value_type_ddl "" pos:[264,88] width:72 height:21 items:#("string", "number", "boolean")
+	button array_add_btn "Add" pos:[280,112] width:56 height:16
+	button array_remove_btn "Remove" pos:[352,112] width:56 height:16
+	edittext script_name_txt "" pos:[14,8] width:146 height:21
+	button add_prop_btn "Add New" pos:[176,119] width:68 height:22
+	
+	
+	button update_prop_btn "Update" pos:[176,152] width:68 height:22
+	button remove_prop_btn "Remove" pos:[176,184] width:68 height:22
+	listbox properties_list "" pos:[16,96] width:147 height:11
+	edittext property_name_txt "" pos:[16,72] width:144 height:24
+	label lbl51 "Properties" pos:[16,56] width:120 height:16
+	
+	local m_script = undefined
+	
+	fn EnableInputs = (
+		if type_radio.state == 4 then -- array
+		(
+			scalar_value_txt.enabled = false
+			array_value_value_txt.enabled = true
+			array_value_type_ddl.enabled = true
+			array_add_btn.enabled = true
+			array_remove_btn.enabled = true
+			array_values_list.enabled = true
+		)
+		else
+		(
+			scalar_value_txt.enabled = true
+			array_value_value_txt.enabled = false
+			array_value_type_ddl.enabled = false
+			array_add_btn.enabled = false
+			array_remove_btn.enabled = false
+			array_values_list.enabled = false
+		)
+	)
+	
+	fn AddArrayValue type val = (
+		local l = array_values_list.items
+		append l (type + ": " + val)
+		array_values_list.items = l
+		array_values_list.selection = 0
+	)
+	
+	fn InitPropertyValues propIdx = (
+		local prop = m_script.props[propIdx]
+		
+		property_name_txt.text = prop.name
+		
+		array_value_value_txt.text = ""
+		array_value_type_ddl.selection = 1
+		
+		if prop.type == "array" then
+		(
+			scalar_value_txt.text = ""
+			
+			local l = #()
+			for i = 1 to prop.val.count do
+			(
+				append l prop.val[i]
+			)
+			array_values_list.items = l
+			array_values_list.selection = 0
+			type_radio.state = 4
+		)
+		else
+		(
+			scalar_value_txt.text = prop.val
+			array_values_list.items = #()
+			
+			if prop.type == "string" then
+			(
+				type_radio.state = 1
+			)
+			else if prop.type == "number" then
+			(
+				type_radio.state = 2
+			)
+			else if prop.type == "boolean" then
+			(
+				type_radio.state = 3
+			)
+		)
+	)
+	
+	on ScriptPropertiesEditor open do
+	(
+		m_script = g_Scripts[g_CurrentScript]
+		script_name_txt.text = m_script.name
+		local props = #()
+		for i = 1 to m_script.props.count do
+		(
+			append props m_script.props[i].name
+		)
+		properties_list.items = props
+		properties_list.selection = 0
+		
+		EnableInputs()
+	)
+	on save_btn pressed do
+	(
+		m_script.name = script_name_txt.text
+		g_Scripts[g_CurrentScript] = m_script
+		DestroyDialog ScriptPropertiesEditor
+	)
+	on cancel_btn pressed do
+	(
+		DestroyDialog ScriptPropertiesEditor
+	)
+	on type_radio changed state do
+	(
+		EnableInputs()
+	)
+	on array_add_btn pressed do
+	(
+		AddArrayValue array_value_types[array_value_type_ddl.selection] array_value_value_txt.text
+	)
+	on array_remove_btn pressed do
+	(
+		if array_values_list.selection != 0 then
+		(
+			local l = array_values_list.items
+			deleteItem l array_values_list.selection
+			array_values_list.items = l
+			array_values_list.selection = 0
+		)
+	)
+	on add_prop_btn pressed do
+	(
+		local propName = property_name_txt.text
+		property_name_txt.text = ""
+		if propName != "" then
+		(
+			local comboItems = properties_list.items
+			local props = m_script.props
+			
+			local type = property_value_types[type_radio.state]
+			local val = scalar_value_txt.text
+			
+			if type_radio.state == 4 then
+			(
+				val = array_values_list.items
+			)
+			
+			local prop = script_property_t name: propName type: type val: val
+			
+			local itemIdx = findItem comboItems propName
+			if itemIdx == 0 then -- Does not exist: add
+			(
+				append props prop
+				append comboItems propName
+			)
+			else -- Exists: edit
+			(
+				props[itemIdx] = prop
+			)
+			
+			m_script.props = props
+			properties_list.items = comboItems
+		)
+	)
+	on update_prop_btn pressed do
+	(
+		local propIdx = properties_list.selection
+		local propName = property_name_txt.text
+		if propIdx != 0 and propName != "" then
+		(
+			local comboItems = properties_list.items
+			local props = m_script.props
+			
+			local type = property_value_types[type_radio.state]
+			local val = scalar_value_txt.text
+			
+			if type_radio.state == 4 then
+			(
+				val = array_values_list.items
+			)
+			
+			local prop = script_property_t name: propName type: type val: val
+			
+			comboItems[propIdx] = propName
+			props[propIdx] = prop
+			
+			m_script.props = props
+			properties_list.items = comboItems
+		)
+	)
+	on remove_prop_btn pressed do
+	(
+		local propIdx = properties_list.selection
+		if propIdx != 0 then
+		(
+			local comboItems = properties_list.items
+			local props = m_script.props
+			deleteItem comboItems propIdx
+			deleteItem props propIdx
+			properties_list.items = comboItems
+			m_script.props = props
+		)
+	)
+	on properties_list selected sel do
+	(
+		InitPropertyValues sel
+		EnableInputs()
+	)
+)
+
 rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 (
 	label object_name_lbl "Label" pos:[80,8] width:272 height:16
@@ -64,11 +291,12 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	GroupBox grp49 "Audio Speaker" pos:[440,424] width:200 height:96
 	checkbox export_speaker_ckb "Export Speaker" pos:[448,440] width:152 height:16
 	spinner speaker_volume_txt "Volume" pos:[489,464] width:95 height:16 enabled:false range:[0,100,100] type:#integer
-	button script_add_btn "Add Script" pos:[32,456] width:184 height:21
+	button script_add_btn "Add Script" pos:[96,456] width:120 height:21
 	
 	
 	
 	local m_ObjSelected = undefined
+	
 	
 	function UpdateEnabledProps = (
 		local expGO = export_cbx.checked
@@ -415,6 +643,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		LoadCkbProp export_cinem_ckb "ExportTAnimation"
 		LoadRadioProp cinematic_type_radio CinematicsLoopTypes "TAnimationType"
 		
+		g_Scripts = #()
+		
 		UpdateEnabledProps()
 	)
 	
@@ -507,6 +737,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	
 	
 	button reset_btn "Reset" pos:[576,680] width:80 height:40
+	button remove_script_btn "Remove" pos:[32,456] width:56 height:21
 	on ExportSceneEditor open do
 	(
 		callbacks.addScript #selectionSetChanged "ExportSceneEditor.selectedObjectChanged()" id:#UABSceneProperties
@@ -552,10 +783,6 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		UpdateEnabledProps()
 	)
 	on scripts_combo changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on scripts_edit_btn changed state do
 	(
 		UpdateEnabledProps()
 	)
@@ -624,10 +851,51 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	(
 		UpdateEnabledProps()
 	)
-	on script_add_btn changed state do
+	
+	on script_add_btn pressed do
 	(
-		UpdateEnabledProps()
+		local txt = scripts_combo.text
+		print txt
+		if txt != "" then
+		(
+			local l = scripts_combo.items
+			local i = findItem l scripts_combo.text
+			if i == 0 then
+			(
+				append l txt
+				scripts_combo.items = l
+				local s = script_t name: txt props: #()--(script_property_t name: scripts_combo.text type: "string" val: "")
+				append g_Scripts s
+				print g_Scripts
+				i = scripts_combo.items.count
+			)
+			scripts_combo.text = ""
+			scripts_combo.selection = i
+		)
 	)
+	on remove_script_btn pressed do
+	(
+		if scripts_combo.selection != 0 then
+		(
+			local l = scripts_combo.items
+			deleteItem l scripts_combo.selection
+			deleteItem g_Scripts scripts_combo.selection
+			scripts_combo.items = l
+			scripts_combo.selection = 0
+		)
+	)
+	on scripts_edit_btn pressed  do
+	(
+		if scripts_combo.selection != 0 then
+		(
+			g_CurrentScript = scripts_combo.selection
+			CreateDialog ScriptPropertiesEditor modal: true parent: ExportSceneEditor.hwnd
+			local l = scripts_combo.items
+			l[g_CurrentScript] = g_Scripts[g_CurrentScript].name
+			scripts_combo.items = l
+		)
+	)
+	
 	on reset_btn pressed do
 	(	
 		ResetProps()
@@ -635,4 +903,4 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	)
 )
 
---CreateDialog ExportSceneEditor
+CreateDialog ExportSceneEditor
