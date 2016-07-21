@@ -73,6 +73,11 @@ void CScriptedComponent::Init()
 		{
 			val = "\"" + val + "\"";
 		}
+		else if ( prop.type == "array" )
+		{
+			val = val.substr( 1, val.size() - 2 );
+			val = "{" + val + "}";
+		}
 		ss << m_scriptClass << "." << prop.name << " = " << val << ";";
 	}
 	ss << "if (_currentComponent.OnCreate ~= nil) then _currentComponent:OnCreate(); end\n";
