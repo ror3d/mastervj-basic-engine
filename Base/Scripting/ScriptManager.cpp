@@ -222,7 +222,14 @@ void CScriptManager::RegisterLUAFunctions()
 		.SetClass<Vect3f, float, float, float>(
 			"x", &Vect3f::x,
 			"y", &Vect3f::y,
-			"z", &Vect3f::z);
+			"z", &Vect3f::z,
+			"Normalized", static_cast<Vect3f (Vect3f::*)() const>(&Vect3f::GetNormalized),
+			"Length", &Vect3f::Length,
+			"Dot", static_cast<float (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator*),
+			"Cross", static_cast<Vect3f (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator^),
+			"Add", static_cast<Vect3f (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator+),
+			"Mul", static_cast<Vect3f (Vect3f::*)(float) const>(&Vect3f::operator*)
+			);
 
 	(*m_state)["C3DElement"]
 		.SetClass<C3DElement>(
@@ -260,6 +267,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCamera", &CElement::GetCamera,
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
+			"GetCollider", &CElement::GetPhysxComponent,
 			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
 			"SendMessageFloat", static_cast<void(CElement::*)(const std::string&, float)>(&CElement::SendMsg),
 			"GetTrigger", &CElement::GetTriggerComponent,
@@ -282,6 +290,11 @@ void CScriptManager::RegisterLUAFunctions()
 			"Resize", &CCharacterControllerComponent::Resize,
 			"GetHeight", &CCharacterControllerComponent::GetHeight,
 			"GetRadius", &CCharacterControllerComponent::GetRadius);
+
+	(*m_state)["CColliderComponent"]
+		.SetClass<CPhysxComponent, const CPhysxComponent&, CElement*>(
+			"Move", &CPhysxComponent::Move
+			);
 
 	(*m_state)["CFPSCameraComponent"]
 		.SetClass<CFPSCameraComponent, const CFPSCameraComponent&, CElement*>(

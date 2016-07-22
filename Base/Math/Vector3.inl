@@ -658,6 +658,12 @@ inline Vector3<T>& Vector3<T>::Normalize (const T tk)
 /// Devuelve el vector normalizado
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
+inline Vector3<T> Vector3<T>::GetNormalized() const
+{
+	return GetNormalized( One<T>() );
+}
+
+template<typename T>
 inline Vector3<T> Vector3<T>::GetNormalized (const T tk) const
 {
 	#ifdef CHECK_MATH_SINGULARITY

@@ -116,7 +116,8 @@ public:
 
   // Funciones de la longitud
   inline Vector3<T>& Normalize     (const T tk = One<T>());
-  inline Vector3<T>  GetNormalized (const T tk = One<T>()) const;
+  inline Vector3<T>  GetNormalized () const;
+  inline Vector3<T>  GetNormalized (const T tk) const;
   inline T           Length        () const;
   inline T           SquaredLength () const;
   inline T           Distance      (const Vector3<T>& rhs) const;
