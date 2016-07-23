@@ -601,8 +601,8 @@ void CPhysXManager::createController(float height, float radius, float density, 
 
 void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
-	registerMaterial("StaticObjectMaterial", 0.1, 0.08, 0.1);
-	registerMaterial("controller_material", 10, 8, 0.1);
+	registerMaterial("default_material", 0.1, 0.8, 0.8);
+	registerMaterial("controller_material", 10, 1, 1);
 	//createPlane("ground", "ground", Vect4f(0, 1, 0,	0));
 }
 

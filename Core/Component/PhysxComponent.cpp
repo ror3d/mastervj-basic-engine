@@ -53,7 +53,7 @@ void CPhysxComponent::Init()
 void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 {
 	CPhysxColliderShapeDesc desc;
-	desc.material = "StaticObjectMaterial";// TODO get from file
+	desc.material = "default_material";// TODO get from file
 	desc.size = scale;
 	desc.position = position;
 	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
