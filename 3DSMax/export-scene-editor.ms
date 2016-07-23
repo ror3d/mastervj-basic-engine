@@ -35,6 +35,8 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 	
 	local m_script = undefined
 	
+	local m_arrayVals = #()
+	
 	fn EnableInputs = (
 		if type_radio.state == 4 then -- array
 		(
@@ -58,7 +60,9 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 	
 	fn AddArrayValue type val = (
 		local l = array_values_list.items
+		local av = script_property_array_val_t type: type val: val
 		append l (type + ": " + val)
+		append m_arrayVals av
 		array_values_list.items = l
 		array_values_list.selection = 0
 	)
@@ -76,9 +80,11 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 			scalar_value_txt.text = ""
 			
 			local l = #()
+			m_arrayVals = prop.val
 			for i = 1 to prop.val.count do
 			(
-				append l prop.val[i]
+				local av = prop.val[i].type + ": " + prop.val[i].val
+				append l av
 			)
 			array_values_list.items = l
 			array_values_list.selection = 0
@@ -88,6 +94,7 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 		(
 			scalar_value_txt.text = prop.val
 			array_values_list.items = #()
+			m_arrayVals = #()
 			
 			if prop.type == "string" then
 			(
@@ -141,7 +148,9 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 		if array_values_list.selection != 0 then
 		(
 			local l = array_values_list.items
-			deleteItem l array_values_list.selection
+			local idx = array_values_list.selection
+			deleteItem l idx
+			deleteItem m_arrayVals idx
 			array_values_list.items = l
 			array_values_list.selection = 0
 		)
@@ -160,7 +169,7 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 			
 			if type_radio.state == 4 then
 			(
-				val = array_values_list.items
+				val = m_arrayVals --array_values_list.items
 			)
 			
 			local prop = script_property_t name: propName type: type val: val
@@ -178,6 +187,8 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 			
 			m_script.props = props
 			properties_list.items = comboItems
+			
+			-- TODO: Empty inputs
 		)
 	)
 	on update_prop_btn pressed do
@@ -194,7 +205,7 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 			
 			if type_radio.state == 4 then
 			(
-				val = array_values_list.items
+				val = m_arrayVals --array_values_list.items
 			)
 			
 			local prop = script_property_t name: propName type: type val: val
@@ -549,6 +560,29 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		)
 	)
 	
+	fn SaveScripts obj scriptList propName =
+	(
+		setUserProp obj propName scriptList
+	)
+	
+	fn LoadScripts combo propName =
+	(
+		local val = getUserProp m_ObjSelected propName
+		local items = #()
+		g_Scripts = #()
+		if val != undefined then
+		(
+			local scripts = execute val
+			g_Scripts = scripts
+			print g_Scripts
+			for i = 1 to scripts.count do
+			(
+				append items scripts[i].name
+			)
+		)
+		combo.items = items
+	)
+	
 	
 	fn LoadObjectProps =
 	(
@@ -601,25 +635,13 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		LoadCkbProp trigger_static_ckb "TriggerCStatic"
 		LoadVec3DProp trigger_scale_x_txt trigger_scale_y_txt trigger_scale_z_txt "TriggerCScale"
 		LoadVec3DProp trigger_offset_x_txt trigger_offset_y_txt trigger_offset_z_txt "TriggerCOffset"
-		--LoadTxtProp trigger_scale_x_txt  "TriggerCScaleX"
-		--LoadTxtProp trigger_scale_y_txt  "TriggerCScaleY"
-		--LoadTxtProp trigger_scale_z_txt  "TriggerCScaleZ"
-		--LoadTxtProp trigger_offset_x_txt "TriggerCOffsetX"
-		--LoadTxtProp trigger_offset_y_txt "TriggerCOffsetY"
-		--LoadTxtProp trigger_offset_z_txt "TriggerCOffsetZ"
 		
 		
 		LoadCkbProp export_camera_ckb "ExportCameraC"
 		LoadVec3DProp cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
-		--LoadTxtProp cam_offset_x_txt "CameraCOffsetX"
-		--LoadTxtProp cam_offset_y_txt "CameraCOffsetY"
-		--LoadTxtProp cam_offset_z_txt "CameraCOffsetZ"
 		
 		LoadCkbProp export_cc_ckb "ExportCharContrC"
 		LoadVec3DProp cc_offset_x_txt cc_offset_y_txt cc_offset_z_txt "CharContrCOffset"
-		--LoadTxtProp cc_offset_x_txt "CharContrCOffsetX"
-		--LoadTxtProp cc_offset_y_txt "CharContrCOffsetY"
-		--LoadTxtProp cc_offset_z_txt "CharContrCOffsetZ"
 		LoadTxtProp cc_radius_txt "CharContrCRadius"
 		LoadTxtProp cc_height_txt "CharContrCHeight"
 		
@@ -644,6 +666,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		LoadRadioProp cinematic_type_radio CinematicsLoopTypes "TAnimationType"
 		
 		g_Scripts = #()
+		
+		LoadScripts scripts_combo "ExportScripts"
 		
 		UpdateEnabledProps()
 	)
@@ -720,6 +744,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		) else (
 			deleteUserProp Obj "export_mesh_instance"
 		)
+		
+		SaveScripts Obj g_Scripts "ExportScripts"
 	)
 	
 	fn selectedObjectChanged =
@@ -878,8 +904,9 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		if scripts_combo.selection != 0 then
 		(
 			local l = scripts_combo.items
-			deleteItem l scripts_combo.selection
-			deleteItem g_Scripts scripts_combo.selection
+			local id = scripts_combo.selection
+			deleteItem l id
+			deleteItem g_Scripts id
 			scripts_combo.items = l
 			scripts_combo.selection = 0
 		)

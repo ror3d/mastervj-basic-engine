@@ -122,6 +122,37 @@ fn createSceneFile sceneName gameObjects = (
 			format "\t\t<particle_emitter class=\"%\" />\n" peClass to: file
 		)
 		
+		exportComp = getUserProp gObj "ExportScripts"
+		if exportComp != undefined then (
+			local scripts = execute exportComp
+			for i = 1 to scripts.count do
+			(
+				format "\t\t<scripted_component class=\"%\">\n" scripts[i].name to: file
+				
+				local props = scripts[i].props
+				for j = 1 to props.count do
+				(
+					if props[j].type == "array" then
+					(
+						format "\t\t\t<property name=\"%\" type=\"array\">\n" props[j].name to: file
+						local vals = props[j].val
+						for k = 1 to vals.count do
+						(
+							format "\t\t\t\t<entry type=\"%\" value=\"%\" />\n" vals[k].type vals[k].val to: file
+						)
+						format "\t\t\t</property>\n" to: file
+					)
+					else
+					(
+						format "\t\t\t<property name=\"%\" type=\"%\" value=\"%\" />\n" props[j].name props[j].type props[j].val to: file
+					)
+				)
+				
+				format "\t\t</scripted_component>\n" to: file
+			)
+		)
+
+		
 		format "\t</object>\n\n" to: file
 	)
 	format "</scene>\n" to:file
