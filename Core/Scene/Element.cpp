@@ -42,6 +42,7 @@ CElement::CElement(const CXMLTreeNode& node)
 {
 	m_Position = node.GetVect3fProperty( "pos" , Vect3f(0, 0, 0), false);
 	m_Scale = node.GetVect3fProperty( "scale" , Vect3f(1, 1, 1), false);
+	m_Enabled = node.GetBoolProperty("enabled", false, true);
 	if (node.GetPszProperty("rotationq", nullptr, false) != nullptr)
 	{
 		Vect4f f4 = node.GetVect4fProperty("rotationq", Vect4f(0, 0, 0, 1), true);
