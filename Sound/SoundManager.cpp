@@ -15,7 +15,7 @@
 #include <AkSoundEngineDLL.h>
 
 #include <Graphics/Camera/Camera.h>
-#include <Graphics/Renderer/3DElement.h>
+//#include <Graphics/Renderer/3DElement.h>
 #include "Core/Engine/Engine.h"
 
 #include <Base/XML/XMLTreeNode.h>
@@ -299,6 +299,24 @@ bool CSoundManager::LoadSoundBanksXML(std::string filename)
 	
 }
 
+void CSoundManager::LoadSpeakers(std::string l_Name, Vect3f l_Position, Vect3f l_Orientation)
+{
+	AkSoundPosition l_SoundPosition = {};
+
+	l_SoundPosition.Position.X = l_Position.x;
+	l_SoundPosition.Position.Y = l_Position.y;
+	l_SoundPosition.Position.Z = l_Position.z;
+
+	l_SoundPosition.Orientation.X = l_Orientation.x;
+	l_SoundPosition.Orientation.Y = l_Orientation.y;
+	l_SoundPosition.Orientation.Z = l_Orientation.z;
+
+	AkGameObjectID id = GenerateObjectID();
+	m_NamedSpeakers[l_Name] = id;
+	AK::SoundEngine::RegisterGameObj(id);
+	AK::SoundEngine::SetPosition(id, l_SoundPosition);
+}
+
 bool CSoundManager::LoadSpeakersXML(std::string filename)
 {
 	if (!m_InitOk) return false;
@@ -315,20 +333,7 @@ bool CSoundManager::LoadSpeakersXML(std::string filename)
 			Vect3f l_Position = l_Speakers(i).GetVect3fProperty("position", Vect3f(0.0f, 0.0f, 0.0f));
 			Vect3f l_Orientation = l_Speakers(i).GetVect3fProperty("orientation", Vect3f(0.0f, 0.0f, 0.0f));
 
-			AkSoundPosition l_SoundPosition = {};
-
-			l_SoundPosition.Position.X = l_Position.x;
-			l_SoundPosition.Position.Y = l_Position.y;
-			l_SoundPosition.Position.Z = l_Position.z;
-
-			l_SoundPosition.Orientation.X = l_Orientation.x;
-			l_SoundPosition.Orientation.Y = l_Orientation.y;
-			l_SoundPosition.Orientation.Z = l_Orientation.z;
-
-			AkGameObjectID id = GenerateObjectID();
-			m_NamedSpeakers[l_Name] = id;
-			AK::SoundEngine::RegisterGameObj(id);
-			AK::SoundEngine::SetPosition(id, l_SoundPosition);
+			LoadSpeakers(l_Name, l_Position, l_Orientation);
 			
 
 		}
@@ -632,6 +637,14 @@ void CSoundManager::Update(const CCamera *camera)
 
 	//Actualiza WWISE
 	AK::SOUNDENGINE_DLL::Tick();
+
+}
+
+void CSoundManager::InitAll(const std::string &soundbanks_filename, const std::string &speakers_filename)
+{
+	bool init = Init();
+	bool initbanks = initBanks();
+	bool load = Load(soundbanks_filename, speakers_filename);
 
 }
 

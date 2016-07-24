@@ -16,8 +16,8 @@ protected:
 	virtual void Init();
 
 public:
-	CFPSCameraComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
-	CFPSCameraComponent(const std::string& name, CElement* Owner);
+	CFPSCameraComponent(CXMLTreeNode& node, CElement* Owner);
+	CFPSCameraComponent(const CFPSCameraComponent& base, CElement* Owner);
 	virtual ~CFPSCameraComponent();
 
 	virtual void Update( float elapsedTime );
@@ -29,6 +29,11 @@ public:
 	void SetFollowCharacter(bool follow, float overrideRot, float camOffset, float camDisplacement);
 
 	float GetYaw();
+
+	static const std::string COMPONENT_TYPE;
+	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
+
+	virtual CComponent* Clone(CElement* Owner) const { return new CFPSCameraComponent( *this, Owner ); }
 };
 
 #endif

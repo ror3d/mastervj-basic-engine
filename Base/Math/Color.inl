@@ -1,4 +1,5 @@
 #include "MathUtils.h"
+#include <Windows.h>
 
 inline CColor& CColor::Clamp()
 {

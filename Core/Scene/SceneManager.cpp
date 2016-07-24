@@ -46,8 +46,7 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 		if ( !( ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
 		{
 			std::string fname = scenesDirectory + ffd.cFileName;
-			CScene * scene = new CScene();
-			scene->Load(fname, this);
+			CScene * scene = new CScene(fname, this);
 			add(scene->getName(), scene);
 		}
 	} while ( FindNextFile( hFind, &ffd ) != 0 );
@@ -55,12 +54,14 @@ void CSceneManager::Initialize( std::string scenesDirectory )
 	FindClose( hFind );
 }
 
-void CSceneManager::EnableScene( const std::string& scene )
+void CSceneManager::LoadScene( const std::string& scene )
 {
+	m_ScenesToLoad.push_back(scene);
 }
 
-void CSceneManager::DisableScene( const std::string& scene )
+void CSceneManager::UnloadScene( const std::string& scene )
 {
+	m_ScenesToUnload.push_back(scene);
 }
 
 void CSceneManager::AddObject( CElement * obj )
@@ -85,6 +86,32 @@ void CSceneManager::DestroyObject( const std::string & id )
 	}
 }
 
+void CSceneManager::AddObjectToScene( const std::string& sceneName, CElement* obj )
+{
+	CScene* scene = get( sceneName );
+
+	DEBUG_ASSERT( scene != nullptr );
+
+	if ( scene != nullptr )
+	{
+		AddObject( obj );
+		scene->AddObject( obj->getName() );
+	}
+}
+
+void CSceneManager::DestroyObjectFromScene( const std::string & sceneName, const std::string & objName )
+{
+	CScene* scene = get( sceneName );
+
+	DEBUG_ASSERT( scene != nullptr );
+
+	if ( scene != nullptr )
+	{
+		scene->RemoveObject( objName );
+		DestroyObject( objName );
+	}
+}
+
 CElement * CSceneManager::GetObjectById( const std::string & id )
 {
 	auto it = m_Objects.find( id );
@@ -95,5 +122,30 @@ CElement * CSceneManager::GetObjectById( const std::string & id )
 	}
 
 	return nullptr;
+}
+
+void CSceneManager::Update()
+{
+	for (auto &const scene : m_ScenesToLoad)
+	{
+		auto sc = get(scene);
+		if (sc)
+		{
+			sc->Load();
+		}
+	}
+
+	m_ScenesToLoad.clear();
+
+	for (auto &const scene : m_ScenesToUnload)
+	{
+		auto sc = get(scene);
+		if (sc)
+		{
+			sc->Unload();
+		}
+	}
+
+	m_ScenesToLoad.clear();
 }
 

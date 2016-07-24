@@ -302,7 +302,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 					radio.state = i
 					exit
 				)
-			)			
+			)
 		)
 		else
 		(
@@ -635,4 +635,4 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	)
 )
 
-CreateDialog ExportSceneEditor
+--CreateDialog ExportSceneEditor

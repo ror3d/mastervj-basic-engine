@@ -10,17 +10,21 @@
 #include <sstream>
 #include <fstream>
 
+#include <Base/Scripting/LuaErrorCapture.h>
+
+const std::string CScriptedComponent::COMPONENT_TYPE = "Script";
+
 unsigned CScriptedComponent::s_nextComponentStateId = 0;
 
-CScriptedComponent::CScriptedComponent(const std::string& name,
+CScriptedComponent::CScriptedComponent(const CScriptedComponent& base,
 									   CElement* Owner)
-	: CComponent(name, Owner)
+	: CComponent(base, Owner)
 	, m_scriptMgr(CEngine::GetSingleton().getScriptManager())
 	, m_componentStateId(s_nextComponentStateId++)
 {
-	m_scriptClass = name;
-	std::string n = Owner->getName() + "_" + name;
-	setName(n);
+	m_scriptClass = base.m_scriptClass;
+	std::string n = Owner->getName() + "_" + m_scriptClass;
+	SetNameFromParentName(n);
 }
 
 CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
@@ -33,7 +37,7 @@ CScriptedComponent::CScriptedComponent(CXMLTreeNode& node,
 	DEBUG_ASSERT(name != "");
 	m_scriptClass = name;
 	name = Owner->getName() + "_" + name;
-	setName(name);
+	SetNameFromParentName(name);
 }
 
 CScriptedComponent::~CScriptedComponent()
@@ -45,6 +49,8 @@ void CScriptedComponent::Init()
 
 	std::string script = m_scriptMgr->GetScript(m_scriptClass);
 	DEBUG_ASSERT(script != "");
+
+	m_scriptMgr->AddScriptReferenceComponent( m_scriptClass, getName() );
 
 	sel::State* state = m_scriptMgr->getLuaState();
 
@@ -66,6 +72,11 @@ void CScriptedComponent::Init()
 		if (prop.type == "string")
 		{
 			val = "\"" + val + "\"";
+		}
+		else if ( prop.type == "array" )
+		{
+			val = val.substr( 1, val.size() - 2 );
+			val = "{" + val + "}";
 		}
 		ss << m_scriptClass << "." << prop.name << " = " << val << ";";
 	}
@@ -91,6 +102,13 @@ void CScriptedComponent::Destroy()
 		<< "_currentComponent = nil;"
 		<< "_componentStates[" << m_componentStateId << "] = nil;";
 	m_scriptMgr->RunCode(ss.str());
+
+	m_scriptMgr->RemoveScriptReferenceComponent( m_scriptClass, getName() );
+}
+
+void CScriptedComponent::Reload()
+{
+	OutputDebugStringA( ( "Reloading Component " + getName() +"\n" ).c_str() );
 }
 
 
@@ -109,7 +127,7 @@ void CScriptedComponent::Update(float ElapsedTime)
 		return;
 	}
 
- 	SetComponent();
+	SetComponent();
 
 	std::stringstream ss;
 	ss << "if (_currentComponent.OnUpdate ~= nil) then _currentComponent:OnUpdate(" << ElapsedTime << "); end";
@@ -158,7 +176,7 @@ void CScriptedComponent::RenderDebug(CContextManager&  _context)
 	m_scriptMgr->RunCode(ss.str());
 }
 
-void CScriptedComponent::SendMsg(const std::string msg)
+void CScriptedComponent::SendMsg(const std::string& msg)
 {
 	SetComponent();
 
@@ -167,8 +185,9 @@ void CScriptedComponent::SendMsg(const std::string msg)
 	m_scriptMgr->RunCode(ss.str());
 }
 
-void CScriptedComponent::SendMsg(const std::string msg, CElement* arg1)
+void CScriptedComponent::SendMsg(const std::string& msg, const std::string& arg1)
 {
+	LuaErrorCapturedStdout errorCapture;
 	SetComponent();
 
 	sel::State &state = *m_scriptMgr->getLuaState();
@@ -176,6 +195,62 @@ void CScriptedComponent::SendMsg(const std::string msg, CElement* arg1)
 	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
 	if (state["_r"])
 	{
-		state["_currentComponent"][msg.c_str()](arg1);
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(\"" + arg1 + "\");").c_str() );
+	}
+}
+
+void CScriptedComponent::SendMsg(const std::string& msg, float arg1)
+{
+	LuaErrorCapturedStdout errorCapture;
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(" + std::to_string(arg1) + ");").c_str() );
+	}
+}
+
+void CScriptedComponent::SendMsg(const std::string& msg, int arg1)
+{
+	LuaErrorCapturedStdout errorCapture;
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(" + std::to_string(arg1) + ");").c_str() );
+	}
+}
+
+class CElemHolder
+{
+public:
+	CElemHolder( CElement* elem ) : Element( elem ) {}
+	CElement* Element;
+	CElement* GetElement() { return Element; }
+};
+
+void CScriptedComponent::SendMsg(const std::string& msg, CElement* arg1)
+{
+	LuaErrorCapturedStdout errorCapture;
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		CElemHolder elemHolder( arg1 );
+		state["_elemHolder"].SetObj( elemHolder, "GetElement", &CElemHolder::GetElement );
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(_elemHolder:GetElement());").c_str() );
 	}
 }

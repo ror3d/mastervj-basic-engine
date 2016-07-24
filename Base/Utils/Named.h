@@ -17,6 +17,6 @@ public:
 	virtual ~CNamed();
 
 	virtual void setName(const std::string &name);
-	virtual const std::string &getName() const;
+	virtual std::string getName() const;
 };
 

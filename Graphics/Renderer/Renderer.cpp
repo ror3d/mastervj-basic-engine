@@ -12,6 +12,7 @@ CRenderer::~CRenderer()
 
 void CRenderer::AddRenderableToRender(const std::string& layer, IRenderable* mesh, const Mat44f& transf)
 {
+	DEBUG_ASSERT( mesh != nullptr );
 	m_Layers[layer][mesh].push_back(transf);
 }
 

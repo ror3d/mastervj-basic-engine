@@ -1,11 +1,11 @@
 //-----------------------------------------------------------------------
 // Vector3 inline
 /// Definiciones de funciones inline de la clase 'Vector3'
-/// Este fichero es realmente parte de la cabecera 'Vector3.h' 
+/// Este fichero es realmente parte de la cabecera 'Vector3.h'
 //-----------------------------------------------------------------------
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Constructor versión 1
-/// Construcción sin inicialización de parámetros  
+/// Construcción sin inicialización de parámetros
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T>::Vector3 ()
@@ -54,7 +54,7 @@ inline Vector3<T>::Vector3 (const T escalar)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T> Vector3<T>::operator + (const Vector3<T>& otro) const
-{   
+{
   return (Vector3<T>(x + otro.x,
                      y + otro.y,
                      z + otro.z));
@@ -65,7 +65,7 @@ inline Vector3<T> Vector3<T>::operator + (const Vector3<T>& otro) const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T> Vector3<T>::operator - (const Vector3<T>& otro) const
-{   
+{
   return (Vector3<T>(x - otro.x,
                      y - otro.y,
                      z - otro.z));
@@ -83,7 +83,7 @@ inline Vector3<T> Vector3<T>::operator * (const T escalar) const
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Función externa operador aritmético: producto escalar x vector 
+/// Función externa operador aritmético: producto escalar x vector
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T> operator * (const T escalar, const Vector3<T>& otro)
@@ -98,7 +98,7 @@ inline Vector3<T> operator * (const T escalar, const Vector3<T>& otro)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T> Vector3<T>::operator / (const T escalar) const
-{ 
+{
 #ifdef CHECK_MATH_SINGULARITY
   //--------------------------------------------------<<<
   // Con chequeo de división por cero
@@ -124,7 +124,7 @@ inline Vector3<T> Vector3<T>::operator / (const T escalar) const
                      y * inv_escalar,
                      z * inv_escalar));
   //--------------------------------------------------<<<
-#endif 
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,7 +132,7 @@ inline Vector3<T> Vector3<T>::operator / (const T escalar) const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T> operator / (const T escalar, const Vector3<T>& otro)
-{ 
+{
 #ifdef CHECK_MATH_SINGULARITY
   //--------------------------------------------------<<<
   // Con chequeo de división por cero
@@ -162,7 +162,7 @@ inline Vector3<T> operator / (const T escalar, const Vector3<T>& otro)
   // Sin chequeo
   return (Vector3<T>(escalar / otro.x,
                      escalar / otro.y,
-                     escalar / otro.z)); 
+                     escalar / otro.z));
   //-------------------------------------------------->>>
 #endif
 }
@@ -218,7 +218,7 @@ inline Vector3<T> operator - (const T escalar, const Vector3<T>& vector)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T> Vector3<T>::operator - () const
-{   
+{
   return (Vector3<T>(-x, -y, -z));
 }
 
@@ -245,7 +245,7 @@ inline const Vector3<T>& Vector3<T>::operator + () const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator += (const Vector3<T>& otro)
-{ 
+{
   x += otro.x;
   y += otro.y;
   z += otro.z;
@@ -271,7 +271,7 @@ inline Vector3<T>& Vector3<T>::operator -= (const Vector3<T>& otro)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator *= (const T escalar)
-{ 
+{
   x *= escalar;
   y *= escalar;
   z *= escalar;
@@ -284,7 +284,7 @@ inline Vector3<T>& Vector3<T>::operator *= (const T escalar)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator /= (const T escalar)
-{ 
+{
 #ifdef CHECK_MATH_SINGULARITY
   //------------------------------------------<<<
   // Con chequeo de división por cero
@@ -341,7 +341,7 @@ inline Vector3<T>& Vector3<T>::operator -= (const T escalar)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator () (const T tx, const T ty, const T tz)
-{   
+{
   x = tx;
   y = ty;
   z = tz;
@@ -380,9 +380,9 @@ void Vector3<T>::SetFromPolar(const T longitude, const T latitude, const T lengt
   T cos_lat;
   mathUtils::SinCos(latitude, z, cos_lat);
   mathUtils::SinCos(longitude, y, x);
-  
+
   T k_length = length * cos_lat;
- 
+
   x *= k_length;
   y *= k_length;
   z *= length;
@@ -419,12 +419,17 @@ inline Vector3<T> Vector3<T>::operator ^ (const Vector3<T>& otro) const
                     (x * otro.y) - (y * otro.x));
 }
 
+template<typename T>
+inline Vector3<T> Vector3<T>::MulElems( const Vector3<T>& otro ) const
+{
+	return Vector3<T>( x*otro.x, y*otro.y, z*otro.z );
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Operador de igualdad absoluto
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline bool Vector3<T>::operator == (const Vector3<T>& otro) const
-{   
+{
   return (x == otro.x &&
           y == otro.y &&
           z == otro.z);
@@ -435,7 +440,7 @@ inline bool Vector3<T>::operator == (const Vector3<T>& otro) const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline bool Vector3<T>::operator != (const Vector3<T>& otro) const
-{   
+{
     return (x != otro.x ||
             y != otro.y ||
             z != otro.z );
@@ -597,7 +602,7 @@ inline T Vector3<T>::SquaredLength () const
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// 
+///
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline T Vector3<T>::Distance(const Vector3<T>& rhs) const
@@ -607,7 +612,7 @@ inline T Vector3<T>::Distance(const Vector3<T>& rhs) const
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// 
+///
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline T Vector3<T>::SqDistance(const Vector3<T>& rhs) const
@@ -644,7 +649,7 @@ inline Vector3<T>& Vector3<T>::Normalize (const T tk)
 		y *= aux;
 		z *= aux;
 		//------------------------------------------>>>
-	#endif    
+	#endif
 
   return (*this);
 }
@@ -766,7 +771,7 @@ inline Vector3<T> Vector3<T>::GetRotatedZ (const T angle) const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename T>
 inline T Vector3<T>::GetAngleX (void) const
-{ 
+{
   return GetProjYZ().GetAngle();
 }
 

@@ -24,6 +24,7 @@ public:
 	template < typename = typename std::enable_if< std::is_base_of<CNamed, T>::value >::type >
 		void add(T* instance);
 	virtual void remove(const std::string& name);
+	virtual void clear();
 	virtual void destroy();
 
 	iterator begin() { return m_resources.begin(); }
@@ -68,6 +69,12 @@ template<class T>
 TMapContainer<T>::~TMapContainer()
 {
 	DEBUG_ASSERT( m_resources.size() == 0 || "Resources not destroyed!" );
+}
+
+template<class T>
+void TMapContainer<T>::clear()
+{
+	m_resources.clear();
 }
 
 template<class T>

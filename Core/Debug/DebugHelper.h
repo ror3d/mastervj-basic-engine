@@ -25,6 +25,8 @@ public:
 		// other data types
 		POSITION_ORIENTATION,
 
+		ROTATION,
+
 		NONE,
 		LABEL,
 		CB

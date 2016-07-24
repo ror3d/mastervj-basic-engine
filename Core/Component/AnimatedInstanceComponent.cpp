@@ -11,17 +11,28 @@
 
 #include <Base/XML/XMLTreeNode.h>
 
-CAnimatedInstanceComponent::CAnimatedInstanceComponent(const std::string& name, CElement* Owner)
-	: CComponent(name, Owner)
+
+const std::string CAnimatedInstanceComponent::COMPONENT_TYPE = "AnimatedInstance";
+
+CAnimatedInstanceComponent::CAnimatedInstanceComponent(const CAnimatedInstanceComponent& base, CElement* Owner)
+	: CComponent(base, Owner)
 {
+	SetNameFromParentName( Owner->getName() );
+
+	m_animatedMeshCore = base.m_animatedMeshCore;
+	CAnimatedMesh* animMesh = CEngine::GetSingleton().getAnimatedMeshManager()->get(base.m_animatedMeshCore);
+	m_AnimatedMeshInstance = new CAnimatedMeshInstance(animMesh);
+	m_layers = base.m_layers;
 }
 
-CAnimatedInstanceComponent::CAnimatedInstanceComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner)
+CAnimatedInstanceComponent::CAnimatedInstanceComponent(CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
-	setName(name);
+	SetNameFromParentName( Owner->getName() );
+
 	std::string core = node.GetPszProperty("core", "", true);
 	DEBUG_ASSERT(core != "");
+	m_animatedMeshCore = core;
 	CAnimatedMesh* animMesh = CEngine::GetSingleton().getAnimatedMeshManager()->get(core);
 	m_AnimatedMeshInstance = new CAnimatedMeshInstance(animMesh);
 
@@ -57,6 +68,11 @@ void CAnimatedInstanceComponent::Update(float ElapsedTime)
 
 void CAnimatedInstanceComponent::Render(CContextManager&  _context)
 {
+	if (!GetOwner()->GetEnabled())
+	{
+		return;
+	}
+
 	//CEffectManager::m_SceneParameters.m_World = GetOwner()->GetTransform();
 	//m_AnimatedMeshInstance->Render( &_context );
 	for (auto &const layer : m_layers)

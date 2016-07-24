@@ -18,6 +18,8 @@
 
 #include <Windows.h>
 
+#include <Windows.h>
+
 CElement::CElement()
 	: m_Scale(1.0f, 1.0f, 1.0f)
 	, m_Enabled(true)
@@ -81,39 +83,39 @@ CElement::CElement(const CXMLTreeNode& node)
 		}
 		else if (type == "character_controller")
 		{
-			component = new CCharacterControllerComponent(getName() + "_CharacterController", comp, this);
+			component = new CCharacterControllerComponent(comp, this);
 		}
 		else if (type == "fps_camera")
 		{
-			component = new CFPSCameraComponent(getName() + "_Camera", comp, this);
+			component = new CFPSCameraComponent(comp, this);
 		}
 		else if (type == "collider")
 		{
-			component = new CPhysxComponent(getName() + "_Collider", comp, this);
+			component = new CPhysxComponent(comp, this);
 		}
 		else if (type == "trigger")
 		{
-			component = new CTriggerComponent(getName() + "_Trigger", comp, this);
+			component = new CTriggerComponent(comp, this);
 		}
 		else if (type == "speaker")
 		{
-			component = new CSpeakerComponent(getName() + "_Speaker", comp, this);
+			component = new CSpeakerComponent(comp, this);
 		}
 		else if (type == "mesh_instance")
 		{
-			component = new CMeshInstanceComponent(getName() + "_MeshInstance", comp, this);
+			component = new CMeshInstanceComponent(comp, this);
 		}
 		else if (type == "animated_instance")
 		{
-			component = new CAnimatedInstanceComponent(getName() + "_AnimatedInstance", comp, this);
+			component = new CAnimatedInstanceComponent(comp, this);
 		}
 		else if (type == "particle_emitter")
 		{
-			component = new CParticleEmitterComponent(getName() + "_ParticleEmitter", comp, this);
+			component = new CParticleEmitterComponent(comp, this);
 		}
 		else
 		{
-			OutputDebugStringA("Component type not recognized\n");
+			OutputDebugStringA(("Component " + type + " type not recognized\n").c_str());
 			continue;
 		}
 		cmgr->AddComponent(component);
@@ -128,6 +130,7 @@ CElement::CElement(const CXMLTreeNode& node)
 
 CElement::~CElement()
 {
+	std::vector<std::string> toRemove;
 	auto cmgr = CEngine::GetSingleton().getComponentManager();
 	for (auto &const comp : m_componentContainer)
 	{
@@ -137,7 +140,7 @@ CElement::~CElement()
 	{
 		cmgr->RemoveComponent(comp.second);
 	}
-	m_componentContainer.destroy();
+	m_componentContainer.clear();
 }
 
 void CElement::SetQuat( Quatf q )
@@ -146,10 +149,11 @@ void CElement::SetQuat( Quatf q )
 	float p1 = q.y;
 	float p2 = q.z;
 	float p3 = q.x;
-	float e = 1;
-	m_RotationYPR.x = atan2(2 * (p0*p1 + e*p2*p3), 1 - 2 * (p1*p1 + p2*p2));
-	m_RotationYPR.y = asin(2 * (p0*p2 - e*p1*p3));
-	m_RotationYPR.z = atan2(2 * (p0*p3 + e*p1*p2), 1 - 2 * (p2*p2 + p3*p3));
+	float e = -1;
+	m_RotationYPR.x = -atan2(2 * (p0*p1 + e*p2*p3), 1 - 2 * (p1*p1 + p2*p2));
+	m_RotationYPR.y = -asin(2 * (p0*p2 - e*p1*p3));
+	m_RotationYPR.z = -atan2(2 * (p0*p3 + e*p1*p2), 1 - 2 * (p2*p2 + p3*p3));
+	m_TransformChanged = true;
 	//m_RotationYPR.x = atan2( 2.0*( q.y*q.z + q.w*q.x ), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z );
 	//m_RotationYPR.y = asin( -2.0*( q.x*q.z - q.w*q.y ) );
 	//m_RotationYPR.z = atan2( 2.0*( q.x*q.y + q.w*q.z ), q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z );
@@ -171,7 +175,7 @@ void CElement::SendMsg(const std::string msg)
 
 CFPSCameraComponent* CElement::GetCamera()
 {
-	auto comp = m_componentContainer.get(getName() + "_Camera");
+	auto comp = m_componentContainer.get(getName() + "_" + CFPSCameraComponent::COMPONENT_TYPE);
 	if (comp)
 	{
 		return dynamic_cast<CFPSCameraComponent*>(comp);
@@ -181,7 +185,7 @@ CFPSCameraComponent* CElement::GetCamera()
 
 CSpeakerComponent* CElement::GetSpeaker()
 {
-	auto comp = m_componentContainer.get(getName() + "_Speaker");
+	auto comp = m_componentContainer.get(getName() + "_" + CSpeakerComponent::COMPONENT_TYPE);
 	if (comp)
 	{
 		return dynamic_cast<CSpeakerComponent*>(comp);
@@ -191,7 +195,7 @@ CSpeakerComponent* CElement::GetSpeaker()
 
 CCharacterControllerComponent* CElement::GetCharacterController()
 {
-	auto comp = m_componentContainer.get(getName() + "_CharacterController");
+	auto comp = m_componentContainer.get(getName() + "_" + CCharacterControllerComponent::COMPONENT_TYPE);
 	if (comp)
 	{
 		return dynamic_cast<CCharacterControllerComponent*>(comp);
@@ -201,7 +205,7 @@ CCharacterControllerComponent* CElement::GetCharacterController()
 
 CPhysxComponent * CElement::GetPhysxComponent()
 {
-	auto comp = m_componentContainer.get(getName() + "_Physx");
+	auto comp = m_componentContainer.get(getName() + "_" + CPhysxComponent::COMPONENT_TYPE);
 	if (comp)
 	{
 		return dynamic_cast<CPhysxComponent*>(comp);
@@ -211,7 +215,7 @@ CPhysxComponent * CElement::GetPhysxComponent()
 
 CTriggerComponent * CElement::GetTriggerComponent()
 {
-	auto comp = m_componentContainer.get(getName() + "_Trigger");
+	auto comp = m_componentContainer.get(getName() + "_" + CTriggerComponent::COMPONENT_TYPE);
 	if (comp)
 	{
 		return dynamic_cast<CTriggerComponent*>(comp);
@@ -221,7 +225,7 @@ CTriggerComponent * CElement::GetTriggerComponent()
 
 CAnimatedInstanceComponent * CElement::GetAnimatedInstanceComponent()
 {
-	auto comp = m_componentContainer.get(getName() + "_AnimatedInstance");
+	auto comp = m_componentContainer.get(getName() + "_" + CAnimatedInstanceComponent::COMPONENT_TYPE);
 	if (comp)
 	{
 		return dynamic_cast<CAnimatedInstanceComponent*>(comp);
@@ -259,5 +263,55 @@ const Mat44f & CElement::GetTransform()
 		m_TransformChanged = false;
 	}
 	return m_TransformMatrix;
+}
+
+template<typename T>
+void CElement::SendMessage_t(const std::string msg, T arg1)
+{
+	for (auto &const c : m_componentContainer)
+	{
+		c.second->SendMsg(msg, arg1);
+	}
+}
+
+void CElement::SendMsg( const std::string& message, CElement* arg1 )
+{
+	SendMessage_t( message, arg1 );
+}
+
+void CElement::SendMsg( const std::string& message, int arg1 )
+{
+	SendMessage_t( message, arg1 );
+}
+
+void CElement::SendMsg( const std::string& message, float arg1 )
+{
+	SendMessage_t( message, arg1 );
+}
+
+CElement* CElement::Clone( const std::string & newName )
+{
+	CElement* ret = new CElement(newName);
+
+	ret->m_Scale = m_Scale;
+	ret->m_Enabled = m_Enabled;
+	ret->m_RotationYPR = m_RotationYPR;
+	ret->m_Position = m_Position;
+	ret->m_TransformMatrix = m_TransformMatrix;
+
+	auto cmgr = CEngine::GetSingleton().getComponentManager();
+
+	for ( auto &const compBasePair : m_componentContainer )
+	{
+		CComponent* comp = compBasePair.second->Clone( ret );
+		ret->AddComponent( comp->getName(), comp );
+		cmgr->AddComponent(comp);
+	}
+	for ( auto &const comp : ret->m_componentContainer )
+	{
+		comp.second->ObjectInitialized();
+	}
+
+	return ret;
 }
 

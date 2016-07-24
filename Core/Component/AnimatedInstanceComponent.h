@@ -5,11 +5,12 @@ class CAnimatedMeshInstance;
 class CAnimatedInstanceComponent :
 	public CComponent
 {
+	std::string m_animatedMeshCore;
 	CAnimatedMeshInstance *m_AnimatedMeshInstance;
 	std::vector<std::string> m_layers;
 public:
-	CAnimatedInstanceComponent(const std::string& name, CElement* Owner);
-	CAnimatedInstanceComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
+	CAnimatedInstanceComponent(const CAnimatedInstanceComponent& base, CElement* Owner);
+	CAnimatedInstanceComponent(CXMLTreeNode& node, CElement* Owner);
 	~CAnimatedInstanceComponent();
 
 	void Update(float ElapsedTime);
@@ -22,5 +23,10 @@ public:
 	void ClearCycle(int Id, float DelayOut);
 	bool IsCycleAnimationActive(int Id) const;
 	bool IsActionAnimationActive(int Id) const;
-};
 
+	static const std::string COMPONENT_TYPE;
+	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
+
+
+	virtual CComponent* Clone(CElement* Owner) const { return new CAnimatedInstanceComponent( *this, Owner ); }
+};

@@ -52,6 +52,7 @@ struct CPhysxColliderShapeDesc {
 	Vect3f position;
 	Quatf orientation;
 	std::string material;
+	float mass;
 	float density;
 	std::vector<uint8> *cookedMeshData;
 };
@@ -69,9 +70,15 @@ public:
 	static CPhysXManager* CreatePhysXManager();
 	virtual ~CPhysXManager();
 
+	void InitPhysx();
+
+	void update(float dt);
+
 	void registerMaterial(const std::string& name, float staticFriction, float dynamicFriction, float restitution);
 
 	void createActor(const std::string& name, ActorType type, const CPhysxColliderShapeDesc& desc, bool isKinematic, bool isTrigger);
+
+	void destroyActor(const std::string& name);
 
 	void MoveActor(std::string name, Vect3f position, Quatf rotation);
 
@@ -79,11 +86,29 @@ public:
 
 	void createPlane(const std::string& name, const std::string& material, Vect4f planeDesc);
 
-	void InitPhysx();
-
 	void createController(float height, float radius, float density, Vect3f pos, std::string name);
 
-	void update(float dt);
+	Vect3f moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name);
+
+	bool isCharacterControllerGrounded(const std::string &name);
+
+	void resizeCharacterController( const std::string &name, float height, float radius );
+
+	void releaseCharacterController(const std::string &name);
+
+	void releaseCharacterControllers();
+
+	Vect3f getActorPosition( const std::string& name );
+	Quatf getActorRotation( const std::string& name );
+
+	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
+
+	Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance);
+
+	std::set<std::string> getTriggerCollisions( const std::string& triggerName ) { auto ret = std::move( m_TriggerCollisions[triggerName] ); return ret; }
+
+	std::set<std::string> getActorCollisions( const std::string& actorName ) { auto ret = std::move( m_ActorCollisions[actorName] ); return ret; }
+
 
 	bool cookConvexMesh(const std::vector<Vect3f>& vec, std::vector<uint8> * outCookedData);
 
@@ -93,19 +118,6 @@ public:
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
 
-	Vect3f moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name);
-
-	bool isCharacterControllerGrounded(const std::string &name);
-
-	void releaseCharacterController(const std::string &name);
-
-	void releaseCharacterControllers();
-
-	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
-
-	Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance);
-
-	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
 
 	void destroy() {}
 
@@ -120,6 +132,7 @@ protected:
 	} m_actors;
 
 	std::map<std::string, std::set<std::string>> m_TriggerCollisions;
+	std::map<std::string, std::set<std::string>> m_ActorCollisions;
 
 
 	physx::PxFoundation					*m_Foundation;
@@ -134,11 +147,13 @@ protected:
 	physx::PxCooking					*m_Cooking; // OPTIMIZE OUT
 	physx::PxControllerManager			*m_ControllerManager;
 
+	std::map<size_t, std::string> m_CharacterControllerIdxs;
 private:
 	float m_elapsedTime;
 
 	std::map<std::string, physx::PxMaterial*> m_materials;
 	std::map<std::string, physx::PxController*> m_CharacterControllers;
+	size_t m_CharacterControllerLastIdx;
 
 
 };

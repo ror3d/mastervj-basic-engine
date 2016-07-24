@@ -17,10 +17,13 @@ public:
 		std::string type;
 		std::string value;
 	};
+
+	virtual std::string GetComponentType() = 0;
+
 private:
 	CElement* m_Owner;
 
-	bool m_Initiaized;
+	bool m_Initialized;
 
 	bool m_Enabled;
 
@@ -34,7 +37,7 @@ protected:
 public:
 	CComponent(CXMLTreeNode& node, CElement* Owner);
 
-	CComponent( const std::string& Name, CElement* Owner );
+	CComponent( const CComponent& base, CElement* Owner );
 
 	virtual ~CComponent() {}
 
@@ -42,16 +45,25 @@ public:
 
 	void ObjectInitialized();
 
+	virtual void PhysxUpdate() {}
 	virtual void Update( float ElapsedTime ) {}
 	virtual void FixedUpdate( float ElapsedTime ) {}
 	virtual void Render(CContextManager&  _context) {}
 	virtual void RenderDebug(CContextManager&  _context) {}
 
-	virtual void SendMsg(const std::string) {}
+	virtual void SendMsg(const std::string&) {}
 
-	virtual void SendMsg(const std::string, CElement*) {}
+	virtual void SendMsg(const std::string&, const std::string&) {}
+
+	virtual void SendMsg(const std::string&, int) {}
+
+	virtual void SendMsg(const std::string&, float) {}
+
+	virtual void SendMsg(const std::string&, CElement*) {}
 
 	virtual void Destroy() = 0;
+
+	virtual void SetNameFromParentName( const std::string& parentName );
 
 	CElement* GetOwner()
 	{
@@ -60,6 +72,8 @@ public:
 
 	inline void SetEnabled(bool en) { m_Enabled = en; }
 	inline bool GetEnabled() const { return m_Enabled; }
+
+	virtual CComponent* Clone(CElement* Owner) const = 0;
 };
 
 #endif

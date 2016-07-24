@@ -2,6 +2,7 @@
 #define SPEAKER_COMPONENT_H
 
 #include "Component.h"
+#include <Graphics/Renderer/3DElement.h>
 
 class CSpeakerComponent : public CComponent
 {
@@ -11,8 +12,8 @@ protected:
 	virtual void Init();
 
 public:
-	CSpeakerComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
-	CSpeakerComponent(const std::string& name, CElement* Owner);
+	CSpeakerComponent(CXMLTreeNode& node, CElement* Owner);
+	CSpeakerComponent(const CSpeakerComponent& name, CElement* Owner);
 	virtual ~CSpeakerComponent();
 
 	virtual void Update(float ElapsedTime);
@@ -21,6 +22,16 @@ public:
 
 	void Play( const std::string audioClipName, bool loop );
 	void Stop();
+
+	Vect3f m_Position;
+	Vect3f m_Orientation;
+	float m_Volume;
+	C3DElement m_Speaker;
+
+	static const std::string COMPONENT_TYPE;
+	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
+
+	virtual CComponent* Clone(CElement* Owner) const { return new CSpeakerComponent( *this, Owner ); }
 };
 
 #endif

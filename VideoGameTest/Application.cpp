@@ -20,6 +20,8 @@
 #include <Core/Input/InputManagerImplementation.h>
 #include <Core/Debug/DebugHelper.h>
 
+#include <Core/Scene/SceneManager.h>
+
 #include <Core/Component/ComponentManager.h>
 
 #include <XML/XMLTreeNode.h>
@@ -47,34 +49,25 @@ void CApplication::Update(float _ElapsedTime)
 {
 	CEngine& engine = CEngine::GetSingleton();
 	m_Timer += _ElapsedTime;
+
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
 
-//	CEngine::GetSingleton().getLayerManager()->Update(_ElapsedTime);
+	engine.getSceneManager()->Update();
+
+	CEngine::GetSingleton().getComponentManager()->PhysxUpdate();
+
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
-	//CCamera l_Camera = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
-	//CCamera l_Camera = { };
-	//CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
-	
+	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+	CCamera l_Camera = { };
+	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController()->UpdateCameraValues(&l_Camera);
+	CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
+
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
 	{
 		m_FixedCamera = !m_FixedCamera;
 	}
-
-	/*
-	if (!m_FixedCamera)
-	{
-		if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__fps")
-			|| CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__cinematics"))
-		{
-			CEngine::GetSingleton().getCharacterControllerManager()->UpdateInstances(_ElapsedTime);
-		}
-		else if (CEngine::GetSingleton().getCameraManager()->GetCurrentCameraControllerName() == std::string("__debug"))
-		{
-		}
-	}
-	*/
 
 	m_FixedTimer += _ElapsedTime;
 

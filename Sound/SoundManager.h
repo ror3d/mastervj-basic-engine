@@ -3,6 +3,7 @@
 #pragma once
 
 #include "ISoundManager.h"
+#include <Graphics/Renderer/3DElement.h>
 
 //#include <string>
 #include <vector>
@@ -28,7 +29,8 @@ public:
 	virtual void Update(const CCamera *camera);
 	virtual bool Load(const std::string &soundbanks_filename, const std::string &speakers_filename);
 	virtual bool Reload();
-
+	virtual void InitAll(const std::string &soundbanks_filename, const std::string &speakers_filename);
+	
 	bool LoadSoundBank(const std::string &bank);
 	bool UnloadSoundBank(const std::string &bank);
 
@@ -37,6 +39,7 @@ public:
 
 	bool LoadSoundBanksXML(std::string filename);
 	bool LoadSpeakersXML(std::string filename);
+	void LoadSpeakers(std::string l_Name, Vect3f l_Position, Vect3f l_Orientation);
 
 	void PlayEvent(const SoundEvent &_event);
 	void PlayEvent(const SoundEvent &_event, const std::string &_speaker);

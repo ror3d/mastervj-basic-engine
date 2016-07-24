@@ -2,8 +2,6 @@
 
 #include <selene.h>
 
-#include <fstream>
-#include <sstream>
 
 #include <Base/XML/XMLTreeNode.h>
 
@@ -20,12 +18,16 @@
 #include <Core/Time/TimeManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
+#include <Graphics/Mesh/StaticMeshManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
 #include <Core/Component/TriggerComponent.h>
 #include <Core/Scene/Scene.h>
+#include <Core/Scene/SceneManager.h>
 #include <Core/Scene/Element.h>
+
+#include "LuaErrorCapture.h"
 
 namespace
 {
@@ -41,33 +43,6 @@ namespace
 		}
 	}
 }
-
-/*
- * This class captures errors printed by lua to redirect them as we wish.
- */
-class LuaErrorCapturedStdout
-{
-public:
-	LuaErrorCapturedStdout()
-	{
-		_old = std::cout.rdbuf(_out.rdbuf());
-	}
-
-	~LuaErrorCapturedStdout()
-	{
-		std::cout.rdbuf(_old);
-		OutputDebugStringA(_out.str().c_str());
-	}
-
-	std::string Content() const
-	{
-		return _out.str();
-	}
-
-private:
-	std::stringstream _out;
-	std::streambuf* _old;
-};
 
 CScriptManager::CScriptManager()
 	: m_state(nullptr)
@@ -107,27 +82,21 @@ void CScriptManager::Initialize(const std::string& file)
 		std::string name = script.GetPszProperty("name", "", false);
 		std::string file = script.GetPszProperty("file", "", false);
 		bool rol = script.GetIntProperty("runonload", 0, false);
-		if (file != "" && m_loadedScripts.find(name) == m_loadedScripts.end())
+
+		DEBUG_ASSERT(name != "");
+
+		if (file != "" && name != "" && m_loadedScripts.find(name) == m_loadedScripts.end())
 		{
-			std::ifstream t(file);
-			if (t)
+			m_scriptFiles[name] = file;
+
+			if ( !ReloadScript( name ) )
 			{
-				t.seekg(0, std::ios::end);
-				size_t size = t.tellg();
-				std::string buffer(size, ' ');
-				t.seekg(0);
-				t.read(&buffer[0], size);
+				continue;
+			}
 
-				DEBUG_ASSERT(name != "");
-
-				if ( name != "" )
-				{
-					m_loadedScripts[name] = buffer;
-					if (rol)
-					{
-						toRunOnLoad.push_back(name);
-				}
-				}
+			if (rol)
+			{
+				toRunOnLoad.push_back(name);
 			}
 		}
 	}
@@ -139,15 +108,53 @@ void CScriptManager::Initialize(const std::string& file)
 	for (auto &const name : toRunOnLoad)
 	{
 		RunScript(name);
+	}
 }
+
+void CScriptManager::destroy()
+{
 }
 
 void CScriptManager::RunScript(const std::string& name)
 {
 	auto it = m_loadedScripts.find(name);
 	DEBUG_ASSERT (it != m_loadedScripts.end());
-	
+
 	RunCode(it->second);
+}
+
+bool CScriptManager::ReloadScript( const std::string & name )
+{
+	if ( m_scriptFiles.find( name ) == m_scriptFiles.end() )
+	{
+		return false;
+	}
+	std::ifstream t(m_scriptFiles[name]);
+	if ( !t )
+	{
+		return false;
+	}
+
+	t.seekg(0, std::ios::end);
+	size_t size = t.tellg();
+	std::string buffer(size, ' ');
+	t.seekg(0);
+	t.read(&buffer[0], size);
+
+	m_loadedScripts[name] = buffer;
+
+	auto cm = CEngine::GetSingleton().getComponentManager();
+	for ( auto &const cName : m_scriptReferences[name] )
+	{
+		CComponent* c = cm->get( cName );
+		CScriptedComponent* cs = dynamic_cast<CScriptedComponent*>( c );
+		if ( cs )
+		{
+			cs->Reload();
+		}
+	}
+
+	return true;
 }
 
 void CScriptManager::RunCode(const std::string& code)
@@ -197,9 +204,7 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CScriptManager"]
 		.SetObj(*this,
-		"RunCode", &CScriptManager::RunCode,
-		"RunFile", &CScriptManager::RunFile,
-		"Load", &CScriptManager::Load);
+		"RunScript", &CScriptManager::RunScript);
 
 	//Global
 	(*m_state)["CXMLTreeNode"]
@@ -248,15 +253,21 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetPosition", &CElement::GetPosition,
 			"SetYaw", &CElement::SetYaw,
 			"GetYaw", &CElement::GetYaw,
+			"GetScale", &CElement::GetScale,
+			"SetScale", &CElement::SetScale,
 			"SetEnabled", &CElement::SetEnabled,
 			"IsEnabled", &CElement::GetEnabled,
 			"GetCamera", &CElement::GetCamera,
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
-			"GetTrigger", &CElement::GetTriggerComponent);
+			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
+			"SendMessageFloat", static_cast<void(CElement::*)(const std::string&, float)>(&CElement::SendMsg),
+			"GetTrigger", &CElement::GetTriggerComponent,
+			"Clone", &CElement::Clone);
+
 
 	(*m_state)["CAnimatedInstanceComponent"]
-		.SetClass<CAnimatedInstanceComponent, const std::string&, CElement*>(
+		.SetClass<CAnimatedInstanceComponent, const CAnimatedInstanceComponent&, CElement*>(
 			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
 			"BlendCycle", &CAnimatedInstanceComponent::BlendCycle,
 			"ClearCycle", &CAnimatedInstanceComponent::ClearCycle,
@@ -264,20 +275,23 @@ void CScriptManager::RegisterLUAFunctions()
 			"IsActionAnimationActive", &CAnimatedInstanceComponent::IsActionAnimationActive);
 
 	(*m_state)["CCharacterControllerComponent"]
-		.SetClass<CCharacterControllerComponent, const std::string&, CElement*>(
+		.SetClass<CCharacterControllerComponent, const CCharacterControllerComponent&, CElement*>(
 			"IsGrounded", &CCharacterControllerComponent::IsGrounded,
 			"Move", &CCharacterControllerComponent::Move,
-			"SetPos", &CCharacterControllerComponent::SetPosition);
+			"SetPosition", &CCharacterControllerComponent::SetPosition,
+			"Resize", &CCharacterControllerComponent::Resize,
+			"GetHeight", &CCharacterControllerComponent::GetHeight,
+			"GetRadius", &CCharacterControllerComponent::GetRadius);
 
 	(*m_state)["CFPSCameraComponent"]
-		.SetClass<CFPSCameraComponent, const std::string&, CElement*>(
+		.SetClass<CFPSCameraComponent, const CFPSCameraComponent&, CElement*>(
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
 			"SetFollowCharacter", &CFPSCameraComponent::SetFollowCharacter,
 			"GetYaw", &CFPSCameraComponent::GetYaw);
 
 
 	(*m_state)["CTriggerComponent"]
-		.SetClass<CTriggerComponent, const std::string&, CElement*>(
+		.SetClass<CTriggerComponent, const CTriggerComponent&, CElement*>(
 		"GetName", &CTriggerComponent::getName);
 
 	(*m_state)["ICameraController"]
@@ -337,11 +351,23 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CSoundManager"].SetObj(
 		*CEngine::GetSingleton().getSoundManager(),
-		//"PlayEvent", &CSoundManager::PlayEvent, 
+		//"PlayEvent", &CSoundManager::PlayEvent,
 		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
-		"LaunchSoundEventXMLpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
+		"LaunchSoundEventXMLSpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
 		"SetVolume", &CSoundManager::SetVolume);
+
+	(*m_state)["CSceneManager"].SetObj(
+		*CEngine::GetSingleton().getSceneManager(),
+		"AddObjectToScene", &CSceneManager::AddObjectToScene,
+		"DestroyObjectFromScene", &CSceneManager::DestroyObjectFromScene,
+		"LoadScene", &CSceneManager::LoadScene,
+		"UnloadScene", &CSceneManager::UnloadScene,
+		"GetObjectById", &CSceneManager::GetObjectById);
+
+	(*m_state)["CStaticMeshManager"].SetObj(
+		*CEngine::GetSingleton().getStaticMeshManager(),
+		"LoadMeshesFile", &CStaticMeshManager::Load);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

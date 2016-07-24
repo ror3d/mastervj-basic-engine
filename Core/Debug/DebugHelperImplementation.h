@@ -4,7 +4,6 @@
 
 #include <unordered_map>
 
-// TODO: Activar AntTeakBar
 #include <AntTweakBar.h>
 
 #include "DebugHelper.h"
@@ -22,7 +21,7 @@ public:
 	virtual void Log(const std::string& text) const;
 
 	virtual void RegisterBar(const SDebugBar& bar);
-	void RemoveBar(std::string bar);
+	void RemoveBar(const std::string &bar);
 
 	void CreateMainBar();
 
@@ -30,4 +29,5 @@ public:
 	SPositionOrientation * m_posRot;
 	TwType m_PosRotType;
 };
+
 

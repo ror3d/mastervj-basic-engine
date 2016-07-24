@@ -28,7 +28,6 @@
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\InputManagerImplementation.cpp" />
-    <ClCompile Include="Logic\LogicManager.cpp" />
     <ClCompile Include="Scene\Element.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -51,7 +50,6 @@
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\InputManagerImplementation.h" />
-    <ClInclude Include="Logic\LogicManager.h" />
     <ClInclude Include="Scene\Element.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneManager.h" />

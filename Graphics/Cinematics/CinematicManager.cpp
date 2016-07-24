@@ -50,7 +50,6 @@ void CCinematicManager::LoadFilesInDir( std::string dirPath )
 
 	hFind = FindFirstFileA( globPath.c_str(), &ffd );
 
-	DEBUG_ASSERT( INVALID_HANDLE_VALUE != hFind );
 	if ( hFind == INVALID_HANDLE_VALUE )
 	{
 		return;

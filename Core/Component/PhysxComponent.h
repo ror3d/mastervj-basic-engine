@@ -15,15 +15,17 @@ protected:
 	bool m_isStatic;
 	bool m_isKinematic;
 	bool m_isTrigger;
+	float m_mass;
 
 	virtual void Init();
 
 	void Init(Vect3f scale, Vect3f position);
 public:
-	CPhysxComponent(const std::string& name, CXMLTreeNode& node, CElement* Owner);
-	CPhysxComponent(const std::string& name, CElement* Owner);
+	CPhysxComponent(CXMLTreeNode& node, CElement* Owner);
+	CPhysxComponent(const CPhysxComponent& base, CElement* Owner);
 	virtual ~CPhysxComponent();
 
+	virtual void PhysxUpdate();
 	virtual void FixedUpdate(float ElapsedTime);
 
 	virtual void Destroy();
@@ -34,6 +36,10 @@ public:
 	bool IsStatic(){ return m_isStatic;  }
 	bool IsKinematic(){ return m_isKinematic;  }
 
+	static const std::string COMPONENT_TYPE;
+	virtual std::string GetComponentType() { return COMPONENT_TYPE; }
+
+	virtual CComponent* Clone(CElement* Owner) const { return new CPhysxComponent( *this, Owner ); }
 };
 
 #endif

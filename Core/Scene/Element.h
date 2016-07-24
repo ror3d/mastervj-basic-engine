@@ -58,8 +58,11 @@ public:
 
 	void SendMsg(const std::string message);
 
-	template<typename T>
-	void SendMsg(const std::string message, T arg1);
+	void SendMsg( const std::string& message, CElement* arg1 );
+	void SendMsg( const std::string& message, int arg1 );
+	void SendMsg( const std::string& message, float arg1 );
+
+	CElement* Clone( const std::string& newName );
 
 	CAnimatedInstanceComponent* GetAnimatedInstanceComponent();
 	CCharacterControllerComponent* GetCharacterController();
@@ -70,14 +73,8 @@ public:
 
 private:
 	ComponentContainer_t m_componentContainer;
+
+	template<typename T>
+	void SendMessage_t(const std::string message, T arg1);
 };
 
-
-template<typename T>
-void CElement::SendMsg(const std::string msg, T arg1)
-{
-	for (auto &const c : m_componentContainer)
-	{
-		c.second->SendMsg(msg, arg1);
-	}
-}

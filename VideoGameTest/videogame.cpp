@@ -38,7 +38,6 @@
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
-#include <Core/Logic/LogicManager.h>
 #include <Core/Scene/SceneManager.h>
 
 
@@ -222,6 +221,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
+	engine.getTextureManager()->Init();
 	engine.getDebugRender()->Init();
 	engine.getEffectsManager()->load("Data\\effects.xml");
 	engine.getRenderableObjectTechniqueManager()->Load("Data\\pool_renderable_objects.xml");
@@ -229,17 +229,12 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getCookedMeshManager()->SetCookedMeshPath("Cache\\Cooked\\");
 	engine.getStaticMeshManager()->Load("Data\\static_meshes.xml");
 	engine.getAnimatedMeshManager()->Load("Data\\animated_models.xml");
-	//engine.getParticleManager()->Load("Data\\particle_classes.xml");
+	engine.getParticleManager()->Load("Data\\particle_classes.xml");
 	engine.getLightManager()->Load("Data\\lights.xml");
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 	engine.getSceneManager()->Initialize("Data\\Scenes\\");
-	//engine.getSoundManager()->Init();
-	//engine.getSoundManager()->initBanks();
-	//engine.getSoundManager()->Load("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
+	engine.getSoundManager()->InitAll("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
 
-	//C3DElement l_speaker = {};
-	//CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&l_speaker);
-	//engine.getSoundManager()->PlayEvent()
 
 
 
@@ -256,13 +251,14 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		engine.getComponentManager()->FirstInitialization();
 
-		engine.getCinematicManager()->Load("Data\\Animations\\Stadium_Cinematics.xml");
-		engine.getCinematicManager()->Play();
+		engine.getCinematicManager()->LoadFilesInDir("Data\\Animations\\");
 
 
 
+#ifdef _DEBUG
 		CDebugHelperImplementation debugHelper(context.GetDevice());
 		CDebugHelper::SetCurrentDebugHelper(&debugHelper);
+#endif
 
 		CApplication application(&context);
 
