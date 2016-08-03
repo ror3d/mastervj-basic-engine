@@ -253,7 +253,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		engine.getCinematicManager()->LoadFilesInDir("Data\\Animations\\");
 
-
+	
 
 //#ifdef _DEBUG
 		CDebugHelperImplementation debugHelper(context.GetDevice());

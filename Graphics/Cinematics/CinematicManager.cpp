@@ -107,7 +107,7 @@ void CCinematicManager::Update(float _elapsedTime)
 
 }
 
-void CCinematicManager::Play()
+void CCinematicManager::PlayAll()
 {
 	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
 	{

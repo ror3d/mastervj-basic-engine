@@ -359,6 +359,7 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CCinematicsManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", static_cast<void(CCinematicManager::*)(std::string)>(&CCinematicManager::Play),
+		"PlayAll", &CCinematicManager::PlayAll,
 		"Stop", &CCinematicManager::Stop,
 		"Pause", &CCinematicManager::Pause);
 

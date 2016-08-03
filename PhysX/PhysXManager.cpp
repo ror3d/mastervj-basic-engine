@@ -684,7 +684,7 @@ Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance)
 	// Raycast against all static & dynamic objects (no filtering)
 	// The main result from this call is the closest hit, stored in the 'hit.block' structure
 	physx::PxQueryFilterData filterData(physx::PxQueryFlag::eSTATIC); //SIno no se deja ver desde el cielo ok
-	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData);
+	bool status = false;// = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData);
 	if (status)
 		return v(hit.block.position);
 	else

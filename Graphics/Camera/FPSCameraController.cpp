@@ -92,7 +92,9 @@ void CFPSCameraController::Update( float ElapsedTime )
 	{
 		m_Position = posWithoutCollision;
 	}
-	//m_Position = posWithoutCollision;
+
+	//Add offset to no be inside the walls
+	m_Position = m_Position + ((m_TargetPosition - m_Position) * 0.08);
 
 	m_Pitch = m_Pitch + m_PitchDisplacement;
 }

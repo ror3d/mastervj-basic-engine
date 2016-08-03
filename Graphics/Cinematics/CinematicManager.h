@@ -15,7 +15,7 @@ public:
 
 	void LoadFilesInDir( std::string dirPath );
 	void Load(std::string nameFile);
-	void Play();
+	void PlayAll();
 	void Play(std::string nameToRun);
 	void Pause(std::string nameToRun);
 	void Stop(std::string nameToRun);

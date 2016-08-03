@@ -24,7 +24,7 @@ fn exportTextureFile texTypeName texMap = (
 )
 
 fn writeDefaultMaterials = (
-	format "\t\t<parameter type=\"float\" name=\"specular\" value=\"1\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"specular\" value=\"0.2\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"gloss\" value=\"80.0\" varParams = \"min=1 max=100 step=0.5 precision=1\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"bump\" value=\"2.4\" varParams = \"min=0 max=5 step=0.1 precision=1\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"environment_factor\" value=\"0.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
