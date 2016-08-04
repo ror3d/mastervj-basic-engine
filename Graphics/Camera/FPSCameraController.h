@@ -30,6 +30,8 @@ public:
 	inline void SetTargetPosition( const Vect3f &pos ) { m_TargetPosition = pos; }
 	inline Vect3f GetTargetPosition() const { return m_TargetPosition; }
 
+	inline void SetCameraDisplacement(const Vect3f &pos) { m_CameraDisplacement = pos; }
+
 	Vect3f GetDirection() const;
 	Vect3f GetCameraDisplacement() { return m_CameraDisplacement; }
 	float GetPitchDisplacement(){ return m_PitchDisplacement; }

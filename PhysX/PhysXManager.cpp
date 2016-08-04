@@ -189,6 +189,7 @@ void CPhysXManagerImplementation::onSleep(physx::PxActor **actors, physx::PxU32 
 
 void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pairHeader, const physx::PxContactPair *pairs, physx::PxU32 nbPairs)
 {
+	
 }
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
@@ -653,6 +654,21 @@ void CPhysXManager::releaseCharacterControllers(){
 		cct->release();
 	}
 	m_CharacterControllers.clear();
+}
+
+
+Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance)
+{	
+	physx::PxRaycastBuffer hit;                 // [out] Raycast results
+
+	// Raycast against all static & dynamic objects (no filtering)
+	// The main result from this call is the closest hit, stored in the 'hit.block' structure
+	physx::PxQueryFilterData filterData(physx::PxQueryFlag::eSTATIC); //SIno no se deja ver desde el cielo ok
+	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData);
+	if (status)
+		return v(hit.block.position);
+	else
+		return Vect3f();
 }
 
 void CPhysXManager::update(float dt)
