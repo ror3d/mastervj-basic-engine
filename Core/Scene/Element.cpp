@@ -42,6 +42,7 @@ CElement::CElement(const CXMLTreeNode& node)
 {
 	m_Position = node.GetVect3fProperty( "pos" , Vect3f(0, 0, 0), false);
 	m_Scale = node.GetVect3fProperty( "scale" , Vect3f(1, 1, 1), false);
+	m_Enabled = node.GetBoolProperty("enabled", false, true);
 	if (node.GetPszProperty("rotationq", nullptr, false) != nullptr)
 	{
 		Vect4f f4 = node.GetVect4fProperty("rotationq", Vect4f(0, 0, 0, 1), true);
@@ -149,7 +150,7 @@ void CElement::SetQuat( Quatf q )
 	float p1 = q.y;
 	float p2 = q.z;
 	float p3 = q.x;
-	float e = 1;
+	float e = -1;
 	m_RotationYPR.x = -atan2(2 * (p0*p1 + e*p2*p3), 1 - 2 * (p1*p1 + p2*p2));
 	m_RotationYPR.y = -asin(2 * (p0*p2 - e*p1*p3));
 	m_RotationYPR.z = -atan2(2 * (p0*p3 + e*p1*p2), 1 - 2 * (p2*p2 + p3*p3));

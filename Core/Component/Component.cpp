@@ -27,6 +27,32 @@ CComponent::CComponent(CXMLTreeNode& node, CElement* Owner)
 		std::string name = prop.GetPszProperty("name", "", false);
 		std::string value = prop.GetPszProperty("value", "", false);
 		std::string type = prop.GetPszProperty("type", "string", false);
+		if ( type == "array" )
+		{
+			value = "";
+			for ( int i = 0; i < prop.GetNumChildren(); ++i )
+			{
+				auto entry = prop( i );
+				if ( entry.GetName() != std::string( "entry" ) )
+				{
+					continue;
+				}
+
+				std::string subVal = entry.GetPszProperty( "value", "", false );
+				std::string subType = entry.GetPszProperty( "type", "string", false );
+
+				if ( subType == "string" )
+				{
+					subVal = "\"" + subVal + "\"";
+				}
+				if ( value != "" )
+				{
+					value += ",";
+				}
+				value += subVal;
+			}
+			value = "[" + value + "]";
+		}
 		m_properties.push_back({name, type, value});
 	}
 }
