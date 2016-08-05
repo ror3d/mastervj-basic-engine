@@ -56,7 +56,7 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 	desc.material = "default_material";// TODO get from file
 	desc.size = scale;
 	desc.position = position;
-	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
+	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), -GetOwner()->GetRoll(), -GetOwner()->GetPitch()));
 	desc.mass = m_mass;
 	desc.density = 1;
 

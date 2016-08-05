@@ -89,7 +89,7 @@ public:
 
 	static inline Quaternion<T> GetQuaternionFromRadians(Vector3<T> pitchRollYawInRads)
 	{
-		Vect3f euler = Vect3f(pitchRollYawInRads.z, pitchRollYawInRads.x, pitchRollYawInRads.y);
+		Vector3<T> euler = Vector3<T>(pitchRollYawInRads.x, pitchRollYawInRads.y, pitchRollYawInRads.z);
 		float c1 = cos(euler.x * 0.5);
 		float c2 = cos(euler.y * 0.5);
 		float c3 = cos(euler.z * 0.5);
@@ -97,13 +97,29 @@ public:
 		float s2 = sin(euler.y * 0.5);
 		float s3 = sin(euler.z * 0.5);
 
-		Vect4f result;
-		result.x = c1*c2*s3 - s1*s2*c3;
-		result.y = c1*s2*c3 + s1*c2*s3;
-		result.z = s1*c2*c3 - c1*s2*s3;
-		result.w = c1*c2*c3 + s1*s2*s3;
+		Vector4<T> result;
+		result.x = c1*c2*s3 - s1*s2*c3; // p3
+		result.z = c1*s2*c3 + s1*c2*s3; // p2
+		result.y = s1*c2*c3 - c1*s2*s3; // p1
+		result.w = c1*c2*c3 + s1*s2*s3; // p0
 
 		return  Quaternion<T>(result.x, result.y, result.z, result.w);
+	}
+
+	static inline Vector3<T> GetEulerFromQuaternion( Quaternion<T> q )
+	{
+		Vector3<T> euler;
+
+		float p0 = q.w;
+		float p1 = q.y;
+		float p2 = q.z;
+		float p3 = q.x;
+		float e = -1;
+		euler.x = -atan2( 2 * ( p0*p1 + e*p2*p3 ), 1 - 2 * ( p1*p1 + p2*p2 ) );
+		euler.y = -asin( 2 * ( p0*p2 - e*p1*p3 ) );
+		euler.z = -atan2( 2 * ( p0*p3 + e*p1*p2 ), 1 - 2 * ( p2*p2 + p3*p3 ) );
+
+		return euler;
 	}
 
 	// member functions
