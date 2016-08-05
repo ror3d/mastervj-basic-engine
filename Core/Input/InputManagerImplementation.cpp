@@ -217,12 +217,15 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		action.keyboard.needsCtrl = false;
 		m_Actions.push_back(action);
 	}
+	
 	{
 		Action action = { "FIXCAMERA", KEYBOARD, Action::ON_PRESS };
 		action.keyboard.key = 'F';
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
-		action.axisName = "FIXCAMERA";
+		action.triggersAxis = true;
+		action.axisValue = -1;
+		action.axisName = "FIXED_CAMERA";
 		m_Actions.push_back(action);
 	}
 

@@ -29,6 +29,7 @@ fn writeDefaultMaterials = (
 	format "\t\t<parameter type=\"float\" name=\"bump\" value=\"2.4\" varParams = \"min=0 max=5 step=0.1 precision=1\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"environment_factor\" value=\"0.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"cutout_factor\" value=\"1.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"ssr_factor\" value=\"0.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
 )
 
 fn exportSingleTexture mat meshName = (

@@ -65,6 +65,9 @@ Vect3f CFPSCameraController::GetDirection() const
 
 void CFPSCameraController::Update( float ElapsedTime )
 {
+	if (m_CameraLocked)
+		return;
+
 	m_Pitch = m_Pitch - m_PitchDisplacement;
 
 	AddYaw(CInputManager::GetInputManager()->GetAxis("X_AXIS"));
