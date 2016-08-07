@@ -498,6 +498,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	{
 		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
 		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
+		shape->setFlag(physx::PxShapeFlag::eSCENE_QUERY_SHAPE, false);
 	}
 
 	physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0, 0, 0), physx::PxQuat::createIdentity());
