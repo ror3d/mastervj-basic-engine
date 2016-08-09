@@ -110,17 +110,23 @@ fn Deg2Rad a =
 
 fn GetYaw transform =
 (
-	return -(transform.rotation as eulerangles).z
+	local eu = quatToEuler transform.rotation order: 4
+	return eu.z
+	-- return -(transform.rotation as eulerangles).z
 )
 
 fn GetPitch transform =
 (
-	return -(transform.rotation as eulerangles).y
+	local eu = quatToEuler transform.rotation order: 4
+	return -eu.y
+	-- return -(transform.rotation as eulerangles).y
 )
 
 fn GetRoll transform =
 (
-	return (transform.rotation as eulerangles).x
+	local eu = quatToEuler transform.rotation order: 4
+	return eu.x
+	-- return (transform.rotation as eulerangles).x
 ) 
 
 fn ChangeCoordsBase coords =
@@ -128,6 +134,11 @@ fn ChangeCoordsBase coords =
 	if classof coords == EulerAngles then
 	(
 		return eulerAngles  -coords.z -coords.y coords.x
+		format "ERROR!!! You should not use this for rotations!!!"
+	)
+	else if classof coords == Quat then
+	(
+		return quat coords.x coords.w -coords.y -coords.z
 	)
 	return point3 -coords[1] coords[3] coords[2]
 )

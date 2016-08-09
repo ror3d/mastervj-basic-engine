@@ -6,8 +6,9 @@
 #define __MATH_UTILS_H__
 
 //#include "Utils/CompileTools.h"
+#define _USE_MATH_DEFINES
 
-#include <math.h>
+#include <cmath>
 #include <cassert>
 #include "MathTypes.h"
 

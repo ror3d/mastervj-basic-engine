@@ -3,8 +3,8 @@
 #ifndef __QUATERNION__
 #define __QUATERNION__
 
-#include "MathTypes.h"
 #include "MathUtils.h"
+#include "MathTypes.h"
 #include "Vector3.h"
 #include "Vector4.h"
 
@@ -87,39 +87,55 @@ public:
 
 	}
 
-	static inline Quaternion<T> GetQuaternionFromRadians(Vector3<T> pitchRollYawInRads)
+	static inline Quaternion<T> GetQuaternionFromRadians(Vector3<T> yawPitchRollInRads)
 	{
-		Vector3<T> euler = Vector3<T>(pitchRollYawInRads.x, pitchRollYawInRads.y, pitchRollYawInRads.z);
-		float c1 = cos(euler.x * 0.5);
-		float c2 = cos(euler.y * 0.5);
-		float c3 = cos(euler.z * 0.5);
-		float s1 = sin(euler.x * 0.5);
-		float s2 = sin(euler.y * 0.5);
-		float s3 = sin(euler.z * 0.5);
+		Vector3<T> euler = Vector3<T>( yawPitchRollInRads.z, yawPitchRollInRads.y, yawPitchRollInRads.x );
+		float c1 = std::cos(euler.x * 0.5);
+		float c2 = std::cos(euler.y * 0.5);
+		float c3 = std::cos(euler.z * 0.5);
+		float s1 = std::sin(euler.x * 0.5);
+		float s2 = std::sin(euler.y * 0.5);
+		float s3 = std::sin(euler.z * 0.5);
+		float e = -1;
 
 		Vector4<T> result;
-		result.x = c1*c2*s3 - s1*s2*c3; // p3
-		result.z = c1*s2*c3 + s1*c2*s3; // p2
-		result.y = s1*c2*c3 - c1*s2*s3; // p1
-		result.w = c1*c2*c3 + s1*s2*s3; // p0
+		result.w = c1*c2*c3 - e*s1*s2*s3; // p0
+		result.z = s1*c2*c3 + e*c1*s2*s3; // p1
+		result.x = c1*s2*c3 - e*s1*c2*s3; // p2
+		result.y = c1*c2*s3 + e*s1*s2*c3; // p3
 
 		return  Quaternion<T>(result.x, result.y, result.z, result.w);
 	}
 
 	static inline Vector3<T> GetEulerFromQuaternion( Quaternion<T> q )
 	{
-		Vector3<T> euler;
+		Vector3<double> euler;
 
-		float p0 = q.w;
-		float p1 = q.y;
-		float p2 = q.z;
-		float p3 = q.x;
-		float e = -1;
-		euler.x = -atan2( 2 * ( p0*p1 + e*p2*p3 ), 1 - 2 * ( p1*p1 + p2*p2 ) );
-		euler.y = -asin( 2 * ( p0*p2 - e*p1*p3 ) );
-		euler.z = -atan2( 2 * ( p0*p3 + e*p1*p2 ), 1 - 2 * ( p2*p2 + p3*p3 ) );
+		double p0 = q.w;
+		double p1 = q.z;
+		double p2 = q.x;
+		double p3 = q.y;
+		double e = -1;
 
-		return euler;
+		euler.y = std::asin(std::fmin(std::fmax(2 * ( p0*p2 + e*p1*p3 ), -1.), 1.));
+
+		if(std::fabsf(euler.y-M_PI/2) < 0.05 )
+		{
+			euler.z = 0;
+			euler.x = 2 * std::atan2( p1, p0 );
+		}
+		else if(std::fabsf(euler.y+M_PI/2) < 0.05 )
+		{
+			euler.z = 0;
+			euler.x = - 2 * std::atan2( p1, p0 );
+		}
+		else
+		{
+			euler.x = std::atan2( 2 * ( p0*p1 - e*p2*p3 ), 1 - 2 * ( p1*p1 + p2*p2 ) );
+			euler.z = std::atan2( 2 * ( p0*p3 - e*p1*p2 ), 1 - 2 * ( p2*p2 + p3*p3 ) );
+		}
+
+		return Vector3<T>(euler.z, euler.y, euler.x);
 	}
 
 	// member functions

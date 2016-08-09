@@ -58,9 +58,6 @@ CMeshInstanceComponent::~CMeshInstanceComponent()
 
 void CMeshInstanceComponent::Render(CContextManager&  _context)
 {
-	// TODO Change to use the Renderer
-	//CEffectManager::m_SceneParameters.m_World = GetOwner()->GetTransform();
-	//m_StaticMesh->Render( &_context );
 	for (auto &const layer : m_layers)
 	{
 		CEngine::GetSingleton().getRenderer()->AddRenderableToRender(layer, m_StaticMesh, GetOwner()->GetTransform());
