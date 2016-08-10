@@ -2,16 +2,19 @@
 #include "Camera.h"
 
 #include <Core/Input/InputManager.h>
+#include <PhysX/PhysXManager.h>
+#include <Core/Engine/Engine.h>
 
 #include "Utils/Utils.h"
+#include <Base/Math/Math.h>
 
 CFPSCameraController::CFPSCameraController()
 : m_YawSpeed(0.08f)
 , m_PitchSpeed(0.5f)
-, m_CameraDisplacement(0, 0, -10)//(0,0,-2)-10
+, m_CameraDisplacement(0, 0, -10)
 , m_PitchDisplacement(0)//(-0.5f)
-, m_PitchfloorLimit(DEG2RAD(60))
-, m_PitchSkyLimit(DEG2RAD(-60))
+, m_PitchfloorLimit(DEG2RAD(20))//60
+, m_PitchSkyLimit(DEG2RAD(-30))
 {
 }
 
@@ -62,30 +65,37 @@ Vect3f CFPSCameraController::GetDirection() const
 
 void CFPSCameraController::Update( float ElapsedTime )
 {
+	if (m_CameraLocked)
+		return;
+
 	m_Pitch = m_Pitch - m_PitchDisplacement;
 
 	AddYaw(CInputManager::GetInputManager()->GetAxis("X_AXIS"));
 	AddPitch(CInputManager::GetInputManager()->GetAxis("Y_AXIS"));
-	if (m_Pitch > m_PitchfloorLimit)//No atraviesa suelo
+	if (m_Pitch > m_PitchfloorLimit)
 	{
 		m_Pitch = m_PitchfloorLimit;
 	}
-	if (m_Pitch < m_PitchSkyLimit)//Vista superior personaje
+	if (m_Pitch < m_PitchSkyLimit)
 	{
 		m_Pitch = m_PitchSkyLimit;
 	}
 
-	//IF CHARCONTROLLER
-	//receive updated pos
-
-	//Vect3f rotacionDeseada = m_CameraDisplacement;
-	//rotacionDeseada = rotacionDeseada.RotateY(-m_Yaw);
-	//rotacionDeseada = rotacionDeseada.RotateX(m_Pitch);
 	Mat33f rot;
 	rot.SetIdentity();
 	rot.RotByAngleX( -m_Pitch );
 	rot.RotByAngleY( -m_Yaw );
 
-	m_Position = m_TargetPosition + rot * m_CameraDisplacement;
+	Vect3f posWithoutCollision = m_TargetPosition + rot * m_CameraDisplacement;
+
+	
+	m_Position = CEngine::GetSingleton().getPhysXManager()->RayCast(m_TargetPosition, posWithoutCollision - m_TargetPosition, mathUtils::Abs(m_CameraDisplacement.z));
+		
+	if (m_Position == Vect3f())
+	{
+		m_Position = posWithoutCollision;
+	}
+	//m_Position = posWithoutCollision;
+
 	m_Pitch = m_Pitch + m_PitchDisplacement;
 }

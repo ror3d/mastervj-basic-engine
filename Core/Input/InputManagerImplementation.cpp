@@ -95,7 +95,40 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 {
 	m_Actions.clear();
 
-	//*
+	
+	{
+		Action action = { "MOVE_FWD", KEYBOARD, Action::WHILE_PRESSED };
+		action.keyboard.key = VK_SHIFT;
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+
+		action.triggersAxis = true;
+		action.axisName = "MOVE_FWD";
+		action.axisValue = 1;
+
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "MOVE_FASTFW", KEYBOARD, Action::WHILE_PRESSED };
+		action.keyboard.key = 'W';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		action.triggersAxis = true;
+		action.axisName = "RunAxis";
+		action.axisValue = 1;
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "MOVE_FASTBW", KEYBOARD, Action::WHILE_PRESSED };
+		action.keyboard.key = 'S';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+
+		action.triggersAxis = true;
+		action.axisName = "RunAxis";
+		action.axisValue = -1;
+		m_Actions.push_back(action);
+	}
 	{
 		Action action = { "STRAFE_LEFT", KEYBOARD, Action::WHILE_PRESSED };
 		action.keyboard.key = 'A';
@@ -128,17 +161,6 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		action.keyboard.needsCtrl = false;
 		action.triggersAxis = true;
 		action.axisName = "JUMPAxis";
-		action.axisValue = 1;
-		m_Actions.push_back(action);
-	}
-
-	{
-		Action action = { "RUN", KEYBOARD, Action::WHILE_PRESSED };
-		action.keyboard.key = VK_SHIFT;
-		action.keyboard.needsAlt = false;
-		action.keyboard.needsCtrl = false;
-		action.triggersAxis = true;
-		action.axisName = "RunAxis";
 		action.axisValue = 1;
 		m_Actions.push_back(action);
 	}
@@ -195,38 +217,18 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		action.keyboard.needsCtrl = false;
 		m_Actions.push_back(action);
 	}
+	
 	{
 		Action action = { "FIXCAMERA", KEYBOARD, Action::ON_PRESS };
 		action.keyboard.key = 'F';
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
-		action.axisName = "FIXCAMERA";
-		m_Actions.push_back(action);
-	}
-	{
-		Action action = { "MOVE_FWD", KEYBOARD, Action::WHILE_PRESSED };
-		action.keyboard.key = 'W';
-		action.keyboard.needsAlt = false;
-		action.keyboard.needsCtrl = false;
-
 		action.triggersAxis = true;
-		action.axisName = "MOVE_FWD";
-		action.axisValue = 1;
-
-		m_Actions.push_back(action);
-	}
-	{
-		Action action = { "MOVE_BACK", KEYBOARD, Action::WHILE_PRESSED };
-		action.keyboard.key = 'S';
-		action.keyboard.needsAlt = false;
-		action.keyboard.needsCtrl = false;
-
-		action.triggersAxis = true;
-		action.axisName = "MOVE_FWD";
 		action.axisValue = -1;
-
+		action.axisName = "FIXED_CAMERA";
 		m_Actions.push_back(action);
 	}
+
 
 	{
 		Action action = { "MOUSE_PRESSED", MOUSE, Action::ON_PRESS };

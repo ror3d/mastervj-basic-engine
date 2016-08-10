@@ -45,13 +45,14 @@ void CSphericalCameraController::Update( float ElapsedTime )
 	}
 
 	float Strafe = CInputManager::GetInputManager()->GetAxis("STRAFE");
-	float Forward = CInputManager::GetInputManager()->GetAxis("MOVE_FWD");
+	float Forward = CInputManager::GetInputManager()->GetAxis("RunAxis");
 
 	Vect3f cameraPosition = Vect3f(0, 0, 0);
 	cameraPosition.x = -Forward*sin(m_Yaw) - Strafe*cos(m_Yaw);
 	cameraPosition.z = Forward*cos(m_Yaw) - Strafe*sin(m_Yaw);
 	cameraPosition.y = CInputManager::GetInputManager()->GetAxis("JUMPAxis");
-	m_Position += cameraPosition*0.1f;
+	float velMultiplicator = 1.5f;
+	m_Position += cameraPosition*velMultiplicator;
 }
 
 void CSphericalCameraController::UpdateCameraValues(CCamera *Camera) const

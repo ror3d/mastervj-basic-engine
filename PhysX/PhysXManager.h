@@ -103,8 +103,10 @@ public:
 
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
+	Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance);
+	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
 
-	std::set<std::string> getTriggerCollisions( const std::string& triggerName ) { auto ret = std::move( m_TriggerCollisions[triggerName] ); return ret; }
+	//std::set<std::string> getTriggerCollisions( const std::string& triggerName ) { auto ret = std::move( m_TriggerCollisions[triggerName] ); return ret; }
 
 	std::set<std::string> getActorCollisions( const std::string& actorName ) { auto ret = std::move( m_ActorCollisions[actorName] ); return ret; }
 

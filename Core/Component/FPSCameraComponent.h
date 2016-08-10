@@ -8,8 +8,10 @@
 class CFPSCameraComponent : public CComponent
 {
 	Vect3f m_CamOffset;
+	Vect3f m_CamDisplacement;
 	bool m_followRenderableObject;
 	float m_characterRotationOverride;
+	bool m_isCameraLocked;
 
 protected:
 	virtual void Init();
@@ -25,7 +27,7 @@ public:
 
 	void SetAsCurrentCamera();
 
-	void SetFollowCharacter(bool follow, float overrideRot);
+	void SetFollowCharacter(bool follow, float overrideRot, float camOffset, float camDisplacement, bool camLocked);
 
 	float GetYaw();
 

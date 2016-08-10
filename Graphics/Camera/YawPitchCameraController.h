@@ -8,6 +8,7 @@ class IYawPitchCameraController : public ICameraController
 protected:
 	float						m_Yaw;
 	float						m_Pitch;
+	bool						m_CameraLocked;
 public:
 	IYawPitchCameraController();
 	virtual ~IYawPitchCameraController();
@@ -18,6 +19,7 @@ public:
 	float GetYaw() const {return m_Yaw;}
 	void SetPitch(float Pitch) {m_Pitch=Pitch;}
 	float GetPitch() const {return m_Pitch;}
+	void SetCameraLocked(bool camLock){ m_CameraLocked = camLock;}
 
 	virtual Vect3f GetRight() const;
 	virtual Vect3f GetUp() const;
