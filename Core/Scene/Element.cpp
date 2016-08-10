@@ -290,6 +290,11 @@ void CElement::SendMsg( const std::string& message, float arg1 )
 	SendMessage_t( message, arg1 );
 }
 
+void CElement::SendMsg(const std::string& message, const std::string& arg1)
+{
+	SendMessage_t(message, arg1);
+}
+
 CElement* CElement::Clone( const std::string & newName )
 {
 	CElement* ret = new CElement(newName);
