@@ -11,6 +11,7 @@ protected:
 	Vect3f 				m_Position;
 public:
 	ICameraController();
+	ICameraController(const Vect3f& position);
 	virtual ~ICameraController();
 
 	virtual std::string GetType() { return "ICameraController"; }

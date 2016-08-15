@@ -212,6 +212,16 @@ CTriggerComponent * CElement::GetTriggerComponent()
 	return nullptr;
 }
 
+CScriptedComponent* CElement::GetScript(const std::string& scriptName)
+{
+	auto comp = m_componentContainer.get(getName() + "_" + scriptName + "_" + CScriptedComponent::COMPONENT_TYPE);
+	if (comp)
+	{
+		return dynamic_cast<CScriptedComponent*>(comp);
+	}
+	return nullptr;
+}
+
 CAnimatedInstanceComponent * CElement::GetAnimatedInstanceComponent()
 {
 	auto comp = m_componentContainer.get(getName() + "_" + CAnimatedInstanceComponent::COMPONENT_TYPE);
@@ -253,6 +263,15 @@ const Mat44f & CElement::GetTransform()
 	return m_TransformMatrix;
 }
 
+template<typename... T>
+void CElement::SendMessage_t(const std::string msg, T... arg1)
+{
+	for (auto &const c : m_componentContainer)
+	{
+		c.second->SendMsg(msg, arg1...);
+	}
+}
+
 template<typename T>
 void CElement::SendMessage_t(const std::string msg, T arg1)
 {
@@ -275,6 +294,11 @@ void CElement::SendMsg( const std::string& message, int arg1 )
 void CElement::SendMsg( const std::string& message, float arg1 )
 {
 	SendMessage_t( message, arg1 );
+}
+
+void CElement::SendMsg( const std::string& message, int arg1, float arg2 )
+{
+	SendMessage_t( message, arg1, arg2 );
 }
 
 CElement* CElement::Clone( const std::string & newName )

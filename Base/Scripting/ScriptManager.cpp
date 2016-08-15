@@ -250,7 +250,9 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCollider", &CElement::GetPhysxComponent,
 			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
 			"SendMessageFloat", static_cast<void(CElement::*)(const std::string&, float)>(&CElement::SendMsg),
+			"SendMessageIntFloat", static_cast<void(CElement::*)(const std::string&, int, float)>(&CElement::SendMsg),
 			"GetTrigger", &CElement::GetTriggerComponent,
+			"GetScript", &CElement::GetScript,
 			"Clone", &CElement::Clone);
 
 
@@ -276,10 +278,20 @@ void CScriptManager::RegisterLUAFunctions()
 			"Move", &CPhysxComponent::Move
 			);
 
+	(*m_state)["CScriptedComponent"]
+		.SetClass<CScriptedComponent, const CScriptedComponent&, CElement*>(
+			"GetLuaObject", std::function<sel::Selector(const CScriptedComponent* _this)>([this]( const CScriptedComponent* _this )
+				{
+					unsigned tid = _this->GetLuaTableId();
+					return ( *m_state )["_componentStates"][tid];
+				} ) );
+
+
 	(*m_state)["CFPSCameraComponent"]
 		.SetClass<CFPSCameraComponent, const CFPSCameraComponent&, CElement*>(
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
-			"SetFollowCharacter", &CFPSCameraComponent::SetFollowCharacter,
+			"GetCamOffset", &CFPSCameraComponent::GetCamOffset,
+			"SetCamOffset", &CFPSCameraComponent::SetCamOffset,
 			"GetYaw", &CFPSCameraComponent::GetYaw);
 
 

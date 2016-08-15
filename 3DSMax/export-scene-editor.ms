@@ -68,6 +68,11 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 	)
 	
 	fn InitPropertyValues propIdx = (
+		if propIdx < 1 then
+		(
+			return ok
+		)
+		
 		local prop = m_script.props[propIdx]
 		
 		property_name_txt.text = prop.name

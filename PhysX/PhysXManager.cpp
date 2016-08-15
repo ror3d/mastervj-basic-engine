@@ -189,7 +189,7 @@ void CPhysXManagerImplementation::onSleep(physx::PxActor **actors, physx::PxU32 
 
 void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pairHeader, const physx::PxContactPair *pairs, physx::PxU32 nbPairs)
 {
-	
+
 }
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
@@ -680,13 +680,36 @@ void CPhysXManager::releaseCharacterControllers(){
 
 
 Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance)
-{	
+{
 	physx::PxRaycastBuffer hit;                 // [out] Raycast results
 
 	// Raycast against all static & dynamic objects (no filtering)
 	// The main result from this call is the closest hit, stored in the 'hit.block' structure
-	physx::PxQueryFilterData filterData(physx::PxQueryFlag::eSTATIC); //SIno no se deja ver desde el cielo ok
-	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData);
+	physx::PxQueryFilterData filterData(physx::PxQueryFlag::eDYNAMIC | physx::PxQueryFlag::eSTATIC | physx::PxQueryFlag::ePREFILTER); //SIno no se deja ver desde el cielo ok
+
+	using namespace physx;
+	class : public PxQueryFilterCallback
+	{
+		PxQueryHitType::Enum preFilter( const PxFilterData &filterData,
+											   const PxShape *shape,
+											   const PxRigidActor *actor,
+											   PxHitFlags &queryFlags )
+		{
+			size_t l_indexActor = (size_t)actor->userData;
+			if ( l_indexActor & CONTROLLER_FLAG )
+			{
+				return PxQueryHitType::eNONE;
+			}
+			return PxQueryHitType::eBLOCK;
+		}
+
+		PxQueryHitType::Enum postFilter( const PxFilterData &filterData, const PxQueryHit &hit )
+		{
+			return PxQueryHitType::eNONE;
+		}
+	} filter;
+
+	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData, &filter);
 	if (status)
 		return v(hit.block.position);
 	else

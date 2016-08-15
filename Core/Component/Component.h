@@ -61,6 +61,8 @@ public:
 
 	virtual void SendMsg(const std::string&, CElement*) {}
 
+	virtual void SendMsg(const std::string&, int, float) {}
+
 	virtual void Destroy() = 0;
 
 	virtual void SetNameFromParentName( const std::string& parentName );

@@ -42,6 +42,8 @@ public:
 	virtual void SendMsg(const std::string &msg, const std::string &arg1);
 	virtual void SendMsg(const std::string &msg, CElement* arg1);
 
+	virtual unsigned GetLuaTableId() const { return m_componentStateId; }
+
 	virtual void Destroy();
 
 	static const std::string COMPONENT_TYPE;
