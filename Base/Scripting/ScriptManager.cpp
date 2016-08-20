@@ -278,7 +278,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"Move", &CPhysxComponent::Move
 			);
 
-	(*m_state)["CScriptedComponent"]
+	( *m_state )["CScriptedComponent"]
 		.SetClass<CScriptedComponent, const CScriptedComponent&, CElement*>(
 			"GetLuaObject", std::function<sel::Selector(const CScriptedComponent* _this)>([this]( const CScriptedComponent* _this )
 				{
