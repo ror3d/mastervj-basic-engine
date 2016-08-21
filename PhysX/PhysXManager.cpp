@@ -196,8 +196,10 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 {
 	for (physx::PxU32 i = 0; i < count; i++)
 	{
-		if ((pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
+		/*if ( ( pairs[i].flags & ( physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER ) ) )
+		{
 			continue;
+		}*/
 
 		size_t l_indexTrigger = (size_t)pairs[i].triggerActor->userData;
 		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
@@ -235,7 +237,9 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 			//CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
 			m_TriggerCollisions[l_triggerName].emplace(l_actorName);
 		}
-		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+		if (pairs[i].status & ( physx::PxPairFlag::eNOTIFY_TOUCH_LOST
+								| physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER
+								| physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER ) )
 		{
 			//CEngine::GetSingleton().getTriggerManager()->Deactivate(l_triggerName);
 			m_TriggerCollisions[l_triggerName].erase(l_actorName);

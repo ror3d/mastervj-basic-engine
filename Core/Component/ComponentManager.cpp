@@ -13,8 +13,6 @@ CComponentManager::~CComponentManager()
 
 void CComponentManager::PhysxUpdate()
 {
-	DestroyRemovedComponents();
-
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
 		(*it)->PhysxUpdate();
@@ -23,18 +21,21 @@ void CComponentManager::PhysxUpdate()
 
 void CComponentManager::FixedUpdate(float ElapsedTime)
 {
-	DestroyRemovedComponents();
-
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
+		if ( std::find( m_componentsToRemove.begin(), m_componentsToRemove.end(), *it ) != m_componentsToRemove.end() )
+		{
+			continue;
+		}
+
 		(*it)->FixedUpdate(ElapsedTime);
 	}
+
+	DestroyRemovedComponents();
 }
 
 void CComponentManager::Update( float ElapsedTime )
 {
-	DestroyRemovedComponents();
-
 	for ( auto &const ca : m_componentsToAdd )
 	{
 		auto it = m_components.find( ca );
@@ -56,16 +57,17 @@ void CComponentManager::Update( float ElapsedTime )
 
 		(*it)->Update(ElapsedTime);
 	}
-
-	DestroyRemovedComponents();
 }
 
 void CComponentManager::Render(CContextManager&  _context)
 {
-	DestroyRemovedComponents();
-
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
+		if ( std::find( m_componentsToRemove.begin(), m_componentsToRemove.end(), *it ) != m_componentsToRemove.end() )
+		{
+			continue;
+		}
+
 		(*it)->Render(_context);
 	}
 }
@@ -73,6 +75,11 @@ void CComponentManager::RenderDebug(CContextManager&  _context)
 {
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
+		if ( std::find( m_componentsToRemove.begin(), m_componentsToRemove.end(), *it ) != m_componentsToRemove.end() )
+		{
+			continue;
+		}
+
 		(*it)->RenderDebug(_context);
 	}
 }

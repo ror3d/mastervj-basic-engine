@@ -116,11 +116,14 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 
 void CPhysxComponent::Destroy()
 {
+	if ( m_Destroyed ) return;
+	m_Destroyed = true;
 	CEngine::GetSingleton().getPhysXManager()->destroyActor(getName());
 }
 
 void CPhysxComponent::PhysxUpdate()
 {
+	if ( m_Destroyed ) return;
 	if ( !m_isStatic )
 	{
 		if ( m_isKinematic )
@@ -137,13 +140,18 @@ void CPhysxComponent::PhysxUpdate()
 
 void CPhysxComponent::FixedUpdate(float ElapsedTime)
 {
+	if ( m_Destroyed ) return;
 	auto collisions = CEngine::GetSingleton().getPhysXManager()->getActorCollisions( getName() );
 	auto own = GetOwner();
 	auto cm = CEngine::GetSingleton().getComponentManager();
 	for ( auto &const col : collisions )
 	{
-		auto otherOwner = cm->get(col)->GetOwner();
-		own->SendMsg("OnCollision", otherOwner);
+		auto other = cm->get( col );
+		if ( other )
+		{
+			auto otherOwner = other->GetOwner();
+			own->SendMsg( "OnCollision", otherOwner );
+		}
 	}
 }
 
@@ -151,6 +159,7 @@ void CPhysxComponent::FixedUpdate(float ElapsedTime)
 
 void CPhysxComponent::Move(Vect3f position)
 {
+	if ( m_Destroyed ) return;
 	Quatf quat = Quatf::GetQuaternionFromRadians(Vect3f(GetOwner()->GetYaw(), GetOwner()->GetPitch(), GetOwner()->GetRoll()));
 	CEngine::GetSingleton().getPhysXManager()->MoveActor(getName(), position, quat);
 }

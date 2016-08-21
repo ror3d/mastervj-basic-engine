@@ -81,8 +81,8 @@ void CSceneManager::DestroyObject( const std::string & id )
 
 	if ( it != m_Objects.end() )
 	{
-		delete it->second;
-		m_Objects.erase( it );
+		m_ObjectsToDestroy.push_back( id );
+		it->second->Destroy();
 	}
 }
 
@@ -115,13 +115,30 @@ void CSceneManager::DestroyObjectFromScene( const std::string & sceneName, const
 CElement * CSceneManager::GetObjectById( const std::string & id )
 {
 	auto it = m_Objects.find( id );
+	auto it2 = std::find( m_ObjectsToDestroy.begin(), m_ObjectsToDestroy.end(), id );
 
-	if ( it != m_Objects.end() )
+	if ( it != m_Objects.end() && it2 == m_ObjectsToDestroy.end())
 	{
 		return it->second;
 	}
 
 	return nullptr;
+}
+
+void CSceneManager::FixedUpdate()
+{
+	for ( auto &id : m_ObjectsToDestroy )
+	{
+		auto it = m_Objects.find( id );
+
+		if ( it != m_Objects.end() )
+		{
+			delete it->second;
+			m_Objects.erase( it );
+		}
+	}
+
+	m_ObjectsToDestroy.clear();
 }
 
 void CSceneManager::Update()
@@ -146,6 +163,6 @@ void CSceneManager::Update()
 		}
 	}
 
-	m_ScenesToLoad.clear();
+	m_ScenesToUnload.clear();
 }
 

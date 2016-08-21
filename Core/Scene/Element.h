@@ -36,6 +36,8 @@ public:
 	CElement(const CXMLTreeNode& node);
 	~CElement();
 
+	void Destroy();
+
 	inline void SetPosition(const Vect3f &Position) { m_Position = Position; m_TransformChanged = true; }
 	inline Vect3f GetPosition() const { return m_Position; }
 	inline void SetYaw(float Yaw) { m_RotationYPR.x = Yaw; m_TransformChanged = true; }
@@ -63,6 +65,7 @@ public:
 	void SendMsg( const std::string& message, int arg1 );
 	void SendMsg( const std::string& message, float arg1 );
 	void SendMsg( const std::string& message, int arg1, float arg2 );
+	void SendMsg( const std::string& message, int arg1, const std::string& arg2 );
 
 	CElement* Clone( const std::string& newName );
 

@@ -27,6 +27,11 @@ CFPSCameraComponent::CFPSCameraComponent(const CFPSCameraComponent& base, CEleme
 	SetNameFromParentName( Owner->getName() );
 
 	m_CamOffset = base.m_CamOffset;
+
+	m_YawSpeed = base.m_YawSpeed;
+	m_PitchSpeed = base.m_PitchSpeed;
+	m_PitchFloorLimit = base.m_PitchFloorLimit;
+	m_PitchSkyLimit = base.m_PitchSkyLimit;
 }
 
 CFPSCameraComponent::~CFPSCameraComponent()
@@ -45,6 +50,7 @@ void CFPSCameraComponent::Init()
 
 void CFPSCameraComponent::Update(float elapsedTime)
 {
+	if ( m_Destroyed ) return;
 	CElement *owner = GetOwner();
 	CFPSCameraController* cc = dynamic_cast<CFPSCameraController*>(CEngine::GetSingleton().getCameraManager()->get( getName() ));
 	DEBUG_ASSERT( cc != nullptr );
@@ -55,6 +61,7 @@ void CFPSCameraComponent::Update(float elapsedTime)
 
 void CFPSCameraComponent::Destroy()
 {
+	m_Destroyed = true;
 	delete CEngine::GetSingleton().getCameraManager()->get( getName() );
 	CEngine::GetSingleton().getCameraManager()->remove( getName() );
 }
@@ -62,10 +69,12 @@ void CFPSCameraComponent::Destroy()
 
 void CFPSCameraComponent::SetAsCurrentCamera()
 {
+	if ( m_Destroyed ) return;
 	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController( getName() );
 }
 
 float CFPSCameraComponent::GetYaw(){
+	if ( m_Destroyed ) return 0;
 	CFPSCameraController* cc = dynamic_cast<CFPSCameraController*>(CEngine::GetSingleton().getCameraManager()->get(getName()));
 	DEBUG_ASSERT(cc != nullptr);
 	return cc->GetYaw();

@@ -39,6 +39,8 @@ public:
 	virtual void SendMsg(const std::string &msg);
 	virtual void SendMsg(const std::string &msg, int arg1);
 	virtual void SendMsg(const std::string &msg, float arg1);
+	virtual void SendMsg(const std::string &msg, int arg1, float arg2);
+	virtual void SendMsg(const std::string &msg, int arg1, const std::string &arg2);
 	virtual void SendMsg(const std::string &msg, const std::string &arg1);
 	virtual void SendMsg(const std::string &msg, CElement* arg1);
 

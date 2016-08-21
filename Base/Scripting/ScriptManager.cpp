@@ -251,6 +251,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
 			"SendMessageFloat", static_cast<void(CElement::*)(const std::string&, float)>(&CElement::SendMsg),
 			"SendMessageIntFloat", static_cast<void(CElement::*)(const std::string&, int, float)>(&CElement::SendMsg),
+			"SendMessageIntStr", static_cast<void(CElement::*)(const std::string&, int, const std::string&)>(&CElement::SendMsg),
 			"GetTrigger", &CElement::GetTriggerComponent,
 			"GetScript", &CElement::GetScript,
 			"Clone", &CElement::Clone);
