@@ -29,7 +29,7 @@ fn createSceneFile sceneName gameObjects = (
 		local Pitch = GetPitch (gObj.transform)
 		local Roll = GetRoll (gObj.transform)
 		
-		format "\t<object name=\"%\" pos=\"% % %\" scale=\"% % %\" yawpitchroll=\"% % %\" enabled=\"%\">\n"\
+		format "\t<object name=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" enabled=\"%\">\n"\
 					gObj.name Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll (TrueFalse true) to: file
 		
 		local exportComp = getUserProp gObj "ExportRendererC"

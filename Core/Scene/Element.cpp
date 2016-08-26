@@ -18,8 +18,6 @@
 
 #include <Windows.h>
 
-#include <Windows.h>
-
 CElement::CElement()
 	: m_Scale(1.0f, 1.0f, 1.0f)
 	, m_Enabled(true)
@@ -146,18 +144,8 @@ CElement::~CElement()
 
 void CElement::SetQuat( Quatf q )
 {
-	float p0 = q.w;
-	float p1 = q.y;
-	float p2 = q.z;
-	float p3 = q.x;
-	float e = -1;
-	m_RotationYPR.x = -atan2(2 * (p0*p1 + e*p2*p3), 1 - 2 * (p1*p1 + p2*p2));
-	m_RotationYPR.y = -asin(2 * (p0*p2 - e*p1*p3));
-	m_RotationYPR.z = -atan2(2 * (p0*p3 + e*p1*p2), 1 - 2 * (p2*p2 + p3*p3));
+	m_RotationYPR = Quatf::GetEulerFromQuaternion( q );
 	m_TransformChanged = true;
-	//m_RotationYPR.x = atan2( 2.0*( q.y*q.z + q.w*q.x ), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z );
-	//m_RotationYPR.y = asin( -2.0*( q.x*q.z - q.w*q.y ) );
-	//m_RotationYPR.z = atan2( 2.0*( q.x*q.y + q.w*q.z ), q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z );
 }
 
 void CElement::AddComponent(std::string Name, CComponent* component)
@@ -242,18 +230,17 @@ const Mat44f & CElement::GetTransform()
 		Mat44f translation;
 		Mat44f scale;
 
-		rotation.SetIdentity();
-		Mat44f l_RotX;
-		l_RotX.SetIdentity();
-		l_RotX.RotByAngleX(m_RotationYPR.z);
-		Mat44f l_RotY;
-		l_RotY.SetIdentity();
-		l_RotY.RotByAngleY(m_RotationYPR.x);
-		Mat44f l_RotZ;
-		l_RotZ.SetIdentity();
-		l_RotZ.RotByAngleZ(m_RotationYPR.y);
+		Mat44f l_RotYaw;
+		l_RotYaw.SetIdentity();
+		l_RotYaw.RotByAngleY(-m_RotationYPR.x);
+		Mat44f l_RotPitch;
+		l_RotPitch.SetIdentity();
+		l_RotPitch.RotByAngleX(-m_RotationYPR.y);
+		Mat44f l_RotRoll;
+		l_RotRoll.SetIdentity();
+		l_RotRoll.RotByAngleZ(-m_RotationYPR.z);
 
-		rotation = l_RotX*l_RotZ*l_RotY;
+		rotation = l_RotRoll*l_RotPitch*l_RotYaw;
 
 		translation.SetFromPos( m_Position );
 

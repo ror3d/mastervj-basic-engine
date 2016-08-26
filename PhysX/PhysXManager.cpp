@@ -521,6 +521,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.name.size());
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.position.size());
 	DEBUG_ASSERT(m_actors.actor.size() == m_actors.rotation.size());
+	DEBUG_ASSERT( m_actors.index.find( name ) == m_actors.index.end() );
 
 	m_actors.index[name] = idx;
 	m_actors.name.push_back(name);
