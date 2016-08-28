@@ -26,7 +26,7 @@ public:
 
 	bool IsGrounded();
 
-	void Move(const Vect3f& velocity, const Vect3f& up, float elapsedTime);
+	void Move(const Vect3f& displacement, const Vect3f& up, float elapsedTime);
 
 	void SetPosition(const Vect3f& pos);
 
