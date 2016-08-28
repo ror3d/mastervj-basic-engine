@@ -593,7 +593,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.radius = radius;
 	desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
 	desc.slopeLimit = cosf(3.1415f / 6); //30º
-	desc.stepOffset = 0.1f * height;
+	desc.stepOffset = 0.2f * (height + 2*radius);
 	desc.density = density;
 	desc.reportCallback = dynamic_cast<CPhysXManagerImplementation*>(this);
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + height*0.5f + radius + desc.contactOffset, pos.z);
@@ -659,6 +659,7 @@ void CPhysXManager::resizeCharacterController( const std::string & name, float h
 	cc->resize( height );
 	cc->setRadius( radius );
 	cc->setFootPosition( pos );
+	cc->setStepOffset( 0.2*( height + 2 * radius ) );
 }
 
 void CPhysXManager::releaseCharacterController( const std::string &name )
