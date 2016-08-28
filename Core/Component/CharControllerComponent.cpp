@@ -54,10 +54,6 @@ bool CCharacterControllerComponent::IsGrounded()
 
 void CCharacterControllerComponent::Move(const Vect3f& displacement, const Vect3f& up, float elapsedTime)
 {
-	if(displacement.SquaredLength() < 0.00001 )
-	{
-		return;
-	}
 	GetOwner()->SetPosition(CEngine::GetSingleton().getPhysXManager()->moveCharacterController( displacement, up, elapsedTime, getName() ) + m_offset);
 }
 
