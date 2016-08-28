@@ -118,8 +118,16 @@ void CCinematicObject::Update( float ElapsedTime )
 
 void CCinematicObject::Stop()
 {
-	CCinematicPlayer::Stop();
 	m_CurrentKeyFrame = 0;
+
+	auto current = m_CinematicObjectKeyFrames[m_CurrentKeyFrame];
+
+	m_object->SetPosition( current->GetPosition() );
+	m_object->SetQuat(current->GetQuat());
+	m_object->SetScale( current->GetScale() );
+
+	CCinematicPlayer::Stop();
+
 }
 
 
