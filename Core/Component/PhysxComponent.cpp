@@ -25,7 +25,6 @@ CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CElement* Owner)
 		DEBUG_ASSERT( !"Collider type requires core_mesh!" );
 		m_colType = "Sphere";
 	}
-	//m_isTrigger = node.GetBoolProperty("trigger", false);
 }
 
 CPhysxComponent::CPhysxComponent(const CPhysxComponent& base, CElement* Owner)
@@ -141,9 +140,12 @@ void CPhysxComponent::FixedUpdate(float ElapsedTime)
 	auto own = GetOwner();
 	auto cm = CEngine::GetSingleton().getComponentManager();
 	for ( auto &const col : collisions )
-	{
-		auto otherOwner = cm->get(col)->GetOwner();
-		own->SendMsg("OnCollision", otherOwner);
+	{		
+		if (cm->get(col) != nullptr) //Can be nullptr if we destroy the object and later check the physx actor colisions
+		{
+			auto otherOwner = cm->get(col)->GetOwner();
+			own->SendMsg("OnCollision", otherOwner);			
+		}
 	}
 }
 

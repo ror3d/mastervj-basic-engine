@@ -53,6 +53,13 @@ CAnimatedInstanceComponent::CAnimatedInstanceComponent(CXMLTreeNode& node, CElem
 		}
 		prev = c;
 	}
+
+	float timeToStart = node.GetFloatProperty("startTime", -1, false);
+	if (timeToStart != -1)
+	{
+		m_AnimatedMeshInstance->ClearCycle(0, 0.2);
+		m_AnimatedMeshInstance->ExecuteAction(0, 0.2, 0, timeToStart, false);
+	}
 }
 
 
@@ -108,5 +115,10 @@ bool CAnimatedInstanceComponent::IsCycleAnimationActive(int Id) const
 bool CAnimatedInstanceComponent::IsActionAnimationActive(int Id) const
 {
 	return m_AnimatedMeshInstance->IsActionAnimationActive(Id);
+}
+
+void CAnimatedInstanceComponent::SetAnimationTime(float animationTime) const
+{
+	m_AnimatedMeshInstance->SetAnimationTime(animationTime);
 }
 

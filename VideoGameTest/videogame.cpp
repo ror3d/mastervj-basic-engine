@@ -245,8 +245,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CInputManager::SetCurrentInputManager(&inputManager);
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
-		engine.getCinematicManager()->LoadFilesInDir("Data\\Animations\\");
-
 		engine.getScriptManager()->Initialize("Data\\scripting.xml");
 
 		engine.getComponentManager()->FirstInitialization();

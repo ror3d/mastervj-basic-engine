@@ -8,6 +8,8 @@
 #include "Utils/Utils.h"
 #include <Base/Math/Math.h>
 
+#include <iostream>
+
 CFPSCameraController::CFPSCameraController()
 : m_YawSpeed(0.08f)
 , m_PitchSpeed(0.5f)
@@ -55,6 +57,7 @@ void CFPSCameraController::UpdateCameraValues(CCamera *Camera) const
 	Camera->SetLookAt(m_Position + l_Direction);
 	Camera->SetUp(GetUp());
 	Camera->SetMatrixs();
+
 }
 
 Vect3f CFPSCameraController::GetDirection() const
@@ -88,14 +91,17 @@ void CFPSCameraController::Update( float ElapsedTime )
 
 	Vect3f posWithoutCollision = m_TargetPosition + rot * m_CameraDisplacement;
 
-	
 	m_Position = CEngine::GetSingleton().getPhysXManager()->RayCast(m_TargetPosition, posWithoutCollision - m_TargetPosition, mathUtils::Abs(m_CameraDisplacement.z));
 		
 	if (m_Position == Vect3f())
 	{
 		m_Position = posWithoutCollision;
 	}
-	//m_Position = posWithoutCollision;
+	else
+	{
+		m_Position = m_TargetPosition + (m_Position - m_TargetPosition) * 0.9;
+	}
+	
 
 	m_Pitch = m_Pitch + m_PitchDisplacement;
 }

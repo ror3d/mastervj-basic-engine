@@ -25,6 +25,8 @@ public:
 
 	virtual void Destroy();
 
+	void Reset();
+
 	void SetAsCurrentCamera();
 
 	void SetFollowCharacter(bool follow, float overrideRot, float camOffset, float camDisplacement, bool camLocked);

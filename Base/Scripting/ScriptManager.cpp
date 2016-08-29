@@ -279,6 +279,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
 			"BlendCycle", &CAnimatedInstanceComponent::BlendCycle,
 			"ClearCycle", &CAnimatedInstanceComponent::ClearCycle,
+			"SetAnimationTime", &CAnimatedInstanceComponent::SetAnimationTime,
 			"IsCycleAnimationActive", &CAnimatedInstanceComponent::IsCycleAnimationActive,
 			"IsActionAnimationActive", &CAnimatedInstanceComponent::IsActionAnimationActive);
 
@@ -360,7 +361,8 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", static_cast<void(CCinematicManager::*)(std::string)>(&CCinematicManager::Play),
 		"Stop", &CCinematicManager::Stop,
-		"Pause", &CCinematicManager::Pause);
+		"Pause", &CCinematicManager::Pause,
+		"StopAll", &CCinematicManager::StopAll);
 
 	(*m_state)["CSoundManager"].SetObj(
 		*CEngine::GetSingleton().getSoundManager(),

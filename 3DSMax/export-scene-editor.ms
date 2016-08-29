@@ -296,6 +296,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	checkbox export_cinem_ckb "Export Transform Anim." pos:[232,568] width:152 height:16
 	local CinematicsLoopTypes = #("Cycle", "Reverse", "One-Shot")
 	radiobuttons cinematic_type_radio "" pos:[248,592] width:68 height:48 enabled:false labels:#("Cycle", "Reverse", "One-Shot") columns:1
+	checkbox cinem_playStart_ckb "Play At Start" pos:[248,642] width:109 height:18
 	checkbox export_particle_ckb "Export Emitter" pos:[448,344] width:152 height:16
 	label lbl43 "Emitter Class" pos:[464,368] width:112 height:16
 	edittext emitter_class_txt "" pos:[464,384] width:144 height:16
@@ -382,6 +383,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		emitter_class_txt.enabled = ePart
 		
 		cinematic_type_radio.enabled = export_cinem_ckb.checked
+		cinem_playStart_ckb.enabled = export_cinem_ckb.checked
 	)
 	
 	function ResetProps = (
@@ -442,6 +444,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 
 
 		export_cinem_ckb.checked = false
+		cinem_playStart_ckb.checked = false
 		cinematic_type_radio.state = 1
 	)
 	
@@ -664,6 +667,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		LoadCkbProp export_cinem_ckb "ExportTAnimation"
 		LoadRadioProp cinematic_type_radio CinematicsLoopTypes "TAnimationType"
+		LoadCkbProp cinem_playStart_ckb "TAnimationPlayStart"
 		
 		g_Scripts = #()
 		
@@ -738,6 +742,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		SaveCkbProp Obj export_cinem_ckb "ExportTAnimation"
 		SaveRadioProp Obj cinematic_type_radio CinematicsLoopTypes "TAnimationType"
+		SaveCkbProp Obj cinem_playStart_ckb "TAnimationPlayStart"
 		
 		if exportMeshCore then (
 			setUserProp Obj "export_mesh_instance" true
@@ -764,6 +769,9 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	
 	button reset_btn "Reset" pos:[576,680] width:80 height:40
 	button remove_script_btn "Remove" pos:[32,456] width:56 height:21
+	
+	
+	
 	on ExportSceneEditor open do
 	(
 		callbacks.addScript #selectionSetChanged "ExportSceneEditor.selectedObjectChanged()" id:#UABSceneProperties
@@ -811,6 +819,17 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	on scripts_combo changed state do
 	(
 		UpdateEnabledProps()
+	)
+	on scripts_edit_btn pressed do
+	(
+		if scripts_combo.selection != 0 then
+		(
+			g_CurrentScript = scripts_combo.selection
+			CreateDialog ScriptPropertiesEditor modal: true parent: ExportSceneEditor.hwnd
+			local l = scripts_combo.items
+			l[g_CurrentScript] = g_Scripts[g_CurrentScript].name
+			scripts_combo.items = l
+		)
 	)
 	on get_btn pressed do
 	(
@@ -877,7 +896,6 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	(
 		UpdateEnabledProps()
 	)
-	
 	on script_add_btn pressed do
 	(
 		local txt = scripts_combo.text
@@ -899,6 +917,11 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			scripts_combo.selection = i
 		)
 	)
+	on reset_btn pressed do
+	(	
+		ResetProps()
+		UpdateEnabledProps()
+	)
 	on remove_script_btn pressed do
 	(
 		if scripts_combo.selection != 0 then
@@ -910,23 +933,6 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			scripts_combo.items = l
 			scripts_combo.selection = 0
 		)
-	)
-	on scripts_edit_btn pressed  do
-	(
-		if scripts_combo.selection != 0 then
-		(
-			g_CurrentScript = scripts_combo.selection
-			CreateDialog ScriptPropertiesEditor modal: true parent: ExportSceneEditor.hwnd
-			local l = scripts_combo.items
-			l[g_CurrentScript] = g_Scripts[g_CurrentScript].name
-			scripts_combo.items = l
-		)
-	)
-	
-	on reset_btn pressed do
-	(	
-		ResetProps()
-		UpdateEnabledProps()
 	)
 )
 

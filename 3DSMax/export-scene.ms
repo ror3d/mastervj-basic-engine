@@ -122,6 +122,16 @@ fn createSceneFile sceneName gameObjects = (
 			format "\t\t<particle_emitter class=\"%\" />\n" peClass to: file
 		)
 		
+		exportComp = getUserProp gObj "ExportTAnimation"
+		if exportComp != undefined  and exportComp == true then (
+			local cinem_playAtStart = getUserProp gObj "TAnimationPlayStart"
+			if cinem_playAtStart == undefined then
+			(
+				cinem_playAtStart = false
+			)
+			format "\t\t<cinematic name=\"%\" playAtStart=\"%\" />\n" gObj.name cinem_playAtStart to: file
+		)
+		
 		exportComp = getUserProp gObj "ExportScripts"
 		if exportComp != undefined then (
 			local scripts = execute exportComp

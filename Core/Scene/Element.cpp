@@ -15,6 +15,8 @@
 #include <Core/Component/ParticleEmitterComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
 #include <Core/Component/SpeakerComponent.h>
+#include <Core/Component/CinematicComponent.h>
+#include <Core/Component/SpawnComponent.h>
 
 #include <Windows.h>
 
@@ -113,6 +115,14 @@ CElement::CElement(const CXMLTreeNode& node)
 		else if (type == "particle_emitter")
 		{
 			component = new CParticleEmitterComponent(comp, this);
+		}
+		else if (type == "cinematic")
+		{
+			component = new CCinematicComponent(comp, this);
+		}
+		else if (type == "spawn")
+		{
+			component = new CSpawnComponent(comp, this);
 		}
 		else
 		{
