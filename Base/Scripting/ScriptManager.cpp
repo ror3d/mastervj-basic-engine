@@ -231,26 +231,6 @@ void CScriptManager::RegisterLUAFunctions()
 			"Mul", static_cast<Vect3f (Vect3f::*)(float) const>(&Vect3f::operator*)
 			);
 
-	(*m_state)["C3DElement"]
-		.SetClass<C3DElement>(
-			"GetPitch", &C3DElement::GetPitch,
-			"SetPitch", &C3DElement::SetPitch,
-			"GetPosition", &C3DElement::GetPosition,
-			"SetPosition", &C3DElement::SetPosition,
-			"GetQuat", &C3DElement::GetQuat,
-			"SetQuat", &C3DElement::SetQuat,
-			"GetRoll", &C3DElement::GetRoll,
-			"SetRoll", &C3DElement::SetRoll,
-			"GetScale", &C3DElement::GetScale,
-			"SetScale", &C3DElement::SetScale,
-			"GetTransform", &C3DElement::GetTransform,
-			"GetVisible", &C3DElement::GetVisible,
-			"SetVisible", &C3DElement::SetVisible,
-			"GetYaw", &C3DElement::GetYaw,
-			"SetYaw", &C3DElement::SetYaw,
-			"SetYawPitchRoll", &C3DElement::SetYawPitchRoll,
-			"GetPrevPosition", &C3DElement::GetPrevPosition);
-
 
 
 	(*m_state)["CElement"]
@@ -270,6 +250,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetCollider", &CElement::GetPhysxComponent,
 			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
 			"SendMessageFloat", static_cast<void(CElement::*)(const std::string&, float)>(&CElement::SendMsg),
+			"SendMessageString", static_cast<void(CElement::*)(const std::string&, const std::string&)>(&CElement::SendMsg),
+			"SendMessageElement", static_cast<void(CElement::*)(const std::string&, CElement*)>(&CElement::SendMsg),
 			"GetTrigger", &CElement::GetTriggerComponent,
 			"Clone", &CElement::Clone);
 

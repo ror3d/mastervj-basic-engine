@@ -1,8 +1,8 @@
 #pragma once
 
+#include <Base/Math/Math.h>
 #include <Base/Utils/Named.h>
 #include <Base/Utils/TMapContainer.h>
-#include <Base/Math/Math.h>
 
 #include <Core/Component/Component.h>
 
@@ -61,6 +61,7 @@ public:
 	void SendMsg( const std::string& message, CElement* arg1 );
 	void SendMsg( const std::string& message, int arg1 );
 	void SendMsg( const std::string& message, float arg1 );
+	void SendMsg(const std::string& message, const std::string& arg1);
 
 	CElement* Clone( const std::string& newName );
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{5775BF0C-0D23-4B87-85C5-9235BCDA49F5}"
 EndProject
@@ -70,6 +70,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cal3D", "3rdParty\cal3d-0.11rc2\src\cal3d\cal3d.vcxproj", "{92B63265-5D15-49C8-B5AA-1B16378BE875}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua", "3rdParty\lua-5.3.2\lua.vcxproj", "{81F73E5A-B785-4F4E-8AF5-D1AE902EDEED}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestQuaternions", "Test\TestQuaternions\TestQuaternions.vcxproj", "{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0EFE939E-9C88-4AC4-A491-629767E662A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -190,6 +194,18 @@ Global
 		{81F73E5A-B785-4F4E-8AF5-D1AE902EDEED}.Template|Win32.ActiveCfg = Release|Win32
 		{81F73E5A-B785-4F4E-8AF5-D1AE902EDEED}.Template|Win32.Build.0 = Release|Win32
 		{81F73E5A-B785-4F4E-8AF5-D1AE902EDEED}.Template|x64.ActiveCfg = Release|Win32
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Debug|Win32.Build.0 = Debug|Win32
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Debug|x64.ActiveCfg = Debug|x64
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Debug|x64.Build.0 = Debug|x64
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Release|Win32.ActiveCfg = Release|Win32
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Release|Win32.Build.0 = Release|Win32
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Release|x64.ActiveCfg = Release|x64
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Release|x64.Build.0 = Release|x64
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Template|Win32.ActiveCfg = Release|Win32
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Template|Win32.Build.0 = Release|Win32
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Template|x64.ActiveCfg = Release|x64
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE}.Template|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -207,6 +223,7 @@ Global
 		{B99E1FA1-C30A-45F2-9D57-9E9C21B2DF42} = {AF11CA96-DD73-44B4-8EDB-F89868271505}
 		{92B63265-5D15-49C8-B5AA-1B16378BE875} = {AF11CA96-DD73-44B4-8EDB-F89868271505}
 		{81F73E5A-B785-4F4E-8AF5-D1AE902EDEED} = {AF11CA96-DD73-44B4-8EDB-F89868271505}
+		{3EA043F5-76C1-47DA-BDB2-029F5CDCD0DE} = {0EFE939E-9C88-4AC4-A491-629767E662A5}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

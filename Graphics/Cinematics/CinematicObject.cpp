@@ -32,6 +32,10 @@ CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 	float duration = 0;
 	for ( int i = 0; i < treeNode.GetNumChildren(); ++i )
 	{
+		if ( treeNode( i ).GetName() != std::string("cinematic_object_key_frame") )
+		{
+			continue;
+		}
 		auto kf = new CCinematicObjectKeyFrame( treeNode( i ) );
 		AddCinematicObjectKeyFrame(kf);
 		if ( kf->getKeyFrameTime() > duration )
@@ -81,6 +85,7 @@ void CCinematicObject::Update( float ElapsedTime )
 		if ( !m_object )
 		{
 			OutputDebugStringA( ( "CCinematicObject: Could not find object " + m_name + "\n" ).c_str() );
+			m_Playing = false;
 			return;
 		}
 	}
@@ -120,6 +125,10 @@ void CCinematicObject::Stop()
 
 void CCinematicObject::OnRestartCycle()
 {
+	if ( m_object )
+	{
+		m_object->SendMsg( "OnAnimationCycleFinished" );
+	}
 }
 
 

@@ -104,6 +104,13 @@ CMesh* CStaticMeshLoader::GetMesh(const std::string& meshFileName)
 			else
 				l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_TEXTURE_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
 		}
+		else if (l_VertexType == MV_POSITION_NORMAL_VERTEX::GetVertexType())
+		{
+			if (l_IndexType == 16)
+				l_RV = new CKGTriangleListRenderableIndexed16Vertexs<MV_POSITION_NORMAL_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
+			else
+				l_RV = new CKGTriangleListRenderableIndexed32Vertexs<MV_POSITION_NORMAL_VERTEX>(l_VtxsData, l_NumVertexs, l_IdxData, l_NumIndexs);
+		}
 		else if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::GetVertexType())
 		{
 			if (l_IndexType == 16)
@@ -142,6 +149,10 @@ std::vector<Vect3f> CStaticMeshLoader::GetVect3fArray( const MeshFile::MeshData&
 	{
 		return GetVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_TEXTURE_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
 	}
+	else if ( l_VertexType == MV_POSITION_NORMAL_VERTEX::GetVertexType() )
+	{
+		return GetVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
+	}
 	else if ( l_VertexType == MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX::GetVertexType() )
 	{
 		return GetVect3fArrayInternal( reinterpret_cast<MV_POSITION_NORMAL_TEXTURE_TEXTURE2_VERTEX*>( mesh.vertexes ), mesh.nVertexes );
@@ -152,6 +163,7 @@ std::vector<Vect3f> CStaticMeshLoader::GetVect3fArray( const MeshFile::MeshData&
 	}
 	else
 	{
+		DEBUG_ASSERT( !"Vertex type not implemented!" );
 		return {};
 	}
 }
@@ -326,6 +338,8 @@ bool CStaticMeshLoader::MeshFile::Load( const std::string &FileName )
 			unsigned long l_NumBytes = 0;
 			if (l_VertexType == MV_POSITION_NORMAL_TEXTURE_VERTEX::GetVertexType())
 				l_NumBytes = sizeof(MV_POSITION_NORMAL_TEXTURE_VERTEX)*l_NumVertexs;
+			else if (l_VertexType == MV_POSITION_NORMAL_VERTEX::GetVertexType())
+				l_NumBytes = sizeof(MV_POSITION_NORMAL_VERTEX)*l_NumVertexs;
 			else if (l_VertexType == MV_POSITION_COLOR_VERTEX::GetVertexType())
 				l_NumBytes = sizeof(MV_POSITION_COLOR_VERTEX)*l_NumVertexs;
 			else if (l_VertexType == MV_POSITION_TEXTURE_VERTEX::GetVertexType())

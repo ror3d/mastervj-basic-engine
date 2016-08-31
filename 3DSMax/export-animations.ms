@@ -127,13 +127,11 @@ fn ExportAllObjectCinematics =
 			local t = keys[i].frame / fps
 			local transf = at time keys[i] obj.transform
 			local pos = ChangeCoordsBase transf.position
-			local qu = transf.rotation as quat			
-			qu.x = qu.x
-			qu.y = -qu.y
-			qu.z = qu.z
+			local qu = ChangeCoordsBase (transf.rotation as quat)
 			local sca = ScaleToRH transf.scale
+			
 			format "\t\t<cinematic_object_key_frame time=\"%\" pos=\"% % %\" rotationq=\"% % % %\" scale=\"% % %\" />\n"\
-					t pos[1] pos[2] pos[3] qu.x qu.z qu.y qu.w sca[1] sca[2] sca[3] to: file
+					t pos[1] pos[2] pos[3] qu.x qu.y qu.z qu.w sca[1] sca[2] sca[3] to: file
 		)
 		format "\t</cinematic_object>\n" to: file
 	)

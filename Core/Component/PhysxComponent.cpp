@@ -55,7 +55,7 @@ void CPhysxComponent::Init(Vect3f scale, Vect3f position)
 	desc.material = "default_material";// TODO get from file
 	desc.size = scale;
 	desc.position = position;
-	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), GetOwner()->GetPitch(), -GetOwner()->GetRoll()));
+	desc.orientation = Quatf::GetQuaternionFromRadians(Vect3f(GetOwner()->GetYaw(), GetOwner()->GetPitch(), GetOwner()->GetRoll()));
 	desc.mass = m_mass;
 	desc.density = 1;
 
@@ -149,8 +149,10 @@ void CPhysxComponent::FixedUpdate(float ElapsedTime)
 	}
 }
 
+
+
 void CPhysxComponent::Move(Vect3f position)
 {
-	Quatf quat = Quatf::GetQuaternionFromRadians(Vect3f(-GetOwner()->GetYaw(), -GetOwner()->GetRoll(), -GetOwner()->GetPitch()));
+	Quatf quat = Quatf::GetQuaternionFromRadians(Vect3f(GetOwner()->GetYaw(), GetOwner()->GetPitch(), GetOwner()->GetRoll()));
 	CEngine::GetSingleton().getPhysXManager()->MoveActor(getName(), position, quat);
 }

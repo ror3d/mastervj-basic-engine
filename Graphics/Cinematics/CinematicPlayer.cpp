@@ -45,6 +45,10 @@ void CCinematicPlayer::Update( float ElapsedTime )
 					m_CurrentTime -= m_Duration;
 				}
 			}
+			else
+			{
+				Pause();
+			}
 			OnRestartCycle();
 		}
 	}
