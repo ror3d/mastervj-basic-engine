@@ -581,6 +581,18 @@ void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
 		size_t id = it->second;
 		physx::PxRigidActor* rigid = static_cast<physx::PxRigidActor*>(m_actors.actor[id]);
 		rigid->setGlobalPose(physx::PxTransform(v(position), q(rotation)));
+
+		Vect3f d = position - m_actors.position[id];
+		m_actors.position[id] = position;
+		m_actors.rotation[id] = rotation;
+
+		for ( auto &ccsf : m_CharacterControllerSurface )
+		{
+			if ( ccsf.second == id )
+			{
+				m_CharacterControllerDisplacements[ccsf.first] += d;
+			}
+		}
 	}
 }
 
@@ -620,6 +632,10 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
 	physx::PxRigidDynamic* actor = cct->getActor();
+
+	displacement = displacement + m_CharacterControllerDisplacements[name];
+	m_CharacterControllerDisplacements.erase( name );
+
 	cct->move(v(displacement), 0.0001, elapsedTime, filters);
 	cct->setUpDirection(v(up));
 	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
@@ -742,6 +758,18 @@ void CPhysXManager::update(float dt)
 			}
 			m_actors.position[idx] = v(activeTransf[i].actor2World.p);
 			m_actors.rotation[idx] = q(activeTransf[i].actor2World.q);
+		}
+
+
+		for ( auto &ccp : m_CharacterControllers )
+		{
+			physx::PxControllerState state;
+			ccp.second->getState( state );
+			if ( state.touchedActor != nullptr ) // TODO: Remove old rigidbody
+			{
+				size_t idx = reinterpret_cast<size_t>( state.touchedActor->userData );
+				m_CharacterControllerSurface[ccp.first] = idx;
+			}
 		}
 	}
 }

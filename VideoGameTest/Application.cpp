@@ -54,10 +54,12 @@ void CApplication::Update(float _ElapsedTime)
 
 	engine.getSceneManager()->Update();
 
+	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
+
 	CEngine::GetSingleton().getComponentManager()->PhysxUpdate();
 
 	CEngine::GetSingleton().getCinematicsActionManager()->Update();
-	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
+
 	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CCamera l_Camera = { };
 	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController()->UpdateCameraValues(&l_Camera);
