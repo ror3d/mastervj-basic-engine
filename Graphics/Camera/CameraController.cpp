@@ -9,6 +9,11 @@ ICameraController::ICameraController()
 {
 }
 
+ICameraController::ICameraController(const Vect3f& pos)
+	: m_Position(pos)
+{
+}
+
 ICameraController::~ICameraController()
 {
 }

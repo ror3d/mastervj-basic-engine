@@ -87,6 +87,7 @@ void CScriptedComponent::Init()
 
 void CScriptedComponent::OnObjectInitialized()
 {
+	if ( m_Destroyed ) return;
 	SetComponent();
 
 	std::stringstream ss;
@@ -96,6 +97,8 @@ void CScriptedComponent::OnObjectInitialized()
 
 void CScriptedComponent::Destroy()
 {
+	if ( m_Destroyed ) return;
+	m_Destroyed = true;
 	std::stringstream ss;
 	ss << "_currentComponent = _componentStates[" << m_componentStateId << "];"
 		<< "if (_currentComponent.OnDestroy ~= nil) then _currentComponent:OnDestroy(); end\n"
@@ -114,6 +117,7 @@ void CScriptedComponent::Reload()
 
 void CScriptedComponent::SetComponent()
 {
+	if ( m_Destroyed ) return;
 	std::stringstream ss;
 	ss << "_currentComponent = _componentStates[" << m_componentStateId << "];";
 
@@ -122,6 +126,7 @@ void CScriptedComponent::SetComponent()
 
 void CScriptedComponent::Update(float ElapsedTime)
 {
+	if ( m_Destroyed ) return;
 	if (!GetOwner()->GetEnabled())
 	{
 		return;
@@ -136,6 +141,7 @@ void CScriptedComponent::Update(float ElapsedTime)
 
 void CScriptedComponent::FixedUpdate(float ElapsedTime)
 {
+	if ( m_Destroyed ) return;
 	if (!GetOwner()->GetEnabled())
 	{
 		return;
@@ -150,6 +156,7 @@ void CScriptedComponent::FixedUpdate(float ElapsedTime)
 
 void CScriptedComponent::Render(CContextManager&  _context)
 {
+	if ( m_Destroyed ) return;
 	if ( ! GetOwner()->GetEnabled() )
 	{
 		return;
@@ -164,6 +171,7 @@ void CScriptedComponent::Render(CContextManager&  _context)
 
 void CScriptedComponent::RenderDebug(CContextManager&  _context)
 {
+	if ( m_Destroyed ) return;
 	if ( ! GetOwner()->GetEnabled() )
 	{
 		return;
@@ -178,6 +186,7 @@ void CScriptedComponent::RenderDebug(CContextManager&  _context)
 
 void CScriptedComponent::SendMsg(const std::string& msg)
 {
+	if ( m_Destroyed ) return;
 	SetComponent();
 
 	std::stringstream ss;
@@ -187,6 +196,7 @@ void CScriptedComponent::SendMsg(const std::string& msg)
 
 void CScriptedComponent::SendMsg(const std::string& msg, const std::string& arg1)
 {
+	if ( m_Destroyed ) return;
 	LuaErrorCapturedStdout errorCapture;
 	SetComponent();
 
@@ -202,6 +212,7 @@ void CScriptedComponent::SendMsg(const std::string& msg, const std::string& arg1
 
 void CScriptedComponent::SendMsg(const std::string& msg, float arg1)
 {
+	if ( m_Destroyed ) return;
 	LuaErrorCapturedStdout errorCapture;
 	SetComponent();
 
@@ -217,6 +228,7 @@ void CScriptedComponent::SendMsg(const std::string& msg, float arg1)
 
 void CScriptedComponent::SendMsg(const std::string& msg, int arg1)
 {
+	if ( m_Destroyed ) return;
 	LuaErrorCapturedStdout errorCapture;
 	SetComponent();
 
@@ -227,6 +239,38 @@ void CScriptedComponent::SendMsg(const std::string& msg, int arg1)
 	{
 		//state["_currentComponent"][msg.c_str()](arg1);
 		state( ("_currentComponent:" + msg + "(" + std::to_string(arg1) + ");").c_str() );
+	}
+}
+
+void CScriptedComponent::SendMsg(const std::string& msg, int arg1, float arg2)
+{
+	if ( m_Destroyed ) return;
+	LuaErrorCapturedStdout errorCapture;
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(" + std::to_string(arg1) + ", " + std::to_string(arg2) + ");").c_str() );
+	}
+}
+
+void CScriptedComponent::SendMsg(const std::string &msg, int arg1, const std::string &arg2)
+{
+	if ( m_Destroyed ) return;
+	LuaErrorCapturedStdout errorCapture;
+	SetComponent();
+
+	sel::State &state = *m_scriptMgr->getLuaState();
+
+	state(("_r = (_currentComponent." + msg + " ~= nil);").c_str());
+	if (state["_r"])
+	{
+		//state["_currentComponent"][msg.c_str()](arg1);
+		state( ("_currentComponent:" + msg + "(" + std::to_string(arg1) + ", \"" + arg2 + "\");").c_str() );
 	}
 }
 

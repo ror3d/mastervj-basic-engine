@@ -11,6 +11,7 @@ CComponent::CComponent(CXMLTreeNode& node, CElement* Owner)
 	: CNamed(node)
 	, m_Owner(Owner)
 	, m_Initialized(false)
+	, m_Destroyed(false)
 {
 	DEBUG_ASSERT( Owner != nullptr );
 
@@ -60,6 +61,7 @@ CComponent::CComponent(CXMLTreeNode& node, CElement* Owner)
 CComponent::CComponent( const CComponent& base, CElement* Owner )
 	: m_Owner(Owner)
 	, m_Initialized(false)
+	, m_Destroyed(false)
 {
 	DEBUG_ASSERT( Owner != nullptr );
 

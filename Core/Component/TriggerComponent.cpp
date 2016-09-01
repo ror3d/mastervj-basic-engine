@@ -96,7 +96,10 @@ void CTriggerComponent::FixedUpdate(float ElapsedTime)
 
 	for (auto &const e : newElems)
 	{
-		auto otherOwner = cm->get(e)->GetOwner();
+		auto c = cm->get( e );
+		if ( !c ) continue; // Wait until the component is registered
+
+		auto otherOwner = c->GetOwner();
 		own->SendMsg("OnTriggerEnter", otherOwner);
 		m_activeElements.push_back( e );
 	}

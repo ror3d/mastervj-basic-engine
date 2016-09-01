@@ -189,14 +189,17 @@ void CPhysXManagerImplementation::onSleep(physx::PxActor **actors, physx::PxU32 
 
 void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pairHeader, const physx::PxContactPair *pairs, physx::PxU32 nbPairs)
 {
+
 }
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
 {
 	for (physx::PxU32 i = 0; i < count; i++)
 	{
-		if ((pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER)))
+		/*if ( ( pairs[i].flags & ( physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER ) ) )
+		{
 			continue;
+		}*/
 
 		size_t l_indexTrigger = (size_t)pairs[i].triggerActor->userData;
 		size_t l_indexActor = (size_t)pairs[i].otherActor->userData;
@@ -234,7 +237,9 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 			//CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
 			m_TriggerCollisions[l_triggerName].emplace(l_actorName);
 		}
-		if (pairs[i].status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+		if (pairs[i].status & ( physx::PxPairFlag::eNOTIFY_TOUCH_LOST
+								| physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER
+								| physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER ) )
 		{
 			//CEngine::GetSingleton().getTriggerManager()->Deactivate(l_triggerName);
 			m_TriggerCollisions[l_triggerName].erase(l_actorName);
@@ -497,6 +502,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 	{
 		shape->setFlag(physx::PxShapeFlag::eSIMULATION_SHAPE, false);
 		shape->setFlag(physx::PxShapeFlag::eTRIGGER_SHAPE, true);
+		shape->setFlag(physx::PxShapeFlag::eSCENE_QUERY_SHAPE, false);
 	}
 
 	physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0, 0, 0), physx::PxQuat::createIdentity());
@@ -575,6 +581,18 @@ void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
 		size_t id = it->second;
 		physx::PxRigidActor* rigid = static_cast<physx::PxRigidActor*>(m_actors.actor[id]);
 		rigid->setGlobalPose(physx::PxTransform(v(position), q(rotation)));
+
+		Vect3f d = position - m_actors.position[id];
+		m_actors.position[id] = position;
+		m_actors.rotation[id] = rotation;
+
+		for ( auto &ccsf : m_CharacterControllerSurface )
+		{
+			if ( ccsf.second == id )
+			{
+				m_CharacterControllerDisplacements[ccsf.first] += d;
+			}
+		}
 	}
 }
 
@@ -587,7 +605,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.radius = radius;
 	desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
 	desc.slopeLimit = cosf(3.1415f / 6); //30º
-	desc.stepOffset = 0.1f * height;
+	desc.stepOffset = 0.2f * (height + 2*radius);
 	desc.density = density;
 	desc.reportCallback = dynamic_cast<CPhysXManagerImplementation*>(this);
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + height*0.5f + radius + desc.contactOffset, pos.z);
@@ -614,6 +632,10 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
 	size_t index = (size_t)cct->getUserData();
 	physx::PxRigidDynamic* actor = cct->getActor();
+
+	displacement = displacement + m_CharacterControllerDisplacements[name];
+	m_CharacterControllerDisplacements.erase( name );
+
 	cct->move(v(displacement), 0.0001, elapsedTime, filters);
 	cct->setUpDirection(v(up));
 	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
@@ -653,6 +675,7 @@ void CPhysXManager::resizeCharacterController( const std::string & name, float h
 	cc->resize( height );
 	cc->setRadius( radius );
 	cc->setFootPosition( pos );
+	cc->setStepOffset( 0.2*( height + 2 * radius ) );
 }
 
 void CPhysXManager::releaseCharacterController( const std::string &name )
@@ -676,6 +699,44 @@ void CPhysXManager::releaseCharacterControllers(){
 	m_CharacterControllers.clear();
 }
 
+
+Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance)
+{
+	physx::PxRaycastBuffer hit;                 // [out] Raycast results
+
+	// Raycast against all static & dynamic objects (no filtering)
+	// The main result from this call is the closest hit, stored in the 'hit.block' structure
+	physx::PxQueryFilterData filterData(physx::PxQueryFlag::eDYNAMIC | physx::PxQueryFlag::eSTATIC | physx::PxQueryFlag::ePREFILTER); //SIno no se deja ver desde el cielo ok
+
+	using namespace physx;
+	class : public PxQueryFilterCallback
+	{
+		PxQueryHitType::Enum preFilter( const PxFilterData &filterData,
+											   const PxShape *shape,
+											   const PxRigidActor *actor,
+											   PxHitFlags &queryFlags )
+		{
+			size_t l_indexActor = (size_t)actor->userData;
+			if ( l_indexActor & CONTROLLER_FLAG )
+			{
+				return PxQueryHitType::eNONE;
+			}
+			return PxQueryHitType::eBLOCK;
+		}
+
+		PxQueryHitType::Enum postFilter( const PxFilterData &filterData, const PxQueryHit &hit )
+		{
+			return PxQueryHitType::eNONE;
+		}
+	} filter;
+
+	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData, &filter);
+	if (status)
+		return v(hit.block.position);
+	else
+		return Vect3f();
+}
+
 void CPhysXManager::update(float dt)
 {
 	m_elapsedTime += dt;
@@ -697,6 +758,18 @@ void CPhysXManager::update(float dt)
 			}
 			m_actors.position[idx] = v(activeTransf[i].actor2World.p);
 			m_actors.rotation[idx] = q(activeTransf[i].actor2World.q);
+		}
+
+
+		for ( auto &ccp : m_CharacterControllers )
+		{
+			physx::PxControllerState state;
+			ccp.second->getState( state );
+			if ( state.touchedActor != nullptr ) // TODO: Remove old rigidbody
+			{
+				size_t idx = reinterpret_cast<size_t>( state.touchedActor->userData );
+				m_CharacterControllerSurface[ccp.first] = idx;
+			}
 		}
 	}
 }

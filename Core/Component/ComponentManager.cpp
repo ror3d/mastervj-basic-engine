@@ -2,6 +2,19 @@
 
 #include "Graphics/Context/ContextManager.h"
 
+std::vector<const char*> CComponentManager::s_componentsUpdateOrder =
+{
+	"Collider",
+	"Trigger",
+	"CharacterController",
+	"Camera",
+	"AnimatedInstance",
+	"Speaker",
+	"ParticleEmitter",
+	"MeshInstance",
+	"Script"
+};
+
 CComponentManager::CComponentManager()
 	: m_initialized(false)
 {
@@ -13,8 +26,6 @@ CComponentManager::~CComponentManager()
 
 void CComponentManager::PhysxUpdate()
 {
-	DestroyRemovedComponents();
-
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
 		(*it)->PhysxUpdate();
@@ -23,30 +34,6 @@ void CComponentManager::PhysxUpdate()
 
 void CComponentManager::FixedUpdate(float ElapsedTime)
 {
-	DestroyRemovedComponents();
-
-	for (auto it = m_components.begin(); it != m_components.end(); it++)
-	{
-		(*it)->FixedUpdate(ElapsedTime);
-	}
-}
-
-void CComponentManager::Update( float ElapsedTime )
-{
-	DestroyRemovedComponents();
-
-	for ( auto &const ca : m_componentsToAdd )
-	{
-		auto it = m_components.find( ca );
-
-		if ( it == m_components.end() )
-		{
-			m_components.emplace( ca );
-			m_componentsMap[ca->getName()] = ca;
-		}
-	}
-	m_componentsToAdd.clear();
-
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
 		if ( std::find( m_componentsToRemove.begin(), m_componentsToRemove.end(), *it ) != m_componentsToRemove.end() )
@@ -54,18 +41,50 @@ void CComponentManager::Update( float ElapsedTime )
 			continue;
 		}
 
-		(*it)->Update(ElapsedTime);
+		(*it)->FixedUpdate(ElapsedTime);
 	}
 
 	DestroyRemovedComponents();
 }
 
+void CComponentManager::Update( float ElapsedTime )
+{
+	for ( auto &const ca : m_componentsToAdd )
+	{
+		auto it = m_components.find( ca );
+
+		if ( it == m_components.end() )
+		{
+			m_components.emplace( ca );
+			m_componentsByType[ca->GetComponentType()].emplace( ca );
+			m_componentsMap[ca->getName()] = ca;
+		}
+	}
+	m_componentsToAdd.clear();
+
+	for ( auto & type : s_componentsUpdateOrder )
+	{
+		for ( auto cp : m_componentsByType[type] )
+		{
+			if ( std::find( m_componentsToRemove.begin(), m_componentsToRemove.end(), cp ) != m_componentsToRemove.end() )
+			{
+				continue;
+			}
+
+			cp->Update(ElapsedTime);
+		}
+	}
+}
+
 void CComponentManager::Render(CContextManager&  _context)
 {
-	DestroyRemovedComponents();
-
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
+		if ( std::find( m_componentsToRemove.begin(), m_componentsToRemove.end(), *it ) != m_componentsToRemove.end() )
+		{
+			continue;
+		}
+
 		(*it)->Render(_context);
 	}
 }
@@ -73,6 +92,11 @@ void CComponentManager::RenderDebug(CContextManager&  _context)
 {
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
+		if ( std::find( m_componentsToRemove.begin(), m_componentsToRemove.end(), *it ) != m_componentsToRemove.end() )
+		{
+			continue;
+		}
+
 		(*it)->RenderDebug(_context);
 	}
 }
@@ -160,6 +184,7 @@ void CComponentManager::DestroyRemovedComponents()
 		if (it != m_components.end())
 		{
 			m_componentsMap.erase(cr->getName());
+			m_componentsByType[cr->GetComponentType()].erase( cr );
 			m_components.erase(it);
 			delete cr;
 		}

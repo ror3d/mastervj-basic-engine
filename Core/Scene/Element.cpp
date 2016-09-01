@@ -129,17 +129,20 @@ CElement::CElement(const CXMLTreeNode& node)
 
 CElement::~CElement()
 {
-	std::vector<std::string> toRemove;
 	auto cmgr = CEngine::GetSingleton().getComponentManager();
-	for (auto &const comp : m_componentContainer)
-	{
-		comp.second->Destroy();
-	}
 	for (auto &const comp : m_componentContainer)
 	{
 		cmgr->RemoveComponent(comp.second);
 	}
 	m_componentContainer.clear();
+}
+
+void CElement::Destroy()
+{
+	for (auto &const comp : m_componentContainer)
+	{
+		comp.second->Destroy();
+	}
 }
 
 void CElement::SetQuat( Quatf q )
@@ -212,6 +215,16 @@ CTriggerComponent * CElement::GetTriggerComponent()
 	return nullptr;
 }
 
+CScriptedComponent* CElement::GetScript(const std::string& scriptName)
+{
+	auto comp = m_componentContainer.get(getName() + "_" + scriptName + "_" + CScriptedComponent::COMPONENT_TYPE);
+	if (comp)
+	{
+		return dynamic_cast<CScriptedComponent*>(comp);
+	}
+	return nullptr;
+}
+
 CAnimatedInstanceComponent * CElement::GetAnimatedInstanceComponent()
 {
 	auto comp = m_componentContainer.get(getName() + "_" + CAnimatedInstanceComponent::COMPONENT_TYPE);
@@ -253,6 +266,15 @@ const Mat44f & CElement::GetTransform()
 	return m_TransformMatrix;
 }
 
+template<typename... T>
+void CElement::SendMessage_t(const std::string msg, T... arg1)
+{
+	for (auto &const c : m_componentContainer)
+	{
+		c.second->SendMsg(msg, arg1...);
+	}
+}
+
 template<typename T>
 void CElement::SendMessage_t(const std::string msg, T arg1)
 {
@@ -280,6 +302,16 @@ void CElement::SendMsg( const std::string& message, float arg1 )
 void CElement::SendMsg(const std::string& message, const std::string& arg1)
 {
 	SendMessage_t(message, arg1);
+}
+
+void CElement::SendMsg( const std::string& message, int arg1, float arg2 )
+{
+	SendMessage_t( message, arg1, arg2 );
+}
+
+void CElement::SendMsg( const std::string& message, int arg1, const std::string& arg2 )
+{
+	SendMessage_t( message, arg1, arg2 );
 }
 
 CElement* CElement::Clone( const std::string & newName )

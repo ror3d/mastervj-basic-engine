@@ -8,9 +8,11 @@
 class CFPSCameraComponent : public CComponent
 {
 	Vect3f m_CamOffset;
-	bool m_followRenderableObject;
-	float m_characterRotationOverride;
 
+	float m_YawSpeed;
+	float m_PitchSpeed;
+	float m_PitchFloorLimit;
+	float m_PitchSkyLimit;
 protected:
 	virtual void Init();
 
@@ -25,7 +27,8 @@ public:
 
 	void SetAsCurrentCamera();
 
-	void SetFollowCharacter(bool follow, float overrideRot);
+	Vect3f GetCamOffset() { return m_CamOffset; }
+	void SetCamOffset( Vect3f offset ) { m_CamOffset = offset; }
 
 	float GetYaw();
 

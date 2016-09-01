@@ -20,6 +20,8 @@ extern "C" {
 
 namespace sel {
 
+class Selector;
+
 namespace detail {
 
 template <typename T>
@@ -388,6 +390,9 @@ inline void _push(lua_State *l, float f) {
 inline void _push(lua_State *l, const std::string &s) {
 	lua_pushlstring(l, s.c_str(), s.size());
 }
+
+inline void _push( lua_State *l, const Selector &s );
+inline void _push( lua_State *l, Selector &&s );
 
 inline void _push(lua_State *l, const char *s) {
 	lua_pushstring(l, s);

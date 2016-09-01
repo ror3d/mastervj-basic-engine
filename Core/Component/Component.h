@@ -30,6 +30,8 @@ private:
 protected:
 	std::vector<Property> m_properties;
 
+	bool m_Destroyed;
+
 	virtual void Init() {}
 
 	virtual void OnObjectInitialized() {};
@@ -60,6 +62,10 @@ public:
 	virtual void SendMsg(const std::string&, float) {}
 
 	virtual void SendMsg(const std::string&, CElement*) {}
+
+	virtual void SendMsg(const std::string&, int, float) {}
+
+	virtual void SendMsg(const std::string&, int, const std::string&) {}
 
 	virtual void Destroy() = 0;
 

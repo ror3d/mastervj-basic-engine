@@ -42,6 +42,8 @@ namespace sel {
 class State;
 class Selector {
 	friend class State;
+	friend void detail::_push( lua_State *l, const Selector &s );
+	friend void detail::_push( lua_State *l, sel::Selector &&s );
 private:
 	lua_State *_state;
 	Registry *_registry;
@@ -480,6 +482,19 @@ inline bool operator==(const Selector &s, T&& t) {
 template <typename T>
 inline bool operator==(T &&t, const Selector &s) {
 	return T(s) == t;
+}
+
+namespace detail
+{
+	inline void _push( lua_State *l, const sel::Selector &s )
+	{
+		s._evaluate_retrieve( 1 );
+	}
+
+	inline void _push( lua_State *l, sel::Selector &&s )
+	{
+		s._evaluate_retrieve( 1 );
+	}
 }
 
 }
