@@ -7,6 +7,15 @@
 IYawPitchCameraController::IYawPitchCameraController()
 : m_Yaw(0.0f)
 , m_Pitch(0.0f)
+, m_CameraLocked(false)
+{
+}
+
+IYawPitchCameraController::IYawPitchCameraController(const Vect3f& position)
+: ICameraController(position)
+, m_Yaw(0.0f)
+, m_Pitch(0.0f)
+, m_CameraLocked(false)
 {
 }
 

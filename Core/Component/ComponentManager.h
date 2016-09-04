@@ -13,8 +13,12 @@ class CContextManager;
 class CComponentManager
 {
 private:
+	static std::vector<const char*> s_componentsUpdateOrder;
+
 	std::map<std::string, CComponent*> m_componentsMap;
 	std::set<CComponent*> m_components;
+	std::map<std::string, std::set<CComponent*>> m_componentsByType;
+
 	std::vector<CComponent*> m_componentsToAdd;
 	std::vector<CComponent*> m_componentsToRemove;
 	bool m_initialized;

@@ -124,6 +124,18 @@ private:
 				_metatable_name.c_str(), lambda));
 	}
 
+	template <typename Ret, typename... Args>
+	void _register_member(lua_State *state,
+						  const char *fun_name,
+						  std::function<Ret( const T*, Args... )> fun) {
+		std::function<Ret( const T*, Args... )> lambda(fun);
+		_constexpr int arity = detail::_arity<Ret>::value;
+		_funs.emplace_back(
+			sel::make_unique<ClassFun<arity, const T, Ret, Args...>>(
+				state, std::string(fun_name),
+				_metatable_name.c_str(), lambda));
+	}
+
 	void _register_members(lua_State *state) {}
 
 	template <typename M, typename... Ms>

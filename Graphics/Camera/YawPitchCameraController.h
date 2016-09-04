@@ -11,6 +11,7 @@ protected:
 	bool						m_CameraLocked;
 public:
 	IYawPitchCameraController();
+	IYawPitchCameraController(const Vect3f& position);
 	virtual ~IYawPitchCameraController();
 
 	virtual void AddYaw(float Radians);

@@ -9,6 +9,8 @@ class CSceneManager : public TMapManager<CScene>
 {
 	std::map<std::string, CElement*> m_Objects;
 
+	std::vector<std::string> m_ObjectsToDestroy;
+
 	std::vector<std::string> m_ScenesToLoad;
 	std::vector<std::string> m_ScenesToUnload;
 public:
@@ -17,6 +19,7 @@ public:
 
 	void Initialize( std::string scenesDirectory );
 
+	void FixedUpdate();
 	void Update();
 
 	void LoadScene( const std::string& sceneName );

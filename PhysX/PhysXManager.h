@@ -154,6 +154,12 @@ private:
 
 	std::map<std::string, physx::PxMaterial*> m_materials;
 	std::map<std::string, physx::PxController*> m_CharacterControllers;
+
+	// Map < cc_name, surface_actor_id >
+	std::map<std::string, size_t> m_CharacterControllerSurface;
+	// Map < cc_name, surface_displacement >
+	std::map<std::string, Vect3f> m_CharacterControllerDisplacements;
+
 	size_t m_CharacterControllerLastIdx;
 
 

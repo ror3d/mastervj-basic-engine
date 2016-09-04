@@ -15,6 +15,7 @@ class CTriggerComponent;
 class CFPSCameraComponent;
 class CRenderableComponent;
 class CSpeakerComponent;
+class CScriptedComponent;
 class CAnimatedInstanceComponent;
 
 class CElement : public CNamed
@@ -34,6 +35,8 @@ public:
 	CElement(const std::string& name);
 	CElement(const CXMLTreeNode& node);
 	~CElement();
+
+	void Destroy();
 
 	inline void SetPosition(const Vect3f &Position) { m_Position = Position; m_TransformChanged = true; }
 	inline Vect3f GetPosition() const { return m_Position; }
@@ -62,6 +65,8 @@ public:
 	void SendMsg( const std::string& message, int arg1 );
 	void SendMsg( const std::string& message, float arg1 );
 	void SendMsg(const std::string& message, const std::string& arg1);
+	void SendMsg( const std::string& message, int arg1, float arg2 );
+	void SendMsg( const std::string& message, int arg1, const std::string& arg2 );
 
 	CElement* Clone( const std::string& newName );
 
@@ -71,11 +76,15 @@ public:
 	CTriggerComponent * GetTriggerComponent();
 	CFPSCameraComponent* GetCamera();
 	CSpeakerComponent* GetSpeaker();
+	CScriptedComponent* GetScript(const std::string& scriptName);
 
 private:
 	ComponentContainer_t m_componentContainer;
 
 	template<typename T>
 	void SendMessage_t(const std::string message, T arg1);
+
+	template<typename... T>
+	void SendMessage_t(const std::string message, T... arg1);
 };
 
