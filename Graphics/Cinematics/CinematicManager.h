@@ -19,7 +19,6 @@ public:
 	void Play(std::string nameToRun);
 	void Pause(std::string nameToRun);
 	void Stop(std::string nameToRun);
-	void StopAll();
 	void destroy();
 	void Remove(std::string nameToDelete);
 	void Update(float _elapsedTime);

@@ -169,11 +169,3 @@ void CCinematicManager::Stop(std::string nameToRun)
 		}
 	}
 }
-
-void CCinematicManager::StopAll()
-{
-	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
-	{		
-		(*it)->Stop();
-	}
-}

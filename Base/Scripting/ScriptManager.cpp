@@ -356,8 +356,7 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", static_cast<void(CCinematicManager::*)(std::string)>(&CCinematicManager::Play),
 		"Stop", &CCinematicManager::Stop,
-		"Pause", &CCinematicManager::Pause,
-		"StopAll", &CCinematicManager::StopAll);
+		"Pause", &CCinematicManager::Pause);
 
 	(*m_state)["CSoundManager"].SetObj(
 		*CEngine::GetSingleton().getSoundManager(),
