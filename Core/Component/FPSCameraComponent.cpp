@@ -48,6 +48,16 @@ void CFPSCameraComponent::Init()
 	CEngine::GetSingleton().getCameraManager()->add(getName(), cc);
 }
 
+void CFPSCameraComponent::Reset()
+{
+	CElement *owner = GetOwner();
+	CFPSCameraController* cc = dynamic_cast<CFPSCameraController*>(CEngine::GetSingleton().getCameraManager()->get(getName()));
+	DEBUG_ASSERT(cc != nullptr);
+
+	cc->SetPosition(owner->GetPosition());
+	cc->SetYaw(owner->GetYaw());
+}
+
 void CFPSCameraComponent::Update(float elapsedTime)
 {
 	if ( m_Destroyed ) return;

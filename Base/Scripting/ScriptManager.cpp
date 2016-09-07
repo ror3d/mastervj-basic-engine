@@ -264,6 +264,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
 			"BlendCycle", &CAnimatedInstanceComponent::BlendCycle,
 			"ClearCycle", &CAnimatedInstanceComponent::ClearCycle,
+			"SetAnimationTime", &CAnimatedInstanceComponent::SetAnimationTime,
 			"IsCycleAnimationActive", &CAnimatedInstanceComponent::IsCycleAnimationActive,
 			"IsActionAnimationActive", &CAnimatedInstanceComponent::IsActionAnimationActive);
 

@@ -26,6 +26,19 @@ void CCinematicManager::destroy()
 	m_cinematicsObjects.clear();
 }
 
+void CCinematicManager::Remove(std::string nameToDelete)
+{
+	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
+	{
+		if ((*it)->getName() == nameToDelete)
+		{
+			delete *it;
+			m_cinematicsObjects.erase(it);			
+			return;
+		}
+	}
+}
+
 void CCinematicManager::LoadFilesInDir( std::string dirPath )
 {
 	HANDLE hFind = INVALID_HANDLE_VALUE;

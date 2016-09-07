@@ -183,6 +183,13 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		m_Actions.push_back(action);
 	}
 	{
+		Action action = { "ACTION", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = 'E';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
 		Action action = { "BACK", KEYBOARD, Action::ON_PRESS };
 		action.keyboard.key = VK_F1;
 		action.keyboard.needsAlt = false;
@@ -232,25 +239,25 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 
 	{
 		Action action = { "MOUSE_PRESSED", MOUSE, Action::ON_PRESS };
-		action.mouse.button = Action::RIGHT;
+		action.mouse.button = Action::LEFT;
 
 		m_Actions.push_back(action);
 	}
 	{
 		Action action = { "MOUSE_DOWN", MOUSE, Action::WHILE_PRESSED };
-		action.mouse.button = Action::RIGHT;
+		action.mouse.button = Action::LEFT;
 
 		m_Actions.push_back(action);
 	}
 	{
 		Action action = { "MOUSE_RELEASED", MOUSE, Action::ON_RELEASE };
-		action.mouse.button = Action::RIGHT;
+		action.mouse.button = Action::LEFT;
 
 		m_Actions.push_back(action);
 	}
 	{
 		Action action = { "MOVE_CAMERA", MOUSE, Action::WHILE_PRESSED };
-		action.mouse.button = Action::RIGHT;
+		action.mouse.button = Action::LEFT;
 
 		m_Actions.push_back(action);
 	}

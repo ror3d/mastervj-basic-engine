@@ -189,7 +189,7 @@ void CPhysXManagerImplementation::onSleep(physx::PxActor **actors, physx::PxU32 
 
 void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pairHeader, const physx::PxContactPair *pairs, physx::PxU32 nbPairs)
 {
-
+	
 }
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
@@ -591,8 +591,8 @@ void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
 			if ( ccsf.second == id )
 			{
 				m_CharacterControllerDisplacements[ccsf.first] += d;
-			}
-		}
+	}
+}
 	}
 }
 
@@ -701,7 +701,7 @@ void CPhysXManager::releaseCharacterControllers(){
 
 
 Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance)
-{
+{	
 	physx::PxRaycastBuffer hit;                 // [out] Raycast results
 
 	// Raycast against all static & dynamic objects (no filtering)

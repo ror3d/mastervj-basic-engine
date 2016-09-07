@@ -105,7 +105,7 @@ void CFPSCameraController::Update( float ElapsedTime )
 
 
 	m_Position = CEngine::GetSingleton().getPhysXManager()->RayCast(offsettedPosition, posWithoutCollision - offsettedPosition, mathUtils::Abs(m_CameraOffset.z));
-
+		
 	if (m_Position == Vect3f())
 	{
 		m_Position = posWithoutCollision;

@@ -25,7 +25,6 @@ CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CElement* Owner)
 		DEBUG_ASSERT( !"Collider type requires core_mesh!" );
 		m_colType = "Sphere";
 	}
-	//m_isTrigger = node.GetBoolProperty("trigger", false);
 }
 
 CPhysxComponent::CPhysxComponent(const CPhysxComponent& base, CElement* Owner)
@@ -154,8 +153,6 @@ void CPhysxComponent::FixedUpdate(float ElapsedTime)
 		}
 	}
 }
-
-
 
 void CPhysxComponent::Move(Vect3f position)
 {

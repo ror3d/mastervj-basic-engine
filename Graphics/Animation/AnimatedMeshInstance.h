@@ -23,5 +23,6 @@ public:
 	void ClearCycle(int Id, float DelayOut);
 	bool IsCycleAnimationActive(int Id) const;
 	bool IsActionAnimationActive(int Id) const;
+	void SetAnimationTime(float animationTime) const;
 };
 
