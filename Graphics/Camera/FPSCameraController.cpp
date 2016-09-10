@@ -103,16 +103,17 @@ void CFPSCameraController::Update( float ElapsedTime )
 
 	Vect3f posWithoutCollision = m_TargetPosition + rot * Vect3f(0, 0, m_CameraOffset.z);
 
+	Vect3f posWithCollision;
 
-	m_Position = CEngine::GetSingleton().getPhysXManager()->RayCast(offsettedPosition, posWithoutCollision - offsettedPosition, mathUtils::Abs(m_CameraOffset.z));
-		
-	if (m_Position == Vect3f())
+	bool hit = CEngine::GetSingleton().getPhysXManager()->RayCast(offsettedPosition, posWithoutCollision - offsettedPosition, mathUtils::Abs(m_CameraOffset.z), posWithCollision);
+
+	if (hit)
 	{
-		m_Position = posWithoutCollision;
+		m_Position = posWithCollision + ( offsettedPosition - posWithCollision ) * 0.05;
 	}
 	else
 	{
-		m_Position = m_Position + ( offsettedPosition - m_Position ) * 0.05;
+		m_Position = posWithoutCollision;
 	}
 	//m_Position = posWithoutCollision;
 
