@@ -591,8 +591,8 @@ void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
 			if ( ccsf.second == id )
 			{
 				m_CharacterControllerDisplacements[ccsf.first] += d;
-			}
-		}
+	}
+}
 	}
 }
 
@@ -620,13 +620,13 @@ void CPhysXManager::createController(float height, float radius, float density, 
 
 void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
-	registerMaterial("default_material", 0.1, 0.8, 0.8);
-	registerMaterial("controller_material", 10, 1, 1);
+	registerMaterial("default_material", 2, 1.5, 0.2);
+	registerMaterial("controller_material", 10, 1, 0.1);
 	//createPlane("ground", "ground", Vect4f(0, 1, 0,	0));
 }
 
 
-Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name)
+Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name, bool stickToGround)
 {
 	physx::PxController* cct = getCharControllers()[name];
 	const physx::PxControllerFilters filters(nullptr, nullptr, nullptr);
@@ -636,10 +636,45 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 	displacement = displacement + m_CharacterControllerDisplacements[name];
 	m_CharacterControllerDisplacements.erase( name );
 
+	auto prevPos = cct->getFootPosition();
+
+	physx::PxControllerState state;
+	cct->getState( state );
+	bool grounded = state.touchedActor != nullptr;
+
 	cct->move(v(displacement), 0.0001, elapsedTime, filters);
+
+	if ( stickToGround )
+	{
+		physx::PxCapsuleController* cc = (physx::PxCapsuleController*)( cct );
+		if ( cc != nullptr && grounded )
+		{
+			// Get new position
+			auto pos = cct->getFootPosition();
+
+			// Get CCT height, radius, max ramp slope
+			auto maxSlope = cc->getSlopeLimit();
+			auto l = (pos - prevPos).magnitude() * sin(maxSlope);
+
+			// See if there is ground at a distance that is
+			//   the new position - slope offset
+			Vect3f hit;
+			if ( l > 0 && RayCast( v( pos ), Vect3f( 0, -1, 0 ), l, hit ) )
+			{
+				// If there is ground, move to that position
+				if ( pos.y > hit.y + 0.00001 )
+				{
+					auto d = hit - v( pos );
+					d.x = d.z = 0;
+					OutputDebugStringA( ( "<" + std::to_string( d.x ) + ", " + std::to_string( d.y ) + ", " + std::to_string( d.z ) + ">\n" ).c_str() );
+					cct->move( v( d ), 0.0001, 0.00001, filters );
+				}
+			}
+		}
+	}
+
 	cct->setUpDirection(v(up));
-	//physx::PxExtendedVec3 pFootPos = cct->getFootPosition();
-	//physx::PxVec3 vel = actor->getLinearVelocity();
+
 	return v(cct->getFootPosition());
 }
 
@@ -700,7 +735,7 @@ void CPhysXManager::releaseCharacterControllers(){
 }
 
 
-Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance)
+bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition)
 {
 	physx::PxRaycastBuffer hit;                 // [out] Raycast results
 
@@ -731,10 +766,16 @@ Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance)
 	} filter;
 
 	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData, &filter);
-	if (status)
-		return v(hit.block.position);
+	if ( status )
+	{
+		out_hitPosition = v( hit.block.position );
+		return true;
+	}
 	else
-		return Vect3f();
+	{
+		out_hitPosition = Vect3f();
+		return false;
+	}
 }
 
 void CPhysXManager::update(float dt)

@@ -264,6 +264,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"ExecuteAction", &CAnimatedInstanceComponent::ExecuteAction,
 			"BlendCycle", &CAnimatedInstanceComponent::BlendCycle,
 			"ClearCycle", &CAnimatedInstanceComponent::ClearCycle,
+			"SetAnimationTime", &CAnimatedInstanceComponent::SetAnimationTime,
 			"IsCycleAnimationActive", &CAnimatedInstanceComponent::IsCycleAnimationActive,
 			"IsActionAnimationActive", &CAnimatedInstanceComponent::IsActionAnimationActive);
 
@@ -274,7 +275,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetPosition", &CCharacterControllerComponent::SetPosition,
 			"Resize", &CCharacterControllerComponent::Resize,
 			"GetHeight", &CCharacterControllerComponent::GetHeight,
-			"GetRadius", &CCharacterControllerComponent::GetRadius);
+			"GetRadius", &CCharacterControllerComponent::GetRadius,
+			"SetStickToGround", &CCharacterControllerComponent::SetStickToGround);
 
 	(*m_state)["CColliderComponent"]
 		.SetClass<CPhysxComponent, const CPhysxComponent&, CElement*>(

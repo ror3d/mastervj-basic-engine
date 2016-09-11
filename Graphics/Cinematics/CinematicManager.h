@@ -20,6 +20,7 @@ public:
 	void Pause(std::string nameToRun);
 	void Stop(std::string nameToRun);
 	void destroy();
+	void Remove(std::string nameToDelete);
 	void Update(float _elapsedTime);
 
 private:

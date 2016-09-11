@@ -12,6 +12,8 @@ class CCharacterControllerComponent : public CComponent
 	float m_density;
 	Vect3f m_offset;
 
+	bool m_stickToGround;
+
 protected:
 	virtual void Init();
 
@@ -34,6 +36,10 @@ public:
 
 	float GetHeight();
 	float GetRadius();
+
+
+	inline bool GetStickToGround() const { return m_stickToGround; }
+	inline void SetStickToGround(bool s) { m_stickToGround = s; }
 
 	static const std::string COMPONENT_TYPE;
 	virtual std::string GetComponentType() { return COMPONENT_TYPE; }

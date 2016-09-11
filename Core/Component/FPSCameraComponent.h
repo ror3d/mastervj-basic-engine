@@ -25,6 +25,8 @@ public:
 
 	virtual void Destroy();
 
+	void Reset();
+
 	void SetAsCurrentCamera();
 
 	Vect3f GetCamOffset() { return m_CamOffset; }

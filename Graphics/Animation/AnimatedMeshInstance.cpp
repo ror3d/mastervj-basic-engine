@@ -58,3 +58,10 @@ bool CAnimatedMeshInstance::IsActionAnimationActive(int Id) const
 	return false;
 }
 
+void CAnimatedMeshInstance::SetAnimationTime(float animationTime) const
+{
+	//TODO: Not working
+	//m_CalModel->getMixer()->setTimeFactor(animationTime);
+	//m_CalModel->getMixer()->setAnimationTime(animationTime);
+}
+

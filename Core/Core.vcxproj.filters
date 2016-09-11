@@ -61,6 +61,12 @@
     <ClCompile Include="Component\SpeakerComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Component\CinematicComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SpawnComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -144,6 +150,12 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\SpeakerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\CinematicComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SpawnComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
