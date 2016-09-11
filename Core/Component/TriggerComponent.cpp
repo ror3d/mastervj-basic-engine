@@ -52,8 +52,10 @@ void CTriggerComponent::PhysxUpdate()
 void CTriggerComponent::FixedUpdate(float ElapsedTime)
 {
 	if (!m_isStatic)
-	{
-		Move(GetOwner()->GetPosition() + m_offset);
+	{		
+		Vect3f rotatedPosition = m_offset;
+		rotatedPosition.RotateY(GetOwner()->GetYaw());
+		Move(GetOwner()->GetPosition() + rotatedPosition);
 	}
 
 	auto elems = CEngine::GetSingleton().getPhysXManager()->getTriggerCollisions(getName());

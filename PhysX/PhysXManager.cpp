@@ -165,7 +165,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 	m_ControllerManager = PxCreateControllerManager(*m_Scene);
 	m_ControllerManager->setOverlapRecoveryModule(true);
 
-
+	m_enabledTriggerDetection = true;
 }
 
 CPhysXManagerImplementation::~CPhysXManagerImplementation()
@@ -194,6 +194,9 @@ void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pa
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
 {
+	if (!m_enabledTriggerDetection)
+		return;
+
 	for (physx::PxU32 i = 0; i < count; i++)
 	{
 		/*if ( ( pairs[i].flags & ( physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER ) ) )

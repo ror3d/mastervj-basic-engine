@@ -372,7 +372,9 @@ void CScriptManager::RegisterLUAFunctions()
 		"DestroyObjectFromScene", &CSceneManager::DestroyObjectFromScene,
 		"LoadScene", &CSceneManager::LoadScene,
 		"UnloadScene", &CSceneManager::UnloadScene,
-		"GetObjectById", &CSceneManager::GetObjectById);
+		"GetObjectById", &CSceneManager::GetObjectById,
+		"StartedUnload", &CSceneManager::StartedUnload,
+		"FinishedLoad", &CSceneManager::FinishedLoad);
 
 	(*m_state)["CStaticMeshManager"].SetObj(
 		*CEngine::GetSingleton().getStaticMeshManager(),

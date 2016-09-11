@@ -67,6 +67,8 @@ public:
 		Dynamic
 	};
 
+	bool m_enabledTriggerDetection;
+
 	static CPhysXManager* CreatePhysXManager();
 	virtual ~CPhysXManager();
 
