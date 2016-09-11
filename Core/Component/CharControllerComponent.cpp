@@ -9,6 +9,7 @@ const std::string CCharacterControllerComponent::COMPONENT_TYPE = "CharacterCont
 
 CCharacterControllerComponent::CCharacterControllerComponent(CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
+	, m_stickToGround(true)
 {
 	SetNameFromParentName( Owner->getName() );
 
@@ -27,6 +28,7 @@ CCharacterControllerComponent::CCharacterControllerComponent(const CCharacterCon
 	m_radius = base.m_radius;
 	m_density = base.m_density;
 	m_offset = base.m_offset;
+	m_stickToGround = base.m_stickToGround;
 }
 
 CCharacterControllerComponent::~CCharacterControllerComponent()
@@ -54,7 +56,7 @@ bool CCharacterControllerComponent::IsGrounded()
 
 void CCharacterControllerComponent::Move(const Vect3f& displacement, const Vect3f& up, float elapsedTime)
 {
-	GetOwner()->SetPosition(CEngine::GetSingleton().getPhysXManager()->moveCharacterController( displacement, up, elapsedTime, getName() ) + m_offset);
+	GetOwner()->SetPosition(CEngine::GetSingleton().getPhysXManager()->moveCharacterController( displacement, up, elapsedTime, getName(), m_stickToGround ) + m_offset);
 }
 
 void CCharacterControllerComponent::SetPosition(const Vect3f& pos)
@@ -80,3 +82,4 @@ float CCharacterControllerComponent::GetRadius()
 {
 	return m_radius;
 }
+

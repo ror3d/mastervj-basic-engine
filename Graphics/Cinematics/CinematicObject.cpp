@@ -118,6 +118,11 @@ void CCinematicObject::Update( float ElapsedTime )
 
 void CCinematicObject::Stop()
 {
+	if ( !m_object )
+	{
+		return;
+	}
+
 	m_CurrentKeyFrame = 0;
 
 	auto current = m_CinematicObjectKeyFrames[m_CurrentKeyFrame];

@@ -90,7 +90,7 @@ public:
 
 	void createController(float height, float radius, float density, Vect3f pos, std::string name);
 
-	Vect3f moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name);
+	Vect3f moveCharacterController(Vect3f displacement, Vect3f up, float elapsedTime, const std::string &name, bool stickToGround);
 
 	bool isCharacterControllerGrounded(const std::string &name);
 
@@ -105,7 +105,8 @@ public:
 
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
-	Vect3f CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance);
+	bool RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition);
+
 	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
 
 	//std::set<std::string> getTriggerCollisions( const std::string& triggerName ) { auto ret = std::move( m_TriggerCollisions[triggerName] ); return ret; }

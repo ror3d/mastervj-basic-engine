@@ -275,7 +275,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetPosition", &CCharacterControllerComponent::SetPosition,
 			"Resize", &CCharacterControllerComponent::Resize,
 			"GetHeight", &CCharacterControllerComponent::GetHeight,
-			"GetRadius", &CCharacterControllerComponent::GetRadius);
+			"GetRadius", &CCharacterControllerComponent::GetRadius,
+			"SetStickToGround", &CCharacterControllerComponent::SetStickToGround);
 
 	(*m_state)["CColliderComponent"]
 		.SetClass<CPhysxComponent, const CPhysxComponent&, CElement*>(
