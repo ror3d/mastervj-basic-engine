@@ -167,7 +167,7 @@ void CElement::AddComponent(std::string Name, CComponent* component)
 	component->Initialize();
 }
 
-void CElement::SendMsg(const std::string msg)
+void CElement::SendMsg(const std::string& msg)
 {
 	for (auto it = m_componentContainer.begin(); it != m_componentContainer.end(); it++)
 	{

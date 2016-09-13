@@ -59,7 +59,7 @@ public:
 
 	void AddComponent(std::string Name, CComponent* component);
 
-	void SendMsg(const std::string message);
+	void SendMsg(const std::string& message);
 
 	void SendMsg( const std::string& message, CElement* arg1 );
 	void SendMsg( const std::string& message, int arg1 );
