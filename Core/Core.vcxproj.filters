@@ -67,6 +67,9 @@
     <ClCompile Include="Component\SpawnComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="Component\FreeCameraComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -156,6 +159,9 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\SpawnComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\FreeCameraComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>

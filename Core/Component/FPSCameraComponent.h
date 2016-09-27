@@ -32,6 +32,8 @@ public:
 	Vect3f GetCamOffset() { return m_CamOffset; }
 	void SetCamOffset( Vect3f offset ) { m_CamOffset = offset; }
 
+	void SetYaw(float yaw);
+
 	float GetYaw();
 
 	static const std::string COMPONENT_TYPE;

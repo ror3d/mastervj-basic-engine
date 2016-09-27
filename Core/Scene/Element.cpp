@@ -8,6 +8,7 @@
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/FreeCameraComponent.h>
 #include <Core/Component/PhysxComponent.h>
 #include <Core/Component/TriggerComponent.h>
 #include <Core/Component/MeshInstanceComponent.h>
@@ -89,6 +90,10 @@ CElement::CElement(const CXMLTreeNode& node)
 		else if (type == "fps_camera")
 		{
 			component = new CFPSCameraComponent(comp, this);
+		}
+		else if (type == "free_camera")
+		{
+			component = new CFreeCameraComponent(comp, this);
 		}
 		else if (type == "collider")
 		{
@@ -181,6 +186,17 @@ CFPSCameraComponent* CElement::GetCamera()
 	if (comp)
 	{
 		return dynamic_cast<CFPSCameraComponent*>(comp);
+	}
+	return nullptr;
+}
+
+
+CFreeCameraComponent* CElement::GetFreeCamera()
+{
+	auto comp = m_componentContainer.get(getName() + "_" + CFreeCameraComponent::COMPONENT_TYPE);
+	if (comp)
+	{
+		return dynamic_cast<CFreeCameraComponent*>(comp);
 	}
 	return nullptr;
 }

@@ -12,6 +12,7 @@
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/FreeCameraComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
@@ -245,6 +246,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetEnabled", &CElement::SetEnabled,
 			"IsEnabled", &CElement::GetEnabled,
 			"GetCamera", &CElement::GetCamera,
+			"GetFreeCamera", &CElement::GetFreeCamera,
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
 			"GetCollider", &CElement::GetPhysxComponent,
@@ -298,7 +300,18 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
 			"GetCamOffset", &CFPSCameraComponent::GetCamOffset,
 			"SetCamOffset", &CFPSCameraComponent::SetCamOffset,
+			"SetYaw", &CFPSCameraComponent::SetYaw,
 			"GetYaw", &CFPSCameraComponent::GetYaw);
+
+	(*m_state)["CFreeCameraComponent"]
+		.SetClass<CFreeCameraComponent, const CFreeCameraComponent&, CElement*>(
+			"SetAsCurrent", &CFreeCameraComponent::SetAsCurrentCamera,
+			"GetForward", &CFreeCameraComponent::GetForward,
+			"SetForward", &CFreeCameraComponent::SetForward,
+			"GetUp", &CFreeCameraComponent::GetUp,
+			"SetUp", &CFreeCameraComponent::SetUp,
+			"GetOffset", &CFreeCameraComponent::GetOffset,
+			"SetOffset", &CFreeCameraComponent::SetOffset);
 
 
 	(*m_state)["CTriggerComponent"]

@@ -9,6 +9,7 @@ std::vector<const char*> CComponentManager::s_componentsUpdateOrder =
 	"Trigger",
 	"CharacterController",
 	"Camera",
+	"FreeCamera",
 	"AnimatedInstance",
 	"Speaker",
 	"ParticleEmitter",

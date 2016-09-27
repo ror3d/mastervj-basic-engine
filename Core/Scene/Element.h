@@ -13,6 +13,7 @@ class CCharacterControllerComponent;
 class CPhysxComponent;
 class CTriggerComponent;
 class CFPSCameraComponent;
+class CFreeCameraComponent;
 class CRenderableComponent;
 class CSpeakerComponent;
 class CScriptedComponent;
@@ -75,6 +76,7 @@ public:
 	CPhysxComponent * GetPhysxComponent();
 	CTriggerComponent * GetTriggerComponent();
 	CFPSCameraComponent* GetCamera();
+	CFreeCameraComponent* GetFreeCamera();
 	CSpeakerComponent* GetSpeaker();
 	CScriptedComponent* GetScript(const std::string& scriptName);
 
