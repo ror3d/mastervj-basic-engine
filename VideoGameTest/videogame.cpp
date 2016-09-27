@@ -39,7 +39,7 @@
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Core/Scene/SceneManager.h>
-
+#include <Video/Player.h>
 
 #include <AntTweakBar.h>
 
@@ -49,6 +49,9 @@
 #define HEIGHT 540
 
 #define APPLICATION_NAME	"VIDEOGAME"
+
+CPlayer *videoPlayer = NULL;
+void OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr);
 
 void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 {
@@ -179,11 +182,16 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			PostQuitMessage(0);
 			return 0;
 		}
+
+		case WM_APP_PLAYER_EVENT:
+		{
+			OnPlayerEvent(hWnd, wParam);
+			break;
+		}
 		break;
 	}//end switch( msg )
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
-
 
 //-----------------------------------------------------------------------
 // WinMain
@@ -235,10 +243,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getSceneManager()->Initialize("Data\\Scenes\\");
 	engine.getSoundManager()->InitAll("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
 
-
-
-
-
 	context.CreateBackBuffer(hWnd, WIDTH, HEIGHT);
 	{
 		CInputManagerImplementation inputManager(hWnd);
@@ -269,6 +273,11 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		bool hasFocus = true;
 
+		bool first = true;
+
+		// Initialize the player object.
+		HRESULT hr = CPlayer::CreateInstance(hWnd, hWnd, &videoPlayer);
+
 		while (msg.message != WM_QUIT)
 		{
 			if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
@@ -281,16 +290,24 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 			}
 			else
 			{
-				inputManager.BeginFrame();
+				if (first)
+				{
+					hr = videoPlayer->OpenURL(L"Data\\sample.mp4");
+					first = false;
+				}
 
-				DWORD l_CurrentTime = timeGetTime();
-				float l_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
-				CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
-				m_PreviousTime = l_CurrentTime;
+				if (videoPlayer->GetState() != Started)
+				{
+					inputManager.BeginFrame();
+					DWORD l_CurrentTime = timeGetTime();
+					float l_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
+					CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
+					m_PreviousTime = l_CurrentTime;
 
-				application.Update(l_ElapsedTime);
-				application.Render();
-				inputManager.EndFrame();
+					application.Update(l_ElapsedTime);
+					application.Render();
+					inputManager.EndFrame();
+				}
 			}
 		}
 	}
@@ -298,6 +315,12 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	CEngine::ReleaseSingleton();
 	UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	return 0;
+}
+
+// Handler for Media Session events.
+void OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr)
+{
+	HRESULT hr = videoPlayer->HandleEvent(pUnkPtr);
 }
 
 

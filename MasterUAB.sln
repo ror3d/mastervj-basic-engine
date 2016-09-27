@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{5775BF0C-0D23-4B87-85C5-9235BCDA49F5}"
 EndProject
@@ -40,7 +40,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUI", "GUI\GUI.vcxproj", "{
 		{0323B8D9-42B2-4768-9F73-6DDEAFA020E7} = {0323B8D9-42B2-4768-9F73-6DDEAFA020E7}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Network", "Network\Network.vcxproj", "{1341C6B1-E103-4A05-BFEF-4E229550C001}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Video", "Network\Network.vcxproj", "{1341C6B1-E103-4A05-BFEF-4E229550C001}"
 	ProjectSection(ProjectDependencies) = postProject
 		{13CD2FD7-8E02-4165-9128-D754579F003F} = {13CD2FD7-8E02-4165-9128-D754579F003F}
 		{0323B8D9-42B2-4768-9F73-6DDEAFA020E7} = {0323B8D9-42B2-4768-9F73-6DDEAFA020E7}
@@ -76,9 +76,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0EFE939E-9C88-4AC4-A491-629767E662A5}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64

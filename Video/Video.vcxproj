@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Video\Player.cpp" />
+    <ClCompile Include="..\VideoGameTest\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Video\Player.h" />
+    <ClInclude Include="..\VideoGameTest\Player.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1341C6B1-E103-4A05-BFEF-4E229550C001}</ProjectGuid>
