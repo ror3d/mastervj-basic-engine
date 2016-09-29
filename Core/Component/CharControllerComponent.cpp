@@ -41,6 +41,8 @@ void CCharacterControllerComponent::Init()
 
 void CCharacterControllerComponent::Destroy()
 {
+	if ( m_Destroyed ) return;
+	m_Destroyed = true;
 	CEngine::GetSingleton().getPhysXManager()->releaseCharacterController( getName() );
 }
 
