@@ -17,47 +17,6 @@ void CRenderer::AddRenderableToRender(const std::string& layer, IRenderable* mes
 	m_Layers[layer][mesh].push_back(transf);
 }
 
-float CRenderer::CalcDistance(Vect3f dist1, Vect3f dist2)
-{
-	float diffx = dist2.x - dist1.x;
-	float diffy = dist2.y - dist1.y;
-	float diffz = dist2.z - dist1.z;
-
-	return sqrt((float)(diffx * diffx + diffy * diffy + diffz * diffz));
-}
-
-bool CRenderer::CompareDistance(const LayerVector &a, const LayerVector &b)
-{
-	return a.distance > b.distance;
-}
-
-void CRenderer::RenderLayerByDepth(LayerMap_t::iterator layerIt, CContextManager *context)
-{
-	Vect3f Cameraposition;
-	Vect3f ObjPosition;
-	std::vector<LayerVector> DistLayerVector;
-	LayerVector Layer;
-
-	for (auto &const meshInstances : layerIt->second)
-	{
-		for (auto &const transf : meshInstances.second)
-		{
-			Cameraposition = (CEffectManager::m_SceneParameters.m_CameraPosition.x, CEffectManager::m_SceneParameters.m_CameraPosition.y, CEffectManager::m_SceneParameters.m_CameraPosition.z);
-			ObjPosition = Vect3f(transf.m30, transf.m31, transf.m32);
-			Layer.distance = CalcDistance(Cameraposition, ObjPosition);
-			Layer.transform = transf;
-			Layer.mesh = meshInstances.first;
-			DistLayerVector.push_back(Layer);
-		}
-	}
-	std::sort(DistLayerVector.begin(), DistLayerVector.end(), CRenderer::CompareDistance);
-
-	for (auto &const it = DistLayerVector.begin(); it != DistLayerVector.end(); ++it) {
-		CEffectManager::m_SceneParameters.m_World = it->transform;
-		it->mesh->Render(context);
-	}
-}
-
 void CRenderer::RenderLayer(const std::string& layer, CContextManager *context, bool m_layer_zsort)
 {
 	auto layerIt = m_Layers.find(layer);
@@ -73,7 +32,34 @@ void CRenderer::RenderLayer(const std::string& layer, CContextManager *context, 
 	//transform y mesh con ese transform (al reves que ahora). Una vez hecho hacer render
 	if (m_layer_zsort)
 	{
-		RenderLayerByDepth(layerIt, context);
+		struct RenderTuple
+		{
+			IRenderable* mesh;
+			float distance;
+			Mat44f *transform;
+		};
+
+		std::vector<RenderTuple> m_orderedMeshes;
+
+
+		for ( auto &const meshInstances : layerIt->second )
+		{
+			for ( auto & transf : meshInstances.second )
+			{
+				Vect4f camPos = CEffectManager::m_SceneParameters.m_CameraPosition;
+				Vect4f objPos = transf.GetPos();
+				m_orderedMeshes.push_back( RenderTuple { meshInstances.first, ( camPos - objPos ).SquaredLength(), &transf } );
+			}
+		}
+
+		std::sort( m_orderedMeshes.begin(), m_orderedMeshes.end(),
+				   []( RenderTuple &a, RenderTuple &b ) { return a.distance > b.distance; } );
+
+		for (auto &const rt : m_orderedMeshes)
+		{
+			CEffectManager::m_SceneParameters.m_World = *rt.transform;
+			rt.mesh->Render(context);
+		}
 	}
 	else
 	{

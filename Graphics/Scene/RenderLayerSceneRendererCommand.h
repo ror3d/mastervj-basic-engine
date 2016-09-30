@@ -8,7 +8,7 @@ class CRenderLayerSceneRendererCommand : public CSceneRendererCommand
 {
 private:
 	std::string m_layerName;
-	bool m_layer_zsort = false;
+	bool m_zSort;
 public:
 	CRenderLayerSceneRendererCommand(CXMLTreeNode &TreeNode);
 	void Execute(CContextManager &_context);
