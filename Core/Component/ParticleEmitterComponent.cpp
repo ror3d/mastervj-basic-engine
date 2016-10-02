@@ -16,14 +16,17 @@ CParticleEmitterComponent::CParticleEmitterComponent(const CParticleEmitterCompo
 	SetNameFromParentName( Owner->getName() );
 
 	m_ParticleInstance = new CParticleSystemInstance( *base.m_ParticleInstance );
+	m_ParticleInstance->SetEnabled(Owner->GetEnabled());
 }
 
 CParticleEmitterComponent::CParticleEmitterComponent(CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
+	
 	SetNameFromParentName( Owner->getName() );
 
 	m_ParticleInstance = new CParticleSystemInstance(node);
+	m_ParticleInstance->SetEnabled(Owner->GetEnabled());
 }
 
 
@@ -36,6 +39,7 @@ void CParticleEmitterComponent::Init()
 
 void CParticleEmitterComponent::Update(float ElapsedTime)
 {
+	m_ParticleInstance->SetEnabled(GetOwner()->GetEnabled());
 	m_ParticleInstance->Update(ElapsedTime);
 }
 
