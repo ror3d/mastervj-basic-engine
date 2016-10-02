@@ -35,22 +35,45 @@ void CCinematicPlayer::Update( float ElapsedTime )
 {
 	if ( m_Playing )
 	{
-		m_CurrentTime += ElapsedTime;
-		if ( m_CurrentTime > m_Duration )
+		if (!m_reverse)
 		{
-			if ( m_Cycle )
+			m_CurrentTime += ElapsedTime;
+			if (m_CurrentTime > m_Duration)
 			{
-				while ( m_CurrentTime > m_Duration )
+				if (m_Cycle)
 				{
-					m_CurrentTime -= m_Duration;
+					while (m_CurrentTime > m_Duration)
+					{
+						m_CurrentTime -= m_Duration;
+					}
 				}
+				else
+				{
+					Pause();
+				}
+				OnRestartCycle();
 			}
-			else
-			{
-				Pause();
-			}
-			OnRestartCycle();
 		}
+		else
+		{
+			m_CurrentTime -= ElapsedTime;
+			if (m_CurrentTime < 0)
+			{
+				if (m_Cycle)
+				{
+					while (m_CurrentTime < m_Duration)
+					{
+						m_CurrentTime += m_Duration;
+					}
+				}
+				else
+				{
+					m_Playing = false;
+				}
+				//OnRestartCycle();
+			}
+		}
+			
 	}
 }
 
@@ -65,6 +88,7 @@ void CCinematicPlayer::Stop()
 
 void CCinematicPlayer::Play()
 {
+	m_reverse = false;
 	m_Playing = true;
 }
 

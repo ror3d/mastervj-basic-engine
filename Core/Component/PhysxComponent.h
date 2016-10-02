@@ -15,6 +15,8 @@ protected:
 	bool m_isStatic;
 	bool m_isKinematic;
 	bool m_isTrigger;
+	Vect3f m_scaleOffset;
+	Vect3f m_positionOffset;
 	float m_mass;
 
 	virtual void Init();

@@ -19,7 +19,10 @@ CPhysxComponent::CPhysxComponent(CXMLTreeNode& node, CElement* Owner)
 	m_isStatic = node.GetBoolProperty("static", false);
 	m_isKinematic = node.GetBoolProperty("kinematic", false);
 	m_coreName = node.GetPszProperty("core_mesh", "");
+	m_positionOffset = node.GetVect3fProperty("position_offset", Vect3f(0, 0, 0));
+	m_scaleOffset = node.GetVect3fProperty("scale_offset", Vect3f(1,1,1));
 	m_mass = node.GetFloatProperty("mass", -1.0);
+
 	if (m_coreName == "" && (m_colType == "ConvexMesh" || m_colType == "TriangleMesh"))
 	{
 		DEBUG_ASSERT( !"Collider type requires core_mesh!" );
@@ -46,7 +49,7 @@ CPhysxComponent::~CPhysxComponent()
 
 void CPhysxComponent::Init()
 {
-	Init(GetOwner()->GetScale(), GetOwner()->GetPosition());
+	Init(GetOwner()->GetScale().MulElems(m_scaleOffset), GetOwner()->GetPosition() + m_positionOffset);
 }
 
 void CPhysxComponent::Init(Vect3f scale, Vect3f position)

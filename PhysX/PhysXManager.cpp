@@ -781,6 +781,53 @@ bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vec
 	}
 }
 
+std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance)
+{
+	physx::PxRaycastBuffer hit;                 // [out] Raycast results
+
+	// Raycast against all static & dynamic objects (no filtering)
+	// The main result from this call is the closest hit, stored in the 'hit.block' structure
+	physx::PxQueryFilterData filterData(physx::PxQueryFlag::eDYNAMIC | physx::PxQueryFlag::eSTATIC | physx::PxQueryFlag::ePREFILTER);
+
+	/*using namespace physx;
+	class : public PxQueryFilterCallback
+	{
+		PxQueryHitType::Enum preFilter(const PxFilterData &filterData,
+			const PxShape *shape,
+			const PxRigidActor *actor,
+			PxHitFlags &queryFlags)
+		{
+			size_t l_indexActor = (size_t)actor->userData;
+			if (l_indexActor & CONTROLLER_FLAG)
+			{
+				return PxQueryHitType::eNONE;
+			}
+			return PxQueryHitType::eBLOCK;
+		}
+
+		PxQueryHitType::Enum postFilter(const PxFilterData &filterData, const PxQueryHit &hit)
+		{
+			return PxQueryHitType::eNONE;
+		}
+	} filter;*/
+
+	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData);
+	if (status)
+	{
+		size_t l_posName = (size_t)hit.block.actor->userData;
+		if (m_actors.name.size() < l_posName)
+		{
+			return "";
+		}
+		std::string l_hitName = m_actors.name[l_posName];
+		return l_hitName;
+	}
+	else
+	{
+		return "";
+	}
+}
+
 void CPhysXManager::update(float dt)
 {
 	m_elapsedTime += dt;

@@ -56,10 +56,11 @@ CAnimatedInstanceComponent::CAnimatedInstanceComponent(CXMLTreeNode& node, CElem
 
 	float timeToStart = node.GetFloatProperty("startTime", -1, false);
 	if (timeToStart != -1)
-	{
-		m_AnimatedMeshInstance->ClearCycle(0, 0.2);
-		m_AnimatedMeshInstance->ExecuteAction(0, 0.2, 0, timeToStart, false);
+	{	
+		m_AnimatedMeshInstance->BlendCycle(0, 1.0, 0.4);
 	}
+
+	
 }
 
 

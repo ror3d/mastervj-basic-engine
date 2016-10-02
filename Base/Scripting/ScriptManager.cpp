@@ -228,7 +228,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"Dot", static_cast<float (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator*),
 			"Cross", static_cast<Vect3f (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator^),
 			"Add", static_cast<Vect3f (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator+),
-			"Mul", static_cast<Vect3f (Vect3f::*)(float) const>(&Vect3f::operator*)
+			"Mul", static_cast<Vect3f (Vect3f::*)(float) const>(&Vect3f::operator*),
+			"Subs", static_cast<Vect3f(Vect3f::*)(const Vect3f&) const>(&Vect3f::operator-)
 			);
 
 
@@ -333,7 +334,9 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CPhysicsManager"].SetObj(
 		*CEngine::GetSingleton().getPhysXManager(),
 		"moveCharController", &CPhysXManager::moveCharacterController,
-		"createController", &CPhysXManager::createController);
+		"createController", &CPhysXManager::createController,
+		"Raycast", &CPhysXManager::RayCast,
+		"RaycastName", &CPhysXManager::RayCastName);
 
 	(*m_state)["CInputManager"].SetObj<CInputManager>(
 		*CInputManager::GetInputManager(),
@@ -357,6 +360,7 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", static_cast<void(CCinematicManager::*)(std::string)>(&CCinematicManager::Play),
 		"Stop", &CCinematicManager::Stop,
+		"Reverse", &CCinematicManager::Reverse,
 		"Pause", &CCinematicManager::Pause);
 
 	(*m_state)["CSoundManager"].SetObj(

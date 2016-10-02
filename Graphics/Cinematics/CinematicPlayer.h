@@ -7,6 +7,7 @@ protected:
 	float m_CurrentTime;
 	float m_Duration;
 	bool m_Cycle;
+	bool m_reverse;
 public:
 	CCinematicPlayer();
 	virtual ~CCinematicPlayer();

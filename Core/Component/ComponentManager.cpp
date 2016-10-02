@@ -12,6 +12,7 @@ std::vector<const char*> CComponentManager::s_componentsUpdateOrder =
 	"Speaker",
 	"ParticleEmitter",
 	"MeshInstance",
+	"Spawn",
 	"Script"
 };
 
