@@ -37,4 +37,5 @@ private:
 	void AddObject( CElement* obj );
 	void DestroyObject(const std::string& id);
 
+	void CleanupObjects();
 };
