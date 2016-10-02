@@ -25,7 +25,7 @@ public:
 
 	void AddRenderableToRender(const std::string& layer, IRenderable* mesh, const Mat44f& transf);
 
-	void RenderLayer(const std::string& layer, CContextManager *context);
+	void RenderLayer(const std::string& layer, CContextManager *context, bool m_layer_zsort);
 
 	void destroy() {}
 };

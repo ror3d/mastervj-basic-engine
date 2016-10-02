@@ -17,6 +17,7 @@
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
     <ClCompile Include="Component\FPSCameraComponent.cpp" />
+    <ClCompile Include="Component\FreeCameraComponent.cpp" />
     <ClCompile Include="Component\MeshInstanceComponent.cpp" />
     <ClCompile Include="Component\ParticleEmitterComponent.cpp" />
     <ClCompile Include="Component\PhysxComponent.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Component\FPSCameraComponent.h" />
+    <ClInclude Include="Component\FreeCameraComponent.h" />
     <ClInclude Include="Component\MeshInstanceComponent.h" />
     <ClInclude Include="Component\ParticleEmitterComponent.h" />
     <ClInclude Include="Component\PhysxComponent.h" />

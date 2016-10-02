@@ -15,11 +15,7 @@ CSpawnComponent::CSpawnComponent(CXMLTreeNode& node, CElement* Owner)
 {
 	SetNameFromParentName( Owner->getName() );
 
-	std::string core = node.GetPszISOProperty("name_to_spawn", "", false);
-	
-	CEngine::GetSingleton().getSceneManager()->GetObjectById(core)->GetCharacterController()->SetPosition(Owner->GetPosition());
-	CEngine::GetSingleton().getSceneManager()->GetObjectById(core)->SetYawPitchRoll(Owner->GetYaw(), Owner->GetPitch(), Owner->GetRoll());
-	CEngine::GetSingleton().getSceneManager()->GetObjectById(core)->GetCamera()->Reset();
+	m_objName = node.GetPszISOProperty( "name_to_spawn", "", false );
 }
 
 CSpawnComponent::CSpawnComponent(const CSpawnComponent& base, CElement* Owner)
@@ -37,7 +33,15 @@ void CSpawnComponent::Destroy()
 }
 
 void CSpawnComponent::Init()
-{	
+{
+	CElement* obj = CEngine::GetSingleton().getSceneManager()->GetObjectById( m_objName );
+	if ( obj )
+	{
+		CElement* owner = GetOwner();
+		obj->GetCharacterController()->SetPosition( owner->GetPosition() );
+		obj->SetYawPitchRoll( owner->GetYaw(), owner->GetPitch(), owner->GetRoll() );
+		obj->GetCamera()->Reset();
+	}
 }
 
 void CSpawnComponent::FixedUpdate(float ElapsedTime)

@@ -95,7 +95,7 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 {
 	m_Actions.clear();
 
-	
+
 	{
 		Action action = { "MOVE_FWD", KEYBOARD, Action::WHILE_PRESSED };
 		action.keyboard.key = VK_SHIFT;
@@ -224,10 +224,24 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		action.keyboard.needsCtrl = false;
 		m_Actions.push_back(action);
 	}
-	
+	{
+		Action action = { "MULTI_CONTROL_TOGGLE", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = 'T';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
+		Action action = { "THROW_DIVISION", KEYBOARD, Action::ON_PRESS };
+		action.keyboard.key = 'G';
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+
 	{
 		Action action = { "FIXCAMERA", KEYBOARD, Action::ON_PRESS };
-		action.keyboard.key = 'F';
+		action.keyboard.key = 'P';
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
 		action.triggersAxis = true;
@@ -257,7 +271,7 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 	}
 	{
 		Action action = { "MOVE_CAMERA", MOUSE, Action::WHILE_PRESSED };
-		action.mouse.button = Action::LEFT;
+		action.mouse.button = Action::RIGHT;
 
 		m_Actions.push_back(action);
 	}

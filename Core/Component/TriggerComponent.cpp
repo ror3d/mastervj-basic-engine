@@ -86,13 +86,21 @@ void CTriggerComponent::FixedUpdate(float ElapsedTime)
 	auto own = GetOwner();
 	for (auto &const e : left)
 	{
-		auto otherOwner = cm->get(e)->GetOwner();
+		auto other = cm->get( e );
+		if ( !other ) continue;
+		auto otherOwner = other->GetOwner();
+		if ( !otherOwner ) continue;
+
 		own->SendMsg("OnTriggerLeave", otherOwner);
 	}
 
 	for (auto &const e : m_activeElements)
 	{
-		auto otherOwner = cm->get(e)->GetOwner();
+		auto other = cm->get( e );
+		if ( !other ) continue;
+		auto otherOwner = other->GetOwner();
+		if ( !otherOwner ) continue;
+
 		own->SendMsg("OnTriggerStay", otherOwner);
 	}
 

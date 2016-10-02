@@ -5,23 +5,14 @@
 
 CRenderLayerSceneRendererCommand::CRenderLayerSceneRendererCommand(CXMLTreeNode &TreeNode)
 	: CSceneRendererCommand(TreeNode)
+	, m_zSort(false)
 {
-	//TODO: save active
-	//<render_layer layer="solid" active="true"/>
-	std::string layerNameToRender = TreeNode.GetPszProperty("layer");
-	m_layerName = layerNameToRender;
-	/*m_Layer = CEngine::GetSingleton().getLayerManager()->get(layerNameToRender);
-	if (m_Layer != nullptr)
-	{
-		m_Layer->setActive(TreeNode.GetBoolProperty("active"));
-	}*/
+	m_layerName = TreeNode.GetPszProperty("layer");
+
+	m_zSort = TreeNode.GetBoolProperty("z_sort", false, false);
 }
 
 void CRenderLayerSceneRendererCommand::Execute(CContextManager &_context)
 {
-	/*if (m_Layer != nullptr)
-	{
-		m_Layer->Render(&_context);
-	}*/
-	CEngine::GetSingleton().getRenderer()->RenderLayer(m_layerName, &_context);
+	CEngine::GetSingleton().getRenderer()->RenderLayer(m_layerName, &_context, m_zSort);
 }
