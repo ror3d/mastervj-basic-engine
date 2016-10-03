@@ -8,6 +8,7 @@
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/FreeCameraComponent.h>
 #include <Core/Component/PhysxComponent.h>
 #include <Core/Component/TriggerComponent.h>
 #include <Core/Component/MeshInstanceComponent.h>
@@ -90,6 +91,10 @@ CElement::CElement(const CXMLTreeNode& node)
 		{
 			component = new CFPSCameraComponent(comp, this);
 		}
+		else if (type == "free_camera")
+		{
+			component = new CFreeCameraComponent(comp, this);
+		}
 		else if (type == "collider")
 		{
 			component = new CPhysxComponent(comp, this);
@@ -167,7 +172,7 @@ void CElement::AddComponent(std::string Name, CComponent* component)
 	component->Initialize();
 }
 
-void CElement::SendMsg(const std::string msg)
+void CElement::SendMsg(const std::string& msg)
 {
 	for (auto it = m_componentContainer.begin(); it != m_componentContainer.end(); it++)
 	{
@@ -181,6 +186,17 @@ CFPSCameraComponent* CElement::GetCamera()
 	if (comp)
 	{
 		return dynamic_cast<CFPSCameraComponent*>(comp);
+	}
+	return nullptr;
+}
+
+
+CFreeCameraComponent* CElement::GetFreeCamera()
+{
+	auto comp = m_componentContainer.get(getName() + "_" + CFreeCameraComponent::COMPONENT_TYPE);
+	if (comp)
+	{
+		return dynamic_cast<CFreeCameraComponent*>(comp);
 	}
 	return nullptr;
 }

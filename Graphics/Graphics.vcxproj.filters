@@ -283,6 +283,9 @@
     <ClInclude Include="Cinematics\CameraKeyController.h">
       <Filter>Cinematic\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Camera\FreeCameraController.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\CameraController.cpp">
@@ -498,6 +501,9 @@
     </ClCompile>
     <ClCompile Include="Cinematics\CameraKeyController.cpp">
       <Filter>Cinematic\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\FreeCameraController.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

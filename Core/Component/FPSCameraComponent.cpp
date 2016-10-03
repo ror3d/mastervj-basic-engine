@@ -71,6 +71,7 @@ void CFPSCameraComponent::Update(float elapsedTime)
 
 void CFPSCameraComponent::Destroy()
 {
+	if ( m_Destroyed ) return;
 	m_Destroyed = true;
 	delete CEngine::GetSingleton().getCameraManager()->get( getName() );
 	CEngine::GetSingleton().getCameraManager()->remove( getName() );
@@ -81,6 +82,14 @@ void CFPSCameraComponent::SetAsCurrentCamera()
 {
 	if ( m_Destroyed ) return;
 	CEngine::GetSingleton().getCameraManager()->SetCurrentCameraController( getName() );
+}
+
+void CFPSCameraComponent::SetYaw( float yaw )
+{
+	if ( m_Destroyed ) return;
+	CFPSCameraController* cc = dynamic_cast<CFPSCameraController*>(CEngine::GetSingleton().getCameraManager()->get(getName()));
+	DEBUG_ASSERT(cc != nullptr);
+	cc->SetYaw(yaw);
 }
 
 float CFPSCameraComponent::GetYaw(){

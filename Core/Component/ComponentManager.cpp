@@ -4,10 +4,12 @@
 
 std::vector<const char*> CComponentManager::s_componentsUpdateOrder =
 {
+	"Spawn",
 	"Collider",
 	"Trigger",
 	"CharacterController",
 	"Camera",
+	"FreeCamera",
 	"AnimatedInstance",
 	"Speaker",
 	"ParticleEmitter",
