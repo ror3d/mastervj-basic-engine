@@ -23,15 +23,6 @@ fn exportTextureFile texTypeName texMap = (
 	)
 )
 
-fn writeDefaultMaterials = (
-	format "\t\t<parameter type=\"float\" name=\"specular\" value=\"1\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
-	format "\t\t<parameter type=\"float\" name=\"gloss\" value=\"80.0\" varParams = \"min=1 max=100 step=0.5 precision=1\"/>\n" to:file
-	format "\t\t<parameter type=\"float\" name=\"bump\" value=\"0.4\" varParams = \"min=0 max=5 step=0.1 precision=1\"/>\n" to:file
-	format "\t\t<parameter type=\"float\" name=\"environment_factor\" value=\"0.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
-	format "\t\t<parameter type=\"float\" name=\"cutout_factor\" value=\"1.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
-	format "\t\t<parameter type=\"float\" name=\"ssr_factor\" value=\"0.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
-)
-
 fn exportSingleTexture mat meshName = (
 	if HasTexture mat alertOnMissing:true then
 	(
@@ -74,7 +65,34 @@ fn createSingleMaterial obj mat = (
 	
 	exportSingleNormal mat obj.name
 	
-	writeDefaultMaterials()
+	
+	local ssr = 0
+	local environment = 0
+	
+	if mat != undefined then
+	(
+		local reflectionFactor = mat.reflectionMapAmount / 100.0
+		local reflect = mat.reflectionMapEnable
+		
+		if reflect then
+		(
+			if mat.reflectionMap != undefined and classof mat.reflectionMap == Bitmaptexture and mat.reflectionMap.bitmap != undefined then
+			(
+				environment = reflectionFactor
+			)
+			else
+			(
+				ssr = reflectionFactor
+			)
+		)
+	)
+	
+	format "\t\t<parameter type=\"float\" name=\"specular\" value=\"1\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"gloss\" value=\"80.0\" varParams = \"min=1 max=100 step=0.5 precision=1\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"bump\" value=\"2.4\" varParams = \"min=0 max=5 step=0.1 precision=1\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"environment_factor\" value=\"%\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" environment to:file
+	format "\t\t<parameter type=\"float\" name=\"cutout_factor\" value=\"1.0\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"ssr_factor\" value=\"%\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" ssr to:file
 	
 	format "\t</material>\n" to:file 
 )
