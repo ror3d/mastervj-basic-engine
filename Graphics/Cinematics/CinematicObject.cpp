@@ -17,14 +17,20 @@ CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 	m_name = treeNode.GetPszProperty("resource");
 	std::string loopType = treeNode.GetPszProperty("loopType");
 
+	m_reverse = false;
 	if (loopType == std::string("Cycle"))
 	{
 		m_Cycle = true;
 	}
-	else if (loopType == std::string("One-Shot") || loopType == std::string("Reverse"))
+	else if (loopType == std::string("One-Shot"))
 	{
 		m_Cycle = false;
 		//TODO: anim reverse
+	}
+	else if (loopType == std::string("Reverse"))
+	{
+		m_Cycle = true;
+		m_reverse = true;
 	}
 
 	m_object = CEngine::GetSingleton().getSceneManager()->GetObjectById(m_name);
@@ -90,14 +96,34 @@ void CCinematicObject::Update( float ElapsedTime )
 		}
 	}
 
-	m_CurrentKeyFrame = 0;
-	while (m_CurrentKeyFrame < m_CinematicObjectKeyFrames.size() - 2
-		   && m_CinematicObjectKeyFrames[m_CurrentKeyFrame+1]->getKeyFrameTime() < m_CurrentTime)
+	if (!m_reverse)
 	{
-		m_CurrentKeyFrame++;
+		m_CurrentKeyFrame = 0;
+		while (m_CurrentKeyFrame < m_CinematicObjectKeyFrames.size() - 2
+			&& m_CinematicObjectKeyFrames[m_CurrentKeyFrame + 1]->getKeyFrameTime() < m_CurrentTime)
+		{
+			m_CurrentKeyFrame++;
+		}
 	}
-
-	int nextKF = mathUtils::Min( m_CurrentKeyFrame + 1, m_CinematicObjectKeyFrames.size()-1);
+	else
+	{
+		m_CurrentKeyFrame = m_CinematicObjectKeyFrames.size()-1;
+		while (m_CurrentKeyFrame > -1
+			&& m_CinematicObjectKeyFrames[m_CurrentKeyFrame - 1]->getKeyFrameTime() > m_CurrentTime)
+		{
+			m_CurrentKeyFrame--;
+		}
+	}
+	
+	int nextKF;
+	if (!m_reverse)
+	{
+		nextKF = mathUtils::Min(m_CurrentKeyFrame + 1, m_CinematicObjectKeyFrames.size() - 1);
+	}
+	else
+	{
+		nextKF = mathUtils::Max(m_CurrentKeyFrame - 1, (unsigned int) 0);		
+	}
 
 	auto current = m_CinematicObjectKeyFrames[m_CurrentKeyFrame];
 	auto next = m_CinematicObjectKeyFrames[nextKF];
@@ -133,6 +159,16 @@ void CCinematicObject::Stop()
 
 	CCinematicPlayer::Stop();
 
+}
+
+void CCinematicObject::Reverse()
+{
+	if (!m_object)
+	{
+		return;
+	}
+	m_Playing = true;
+	m_reverse = true;
 }
 
 

@@ -25,6 +25,8 @@ public:
 	void LoadScene( const std::string& sceneName );
 	void UnloadScene( const std::string& sceneName );
 
+	void StartedUnload();
+	void FinishedLoad();
 
 	void AddObjectToScene( const std::string& sceneName, CElement* obj );
 	void DestroyObjectFromScene( const std::string& sceneName, const std::string& objectName );

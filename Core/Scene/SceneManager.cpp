@@ -3,6 +3,8 @@
 #include "Element.h"
 
 #include <Windows.h>
+#include <Core\Engine\Engine.h>
+#include <PhysX\PhysXManager.h>
 
 CSceneManager::CSceneManager()
 {
@@ -171,5 +173,15 @@ void CSceneManager::Update()
 	}
 
 	m_ScenesToUnload.clear();
+}
+
+void CSceneManager::StartedUnload()
+{
+	CEngine::GetSingleton().getPhysXManager()->m_enabledTriggerDetection = false;
+}
+
+void CSceneManager::FinishedLoad()
+{
+	CEngine::GetSingleton().getPhysXManager()->m_enabledTriggerDetection = true;
 }
 

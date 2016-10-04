@@ -293,7 +293,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	GroupBox grp33 "Game Object" pos:[8,24] width:648 height:512
 	GroupBox grp34 "Other Exports" pos:[8,536] width:648 height:136
 	GroupBox grp35 "Light" pos:[16,552] width:200 height:112
-	GroupBox grp36 "Transform Cinematic" pos:[222,552] width:200 height:112
+	GroupBox grp36 "Transform Cinematic" pos:[221,552] width:200 height:112
 	button get_btn "Get" pos:[16,680] width:136 height:40
 	button set_btn "Set" pos:[160,680] width:136 height:40
 	checkbox autoload_ckb "Load automatically when selection changes" pos:[312,680] width:232 height:16
@@ -310,6 +310,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	spinner speaker_volume_txt "Volume" pos:[489,464] width:95 height:16 enabled:false range:[0,100,100] type:#integer
 	button script_add_btn "Add Script" pos:[96,456] width:120 height:21
 	
+	GroupBox grp14 "Spawn" pos:[430,553] width:200 height:45
+	checkbox export_spawn_ckb "Export As Spawn" pos:[440,569] width:152 height:16
 	
 	
 	local m_ObjSelected = undefined
@@ -335,6 +337,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			scripts_combo.enabled = true
 			script_add_btn.enabled = true
 			scripts_edit_btn.enabled = true
+			export_spawn_ckb.enabled = true
 			
 			eRend = export_rend_ckb.checked
 			eColl = export_collider_ckb.checked
@@ -342,7 +345,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			eCam = export_camera_ckb.checked
 			eCC = export_cc_ckb.checked
 			eSpeak = export_speaker_ckb.checked
-			ePart = export_particle_ckb.checked
+			ePart = export_particle_ckb.checked			
 		) else (
 			export_rend_ckb.enabled = false
 			export_collider_ckb.enabled = false
@@ -389,6 +392,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		cinematic_type_radio.enabled = export_cinem_ckb.checked
 		cinem_playStart_ckb.enabled = export_cinem_ckb.checked
+		
 	)
 	
 	function ResetProps = (
@@ -451,6 +455,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		export_cinem_ckb.checked = false
 		cinem_playStart_ckb.checked = false
 		cinematic_type_radio.state = 1
+		
+		export_spawn_ckb.checked = false
 	)
 	
 	
@@ -673,6 +679,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		LoadCkbProp export_cinem_ckb "ExportTAnimation"
 		LoadRadioProp cinematic_type_radio CinematicsLoopTypes "TAnimationType"
 		LoadCkbProp cinem_playStart_ckb "TAnimationPlayStart"
+		LoadCkbProp export_spawn_ckb "ExportAsSpawn"
 		
 		g_Scripts = #()
 		
@@ -749,6 +756,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		SaveRadioProp Obj cinematic_type_radio CinematicsLoopTypes "TAnimationType"
 		SaveCkbProp Obj cinem_playStart_ckb "TAnimationPlayStart"
 		
+		SaveCkbProp Obj export_spawn_ckb "ExportAsSpawn"
+		
 		if exportMeshCore then (
 			setUserProp Obj "export_mesh_instance" true
 		) else (
@@ -774,6 +783,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	
 	button reset_btn "Reset" pos:[576,680] width:80 height:40
 	button remove_script_btn "Remove" pos:[32,456] width:56 height:21
+	
 	
 	
 	
@@ -822,6 +832,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		UpdateEnabledProps()
 	)
 	on scripts_combo changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on export_spawn_ckb state do
 	(
 		UpdateEnabledProps()
 	)
@@ -938,6 +952,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			scripts_combo.items = l
 			scripts_combo.selection = 0
 		)
+	)
+	on export_spawn_ckb changed state do
+	(
+		UpdateEnabledProps()
 	)
 )
 

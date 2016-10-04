@@ -165,7 +165,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 	m_ControllerManager = PxCreateControllerManager(*m_Scene);
 	m_ControllerManager->setOverlapRecoveryModule(true);
 
-
+	m_enabledTriggerDetection = true;
 }
 
 CPhysXManagerImplementation::~CPhysXManagerImplementation()
@@ -194,6 +194,9 @@ void CPhysXManagerImplementation::onContact(const physx::PxContactPairHeader &pa
 
 void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::PxU32 count)
 {
+	if (!m_enabledTriggerDetection)
+		return;
+
 	for (physx::PxU32 i = 0; i < count; i++)
 	{
 		/*if ( ( pairs[i].flags & ( physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER ) ) )
@@ -775,6 +778,53 @@ bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vec
 	{
 		out_hitPosition = Vect3f();
 		return false;
+	}
+}
+
+std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance)
+{
+	physx::PxRaycastBuffer hit;                 // [out] Raycast results
+
+	// Raycast against all static & dynamic objects (no filtering)
+	// The main result from this call is the closest hit, stored in the 'hit.block' structure
+	physx::PxQueryFilterData filterData(physx::PxQueryFlag::eDYNAMIC | physx::PxQueryFlag::eSTATIC | physx::PxQueryFlag::ePREFILTER);
+
+	/*using namespace physx;
+	class : public PxQueryFilterCallback
+	{
+		PxQueryHitType::Enum preFilter(const PxFilterData &filterData,
+			const PxShape *shape,
+			const PxRigidActor *actor,
+			PxHitFlags &queryFlags)
+		{
+			size_t l_indexActor = (size_t)actor->userData;
+			if (l_indexActor & CONTROLLER_FLAG)
+			{
+				return PxQueryHitType::eNONE;
+			}
+			return PxQueryHitType::eBLOCK;
+		}
+
+		PxQueryHitType::Enum postFilter(const PxFilterData &filterData, const PxQueryHit &hit)
+		{
+			return PxQueryHitType::eNONE;
+		}
+	} filter;*/
+
+	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData);
+	if (status)
+	{
+		size_t l_posName = (size_t)hit.block.actor->userData;
+		if (m_actors.name.size() < l_posName)
+		{
+			return "";
+		}
+		std::string l_hitName = m_actors.name[l_posName];
+		return l_hitName;
+	}
+	else
+	{
+		return "";
 	}
 }
 

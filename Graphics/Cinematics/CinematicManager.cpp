@@ -169,3 +169,15 @@ void CCinematicManager::Stop(std::string nameToRun)
 		}
 	}
 }
+
+void CCinematicManager::Reverse(std::string nameToRun)
+{
+	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
+	{
+		if ((*it)->getName() == nameToRun)
+		{
+			(*it)->Reverse();
+			return;
+		}
+	}
+}

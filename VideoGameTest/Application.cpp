@@ -84,11 +84,15 @@ void CApplication::Update(float _ElapsedTime)
 	{
 		CEngine::GetSingleton().getPhysXManager()->update( PHYSX_UPDATE_STEP );
 		CEngine::GetSingleton().getComponentManager()->FixedUpdate( PHYSX_UPDATE_STEP );
-		CEngine::GetSingleton().getSceneManager()->FixedUpdate();
 	}
 
 	CEngine::GetSingleton().getComponentManager()->Update(_ElapsedTime);
 
+
+	if ( isFixedUpdate )
+	{
+		CEngine::GetSingleton().getSceneManager()->FixedUpdate();
+	}
 
 	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 }
