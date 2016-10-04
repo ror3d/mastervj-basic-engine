@@ -114,7 +114,7 @@ fn createMaterials copyTextures = (
 				createSingleMaterial cores[i] cores[i].material
 			)
 		)
-		else -- Si se trata de un multimaterial
+		else if cores[i].material != undefined then -- Si se trata de un multimaterial
 		(
 			for j = 1 to cores[i].material.numsubs do
 			(		

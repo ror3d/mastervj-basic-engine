@@ -66,6 +66,7 @@ utility UABUtility "UAB Utility" width:160 height:552
 	(
 		if $ != undefined then
 		(
+			CollectCoresAndInstances()
 			createMeshes($selection)
 			messageBox "Fichero .mesh creado correctamente" title:"Exportación correcta"
 		)

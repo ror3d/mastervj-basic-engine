@@ -19,7 +19,7 @@ fn HasColor mat alertOnMissing:false = (
 )
 
 fn HasTexture mat alertOnMissing:false = (
-	local ret = mat.diffuseMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.diffuseMap.bitmap != undefined
+	local ret = mat != undefined and mat.diffuseMap != undefined and mat.diffuseMapEnable and classof mat.diffuseMap == Bitmaptexture and mat.diffuseMap.bitmap != undefined
 	if alertOnMissing and not ret then
 	(
 		DisplayMaterialError ("En el material " + mat.name + " no hay textura difusa o no es un bitmap!!!")
@@ -28,7 +28,7 @@ fn HasTexture mat alertOnMissing:false = (
 )
 
 fn HasReflection mat alertOnMissing:false = (
-	local ret = mat.reflectionMap != undefined and classof mat.reflectionMap == Bitmaptexture and mat.reflectionMap.bitmap != undefined
+	local ret = mat != undefined and mat.reflectionMap != undefined and mat.reflectionMapEnable and classof mat.reflectionMap == Bitmaptexture and mat.reflectionMap.bitmap != undefined
 	if alertOnMissing and not ret then
 	(
 		DisplayMaterialError ("En el material " + mat.name + " no hay textura de skymap o no es un bitmap!!!")
@@ -37,7 +37,7 @@ fn HasReflection mat alertOnMissing:false = (
 )
 
 fn HasNormal mat alertOnMissing:false = (
-	local ret = mat.bumpMap != undefined and classof mat.bumpMap == Bitmaptexture and mat.bumpMap.bitmap != undefined
+	local ret = mat != undefined and mat.bumpMap != undefined and mat.bumpMapEnable and classof mat.bumpMap == Bitmaptexture and mat.bumpMap.bitmap != undefined
 	if alertOnMissing and not ret then
 	(
 		DisplayMaterialError ("En el material " + mat.name + " no hay textura normal o no es un bitmap!!!")
@@ -50,7 +50,7 @@ fn HasWeights mat = (
 )
 
 fn HasLightmap mat alertOnMissing:false = (
-	local ret = mat.selfIllumMap != undefined and classof mat.diffuseMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
+	local ret = mat != undefined and mat.selfIllumMap != undefined and mat.selfIllumMapEnable and classof mat.diffuseMap == Bitmaptexture and mat.selfIllumMap.bitmap != undefined
 	if alertOnMissing and not ret and mat.selfIllumMap != undefined then
 	(
 		DisplayMaterialError ("El material " + mat.name + " parece tener Lightmap pero no tiene una textura asociada v�lida!!!")

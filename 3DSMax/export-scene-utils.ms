@@ -3,9 +3,37 @@
 -- Export utilities
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
+
+fn deleteUserProp node prop = if getUserProp node prop != undefined do
+(
+	buff = (getUserPropBuffer node) as stringStream 
+	newb = stringStream ""
+	while not eof buff do
+	(
+		str = readLine buff
+		if str != "" and not matchpattern str pattern:("*" + prop + "*=*") do format "%\n" str to:newb
+	)
+	setUserPropBuffer node (replace_LF_with_CRLF (newb as string))
+)
+
 global g_allCores;
 global g_allInstances;
 global g_allGameObjects;
+
+fn ClearCoreNames = (
+	g_allCores = #()
+	g_allInstances = #()
+	g_allGameObjects = #()
+	
+	for i = 1 to $*.count do
+	(
+		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
+		(
+			deleteUserProp $*[i] "export_core_name"
+		)
+	)
+)
+
 fn CollectCoresAndInstances = (
 	g_allCores = #()
 	g_allInstances = #()
@@ -98,18 +126,6 @@ fn GetGameObjects = (
 	return g_allGameObjects
 )
 
-
-fn deleteUserProp node prop = if getUserProp node prop != undefined do
-(
-	buff = (getUserPropBuffer node) as stringStream 
-	newb = stringStream ""
-	while not eof buff do
-	(
-		str = readLine buff
-		if str != "" and not matchpattern str pattern:("*" + prop + "*=*") do format "%\n" str to:newb
-	)
-	setUserPropBuffer node (replace_LF_with_CRLF (newb as string))
-)
 
 fn GetAnimatedInstances = (
 	local ret = #()

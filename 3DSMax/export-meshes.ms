@@ -26,6 +26,11 @@ fn getMaterial obj matId = (
 
 fn getUsedMaterials obj = (
 	
+	if (obj.material == undefined) then
+	(
+		return #()
+	)
+	
 	if (classOf obj.material) == Standardmaterial then
 	(
 		return #(1)
@@ -313,10 +318,97 @@ fn createVertexesForFace obj IdFace matDesc = (
 
 )
 
-fn createMesh obj = (
-	format "____Creating Mesh %____\n" obj.name
+fn writeMeshToFile file matDescriptor vtxs idxs = (
 	
-	MyFOpen (MeshSubPath + obj.name + ".mesh") "wb"
+	if vtxs.count > 65535 then
+	(
+		format "\n$$$$ Object % has too many vertices: %. Maximum 65535.\n\n" obj.name vtxs.count
+		messageBox ("Object "+obj.name+" has too many vertices: " + (vtxs.count as string) + ". Maximum 65535.") title: "Error!"
+		MyCloseFile()
+		return false
+	)
+	if idxs.count > 65535 then
+	(
+		format "\n$$$$ Object % has too many faces: %. Maximum 65535.\n\n" obj.name vtxs.count
+		messageBox ("Object "+obj.name+" has too many faces: " + (vtxs.count as string) + ". Maximum 65535.") title: "Error!"
+		MyCloseFile()
+		return false
+	)
+	
+	writeshort file vtxs.count
+	
+	tik()
+	for idVtx = 1 to vtxs.count do
+	(
+		local vtx = vtxs[idVtx]
+		-- Vertex
+		writefloat file vtx.pos.x
+		writefloat file vtx.pos.y
+		writefloat file vtx.pos.z
+		
+		-- Normal
+		writefloat file vtx.normal.x
+		writefloat file vtx.normal.y
+		writefloat file vtx.normal.z
+
+		if matDescriptor.normal_map then
+		(
+			-- Binormal
+			writefloat file vtx.binormal.x
+			writefloat file vtx.binormal.y
+			writefloat file vtx.binormal.z
+			writefloat file 0
+			-- Tangencial
+			writefloat file vtx.tangencial.x
+			writefloat file vtx.tangencial.y
+			writefloat file vtx.tangencial.z
+			writefloat file 0
+		)
+		
+		if matDescriptor.texture or matDescriptor.environment_map then
+		(
+			-- UV
+			writefloat file vtx.uv.x
+			writefloat file (1 - vtx.uv.y)
+		)
+		
+		if matDescriptor.light_map then
+		(
+			--UV Lightmap
+			writefloat file vtx.uv2.x
+			writefloat file (1 - vtx.uv2.y)
+		)
+	)
+	tok s:"write all vertices for this material"
+	
+	-- Write the index byte width
+	writeshort file 16
+	
+	writeshort file idxs.count
+	
+	tik()
+	for idx = 1 to idxs.count do
+	(
+		writeshort file idxs[idx]
+	)
+	tok s:"write indices for this material's vertices"
+	
+	return true
+)
+
+fn createMesh obj coreName = (
+	
+	local l_coreName = coreName
+	if (coreName == undefined) then
+	(
+		l_coreName = obj.name
+	)
+	
+	format "____Creating Core % for Mesh %____\n" l_coreName obj.name
+	
+	MyFOpen (MeshSubPath + l_coreName + ".mesh") "wb"
+
+	format "  Open file %\n" (MeshSubPath + l_coreName + ".mesh")
 	
 	-- Centrar al origen
 	--obj.position = [0, 0, 0]
@@ -337,33 +429,51 @@ fn createMesh obj = (
 	if obj.material == undefined then
 	(
 		format "\n$$$$ Object % doesn't have a material!\n\n" obj.name
-		messageBox ("Object "+obj.name+" doesn't have a material!") title: "Error!"
-		MyCloseFile()
-		return OK
+		--messageBox ("Object "+obj.name+" doesn't have a material!") title: "Error!"
+		--MyCloseFile()
+		--return OK
 	)
 	
 	--Materials
 	local usedMaterials = getUsedMaterials obj
 	
-	if (classOf obj.material) == Standardmaterial then
+	if usedMaterials.count > 0  then
 	(
-		numMats=1
-		writeshort file numMats
-/*		writeshort file obj.material.name.count
-		writestring file obj.material.name
-*/
+		writeshort file usedMaterials.count
 	)
 	else
 	(
-		-- TODO 
-		numMats = usedMaterials.count
+		format "Exporting mesh without material\n"
+		numMats = 1
 		writeshort file numMats
-/*		for mats=1 to numMats do
+		
+		local l_VtxsMap = dotnetobject "System.Collections.Generic.Dictionary`2[System.String,System.Int16]"
+		local idxs = #()
+		local vtxs = #()
+		
+		writeshort file (GetVertexTypeFromObjectMaterial obj undefined)
+		
+		tik()
+		local matDescriptor = GetMatDescriptor undefined
+		
+		for idFace = 1 to (getNumFaces obj) do
 		(
-			writeshort file obj.material[usedMaterials[mats]].name.count
-			writestring file obj.material[usedMaterials[mats]].name
+			--format "idFace %\n" idFace
+			local faceVtxs = createVertexesForFace obj idFace matDescriptor
+			for numVtx = 1 to 3 do
+			(
+				local idx = DotNetAddVertex vtxs l_VtxsMap faceVtxs[numVtx]
+				append idxs idx
+			)
 		)
-*/
+		tok s:"gather all vertices for this mesh"
+		
+		local r = writeMeshToFile file matDescriptor vtxs idxs
+		if not r then
+		(
+			MyCloseFile()
+			return Ok
+		)
 	)
 	
 	--Vertex
@@ -381,11 +491,11 @@ fn createMesh obj = (
 		tik()
 		local matDescriptor = GetMatDescriptor mat
 		
-		--TODO: coger solo vertices afectados por ese mat...
 		for idFace = 1 to (getNumFaces obj) do
 		(
-			format "idFace %\n" idFace
+			--format "idFace %\n" idFace
 			local faceMatId = getRealFaceMatID obj IdFace
+			-- coger solo vertices afectados por ese mat...
 			if faceMatId == usedMaterials[i] then
 			(
 				local faceVtxs = createVertexesForFace obj idFace matDescriptor
@@ -398,79 +508,12 @@ fn createMesh obj = (
 		)
 		tok s:"gather all vertices for this material"
 		
-		if vtxs.count > 65535 then
+		local r = writeMeshToFile file matDescriptor vtxs idxs
+		if not r then
 		(
-			format "\n$$$$ Object % has too many vertices: %. Maximum 65535.\n\n" obj.name vtxs.count
-			messageBox ("Object "+obj.name+" has too many vertices: " + (vtxs.count as string) + ". Maximum 65535.") title: "Error!"
 			MyCloseFile()
 			return Ok
 		)
-		if idxs.count > 65535 then
-		(
-			format "\n$$$$ Object % has too many faces: %. Maximum 65535.\n\n" obj.name vtxs.count
-			messageBox ("Object "+obj.name+" has too many faces: " + (vtxs.count as string) + ". Maximum 65535.") title: "Error!"
-			MyCloseFile()
-			return Ok
-		)
-		
-		writeshort file vtxs.count
-		
-		tik()
-		for idVtx = 1 to vtxs.count do
-		(
-			local vtx = vtxs[idVtx]
-			-- Vertex
-			writefloat file vtx.pos.x
-			writefloat file vtx.pos.y
-			writefloat file vtx.pos.z
-			
-			-- Normal
-			writefloat file vtx.normal.x
-			writefloat file vtx.normal.y
-			writefloat file vtx.normal.z
-
-			if matDescriptor.normal_map then
-			(
-				
-				-- Binormal
-				writefloat file vtx.binormal.x
-				writefloat file vtx.binormal.y
-				writefloat file vtx.binormal.z
-				writefloat file 0
-				-- Tangencial
-				writefloat file vtx.tangencial.x
-				writefloat file vtx.tangencial.y
-				writefloat file vtx.tangencial.z
-				writefloat file 0
-			)
-			
-			if matDescriptor.texture or matDescriptor.environment_map then
-			(
-				-- UV
-				writefloat file vtx.uv.x
-				writefloat file (1 - vtx.uv.y)
-			)
-			
-			if matDescriptor.light_map then
-			(
-				--UV Lightmap
-				writefloat file vtx.uv2.x
-				writefloat file (1 - vtx.uv2.y)
-			)
-		)
-		tok s:"write all vertices for this material"
-		
-		-- Write the index byte width
-		writeshort file 16
-		
-		writeshort file idxs.count
-		
-		tik()
-		for idx = 1 to idxs.count do
-		(
-			writeshort file idxs[idx]
-		)
-		tok s:"write indices for this material's vertices"
 	)
 	
 	-- TODO: Export bounding box/sphere? look into NodeGetBoundingBox
@@ -507,7 +550,9 @@ fn createMeshes meshesToExport = (
 		cores[i].name = "_" + n
 		clone[1].name = n
 		
-		createMesh (convertToMesh clone[1])
+		local l_coreName = getUserProp clone[1] "export_core_name"
+		
+		createMesh (convertToMesh clone[1]) l_coreName
 		
 		delete clone
 		cores[i].name = n
