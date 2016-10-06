@@ -286,7 +286,8 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CColliderComponent"]
 		.SetClass<CPhysxComponent, const CPhysxComponent&, CElement*>(
-			"Move", &CPhysxComponent::Move
+			"Move", &CPhysxComponent::Move,
+			"Recreate", &CPhysxComponent::Recreate
 			);
 
 	( *m_state )["CScriptedComponent"]
@@ -320,7 +321,9 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CTriggerComponent"]
 		.SetClass<CTriggerComponent, const CTriggerComponent&, CElement*>(
-		"GetName", &CTriggerComponent::getName);
+		"GetName", &CTriggerComponent::getName,
+		"Recreate", &CTriggerComponent::Recreate
+		);
 
 	(*m_state)["ICameraController"]
 		.SetClass<ICameraController>(

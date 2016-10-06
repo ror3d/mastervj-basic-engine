@@ -594,8 +594,8 @@ void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
 			if ( ccsf.second == id )
 			{
 				m_CharacterControllerDisplacements[ccsf.first] += d;
-	}
-}
+			}
+		}
 	}
 }
 

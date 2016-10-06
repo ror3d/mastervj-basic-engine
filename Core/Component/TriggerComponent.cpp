@@ -52,8 +52,8 @@ void CTriggerComponent::PhysxUpdate()
 void CTriggerComponent::FixedUpdate(float ElapsedTime)
 {
 	if (!m_isStatic)
-	{		
-		Vect3f rotatedPosition = m_offset;
+	{
+		Vect3f rotatedPosition = m_offset.MulElems(GetOwner()->GetScale());
 		rotatedPosition.RotateY(GetOwner()->GetYaw());
 		Move(GetOwner()->GetPosition() + rotatedPosition);
 	}
