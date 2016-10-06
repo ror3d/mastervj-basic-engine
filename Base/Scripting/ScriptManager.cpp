@@ -240,6 +240,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetName", &CElement::getName,
 			"SetPosition", &CElement::SetPosition,
 			"GetPosition", &CElement::GetPosition,
+			"SetRotation", &CElement::SetRotation,
+			"GetRotation", &CElement::GetRotation,
 			"SetYaw", &CElement::SetYaw,
 			"GetYaw", &CElement::GetYaw,
 			"GetScale", &CElement::GetScale,
@@ -301,6 +303,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
 			"GetCamOffset", &CFPSCameraComponent::GetCamOffset,
 			"SetCamOffset", &CFPSCameraComponent::SetCamOffset,
+			"Reset", &CFPSCameraComponent::Reset,
 			"SetYaw", &CFPSCameraComponent::SetYaw,
 			"GetYaw", &CFPSCameraComponent::GetYaw);
 

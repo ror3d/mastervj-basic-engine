@@ -8,14 +8,16 @@
 #include <Core/Component/FPSCameraComponent.h>
 #include "ComponentManager.h"
 
+#include <Base/Scripting/LuaErrorCapture.h>
+#include <selene.h>
+#include <Base/Scripting/ScriptManager.h>
+
 const std::string CSpawnComponent::COMPONENT_TYPE = "Spawn";
 
 CSpawnComponent::CSpawnComponent(CXMLTreeNode& node, CElement* Owner)
 	: CComponent(node, Owner)
 {
 	SetNameFromParentName( Owner->getName() );
-
-	m_objName = node.GetPszISOProperty( "name_to_spawn", "", false );
 }
 
 CSpawnComponent::CSpawnComponent(const CSpawnComponent& base, CElement* Owner)
@@ -34,17 +36,17 @@ void CSpawnComponent::Destroy()
 
 void CSpawnComponent::Init()
 {
-	CElement* obj = CEngine::GetSingleton().getSceneManager()->GetObjectById( m_objName );
-	if ( obj )
-	{
-		CElement* owner = GetOwner();
-		obj->GetCharacterController()->SetPosition( owner->GetPosition() );
-		obj->SetYawPitchRoll( owner->GetYaw(), owner->GetPitch(), owner->GetRoll() );
-		obj->GetCamera()->Reset();
-	}
-}
+	auto sm = CEngine::GetSingleton().getScriptManager();
+	auto& sel = *sm->getLuaState();
 
-void CSpawnComponent::FixedUpdate(float ElapsedTime)
-{
+	CElement* owner = GetOwner();
+	auto p = owner->GetPosition();
+	auto q = owner->GetRotation();
+	sel( ( "g_CharacterSpawnPosition = Vect3f.new(" + std::to_string( p.x ) + "," + std::to_string( p.y ) + "," + std::to_string( p.z ) + ")" ).c_str() );
+	sel( ( "g_CharacterSpawnRotation = Vect3f.new(" + std::to_string( q.x ) + "," + std::to_string( q.y ) + "," + std::to_string( q.z ) + ")" ).c_str() );
+	sel["g_CharacterSpawnSet"] = true;
+
+	OutputDebugStringA( "Setting spawn point\n" );
+
 }
 
