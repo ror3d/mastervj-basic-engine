@@ -13,6 +13,7 @@ CSceneManager::CSceneManager()
 CSceneManager::~CSceneManager()
 {
 	CleanupObjects();
+	CleanupObjects(); // Do it twice to clear the objects to destroy buffer
 	DEBUG_ASSERT( m_Objects.size() == 0 );
 }
 
@@ -92,7 +93,7 @@ void CSceneManager::DestroyObject( const std::string & id )
 
 void CSceneManager::CleanupObjects()
 {
-	for ( auto &id : m_ObjectsToDestroy )
+	for ( auto &id : m_ObjectsReadyToDestroy )
 	{
 		auto it = m_Objects.find( id );
 
@@ -102,6 +103,8 @@ void CSceneManager::CleanupObjects()
 			m_Objects.erase( it );
 		}
 	}
+
+	m_ObjectsReadyToDestroy = std::move(m_ObjectsToDestroy);
 
 	m_ObjectsToDestroy.clear();
 }

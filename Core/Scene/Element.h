@@ -81,6 +81,7 @@ public:
 	CSpeakerComponent* GetSpeaker();
 	CScriptedComponent* GetScript(const std::string& scriptName);
 
+
 private:
 	ComponentContainer_t m_componentContainer;
 

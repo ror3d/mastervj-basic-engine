@@ -27,6 +27,8 @@ public:
 	virtual void clear();
 	virtual void destroy();
 
+	inline size_t size() const { return m_resources.size(); }
+
 	iterator begin() { return m_resources.begin(); }
 	iterator end() { return m_resources.end(); }
 	const_iterator begin() const { return m_resources.begin(); }
