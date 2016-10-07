@@ -193,7 +193,7 @@ fn ChangeCoordsBase coords =
 	)
 	else if classof coords == Quat then
 	(
-		return quat coords.x coords.w -coords.y -coords.z
+		return quat -coords.x coords.z coords.y coords.w
 	)
 	return point3 -coords[1] coords[3] coords[2]
 )

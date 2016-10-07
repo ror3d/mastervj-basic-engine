@@ -64,8 +64,8 @@ fn getUsedMaterials obj = (
 )
 
 
-fn createStaticMeshesFile meshesToExport = (
-	MyCreateFile "static_meshes.xml"
+fn createStaticMeshesFile sceneName meshesToExport = (
+	MyCreateFile ("static_meshes_" + sceneName + ".xml")
 	
 	local cores = meshesToExport
 

@@ -102,7 +102,7 @@ utility UABUtility "UAB Utility" width:160 height:552
 	on StaticMeshManagerButton pressed do
 	(
 		CollectCoresAndInstances()
-		createStaticMeshesFile( GetCores() )
+		createStaticMeshesFile (SceneNameTxt.text) (GetCores())
 		messageBox "Fichero static_meshes.xml creado correctamente" title:"Exportación correcta"
 		
 		if ExportMeshCheck.checked then
