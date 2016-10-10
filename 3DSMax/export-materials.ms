@@ -109,8 +109,8 @@ fn matExistsElseAdd matMap mat = (
 	)
 )
 
-fn createMaterials copyTextures = (
-	MyCreateFile "materials.xml"
+fn createMaterials sceneName copyTextures = (
+	MyCreateFile ( MaterialsSubPath + sceneName + ".xml" )
 	
 	local cores = GetCores()
 	

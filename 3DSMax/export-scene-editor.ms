@@ -762,6 +762,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			setUserProp Obj "export_mesh_instance" true
 		) else (
 			deleteUserProp Obj "export_mesh_instance"
+			deleteUserProp Obj "export_core_name"
 		)
 		
 		SaveScripts Obj g_Scripts "ExportScripts"
