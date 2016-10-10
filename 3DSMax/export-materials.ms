@@ -55,16 +55,8 @@ fn createSingleMaterial obj mat = (
 	
 	-- TODO cambiar technique dependiendo del tipo de material
 	
-	format "\t<material name=\"%\" vertex_type=\"%\" >\n" mat.name (GetVertexTypeStringFromObjectMaterial mat) to:file	
-
-	exportSingleTexture mat obj.name
-	
-	exportSingleReflection mat obj.name
-	
-	exportSingleLightmap mat obj.name
-	
-	exportSingleNormal mat obj.name
-	
+	local vtype = GetVertexTypeStringFromObjectMaterial mat
+		
 	
 	local ssr = 0
 	local environment = 0
@@ -79,6 +71,7 @@ fn createSingleMaterial obj mat = (
 			if mat.reflectionMap != undefined and classof mat.reflectionMap == Bitmaptexture and mat.reflectionMap.bitmap != undefined then
 			(
 				environment = reflectionFactor
+				vtype = vtype + "_ENVIRONMENT"
 			)
 			else
 			(
@@ -86,6 +79,18 @@ fn createSingleMaterial obj mat = (
 			)
 		)
 	)
+	
+	
+	
+	format "\t<material name=\"%\" vertex_type=\"%\" >\n" mat.name (vtype) to:file	
+
+	exportSingleTexture mat obj.name
+	
+	exportSingleReflection mat obj.name
+	
+	exportSingleLightmap mat obj.name
+	
+	exportSingleNormal mat obj.name
 	
 	format "\t\t<parameter type=\"float\" name=\"specular\" value=\"1\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"gloss\" value=\"80.0\" varParams = \"min=1 max=100 step=0.5 precision=1\"/>\n" to:file
