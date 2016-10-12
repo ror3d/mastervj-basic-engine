@@ -92,7 +92,7 @@ fn createSingleMaterial obj mat = (
 	
 	exportSingleNormal mat obj.name
 	
-	format "\t\t<parameter type=\"float\" name=\"specular\" value=\"1\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"specular\" value=\"0.05\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"gloss\" value=\"80.0\" varParams = \"min=1 max=100 step=0.5 precision=1\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"bump\" value=\"2.4\" varParams = \"min=0 max=5 step=0.1 precision=1\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"environment_factor\" value=\"%\" varParams = \"min=0 max=1 step=0.01 precision=2\"/>\n" environment to:file

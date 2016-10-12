@@ -288,7 +288,8 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CColliderComponent"]
 		.SetClass<CPhysxComponent, const CPhysxComponent&, CElement*>(
 			"Move", &CPhysxComponent::Move,
-			"Recreate", &CPhysxComponent::Recreate
+			"Recreate", &CPhysxComponent::Recreate,
+			"IsKinematic", &CPhysxComponent::IsKinematic
 			);
 
 	( *m_state )["CScriptedComponent"]
