@@ -1,27 +1,38 @@
 #include "Scene/RenderLayerSceneRendererCommand.h"
-//#include <Graphics/Layer/LayerManager.h>
 #include <Base/XML/XMLTreeNode.h>
+#include "Engine/Engine.h"
+#include <Graphics/Texture/TextureManager.h>
 #include <Graphics/Renderer/Renderer.h>
 
 CRenderLayerSceneRendererCommand::CRenderLayerSceneRendererCommand(CXMLTreeNode &TreeNode)
-	: CSceneRendererCommand(TreeNode)
+	: CStagedTexturedSceneRendererCommand(TreeNode)
+	, m_zSort(false)
 {
-	//TODO: save active
-	//<render_layer layer="solid" active="true"/>
-	std::string layerNameToRender = TreeNode.GetPszProperty("layer");
-	m_layerName = layerNameToRender;
-	/*m_Layer = CEngine::GetSingleton().getLayerManager()->get(layerNameToRender);
-	if (m_Layer != nullptr)
+	m_layerName = TreeNode.GetPszProperty("layer");
+
+	m_zSort = TreeNode.GetBoolProperty("z_sort", false, false);
+
+	for (int i = 0; i < TreeNode.GetNumChildren(); i++)
 	{
-		m_Layer->setActive(TreeNode.GetBoolProperty("active"));
-	}*/
+		CXMLTreeNode texChild = TreeNode(i);
+		if (texChild.GetName() == std::string("texture"))
+		{
+			CTexture *tex = nullptr;
+			if (texChild.GetBoolProperty("load_file", false))
+			{
+				tex = CEngine::GetSingleton().getTextureManager()->GetTexture(texChild.GetPszProperty("file"));
+			}
+			else
+			{
+				tex = CEngine::GetSingleton().getTextureManager()->get(texChild.GetPszProperty("file"));
+			}
+			AddStageTexture(texChild.GetIntProperty("stage_id"), tex);
+		}
+	}
 }
 
 void CRenderLayerSceneRendererCommand::Execute(CContextManager &_context)
 {
-	/*if (m_Layer != nullptr)
-	{
-		m_Layer->Render(&_context);
-	}*/
-	CEngine::GetSingleton().getRenderer()->RenderLayer(m_layerName, &_context);
+	ActivateTextures();
+	CEngine::GetSingleton().getRenderer()->RenderLayer(m_layerName, &_context, m_zSort);
 }

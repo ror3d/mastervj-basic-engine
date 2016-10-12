@@ -66,6 +66,7 @@ utility UABUtility "UAB Utility" width:160 height:552
 	(
 		if $ != undefined then
 		(
+			CollectCoresAndInstances()
 			createMeshes($selection)
 			messageBox "Fichero .mesh creado correctamente" title:"Exportación correcta"
 		)
@@ -77,7 +78,7 @@ utility UABUtility "UAB Utility" width:160 height:552
 	on ExportMaterialButton pressed do
 	(
 		CollectCoresAndInstances()
-		createMaterials CopyTexturesCheck.checked
+		createMaterials (SceneNameTxt.text) CopyTexturesCheck.checked
 		messageBox "Fichero Materials.xml creado correctamente" title:"Creación correcta"		
 	)
 	on CameraButton pressed do
@@ -101,7 +102,7 @@ utility UABUtility "UAB Utility" width:160 height:552
 	on StaticMeshManagerButton pressed do
 	(
 		CollectCoresAndInstances()
-		createStaticMeshesFile( GetCores() )
+		createStaticMeshesFile (SceneNameTxt.text) (GetCores())
 		messageBox "Fichero static_meshes.xml creado correctamente" title:"Exportación correcta"
 		
 		if ExportMeshCheck.checked then

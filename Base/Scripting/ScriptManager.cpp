@@ -12,6 +12,7 @@
 #include <Core/Component/CharControllerComponent.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Core/Component/FPSCameraComponent.h>
+#include <Core/Component/FreeCameraComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
@@ -19,6 +20,7 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
@@ -228,7 +230,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"Dot", static_cast<float (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator*),
 			"Cross", static_cast<Vect3f (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator^),
 			"Add", static_cast<Vect3f (Vect3f::*)(const Vect3f&) const>(&Vect3f::operator+),
-			"Mul", static_cast<Vect3f (Vect3f::*)(float) const>(&Vect3f::operator*)
+			"Mul", static_cast<Vect3f (Vect3f::*)(float) const>(&Vect3f::operator*),
+			"Subs", static_cast<Vect3f(Vect3f::*)(const Vect3f&) const>(&Vect3f::operator-)
 			);
 
 
@@ -238,6 +241,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetName", &CElement::getName,
 			"SetPosition", &CElement::SetPosition,
 			"GetPosition", &CElement::GetPosition,
+			"SetRotation", &CElement::SetRotation,
+			"GetRotation", &CElement::GetRotation,
 			"SetYaw", &CElement::SetYaw,
 			"GetYaw", &CElement::GetYaw,
 			"GetScale", &CElement::GetScale,
@@ -245,9 +250,11 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetEnabled", &CElement::SetEnabled,
 			"IsEnabled", &CElement::GetEnabled,
 			"GetCamera", &CElement::GetCamera,
+			"GetFreeCamera", &CElement::GetFreeCamera,
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
 			"GetCollider", &CElement::GetPhysxComponent,
+			"SendMessage", static_cast<void(CElement::*)(const std::string&)>(&CElement::SendMsg),
 			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
 			"SendMessageFloat", static_cast<void(CElement::*)(const std::string&, float)>(&CElement::SendMsg),
 			"SendMessageString", static_cast<void(CElement::*)(const std::string&, const std::string&)>(&CElement::SendMsg),
@@ -280,7 +287,8 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CColliderComponent"]
 		.SetClass<CPhysxComponent, const CPhysxComponent&, CElement*>(
-			"Move", &CPhysxComponent::Move
+			"Move", &CPhysxComponent::Move,
+			"Recreate", &CPhysxComponent::Recreate
 			);
 
 	( *m_state )["CScriptedComponent"]
@@ -297,12 +305,26 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
 			"GetCamOffset", &CFPSCameraComponent::GetCamOffset,
 			"SetCamOffset", &CFPSCameraComponent::SetCamOffset,
+			"Reset", &CFPSCameraComponent::Reset,
+			"SetYaw", &CFPSCameraComponent::SetYaw,
 			"GetYaw", &CFPSCameraComponent::GetYaw);
+
+	(*m_state)["CFreeCameraComponent"]
+		.SetClass<CFreeCameraComponent, const CFreeCameraComponent&, CElement*>(
+			"SetAsCurrent", &CFreeCameraComponent::SetAsCurrentCamera,
+			"GetForward", &CFreeCameraComponent::GetForward,
+			"SetForward", &CFreeCameraComponent::SetForward,
+			"GetUp", &CFreeCameraComponent::GetUp,
+			"SetUp", &CFreeCameraComponent::SetUp,
+			"GetOffset", &CFreeCameraComponent::GetOffset,
+			"SetOffset", &CFreeCameraComponent::SetOffset);
 
 
 	(*m_state)["CTriggerComponent"]
 		.SetClass<CTriggerComponent, const CTriggerComponent&, CElement*>(
-		"GetName", &CTriggerComponent::getName);
+		"GetName", &CTriggerComponent::getName,
+		"Recreate", &CTriggerComponent::Recreate
+		);
 
 	(*m_state)["ICameraController"]
 		.SetClass<ICameraController>(
@@ -333,7 +355,8 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CPhysicsManager"].SetObj(
 		*CEngine::GetSingleton().getPhysXManager(),
 		"moveCharController", &CPhysXManager::moveCharacterController,
-		"createController", &CPhysXManager::createController);
+		"createController", &CPhysXManager::createController,
+		"RaycastName", &CPhysXManager::RayCastName);
 
 	(*m_state)["CInputManager"].SetObj<CInputManager>(
 		*CInputManager::GetInputManager(),
@@ -357,6 +380,7 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", static_cast<void(CCinematicManager::*)(std::string)>(&CCinematicManager::Play),
 		"Stop", &CCinematicManager::Stop,
+		"Reverse", &CCinematicManager::Reverse,
 		"Pause", &CCinematicManager::Pause);
 
 	(*m_state)["CSoundManager"].SetObj(
@@ -373,11 +397,17 @@ void CScriptManager::RegisterLUAFunctions()
 		"DestroyObjectFromScene", &CSceneManager::DestroyObjectFromScene,
 		"LoadScene", &CSceneManager::LoadScene,
 		"UnloadScene", &CSceneManager::UnloadScene,
-		"GetObjectById", &CSceneManager::GetObjectById);
+		"GetObjectById", &CSceneManager::GetObjectById,
+		"StartedUnload", &CSceneManager::StartedUnload,
+		"FinishedLoad", &CSceneManager::FinishedLoad);
 
 	(*m_state)["CStaticMeshManager"].SetObj(
 		*CEngine::GetSingleton().getStaticMeshManager(),
 		"LoadMeshesFile", &CStaticMeshManager::Load);
+
+	( *m_state )["CMaterialManager"].SetObj(
+		*CEngine::GetSingleton().getMaterialManager(),
+		"LoadMaterialsFile", &CMaterialManager::load);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

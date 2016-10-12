@@ -13,6 +13,7 @@ class CCharacterControllerComponent;
 class CPhysxComponent;
 class CTriggerComponent;
 class CFPSCameraComponent;
+class CFreeCameraComponent;
 class CRenderableComponent;
 class CSpeakerComponent;
 class CScriptedComponent;
@@ -49,6 +50,7 @@ public:
 	inline float GetPitch() const { return m_RotationYPR.y; }
 	inline float GetRoll() const { return m_RotationYPR.z; }
 	inline Vect3f GetRotation() const { return m_RotationYPR; }
+	inline void SetRotation(Vect3f rot) { m_RotationYPR = rot; m_TransformChanged = true; }
 	inline void SetScale(const Vect3f &Scale) { m_Scale = Scale; m_TransformChanged = true; }
 	inline Vect3f GetScale() const { return m_Scale; }
 
@@ -59,7 +61,7 @@ public:
 
 	void AddComponent(std::string Name, CComponent* component);
 
-	void SendMsg(const std::string message);
+	void SendMsg(const std::string& message);
 
 	void SendMsg( const std::string& message, CElement* arg1 );
 	void SendMsg( const std::string& message, int arg1 );
@@ -75,8 +77,10 @@ public:
 	CPhysxComponent * GetPhysxComponent();
 	CTriggerComponent * GetTriggerComponent();
 	CFPSCameraComponent* GetCamera();
+	CFreeCameraComponent* GetFreeCamera();
 	CSpeakerComponent* GetSpeaker();
 	CScriptedComponent* GetScript(const std::string& scriptName);
+
 
 private:
 	ComponentContainer_t m_componentContainer;

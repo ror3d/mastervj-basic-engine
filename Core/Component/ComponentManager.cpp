@@ -4,14 +4,17 @@
 
 std::vector<const char*> CComponentManager::s_componentsUpdateOrder =
 {
+	"Spawn",
 	"Collider",
 	"Trigger",
 	"CharacterController",
 	"Camera",
+	"FreeCamera",
 	"AnimatedInstance",
 	"Speaker",
 	"ParticleEmitter",
 	"MeshInstance",
+	"Spawn",
 	"Script"
 };
 
@@ -70,7 +73,11 @@ void CComponentManager::Update( float ElapsedTime )
 			{
 				continue;
 			}
-
+			if (type == "ParticleEmitter")
+			{
+				cp->GetEnabled(); 
+			}
+			
 			cp->Update(ElapsedTime);
 		}
 	}

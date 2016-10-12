@@ -22,6 +22,7 @@ public:
 	void AddCinematicObjectKeyFrame( CCinematicObjectKeyFrame *CinematicObjectKeyFrame );
 	void Update( float ElapsedTime );
 	void Stop();
+	void Reverse();
 	std::string getName() { return m_name;  }
 	void OnRestartCycle();
 };

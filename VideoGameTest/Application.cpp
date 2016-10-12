@@ -50,6 +50,15 @@ void CApplication::Update(float _ElapsedTime)
 	CEngine& engine = CEngine::GetSingleton();
 	m_Timer += _ElapsedTime;
 
+	m_FixedTimer += _ElapsedTime;
+
+	bool isFixedUpdate = false;
+	if ( m_FixedTimer >= PHYSX_UPDATE_STEP )
+	{
+		isFixedUpdate = true;
+		m_FixedTimer = fmod( m_FixedTimer, PHYSX_UPDATE_STEP );
+	}
+
 	engine.getEffectsManager()->m_SceneParameters.m_Time = m_Timer;
 
 	engine.getSceneManager()->Update();
@@ -71,17 +80,19 @@ void CApplication::Update(float _ElapsedTime)
 		m_FixedCamera = !m_FixedCamera;
 	}
 
-	m_FixedTimer += _ElapsedTime;
-
-	if ( m_FixedTimer >= PHYSX_UPDATE_STEP )
+	if(isFixedUpdate)
 	{
-		m_FixedTimer = fmod(m_FixedTimer, PHYSX_UPDATE_STEP);
 		CEngine::GetSingleton().getPhysXManager()->update( PHYSX_UPDATE_STEP );
 		CEngine::GetSingleton().getComponentManager()->FixedUpdate( PHYSX_UPDATE_STEP );
-		CEngine::GetSingleton().getSceneManager()->FixedUpdate();
 	}
 
 	CEngine::GetSingleton().getComponentManager()->Update(_ElapsedTime);
+
+
+	if ( isFixedUpdate )
+	{
+		CEngine::GetSingleton().getSceneManager()->FixedUpdate();
+	}
 
 	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 }
