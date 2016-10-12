@@ -594,8 +594,8 @@ void CPhysXManager::MoveActor(std::string name, Vect3f position, Quatf rotation)
 			if ( ccsf.second == id )
 			{
 				m_CharacterControllerDisplacements[ccsf.first] += d;
-	}
-}
+			}
+		}
 	}
 }
 
@@ -607,8 +607,8 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.height = height;
 	desc.radius = radius;
 	desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
-	desc.slopeLimit = cosf(3.1415f / 6); //30º
-	desc.stepOffset = 0.2f * (height + 2*radius);
+	desc.slopeLimit = cosf(3.1415f / 3); //60º
+	desc.stepOffset = 0.3f * (height + 2*radius);
 	desc.density = density;
 	desc.reportCallback = dynamic_cast<CPhysXManagerImplementation*>(this);
 	desc.position = physx::PxExtendedVec3(pos.x, pos.y + height*0.5f + radius + desc.contactOffset, pos.z);
@@ -713,7 +713,7 @@ void CPhysXManager::resizeCharacterController( const std::string & name, float h
 	cc->resize( height );
 	cc->setRadius( radius );
 	cc->setFootPosition( pos );
-	cc->setStepOffset( 0.2*( height + 2 * radius ) );
+	cc->setStepOffset( 0.3*( height + 2 * radius ) );
 }
 
 void CPhysXManager::releaseCharacterController( const std::string &name )
@@ -781,24 +781,35 @@ bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vec
 	}
 }
 
-std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance)
+std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance, std::string objectToAvoid)
 {
 	physx::PxRaycastBuffer hit;                 // [out] Raycast results
+
+	size_t actorToAvoid = -1;
+	if ( m_actors.index.find( objectToAvoid ) != m_actors.index.end() )
+	{
+		actorToAvoid = m_actors.index[objectToAvoid];
+	}
 
 	// Raycast against all static & dynamic objects (no filtering)
 	// The main result from this call is the closest hit, stored in the 'hit.block' structure
 	physx::PxQueryFilterData filterData(physx::PxQueryFlag::eDYNAMIC | physx::PxQueryFlag::eSTATIC | physx::PxQueryFlag::ePREFILTER);
 
-	/*using namespace physx;
-	class : public PxQueryFilterCallback
+	using namespace physx;
+	class F : public PxQueryFilterCallback
 	{
+	public:
+		size_t m_actorToAvoid;
+
+		F( size_t atv ) : m_actorToAvoid( atv ) {}
+
 		PxQueryHitType::Enum preFilter(const PxFilterData &filterData,
 			const PxShape *shape,
 			const PxRigidActor *actor,
 			PxHitFlags &queryFlags)
 		{
 			size_t l_indexActor = (size_t)actor->userData;
-			if (l_indexActor & CONTROLLER_FLAG)
+			if (l_indexActor == m_actorToAvoid)
 			{
 				return PxQueryHitType::eNONE;
 			}
@@ -809,7 +820,7 @@ std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float di
 		{
 			return PxQueryHitType::eNONE;
 		}
-	} filter;*/
+	} filter (actorToAvoid);
 
 	bool status = m_Scene->raycast(v(origin), v(direction.Normalize()), distance, hit, physx::PxHitFlag::ePOSITION | physx::PxHitFlag::eDISTANCE, filterData);
 	if (status)

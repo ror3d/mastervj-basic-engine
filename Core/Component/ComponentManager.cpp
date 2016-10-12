@@ -73,7 +73,11 @@ void CComponentManager::Update( float ElapsedTime )
 			{
 				continue;
 			}
-
+			if (type == "ParticleEmitter")
+			{
+				cp->GetEnabled(); 
+			}
+			
 			cp->Update(ElapsedTime);
 		}
 	}

@@ -106,7 +106,7 @@ public:
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
 	bool RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition);
-	std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance);
+	std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance, std::string objectToAvoid);
 
 	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
 

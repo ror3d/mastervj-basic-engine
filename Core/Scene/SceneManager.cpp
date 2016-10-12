@@ -12,6 +12,9 @@ CSceneManager::CSceneManager()
 
 CSceneManager::~CSceneManager()
 {
+	CleanupObjects();
+	CleanupObjects(); // Do it twice to clear the objects to destroy buffer
+	DEBUG_ASSERT( m_Objects.size() == 0 );
 }
 
 void CSceneManager::Initialize( std::string scenesDirectory )
@@ -88,6 +91,24 @@ void CSceneManager::DestroyObject( const std::string & id )
 	}
 }
 
+void CSceneManager::CleanupObjects()
+{
+	for ( auto &id : m_ObjectsReadyToDestroy )
+	{
+		auto it = m_Objects.find( id );
+
+		if ( it != m_Objects.end() )
+		{
+			delete it->second;
+			m_Objects.erase( it );
+		}
+	}
+
+	m_ObjectsReadyToDestroy = std::move(m_ObjectsToDestroy);
+
+	m_ObjectsToDestroy.clear();
+}
+
 void CSceneManager::AddObjectToScene( const std::string& sceneName, CElement* obj )
 {
 	CScene* scene = get( sceneName );
@@ -129,18 +150,7 @@ CElement * CSceneManager::GetObjectById( const std::string & id )
 
 void CSceneManager::FixedUpdate()
 {
-	for ( auto &id : m_ObjectsToDestroy )
-	{
-		auto it = m_Objects.find( id );
-
-		if ( it != m_Objects.end() )
-		{
-			delete it->second;
-			m_Objects.erase( it );
-		}
-	}
-
-	m_ObjectsToDestroy.clear();
+	CleanupObjects();
 }
 
 void CSceneManager::Update()

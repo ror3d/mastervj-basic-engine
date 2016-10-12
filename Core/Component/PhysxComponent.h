@@ -32,6 +32,8 @@ public:
 
 	virtual void Destroy();
 
+	void Recreate();
+
 	void Move(Vect3f position);
 
 	std::string GetColType(){ return m_colType; }

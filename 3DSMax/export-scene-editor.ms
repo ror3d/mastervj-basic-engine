@@ -252,7 +252,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	checkbox export_rend_ckb "Export Renderable" pos:[32,96] width:112 height:16
 	checkbox static_mesh_ckb "Static Mesh" pos:[48,192] width:120 height:16 enabled:false
 	checkbox skinned_mesh_ckb "Skinned Mesh" pos:[48,216] width:120 height:16 enabled:false
-	multiListBox layer_select "Layers" pos:[40,112] width:168 height:4 enabled:false items:#("solid", "models")
+	multiListBox layer_select "Layers" pos:[40,112] width:168 height:4 enabled:false items:#("solid", "alpha-blended", "models")
 	edittext skinned_mesh_core_txt "" pos:[72,256] width:136 height:16 enabled:false
 	label lbl3 "Model Name" pos:[72,240] width:104 height:16
 	GroupBox grp3 "Collider" pos:[232,80] width:200 height:136
@@ -762,6 +762,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			setUserProp Obj "export_mesh_instance" true
 		) else (
 			deleteUserProp Obj "export_mesh_instance"
+			deleteUserProp Obj "export_core_name"
 		)
 		
 		SaveScripts Obj g_Scripts "ExportScripts"
@@ -959,4 +960,4 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	)
 )
 
-CreateDialog ExportSceneEdi
+CreateDialog ExportSceneEditor

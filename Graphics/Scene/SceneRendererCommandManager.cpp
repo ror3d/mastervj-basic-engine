@@ -22,6 +22,8 @@
 #include "RenderDebugGUISceneRendererCommand.h"
 #include "ApplyFiltersSceneRendererCommand.h"
 
+#include "Engine/Engine.h"
+
 #include <Graphics/Texture/TextureManager.h>
 #include <Base/XML/XMLTreeNode.h>
 

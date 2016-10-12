@@ -3,13 +3,70 @@
 -- Export utilities
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
+
+fn deleteUserProp node prop = if getUserProp node prop != undefined do
+(
+	buff = (getUserPropBuffer node) as stringStream 
+	newb = stringStream ""
+	while not eof buff do
+	(
+		str = readLine buff
+		if str != "" and not matchpattern str pattern:("*" + prop + "*=*") do format "%\n" str to:newb
+	)
+	setUserPropBuffer node (replace_LF_with_CRLF (newb as string))
+)
+
 global g_allCores;
 global g_allInstances;
 global g_allGameObjects;
+
+fn ClearCoreNames = (
+	g_allCores = #()
+	g_allInstances = #()
+	g_allGameObjects = #()
+	
+	for i = 1 to $*.count do
+	(
+		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
+		(
+			deleteUserProp $*[i] "export_core_name"
+		)
+	)
+)
+
 fn CollectCoresAndInstances = (
 	g_allCores = #()
 	g_allInstances = #()
 	g_allGameObjects = #()
+	
+	-- Collect all the existing cores
+	for i = 1 to $*.count do
+	(
+		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
+		(
+			local l_thisCoreName = getUserProp $*[i] "export_core_name"
+			
+			-- If we have a name assigned, keep the instance as core
+			if l_thisCoreName != undefined then
+			(
+				local isCore = true
+				for j = 1 to g_allCores.count do
+				(
+					if areNodesInstances g_allCores[j] $*[i] then
+					(
+						isCore = false
+						break
+					)
+				)
+				if isCore then
+				(
+					append g_allCores $*[i]
+				)
+			)
+		)
+	)
+	
+	-- Collect the rest of the geometry and cores
 	for i = 1 to $*.count do
 	(
 		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
@@ -26,19 +83,29 @@ fn CollectCoresAndInstances = (
 			(
 				append g_allInstances $*[i]
 				
+				local l_thisCoreName = getUserProp $*[i] "export_core_name"
+				
 				local isCore = true
 				for j = 1 to g_allCores.count do
 				(
 					if areNodesInstances g_allCores[j] $*[i] then
 					(
-						setUserProp $*[i] "export_core_name" g_allCores[j].name
+						local l_coreName = getUserProp g_allCores[j] "export_core_name"
+						if l_thisCoreName == undefined or l_thisCoreName != l_coreName then
+						(
+							setUserProp $*[i] "export_core_name" l_coreName
+						)
 						isCore = false
 						break
 					)
 				)
 				if isCore then
 				(
-					setUserProp $*[i] "export_core_name" $*[i].name
+					local l_thisCoreName = getUserProp $*[i] "export_core_name"
+					if l_thisCoreName == undefined then
+					(
+						setUserProp $*[i] "export_core_name" $*[i].name
+					)
 					append g_allCores $*[i]
 				)
 			)
@@ -59,18 +126,6 @@ fn GetGameObjects = (
 	return g_allGameObjects
 )
 
-
-fn deleteUserProp node prop = if getUserProp node prop != undefined do
-(
-	buff = (getUserPropBuffer node) as stringStream 
-	newb = stringStream ""
-	while not eof buff do
-	(
-		str = readLine buff
-		if str != "" and not matchpattern str pattern:("*" + prop + "*=*") do format "%\n" str to:newb
-	)
-	setUserPropBuffer node (replace_LF_with_CRLF (newb as string))
-)
 
 fn GetAnimatedInstances = (
 	local ret = #()
@@ -138,7 +193,7 @@ fn ChangeCoordsBase coords =
 	)
 	else if classof coords == Quat then
 	(
-		return quat coords.x coords.w -coords.y -coords.z
+		return quat -coords.x coords.z coords.y coords.w
 	)
 	return point3 -coords[1] coords[3] coords[2]
 )

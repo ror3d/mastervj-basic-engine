@@ -123,6 +123,13 @@ void CPhysxComponent::Destroy()
 	CEngine::GetSingleton().getPhysXManager()->destroyActor(getName());
 }
 
+void CPhysxComponent::Recreate()
+{
+	Destroy();
+	m_Destroyed = false;
+	Init();
+}
+
 void CPhysxComponent::PhysxUpdate()
 {
 	if ( m_Destroyed ) return;

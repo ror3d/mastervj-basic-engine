@@ -20,6 +20,7 @@
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
+#include <Graphics/Material/MaterialManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Sound/SoundManager.h>
 #include <GUI/GUI.h>
@@ -240,6 +241,8 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetName", &CElement::getName,
 			"SetPosition", &CElement::SetPosition,
 			"GetPosition", &CElement::GetPosition,
+			"SetRotation", &CElement::SetRotation,
+			"GetRotation", &CElement::GetRotation,
 			"SetYaw", &CElement::SetYaw,
 			"GetYaw", &CElement::GetYaw,
 			"GetScale", &CElement::GetScale,
@@ -284,7 +287,8 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CColliderComponent"]
 		.SetClass<CPhysxComponent, const CPhysxComponent&, CElement*>(
-			"Move", &CPhysxComponent::Move
+			"Move", &CPhysxComponent::Move,
+			"Recreate", &CPhysxComponent::Recreate
 			);
 
 	( *m_state )["CScriptedComponent"]
@@ -301,6 +305,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"SetAsCurrent", &CFPSCameraComponent::SetAsCurrentCamera,
 			"GetCamOffset", &CFPSCameraComponent::GetCamOffset,
 			"SetCamOffset", &CFPSCameraComponent::SetCamOffset,
+			"Reset", &CFPSCameraComponent::Reset,
 			"SetYaw", &CFPSCameraComponent::SetYaw,
 			"GetYaw", &CFPSCameraComponent::GetYaw);
 
@@ -317,7 +322,9 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CTriggerComponent"]
 		.SetClass<CTriggerComponent, const CTriggerComponent&, CElement*>(
-		"GetName", &CTriggerComponent::getName);
+		"GetName", &CTriggerComponent::getName,
+		"Recreate", &CTriggerComponent::Recreate
+		);
 
 	(*m_state)["ICameraController"]
 		.SetClass<ICameraController>(
@@ -349,7 +356,6 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getPhysXManager(),
 		"moveCharController", &CPhysXManager::moveCharacterController,
 		"createController", &CPhysXManager::createController,
-		"Raycast", &CPhysXManager::RayCast,
 		"RaycastName", &CPhysXManager::RayCastName);
 
 	(*m_state)["CInputManager"].SetObj<CInputManager>(
@@ -398,6 +404,10 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CStaticMeshManager"].SetObj(
 		*CEngine::GetSingleton().getStaticMeshManager(),
 		"LoadMeshesFile", &CStaticMeshManager::Load);
+
+	( *m_state )["CMaterialManager"].SetObj(
+		*CEngine::GetSingleton().getMaterialManager(),
+		"LoadMaterialsFile", &CMaterialManager::load);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

@@ -10,6 +10,7 @@ class CSceneManager : public TMapManager<CScene>
 	std::map<std::string, CElement*> m_Objects;
 
 	std::vector<std::string> m_ObjectsToDestroy;
+	std::vector<std::string> m_ObjectsReadyToDestroy;
 
 	std::vector<std::string> m_ScenesToLoad;
 	std::vector<std::string> m_ScenesToUnload;
@@ -39,4 +40,5 @@ private:
 	void AddObject( CElement* obj );
 	void DestroyObject(const std::string& id);
 
+	void CleanupObjects();
 };

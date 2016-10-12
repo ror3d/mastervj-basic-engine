@@ -11,14 +11,10 @@ class CSpawnComponent : public CComponent
 protected:
 	virtual void Init();
 
-	std::string m_objName;
-
 public:
 	CSpawnComponent(CXMLTreeNode& node, CElement* Owner);
 	CSpawnComponent(const CSpawnComponent& base, CElement* Owner);
 	virtual ~CSpawnComponent();
-
-	virtual void FixedUpdate( float ElapsedTime );
 
 	virtual void Destroy();
 
