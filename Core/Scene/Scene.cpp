@@ -59,7 +59,7 @@ void CScene::Load()
 	{
 		CEngine::GetSingleton().getSceneManager()->GetObjectById("main")->SendMsg("Loaded_Level");
 	}
-		
+
 }
 
 void CScene::Unload()
