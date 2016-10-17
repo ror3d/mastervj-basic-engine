@@ -11,6 +11,7 @@ private:
 	Vect3f m_forward;
 	Vect3f m_up;
 	Vect3f m_offset;
+	float m_fov;
 public:
 	CFreeCameraController();
 	virtual ~CFreeCameraController();
@@ -29,6 +30,9 @@ public:
 
 	inline void SetOffset( Vect3f offset ) { m_offset = offset; }
 	inline Vect3f GetOffset() const { return m_offset; }
+
+	inline void SetFOV( float fov ) { m_fov = fov; }
+	inline float GetFOV() const { return m_fov; }
 };
 
 

@@ -97,11 +97,36 @@ fn createSceneFile sceneName gameObjects = (
 		
 		exportComp = getUserProp gObj "ExportCameraC"
 		if exportComp != undefined then (
-			local cOff = (getUserProp gObj "CameraCOffset")
-			if cOff == undefined then (
-				cOff = "0 0 0"
+			--local cOff = (getUserProp gObj "CameraCOffset")
+			--if cOff == undefined then (
+			--	cOff = "0 0 0"
+			--)
+			local cOff = "0 0 0"
+			local fwd = "1 0 0"
+			local fov = ""
+			
+			if classof(gObj) == Targetcamera then
+			(
+				local tgt = gObj.target
+				local ss = stringstream ""
+				local v = ChangeCoordsBase(gObj.position - tgt.position)
+				format "% % %" v.x v.y v.z to: ss
+				cOff = ss as string
+				
+				ss = stringstream ""
+				v = - normalize v
+				format "% % %" v.x v.y v.z to: ss
+				fwd = ss as string
+				
+				local exportFov = getUserProp gObj "ExportCameraCFov"
+				if exportFov != undefined then (
+					ss = stringstream ""
+					format "fov=\"%\" " gObj.fov to:ss
+					fov = ss as string
+				)
 			)
-			format "\t\t<fps_camera offset=\"%\" />\n" to: file
+			
+			format "\t\t<free_camera forward=\"%\" offset=\"%\" %/>\n" fwd cOff fov to: file
 		)
 		
 		exportComp = getUserProp gObj "ExportCharContrC"
