@@ -34,7 +34,8 @@ fn createSceneFile sceneName gameObjects = (
 		
 		local exportSpawn = getUserProp gObj "ExportAsSpawn"
 		if exportSpawn != undefined then (
-			format "\t\t<spawn name_to_spawn=\"main\" />\n" to: file
+			local nameSkinnedMeshCore = getUserProp gObj "SkinnedMeshCore"
+			format "\t\t<spawn name_to_spawn=\"%\" />\n" nameSkinnedMeshCore to: file
 		)
 		
 		local exportComp = getUserProp gObj "ExportRendererC"
@@ -49,7 +50,13 @@ fn createSceneFile sceneName gameObjects = (
 				format "\t\t<mesh_instance core=\"%\" layers=\"%\" visible=\"%\" />\n" core layers (TrueFalse gObj.visibility) to: file
 			) else (
 				local core = getUserProp gObj "SkinnedMeshCore"
-				format "\t\t<animated_instance core=\"%\" layers=\"%\" visible=\"%\" />\n" core layers (TrueFalse gObj.visibility) to: file
+				local playAtStart = getUserProp gObj "PlayAtStartSkinnedMesh"
+				local startTime = -1
+				if playAtStart != undefined then
+				(
+					startTime = 0
+				)
+				format "\t\t<animated_instance core=\"%\" layers=\"%\" visible=\"%\" startTime=\"%\" />\n" core layers (TrueFalse gObj.visibility) startTime to: file
 			)
 		)
 		
