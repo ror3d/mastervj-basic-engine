@@ -16,7 +16,8 @@ CSpeakerComponent::CSpeakerComponent(CXMLTreeNode& node, CElement* Owner)
 	SetNameFromParentName( Owner->getName() );
 
 	m_Position = Owner->GetPosition();
-	m_Orientation.x = Owner->GetYaw();
+	m_Position.x = -m_Position.x;
+	m_Orientation.x = -Owner->GetYaw();
 	m_Orientation.y = Owner->GetPitch();
 	m_Orientation.z = Owner->GetRoll();
 	m_Volume = node.GetFloatProperty("volume", 50.0f, false);
@@ -49,7 +50,7 @@ void CSpeakerComponent::Init()
 	m_Speaker.SetYawPitchRoll(m_Orientation.x, m_Orientation.y, m_Orientation.z);
 	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&m_Speaker);
 	CEngine::GetSingleton().getSoundManager()->SetVolume("Volume", m_Volume);
-	Play((std::string)"Play", true);
+	//Play((std::string)"Play", true);
 
 }
 
@@ -60,11 +61,20 @@ void CSpeakerComponent::Destroy()
 	CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&m_Speaker);
 }
 
-void CSpeakerComponent::Play( const std::string EventName, bool loop )
+void CSpeakerComponent::Play( const std::string EventName)
 {
-	// TODO: Reproduir one-shot o bucle depenent de loop
 	C3DElement nspeaker = {};
 	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &m_Speaker);
+	
+
+}
+
+bool CSpeakerComponent::Finished(const std::string EventName)
+{
+	C3DElement nspeaker = {};
+	AkGameObjectID id = CEngine::GetSingleton().getSoundManager()->SearchID(getName());
+	bool finished = CEngine::GetSingleton().getSoundManager()->EventFinished(EventName, id);
+	return finished;
 
 }
 

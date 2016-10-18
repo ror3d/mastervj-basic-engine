@@ -20,7 +20,8 @@ public:
 
 	virtual void Destroy();
 
-	void Play( const std::string audioClipName, bool loop );
+	void Play( const std::string audioClipName);
+	bool Finished(const std::string EventName);
 	void Stop();
 
 	Vect3f m_Position;

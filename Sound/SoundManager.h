@@ -40,7 +40,8 @@ public:
 	bool LoadSoundBanksXML(std::string filename);
 	bool LoadSpeakersXML(std::string filename);
 	void LoadSpeakers(std::string l_Name, Vect3f l_Position, Vect3f l_Orientation);
-
+	bool EventFinishedOK();
+	bool EventFinished(const SoundEvent &_event, const AkGameObjectID &ID);
 	void PlayEvent(const SoundEvent &_event);
 	void PlayEvent(const SoundEvent &_event, const std::string &_speaker);
 	void PlayEvent(const SoundEvent &_event, const C3DElement* _speaker);
@@ -58,6 +59,8 @@ public:
 	void SetRTPCValue(const SoundRTPC &_rtpc, float value, const AkGameObjectID &ID);
 
 	void BroadcastState(const SoundStateValue &_state);
+
+	AkGameObjectID SearchID(std::string name);
 
 	//self
 	bool initBanks();
