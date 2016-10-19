@@ -56,11 +56,6 @@ void CScene::Load()
 		m_Elements.push_back(elem->getName());
 	}
 	m_isLoaded = true;
-	if (m_SceneFile.find("level") != std::string::npos)
-	{
-		CEngine::GetSingleton().getSceneManager()->GetObjectById("main")->SendMsg("Loaded_Level");
-	}
-
 }
 
 void CScene::Unload()
