@@ -26,6 +26,9 @@ public:
 	void LoadScene( const std::string& sceneName );
 	void UnloadScene( const std::string& sceneName );
 
+	bool IsSceneLoaded( const std::string& sceneName ) const;
+	bool IsSceneUnloaded( const std::string& sceneName ) const;
+
 	void StartedUnload();
 	void FinishedLoad();
 

@@ -20,4 +20,7 @@ public:
 
 	void AddObject( const std::string& objName );
 	void RemoveObject( const std::string& objName );
+
+	inline bool IsLoaded() const { return m_isLoaded; }
+	inline size_t CountElements() const { return m_Elements.size(); }
 };

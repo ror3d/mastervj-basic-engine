@@ -69,6 +69,18 @@ void CSceneManager::UnloadScene( const std::string& scene )
 	m_ScenesToUnload.push_back(scene);
 }
 
+bool CSceneManager::IsSceneLoaded( const std::string & sceneName ) const
+{
+	auto sc = m_resources.find( sceneName );
+	return sc != m_resources.end() && sc->second->IsLoaded();
+}
+
+bool CSceneManager::IsSceneUnloaded( const std::string & sceneName ) const
+{
+	auto sc = m_resources.find( sceneName );
+	return sc != m_resources.end() && !sc->second->IsLoaded() && sc->second->CountElements() == 0;
+}
+
 void CSceneManager::AddObject( CElement * obj )
 {
 	auto it = m_Objects.find( obj->getName() );
@@ -99,6 +111,7 @@ void CSceneManager::CleanupObjects()
 
 		if ( it != m_Objects.end() )
 		{
+			it->second->GetScene()->RemoveObject( id );
 			delete it->second;
 			m_Objects.erase( it );
 		}
@@ -155,16 +168,27 @@ void CSceneManager::FixedUpdate()
 
 void CSceneManager::Update()
 {
+	std::vector<std::string> scenesNotYetLoaded;
+
 	for (auto &const scene : m_ScenesToLoad)
 	{
 		auto sc = get(scene);
 		if (sc)
 		{
-			sc->Load();
+			if(!sc->IsLoaded() && sc->CountElements() == 0)
+			{
+				sc->Load();
+			}
+			else if( sc->CountElements() > 0 // If scene started being unloaded but objects are still present
+					 || std::find(m_ScenesToUnload.begin(), m_ScenesToUnload.end(), scene) != m_ScenesToLoad.end()) // If we are about to start unloading the scene
+			{
+				scenesNotYetLoaded.push_back(scene);
+			}
+			// Else we just skip it since we aren't unloading it currently
 		}
 	}
 
-	m_ScenesToLoad.clear();
+	m_ScenesToLoad.swap( scenesNotYetLoaded );
 
 	for (auto &const scene : m_ScenesToUnload)
 	{
