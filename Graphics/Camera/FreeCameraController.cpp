@@ -18,11 +18,11 @@ void CFreeCameraController::UpdateCameraValues( CCamera * Camera ) const
 	Camera->SetPosition(m_Position + m_offset);
 	Camera->SetLookAt(m_Position + m_offset + m_forward);
 	Camera->SetUp(GetUp());
-	Camera->SetMatrixs();
 	if ( m_fov > 0 )
 	{
 		Camera->SetFOV( m_fov );
 	}
+	Camera->SetMatrixs();
 }
 
 void CFreeCameraController::Update( float ElapsedTime )

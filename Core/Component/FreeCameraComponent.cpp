@@ -24,7 +24,7 @@ CFreeCameraComponent::CFreeCameraComponent(CXMLTreeNode& node, CElement* Owner)
 
 	if ( fov > 0 )
 	{
-		m_camController->SetFOV( mathUtils::Deg2Rad(fov) );
+		m_camController->SetFOV( mathUtils::Deg2Rad(fov)/2 );
 	}
 }
 
