@@ -27,7 +27,14 @@ fn createSceneFile sceneName gameObjects = (
 		local Sc = ScaleToRH gObj.transform.scale
 		local Yaw = GetYaw (gObj.transform)
 		local Pitch = GetPitch (gObj.transform)
-		local Roll = GetRoll (gObj.transform)		
+		local Roll = GetRoll (gObj.transform)
+		
+		local exportFreeCam = getUserProp gObj "ExportCameraC"
+		if exportFreeCam != undefined and classof(gObj) == Targetcamera then
+		(
+			local tgt = gObj.target
+			Pos = TranslationToRH (tgt.transform.translation)
+		)
 
 		format "\t<object name=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" enabled=\"%\">\n"\
 					gObj.name Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll (TrueFalse true) to: file
@@ -102,13 +109,33 @@ fn createSceneFile sceneName gameObjects = (
 		
 		)
 		
-		exportComp = getUserProp gObj "ExportCameraC"
-		if exportComp != undefined then (
-			local cOff = (getUserProp gObj "CameraCOffset")
-			if cOff == undefined then (
-				cOff = "0 0 0"
+		if exportFreeCam != undefined then (
+			local cOff = "0 0 0"
+			local fwd = "1 0 0"
+			local fov = ""
+			
+			if classof(gObj) == Targetcamera then
+			(
+				local tgt = gObj.target
+				local ss = stringstream ""
+				local v = ChangeCoordsBase(gObj.position - tgt.position)
+				format "% % %" v.x v.y v.z to: ss
+				cOff = ss as string
+				
+				ss = stringstream ""
+				v = - normalize v
+				format "% % %" v.x v.y v.z to: ss
+				fwd = ss as string
+				
+				local exportFov = getUserProp gObj "ExportCameraCFov"
+				if exportFov != undefined then (
+					ss = stringstream ""
+					format "fov=\"%\" " gObj.fov to:ss
+					fov = ss as string
+				)
 			)
-			format "\t\t<fps_camera offset=\"%\" />\n" to: file
+			
+			format "\t\t<free_camera forward=\"%\" offset=\"%\" %/>\n" fwd cOff fov to: file
 		)
 		
 		exportComp = getUserProp gObj "ExportCharContrC"

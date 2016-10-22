@@ -276,12 +276,13 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	GroupBox grp22 "Camera" pos:[232,304] width:200 height:80
 	GroupBox grp23 "Character Controller" pos:[232,392] width:200 height:128
 	GroupBox grp24 "Particle Emitter" pos:[440,328] width:200 height:88
-	label lbl34 "Offset" pos:[248,336] width:80 height:16
-	edittext cam_offset_x_txt "x" pos:[256,352] width:48 height:16 enabled:false
-	edittext cam_offset_y_txt "y" pos:[312,352] width:48 height:16 enabled:false
-	edittext cam_offset_z_txt "z" pos:[368,352] width:48 height:16 enabled:false
+	--label lbl34 "Offset" pos:[248,336] width:80 height:16
+	--edittext cam_offset_x_txt "x" pos:[256,352] width:48 height:16 enabled:false
+	--edittext cam_offset_y_txt "y" pos:[312,352] width:48 height:16 enabled:false
+	--edittext cam_offset_z_txt "z" pos:[368,352] width:48 height:16 enabled:false
 	checkbox export_trigger_ckb "Export Trigger" pos:[448,95] width:152 height:16
 	checkbox export_camera_ckb "Export Camera" pos:[240,320] width:152 height:16
+	checkbox export_camera_fov_ckb "Include FOV" pos:[240,336] width:152 height:16
 	label lbl35 "Offset" pos:[248,480] width:80 height:16
 	edittext cc_offset_x_txt "x" pos:[256,496] width:48 height:16 enabled:false
 	edittext cc_offset_y_txt "y" pos:[312,496] width:48 height:16 enabled:false
@@ -352,7 +353,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			export_collider_ckb.enabled = false
 			export_trigger_ckb.enabled = false
 			export_camera_ckb.enabled = false
-			export_cc_ckb.enabled = false
+			export_camera_fov_ckb.enabled = false
 			export_speaker_ckb.enabled = false
 			export_particle_ckb.enabled = false
 			scripts_combo.enabled = false
@@ -378,9 +379,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		trigger_offset_y_txt.enabled = eTrig
 		trigger_offset_z_txt.enabled = eTrig
 		
-		cam_offset_x_txt.enabled = eCam
-		cam_offset_y_txt.enabled = eCam
-		cam_offset_z_txt.enabled = eCam
+		export_camera_fov_ckb.enabled = eCam
+		--cam_offset_x_txt.enabled = eCam
+		--cam_offset_y_txt.enabled = eCam
+		--cam_offset_z_txt.enabled = eCam
 		
 		cc_offset_x_txt.enabled = eCC
 		cc_offset_y_txt.enabled = eCC
@@ -426,10 +428,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 
 
 		export_camera_ckb.checked = false
-		cam_offset_x_txt.text = "0"
-		cam_offset_y_txt.text = "0"
-		cam_offset_z_txt.text = "0"
-
+		export_camera_fov_ckb.checked = false
+		--cam_offset_x_txt.text = "0"
+		--cam_offset_y_txt.text = "0"
+		--cam_offset_z_txt.text = "0"
 
 		export_cc_ckb.checked = false
 		cc_offset_x_txt.text = "0"
@@ -656,7 +658,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		
 		LoadCkbProp export_camera_ckb "ExportCameraC"
-		LoadVec3DProp cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
+		LoadCkbProp export_camera_fov_ckb "ExportCameraCFov"
+		--LoadVec3DProp cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
 		
 		LoadCkbProp export_cc_ckb "ExportCharContrC"
 		LoadVec3DProp cc_offset_x_txt cc_offset_y_txt cc_offset_z_txt "CharContrCOffset"
@@ -737,8 +740,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		
 		SaveCkbProp Obj export_camera_ckb "ExportCameraC"
-		SaveVec3DProp Obj cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
-
+		SaveCkbProp Obj export_camera_fov_ckb "ExportCameraCFov"
+		--SaveVec3DProp Obj cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
 		
 		SaveCkbProp Obj export_cc_ckb "ExportCharContrC"
 		SaveVec3DProp Obj cc_offset_x_txt cc_offset_y_txt cc_offset_z_txt "CharContrCOffset"
@@ -833,6 +836,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		UpdateEnabledProps()
 	)
 	on export_camera_ckb changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on export_camera_fov_ckb changed state do
 	(
 		UpdateEnabledProps()
 	)

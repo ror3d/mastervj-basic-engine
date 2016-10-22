@@ -18,6 +18,7 @@ class CRenderableComponent;
 class CSpeakerComponent;
 class CScriptedComponent;
 class CAnimatedInstanceComponent;
+class CScene;
 
 class CElement : public CNamed
 {
@@ -28,6 +29,8 @@ class CElement : public CNamed
 	bool m_TransformChanged;
 
 	bool m_Enabled;
+
+	CScene *m_Scene;
 
 public:
 	typedef TMapContainer<CComponent> ComponentContainer_t;
@@ -81,6 +84,8 @@ public:
 	CSpeakerComponent* GetSpeaker();
 	CScriptedComponent* GetScript(const std::string& scriptName);
 
+	inline void SetScene( CScene* scene ) { m_Scene = scene; }
+	inline CScene* GetScene() const { return m_Scene; }
 
 private:
 	ComponentContainer_t m_componentContainer;

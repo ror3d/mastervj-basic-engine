@@ -51,15 +51,11 @@ void CScene::Load()
 		}
 
 		auto elem = new CElement(obj);
+		elem->SetScene( this );
 		m_sm->AddObject( elem );
 		m_Elements.push_back(elem->getName());
 	}
 	m_isLoaded = true;
-	if (m_SceneFile.find("level"))
-	{
-		CEngine::GetSingleton().getSceneManager()->GetObjectById("main")->SendMsg("Loaded_Level");
-	}
-
 }
 
 void CScene::Unload()
@@ -73,7 +69,6 @@ void CScene::Unload()
 	{
 		m_sm->DestroyObject( p );
 	}
-	m_Elements.clear();
 
 	m_isLoaded = false;
 }

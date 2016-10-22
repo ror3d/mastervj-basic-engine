@@ -69,7 +69,7 @@ fn CollectCoresAndInstances = (
 	-- Collect the rest of the geometry and cores
 	for i = 1 to $*.count do
 	(
-		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
+		if (superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject) or superclassof $*[i] == camera then
 		(
 			local gameObject = getUserProp $*[i] "ExportGameObject"
 			

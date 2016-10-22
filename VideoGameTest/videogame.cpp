@@ -128,8 +128,11 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						}
 						break;
 					case VK_ESCAPE:
-						PostQuitMessage(0);
-						consumed = true;
+						if ( Alt )
+						{
+							PostQuitMessage( 0 );
+							consumed = true;
+						}
 						break;
 					case VK_F4:
 						if (Alt)
