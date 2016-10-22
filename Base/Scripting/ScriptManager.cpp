@@ -14,7 +14,6 @@
 #include <Core/Component/FPSCameraComponent.h>
 #include <Core/Component/FreeCameraComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
-#include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Graphics/Camera/CameraManager.h>
@@ -372,10 +371,6 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCameraManager(),
 		"SetCurrentCameraController", &CCameraManager::SetCurrentCameraController,
 		"GetCurrentCamera", &CCameraManager::GetCurrentCameraController);
-
-	(*m_state)["CinematicsActionManager"].SetObj(
-		*CEngine::GetSingleton().getCinematicsActionManager(),
-		"m_FileName", &CCinematicsActionManager::m_FileName);
 
 	(*m_state)["CCinematicsManager"].SetObj(
 		*CEngine::GetSingleton().getCinematicManager(),

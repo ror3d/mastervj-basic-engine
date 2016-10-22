@@ -34,7 +34,6 @@
 #include <Core/Component/ComponentManager.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Graphics/Particles/ParticleSystemManager.h>
-#include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>

@@ -23,7 +23,6 @@
     <ClInclude Include="Camera\Frustum.h" />
     <ClInclude Include="Camera\SphericalCameraController.h" />
     <ClInclude Include="Camera\YawPitchCameraController.h" />
-    <ClInclude Include="CinematicsAction\CinematicsActionManager.h" />
     <ClInclude Include="Cinematics\CameraKey.h" />
     <ClInclude Include="Cinematics\CameraKeyController.h" />
     <ClInclude Include="Cinematics\Cinematic.h" />
@@ -107,7 +106,6 @@
     <ClCompile Include="Camera\Frustum.cpp" />
     <ClCompile Include="Camera\SphericalCameraController.cpp" />
     <ClCompile Include="Camera\YawPitchCameraController.cpp" />
-    <ClCompile Include="CinematicsAction\CinematicsActionManager.cpp" />
     <ClCompile Include="Cinematics\CameraKey.cpp" />
     <ClCompile Include="Cinematics\CameraKeyController.cpp" />
     <ClCompile Include="Cinematics\Cinematic.cpp" />
