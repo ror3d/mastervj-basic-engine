@@ -22,12 +22,6 @@ public:
 	virtual void Apply() = 0;
 	TMaterialType getMaterialType(){ return m_MaterialType; }
 	std::string getParamValues(){ return m_paramValues;  }
-
-	//TODO: LUA
-	/*virtual CEmptyPointerClass * GetValueLuaAddress() const {
-		return
-			(CEmptyPointerClass *)GetValueAddress();
-	}*/
 };
 
 template<typename T>
@@ -47,7 +41,13 @@ public:
 	virtual ~CTemplatedMaterialParameter(){
 	}
 
-	T * getValue(){
+	inline T * getValue()
+	{
+		return &m_Value;
+	}
+
+	inline void setValue(T val)
+	{
 		return &m_Value;
 	}
 
