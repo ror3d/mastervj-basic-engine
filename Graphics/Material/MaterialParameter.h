@@ -1,7 +1,7 @@
 #ifndef MATERIAL_PARAMETER_H
 #define MATERIAL_PARAMETER_H
 
-#include "Utils/Named.h"
+#include <Base/Utils/Named.h>
 
 class CMaterialParameter : public CNamed
 {
