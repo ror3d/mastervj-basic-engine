@@ -344,6 +344,7 @@ CElement* CElement::Clone( const std::string & newName )
 {
 	CElement* ret = new CElement(newName);
 
+	ret->m_Scene = m_Scene;
 	ret->m_Scale = m_Scale;
 	ret->m_Enabled = m_Enabled;
 	ret->m_RotationYPR = m_RotationYPR;
