@@ -49,7 +49,7 @@ void CSpeakerComponent::Init()
 	m_Speaker.SetPosition(m_Position);
 	m_Speaker.SetYawPitchRoll(m_Orientation.x, m_Orientation.y, m_Orientation.z);
 	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&m_Speaker);
-	CEngine::GetSingleton().getSoundManager()->SetVolume("Volume", m_Volume);
+	CEngine::GetSingleton().getSoundManager()->SetVolume("VolumeEffects", 0);
 	//Play((std::string)"Play", true);
 
 }
@@ -66,6 +66,16 @@ void CSpeakerComponent::Play( const std::string EventName)
 	C3DElement nspeaker = {};
 	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &m_Speaker);
 	
+
+}
+
+void CSpeakerComponent::SetSwitch(const std::string SwitchValue, const std::string SwitchName)
+{
+	SoundSwitchValue SoundSwitch;
+	SoundSwitch.m_SoundSwitch.m_SwitchName = SwitchName;
+	SoundSwitch.valueName = SwitchValue;
+	CEngine::GetSingleton().getSoundManager()->SetSwitch(SoundSwitch, &m_Speaker);
+
 
 }
 

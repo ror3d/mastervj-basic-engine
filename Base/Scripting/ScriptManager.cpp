@@ -298,6 +298,7 @@ void CScriptManager::RegisterLUAFunctions()
 		.SetClass<CSpeakerComponent, const CSpeakerComponent&, CElement*>(
 		"Play", &CSpeakerComponent::Play,
 		"Finished", &CSpeakerComponent::Finished,
+		"SetSwitch", &CSpeakerComponent::SetSwitch,
 		"Stop", &CSpeakerComponent::Stop
 		);
 

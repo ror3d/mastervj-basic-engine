@@ -22,6 +22,7 @@ public:
 
 	void Play( const std::string audioClipName);
 	bool Finished(const std::string EventName);
+	void CSpeakerComponent::SetSwitch(const std::string SwitchValue, const std::string SwitchName);
 	void Stop();
 
 	Vect3f m_Position;
