@@ -84,6 +84,12 @@ CSoundManager::~CSoundManager()
 	//Terminate();
 }
 
+AkGameObjectID CSoundManager::SearchID(std::string name)
+{
+	AkGameObjectID id = m_NamedSpeakers[name];
+	return id;
+}
+
 
 void CSoundManager::PlayEvent(const SoundEvent &_event)
 {
@@ -119,11 +125,26 @@ void CSoundManager::PlayEvent(const SoundEvent &_event, const C3DElement *_speak
 		assert(false);
 	}
 }
+
+bool CSoundManager::EventFinishedOK()
+{
+	return true;
+}
+
+bool CSoundManager::EventFinished(const SoundEvent &_event, const AkGameObjectID &ID)
+{
+	AkCallbackFunc EventFinished = AkCallbackFunc(CSoundManager::EventFinishedOK());
+	bool finished = false;
+	finished = AK::SoundEngine::PostEvent(_event.m_EventName.c_str(), ID, AK_EndOfEvent);
+	return finished;
+}
+
 void CSoundManager::PlayEvent(const SoundEvent &_event, const AkGameObjectID &ID)
 {
 	if (!m_InitOk) return;
-
+	
 	AK::SoundEngine::PostEvent(_event.m_EventName.c_str(), ID);
+	
 }
 
 void CSoundManager::SetSwitch(const SoundSwitchValue &switchValue)
@@ -303,11 +324,11 @@ void CSoundManager::LoadSpeakers(std::string l_Name, Vect3f l_Position, Vect3f l
 {
 	AkSoundPosition l_SoundPosition = {};
 
-	l_SoundPosition.Position.X = l_Position.x;
+	l_SoundPosition.Position.X = -l_Position.x;
 	l_SoundPosition.Position.Y = l_Position.y;
 	l_SoundPosition.Position.Z = l_Position.z;
 
-	l_SoundPosition.Orientation.X = l_Orientation.x;
+	l_SoundPosition.Orientation.X = -l_Orientation.x;
 	l_SoundPosition.Orientation.Y = l_Orientation.y;
 	l_SoundPosition.Orientation.Z = l_Orientation.z;
 
@@ -552,20 +573,20 @@ void CSoundManager::SetListenerPosition(const CCamera *camera)
 	if (!m_InitOk) return;
 
 	Vect3f l_Position = camera->GetPosition();
-	Vect3f l_Orientation = camera->GetLookAt();
+	Vect3f l_Orientation = (camera->GetLookAt() - camera->GetPosition()).Normalize();
 	Vect3f l_VectorUp = camera->GetUp();
 
 	AkListenerPosition l_ListenerPosition = {};
 
-	l_ListenerPosition.Position.X = l_Position.x;
+	l_ListenerPosition.Position.X = -l_Position.x;
 	l_ListenerPosition.Position.Y = l_Position.y;
 	l_ListenerPosition.Position.Z = l_Position.z;
 
-	l_ListenerPosition.OrientationFront.X = l_Orientation.x;
+	l_ListenerPosition.OrientationFront.X = -l_Orientation.x;
 	l_ListenerPosition.OrientationFront.Y = l_Orientation.y;
 	l_ListenerPosition.OrientationFront.Z = l_Orientation.z;
 
-	l_ListenerPosition.OrientationTop.X = l_VectorUp.x;
+	l_ListenerPosition.OrientationTop.X = -l_VectorUp.x;
 	l_ListenerPosition.OrientationTop.Y = l_VectorUp.y;
 	l_ListenerPosition.OrientationTop.Z = l_VectorUp.z;
 
@@ -619,7 +640,6 @@ void CSoundManager::Update(const CCamera *camera)
 		float l_Pitch = it.first->GetPitch();
 
 		Vect3f l_Orientation(cos(l_Yaw) * cos(l_Pitch), sin(l_Pitch), sin(l_Yaw) * cos(l_Pitch));
-
 		AkSoundPosition l_SoundPosition = {}; 
 
 		l_SoundPosition.Position.X = l_Position.x;
