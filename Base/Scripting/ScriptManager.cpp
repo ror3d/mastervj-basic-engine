@@ -29,6 +29,7 @@
 #include <Core/Scene/Scene.h>
 #include <Core/Scene/SceneManager.h>
 #include <Core/Scene/Element.h>
+#include <Video/Player.h>
 
 #include "LuaErrorCapture.h"
 
@@ -421,6 +422,10 @@ void CScriptManager::RegisterLUAFunctions()
 	( *m_state )["CMaterialManager"].SetObj(
 		*CEngine::GetSingleton().getMaterialManager(),
 		"LoadMaterialsFile", &CMaterialManager::load);
+
+	(*m_state)["CPlayerManager"].SetObj(
+		*CEngine::GetSingleton().getPlayerManager(),
+		"LoadVideo", &CPlayer::OpenURL);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

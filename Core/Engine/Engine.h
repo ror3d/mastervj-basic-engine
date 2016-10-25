@@ -25,6 +25,7 @@ class CStaticMeshLoader;
 class CAnimatedMeshManager;
 class CRenderer;
 class CSceneManager;
+class CPlayer;
 
 class CEngine : public CSingleton<CEngine>
 {
@@ -52,6 +53,7 @@ private:
 	CAnimatedMeshManager * animatedMeshManager;
 	CRenderer * renderer;
 	CSceneManager * sceneManager;
+	CPlayer * playerManager;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -83,4 +85,6 @@ public:
 	inline CAnimatedMeshManager * getAnimatedMeshManager() const { return animatedMeshManager; }
 	inline CRenderer * getRenderer() const { return renderer; }
 	inline CSceneManager * getSceneManager() const { return sceneManager; }
+	inline CPlayer * getPlayerManager() const { return playerManager; }
+	inline void setPlayerManager(CPlayer * player) { playerManager = player; }
 };

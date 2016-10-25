@@ -21,6 +21,7 @@
 #include <mfidl.h>
 #include <mferror.h>
 #include <evr.h>
+#include <string>
 
 template <class T> void SafeRelease(T **ppT)
 {
@@ -65,7 +66,7 @@ public:
 	STDMETHODIMP  Invoke(IMFAsyncResult* pAsyncResult);
 
 	// Playback
-	HRESULT       OpenURL(const WCHAR *sURL);
+	HRESULT       OpenURL(const std::string sURL);
 	HRESULT       Play();
 	HRESULT       Pause();
 	HRESULT       Stop();

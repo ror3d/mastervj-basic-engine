@@ -51,6 +51,7 @@ CEngine::CEngine()
 	, animatedMeshManager(nullptr)
 	, renderer(nullptr)
 	, sceneManager(nullptr)
+	, playerManager(nullptr)
 {
 }
 CEngine::~CEngine()

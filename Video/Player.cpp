@@ -146,7 +146,7 @@ ULONG CPlayer::Release()
 }
 
 //  Open a URL for playback.
-HRESULT CPlayer::OpenURL(const WCHAR *sURL)
+HRESULT CPlayer::OpenURL(const std::string sURL)
 {
 	// 1. Create a new media session.
 	// 2. Create the media source.
@@ -165,7 +165,7 @@ HRESULT CPlayer::OpenURL(const WCHAR *sURL)
 	}
 
 	// Create the media source.
-	hr = CreateMediaSource(sURL, &m_pSource);
+	hr = CreateMediaSource(std::wstring(sURL.begin(), sURL.end()).c_str(), &m_pSource);
 	if (FAILED(hr))
 	{
 		goto done;

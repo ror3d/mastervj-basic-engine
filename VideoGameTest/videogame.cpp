@@ -50,7 +50,6 @@
 
 #define APPLICATION_NAME	"VIDEOGAME"
 
-CPlayer *videoPlayer = NULL;
 void OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr);
 
 void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
@@ -179,9 +178,9 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				// TODO: Resetear el AntTeakBar
 				TwWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 
-				if (videoPlayer != NULL)
+				if (CEngine::GetSingleton().getPlayerManager() != NULL)
 				{
-					videoPlayer->ResizeVideo((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+					CEngine::GetSingleton().getPlayerManager()->ResizeVideo((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 				}
 			}
 			return 0;
@@ -237,6 +236,13 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
+	CPlayer *videoPlayer = NULL;
+
+	// Initialize the player object.
+	HRESULT hr = CPlayer::CreateInstance(hWnd, hWnd, &videoPlayer);
+
+	CEngine::GetSingleton().setPlayerManager(videoPlayer);
+
 	engine.getTextureManager()->Init();
 	engine.getDebugRender()->Init();
 	engine.getEffectsManager()->load("Data\\effects.xml");
@@ -283,9 +289,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		bool first = true;
 
-		// Initialize the player object.
-		HRESULT hr = CPlayer::CreateInstance(hWnd, hWnd, &videoPlayer);
-
 		while (msg.message != WM_QUIT)
 		{
 			if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
@@ -298,13 +301,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 			}
 			else
 			{
-				if (first)
-				{
-					hr = videoPlayer->OpenURL(L"Data\\Video\\Cinematica Inicial.avi");
-					first = false;
-				}
-
-				if (videoPlayer->GetState() != Started)
+				if (CEngine::GetSingleton().getPlayerManager()->GetState() != Started)
 				{
 					inputManager.BeginFrame();
 					DWORD l_CurrentTime = timeGetTime();
@@ -328,7 +325,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 // Handler for Media Session events.
 void OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr)
 {
-	HRESULT hr = videoPlayer->HandleEvent(pUnkPtr);
+	HRESULT hr = CEngine::GetSingleton().getPlayerManager()->HandleEvent(pUnkPtr);
 }
 
 
