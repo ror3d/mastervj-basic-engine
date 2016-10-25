@@ -178,6 +178,11 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				context.Resize(hWnd, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 				// TODO: Resetear el AntTeakBar
 				TwWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+
+				if (videoPlayer != NULL)
+				{
+					videoPlayer->ResizeVideo((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+				}
 			}
 			return 0;
 		case WM_DESTROY:
@@ -295,7 +300,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 			{
 				if (first)
 				{
-					hr = videoPlayer->OpenURL(L"Data\\sample.mp4");
+					hr = videoPlayer->OpenURL(L"Data\\Video\\Cinematica Inicial.avi");
 					first = false;
 				}
 
