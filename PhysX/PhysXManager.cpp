@@ -238,7 +238,12 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 		{
 			//OutputDebugStringA("Hola!\n");
 			//CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
-			m_TriggerCollisions[l_triggerName].emplace(l_actorName);
+			physx::PxShape *shape;
+			pairs[i].otherActor->getShapes( &shape, 1 );
+			if ( shape && !shape->getFlags().isSet(physx::PxShapeFlag::eTRIGGER_SHAPE) )
+			{
+				m_TriggerCollisions[l_triggerName].emplace(l_actorName);
+			}
 		}
 		if (pairs[i].status & ( physx::PxPairFlag::eNOTIFY_TOUCH_LOST
 								| physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER
