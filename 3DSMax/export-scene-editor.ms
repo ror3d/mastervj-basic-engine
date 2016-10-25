@@ -252,9 +252,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	checkbox export_rend_ckb "Export Renderable" pos:[32,96] width:112 height:16
 	checkbox static_mesh_ckb "Static Mesh" pos:[48,192] width:120 height:16 enabled:false
 	checkbox skinned_mesh_ckb "Skinned Mesh" pos:[48,216] width:120 height:16 enabled:false
+	checkbox skinned_mesh_playAtStart_ckb "Play At Start" pos:[69,271] width:123 height:20
 	multiListBox layer_select "Layers" pos:[40,112] width:168 height:4 enabled:false items:#("solid", "alpha-blended", "models")
-	edittext skinned_mesh_core_txt "" pos:[72,256] width:136 height:16 enabled:false
-	label lbl3 "Model Name" pos:[72,240] width:104 height:16
+	edittext skinned_mesh_core_txt "" pos:[72,252] width:136 height:16 enabled:false
+	label lbl3 "Model Name" pos:[72,235] width:104 height:16
 	GroupBox grp3 "Collider" pos:[232,80] width:200 height:136
 	checkbox export_collider_ckb "Export Collider" pos:[240,96] width:152 height:16
 	dropdownList collider_type_select "Collider Type" pos:[248,152] width:152 height:40 enabled:false items:#("Triangle Mesh", "Convex Mesh", "Bounding Box", "Bounding Sphere")
@@ -275,12 +276,13 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	GroupBox grp22 "Camera" pos:[232,304] width:200 height:80
 	GroupBox grp23 "Character Controller" pos:[232,392] width:200 height:128
 	GroupBox grp24 "Particle Emitter" pos:[440,328] width:200 height:88
-	label lbl34 "Offset" pos:[248,336] width:80 height:16
-	edittext cam_offset_x_txt "x" pos:[256,352] width:48 height:16 enabled:false
-	edittext cam_offset_y_txt "y" pos:[312,352] width:48 height:16 enabled:false
-	edittext cam_offset_z_txt "z" pos:[368,352] width:48 height:16 enabled:false
+	--label lbl34 "Offset" pos:[248,336] width:80 height:16
+	--edittext cam_offset_x_txt "x" pos:[256,352] width:48 height:16 enabled:false
+	--edittext cam_offset_y_txt "y" pos:[312,352] width:48 height:16 enabled:false
+	--edittext cam_offset_z_txt "z" pos:[368,352] width:48 height:16 enabled:false
 	checkbox export_trigger_ckb "Export Trigger" pos:[448,95] width:152 height:16
 	checkbox export_camera_ckb "Export Camera" pos:[240,320] width:152 height:16
+	checkbox export_camera_fov_ckb "Include FOV" pos:[240,336] width:152 height:16
 	label lbl35 "Offset" pos:[248,480] width:80 height:16
 	edittext cc_offset_x_txt "x" pos:[256,496] width:48 height:16 enabled:false
 	edittext cc_offset_y_txt "y" pos:[312,496] width:48 height:16 enabled:false
@@ -351,7 +353,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			export_collider_ckb.enabled = false
 			export_trigger_ckb.enabled = false
 			export_camera_ckb.enabled = false
-			export_cc_ckb.enabled = false
+			export_camera_fov_ckb.enabled = false
 			export_speaker_ckb.enabled = false
 			export_particle_ckb.enabled = false
 			scripts_combo.enabled = false
@@ -360,6 +362,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		)
 		static_mesh_ckb.enabled = eRend
 		skinned_mesh_ckb.enabled = eRend
+		skinned_mesh_playAtStart_ckb.enabled = eRend
 		layer_select.enabled = eRend
 		skinned_mesh_core_txt.enabled = (eRend and skinned_mesh_ckb.checked)
 		
@@ -376,9 +379,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		trigger_offset_y_txt.enabled = eTrig
 		trigger_offset_z_txt.enabled = eTrig
 		
-		cam_offset_x_txt.enabled = eCam
-		cam_offset_y_txt.enabled = eCam
-		cam_offset_z_txt.enabled = eCam
+		export_camera_fov_ckb.enabled = eCam
+		--cam_offset_x_txt.enabled = eCam
+		--cam_offset_y_txt.enabled = eCam
+		--cam_offset_z_txt.enabled = eCam
 		
 		cc_offset_x_txt.enabled = eCC
 		cc_offset_y_txt.enabled = eCC
@@ -401,6 +405,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		export_rend_ckb.checked = false
 		static_mesh_ckb.checked = true
 		skinned_mesh_ckb.checked = false
+		skinned_mesh_playAtStart_ckb.checked = false
 		layer_select.selection = #{}
 		skinned_mesh_core_txt.text = ""
 		
@@ -423,10 +428,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 
 
 		export_camera_ckb.checked = false
-		cam_offset_x_txt.text = "0"
-		cam_offset_y_txt.text = "0"
-		cam_offset_z_txt.text = "0"
-
+		export_camera_fov_ckb.checked = false
+		--cam_offset_x_txt.text = "0"
+		--cam_offset_y_txt.text = "0"
+		--cam_offset_z_txt.text = "0"
 
 		export_cc_ckb.checked = false
 		cc_offset_x_txt.text = "0"
@@ -616,6 +621,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		LoadCkbProp export_rend_ckb "ExportRendererC"
 		LoadCkbProp skinned_mesh_ckb "RendererSkinnedMesh"
+		LoadCkbProp skinned_mesh_playAtStart_ckb "PlayAtStartSkinnedMesh"
 		static_mesh_ckb.checked = not skinned_mesh_ckb.checked
 		
 		local rLayer = getUserProp m_ObjSelected "RendererLayer"
@@ -652,7 +658,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		
 		LoadCkbProp export_camera_ckb "ExportCameraC"
-		LoadVec3DProp cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
+		LoadCkbProp export_camera_fov_ckb "ExportCameraCFov"
+		--LoadVec3DProp cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
 		
 		LoadCkbProp export_cc_ckb "ExportCharContrC"
 		LoadVec3DProp cc_offset_x_txt cc_offset_y_txt cc_offset_z_txt "CharContrCOffset"
@@ -696,6 +703,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		SaveCkbProp Obj export_rend_ckb "ExportRendererC"
 		SaveCkbProp Obj skinned_mesh_ckb "RendererSkinnedMesh"
+		SaveCkbProp Obj skinned_mesh_playAtStart_ckb "PlayAtStartSkinnedMesh"
 		local layers = ""
 		for i = 1 to layer_select.items.count do (
 			if layer_select.selection[i] then (
@@ -732,8 +740,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		
 		SaveCkbProp Obj export_camera_ckb "ExportCameraC"
-		SaveVec3DProp Obj cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
-
+		SaveCkbProp Obj export_camera_fov_ckb "ExportCameraCFov"
+		--SaveVec3DProp Obj cam_offset_x_txt cam_offset_y_txt cam_offset_z_txt "CameraCOffset"
 		
 		SaveCkbProp Obj export_cc_ckb "ExportCharContrC"
 		SaveVec3DProp Obj cc_offset_x_txt cc_offset_y_txt cc_offset_z_txt "CharContrCOffset"
@@ -788,6 +796,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	
 	
 	
+	
 	on ExportSceneEditor open do
 	(
 		callbacks.addScript #selectionSetChanged "ExportSceneEditor.selectedObjectChanged()" id:#UABSceneProperties
@@ -810,10 +819,12 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	(
 		skinned_mesh_ckb.checked = not state
 		skinned_mesh_core_txt.enabled = skinned_mesh_ckb.checked
+		skinned_mesh_playAtStart_ckb.checked = not state
 	)
 	on skinned_mesh_ckb changed state do
 	(
 		static_mesh_ckb.checked = not state
+		skinned_mesh_playAtStart_ckb.checked = not state
 		skinned_mesh_core_txt.enabled = skinned_mesh_ckb.checked
 	)
 	on export_collider_ckb changed state do
@@ -828,15 +839,15 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	(
 		UpdateEnabledProps()
 	)
+	on export_camera_fov_ckb changed state do
+	(
+		UpdateEnabledProps()
+	)
 	on export_cc_ckb changed state do
 	(
 		UpdateEnabledProps()
 	)
 	on scripts_combo changed state do
-	(
-		UpdateEnabledProps()
-	)
-	on export_spawn_ckb state do
 	(
 		UpdateEnabledProps()
 	)
@@ -937,6 +948,14 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			scripts_combo.selection = i
 		)
 	)
+	on export_spawn_ckb changed state do
+	(
+		UpdateEnabledProps()
+	)
+	on export_spawn_ckb state do
+	(
+		UpdateEnabledProps()
+	)
 	on reset_btn pressed do
 	(	
 		ResetProps()
@@ -953,10 +972,6 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			scripts_combo.items = l
 			scripts_combo.selection = 0
 		)
-	)
-	on export_spawn_ckb changed state do
-	(
-		UpdateEnabledProps()
 	)
 )
 

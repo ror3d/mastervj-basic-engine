@@ -191,7 +191,7 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 	}
 	{
 		Action action = { "BACK", KEYBOARD, Action::ON_PRESS };
-		action.keyboard.key = VK_F1;
+		action.keyboard.key = VK_ESCAPE;
 		action.keyboard.needsAlt = false;
 		action.keyboard.needsCtrl = false;
 		m_Actions.push_back(action);

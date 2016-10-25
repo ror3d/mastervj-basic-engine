@@ -17,9 +17,15 @@ CFreeCameraComponent::CFreeCameraComponent(CXMLTreeNode& node, CElement* Owner)
 
 	Vect3f fwd = node.GetVect3fProperty("forward", Vect3f( 1, 0, 0), false);
 	Vect3f off = node.GetVect3fProperty( "offset", Vect3f( 0, 0, 0 ), false );
+	float fov = node.GetFloatProperty( "fov", -1, false );
 
 	m_camController->SetForward( fwd );
 	m_camController->SetOffset( off );
+
+	if ( fov > 0 )
+	{
+		m_camController->SetFOV( mathUtils::Deg2Rad(fov)/2 );
+	}
 }
 
 CFreeCameraComponent::CFreeCameraComponent(const CFreeCameraComponent& base, CElement* Owner)

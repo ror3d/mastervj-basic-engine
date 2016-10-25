@@ -51,6 +51,7 @@ void CScene::Load()
 		}
 
 		auto elem = new CElement(obj);
+		elem->SetScene( this );
 		m_sm->AddObject( elem );
 		m_Elements.push_back(elem->getName());
 	}
@@ -68,7 +69,6 @@ void CScene::Unload()
 	{
 		m_sm->DestroyObject( p );
 	}
-	m_Elements.clear();
 
 	m_isLoaded = false;
 }

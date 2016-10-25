@@ -16,7 +16,8 @@ CSpeakerComponent::CSpeakerComponent(CXMLTreeNode& node, CElement* Owner)
 	SetNameFromParentName( Owner->getName() );
 
 	m_Position = Owner->GetPosition();
-	m_Orientation.x = Owner->GetYaw();
+	m_Position.x = -m_Position.x;
+	m_Orientation.x = -Owner->GetYaw();
 	m_Orientation.y = Owner->GetPitch();
 	m_Orientation.z = Owner->GetRoll();
 	m_Volume = node.GetFloatProperty("volume", 50.0f, false);
@@ -28,6 +29,7 @@ CSpeakerComponent::CSpeakerComponent(const CSpeakerComponent& base, CElement* Ow
 	SetNameFromParentName( Owner->getName() );
 
 	m_Position = Owner->GetPosition();
+	m_Position.x = -m_Position.x;
 	m_Orientation.x = Owner->GetYaw();
 	m_Orientation.y = Owner->GetPitch();
 	m_Orientation.z = Owner->GetRoll();
@@ -48,8 +50,8 @@ void CSpeakerComponent::Init()
 	m_Speaker.SetPosition(m_Position);
 	m_Speaker.SetYawPitchRoll(m_Orientation.x, m_Orientation.y, m_Orientation.z);
 	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&m_Speaker);
-	CEngine::GetSingleton().getSoundManager()->SetVolume("Volume", m_Volume);
-	Play((std::string)"Play", true);
+	CEngine::GetSingleton().getSoundManager()->SetVolume("VolumeEffects", 0);
+	//Play((std::string)"Play", true);
 
 }
 
@@ -60,11 +62,30 @@ void CSpeakerComponent::Destroy()
 	CEngine::GetSingleton().getSoundManager()->UnregisterSpeaker(&m_Speaker);
 }
 
-void CSpeakerComponent::Play( const std::string EventName, bool loop )
+void CSpeakerComponent::Play( const std::string EventName)
 {
-	// TODO: Reproduir one-shot o bucle depenent de loop
 	C3DElement nspeaker = {};
 	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &m_Speaker);
+	
+
+}
+
+void CSpeakerComponent::SetSwitch(const std::string SwitchValue, const std::string SwitchName)
+{
+	SoundSwitchValue SoundSwitch;
+	SoundSwitch.m_SoundSwitch.m_SwitchName = SwitchName;
+	SoundSwitch.valueName = SwitchValue;
+	CEngine::GetSingleton().getSoundManager()->SetSwitch(SoundSwitch, &m_Speaker);
+
+
+}
+
+bool CSpeakerComponent::Finished(const std::string EventName)
+{
+	C3DElement nspeaker = {};
+	AkGameObjectID id = CEngine::GetSingleton().getSoundManager()->SearchID(getName());
+	bool finished = CEngine::GetSingleton().getSoundManager()->EventFinished(EventName, id);
+	return finished;
 
 }
 
@@ -79,6 +100,7 @@ void CSpeakerComponent::Update(float ElapsedTime)
 	// TODO: Actualitzar posició i rotació del speaker en el manager d'audio a partir del GetOwner()->GetPosition() i GetOwner()->GetDirection()
 
 	Vect3f newPosition = GetOwner()->GetPosition();
+	newPosition.x = -newPosition.x;
 	Vect3f newOrientation = GetOwner()->GetRotation();
 	if ((newPosition != m_Position) || (newOrientation != m_Orientation))
 	{

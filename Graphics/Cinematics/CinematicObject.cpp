@@ -29,7 +29,7 @@ CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 	}
 	else if (loopType == std::string("Reverse"))
 	{
-		m_Cycle = true;
+		m_Cycle = false;
 		m_reverse = true;
 	}
 

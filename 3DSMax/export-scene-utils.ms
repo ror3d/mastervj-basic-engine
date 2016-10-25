@@ -69,7 +69,7 @@ fn CollectCoresAndInstances = (
 	-- Collect the rest of the geometry and cores
 	for i = 1 to $*.count do
 	(
-		if superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject then
+		if (superclassof $*[i] == GeometryClass and classof $*[i] != Targetobject) or superclassof $*[i] == camera then
 		(
 			local gameObject = getUserProp $*[i] "ExportGameObject"
 			
@@ -193,7 +193,7 @@ fn ChangeCoordsBase coords =
 	)
 	else if classof coords == Quat then
 	(
-		return quat -coords.x coords.z coords.y coords.w
+		return quat coords.x -coords.z -coords.y coords.w
 	)
 	return point3 -coords[1] coords[3] coords[2]
 )

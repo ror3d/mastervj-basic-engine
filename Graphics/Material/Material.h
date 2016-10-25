@@ -6,12 +6,12 @@
 #include <Base/Math/Color.h>
 #include <vector>
 
+#include <Graphics/Material/MaterialParameter.h>
+
 class CXMLTreeNode;
 class CEffectTechnique;
 class CTexture;
-class CMaterialParameter;
 class CRenderableObjectTechnique;
-class CMaterialParameter;
 
 class CMaterial : public CNamed
 {
@@ -50,9 +50,44 @@ public:
 	CRenderableObjectTechnique * getRenderableObjectTechique(){ return m_RenderableObjectTechnique; }
 
 	std::vector<CMaterialParameter *> * getParameters(){ return &m_Parameters;  }
-	
+
 	CTexture *GetTexture( uint32 id );
 	CTexture *GetTextureAtStage( uint32 stage );
+
+	template<typename T>
+	inline void SetParameterValue( const std::string& paramName, T value )
+	{
+		for (auto &p : m_Parameters)
+		{
+			if ( p->getName() == paramName )
+			{
+				CTemplatedMaterialParameter<T>* pd = dynamic_cast<CTemplatedMaterialParameter<T>*>( p );
+				if ( pd )
+				{
+					pd->setValue( value );
+					break;
+				}
+			}
+		}
+	}
+
+	template<typename T>
+	inline T GetParameterValue( const std::string& paramName ) const
+	{
+		for (const auto &p : m_Parameters)
+		{
+			if ( p->getName() == paramName )
+			{
+				CTemplatedMaterialParameter<T>* pd = dynamic_cast<CTemplatedMaterialParameter<T>*>( p );
+				if ( pd )
+				{
+					return pd->getValue();
+					return;
+				}
+			}
+		}
+		return T();
+	}
 
 	void SetTextureAtStage(CTexture* tex, uint32 stage);
 };

@@ -15,6 +15,7 @@
 #include <Core/Component/FreeCameraComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
 #include <Graphics/CinematicsAction/CinematicsActionManager.h>
+#include <Core\Component\SpeakerComponent.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Time/TimeManager.h>
 #include <Graphics/Camera/CameraManager.h>
@@ -253,6 +254,7 @@ void CScriptManager::RegisterLUAFunctions()
 			"GetFreeCamera", &CElement::GetFreeCamera,
 			"GetCharacterController", &CElement::GetCharacterController,
 			"GetAnimatedInstanceComponent", &CElement::GetAnimatedInstanceComponent,
+			"GetSpeaker", &CElement::GetSpeaker,
 			"GetCollider", &CElement::GetPhysxComponent,
 			"SendMessage", static_cast<void(CElement::*)(const std::string&)>(&CElement::SendMsg),
 			"SendMessageInt", static_cast<void(CElement::*)(const std::string&, int)>(&CElement::SendMsg),
@@ -288,8 +290,17 @@ void CScriptManager::RegisterLUAFunctions()
 	(*m_state)["CColliderComponent"]
 		.SetClass<CPhysxComponent, const CPhysxComponent&, CElement*>(
 			"Move", &CPhysxComponent::Move,
-			"Recreate", &CPhysxComponent::Recreate
+			"Recreate", &CPhysxComponent::Recreate,
+			"IsKinematic", &CPhysxComponent::IsKinematic
 			);
+
+	(*m_state)["CSpeakerComponent"]
+		.SetClass<CSpeakerComponent, const CSpeakerComponent&, CElement*>(
+		"Play", &CSpeakerComponent::Play,
+		"Finished", &CSpeakerComponent::Finished,
+		"SetSwitch", &CSpeakerComponent::SetSwitch,
+		"Stop", &CSpeakerComponent::Stop
+		);
 
 	( *m_state )["CScriptedComponent"]
 		.SetClass<CScriptedComponent, const CScriptedComponent&, CElement*>(
@@ -398,6 +409,8 @@ void CScriptManager::RegisterLUAFunctions()
 		"LoadScene", &CSceneManager::LoadScene,
 		"UnloadScene", &CSceneManager::UnloadScene,
 		"GetObjectById", &CSceneManager::GetObjectById,
+		"IsSceneLoaded", &CSceneManager::IsSceneLoaded,
+		"IsSceneUnloaded", &CSceneManager::IsSceneUnloaded,
 		"StartedUnload", &CSceneManager::StartedUnload,
 		"FinishedLoad", &CSceneManager::FinishedLoad);
 
