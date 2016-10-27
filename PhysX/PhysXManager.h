@@ -108,6 +108,8 @@ public:
 	bool RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition);
 	std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance, std::string objectToAvoid);
 
+	std::vector<std::string> overlapSphere( Vect3f position, float radius );
+
 	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
 
 	//std::set<std::string> getTriggerCollisions( const std::string& triggerName ) { auto ret = std::move( m_TriggerCollisions[triggerName] ); return ret; }
@@ -122,7 +124,6 @@ public:
 	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
-
 
 	void destroy() {}
 

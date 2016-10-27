@@ -844,6 +844,48 @@ std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float di
 	}
 }
 
+std::vector<std::string> CPhysXManager::overlapSphere( Vect3f position, float radius )
+{
+	physx::PxSphereGeometry sphere(radius);
+	physx::PxTransform transf(v(position));
+	physx::PxOverlapBuffer overlaps;
+
+	std::vector<std::string> ret;
+
+	if ( m_Scene->overlap( sphere, transf, overlaps, physx::PxQueryFilterData( physx::PxQueryFlag::eSTATIC
+																			   | physx::PxQueryFlag::eDYNAMIC
+																			   | physx::PxQueryFlag::eANY_HIT ) ) )
+	{
+		for ( uint32 i = 0; i < overlaps.getNbAnyHits(); ++i )
+		{
+			const physx::PxOverlapHit &hit = overlaps.getAnyHit( i );
+
+			size_t l_indexActor = (size_t)hit.actor->userData;
+
+			std::string l_actorName;
+			if ( l_indexActor & CONTROLLER_FLAG )
+			{
+				if ( m_CharacterControllerIdxs.find(l_indexActor^CONTROLLER_FLAG) == m_CharacterControllerIdxs.end() )
+				{
+					continue;
+				}
+				l_actorName = m_CharacterControllerIdxs[l_indexActor^CONTROLLER_FLAG];
+			}
+			else
+			{
+				if ( m_actors.name.size() <= l_indexActor )
+				{
+					continue;
+				}
+				l_actorName = m_actors.name[l_indexActor];
+			}
+			ret.push_back( l_actorName );
+		}
+	}
+
+	return ret;
+}
+
 void CPhysXManager::update(float dt)
 {
 	m_elapsedTime += dt;
