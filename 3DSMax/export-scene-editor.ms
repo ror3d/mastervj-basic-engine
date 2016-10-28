@@ -7,7 +7,7 @@ struct script_property_array_val_t (type, val)
 global g_Scripts = #()
 global g_CurrentScript = 0
 
-rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
+rollout ScriptPropertiesEditor "Script Properties" width:536 height:296
 (
 	local property_value_types = #("string", "number", "boolean", "array")
 	local array_value_types = #("string", "number", "boolean")
@@ -15,11 +15,11 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 	button save_btn "Save" pos:[101,256] width:96 height:32
 	button cancel_btn "Cancel" pos:[213,256] width:96 height:32
 	radiobuttons type_radio "Type" pos:[184,24] width:61 height:78 enabled:true labels:#("string", "number", "boolean", "array") columns:1
-	GroupBox grp14 "Scalar Value" pos:[256,24] width:168 height:40
-	edittext scalar_value_txt "" pos:[264,40] width:152 height:16
-	GroupBox grp15 "Array Value" pos:[256,72] width:168 height:176
-	listbox array_values_list "" pos:[264,136] width:152 height:7
-	edittext array_value_value_txt "" pos:[344,88] width:72 height:16
+	GroupBox grp14 "Scalar Value" pos:[256,24] width:272 height:40
+	edittext scalar_value_txt "" pos:[264,40] width:256 height:16
+	GroupBox grp15 "Array Value" pos:[256,72] width:272 height:176
+	listbox array_values_list "" pos:[264,136] width:256 height:7
+	edittext array_value_value_txt "" pos:[344,88] width:176 height:16
 	dropdownList array_value_type_ddl "" pos:[264,88] width:72 height:21 items:#("string", "number", "boolean")
 	button array_add_btn "Add" pos:[280,112] width:56 height:16
 	button array_remove_btn "Remove" pos:[352,112] width:56 height:16

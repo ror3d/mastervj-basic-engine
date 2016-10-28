@@ -52,10 +52,25 @@ fn CollectCoresAndInstances = (
 				local isCore = true
 				for j = 1 to g_allCores.count do
 				(
+					local l_otherCoreName = getUserProp g_allCores[j] "export_core_name"
 					if areNodesInstances g_allCores[j] $*[i] then
-					(
+					( -- If they are instances, we don't continue
 						isCore = false
 						break
+					)
+					else if l_thisCoreName == l_otherCoreName then
+					( -- If not instances but name coincides, we remove our name and stop
+						-- or change the other's name and continue
+						if l_thisCoreName == $*[i].name then
+						( -- We have to change the other's name
+							setUserProp g_allCores[j] "export_core_name" g_allCores[j].name
+							-- we continue to search for an instance
+						)
+						else --if l_otherCoreName == g_allCores[j].name then
+						( -- We remove our name
+							setUserProp $*[i] "export_core_name" $*[i].name
+							-- we continue to search for an instance
+						) 
 					)
 				)
 				if isCore then
