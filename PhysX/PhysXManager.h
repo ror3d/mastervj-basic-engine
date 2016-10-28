@@ -106,6 +106,7 @@ public:
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
 	bool RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition);
+	bool RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition, Vect3f& out_normal);
 	std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance, std::string objectToAvoid);
 
 	std::vector<std::string> overlapSphere( Vect3f position, float radius );

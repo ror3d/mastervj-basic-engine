@@ -612,7 +612,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.height = height;
 	desc.radius = radius;
 	desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
-	desc.slopeLimit = cosf(3.1415f / 3); //60º
+	desc.slopeLimit = cosf(3.1415f / 4); //45º
 	desc.stepOffset = 0.3f * (height + 2*radius);
 	desc.density = density;
 	desc.reportCallback = dynamic_cast<CPhysXManagerImplementation*>(this);
@@ -652,7 +652,9 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 
 	cct->move(v(displacement), 0.0001, elapsedTime, filters);
 
-	if ( stickToGround )
+	Vect3f xz = displacement;
+	xz.y = 0;
+	if ( xz.SquaredLength() > 0 && stickToGround )
 	{
 		physx::PxCapsuleController* cc = (physx::PxCapsuleController*)( cct );
 		if ( cc != nullptr && grounded )
@@ -660,22 +662,28 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 			// Get new position
 			auto pos = cct->getFootPosition();
 
-			// Get CCT height, radius, max ramp slope
-			auto maxSlope = cc->getSlopeLimit();
-			auto l = (pos - prevPos).magnitude() * sin(maxSlope);
-
-			// See if there is ground at a distance that is
-			//   the new position - slope offset
-			Vect3f hit;
-			if ( l > 0 && RayCast( v( pos ), Vect3f( 0, -1, 0 ), l, hit ) )
+			if ( prevPos.y + 0.00001 >= pos.y )
 			{
-				// If there is ground, move to that position
-				if ( pos.y > hit.y + 0.00001 )
+			// Get CCT height, radius, max ramp slope
+				auto maxSlope = cc->getSlopeLimit();
+				if ( maxSlope > 0 )
 				{
-					auto d = hit - v( pos );
-					d.x = d.z = 0;
-					OutputDebugStringA( ( "<" + std::to_string( d.x ) + ", " + std::to_string( d.y ) + ", " + std::to_string( d.z ) + ">\n" ).c_str() );
-					cct->move( v( d ), 0.0001, 0.00001, filters );
+					auto l = ( pos - prevPos ).magnitude() * tan( acos( maxSlope ) );
+
+					// See if there is ground at a distance that is
+					//   the new position - slope offset
+					Vect3f hit;
+					if ( l > 0 && RayCast( v( pos ), Vect3f( 0, -1, 0 ), l, hit ) )
+					{
+						// If there is ground, move to that position
+						if ( pos.y > hit.y + 0.00001 )
+						{
+							auto d = hit - v( pos );
+							d.x = d.z = 0;
+							OutputDebugStringA( ( "<" + std::to_string( d.x ) + ", " + std::to_string( d.y ) + ", " + std::to_string( d.z ) + ">\n" ).c_str() );
+							cct->move( v( d ), 0.0001, 0.00001, filters );
+						}
+					}
 				}
 			}
 		}
@@ -702,7 +710,31 @@ bool CPhysXManager::isCharacterControllerGrounded( const std::string &name )
 
 	physx::PxControllerState state;
 	cct->getState( state );
-	return state.touchedActor != nullptr;
+	bool grounded = state.touchedActor != nullptr && state.collisionFlags & physx::PxControllerCollisionFlag::eCOLLISION_DOWN;
+
+	if ( cct != nullptr && grounded )
+	{
+		// Get new position
+		auto pos = cct->getFootPosition();
+
+		// Get CCT height, radius, max ramp slope
+		auto maxSlope = cct->getSlopeLimit();
+
+		// See if there is ground at a distance that is
+		//   the new position - slope offset
+		Vect3f hit;
+		Vect3f normal;
+		if ( RayCast( v( pos ) + Vect3f(0, 0.1, 0), Vect3f( 0, -1, 0 ), 1, hit, normal ) )
+		{
+			// If there is ground, move to that position
+			if ( normal.SquaredLength() > 0.5 && ( normal * Vect3f( 0, 1, 0 ) ) < maxSlope )
+			{
+				grounded = false;
+			}
+		}
+	}
+
+	return grounded;
 }
 
 void CPhysXManager::resizeCharacterController( const std::string & name, float height, float radius )
@@ -743,7 +775,13 @@ void CPhysXManager::releaseCharacterControllers(){
 }
 
 
-bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition)
+bool CPhysXManager::RayCast( Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition )
+{
+	Vect3f tmp;
+	return RayCast( origin, direction, distance, out_hitPosition, tmp );
+}
+
+bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition, Vect3f& out_normal)
 {
 	physx::PxRaycastBuffer hit;                 // [out] Raycast results
 
@@ -777,6 +815,7 @@ bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vec
 	if ( status )
 	{
 		out_hitPosition = v( hit.block.position );
+		out_normal = v( hit.block.normal );
 		return true;
 	}
 	else
