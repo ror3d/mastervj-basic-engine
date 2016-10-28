@@ -71,7 +71,11 @@ void CApplication::Update(float _ElapsedTime)
 
 	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CCamera l_Camera = { };
-	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController()->UpdateCameraValues(&l_Camera);
+	auto camController = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
+	if ( camController )
+	{
+		camController->UpdateCameraValues( &l_Camera );
+	}
 	CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
 
 
@@ -100,13 +104,16 @@ void CApplication::Update(float _ElapsedTime)
 
 void CApplication::Render()
 {
-	auto renderer = CEngine::GetSingleton().getRenderer();
+	if ( CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController() != nullptr )
+	{
+		auto renderer = CEngine::GetSingleton().getRenderer();
 
-	renderer->BeginRender();
+		renderer->BeginRender();
 
-	CEngine::GetSingleton().getComponentManager()->Render(*m_ContextManager);
+		CEngine::GetSingleton().getComponentManager()->Render( *m_ContextManager );
 
-	CEngine::GetSingleton().getSceneRendererCommandManager()->Execute(*m_ContextManager);
+		CEngine::GetSingleton().getSceneRendererCommandManager()->Execute( *m_ContextManager );
 
-	renderer->EndRender();
+		renderer->EndRender();
+	}
 }

@@ -36,7 +36,10 @@ void CCameraManager::Load( const std::string & file )
 void CCameraManager::Update( float ElapsedTime )
 {
 	auto cc = get( m_currentCameraControllerName );
-	cc->Update( ElapsedTime );
+	if ( cc )
+	{
+		cc->Update( ElapsedTime );
+	}
 }
 
 void CCameraManager::SetMatrixes()
