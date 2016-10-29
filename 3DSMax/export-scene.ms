@@ -158,7 +158,13 @@ fn createSceneFile sceneName gameObjects = (
 		exportComp = getUserProp gObj "ExportParticleSC"
 		if exportComp != undefined then (
 			local peClass = getUserProp gObj "ParticleSCClass"
-			format "\t\t<particle_emitter class=\"%\" />\n" peClass to: file
+			local collide = getUserProp gObj "ParticleSCCollisions"
+			local collisions_step = ""
+			if collide != undefined and (collide as integer) != 0 then
+			(
+				collisions_step = "collisions_step=\"" + (collide as string) + "\" "
+			)
+			format "\t\t<particle_emitter class=\"%\" %/>\n" peClass collisions_step to: file
 		)
 		
 		exportComp = getUserProp gObj "ExportTAnimation"
