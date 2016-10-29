@@ -3,6 +3,8 @@
 
 #include <d3d11.h>
 
+#include <chrono>
+
 // TODO: Activar AntTeakBar
 //#include <AntTweakBar.h>
 
@@ -38,7 +40,7 @@
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
 #include <Core/Scene/SceneManager.h>
-
+#include <Video/Player.h>
 
 #include <AntTweakBar.h>
 
@@ -48,6 +50,8 @@
 #define HEIGHT 540
 
 #define APPLICATION_NAME	"VIDEOGAME"
+
+void OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr);
 
 void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
 {
@@ -174,6 +178,11 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				context.Resize(hWnd, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
 				// TODO: Resetear el AntTeakBar
 				TwWindowSize((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+
+				if (CEngine::GetSingleton().getPlayerManager() != NULL)
+				{
+					CEngine::GetSingleton().getPlayerManager()->ResizeVideo((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+				}
 			}
 			return 0;
 		case WM_DESTROY:
@@ -181,11 +190,16 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			PostQuitMessage(0);
 			return 0;
 		}
+
+		case WM_APP_PLAYER_EVENT:
+		{
+			OnPlayerEvent(hWnd, wParam);
+			break;
+		}
 		break;
 	}//end switch( msg )
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
-
 
 //-----------------------------------------------------------------------
 // WinMain
@@ -223,6 +237,13 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
+	CPlayer *videoPlayer = NULL;
+
+	// Initialize the player object.
+	HRESULT hr = CPlayer::CreateInstance(hWnd, hWnd, &videoPlayer);
+
+	CEngine::GetSingleton().setPlayerManager(videoPlayer);
+
 	engine.getTextureManager()->Init();
 	engine.getDebugRender()->Init();
 	engine.getEffectsManager()->load("Data\\effects.xml");
@@ -236,10 +257,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getSceneRendererCommandManager()->Load("Data\\scene_renderer_commands.xml");
 	engine.getSceneManager()->Initialize("Data\\Scenes\\");
 	engine.getSoundManager()->InitAll("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
-
-
-
-
 
 	context.CreateBackBuffer(hWnd, WIDTH, HEIGHT);
 	{
@@ -267,9 +284,11 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		ZeroMemory(&msg, sizeof(msg));
 
 		// Añadir en el while la condición de salida del programa de la aplicación
-		DWORD m_PreviousTime = timeGetTime();
+		auto previousTime = std::chrono::high_resolution_clock::now();
 
 		bool hasFocus = true;
+
+		bool first = true;
 
 		while (msg.message != WM_QUIT)
 		{
@@ -283,16 +302,30 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 			}
 			else
 			{
-				inputManager.BeginFrame();
+				if (! CEngine::GetSingleton().getPlayerManager()->IsVideoPlaying())
+				{
+					inputManager.BeginFrame();
 
-				DWORD l_CurrentTime = timeGetTime();
-				float l_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
-				CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
-				m_PreviousTime = l_CurrentTime;
+					auto now = std::chrono::high_resolution_clock::now();
+					double l_ElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>( ( now - previousTime ) ).count() * 0.000001;
+					CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
+					previousTime = now;
 
-				application.Update(l_ElapsedTime);
-				application.Render();
-				inputManager.EndFrame();
+					application.Update(l_ElapsedTime);
+					application.Render();
+					inputManager.EndFrame();
+				}
+				else
+				{
+					inputManager.BeginFrame();
+
+					if (inputManager.IsActionActive("MOUSE_PRESSED"))
+					{
+						CEngine::GetSingleton().getPlayerManager()->Stop();
+					}
+
+					inputManager.EndFrame();
+				}
 			}
 		}
 	}
@@ -300,6 +333,12 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	CEngine::ReleaseSingleton();
 	UnregisterClass(APPLICATION_NAME, wc.hInstance);
 	return 0;
+}
+
+// Handler for Media Session events.
+void OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr)
+{
+	HRESULT hr = CEngine::GetSingleton().getPlayerManager()->HandleEvent(pUnkPtr);
 }
 
 

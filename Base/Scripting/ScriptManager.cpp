@@ -28,6 +28,7 @@
 #include <Core/Scene/Scene.h>
 #include <Core/Scene/SceneManager.h>
 #include <Core/Scene/Element.h>
+#include <Video/Player.h>
 
 #include "LuaErrorCapture.h"
 
@@ -298,6 +299,7 @@ void CScriptManager::RegisterLUAFunctions()
 		"Play", &CSpeakerComponent::Play,
 		"Finished", &CSpeakerComponent::Finished,
 		"SetSwitch", &CSpeakerComponent::SetSwitch,
+		"SetVolume", &CSpeakerComponent::SetVolume,
 		"Stop", &CSpeakerComponent::Stop
 		);
 
@@ -416,6 +418,10 @@ void CScriptManager::RegisterLUAFunctions()
 	( *m_state )["CMaterialManager"].SetObj(
 		*CEngine::GetSingleton().getMaterialManager(),
 		"LoadMaterialsFile", &CMaterialManager::load);
+
+	(*m_state)["CPlayerManager"].SetObj(
+		*CEngine::GetSingleton().getPlayerManager(),
+		"LoadVideo", &CPlayer::LoadVideo);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

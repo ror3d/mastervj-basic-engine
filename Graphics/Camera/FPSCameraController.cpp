@@ -101,7 +101,7 @@ void CFPSCameraController::Update( float ElapsedTime )
 	offsettedPosition.y += m_CameraOffset.y;
 
 
-	Vect3f posWithoutCollision = m_TargetPosition + rot * Vect3f(0, 0, m_CameraOffset.z);
+	Vect3f posWithoutCollision = m_TargetPosition + rot * Vect3f(0, 0, m_CameraOffset.z) + Vect3f(0, m_CameraOffset.y, 0);
 
 	Vect3f posWithCollision;
 

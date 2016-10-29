@@ -13,7 +13,7 @@ public:
 	CAnimatedInstanceComponent(CXMLTreeNode& node, CElement* Owner);
 	~CAnimatedInstanceComponent();
 
-	void Update(float ElapsedTime);
+	void Update(double ElapsedTime);
 	void Render(CContextManager&  _context);
 	void Destroy();
 

@@ -11,6 +11,8 @@
 #include "Renderable/RenderableObjectTechnique.h"
 #include "Effect/EffectGeometryShader.h"
 
+#include <PhysX/PhysXManager.h>
+
 #include <algorithm>
 
 std::random_device rnd;
@@ -80,11 +82,6 @@ CParticleSystemInstance::~CParticleSystemInstance()
 
 void CParticleSystemInstance::Update(float ElapsedTime)
 {
-	if (!m_enabled)
-	{
-		return;
-	}
-
 	// Update existing particles
 	for (int i = 0; i < m_activeParticles; ++i)
 	{
@@ -105,7 +102,7 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 		if (m_particleSystemClass->numFrames > 0)
 		{
 			p.currentFrame = p.lifetime * m_particleSystemClass->numFrames;
-			
+
 			if (m_particleSystemClass->colorInterpolation)
 			{
 				CColor c1 = m_particleSystemClass->color.first.toHSL();
@@ -127,30 +124,38 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 	size_t n = std::floorf(m_toCreateParticles);
 	m_toCreateParticles -= n;
 
-	// Create new particles
-	for (int i = 0; i < n && m_activeParticles < MAX_PARTICLES_PER_EMITTER; ++i)
-	{
-		ParticleData &p = m_particles[m_activeParticles];
-		m_activeParticles++;
+	Mat44f rot;
+	rot.SetIdentity();
+	rot.SetRotByQuat( m_startSpeedRotation );
 
-		p.pos = GetPosition();
-		p.vel = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startVelocity);
-		p.acc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->acceleration);
-		p.size = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->size);
-		p.angle = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startAngle);
-		p.angularSpeed = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->angleSpeed);
-		p.angularAcc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->angleAcceleration);
-		p.currentFrame = 0;
-		p.lifetime = 0;
-		p.totalLifetime = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->life);
-		
-		if (m_particleSystemClass->colorInterpolation)
+	if (m_enabled)
+	{
+		// Create new particles
+		for (int i = 0; i < n && m_activeParticles < MAX_PARTICLES_PER_EMITTER; ++i)
 		{
-			p.color = m_particleSystemClass->color.first;
-		}
-		else
-		{
-			p.color = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->color);
+			ParticleData &p = m_particles[m_activeParticles];
+			m_activeParticles++;
+
+			p.pos = GetPosition();
+			p.vel = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startVelocity);
+			p.vel = rot*p.vel;
+			p.acc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->acceleration);
+			p.size = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->size);
+			p.angle = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startAngle);
+			p.angularSpeed = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->angleSpeed);
+			p.angularAcc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->angleAcceleration);
+			p.currentFrame = 0;
+			p.lifetime = 0;
+			p.totalLifetime = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->life);
+
+			if (m_particleSystemClass->colorInterpolation)
+			{
+				p.color = m_particleSystemClass->color.first;
+			}
+			else
+			{
+				p.color = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->color);
+			}
 		}
 	}
 
@@ -177,10 +182,6 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 
 void CParticleSystemInstance::Render(CContextManager *_context)
 {
-	if (!m_enabled)
-	{
-		return;
-	}
 	auto devCtx = _context->GetDeviceContext();
 	m_vertexs->UpdateVertices(devCtx, m_particleVtxs, m_activeParticles);
 
@@ -190,4 +191,37 @@ void CParticleSystemInstance::Render(CContextManager *_context)
 	material->apply();
 
 	m_vertexs->Render(_context, technique);
+}
+
+std::vector<std::string> CParticleSystemInstance::CheckCollisions( unsigned int step )
+{
+	std::set<std::string> retSet;
+	auto pm = CEngine::GetSingleton().getPhysXManager();
+	std::vector<size_t> toDelete;
+
+	for ( size_t i = 0; i < m_activeParticles; i += step )
+	{
+		ParticleData &p = m_particles[i];
+
+		std::vector<std::string> hits = pm->overlapSphere( p.pos, p.size / 2 );
+		retSet.insert( hits.begin(), hits.end() );
+
+		if ( hits.size() > 0 )
+		{
+			toDelete.push_back( i );
+		}
+	}
+
+	for ( int i = toDelete.size() - 1; i >= 0; --i )
+	{
+		size_t j = toDelete[i];
+		m_activeParticles--;
+		if ( j < m_activeParticles )
+		{
+			m_particles[j] = m_particles[m_activeParticles];
+		}
+	}
+
+	std::vector<std::string> ret( retSet.begin(), retSet.end() );
+	return ret;
 }

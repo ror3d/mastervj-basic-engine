@@ -7,7 +7,7 @@ struct script_property_array_val_t (type, val)
 global g_Scripts = #()
 global g_CurrentScript = 0
 
-rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
+rollout ScriptPropertiesEditor "Script Properties" width:536 height:296
 (
 	local property_value_types = #("string", "number", "boolean", "array")
 	local array_value_types = #("string", "number", "boolean")
@@ -15,11 +15,11 @@ rollout ScriptPropertiesEditor "Script Properties" width:432 height:296
 	button save_btn "Save" pos:[101,256] width:96 height:32
 	button cancel_btn "Cancel" pos:[213,256] width:96 height:32
 	radiobuttons type_radio "Type" pos:[184,24] width:61 height:78 enabled:true labels:#("string", "number", "boolean", "array") columns:1
-	GroupBox grp14 "Scalar Value" pos:[256,24] width:168 height:40
-	edittext scalar_value_txt "" pos:[264,40] width:152 height:16
-	GroupBox grp15 "Array Value" pos:[256,72] width:168 height:176
-	listbox array_values_list "" pos:[264,136] width:152 height:7
-	edittext array_value_value_txt "" pos:[344,88] width:72 height:16
+	GroupBox grp14 "Scalar Value" pos:[256,24] width:272 height:40
+	edittext scalar_value_txt "" pos:[264,40] width:256 height:16
+	GroupBox grp15 "Array Value" pos:[256,72] width:272 height:176
+	listbox array_values_list "" pos:[264,136] width:256 height:7
+	edittext array_value_value_txt "" pos:[344,88] width:176 height:16
 	dropdownList array_value_type_ddl "" pos:[264,88] width:72 height:21 items:#("string", "number", "boolean")
 	button array_add_btn "Add" pos:[280,112] width:56 height:16
 	button array_remove_btn "Remove" pos:[352,112] width:56 height:16
@@ -275,7 +275,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	GroupBox grp21 "Scripts" pos:[24,304] width:200 height:216
 	GroupBox grp22 "Camera" pos:[232,304] width:200 height:80
 	GroupBox grp23 "Character Controller" pos:[232,392] width:200 height:128
-	GroupBox grp24 "Particle Emitter" pos:[440,328] width:200 height:88
+	GroupBox grp24 "Particle Emitter" pos:[440,288] width:200 height:128
 	--label lbl34 "Offset" pos:[248,336] width:80 height:16
 	--edittext cam_offset_x_txt "x" pos:[256,352] width:48 height:16 enabled:false
 	--edittext cam_offset_y_txt "y" pos:[312,352] width:48 height:16 enabled:false
@@ -304,9 +304,9 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	local CinematicsLoopTypes = #("Cycle", "Reverse", "One-Shot")
 	radiobuttons cinematic_type_radio "" pos:[248,592] width:68 height:48 enabled:false labels:#("Cycle", "Reverse", "One-Shot") columns:1
 	checkbox cinem_playStart_ckb "Play At Start" pos:[248,642] width:109 height:18
-	checkbox export_particle_ckb "Export Emitter" pos:[448,344] width:152 height:16
-	label lbl43 "Emitter Class" pos:[464,368] width:112 height:16
-	edittext emitter_class_txt "" pos:[464,384] width:144 height:16
+	checkbox export_particle_ckb "Export Emitter" pos:[448,304] width:152 height:16
+	label lbl43 "Emitter Class" pos:[464,328] width:112 height:16
+	edittext emitter_class_txt "" pos:[464,344] width:144 height:16
 	GroupBox grp49 "Audio Speaker" pos:[440,424] width:200 height:96
 	checkbox export_speaker_ckb "Export Speaker" pos:[448,440] width:152 height:16
 	spinner speaker_volume_txt "Volume" pos:[489,464] width:95 height:16 enabled:false range:[0,100,100] type:#integer
@@ -314,6 +314,11 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	
 	GroupBox grp14 "Spawn" pos:[430,553] width:200 height:45
 	checkbox export_spawn_ckb "Export As Spawn" pos:[440,569] width:152 height:16
+
+	button reset_btn "Reset" pos:[576,680] width:80 height:40
+	button remove_script_btn "Remove" pos:[32,456] width:56 height:21
+	label lbl8 "Emitter Collision" pos:[464,368] width:88 height:16
+	spinner emitter_collisions_spn "" pos:[474,384] width:96 height:16 type:#integer scale:1 range:[0,50,0]
 	
 	
 	local m_ObjSelected = undefined
@@ -393,6 +398,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		speaker_volume_txt.enabled = eSpeak
 		
 		emitter_class_txt.enabled = ePart
+		emitter_collisions_spn.enabled = ePart
 		
 		cinematic_type_radio.enabled = export_cinem_ckb.checked
 		cinem_playStart_ckb.enabled = export_cinem_ckb.checked
@@ -447,6 +453,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 
 		export_particle_ckb.checked = false
 		emitter_class_txt.text = ""
+		emitter_collisions_spn.value = 0
 
 
 		scripts_combo.text = ""
@@ -547,6 +554,18 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		(
 			deleteUserProp obj propName
 		)
+	)
+	
+	fn LoadSpinnerProp spn propName = (
+		local val = getUserProp m_ObjSelected propName
+		if val != undefined then
+		(
+			spn.value = val as float
+		)
+	)
+	
+	fn SaveSpinnerProp obj spn propName = (
+		setUserProp obj propName spn.value
 	)
 	
 	fn LoadRadioProp radio arr propName = (
@@ -678,8 +697,9 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		LoadCkbProp export_particle_ckb "ExportParticleSC"
 		LoadTxtProp emitter_class_txt "ParticleSCClass"
+		LoadSpinnerProp emitter_collisions_spn "ParticleSCCollisions"
 		
-		-- TODO: Scripts
+		-- Scripts
 		
 		LoadCkbProp export_light_ckb "ExportAsLight"
 		
@@ -755,8 +775,9 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		SaveCkbProp Obj export_particle_ckb "ExportParticleSC"
 		SaveTxtProp Obj emitter_class_txt "ParticleSCClass"
+		SaveSpinnerProp Obj emitter_collisions_spn "ParticleSCCollisions"
 		
-		-- TODO: Export scripts
+		-- Export scripts
 		
 		SaveCkbProp Obj export_light_ckb "ExportAsLight"
 		
@@ -783,18 +804,6 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			LoadObjectProps()
 		)
 	)
-
-	
-	
-	
-	
-	
-	
-	button reset_btn "Reset" pos:[576,680] width:80 height:40
-	button remove_script_btn "Remove" pos:[32,456] width:56 height:21
-	
-	
-	
 	
 	
 	on ExportSceneEditor open do

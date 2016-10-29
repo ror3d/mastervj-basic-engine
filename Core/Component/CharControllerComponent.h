@@ -22,13 +22,13 @@ public:
 	CCharacterControllerComponent(const CCharacterControllerComponent& base, CElement* Owner);
 	virtual ~CCharacterControllerComponent();
 
-	virtual void FixedUpdate( float ElapsedTime );
+	virtual void FixedUpdate( double ElapsedTime );
 
 	virtual void Destroy();
 
 	bool IsGrounded();
 
-	void Move(const Vect3f& displacement, const Vect3f& up, float elapsedTime);
+	Vect3f Move(const Vect3f& displacement, const Vect3f& up, float elapsedTime);
 
 	void SetPosition(const Vect3f& pos);
 

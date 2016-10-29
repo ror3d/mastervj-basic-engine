@@ -31,8 +31,8 @@ public:
 	CScriptedComponent(CXMLTreeNode& node, CElement* Owner);
 	virtual ~CScriptedComponent();
 
-	virtual void Update(float ElapsedTime);
-	virtual void FixedUpdate(float ElapsedTime);
+	virtual void Update(double ElapsedTime);
+	virtual void FixedUpdate(double ElapsedTime);
 	virtual void Render(CContextManager&  _context);
 	virtual void RenderDebug(CContextManager&  _context);
 

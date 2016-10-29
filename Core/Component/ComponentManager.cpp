@@ -35,7 +35,7 @@ void CComponentManager::PhysxUpdate()
 	}
 }
 
-void CComponentManager::FixedUpdate(float ElapsedTime)
+void CComponentManager::FixedUpdate(double ElapsedTime)
 {
 	for (auto it = m_components.begin(); it != m_components.end(); it++)
 	{
@@ -50,7 +50,7 @@ void CComponentManager::FixedUpdate(float ElapsedTime)
 	DestroyRemovedComponents();
 }
 
-void CComponentManager::Update( float ElapsedTime )
+void CComponentManager::Update( double ElapsedTime )
 {
 	for ( auto &const ca : m_componentsToAdd )
 	{

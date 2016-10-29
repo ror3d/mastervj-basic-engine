@@ -47,7 +47,7 @@ void CCharacterControllerComponent::Destroy()
 }
 
 
-void CCharacterControllerComponent::FixedUpdate(float ElapsedTime)
+void CCharacterControllerComponent::FixedUpdate(double ElapsedTime)
 {
 }
 
@@ -56,9 +56,12 @@ bool CCharacterControllerComponent::IsGrounded()
 	return CEngine::GetSingleton().getPhysXManager()->isCharacterControllerGrounded( getName() );
 }
 
-void CCharacterControllerComponent::Move(const Vect3f& displacement, const Vect3f& up, float elapsedTime)
+Vect3f CCharacterControllerComponent::Move(const Vect3f& displacement, const Vect3f& up, float elapsedTime)
 {
+	Vect3f d = GetOwner()->GetPosition();
 	GetOwner()->SetPosition(CEngine::GetSingleton().getPhysXManager()->moveCharacterController( displacement, up, elapsedTime, getName(), m_stickToGround ) + m_offset);
+	d = GetOwner()->GetPosition() - d;
+	return d;
 }
 
 void CCharacterControllerComponent::SetPosition(const Vect3f& pos)

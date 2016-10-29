@@ -8,7 +8,7 @@
 
 #define USE_PHYSX_DEBUG 1
 
-#define PHYSX_UPDATE_STEP (1/60.f)
+#define PHYSX_UPDATE_STEP (1/60.0)
 
 class CRenderableVertexs;
 
@@ -106,7 +106,10 @@ public:
 	std::map<std::string, physx::PxController*> getCharControllers(){ return m_CharacterControllers;  }
 
 	bool RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition);
+	bool RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition, Vect3f& out_normal);
 	std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float distance, std::string objectToAvoid);
+
+	std::vector<std::string> overlapSphere( Vect3f position, float radius );
 
 	std::set<std::string> getTriggerCollisions(const std::string& triggerName) { return m_TriggerCollisions[triggerName]; }
 
@@ -122,7 +125,6 @@ public:
 	bool loadCookedMesh(const std::string& fname, std::vector<uint8>& outCookedData);
 
 	bool saveCookedMeshToFile(const std::vector<uint8>& inCookedData, const std::string& fname);
-
 
 	void destroy() {}
 

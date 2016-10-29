@@ -92,7 +92,7 @@ if exist $(SolutionDir)bin\lib\lua_d.dll  xcopy /y /f $(SolutionDir)bin\lib\lua_
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatWarningAsError>false</TreatWarningAsError>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)/Base;$(SolutionDir)/Core;$(SolutionDir)/Graphics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)/Base;$(SolutionDir)/Core;$(SolutionDir)/Graphics;$(SolutionDir)/Video;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

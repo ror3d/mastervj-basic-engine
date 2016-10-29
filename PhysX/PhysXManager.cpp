@@ -236,7 +236,12 @@ void CPhysXManagerImplementation::onTrigger(physx::PxTriggerPair *pairs, physx::
 		{
 			//OutputDebugStringA("Hola!\n");
 			//CEngine::GetSingleton().getTriggerManager()->Activate(l_triggerName);
-			m_TriggerCollisions[l_triggerName].emplace(l_actorName);
+			physx::PxShape *shape;
+			pairs[i].otherActor->getShapes( &shape, 1 );
+			if ( shape && !shape->getFlags().isSet(physx::PxShapeFlag::eTRIGGER_SHAPE) )
+			{
+				m_TriggerCollisions[l_triggerName].emplace(l_actorName);
+			}
 		}
 		if (pairs[i].status & ( physx::PxPairFlag::eNOTIFY_TOUCH_LOST
 								| physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER
@@ -645,7 +650,9 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 
 	cct->move(v(displacement), 0.0001, elapsedTime, filters);
 
-	if ( stickToGround )
+	Vect3f xz = displacement;
+	xz.y = 0;
+	if ( xz.SquaredLength() > 0 && stickToGround )
 	{
 		physx::PxCapsuleController* cc = (physx::PxCapsuleController*)( cct );
 		if ( cc != nullptr && grounded )
@@ -653,22 +660,28 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 			// Get new position
 			auto pos = cct->getFootPosition();
 
-			// Get CCT height, radius, max ramp slope
-			auto maxSlope = cc->getSlopeLimit();
-			auto l = (pos - prevPos).magnitude() * sin(maxSlope);
-
-			// See if there is ground at a distance that is
-			//   the new position - slope offset
-			Vect3f hit;
-			if ( l > 0 && RayCast( v( pos ), Vect3f( 0, -1, 0 ), l, hit ) )
+			if ( prevPos.y + 0.00001 >= pos.y )
 			{
-				// If there is ground, move to that position
-				if ( pos.y > hit.y + 0.00001 )
+			// Get CCT height, radius, max ramp slope
+				auto maxSlope = cc->getSlopeLimit();
+				if ( maxSlope > 0 )
 				{
-					auto d = hit - v( pos );
-					d.x = d.z = 0;
-					OutputDebugStringA( ( "<" + std::to_string( d.x ) + ", " + std::to_string( d.y ) + ", " + std::to_string( d.z ) + ">\n" ).c_str() );
-					cct->move( v( d ), 0.0001, 0.00001, filters );
+					auto l = ( pos - prevPos ).magnitude() * tan( acos( maxSlope ) );
+
+					// See if there is ground at a distance that is
+					//   the new position - slope offset
+					Vect3f hit;
+					if ( l > 0 && RayCast( v( pos ), Vect3f( 0, -1, 0 ), l, hit ) )
+					{
+						// If there is ground, move to that position
+						if ( pos.y > hit.y + 0.00001 )
+						{
+							auto d = hit - v( pos );
+							d.x = d.z = 0;
+							OutputDebugStringA( ( "<" + std::to_string( d.x ) + ", " + std::to_string( d.y ) + ", " + std::to_string( d.z ) + ">\n" ).c_str() );
+							cct->move( v( d ), 0.0001, 0.00001, filters );
+						}
+					}
 				}
 			}
 		}
@@ -695,7 +708,31 @@ bool CPhysXManager::isCharacterControllerGrounded( const std::string &name )
 
 	physx::PxControllerState state;
 	cct->getState( state );
-	return state.touchedActor != nullptr;
+	bool grounded = state.touchedActor != nullptr && state.collisionFlags & physx::PxControllerCollisionFlag::eCOLLISION_DOWN;
+
+	if ( cct != nullptr && grounded )
+	{
+		// Get new position
+		auto pos = cct->getFootPosition();
+
+		// Get CCT height, radius, max ramp slope
+		auto maxSlope = cct->getSlopeLimit();
+
+		// See if there is ground at a distance that is
+		//   the new position - slope offset
+		Vect3f hit;
+		Vect3f normal;
+		if ( RayCast( v( pos ) + Vect3f(0, 0.1, 0), Vect3f( 0, -1, 0 ), 1, hit, normal ) )
+		{
+			// If there is ground, move to that position
+			if ( normal.SquaredLength() > 0.5 && ( normal * Vect3f( 0, 1, 0 ) ) < maxSlope )
+			{
+				grounded = false;
+			}
+		}
+	}
+
+	return grounded;
 }
 
 void CPhysXManager::resizeCharacterController( const std::string & name, float height, float radius )
@@ -736,7 +773,13 @@ void CPhysXManager::releaseCharacterControllers(){
 }
 
 
-bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition)
+bool CPhysXManager::RayCast( Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition )
+{
+	Vect3f tmp;
+	return RayCast( origin, direction, distance, out_hitPosition, tmp );
+}
+
+bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vect3f& out_hitPosition, Vect3f& out_normal)
 {
 	physx::PxRaycastBuffer hit;                 // [out] Raycast results
 
@@ -770,6 +813,7 @@ bool CPhysXManager::RayCast(Vect3f origin, Vect3f direction, float distance, Vec
 	if ( status )
 	{
 		out_hitPosition = v( hit.block.position );
+		out_normal = v( hit.block.normal );
 		return true;
 	}
 	else
@@ -835,6 +879,48 @@ std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float di
 	{
 		return "";
 	}
+}
+
+std::vector<std::string> CPhysXManager::overlapSphere( Vect3f position, float radius )
+{
+	physx::PxSphereGeometry sphere(radius);
+	physx::PxTransform transf(v(position));
+	physx::PxOverlapBuffer overlaps;
+
+	std::vector<std::string> ret;
+
+	if ( m_Scene->overlap( sphere, transf, overlaps, physx::PxQueryFilterData( physx::PxQueryFlag::eSTATIC
+																			   | physx::PxQueryFlag::eDYNAMIC
+																			   | physx::PxQueryFlag::eANY_HIT ) ) )
+	{
+		for ( uint32 i = 0; i < overlaps.getNbAnyHits(); ++i )
+		{
+			const physx::PxOverlapHit &hit = overlaps.getAnyHit( i );
+
+			size_t l_indexActor = (size_t)hit.actor->userData;
+
+			std::string l_actorName;
+			if ( l_indexActor & CONTROLLER_FLAG )
+			{
+				if ( m_CharacterControllerIdxs.find(l_indexActor^CONTROLLER_FLAG) == m_CharacterControllerIdxs.end() )
+				{
+					continue;
+				}
+				l_actorName = m_CharacterControllerIdxs[l_indexActor^CONTROLLER_FLAG];
+			}
+			else
+			{
+				if ( m_actors.name.size() <= l_indexActor )
+				{
+					continue;
+				}
+				l_actorName = m_actors.name[l_indexActor];
+			}
+			ret.push_back( l_actorName );
+		}
+	}
+
+	return ret;
 }
 
 void CPhysXManager::update(float dt)

@@ -15,8 +15,8 @@ public:
 	CCinematicComponent(CXMLTreeNode& node, CElement* Owner);
 	CCinematicComponent(const CCinematicComponent& base, CElement* Owner);
 	virtual ~CCinematicComponent();
-	
-	virtual void FixedUpdate( float ElapsedTime );
+
+	virtual void FixedUpdate( double ElapsedTime );
 
 	virtual void Destroy();
 

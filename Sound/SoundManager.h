@@ -71,7 +71,7 @@ public:
 	void CSoundManager::LaunchSoundEventDefaultSpeaker(std::string _string);
 	void CSoundManager::LaunchSoundEventXMLSpeaker(std::string _string, std::string &_speaker);
 	void CSoundManager::LaunchSoundEventDynamicSpeaker(std::string _string, C3DElement *_dynamicspeaker);
-	void CSoundManager::SetVolume(std::string _string, float value);
+	void CSoundManager::SetVolume(std::string _string, float value, const C3DElement*  _speaker);
 	
 };
 #endif

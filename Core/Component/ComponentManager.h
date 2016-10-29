@@ -26,8 +26,8 @@ public:
 	CComponentManager();
 	virtual ~CComponentManager();
 	void PhysxUpdate();
-	void Update(float ElapsedTime);
-	void FixedUpdate(float ElapsedTime);
+	void Update(double ElapsedTime);
+	void FixedUpdate(double ElapsedTime);
 	void Render(CContextManager  &_context);
 	void RenderDebug(CContextManager  &_context);
 	bool AddComponent(CComponent *Component);

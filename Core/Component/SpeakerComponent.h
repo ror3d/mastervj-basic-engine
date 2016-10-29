@@ -16,7 +16,7 @@ public:
 	CSpeakerComponent(const CSpeakerComponent& name, CElement* Owner);
 	virtual ~CSpeakerComponent();
 
-	virtual void Update(float ElapsedTime);
+	virtual void Update(double ElapsedTime);
 
 	virtual void Destroy();
 
@@ -24,6 +24,7 @@ public:
 	bool Finished(const std::string EventName);
 	void CSpeakerComponent::SetSwitch(const std::string SwitchValue, const std::string SwitchName);
 	void Stop();
+	void CSpeakerComponent::SetVolume(const std::string VolumeName, float volumeValue);
 
 	Vect3f m_Position;
 	Vect3f m_Orientation;
