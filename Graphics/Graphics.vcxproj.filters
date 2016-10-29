@@ -40,9 +40,6 @@
     <Filter Include="Particles">
       <UniqueIdentifier>{061a0bb3-4f2e-4ce7-a2a3-97208de56490}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CinematicsAction">
-      <UniqueIdentifier>{4b39dac3-15c1-4c01-8256-ca8fa68f6f82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Animation">
       <UniqueIdentifier>{04abb94a-7fad-4083-a7b7-f4edae1ab932}</UniqueIdentifier>
     </Filter>
@@ -243,9 +240,6 @@
     </ClInclude>
     <ClInclude Include="Particles\ParticleSystemInstance.h">
       <Filter>Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="CinematicsAction\CinematicsActionManager.h">
-      <Filter>CinematicsAction</Filter>
     </ClInclude>
     <ClInclude Include="Cinematics\CinematicManager.h">
       <Filter>Cinematic</Filter>
@@ -471,9 +465,6 @@
     </ClCompile>
     <ClCompile Include="Particles\ParticleSystemInstance.cpp">
       <Filter>Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="CinematicsAction\CinematicsActionManager.cpp">
-      <Filter>CinematicsAction</Filter>
     </ClCompile>
     <ClCompile Include="Cinematics\CinematicManager.cpp">
       <Filter>Cinematic</Filter>

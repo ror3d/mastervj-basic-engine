@@ -18,7 +18,6 @@
 #include <Core/Time/TimeManager.h>
 #include <Core/Component/ComponentManager.h>
 #include <Graphics/Particles/ParticleSystemManager.h>
-#include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/Renderer.h>
@@ -43,7 +42,6 @@ CEngine::CEngine()
 	, scriptManager(nullptr)
 	, timerManager(nullptr)
 	, componentManager(nullptr)
-	, cinematicsActionManager(nullptr)
 	, cinematicManager(nullptr)
 	, particleManager(nullptr)
 	, soundManager(nullptr)
@@ -74,7 +72,6 @@ CEngine::~CEngine()
 	CHECKED_DESTROY(timerManager);
 	CHECKED_DESTROY(particleManager);
 	CHECKED_DESTROY(cinematicManager);
-	CHECKED_DESTROY(cinematicsActionManager);
 	CHECKED_DESTROY(soundManager);
 	CHECKED_DESTROY(meshLoader);
 	CHECKED_DESTROY(animatedMeshManager);
@@ -100,7 +97,6 @@ void CEngine::Init()
 	timerManager = new CTimerManager();
 	componentManager = new CComponentManager();
 	particleManager = new CParticleSystemManager();
-	cinematicsActionManager = new CCinematicsActionManager();
 	cinematicManager = new CCinematicManager();
 	soundManager = new CSoundManager();
 	meshLoader = new CStaticMeshLoader();

@@ -36,7 +36,6 @@
 #include <Core/Component/ComponentManager.h>
 #include <Core/Component/ScriptedComponent.h>
 #include <Graphics/Particles/ParticleSystemManager.h>
-#include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
 #include <Graphics/Renderer/3DElement.h>
@@ -314,6 +313,17 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 					application.Update(l_ElapsedTime);
 					application.Render();
+					inputManager.EndFrame();
+				}
+				else
+				{
+					inputManager.BeginFrame();
+
+					if (inputManager.IsActionActive("MOUSE_PRESSED"))
+					{
+						CEngine::GetSingleton().getPlayerManager()->Stop();
+					}
+
 					inputManager.EndFrame();
 				}
 			}

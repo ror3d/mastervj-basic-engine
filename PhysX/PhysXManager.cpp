@@ -3,8 +3,6 @@
 #include <Base/Utils/Utils.h>
 #include <PxPhysicsAPI.h>
 
-#include <Graphics/CinematicsAction/CinematicsActionManager.h>
-
 #include <fstream>
 #include <iterator>
 #include <algorithm>

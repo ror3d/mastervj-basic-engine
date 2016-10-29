@@ -10,7 +10,6 @@
 #include <Graphics/Camera/Camera.h>
 #include <Graphics/Renderer/Renderer.h>
 #include <PhysX/PhysXManager.h>
-#include <Graphics/CinematicsAction/CinematicsActionManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Sound/SoundManager.h>
 
@@ -66,9 +65,7 @@ void CApplication::Update(double _ElapsedTime)
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
 
 	CEngine::GetSingleton().getComponentManager()->PhysxUpdate();
-
-	CEngine::GetSingleton().getCinematicsActionManager()->Update();
-
+	
 	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CCamera l_Camera = { };
 	auto camController = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
