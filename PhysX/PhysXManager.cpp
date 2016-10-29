@@ -612,7 +612,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 	desc.height = height;
 	desc.radius = radius;
 	desc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
-	desc.slopeLimit = cosf(3.1415f / 4); //45º
+	desc.slopeLimit = cosf(3.1415f / 3); //60º
 	desc.stepOffset = 0.3f * (height + 2*radius);
 	desc.density = density;
 	desc.reportCallback = dynamic_cast<CPhysXManagerImplementation*>(this);
