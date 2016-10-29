@@ -152,7 +152,7 @@ CPhysXManagerImplementation::CPhysXManagerImplementation()
 
 
 	physx::PxSceneDesc sceneDesc(m_PhysX->getTolerancesScale());
-	sceneDesc.gravity = physx::PxVec3(0, -9.81, 0);
+	sceneDesc.gravity = physx::PxVec3(0, -9.81*3, 0);
 	sceneDesc.cpuDispatcher = m_Dispatcher;
 	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 	sceneDesc.flags = physx::PxSceneFlag::eENABLE_ACTIVETRANSFORMS;
