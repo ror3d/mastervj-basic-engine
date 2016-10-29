@@ -316,6 +316,17 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 					application.Render();
 					inputManager.EndFrame();
 				}
+				else
+				{
+					inputManager.BeginFrame();
+
+					if (inputManager.IsActionActive("MOUSE_PRESSED"))
+					{
+						CEngine::GetSingleton().getPlayerManager()->Stop();
+					}
+
+					inputManager.EndFrame();
+				}
 			}
 		}
 	}
