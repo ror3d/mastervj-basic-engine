@@ -47,7 +47,7 @@ void CCharacterControllerComponent::Destroy()
 }
 
 
-void CCharacterControllerComponent::FixedUpdate(float ElapsedTime)
+void CCharacterControllerComponent::FixedUpdate(double ElapsedTime)
 {
 }
 

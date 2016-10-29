@@ -19,7 +19,7 @@ public:
 	CFreeCameraComponent(const CFreeCameraComponent& base, CElement* Owner);
 	virtual ~CFreeCameraComponent();
 
-	virtual void Update( float elapsedTime );
+	virtual void Update( double elapsedTime );
 
 	virtual void Destroy();
 

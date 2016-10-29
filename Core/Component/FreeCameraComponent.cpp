@@ -54,7 +54,7 @@ void CFreeCameraComponent::Reset()
 	m_camController->SetPosition( owner->GetPosition() );
 }
 
-void CFreeCameraComponent::Update(float elapsedTime)
+void CFreeCameraComponent::Update(double elapsedTime)
 {
 	if ( m_Destroyed ) return;
 	CElement *owner = GetOwner();

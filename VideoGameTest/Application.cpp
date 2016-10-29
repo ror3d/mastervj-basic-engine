@@ -45,7 +45,7 @@ CApplication::~CApplication()
 	CDebugHelper::GetDebugHelper()->Log("CApplication::~CApplication");
 }
 
-void CApplication::Update(float _ElapsedTime)
+void CApplication::Update(double _ElapsedTime)
 {
 	CEngine& engine = CEngine::GetSingleton();
 	m_Timer += _ElapsedTime;

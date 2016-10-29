@@ -13,15 +13,15 @@ public:
 	CApplication( CContextManager *_ContextManager);
 	~CApplication();
 
-	void Update(float _ElapsedTime);
+	void Update(double _ElapsedTime);
 	void Render();
 	bool activeMovAnim;
 
 	void Destroy() {/* TODO */}
 private:
 	CContextManager *m_ContextManager;
-	float m_Timer;
-	float m_FixedTimer;
+	double m_Timer;
+	double m_FixedTimer;
 	bool m_FixedCamera;
 };
 

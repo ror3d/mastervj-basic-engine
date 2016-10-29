@@ -8,7 +8,7 @@
 
 #define USE_PHYSX_DEBUG 1
 
-#define PHYSX_UPDATE_STEP (1/60.f)
+#define PHYSX_UPDATE_STEP (1/60.0)
 
 class CRenderableVertexs;
 

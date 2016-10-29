@@ -21,7 +21,7 @@ public:
 	CFPSCameraComponent(const CFPSCameraComponent& base, CElement* Owner);
 	virtual ~CFPSCameraComponent();
 
-	virtual void Update( float elapsedTime );
+	virtual void Update( double elapsedTime );
 
 	virtual void Destroy();
 

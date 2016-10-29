@@ -22,7 +22,7 @@ public:
 	CCharacterControllerComponent(const CCharacterControllerComponent& base, CElement* Owner);
 	virtual ~CCharacterControllerComponent();
 
-	virtual void FixedUpdate( float ElapsedTime );
+	virtual void FixedUpdate( double ElapsedTime );
 
 	virtual void Destroy();
 

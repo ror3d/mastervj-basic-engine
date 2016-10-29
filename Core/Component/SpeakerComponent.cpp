@@ -66,7 +66,7 @@ void CSpeakerComponent::Play( const std::string EventName)
 {
 	C3DElement nspeaker = {};
 	CEngine::GetSingleton().getSoundManager()->PlayEvent(EventName, &m_Speaker);
-	
+
 
 }
 
@@ -95,7 +95,7 @@ void CSpeakerComponent::Stop()
 	CEngine::GetSingleton().getSoundManager()->PlayEvent((std::string)"Stop", &m_Speaker);
 }
 
-void CSpeakerComponent::Update(float ElapsedTime)
+void CSpeakerComponent::Update(double ElapsedTime)
 {
 	// TODO: Actualitzar posició i rotació del speaker en el manager d'audio a partir del GetOwner()->GetPosition() i GetOwner()->GetDirection()
 

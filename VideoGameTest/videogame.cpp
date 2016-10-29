@@ -3,6 +3,8 @@
 
 #include <d3d11.h>
 
+#include <chrono>
+
 // TODO: Activar AntTeakBar
 //#include <AntTweakBar.h>
 
@@ -268,7 +270,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		ZeroMemory(&msg, sizeof(msg));
 
 		// Añadir en el while la condición de salida del programa de la aplicación
-		DWORD m_PreviousTime = timeGetTime();
+		auto previousTime = std::chrono::high_resolution_clock::now();
 
 		bool hasFocus = true;
 
@@ -286,10 +288,10 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 			{
 				inputManager.BeginFrame();
 
-				DWORD l_CurrentTime = timeGetTime();
-				float l_ElapsedTime = (float)(l_CurrentTime - m_PreviousTime)*0.001f;
+				auto now = std::chrono::high_resolution_clock::now();
+				double l_ElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>( ( now - previousTime ) ).count() * 0.000001;
 				CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
-				m_PreviousTime = l_CurrentTime;
+				previousTime = now;
 
 				application.Update(l_ElapsedTime);
 				application.Render();

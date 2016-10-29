@@ -18,8 +18,8 @@ public:
 	CParticleEmitterComponent(CXMLTreeNode& node, CElement* Owner);
 	~CParticleEmitterComponent();
 
-	void Update(float ElapsedTime);
-	void FixedUpdate(float ElapsedTime);
+	void Update(double ElapsedTime);
+	void FixedUpdate(double ElapsedTime);
 	void Render(CContextManager&  _context);
 	void Destroy();
 

@@ -40,7 +40,7 @@ void CParticleEmitterComponent::Init()
 {
 }
 
-void CParticleEmitterComponent::FixedUpdate( float ElapsedTime )
+void CParticleEmitterComponent::FixedUpdate( double ElapsedTime )
 {
 	if ( m_CheckCollisionsEveryNParticles > 0 )
 	{
@@ -61,7 +61,7 @@ void CParticleEmitterComponent::FixedUpdate( float ElapsedTime )
 	}
 }
 
-void CParticleEmitterComponent::Update(float ElapsedTime)
+void CParticleEmitterComponent::Update(double ElapsedTime)
 {
 	m_ParticleInstance->SetEnabled(GetOwner()->GetEnabled());
 	m_ParticleInstance->SetPosition( GetOwner()->GetPosition() );

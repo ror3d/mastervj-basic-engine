@@ -16,7 +16,7 @@ public:
 	CSpeakerComponent(const CSpeakerComponent& name, CElement* Owner);
 	virtual ~CSpeakerComponent();
 
-	virtual void Update(float ElapsedTime);
+	virtual void Update(double ElapsedTime);
 
 	virtual void Destroy();
 
