@@ -413,6 +413,7 @@ void CScriptManager::RegisterLUAFunctions()
 		"GetObjectById", &CSceneManager::GetObjectById,
 		"IsSceneLoaded", &CSceneManager::IsSceneLoaded,
 		"IsSceneUnloaded", &CSceneManager::IsSceneUnloaded,
+		"IsLoadingAnyScene", &CSceneManager::IsLoadingAnyScene,
 		"StartedUnload", &CSceneManager::StartedUnload,
 		"FinishedLoad", &CSceneManager::FinishedLoad);
 

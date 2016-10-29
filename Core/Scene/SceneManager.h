@@ -29,6 +29,9 @@ public:
 	bool IsSceneLoaded( const std::string& sceneName ) const;
 	bool IsSceneUnloaded( const std::string& sceneName ) const;
 
+
+	bool IsLoadingAnyScene() const;
+
 	void StartedUnload();
 	void FinishedLoad();
 

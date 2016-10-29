@@ -202,6 +202,11 @@ void CSceneManager::Update()
 	m_ScenesToUnload.clear();
 }
 
+bool CSceneManager::IsLoadingAnyScene() const
+{
+	return m_ScenesToLoad.size() > 0;
+}
+
 void CSceneManager::StartedUnload()
 {
 	CEngine::GetSingleton().getPhysXManager()->m_enabledTriggerDetection = false;
