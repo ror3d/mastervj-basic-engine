@@ -50,9 +50,14 @@ void CSpeakerComponent::Init()
 	m_Speaker.SetPosition(m_Position);
 	m_Speaker.SetYawPitchRoll(m_Orientation.x, m_Orientation.y, m_Orientation.z);
 	CEngine::GetSingleton().getSoundManager()->RegisterSpeaker(&m_Speaker);
-	CEngine::GetSingleton().getSoundManager()->SetVolume("VolumeEffects", 0);
+	//CEngine::GetSingleton().getSoundManager()->SetVolume("VolumeEffects", 0, &m_Speaker);
 	//Play((std::string)"Play", true);
 
+}
+
+void CSpeakerComponent::SetVolume(const std::string VolumeName, float volumeValue)
+{
+	CEngine::GetSingleton().getSoundManager()->SetVolume(VolumeName, volumeValue, &m_Speaker);
 }
 
 
