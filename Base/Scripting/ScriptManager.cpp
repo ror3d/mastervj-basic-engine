@@ -426,7 +426,7 @@ void CScriptManager::RegisterLUAFunctions()
 
 	(*m_state)["CPlayerManager"].SetObj(
 		*CEngine::GetSingleton().getPlayerManager(),
-		"LoadVideo", &CPlayer::OpenURL);
+		"LoadVideo", &CPlayer::LoadVideo);
 
 	(*m_state)["DebugPrint"] = [](const std::string& s)
 	{

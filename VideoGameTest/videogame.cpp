@@ -303,21 +303,21 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 			}
 			else
 			{
-				if (CEngine::GetSingleton().getPlayerManager()->GetState() != Started)
+				if (! CEngine::GetSingleton().getPlayerManager()->IsVideoPlaying())
 				{
-				inputManager.BeginFrame();
+					inputManager.BeginFrame();
 
-				auto now = std::chrono::high_resolution_clock::now();
-				double l_ElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>( ( now - previousTime ) ).count() * 0.000001;
-				CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
-				previousTime = now;
+					auto now = std::chrono::high_resolution_clock::now();
+					double l_ElapsedTime = std::chrono::duration_cast<std::chrono::microseconds>( ( now - previousTime ) ).count() * 0.000001;
+					CEngine::GetSingleton().getTimerManager()->m_elapsedTime = l_ElapsedTime;
+					previousTime = now;
 
-				application.Update(l_ElapsedTime);
-				application.Render();
-				inputManager.EndFrame();
+					application.Update(l_ElapsedTime);
+					application.Render();
+					inputManager.EndFrame();
+				}
 			}
 		}
-	}
 	}
 
 	CEngine::ReleaseSingleton();

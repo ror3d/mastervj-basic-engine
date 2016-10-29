@@ -11,7 +11,7 @@
 
 #include <new>
 #include <windows.h>
-#include <shobjidl.h> 
+#include <shobjidl.h>
 #include <shlwapi.h>
 #include <assert.h>
 #include <strsafe.h>
@@ -36,20 +36,20 @@ const UINT WM_APP_PLAYER_EVENT = WM_APP + 1;
 
 // WPARAM = IMFMediaEvent*, WPARAM = MediaEventType
 
-enum PlayerState
-{
-	Closed = 0,     // No session.
-	Ready,          // Session was created, ready to open a file. 
-	OpenPending,    // Session is opening a file.
-	Started,        // Session is playing a file.
-	Paused,         // Session is paused.
-	Stopped,        // Session is stopped (ready to play). 
-	Closing         // Application has closed the session, but is waiting for MESessionClosed.
-};
-
 class CPlayer : public IMFAsyncCallback
 {
 public:
+	enum PlayerState
+	{
+		Closed = 0,     // No session.
+		Ready,          // Session was created, ready to open a file.
+		OpenPending,    // Session is opening a file.
+		Started,        // Session is playing a file.
+		Paused,         // Session is paused.
+		Stopped,        // Session is stopped (ready to play).
+		Closing         // Application has closed the session, but is waiting for MESessionClosed.
+	};
+
 	static HRESULT CreateInstance(HWND hVideo, HWND hEvent, CPlayer **ppPlayer);
 
 	// IUnknown methods
@@ -66,6 +66,8 @@ public:
 	STDMETHODIMP  Invoke(IMFAsyncResult* pAsyncResult);
 
 	// Playback
+	inline bool   LoadVideo( const std::string &sURL ) { return SUCCEEDED(OpenURL(sURL)); }
+	inline bool   IsVideoPlaying() const { return !(m_state == Closed || m_state == Ready || m_state == Stopped || m_state == Closing); }
 	HRESULT       OpenURL(const std::string sURL);
 	HRESULT       Play();
 	HRESULT       Pause();
