@@ -326,7 +326,7 @@ void CContextManager::DrawScreenQuad(CEffectTechnique *EffectTechnique, CTexture
 }
 
 void CContextManager::Present(){
-	m_SwapChain->Present(0, 0);
+	m_SwapChain->Present(1, 0);
 }
 
 void CContextManager::Draw(CRenderableVertexs* _VerticesToRender){

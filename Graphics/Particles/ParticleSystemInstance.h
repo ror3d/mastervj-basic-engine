@@ -47,6 +47,7 @@ private:
 	std::uniform_real_distribution<float> m_unitDist;
 
 	Vect3f m_position;
+	Quatf m_startSpeedRotation;
 	bool m_enabled;
 
 public:
@@ -64,8 +65,12 @@ public:
 
 	inline void SetPosition(Vect3f pos) { m_position = pos; }
 	inline Vect3f GetPosition() const { return m_position; }
+	inline void SetStartSpeedRotation(Quatf ssr) { m_startSpeedRotation = ssr; }
+	inline Quatf GetStartSpeedRotation() const { return m_startSpeedRotation; }
 	inline void SetEnabled(bool e) { m_enabled = e; }
 	inline bool IsEnabled() const { return m_enabled; }
+
+	std::vector<std::string> CheckCollisions( unsigned int step );
 };
 
 #endif

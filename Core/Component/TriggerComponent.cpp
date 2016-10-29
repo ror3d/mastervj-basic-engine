@@ -49,7 +49,7 @@ void CTriggerComponent::PhysxUpdate()
 {
 }
 
-void CTriggerComponent::FixedUpdate(float ElapsedTime)
+void CTriggerComponent::FixedUpdate(double ElapsedTime)
 {
 	if (!m_isStatic)
 	{

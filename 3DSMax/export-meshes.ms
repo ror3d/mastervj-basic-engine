@@ -89,11 +89,12 @@ fn createStaticMeshesFile sceneName meshesToExport = (
 			format "$$$$ % no es un objeto adecuado!\n" cores[i]
 			continue
 		)
+		local nn = getUserProp cores[i] "export_core_name"
 		local n = cores[i].name
 		cores[i].name = "_" + n
 		clone[1].name = n
 		
-		format "\t<static_mesh name=\"%\" filename=\"%.mesh\">\n" n (getMeshPath n) to:file
+		format "\t<static_mesh name=\"%\" filename=\"%.mesh\">\n" nn (getMeshPath nn) to:file
 		local mats = getUsedMaterials(convertToMesh clone[1])
 		for j = 1 to mats.count do
 		(

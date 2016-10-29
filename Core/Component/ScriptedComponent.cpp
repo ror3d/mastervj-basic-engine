@@ -124,7 +124,7 @@ void CScriptedComponent::SetComponent()
 	m_scriptMgr->RunCode(ss.str());
 }
 
-void CScriptedComponent::Update(float ElapsedTime)
+void CScriptedComponent::Update(double ElapsedTime)
 {
 	if ( m_Destroyed ) return;
 	if (!GetOwner()->GetEnabled())
@@ -139,7 +139,7 @@ void CScriptedComponent::Update(float ElapsedTime)
 	m_scriptMgr->RunCode( ss.str() );
 }
 
-void CScriptedComponent::FixedUpdate(float ElapsedTime)
+void CScriptedComponent::FixedUpdate(double ElapsedTime)
 {
 	if ( m_Destroyed ) return;
 	if (!GetOwner()->GetEnabled())

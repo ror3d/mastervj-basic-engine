@@ -300,6 +300,7 @@ void CScriptManager::RegisterLUAFunctions()
 		"Play", &CSpeakerComponent::Play,
 		"Finished", &CSpeakerComponent::Finished,
 		"SetSwitch", &CSpeakerComponent::SetSwitch,
+		"SetVolume", &CSpeakerComponent::SetVolume,
 		"Stop", &CSpeakerComponent::Stop
 		);
 

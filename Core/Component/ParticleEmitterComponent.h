@@ -10,12 +10,16 @@ class CParticleEmitterComponent :
 protected:
 	virtual void Init();
 	CParticleSystemInstance* m_ParticleInstance;
+
+	unsigned int m_CheckCollisionsEveryNParticles;
+
 public:
 	CParticleEmitterComponent(const CParticleEmitterComponent& base, CElement* Owner);
 	CParticleEmitterComponent(CXMLTreeNode& node, CElement* Owner);
 	~CParticleEmitterComponent();
 
-	void Update(float ElapsedTime);
+	void Update(double ElapsedTime);
+	void FixedUpdate(double ElapsedTime);
 	void Render(CContextManager&  _context);
 	void Destroy();
 

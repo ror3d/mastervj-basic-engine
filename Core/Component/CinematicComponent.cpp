@@ -17,7 +17,7 @@ CCinematicComponent::CCinematicComponent(CXMLTreeNode& node, CElement* Owner)
 	if (playAtStart)
 	{
 		CEngine::GetSingleton().getCinematicManager()->Play(node.GetPszISOProperty("name","none"));
-	}	
+	}
 }
 
 CCinematicComponent::CCinematicComponent(const CCinematicComponent& base, CElement* Owner)
@@ -36,10 +36,10 @@ void CCinematicComponent::Destroy()
 }
 
 void CCinematicComponent::Init()
-{	
+{
 }
 
-void CCinematicComponent::FixedUpdate(float ElapsedTime)
+void CCinematicComponent::FixedUpdate(double ElapsedTime)
 {
 }
 

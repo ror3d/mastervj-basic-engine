@@ -21,7 +21,7 @@ public:
 	virtual ~CTriggerComponent();
 
 	virtual void PhysxUpdate();
-	virtual void FixedUpdate( float ElapsedTime );
+	virtual void FixedUpdate( double ElapsedTime );
 
 	virtual void Destroy();
 

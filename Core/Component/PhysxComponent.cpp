@@ -147,7 +147,7 @@ void CPhysxComponent::PhysxUpdate()
 	}
 }
 
-void CPhysxComponent::FixedUpdate(float ElapsedTime)
+void CPhysxComponent::FixedUpdate(double ElapsedTime)
 {
 	if ( m_Destroyed ) return;
 	auto collisions = CEngine::GetSingleton().getPhysXManager()->getActorCollisions( getName() );

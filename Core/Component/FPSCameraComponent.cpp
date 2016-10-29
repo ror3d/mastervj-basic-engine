@@ -58,7 +58,7 @@ void CFPSCameraComponent::Reset()
 	cc->SetYaw(owner->GetYaw());
 }
 
-void CFPSCameraComponent::Update(float elapsedTime)
+void CFPSCameraComponent::Update(double elapsedTime)
 {
 	if ( m_Destroyed ) return;
 	CElement *owner = GetOwner();
