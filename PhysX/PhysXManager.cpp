@@ -639,7 +639,9 @@ Vect3f CPhysXManager::moveCharacterController(Vect3f displacement, Vect3f up, fl
 	size_t index = (size_t)cct->getUserData();
 	physx::PxRigidDynamic* actor = cct->getActor();
 
+	float origDisplacementY = displacement.y;
 	displacement = displacement + m_CharacterControllerDisplacements[name];
+	displacement.y = origDisplacementY;
 	m_CharacterControllerDisplacements.erase( name );
 
 	auto prevPos = cct->getFootPosition();
