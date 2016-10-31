@@ -619,6 +619,18 @@ void CSoundManager::LaunchSoundEventDynamicSpeaker(std::string _string, C3DEleme
 	PlayEvent(_event, _dynamicspeaker);
 }
 
+
+
+void CSoundManager::SetVolumeDefault(std::string _string, float value)
+{
+	if (!m_InitOk) return;
+
+	SoundRTPC _rtpc;
+	_rtpc.RTPCName = _string;
+	SetRTPCValue(_rtpc, value, m_DefaultSpeakerId);
+}
+
+
 void CSoundManager::SetVolume(std::string _string, float value, const C3DElement* _speaker)
 {
 	if (!m_InitOk) return;

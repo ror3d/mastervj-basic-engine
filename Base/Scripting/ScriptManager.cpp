@@ -397,6 +397,7 @@ void CScriptManager::RegisterLUAFunctions()
 		"LaunchSoundEventDefaultSpeaker", &CSoundManager::LaunchSoundEventDefaultSpeaker,
 		"LaunchSoundEventXMLSpeaker", &CSoundManager::LaunchSoundEventXMLSpeaker,
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
+		"SetVolumeDefault", &CSoundManager::SetVolumeDefault,
 		"SetVolume", &CSoundManager::SetVolume);
 
 	(*m_state)["CComponentManager"].SetObj(
