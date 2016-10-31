@@ -399,6 +399,10 @@ void CScriptManager::RegisterLUAFunctions()
 		"LaunchSoundEventDynamicSpeaker", &CSoundManager::LaunchSoundEventDynamicSpeaker,
 		"SetVolume", &CSoundManager::SetVolume);
 
+	(*m_state)["CComponentManager"].SetObj(
+		*CEngine::GetSingleton().getComponentManager(),
+		"GetComponentGameObject", &CComponentManager::GetComponentGameObject);
+
 	(*m_state)["CSceneManager"].SetObj(
 		*CEngine::GetSingleton().getSceneManager(),
 		"AddObjectToScene", &CSceneManager::AddObjectToScene,

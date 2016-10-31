@@ -139,6 +139,8 @@ void CParticleSystemInstance::Update(float ElapsedTime)
 			p.pos = GetPosition();
 			p.vel = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startVelocity);
 			p.vel = rot*p.vel;
+			p.pos = GetPosition() + p.vel * ((ElapsedTime * i) / n);
+
 			p.acc = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->acceleration);
 			p.size = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->size);
 			p.angle = getRand(m_randomEngine, m_unitDist, m_particleSystemClass->startAngle);

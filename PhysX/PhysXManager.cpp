@@ -526,6 +526,7 @@ void CPhysXManager::createActor(const std::string& name, ActorType actorType, co
 		{
 			physx::PxRigidBodyExt::updateMassAndInertia( *static_cast<physx::PxRigidBody*>( body ), desc.density );
 		}
+		static_cast<physx::PxRigidDynamic*>( body )->setMassSpaceInertiaTensor( physx::PxVec3( 0 ) );
 	}
 	m_Scene->addActor(*body);
 
@@ -626,7 +627,7 @@ void CPhysXManager::createController(float height, float radius, float density, 
 
 void CPhysXManager::InitPhysx(){
 	registerMaterial("ground", 1, 0.9, 0.1);
-	registerMaterial("default_material", 2, 1.5, 0.2);
+	registerMaterial("default_material", 2, 1.5, 0);
 	registerMaterial("controller_material", 10, 1, 0.1);
 	//createPlane("ground", "ground", Vect4f(0, 1, 0,	0));
 }
@@ -834,6 +835,10 @@ std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float di
 	{
 		actorToAvoid = m_actors.index[objectToAvoid];
 	}
+	else if ( m_CharacterControllers.find( objectToAvoid ) != m_CharacterControllers.end() )
+	{
+		actorToAvoid = (size_t)m_CharacterControllers[objectToAvoid]->getUserData();
+	}
 
 	// Raycast against all static & dynamic objects (no filtering)
 	// The main result from this call is the closest hit, stored in the 'hit.block' structure
@@ -870,11 +875,19 @@ std::string CPhysXManager::RayCastName(Vect3f origin, Vect3f direction, float di
 	if (status)
 	{
 		size_t l_posName = (size_t)hit.block.actor->userData;
-		if (m_actors.name.size() < l_posName)
+		std::string l_hitName;
+		if ( l_posName & CONTROLLER_FLAG )
 		{
-			return "";
+			l_hitName = m_CharacterControllerIdxs[l_posName^CONTROLLER_FLAG];
 		}
-		std::string l_hitName = m_actors.name[l_posName];
+		else
+		{
+			if ( m_actors.name.size() < l_posName )
+			{
+				return "";
+			}
+			l_hitName = m_actors.name[l_posName];
+		}
 		return l_hitName;
 	}
 	else

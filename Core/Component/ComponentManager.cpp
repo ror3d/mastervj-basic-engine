@@ -1,4 +1,5 @@
 #include "ComponentManager.h"
+#include "ComponentManager.h"
 
 #include "Graphics/Context/ContextManager.h"
 
@@ -75,9 +76,9 @@ void CComponentManager::Update( double ElapsedTime )
 			}
 			if (type == "ParticleEmitter")
 			{
-				cp->GetEnabled(); 
+				cp->GetEnabled();
 			}
-			
+
 			cp->Update(ElapsedTime);
 		}
 	}
@@ -180,6 +181,16 @@ void CComponentManager::destroy()
 		delete ca;
 	}
 	m_componentsToAdd.clear();
+}
+
+CElement * CComponentManager::GetComponentGameObject( const std::string & componentName ) const
+{
+	auto it = m_componentsMap.find(componentName);
+	if (it == m_componentsMap.end())
+	{
+		return nullptr;
+	}
+	return it->second->GetOwner();
 }
 
 void CComponentManager::DestroyRemovedComponents()

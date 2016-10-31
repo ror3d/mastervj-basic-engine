@@ -36,6 +36,8 @@ public:
 	CComponent* get(const std::string& componentName) const;
 	void destroy();
 
+	CElement * GetComponentGameObject( const std::string& componentName ) const;
+
 	inline bool IsInitialized() const { return m_initialized; }
 
 private:
