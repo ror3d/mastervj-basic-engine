@@ -170,7 +170,7 @@ rollout ScriptPropertiesEditor "Script Properties" width:536 height:296
 			local props = m_script.props
 			
 			local type = property_value_types[type_radio.state]
-			local val = scalar_value_txt.text
+			local val = substituteString scalar_value_txt.text "\\" "\\\\"
 			
 			if type_radio.state == 4 then
 			(
@@ -206,7 +206,7 @@ rollout ScriptPropertiesEditor "Script Properties" width:536 height:296
 			local props = m_script.props
 			
 			local type = property_value_types[type_radio.state]
-			local val = scalar_value_txt.text
+			local val = substituteString scalar_value_txt.text "\\" "\\\\"
 			
 			if type_radio.state == 4 then
 			(
