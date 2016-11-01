@@ -53,8 +53,14 @@
 
 void OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr);
 
-void ToggleFullscreen(HWND Window, WINDOWPLACEMENT &WindowPosition)
+
+static WINDOWPLACEMENT WindowPosition = { sizeof(WINDOWPLACEMENT) };
+
+void ToggleFullscreen(HWND Window)
 {
+	//WINDOWPLACEMENT WindowPosition = { sizeof(WINDOWPLACEMENT) };
+	//GetWindowPlacement(Window, &WindowPosition);
+
 	// This follows Raymond Chen's prescription
 	// for fullscreen toggling, see:
 	// http://blogs.msdn.com/b/oldnewthing/archive/2010/04/12/9994016.aspx
@@ -123,10 +129,10 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					case VK_RETURN:
 						if (Alt)
 						{
-							WINDOWPLACEMENT windowPosition = { sizeof(WINDOWPLACEMENT) };
-							GetWindowPlacement(hWnd, &windowPosition);
+							//WINDOWPLACEMENT windowPosition = { sizeof(WINDOWPLACEMENT) };
+							//GetWindowPlacement(hWnd, &windowPosition);
 
-							ToggleFullscreen(hWnd, windowPosition);
+							ToggleFullscreen(hWnd);
 							consumed = true;
 						}
 						break;
@@ -227,6 +233,8 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	// Create the application's window
 	HWND hWnd = CreateWindow(APPLICATION_NAME, APPLICATION_NAME, WS_OVERLAPPEDWINDOW, 100, 100, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, wc.hInstance, NULL);
 
+
+
 	// Añadir aquí el Init de la applicacioón
 
 	engine.Init();
@@ -236,6 +244,13 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	context.CreateContext(hWnd, WIDTH, HEIGHT);
 
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+
+	context.CreateBackBuffer(hWnd, WIDTH, HEIGHT);
+
+#ifndef _DEBUG
+	ToggleFullscreen( hWnd );
+#endif
+
 
 	CPlayer *videoPlayer = NULL;
 
@@ -258,7 +273,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 	engine.getSceneManager()->Initialize("Data\\Scenes\\");
 	engine.getSoundManager()->InitAll("Data\\Sound\\Soundbanks\\SoundbanksInfo.xml", "Data\\Sound\\speakers.xml");
 
-	context.CreateBackBuffer(hWnd, WIDTH, HEIGHT);
 	{
 		CInputManagerImplementation inputManager(hWnd);
 		CInputManager::SetCurrentInputManager(&inputManager);
