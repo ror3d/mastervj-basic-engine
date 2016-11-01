@@ -96,6 +96,7 @@
     <ClInclude Include="Scripting\LuaErrorCapture.h">
       <Filter>Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="IApplicationBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Math\MathUtils.inl">

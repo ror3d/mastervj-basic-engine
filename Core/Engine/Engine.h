@@ -2,6 +2,7 @@
 
 #include <Base/Utils/SingletonPattern.h>
 
+class IApplicationBase;
 class CStaticMeshManager;
 class CMaterialManager;
 class CEffectManager;
@@ -54,6 +55,7 @@ private:
 	CRenderer * renderer;
 	CSceneManager * sceneManager;
 	CPlayer * playerManager;
+	IApplicationBase * application;
 
 public:
 	CEngine(); //Construimos vars y hacemos gets
@@ -85,6 +87,8 @@ public:
 	inline CAnimatedMeshManager * getAnimatedMeshManager() const { return animatedMeshManager; }
 	inline CRenderer * getRenderer() const { return renderer; }
 	inline CSceneManager * getSceneManager() const { return sceneManager; }
+	inline IApplicationBase * getApplication() const { return application; }
+	inline void setApplication(IApplicationBase* app) { application = app; }
 	inline CPlayer * getPlayerManager() const { return playerManager; }
 	inline void setPlayerManager(CPlayer * player) { playerManager = player; }
 };

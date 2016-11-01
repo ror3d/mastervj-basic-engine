@@ -4,6 +4,7 @@
 
 
 #include <Base/XML/XMLTreeNode.h>
+#include <Base/IApplicationBase.h>
 
 #include "Core/Engine/Engine.h"
 #include "Core/Input/InputManager.h"
@@ -364,6 +365,10 @@ void CScriptManager::RegisterLUAFunctions()
 	gui["SetFontColor"] = [](float r, float g, float b) { CGUI::GetInstance()->SetFontColor(CColor(r, g, b)); };
 
 	//Engine References
+	(*m_state)["CApplication"].SetObj(
+		*CEngine::GetSingleton().getApplication(),
+		"Quit", &IApplicationBase::Quit);
+
 	(*m_state)["CPhysicsManager"].SetObj(
 		*CEngine::GetSingleton().getPhysXManager(),
 		"moveCharController", &CPhysXManager::moveCharacterController,

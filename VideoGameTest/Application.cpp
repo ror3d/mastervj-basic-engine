@@ -34,7 +34,6 @@ CApplication::CApplication(CContextManager *_ContextManager)
 {
 	CDebugHelper::GetDebugHelper()->Log("CApplication::CApplication");
 	CDebugHelper::GetDebugHelper()->CreateMainBar();
-	activeMovAnim = false;
 	m_FixedCamera = false;
 }
 
@@ -65,7 +64,7 @@ void CApplication::Update(double _ElapsedTime)
 	CEngine::GetSingleton().getCinematicManager()->Update(_ElapsedTime);
 
 	CEngine::GetSingleton().getComponentManager()->PhysxUpdate();
-	
+
 	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	CCamera l_Camera = { };
 	auto camController = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
@@ -73,7 +72,6 @@ void CApplication::Update(double _ElapsedTime)
 	{
 		camController->UpdateCameraValues( &l_Camera );
 	}
-	CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
 
 
 	if (CInputManager::GetInputManager()->IsActionActive("FIXCAMERA"))
@@ -96,6 +94,8 @@ void CApplication::Update(double _ElapsedTime)
 	}
 
 	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
+
+	CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
 }
 
 

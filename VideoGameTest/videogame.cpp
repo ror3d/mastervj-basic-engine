@@ -264,10 +264,6 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		CInputManager::SetCurrentInputManager(&inputManager);
 		inputManager.LoadCommandsFromFile("Data\\input.xml");
 
-		engine.getScriptManager()->Initialize("Data\\scripting.xml");
-
-		engine.getComponentManager()->FirstInitialization();
-
 		engine.getCinematicManager()->LoadFilesInDir("Data\\Animations\\");
 
 
@@ -278,6 +274,13 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 //#endif
 
 		CApplication application(&context);
+		engine.setApplication( &application );
+
+
+		engine.getScriptManager()->Initialize("Data\\scripting.xml");
+
+		engine.getComponentManager()->FirstInitialization();
+
 
 		UpdateWindow(hWnd);
 		MSG msg;
@@ -290,7 +293,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 		bool first = true;
 
-		while (msg.message != WM_QUIT)
+		while (msg.message != WM_QUIT && !application.ShouldQuit())
 		{
 			if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
 			{

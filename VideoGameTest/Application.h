@@ -2,12 +2,13 @@
 #define APPLICATION_H
 
 #include "HelperTypes.h"
+#include <Base/IApplicationBase.h>
 #include <Material/MaterialManager.h>
 
 class CContextManager;
 class CRenderManager;
 
-class CApplication
+class CApplication : public IApplicationBase
 {
 public:
 	CApplication( CContextManager *_ContextManager);
@@ -15,7 +16,6 @@ public:
 
 	void Update(double _ElapsedTime);
 	void Render();
-	bool activeMovAnim;
 
 	void Destroy() {/* TODO */}
 private:
