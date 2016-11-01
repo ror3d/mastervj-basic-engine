@@ -4,6 +4,7 @@
 #include "HelperTypes.h"
 #include <Base/IApplicationBase.h>
 #include <Material/MaterialManager.h>
+#include <Graphics/Camera/Camera.h>
 
 class CContextManager;
 class CRenderManager;
@@ -16,6 +17,7 @@ public:
 
 	void Update(double _ElapsedTime);
 	void Render();
+	void PostRender( double _ElapsedTime );
 
 	void Destroy() {/* TODO */}
 private:
@@ -23,6 +25,7 @@ private:
 	double m_Timer;
 	double m_FixedTimer;
 	bool m_FixedCamera;
+	CCamera m_CurrentCamera;
 };
 
 #endif

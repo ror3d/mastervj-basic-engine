@@ -316,6 +316,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 
 					application.Update(l_ElapsedTime);
 					application.Render();
+					application.PostRender( l_ElapsedTime );
 					inputManager.EndFrame();
 				}
 				else

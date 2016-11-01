@@ -7,7 +7,6 @@
 #include <Graphics/Scene/SceneRendererCommandManager.h>
 #include <Graphics/Effect/EffectManager.h>
 #include <Graphics/Camera/CameraManager.h>
-#include <Graphics/Camera/Camera.h>
 #include <Graphics/Renderer/Renderer.h>
 #include <PhysX/PhysXManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
@@ -66,11 +65,11 @@ void CApplication::Update(double _ElapsedTime)
 	CEngine::GetSingleton().getComponentManager()->PhysxUpdate();
 
 	CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
-	CCamera l_Camera = { };
+	m_CurrentCamera = { };
 	auto camController = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 	if ( camController )
 	{
-		camController->UpdateCameraValues( &l_Camera );
+		camController->UpdateCameraValues( &m_CurrentCamera );
 	}
 
 
@@ -95,7 +94,6 @@ void CApplication::Update(double _ElapsedTime)
 
 	CEngine::GetSingleton().getCameraManager()->Update(_ElapsedTime);
 
-	CEngine::GetSingleton().getSoundManager()->Update(&l_Camera);
 }
 
 
@@ -113,4 +111,9 @@ void CApplication::Render()
 
 		renderer->EndRender();
 	}
+}
+
+void CApplication::PostRender( double _ElapsedTime )
+{
+	CEngine::GetSingleton().getSoundManager()->Update(&m_CurrentCamera);
 }
