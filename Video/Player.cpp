@@ -7,6 +7,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
 #include "Player.h"
+#include "Audio.h"
 #include <assert.h>
 
 #pragma comment(lib, "shlwapi")
@@ -60,7 +61,7 @@ HRESULT CPlayer::CreateInstance(
 		return E_OUTOFMEMORY;
 	}
 
-	HRESULT hr = pPlayer->Initialize();
+	HRESULT hr = pPlayer->Initialize(hVideo);
 	if (SUCCEEDED(hr))
 	{
 		*ppPlayer = pPlayer;
@@ -69,10 +70,11 @@ HRESULT CPlayer::CreateInstance(
 	{
 		pPlayer->Release();
 	}
+
 	return hr;
 }
 
-HRESULT CPlayer::Initialize()
+HRESULT CPlayer::Initialize(HWND hWnd)
 {
 	// Start up Media Foundation platform.
 	HRESULT hr = MFStartup(MF_VERSION);
@@ -84,6 +86,20 @@ HRESULT CPlayer::Initialize()
 			hr = HRESULT_FROM_WIN32(GetLastError());
 		}
 	}
+
+	hr = CAudio::CreateInstance(WM_AUDIO_EVENT, hWnd, &m_pAudioSession);
+
+	if (SUCCEEDED(hr))
+	{
+		// Ask for audio session events.
+		hr = m_pAudioSession->EnableNotifications(TRUE);
+	}
+
+	if (FAILED(hr))
+	{
+		SafeRelease(&m_pAudioSession);
+	}
+
 	return hr;
 }
 
@@ -127,6 +143,7 @@ HRESULT CPlayer::QueryInterface(REFIID riid, void** ppv)
 		QITABENT(CPlayer, IMFAsyncCallback),
 		{ 0 }
 	};
+	
 	return QISearch(this, qit, riid, ppv);
 }
 
@@ -928,3 +945,108 @@ done:
 	SafeRelease(&pTopology);
 	return hr;
 }
+
+//-----------------------------------------------------------------------------
+// SetVolume
+//
+// Sets the audio volume.
+//-----------------------------------------------------------------------------
+
+HRESULT CPlayer::SetVolume(float fLevel)
+{
+	HRESULT hr = S_OK;
+
+	if (m_pAudioSession)
+	{
+		hr = m_pAudioSession->SetVolume(fLevel);
+	}
+	else
+	{
+		hr = E_FAIL;
+	}
+
+	return hr;
+}
+
+
+
+//-----------------------------------------------------------------------------
+// GetVolume
+//
+// Gets the audio volume.
+//-----------------------------------------------------------------------------
+
+HRESULT CPlayer::GetVolume(float *pfLevel)
+{
+	HRESULT hr = S_OK;
+
+	if (pfLevel == NULL)
+	{
+		return E_POINTER;
+	}
+
+	if (m_pAudioSession)
+	{
+		hr = m_pAudioSession->GetVolume(pfLevel);
+	}
+	else
+	{
+		hr = E_FAIL;
+	}
+
+	return hr;
+}
+
+
+//-----------------------------------------------------------------------------
+// SetMute
+//
+// Mutes or unmutes the audio.
+//-----------------------------------------------------------------------------
+
+HRESULT CPlayer::SetMute(BOOL bMute)
+{
+	HRESULT hr = S_OK;
+
+	if (m_pAudioSession)
+	{
+		hr = m_pAudioSession->SetMute(bMute);
+	}
+	else
+	{
+		hr = E_FAIL;
+	}
+
+	return hr;
+}
+
+
+//-----------------------------------------------------------------------------
+// GetMute
+//
+// Gets the audio mute state.
+//-----------------------------------------------------------------------------
+
+HRESULT CPlayer::GetMute(BOOL *pbMute)
+{
+	HRESULT hr = S_OK;
+
+	if (pbMute == NULL)
+	{
+		return E_POINTER;
+	}
+
+	if (m_pAudioSession)
+	{
+		hr = m_pAudioSession->GetMute(pbMute);
+	}
+	else
+	{
+		hr = E_FAIL;
+	}
+
+	return hr;
+}
+
+
+

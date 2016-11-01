@@ -2,8 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\Video\Player.cpp" />
+    <ClCompile Include="..\Video\Audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Video\Player.h" />
+    <ClInclude Include="..\Video\Audio.h" />
   </ItemGroup>
 </Project>

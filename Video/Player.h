@@ -23,16 +23,10 @@
 #include <evr.h>
 #include <string>
 
-template <class T> void SafeRelease(T **ppT)
-{
-	if (*ppT)
-	{
-		(*ppT)->Release();
-		*ppT = NULL;
-	}
-}
+class CAudio;
 
 const UINT WM_APP_PLAYER_EVENT = WM_APP + 1;
+static const UINT WM_AUDIO_EVENT = WM_APP + 4;
 
 // WPARAM = IMFMediaEvent*, WPARAM = MediaEventType
 
@@ -76,6 +70,12 @@ public:
 	HRESULT       HandleEvent(UINT_PTR pUnkPtr);
 	PlayerState   GetState() const { return m_state; }
 
+	BOOL    IsAudioEnabled() const { return (m_pAudioSession != NULL); }
+	HRESULT SetVolume(float fLevel);
+	HRESULT GetVolume(float *pfLevel);
+	HRESULT SetMute(BOOL bMute);
+	HRESULT GetMute(BOOL *pbMute);
+
 	// Video functionality
 	HRESULT       Repaint();
 	HRESULT       ResizeVideo(WORD width, WORD height);
@@ -90,7 +90,7 @@ protected:
 	// Destructor is private. Caller should call Release.
 	virtual ~CPlayer();
 
-	HRESULT Initialize();
+	HRESULT Initialize(HWND hWnd);
 	HRESULT CreateSession();
 	HRESULT CloseSession();
 	HRESULT StartPlayback();
@@ -108,6 +108,8 @@ protected:
 
 protected:
 	long                    m_nRefCount;        // Reference count.
+
+	CAudio *m_pAudioSession;
 
 	IMFMediaSession         *m_pSession;
 	IMFMediaSource          *m_pSource;
