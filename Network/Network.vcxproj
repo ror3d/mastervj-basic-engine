@@ -11,9 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Video\Audio.cpp" />
     <ClCompile Include="..\Video\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Video\Audio.h" />
     <ClInclude Include="..\Video\Player.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
