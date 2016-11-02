@@ -337,7 +337,7 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 				{
 					inputManager.BeginFrame();
 
-					if (inputManager.IsActionActive("MOUSE_PRESSED"))
+					if (inputManager.IsActionActive("MOUSE_RELEASED"))
 					{
 						CEngine::GetSingleton().getPlayerManager()->Stop();
 					}

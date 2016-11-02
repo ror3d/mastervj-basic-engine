@@ -15,9 +15,10 @@
 #include <Core/Component/FPSCameraComponent.h>
 #include <Core/Component/FreeCameraComponent.h>
 #include <Core/Component/AnimatedInstanceComponent.h>
-#include <Core\Component\SpeakerComponent.h>
+#include <Core/Component/SpeakerComponent.h>
 #include <PhysX/PhysXManager.h>
 #include <Core/Time/TimeManager.h>
+#include <Graphics/Context/ContextManager.h>
 #include <Graphics/Camera/CameraManager.h>
 #include <Graphics/Cinematics/CinematicManager.h>
 #include <Graphics/Mesh/StaticMeshManager.h>
@@ -363,6 +364,9 @@ void CScriptManager::RegisterLUAFunctions()
 	gui["Text"] = [](std::string font, std::string text, Rectf bounds, int alignToParent, int alignSelf, bool overflowX) -> void { return CGUI::GetInstance()->Text(font, text, bounds, (Rectf::Alignment)alignToParent, (Rectf::Alignment)alignSelf, overflowX); };
 
 	gui["SetFontColor"] = [](float r, float g, float b) { CGUI::GetInstance()->SetFontColor(CColor(r, g, b)); };
+
+	gui["WindowWidth"] = []() -> float { return CEngine::GetSingleton().getContextManager()->GetWidth(); };
+	gui["WindowHeight"] = []() -> float { return CEngine::GetSingleton().getContextManager()->GetHeight(); };
 
 	//Engine References
 	(*m_state)["CApplication"].SetObj(
