@@ -9,5 +9,7 @@ CRenderDebugLayerSceneRendererCommand::CRenderDebugLayerSceneRendererCommand(CXM
 
 void CRenderDebugLayerSceneRendererCommand::Execute(CContextManager &_context)
 {
+#if _DEBUG
 	CEngine::GetSingleton().getDebugRender()->Render();
+#endif
 }

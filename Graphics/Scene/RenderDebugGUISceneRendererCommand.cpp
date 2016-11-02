@@ -5,5 +5,7 @@ CRenderDebugGUISceneRendererCommand::CRenderDebugGUISceneRendererCommand(CXMLTre
 }
 
 void CRenderDebugGUISceneRendererCommand::Execute(CContextManager &_contex){
+#if _DEBUG
 	CDebugHelper::GetDebugHelper()->Render();
+#endif
 }
