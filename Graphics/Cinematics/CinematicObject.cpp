@@ -33,8 +33,6 @@ CCinematicObject::CCinematicObject( CXMLTreeNode &treeNode )
 		m_reverse = true;
 	}
 
-	m_object = CEngine::GetSingleton().getSceneManager()->GetObjectById(m_name);
-
 	float duration = 0;
 	for ( int i = 0; i < treeNode.GetNumChildren(); ++i )
 	{
@@ -85,15 +83,12 @@ void CCinematicObject::Update( float ElapsedTime )
 		return;
 	}
 
-	if ( !m_object )
+	CElement *l_object = CEngine::GetSingleton().getSceneManager()->GetObjectById(m_name);
+	if ( !l_object )
 	{
-		m_object = CEngine::GetSingleton().getSceneManager()->GetObjectById(m_name);
-		if ( !m_object )
-		{
-			OutputDebugStringA( ( "CCinematicObject: Could not find object " + m_name + "\n" ).c_str() );
-			m_Playing = false;
-			return;
-		}
+		OutputDebugStringA( ( "CCinematicObject: Could not find object " + m_name + "\n" ).c_str() );
+		m_Playing = false;
+		return;
 	}
 
 	if (!m_reverse)
@@ -114,7 +109,7 @@ void CCinematicObject::Update( float ElapsedTime )
 			m_CurrentKeyFrame--;
 		}
 	}
-	
+
 	int nextKF;
 	if (!m_reverse)
 	{
@@ -122,7 +117,7 @@ void CCinematicObject::Update( float ElapsedTime )
 	}
 	else
 	{
-		nextKF = mathUtils::Max(m_CurrentKeyFrame - 1, (unsigned int) 0);		
+		nextKF = mathUtils::Max(m_CurrentKeyFrame - 1, (unsigned int) 0);
 	}
 
 	auto current = m_CinematicObjectKeyFrames[m_CurrentKeyFrame];
@@ -134,28 +129,27 @@ void CCinematicObject::Update( float ElapsedTime )
 		t = ( getCurrentTime() - current->getKeyFrameTime() ) / ( next->getKeyFrameTime() - current->getKeyFrameTime() );
 	}
 
-	m_object->SetPosition(mathUtils::Lerp(current->GetPosition(), next->GetPosition(), t));
+	l_object->SetPosition(mathUtils::Lerp(current->GetPosition(), next->GetPosition(), t));
 	Quatf q = current->GetQuat();
 	q.SLerp(t, next->GetQuat());
-	m_object->SetQuat(q);
-	m_object->SetScale( mathUtils::Lerp( current->GetScale(), next->GetScale(), t ) );
+	l_object->SetQuat(q);
+	l_object->SetScale( mathUtils::Lerp( current->GetScale(), next->GetScale(), t ) );
 }
 
 
 void CCinematicObject::Stop()
 {
-	if ( !m_object )
-	{
-		return;
-	}
-
 	m_CurrentKeyFrame = 0;
 
 	auto current = m_CinematicObjectKeyFrames[m_CurrentKeyFrame];
 
-	m_object->SetPosition( current->GetPosition() );
-	m_object->SetQuat(current->GetQuat());
-	m_object->SetScale( current->GetScale() );
+	CElement *l_object = CEngine::GetSingleton().getSceneManager()->GetObjectById(m_name);
+	if ( l_object )
+	{
+		l_object->SetPosition( current->GetPosition() );
+		l_object->SetQuat(current->GetQuat());
+		l_object->SetScale( current->GetScale() );
+	}
 
 	CCinematicPlayer::Stop();
 
@@ -163,10 +157,6 @@ void CCinematicObject::Stop()
 
 void CCinematicObject::Reverse()
 {
-	if (!m_object)
-	{
-		return;
-	}
 	m_Playing = true;
 	m_reverse = true;
 }
@@ -174,9 +164,10 @@ void CCinematicObject::Reverse()
 
 void CCinematicObject::OnRestartCycle()
 {
-	if ( m_object )
+	CElement *l_object = CEngine::GetSingleton().getSceneManager()->GetObjectById(m_name);
+	if ( l_object )
 	{
-		m_object->SendMsg( "OnAnimationCycleFinished" );
+		l_object->SendMsg( "OnAnimationCycleFinished" );
 	}
 }
 

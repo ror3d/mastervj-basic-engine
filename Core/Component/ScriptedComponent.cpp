@@ -284,6 +284,7 @@ public:
 
 void CScriptedComponent::SendMsg(const std::string& msg, CElement* arg1)
 {
+	if ( m_Destroyed ) return;
 	LuaErrorCapturedStdout errorCapture;
 	SetComponent();
 

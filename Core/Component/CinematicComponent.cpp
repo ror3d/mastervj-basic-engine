@@ -32,7 +32,6 @@ CCinematicComponent::~CCinematicComponent()
 
 void CCinematicComponent::Destroy()
 {
-	CEngine::GetSingleton().getCinematicManager()->Remove(GetOwner()->getName());
 }
 
 void CCinematicComponent::Init()

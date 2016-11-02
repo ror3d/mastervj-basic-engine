@@ -128,6 +128,12 @@ public:
 
 	void destroy() {}
 
+	void resetTriggersAndCollisions()
+	{
+		m_CharacterControllerSurface.clear();
+		m_TriggerCollisions.clear();
+		m_ActorCollisions.clear();
+	}
 protected:
 
 	struct {

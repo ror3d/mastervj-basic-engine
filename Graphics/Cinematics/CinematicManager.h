@@ -20,6 +20,7 @@ public:
 	void Reverse(std::string nameToRun);
 	void Pause(std::string nameToRun);
 	void Stop(std::string nameToRun);
+	void ResetAllCinematics();
 	void destroy();
 	void Remove(std::string nameToDelete);
 	void Update(float _elapsedTime);

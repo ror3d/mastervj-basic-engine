@@ -33,7 +33,7 @@ void CCinematicManager::Remove(std::string nameToDelete)
 		if ((*it)->getName() == nameToDelete)
 		{
 			delete *it;
-			m_cinematicsObjects.erase(it);			
+			m_cinematicsObjects.erase(it);
 			return;
 		}
 	}
@@ -167,6 +167,14 @@ void CCinematicManager::Stop(std::string nameToRun)
 			(*it)->Stop();
 			return;
 		}
+	}
+}
+
+void CCinematicManager::ResetAllCinematics()
+{
+	for (auto it = m_cinematicsObjects.begin(); it != m_cinematicsObjects.end(); it++)
+	{
+		(*it)->Stop();
 	}
 }
 

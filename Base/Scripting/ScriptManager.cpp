@@ -377,6 +377,7 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getPhysXManager(),
 		"moveCharController", &CPhysXManager::moveCharacterController,
 		"createController", &CPhysXManager::createController,
+		"ResetTriggersAndCollisions", &CPhysXManager::resetTriggersAndCollisions,
 		"RaycastName", &CPhysXManager::RayCastName);
 
 	(*m_state)["CInputManager"].SetObj<CInputManager>(
@@ -397,6 +398,7 @@ void CScriptManager::RegisterLUAFunctions()
 		*CEngine::GetSingleton().getCinematicManager(),
 		"Play", static_cast<void(CCinematicManager::*)(std::string)>(&CCinematicManager::Play),
 		"Stop", &CCinematicManager::Stop,
+		"ResetAllCinematics", &CCinematicManager::ResetAllCinematics,
 		"Reverse", &CCinematicManager::Reverse,
 		"Pause", &CCinematicManager::Pause);
 

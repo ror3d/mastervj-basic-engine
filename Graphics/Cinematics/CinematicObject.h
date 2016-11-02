@@ -14,7 +14,6 @@ private:
 	std::vector<CCinematicObjectKeyFrame *> m_CinematicObjectKeyFrames;
 	std::string m_name;
 	size_t m_CurrentKeyFrame;
-	CElement *m_object;
 public:
 	CCinematicObject( CXMLTreeNode &TreeNode );
 	bool IsOk();
