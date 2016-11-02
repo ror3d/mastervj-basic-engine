@@ -300,6 +300,9 @@ int APIENTRY WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCm
 		MSG msg;
 		ZeroMemory(&msg, sizeof(msg));
 
+		HCURSOR cursor = LoadCursor( NULL, IDC_ARROW );
+		SetCursor( cursor );
+
 		// Añadir en el while la condición de salida del programa de la aplicación
 		auto previousTime = std::chrono::high_resolution_clock::now();
 

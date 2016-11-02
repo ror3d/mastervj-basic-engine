@@ -368,6 +368,8 @@ void CScriptManager::RegisterLUAFunctions()
 	gui["WindowWidth"] = []() -> float { return CEngine::GetSingleton().getContextManager()->GetWidth(); };
 	gui["WindowHeight"] = []() -> float { return CEngine::GetSingleton().getContextManager()->GetHeight(); };
 
+	gui["ShowCursor"] = [](bool show) { ShowCursor( show ); };
+
 	//Engine References
 	(*m_state)["CApplication"].SetObj(
 		*CEngine::GetSingleton().getApplication(),
