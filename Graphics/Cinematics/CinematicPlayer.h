@@ -7,7 +7,7 @@ protected:
 	float m_CurrentTime;
 	float m_Duration;
 	bool m_Cycle;
-	bool m_reverse;
+	bool m_Reverse;
 public:
 	CCinematicPlayer();
 	virtual ~CCinematicPlayer();
@@ -17,6 +17,7 @@ public:
 	virtual void Stop();
 	virtual void Play();
 	virtual void Pause();
+	virtual void Reverse();
 	bool IsFinished() { return m_CurrentTime >= m_Duration; }
 	float GetDuration() { return m_Duration; }
 	float getCurrentTime() { return m_CurrentTime; }
