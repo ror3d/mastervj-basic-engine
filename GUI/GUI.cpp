@@ -59,7 +59,7 @@ void CGUI::Init(const std::string& xml)
 				CFont *font = new CFont(elem, this);
 				m_fonts[font->getName()] = font;
 			}
-			else
+			else if (elemTag != "comment")
 			{
 				auto ps = elem.GetProperties();
 				std::string elemName = elem.GetPszProperty("name", "", false);
