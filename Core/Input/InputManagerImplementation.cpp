@@ -190,6 +190,13 @@ void CInputManagerImplementation::LoadCommandsFromFile(const std::string& path)
 		m_Actions.push_back(action);
 	}
 	{
+		Action action = { "NEXT_LEVEL_ACTIVE", KEYBOARD, Action::WHILE_PRESSED };
+		action.keyboard.key = VK_F9;
+		action.keyboard.needsAlt = false;
+		action.keyboard.needsCtrl = false;
+		m_Actions.push_back(action);
+	}
+	{
 		Action action = { "BACK", KEYBOARD, Action::ON_PRESS };
 		action.keyboard.key = VK_ESCAPE;
 		action.keyboard.needsAlt = false;
