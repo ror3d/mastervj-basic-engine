@@ -99,6 +99,7 @@ fn createSingleMaterial obj mat = (
 	format "\t\t<parameter type=\"float\" name=\"cutout_factor\" value=\"1.0\" varParams=\"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
 	format "\t\t<parameter type=\"float\" name=\"ssr_factor\" value=\"%\" varParams=\"min=0 max=1 step=0.01 precision=2\"/>\n" ssr to:file
 	format "\t\t<parameter type=\"Vect2f\" name=\"tex_velocity\" value=\"0 0\" varParams=\"min=0 max=1 step=0.01 precision=2\"/>\n" to:file
+	format "\t\t<parameter type=\"float\" name=\"receive_shadows\" value=\"1\" varParams=\"min=0 max=1 step=1 precision=0\"/>\n" to:file
 	
 	format "\t</material>\n" to:file 
 )

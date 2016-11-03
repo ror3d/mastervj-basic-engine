@@ -6,7 +6,7 @@
 #include "Graphics/Effect/EffectTechnique.h"
 #include <Base/Math/Color.h>
 
-#define MAX_RENDER_TARGET_VIEW 4
+#define MAX_RENDER_TARGET_VIEW 5
 
 class CRenderableVertexs;
 
