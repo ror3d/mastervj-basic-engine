@@ -35,9 +35,19 @@ fn createSceneFile sceneName gameObjects = (
 			local tgt = gObj.target
 			Pos = TranslationToRH (tgt.transform.translation)
 		)
+		
+		local disabled = getUserProp gObj "ExportGODisabled"
+		if disabled != undefined then
+		(
+			disabled = (disabled == true) or (disabled == "true")
+		)
+		else
+		(
+			disabled = false
+		)
 
 		format "\t<object name=\"%\" pos=\"% % %\" scale=\"% % %\" rotation=\"% % %\" enabled=\"%\">\n"\
-					gObj.name Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll (TrueFalse true) to: file
+					gObj.name Pos[1] Pos[2] Pos[3] Sc[1] Sc[2] Sc[3] Yaw Pitch Roll (TrueFalse (not disabled)) to: file
 		
 		local exportSpawn = getUserProp gObj "ExportAsSpawn"
 		if exportSpawn != undefined then (

@@ -318,7 +318,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	button reset_btn "Reset" pos:[576,680] width:80 height:40
 	button remove_script_btn "Remove" pos:[32,456] width:56 height:21
 	label lbl8 "Emitter Collision" pos:[464,368] width:88 height:16
-	spinner emitter_collisions_spn "" pos:[474,384] width:96 height:16 type:#integer scale:1 range:[0,50,0]
+	spinner emitter_collisions_spn "" pos:[474,384] width:96 height:16 range:[0,50,0] type:#integer scale:1
+	checkbox enabled_ckb "Enabled" pos:[232,40] width:120 height:16 checked:true
 	
 	
 	local m_ObjSelected = undefined
@@ -334,6 +335,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		local eSpeak = false
 		local ePart = false
 		if expGO then (
+			enabled_ckb.enabled = true
 			export_rend_ckb.enabled = true
 			export_collider_ckb.enabled = true
 			export_trigger_ckb.enabled = true
@@ -354,6 +356,7 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 			eSpeak = export_speaker_ckb.checked
 			ePart = export_particle_ckb.checked			
 		) else (
+			enabled_ckb.enabled = false
 			export_rend_ckb.enabled = false
 			export_collider_ckb.enabled = false
 			export_trigger_ckb.enabled = false
@@ -407,6 +410,8 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 	
 	function ResetProps = (
 		export_cbx.checked = false
+		
+		enabled_ckb.checked = true
 		
 		export_rend_ckb.checked = false
 		static_mesh_ckb.checked = true
@@ -638,6 +643,9 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		
 		LoadCkbProp export_cbx "ExportGameObject"
 		
+		LoadCkbProp enabled_ckb "ExportGODisabled"
+		enabled_ckb.checked = not enabled_ckb.checked
+		
 		LoadCkbProp export_rend_ckb "ExportRendererC"
 		LoadCkbProp skinned_mesh_ckb "RendererSkinnedMesh"
 		LoadCkbProp skinned_mesh_playAtStart_ckb "PlayAtStartSkinnedMesh"
@@ -720,6 +728,10 @@ rollout ExportSceneEditor "Export Scene Editor" width:664 height:728
 		local exportMeshCore = false
 		
 		SaveCkbProp Obj export_cbx "ExportGameObject"
+		
+		enabled_ckb.checked = not enabled_ckb.checked
+		SaveCkbProp Obj enabled_ckb "ExportGODisabled"
+		enabled_ckb.checked = not enabled_ckb.checked
 		
 		SaveCkbProp Obj export_rend_ckb "ExportRendererC"
 		SaveCkbProp Obj skinned_mesh_ckb "RendererSkinnedMesh"
