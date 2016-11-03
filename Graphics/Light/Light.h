@@ -35,7 +35,7 @@ protected:
 	bool m_GenerateShadowMap;
 	CDynamicTexture *m_ShadowMap;
 	CTexture *m_ShadowMaskTexture;
-	std::vector<CRenderableObjectsManager *> m_Layers;
+	std::vector<std::string> m_Layers;
 	Mat44f m_ViewShadowMap;
 	Mat44f m_ProjectionShadowMap;
 
@@ -66,18 +66,20 @@ public:
 	CTexture * getShadowMaskTexture(){ return m_ShadowMaskTexture;  }
 	Mat44f getViewShadowMap(){ return m_ViewShadowMap; }
 	Mat44f getProjectionShadowMap(){ return m_ProjectionShadowMap; }
-	std::vector<CRenderableObjectsManager *> getLayers(){ return m_Layers;  }
+	std::vector<std::string> getLayers(){ return m_Layers;  }
 	virtual void SetShadowMap(CContextManager &_context, const CCamera& cam) = 0;
+	virtual void SetShadowMap(CContextManager &_context, Vect3f ShadowmapPosition, float shadowmapScale = 1) = 0;
 };
 
 //-----------OMNI
 class COmniLight : public CLight
 {
 public:
-	COmniLight();
+	COmniLight() {}
 	COmniLight(const CXMLTreeNode &TreeNode);
 	virtual const TLightType getType() const { return TLightType::OMNI; }
 	void SetShadowMap(CContextManager &_context, const CCamera& cam);
+	void SetShadowMap(CContextManager &_context, Vect3f ShadowmapPosition, float shadowmapScale = 1);
 };
 
 //-----------DIRECTIONAL
@@ -87,13 +89,14 @@ protected:
 	Vect3f m_Direction;
 	Vect2f m_OrthoShadowMapSize;
 public:
-	CDirectionalLight();
+	CDirectionalLight() {}
 	CDirectionalLight(const CXMLTreeNode &TreeNode);
 	Vect3f getDirection() { return m_Direction; } const
 	void setDiretion(const Vect3f direction) { m_Direction = direction; }
 	virtual void Render(CRenderManager *RenderManager);
 	virtual const TLightType getType() const { return TLightType::DIRECTIONAL; }
 	void SetShadowMap(CContextManager &_context, const CCamera& cam);
+	void SetShadowMap(CContextManager &_context, Vect3f ShadowmapPosition, float shadowmapScale = 1);
 };
 
 //-----------SPOT
@@ -103,7 +106,7 @@ protected:
 	float m_Angle;
 	float m_FallOff;
 public:
-	CSpotLight();
+	CSpotLight() {}
 	CSpotLight(const CXMLTreeNode &TreeNode);
 	float getAngle() { return m_Angle; } const
 	float getFallOff() { return m_FallOff; } const
@@ -111,6 +114,7 @@ public:
 	void setFallOff(const float fallOff) { m_FallOff = fallOff; }
 	virtual const TLightType getType() const { return TLightType::SPOT; }
 	void SetShadowMap(CContextManager &_context, const CCamera& cam);
+	void SetShadowMap(CContextManager &_context, Vect3f ShadowmapPosition, float shadowmapScale = 1);
 };
 
 #endif

@@ -7,7 +7,10 @@
 #include "Camera/Camera.h"
 #include "Camera/CameraManager.h"
 #include "Camera/CameraController.h"
+#include "Camera/FPSCameraController.h"
+#include "Camera/FreeCameraController.h"
 
+#include <Graphics/Renderer/Renderer.h>
 
 CLightManager::CLightManager()
 	: m_ambient(0, 0, 0, 0)
@@ -104,27 +107,35 @@ void CLightManager::ExecuteShadowCreation(CContextManager &_context)
 	CCamera cam;
 	ICameraController *cc = CEngine::GetSingleton().getCameraManager()->GetCurrentCameraController();
 
+	Vect3f position = cc->GetPosition();
+	float scale = 1;
+
+	CFPSCameraController* ypcc = dynamic_cast<CFPSCameraController*>( cc );
+	if ( ypcc )
+	{
+		position = ypcc->GetTargetPosition();
+		scale = (position - ypcc->GetPosition()).Length();
+	}
+
 	cc->UpdateCameraValues(&cam);
 
 	for (auto const &light : m_resources)
 	{
-		/* TODO(roc): reenable
 		if (light.second->getGenerateShadowMap() && light.second->isActive())
 		{
-			light.second->SetShadowMap(_context, cam); //Set matrices y renderTarget
+			light.second->SetShadowMap(_context, position, scale); //Set matrices y renderTarget
 
 			auto c = _context.m_BackgroundColor;
 			_context.m_BackgroundColor = CColor(1, 1, 1, 1);
 			_context.Clear(true, true);//Clear Depth
 			_context.m_BackgroundColor = c;
 
-			std::vector<CRenderableObjectsManager *> layers = light.second->getLayers();
-			for (auto child = layers.begin(); child < layers.end(); child++)
+			std::vector<std::string> layers = light.second->getLayers();
+			for ( auto &layer : layers)
 			{
-				(*child)->Render(&_context);//Render de layers afectadas por la luz
+				CEngine::GetSingleton().getRenderer()->RenderLayer( layer, &_context, false );
 			}
-			//DUDA::::::DONDE SE USA m_ShadowMaskTexture???
-		}*/
+		}
 	}
 	_context.UnsetRenderTargets();//Una vez pintadas las sombras, quitamos target para render normal
 }

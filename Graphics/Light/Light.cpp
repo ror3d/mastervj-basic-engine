@@ -38,8 +38,7 @@ CLight::CLight(const CXMLTreeNode &TreeNode)
 	for (int i = 0; i< light.GetNumChildren(); i++){
 		CXMLTreeNode layer = light(i);
 		if (layer.GetName() == std::string("layer")){
-			// TODO(roc)
-			//m_Layers.push_back(CEngine::GetSingleton().getLayerManager()->get(layer.GetPszProperty("name")));
+			m_Layers.push_back( layer.GetPszProperty( "name" ) );
 		}
 	}
 }
@@ -112,6 +111,11 @@ void COmniLight::SetShadowMap(CContextManager &_context, const CCamera& cam)
 	DEBUG_ASSERT(false);
 }
 
+void COmniLight::SetShadowMap( CContextManager & _context, Vect3f ShadowmapPosition, float shadowmapScale )
+{
+	DEBUG_ASSERT(false);
+}
+
 //-----------DIRECTIONAL
 CDirectionalLight::CDirectionalLight(const CXMLTreeNode &TreeNode) : CLight(TreeNode)
 {
@@ -131,18 +135,28 @@ void CDirectionalLight::Render(CRenderManager *RenderManager)
 
 void CDirectionalLight::SetShadowMap(CContextManager &_context, const CCamera& cam)
 {
-	if (m_ShadowMap == NULL)
-		DEBUG_ASSERT(false);
+	DEBUG_ASSERT(m_ShadowMap != NULL);
 	m_ViewShadowMap.SetIdentity();
-	Vect3f camForward = cam.GetLookAt() + cam.GetPosition();
+	/*Vect3f camForward = cam.GetLookAt() + cam.GetPosition();
 	camForward.y = 0;
 	if (camForward.SquaredLength() > 0.00001)
 		camForward.Normalize();
-	Vect3f pos = m_Position + cam.GetPosition() - (camForward * 1);
-	m_ViewShadowMap.SetFromLookAt(pos, pos + m_Direction, v3fY);
+	*/
+	Vect3f pos = m_Position + cam.GetPosition();// -( camForward * 1 );
+	SetShadowMap( _context, pos );
+}
+
+void CDirectionalLight::SetShadowMap( CContextManager & _context, Vect3f ShadowmapPosition, float shadowmapScale )
+{
+	DEBUG_ASSERT(m_ShadowMap != NULL);
+
+	m_ViewShadowMap.SetFromLookAt(ShadowmapPosition, ShadowmapPosition + m_Direction, v3fY);
+
 	unsigned int l_ShadowMapWidth = m_ShadowMap->GetWidth();
 	unsigned int l_ShadowMapHeight = m_ShadowMap->GetHeight();
-	m_ProjectionShadowMap.SetFromOrtho(m_OrthoShadowMapSize.x, m_OrthoShadowMapSize.y, 0.1f, m_EndRangeAttenuation);
+
+	m_ProjectionShadowMap.SetFromOrtho(m_OrthoShadowMapSize.x*shadowmapScale, m_OrthoShadowMapSize.y*shadowmapScale, 0.1f, m_EndRangeAttenuation);
+
 	CEffectManager::m_SceneParameters.m_View = m_ViewShadowMap;
 	CEffectManager::m_SceneParameters.m_Projection = m_ProjectionShadowMap;
 	ID3D11RenderTargetView *l_RenderTargetViews[1];
@@ -167,10 +181,17 @@ CSpotLight::CSpotLight(const CXMLTreeNode &TreeNode) : CDirectionalLight(TreeNod
 
 void CSpotLight::SetShadowMap(CContextManager &_context, const CCamera& cam)
 {
-	if (m_ShadowMap == NULL)
-		DEBUG_ASSERT(false);
+	DEBUG_ASSERT(m_ShadowMap != NULL);
+
+	SetShadowMap( _context, m_Position );
+}
+
+void CSpotLight::SetShadowMap( CContextManager & _context, Vect3f ShadowmapPosition, float shadowmapScale )
+{
+	DEBUG_ASSERT(m_ShadowMap != NULL);
+
 	m_ViewShadowMap.SetIdentity();
-	m_ViewShadowMap.SetFromLookAt(m_Position, m_Position + m_Direction, v3fY);
+	m_ViewShadowMap.SetFromLookAt(ShadowmapPosition, ShadowmapPosition + m_Direction, v3fY);
 	unsigned int l_ShadowMapWidth = m_ShadowMap->GetWidth();
 	unsigned int l_ShadowMapHeight = m_ShadowMap->GetHeight();
 	m_ProjectionShadowMap.SetIdentity();
