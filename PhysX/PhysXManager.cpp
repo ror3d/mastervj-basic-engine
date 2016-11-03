@@ -702,7 +702,7 @@ void CPhysXManager::setPosition(const Vect3f pos, const std::string &name)
 	physx::PxExtended y = pos.y;
 	physx::PxExtended z = pos.z;
 	physx::PxExtendedVec3 vecPos(x,y,z);
-	cct->setPosition(vecPos);
+	cct->setFootPosition( vecPos );
 }
 
 bool CPhysXManager::isCharacterControllerGrounded( const std::string &name )
