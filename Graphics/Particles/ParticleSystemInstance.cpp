@@ -205,7 +205,7 @@ std::vector<std::string> CParticleSystemInstance::CheckCollisions( unsigned int 
 	{
 		ParticleData &p = m_particles[i];
 
-		std::vector<std::string> hits = pm->overlapSphere( p.pos, p.size / 2 );
+		std::vector<std::string> hits = pm->overlapSphere( p.pos, p.size );
 		retSet.insert( hits.begin(), hits.end() );
 
 		if ( hits.size() > 0 )
