@@ -4,6 +4,7 @@ class CCinematicPlayer
 {
 protected:
 	bool m_Playing;
+	bool m_Pause;
 	float m_CurrentTime;
 	float m_Duration;
 	bool m_Cycle;

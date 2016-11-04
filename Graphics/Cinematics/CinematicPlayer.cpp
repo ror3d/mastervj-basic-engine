@@ -6,6 +6,7 @@ CCinematicPlayer::CCinematicPlayer()
 	, m_Duration(0)
 	, m_Cycle(false)
 	, m_Playing(false)
+	, m_Pause(false)
 	, m_Reverse(false)
 {
 }
@@ -34,6 +35,12 @@ void CCinematicPlayer::SetAnimTime(float Time)
 
 void CCinematicPlayer::Update( float ElapsedTime )
 {
+	if ( m_Pause )
+	{
+		m_Pause = false;
+		m_Playing = false;
+	}
+
 	if ( m_Playing )
 	{
 		if (!m_Reverse)
@@ -93,7 +100,7 @@ void CCinematicPlayer::Play()
 
 void CCinematicPlayer::Pause()
 {
-	m_Playing = false;
+	m_Pause = true;
 }
 
 void CCinematicPlayer::Reverse()
